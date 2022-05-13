@@ -58,7 +58,7 @@
                             @foreach($edu['certificates'] as $key => $cert)
                                 <a href="{{ Storage::url($cert['file_name']) }}" target="_blank" class="bg-white flex items-center rounded-lg border border-gray-200 p-2">
                                     @svg('heroicon-o-document-text', ['class' => 'w-4 h-4 mr-2 text-typ-2'])
-                                    <span class="text-14 text-typ-2">{{ translate('Certificate').' '.($key+1) }}</span>
+                                    <span class="text-14 text-typ-2">{{ translate('Certificate') }}</span>
                                 </a>
                             @endforeach
                         </div>
@@ -72,7 +72,7 @@
                 <span class="mt-2 block text-sm font-medium text-typ-2">{{ translate('No education yet...') }}</span>
 
                 @owner($user)
-                    <a href="{{ route('blog.post.create') }}" class="btn-primary mt-3">
+                    <a href="{{ route('my.account.settings') }}" class="btn-primary mt-3">
                         {{ translate('Add Education?') }}
                     </a>
                 @endowner

@@ -60,7 +60,7 @@
                 <span class="mt-2 block text-sm font-medium text-typ-2">{{ translate('No work experience yet...') }}</span>
 
                 @owner($user)
-                    <a href="{{ route('blog.post.create') }}" class="btn-primary mt-3">
+                    <a href="{{ route('my.account.settings') }}" class="btn-primary mt-3">
                         {{ translate('Add Work Experience?') }}
                     </a>
                 @endowner

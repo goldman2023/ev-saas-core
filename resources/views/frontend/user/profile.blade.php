@@ -8,7 +8,7 @@
 
 <div class="col-span-12">
 
-    <section class="relative w-full mb-3 md:mb-5 bg-white rounded-b-lg">
+    <section class="relative w-full mb-3 md:mb-5 bg-white rounded-xl">
         <div class="relative w-full">
             <x-tenant.system.image class="block h-[180px] sm:h-[260px] w-full rounded-t-xl " fit="cover" :image="$user->getCover(['w' => 1200])" />
             <x-tenant.system.image class="absolute left-[30px] bottom-[-50px] w-[120px] h-[120px] sm:w-[160px] sm:h-[160px] rounded-full bg-white border border-gray-200" fit="contain" :image="$user->getThumbnail()" />
@@ -35,15 +35,15 @@
                 <ul class="w-full flex ">
                     <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 cursor-pointer">
                         <span class="text-typ-1 block">{{ translate('Posts') }}</span>
-                        <strong class="text-typ-2">{{ $user->social_posts()->count() }}</strong>
+                        <strong class="text-typ-2">{{ $user->social_posts()->published()->count() }}</strong>
                     </div>
                     <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 cursor-pointer">
                         <span class="text-typ-1 block">{{ translate('Articles') }}</span>
-                        <strong class="text-typ-2">{{ $user->blog_posts()->where('type', 'portfolio')->count() }}</strong>
+                        <strong class="text-typ-2">{{ $user->blog_posts()->published()->where('type', 'blog')->count() }}</strong>
                     </div>
                     <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 cursor-pointer">
                         <span class="text-typ-1 block">{{ translate('Portfolios') }}</span>
-                        <strong class="text-typ-2">{{ $user->blog_posts()->where('type', 'blog')->count() }}</strong>
+                        <strong class="text-typ-2">{{ $user->portfolio()->published()->count() }}</strong>
                     </div>
                     <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 cursor-pointer">
                         <span class="text-typ-1 block">{{ translate('Followers') }}</span>
@@ -143,6 +143,10 @@
                     </div>
                 @endif
             </div>
+
+            <x-feed.elements.users.shop-card :user="$user" class="hidden md:block" />
+
+            <x-feed.elements.users.portfolio :user="$user" class="hidden md:block" />
 
             <x-feed.elements.users.work-experience :user="$user" class="hidden md:block" />
 

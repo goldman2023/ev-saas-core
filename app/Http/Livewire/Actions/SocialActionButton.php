@@ -20,6 +20,8 @@ class SocialActionButton extends Component
 
     public $model_class;
 
+    public $class;
+
     public $template = 'default'; // wishlist-button-detailed
 
     public $available_actions = [
@@ -89,13 +91,14 @@ class SocialActionButton extends Component
 
     public $count = 0;
 
-    public function mount($object, $action = 'reaction', $type = '')
+    public function mount($object, $action = 'reaction', $type = '', $class = '')
     {
         $this->object = $object;
         $this->model_class = $object::class;
         $this->selectedAction = $action;
         $this->action = $this->available_actions[$action] ?? null;
         $this->type = $type;
+        $this->class = $class;
         
         if ($action === 'reaction') {
             if(empty($type)) {

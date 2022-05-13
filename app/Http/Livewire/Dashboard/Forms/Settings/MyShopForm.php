@@ -102,9 +102,15 @@ class MyShopForm extends Component
     {
         $this->onboarding = $onboarding;
         $this->shop = MyShop::getShop();
-        $this->settings = $this->shop->settings()->get()->keyBy('setting')->map(fn ($item) => $item['value'])->toArray();
         $this->addresses = $this->shop->addresses;
         $this->domains = $this->shop->domains;
+
+        // User Meta
+        ShopSetting::createMissingSettings($this->shop);
+        $shop_settings = $this->shop->settings()->select('id', 'setting', 'value')->get()->keyBy('setting')->toArray();
+        castValuesForGet($shop_settings, ShopSetting::metaDataTypes());
+        
+        $this->settings = $shop_settings;
     }
 
     // public function updatingShop(&$shop, $key) {
@@ -207,7 +213,7 @@ class MyShopForm extends Component
         $contact_details->value = json_encode($contacts);
         $contact_details->save();
 
-        $this->settings['contact_details'] = $contact_details->value;
+        $this->settings['contact_details'] = $contacts;
 
         // $this->dispatchBrowserEvent('contact-details-modal-hide');
         $this->dispatchBrowserEvent('toggle-flyout-panel', ['id' => 'contact-panel', 'timeout' => '500']);
@@ -251,25 +257,46 @@ class MyShopForm extends Component
      */
     protected function saveSettings($rules)
     {
-        // Save data in settings table
-        $old_settings = $this->shop->settings()->get()->keyBy('setting'); // Get ShopSetting models and key them by their name (aka. `setting` column)
-
         foreach (collect($rules)->filter(fn ($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
-            $setting_key = explode('.', $key)[1];
+            $setting_key = explode('.', $key)[1]; // get the part after `core_meta.`
 
             if (! empty($setting_key) && $setting_key !== '*') {
-                $setting = $old_settings->get($setting_key);
+                $new_value = castValueForSave($setting_key, $this->settings[$setting_key], ShopSetting::metaDataTypes());
 
-                // If $setting does not exist in old_settings, create it and save it!!!
-                if (empty($setting)) {
-                    $setting = new ShopSetting();
-                    $setting->shop_id = $this->shop->id;
-                    $setting->setting = $setting_key;
+                try {
+                    ShopSetting::updateOrCreate(
+                        [
+                            'shop_id' => $this->shop->id, 
+                            'setting' => $setting_key, 
+                        ],
+                        ['value' => $new_value]
+                    );
+                } catch(\Exception $e) {
+                    Log::error($e->getMessage());
+                    // dd($this->model_core_meta[$core_meta_key]);
                 }
-
-                $setting->value = is_array($this->settings[$setting_key]) || is_object($this->settings[$setting_key]) ? json_encode($this->settings[$setting_key]) : $this->settings[$setting_key];
-                $setting->save();
             }
         }
+
+        // // Save data in settings table
+        // $old_settings = $this->shop->settings()->get()->keyBy('setting'); // Get ShopSetting models and key them by their name (aka. `setting` column)
+
+        // foreach (collect($rules)->filter(fn ($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
+        //     $setting_key = explode('.', $key)[1];
+
+        //     if (! empty($setting_key) && $setting_key !== '*') {
+        //         $setting = $old_settings->get($setting_key);
+
+        //         // If $setting does not exist in old_settings, create it and save it!!!
+        //         if (empty($setting)) {
+        //             $setting = new ShopSetting();
+        //             $setting->shop_id = $this->shop->id;
+        //             $setting->setting = $setting_key;
+        //         }
+
+        //         $setting->value = is_array($this->settings[$setting_key]) || is_object($this->settings[$setting_key]) ? json_encode($this->settings[$setting_key]) : $this->settings[$setting_key];
+        //         $setting->save();
+        //     }
+        // }
     }
 }
