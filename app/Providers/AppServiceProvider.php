@@ -73,6 +73,10 @@ class AppServiceProvider extends ServiceProvider
             return Permissions::canAccess($types, $permissions, false);
         });
 
+        Blade::if('owner', function ($user) {
+            return ($user?->id ?? null) === (auth()->user()?->id ?? null);
+        });
+
         // Hooks system
         Blade::directive('do_action', function ($name, $arg = '') {
             return "<?php do_action($name, $arg); ?>";

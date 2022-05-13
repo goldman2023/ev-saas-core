@@ -11,7 +11,7 @@
     <x-dashboard.section-headers.section-header title="{{ translate('Plans Management') }}"
         text="{{ translate('Manage your subscription and billind details') }}">
         <x-slot name="content">
-            @if(auth()->user()->isSubscribed())
+            @if(auth()->user()?->isSubscribed() ?? false)
                 <a href="{{ route('stripe.portal_session') }}" class="btn-primary" target="_blank">
                         {{ translate('Biling Portal') }}
                 </a>
@@ -19,14 +19,14 @@
         </x-slot>
     </x-dashboard.section-headers.section-header>
 
-    @if(auth()->user()->isSubscribed())
+    @if(auth()->user()?->isSubscribed() ?? false)
         <div class="w-full mb-7">
             <livewire:dashboard.tables.plans-table for="me" />
         </div>
     @endif
 
     <div class="w-full">
-        @if(auth()->user()->isSubscribed())
+        @if(auth()->user()?->isSubscribed() ?? false)
             <h2 class="text-32 text-gray-700 font-semibold mb-5">{{ translate('Explore other plans')}}</h2>
         @endif
         <div class="grid gap-10 grid-cols-12">
