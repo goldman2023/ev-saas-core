@@ -21,7 +21,7 @@ use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 use DB;
-
+use Laravel\Nova\Auth\Impersonatable;
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
 {
@@ -38,6 +38,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use CoreMetaTrait;
     use SocialReactionsTrait;
     use SocialFollowingTrait;
+    use Impersonatable;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -310,7 +311,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function getUserMeta($key)
     {
         $user_meta = $this->user_meta->where('key', $key)->keyBy('key')->toArray();
-        
+
         castValuesForGet($user_meta, UserMeta::metaDataTypes());
 
         return $user_meta[$key] ?? null;
