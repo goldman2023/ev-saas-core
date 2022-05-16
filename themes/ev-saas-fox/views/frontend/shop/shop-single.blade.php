@@ -61,12 +61,12 @@
                             <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 ">
                                 <strong class="text-16 text-typ-2">{{ $shop->products()->published()->where('type', '=', 'event')->count() }}</strong>
                                 <span class="text-14 text-typ-3 block">{{ translate('Events') }}</span>
-        
+
                             </div>
                             <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 ">
                                 <strong class="text-16 text-typ-2">{{ $shop->blog_posts()->where('type', 'blog')->count() }}</strong>
                                 <span class="text-14 text-typ-3 block">{{ translate('Articles') }}</span>
-        
+
                             </div>
                             <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 ">
                                 <strong class="text-16 text-typ-2">{{ $shop->followers()->count() }}</strong>
@@ -244,7 +244,7 @@
                 <div class="w-full px-5 py-4 pb-3 mb-3 flex justify-between items-center border-b border-gray-200">
                     <h5 class="text-14 font-semibold">{{ translate('Contact information') }}</h5>
                 </div>
-            
+
                 <div class="px-5 pb-3 flex flex-col ">
                     @if(!empty($shop->getShopMeta('contact_details')))
                         @foreach($shop->getShopMeta('contact_details') as $index => $contact)
@@ -268,7 +268,7 @@
                             <span class="mt-2 block text-sm font-medium text-typ-2">{{ translate('No contact details yet...') }}</span>
 
                             @owner($user)
-                                <a href="{{ route('settings.shop-settings') }}" class="btn-primary mt-3">
+                                <a href="{{ route('settings.shop_settings') }}" class="btn-primary mt-3">
                                     {{ translate('Add Contact Details?') }}
                                 </a>
                             @endowner

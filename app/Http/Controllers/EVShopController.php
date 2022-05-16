@@ -24,20 +24,28 @@ class EVShopController extends Controller
             return abort(404);
         }
 
-        activity()
+        if(auth()->user()) {
+            $user = auth()->user();
+
+            activity()
             ->performedOn($shop)
-            ->causedBy(auth()->user())
+            ->causedBy($user)
             ->withProperties([
                 'action' => 'viewed',
                 'action_title' => 'viewed a shop',
             ])
             ->log('viewed');
+        } else {
+            $user = null;
+        }
+
+
 
         /* TODO: Shop shop page only after veiriication
             - verification_status column on $seller does not exists,
             what is replacement?
             */
-        return view('frontend.shop.shop-single', compact('shop'));
+        return view('frontend.shop.shop-single', compact('shop', 'user'));
     }
 
     /**
