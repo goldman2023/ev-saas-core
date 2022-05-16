@@ -16,7 +16,7 @@
             </h4>
 
             <p class="text-14 text-primary font-semibold line-clamp-3 mb-2">
-                {{ $product->getTotalPrice(true) }}
+                {{ $product->getTotalPrice() == 0 ? translate('Free') : $product->getTotalPrice(true) }}
             </p>
 
             <div class="w-full grid grid-cols-2">

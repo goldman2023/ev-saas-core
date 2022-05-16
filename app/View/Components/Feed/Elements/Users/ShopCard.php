@@ -15,11 +15,16 @@ class ShopCard extends Component
      *
      * @return void
      */
-    public function __construct($user, $class = '')
+    public function __construct($user = null, $shop = null, $class = '')
     {
         $this->user = $user;
         $this->class = $class;
-        $this->shop = ($user?->hasShop() ?? null) ? $this->user->shop->first() : null;
+
+        if(!empty($shop)) {
+            $this->shop = $shop;
+        } else {
+            $this->shop = ($user?->hasShop() ?? null) ? $this->user->shop->first() : null;
+        }
     }
 
     /**

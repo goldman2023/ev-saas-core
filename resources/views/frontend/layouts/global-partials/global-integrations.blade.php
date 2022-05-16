@@ -23,6 +23,7 @@
 
 {{-- Facebook App Integration --}}
 @if(!empty(get_tenant_setting('facebook_app_id')) && !empty(get_tenant_setting('facebook_app_secret')))
+<meta property="fb:app_id" content="{{ get_tenant_setting('facebook_app_id') }}">
 <script>
     window.fbAsyncInit = function() {
       FB.init({

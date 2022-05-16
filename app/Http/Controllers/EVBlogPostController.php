@@ -41,7 +41,7 @@ class EVBlogPostController extends Controller
 
     public function single(Request $request, $slug)
     {
-        $blog_post = BlogPost::where('slug', $slug)->published()->with(['authors'])->first();
+        $blog_post = BlogPost::where('slug', $slug)->published()->with(['authors', 'shop'])->first();
         $categories_idx = $blog_post->categories->pluck('id')->toArray();
         
         $related_blog_posts = BlogPost::whereHas('categories', function ($query) use($categories_idx) { 
@@ -51,9 +51,10 @@ class EVBlogPostController extends Controller
         $latest_blog_posts = BlogPost::where('id', '!=', $blog_post->id)->published()->with(['authors'])->latest()->take(3)->get();
         
         $authors = $blog_post->authors;
+        $shop = $blog_post->shop;
 
         if (! empty($blog_post)) {
-            return view('frontend.blog.single.blog-post-single-1', compact('blog_post', 'authors', 'related_blog_posts', 'latest_blog_posts'));
+            return view('frontend.blog.blog-post-single', compact('blog_post', 'authors', 'shop', 'related_blog_posts', 'latest_blog_posts'));
         }
 
         abort(404);

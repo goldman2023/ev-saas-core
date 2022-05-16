@@ -24,6 +24,7 @@ use Livewire\Component;
 use Permissions;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
+use Spatie\Activitylog\Facades\CauserResolver;
 
 class PlanForm extends Component
 {
@@ -150,6 +151,8 @@ class PlanForm extends Component
         DB::beginTransaction();
 
         try {
+            CauserResolver::setCauser(MyShop::getShop());
+
             // Insert or Update plan
             $this->plan->shop_id = MyShop::getShopID();
 
