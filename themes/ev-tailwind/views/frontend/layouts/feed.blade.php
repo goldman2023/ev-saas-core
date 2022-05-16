@@ -10,7 +10,6 @@
         <main class="sm:col-span-10 grid grid-cols-12 gap-6">
             @yield('feed_content')
         </main>
-
     </div>
 </div>
 @endsection
