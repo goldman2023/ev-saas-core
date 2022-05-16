@@ -10,9 +10,10 @@ class EVDownloadsController extends Controller
 {
     public function my_downloads(Request $request)
     {
-        // $orders = auth()->user()->orders()->orderBy('created_at', 'desc')->paginate(20);
+        // $orders = auth()->user()->orders()->orderBy('created_at', 'desc')->with()
         // $orders_count = auth()->user()->orders()->count();
 
+        // dd(auth()->user()->purchasedProducts());
         return view('frontend.dashboard.my-downloads.index');
     }
 }

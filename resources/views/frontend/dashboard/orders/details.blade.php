@@ -244,7 +244,7 @@
                                     <p class="text-gray-900">Ending with ****</p>
                                     <p class="text-gray-600">Expires ** / **</p>
                                 </div>
-                                @if(auth()->user()->isAdmin() && !empty($order->meta['stripe_payment_intent_id'] ?? null))
+                                @if((auth()->user()?->isAdmin() ?? false) && !empty($order->meta['stripe_payment_intent_id'] ?? null))
                                     @if(\StripeService::getStripeMode() === 'live')
                                         <a target="_blank" class="btn btn-primary"
                                             href="https://dashboard.stripe.com/live/payments/{{ $order->meta['stripe_payment_intent_id'] ?? null }}">

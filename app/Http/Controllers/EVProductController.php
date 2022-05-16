@@ -96,6 +96,12 @@ class EVProductController extends Controller
         return view('frontend.dashboard.products.activity')->with('product', $product);
     }
 
+    public function thank_you_preview(Request $request, $id) {
+        $product = Product::findOrFail($id);
+
+        return view('frontend.dashboard.products.thank-you-preview')->with('product', $product);
+    }
+
     // Frontend
     public function productsByCategory(Request $request, $slug)
     {

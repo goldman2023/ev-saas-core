@@ -77,7 +77,7 @@ Route::middleware([
 ])->group(function () {
 
     Route::middleware('auth')->group(function () {
-        Route::get('/we-analytics', [WeAnalyticsController::class, 'index'])->name('analytics.index');
+        Route::get('/dashboard/we-analytics', [WeAnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('/we-menu', [WeMenuController::class, 'index'])->name('menu.index');
 
         Route::get('/we-edit', [WeEditController::class, 'index'])->name('we-edit.index');

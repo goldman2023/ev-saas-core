@@ -58,13 +58,12 @@
             <div class="col-span-12 relative block w-full bg-white border-2 border-gray-300 border-dashed rounded-lg p-12 text-center">
                 @svg('icomoon-briefcase', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
                 <span class="mt-2 block text-sm font-medium text-typ-2">{{ translate('No work experience yet...') }}</span>
-                @auth
-                @if($user->id === auth()->user()->id)
-                    <a href="{{ route('blog.post.create') }}" class="btn-primary mt-3">
+
+                @owner($user)
+                    <a href="{{ route('my.account.settings') }}" class="btn-primary mt-3">
                         {{ translate('Add Work Experience?') }}
                     </a>
-                @endif
-                @endauth
+                @endowner
             </div>
         @endif
     </div>

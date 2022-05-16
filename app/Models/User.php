@@ -20,6 +20,7 @@ use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
+use DB;
 
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
@@ -92,6 +93,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return !empty($this->email_verified_at);
     }
 
+    public function hasShop() {
+        return ($this->isAdmin() || $this->isSeller() || $this->isStaff()) && ($this->shop?->isNotEmpty() ?? false);
+    }
+
     public function isAdmin()
     {
         return $this->user_type === 'admin';
@@ -157,6 +162,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
     }
 
+    public function portfolio()
+    {
+        return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships')->where('type', 'portfolio');
+    }
+
     public function social_posts()
     {
         return $this->hasMany(SocialPost::class);
@@ -170,6 +180,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function purchasedProducts() {
+        // return DB::table('products')->;
     }
 
     public function wallets()
@@ -295,7 +309,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function getUserMeta($key)
     {
-        // TODO: Implement castValuesForGet($core_meta, $data_types); here
         $user_meta = $this->user_meta->where('key', $key)->keyBy('key')->toArray();
         
         castValuesForGet($user_meta, UserMeta::metaDataTypes());

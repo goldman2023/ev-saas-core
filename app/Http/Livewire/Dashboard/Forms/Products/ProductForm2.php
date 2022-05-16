@@ -37,6 +37,7 @@ use MyShop;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Str;
+use Spatie\Activitylog\Facades\CauserResolver;
 
 class ProductForm2 extends Component
 {
@@ -319,6 +320,9 @@ class ProductForm2 extends Component
         DB::beginTransaction();
 
         try {
+            // Causer is Shop, not user
+            CauserResolver::setCauser(MyShop::getShop());
+
             $this->saveMinimumRequired();
 
             // Save product data

@@ -103,6 +103,13 @@
                         <a href="{{ route('grape.index', ['pageID' => $page->id]) }}" class="btn-info">
                             {{ translate('Open in builder') }}
                         </a>
+
+                        @if($is_update)
+                            <a href="{{ $page->getPermalink() }}" class="btn-info ml-2" target="_blank">
+                                {{ translate('Preview') }}
+                            </a>
+                        @endif
+
                         <button type="button" class="btn btn-primary ml-auto btn-sm"
                             @click="
                                 $wire.set('page.status', status, true);
