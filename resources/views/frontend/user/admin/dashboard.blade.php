@@ -81,7 +81,7 @@
             </div>
 
             <div class="w-full col-span-3">
-                <livewire:dashboard.tables.recent-invoices-widget-table for="me" :show-per-page="false" :show-search="false" :column-select="false" />
+                <livewire:dashboard.tables.recent-invoices-widget-table for="all" :show-per-page="false" :show-search="false" :column-select="false" />
             </div>
 
         </div>

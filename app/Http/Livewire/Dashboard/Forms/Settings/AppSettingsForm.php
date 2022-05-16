@@ -93,6 +93,7 @@ class AppSettingsForm extends Component
                 'settings.google_tag_manager_enabled' => ['boolean'],
                 'settings.google_tag_manager_id' => ['exclude_if:settings.google_tag_manager_enabled,false', 'required'],
             ],
+            /* TODO: Add woocommerce rules here */
             'integrations.facebook_pixel' => [
                 'settings.facebook_pixel_enabled' => ['boolean'],
                 'settings.facebook_pixel_id' => ['exclude_if:settings.facebook_pixel_enabled,false', 'required'],
@@ -365,7 +366,7 @@ class AppSettingsForm extends Component
 
     public function saveIntegrations($rule_set) {
         $rules = $this->getRuleSet($rule_set);
-     
+
         try {
             $this->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
