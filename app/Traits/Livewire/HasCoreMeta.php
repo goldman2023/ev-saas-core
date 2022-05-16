@@ -4,6 +4,7 @@ namespace App\Traits\Livewire;
 
 use App\Models\CoreMeta;
 use App\Models\Product;
+use App\Models\Plan;
 use DB;
 
 trait HasCoreMeta
@@ -31,6 +32,8 @@ trait HasCoreMeta
             foreach ($this->core_meta as $meta) {
                 // Skip predefined CoreMeta keys
                 if($model instanceof Product && array_key_exists($meta['key'], CoreMeta::metaProductDataTypes()) ) {
+                    continue;
+                } else if($model instanceof Plan && array_key_exists($meta['key'], CoreMeta::metaPlanDataTypes()) ) {
                     continue;
                 }
 

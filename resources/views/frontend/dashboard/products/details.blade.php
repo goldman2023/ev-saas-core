@@ -255,7 +255,6 @@
                                                                     fill="#1A1918" mask="url(#b)" />
                                                             </g>
                                                         </svg>
-                                                        <!-- Extend touch target to entire panel -->
                                                         @if($product->isStripeProduct())
                                                             <span
                                                                 class="mt-3 mr-auto mb-3 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
@@ -287,12 +286,18 @@
                                                     checkout needs. Create QR codes and payment links') }}
                                                 </p>
 
-                                                <!-- This example requires Tailwind CSS v2.0+ -->
                                                 <a target="_blank"
                                                     href="{{ $product->getStripeCheckoutPermalink(1, true) }}"
                                                     class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     {{ translate('Peview checkout') }}
                                                     @svg('heroicon-s-mail', ['class' => 'w-6 h-6 ml-2'])
+                                                </a>
+
+                                                <a target="_blank"
+                                                    href="{{ route('product.thank_you_preview', ['id' => $product->id]) }}"
+                                                    class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    {{ translate('Peview order') }}
+                                                    @svg('heroicon-s-document', ['class' => 'w-6 h-6 ml-2'])
                                                 </a>
                                             </div>
                                         </li>

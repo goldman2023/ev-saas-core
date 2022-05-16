@@ -401,15 +401,23 @@
                         <div
                             class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                             @if($is_update)
-                            <button type="button" class="btn btn-danger btn-sm cursor-pointer">
-                                {{ translate('Delete') }}
-                            </button>
+                                <button type="button" class="btn btn-danger btn-sm cursor-pointer">
+                                    {{ translate('Delete') }}
+                                </button>
                             @endif
 
-                            <button type="button" class="btn btn-primary ml-auto btn-sm" @click="onSave()"
-                                wire:click="saveBlogPost()">
-                                {{ translate('Save') }}
-                            </button>
+                            <div class="flex flex-row ml-auto">
+                                @if($is_update)
+                                    <a href="{{ $blogPost->getPermalink() }}" class="btn-info mr-2" target="_blank">
+                                        {{ translate('Preview') }}
+                                    </a>
+                                @endif
+                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="onSave()"
+                                    wire:click="saveBlogPost()">
+                                    {{ translate('Save') }}
+                                </button>
+                            </div>
+                            
                         </div>
                     </div>
                     {{-- END Actions --}}

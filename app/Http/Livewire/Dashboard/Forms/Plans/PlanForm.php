@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Plan;
 use App\Models\ShopAddress;
 use App\Models\User;
+use App\Models\CoreMeta;
 use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\HasCategories;
 use App\Traits\Livewire\RulesSets;
@@ -19,6 +20,7 @@ use Categories;
 use DB;
 use EVS;
 use FX;
+use Log;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Permissions;
@@ -37,6 +39,9 @@ class PlanForm extends Component
     public $plan;
 
     public $is_update;
+
+    public $model_core_meta;
+
 
     /**
      * Create a new component instance.
@@ -66,12 +71,27 @@ class PlanForm extends Component
         $this->refreshAttributes($this->plan);
 
         $this->initCoreMeta($this->plan);
+
+        $this->model_core_meta = CoreMeta::getMeta($this->plan?->core_meta ?? [], Plan::class, true);
     }
 
+    protected function getRuleSet($set = null)
+    {
+        $rulesSets = collect([
+            'meta' => [
+                'model_core_meta.custom_redirect_url' => 'nullable',
+            ],
+            'core_meta' => [
+                'core_meta' => '',
+            ]
+        ]);
+
+        return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
+    }
+    
     protected function rules()
     {
         return [
-            'core_meta' => '',
             'selected_categories' => 'required',
             'plan.featured' => ['boolean'],
             'plan.primary' => ['boolean'],
@@ -79,11 +99,12 @@ class PlanForm extends Component
             'plan.cover' => ['if_id_exists:App\Models\Upload,id,true'],
             'plan.name' => 'required|min:2',
             'plan.status' => [Rule::in(StatusEnum::toValues('archived'))],
+            'plan.is_purchasable' => ['nullable', 'boolean'],
             'plan.excerpt' => 'required|min:10',
             'plan.content' => 'nullable', //'required|min:10',
             'plan.features' => 'required|array',
             'plan.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn ($item) => $item->code)->toArray())],
-            'plan.price' => 'required|numeric',
+            'plan.price' => 'nullable|numeric',
             'plan.discount' => 'nullable|numeric',
             'plan.discount_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
             'plan.yearly_discount' => 'nullable|numeric',
@@ -174,6 +195,7 @@ class PlanForm extends Component
             $this->setCategories($this->plan);
             $this->refreshAttributes($this->plan);
             $this->setCoreMeta($this->plan);
+            $this->saveModelCoreMeta();
 
             // TODO: Determine which package to use for Translations! Set Translations...
 
@@ -206,5 +228,28 @@ class PlanForm extends Component
     public function render()
     {
         return view('livewire.dashboard.forms.plans.plan-form');
+    }
+
+    protected function saveModelCoreMeta()
+    {
+        foreach (collect($this->getRuleSet('meta') ?? [])->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {
+            $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
+
+            if (! empty($core_meta_key) && $core_meta_key !== '*') {
+                if(array_key_exists($core_meta_key, is_array($this->model_core_meta) ? $this->model_core_meta : $this->model_core_meta->toArray())) {
+                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaBlogPostDataTypes());
+
+                    try {
+                        CoreMeta::updateOrCreate(
+                            ['subject_id' => $this->plan->id, 'subject_type' => $this->plan::class, 'key' => $core_meta_key],
+                            ['value' => $new_value]
+                        );
+                    } catch(\Exception $e) {
+                        Log::error($e->getMessage());
+                        // dd($this->model_core_meta[$core_meta_key]);
+                    }
+                }
+            }
+        }
     }
 }

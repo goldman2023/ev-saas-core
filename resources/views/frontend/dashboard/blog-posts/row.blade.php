@@ -51,6 +51,10 @@
 
 <x-livewire-tables::table.cell class="align-middle">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
+        <a href="{{ $row->getPermalink() }}" target="_blank" class="btn btn-white flex items-center mr-2">
+            @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px]'])
+            <span class="ml-2">{{ translate('Preview') }}</span>
+        </a>
         <a class="btn btn-white flex items-center mr-2" href="{{ route('blog.post.edit', ['id' => $row->id]) }}">
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>

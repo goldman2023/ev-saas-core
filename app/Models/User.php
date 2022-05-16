@@ -20,6 +20,7 @@ use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
+use DB;
 
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
@@ -179,6 +180,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function purchasedProducts() {
+        // return DB::table('products')->;
     }
 
     public function wallets()

@@ -308,7 +308,7 @@ class EVService
                         'permissions' => [],
                     ],
                     [
-                        'label' => translate('Downloads'),
+                        'label' => translate('Downloads and Unlocked Content'),
                         'icon' => 'heroicon-o-download',
                         'route' => route('my.downloads.all'),
                         'is_active' => areActiveRoutes(['my.downloads.all']),
