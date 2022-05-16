@@ -75,6 +75,7 @@ class BlogPostForm extends Component
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
     }
+    
     protected function rules()
     {
         return [
@@ -92,7 +93,6 @@ class BlogPostForm extends Component
             'blogPost.meta_keywords' => [''],
             'blogPost.meta_description' => [''],
             'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
-            'core_meta.portfolio_link.value' => 'nullable',
         ];
     }
 
@@ -213,7 +213,7 @@ class BlogPostForm extends Component
 
             if (! empty($core_meta_key) && $core_meta_key !== '*') {
                 if(array_key_exists($core_meta_key, is_array($this->model_core_meta) ? $this->model_core_meta : $this->model_core_meta->toArray())) {
-                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaProductDataTypes());
+                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaBlogPostDataTypes());
 
                     try {
                         CoreMeta::updateOrCreate(

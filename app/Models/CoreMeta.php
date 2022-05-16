@@ -45,6 +45,13 @@ class CoreMeta extends Model
         ];
     }
 
+    public static function metaPlanDataTypes()
+    {
+        return [
+            'custom_redirect_url' => 'string',
+        ];
+    }
+
     public static function getMeta($core_meta, $content_type, $strict = false)
     {
         if (is_array($core_meta)) {
@@ -61,6 +68,8 @@ class CoreMeta extends Model
             $data_types = self::metaProductDataTypes();
         } else if($content_type === BlogPost::class) {
             $data_types = self::metaBlogPostDataTypes();
+        } else if($content_type === Plan::class) {
+            $data_types = self::metaPlanDataTypes();
         }
 
         castValuesForGet($core_meta, $data_types);

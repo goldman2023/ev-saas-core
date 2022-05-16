@@ -76,6 +76,7 @@ Route::middleware([
         Route::get('/products/edit/{id}/details/activity', [EVProductController::class, 'product_activity'])->name('product.activity');
         Route::get('/products/edit/{id}/variations', [EVProductController::class, 'edit_variations'])->name('product.edit.variations');
         Route::get('/products/edit/{id}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
+        Route::get('/products/preview/{id}/thank-you', [EVProductController::class, 'thank_you_preview'])->name('product.thank_you_preview');
 
         /* Pages */
         Route::get('/pages', [EVPageController::class, 'index'])->name('pages.index');
@@ -117,7 +118,7 @@ Route::middleware([
 
 
         /* My account */
-        Route::get('/account-settings', [EVAccountController::class, 'account_settings'])->name('my.shop.settings');
+        Route::get('/account-settings', [EVAccountController::class, 'account_settings'])->name('my.account.settings');
         Route::get('/account-settings/shops', [EVAccountController::class, 'account_shops_settings'])->name('my.account.shops');
         Route::get('/profile/{id}', [EVAccountController::class, 'user_profile'])->name('user.profile');
 
