@@ -188,7 +188,7 @@ Route::middleware([
     Route::get('/blog/post/{slug}', [EVBlogPostController::class, 'single'])->name('blog.post.single');
 
     // Social Posts
-    Route::get('/social/post/{id}', [EVBlogPostController::class, 'single'])->name('social.post.single');
+    Route::get('/social/post/{id}', [EVBlogPostController::class, 'social_post_single'])->name('social.post.single');
 
     // Shop pages
     Route::get('/shop/{slug}', [EVShopController::class, 'single'])->name(Shop::getRouteName());
