@@ -6,7 +6,7 @@
     base_currency: @js($plan->base_currency),
     primary: @js($plan->primary ?? false),
     featured: @js($plan->featured ?? false),
-    is_purchasable: @js($plan->is_purchasable ?? 'true'),
+    non_standard: @js($plan->non_standard ?? 'true'),
     discount_type: @js($plan->discount_type),
     yearly_discount_type: @js($plan->yearly_discount_type),
     tax_type: @js($plan->tax_type),
@@ -63,11 +63,11 @@
                         <!-- Is Purchasable -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                             <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                <span class="mr-2">{{ translate('Is Purchasable?') }}</span>
+                                <span class="mr-2">{{ translate('Requires contact to be purchased?') }}</span>
                             </label>
 
                             <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-                                <x-dashboard.form.toggle field="is_purchasable" />
+                                <x-dashboard.form.toggle field="non_standard" />
 
                                 <div class="w-full">
                                     <small class="text-info text-12">
@@ -79,7 +79,7 @@
                         <!-- END Is purchasable -->
 
                         <!-- Redirect URL Meta -->
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="!is_purchasable">
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="non_standard">
         
                             <label for="plan-title" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Redirect URL') }}
@@ -90,9 +90,21 @@
                             </div>
                         </div>
                         <!-- END Redirect URL Meta -->
+
+                        <!-- Custom CTA Label Meta -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="non_standard">
+                            <label for="plan-title" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('CTA Label') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.input field="model_core_meta.custom_cta_label" />
+                            </div>
+                        </div>
+                        <!-- END Custom CTA Label Meta -->
                 
                         <!-- Price -->
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="!non_standard">
                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Price') }}
                             </label>
@@ -119,7 +131,7 @@
 
 
                         <!-- Discount and Discount type -->
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="!non_standard">
                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Monthly plan discount') }}
                             </label>
@@ -145,7 +157,7 @@
                         <!-- END Discount and discount type -->
 
                         <!-- Yearly discount and discount type -->
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="!non_standard">
                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Annual plan discount') }}
                             </label>
@@ -178,7 +190,7 @@
 
 
                         <!-- Tax and Tax type -->
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="!non_standard">
                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Tax') }}
                             </label>
@@ -328,7 +340,7 @@
                                 $wire.set('plan.features', features, true);
                                 $wire.set('plan.primary', primary, true);
                                 $wire.set('plan.featured', featured, true);
-                                $wire.set('plan.is_purchasable', is_purchasable, true);
+                                $wire.set('plan.non_standard', non_standard, true);
                                 $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
                                 $wire.set('custom_attributes', this.attributes, true);
                             "

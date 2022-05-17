@@ -80,6 +80,7 @@ class PlanForm extends Component
         $rulesSets = collect([
             'meta' => [
                 'model_core_meta.custom_redirect_url' => 'nullable',
+                'model_core_meta.custom_cta_label' => 'nullable',
             ],
             'core_meta' => [
                 'core_meta' => '',
@@ -95,11 +96,11 @@ class PlanForm extends Component
             'selected_categories' => 'required',
             'plan.featured' => ['boolean'],
             'plan.primary' => ['boolean'],
-            'plan.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
+            'plan.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
             'plan.cover' => ['if_id_exists:App\Models\Upload,id,true'],
             'plan.name' => 'required|min:2',
             'plan.status' => [Rule::in(StatusEnum::toValues('archived'))],
-            'plan.is_purchasable' => ['nullable', 'boolean'],
+            'plan.non_standard' => ['nullable', 'boolean'],
             'plan.excerpt' => 'required|min:10',
             'plan.content' => 'nullable', //'required|min:10',
             'plan.features' => 'required|array',
@@ -208,7 +209,7 @@ class PlanForm extends Component
             }
         } catch (\Exception $e) {
             DB::rollBack();
-
+            dd($e);
             if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a subscription plan...Please try again.'));
                 $this->inform(translate('There was an error while updating a subscription plan...Please try again.'), '', 'fail');
@@ -237,7 +238,7 @@ class PlanForm extends Component
 
             if (! empty($core_meta_key) && $core_meta_key !== '*') {
                 if(array_key_exists($core_meta_key, is_array($this->model_core_meta) ? $this->model_core_meta : $this->model_core_meta->toArray())) {
-                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaBlogPostDataTypes());
+                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaPlanDataTypes());
 
                     try {
                         CoreMeta::updateOrCreate(
