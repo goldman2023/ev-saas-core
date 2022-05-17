@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('plans', function (Blueprint $table) {
-            $table->double('price')->nullable()->change();
-            $table->double('base_currency')->nullable()->change();
+            $table->float('price', 8 , 2)->nullable()->change();
+            $table->float('base_currency', 8, 2)->nullable()->change();
         });
     }
 
