@@ -18,10 +18,13 @@
             @endif
             
             <div class="w-full flex items-center px-5 pb-5 @if(empty($social_post->thumbnail)) pt-5 @endif">
-                <x-tenant.system.image alt="{{ get_site_name() }} logo"
-                    class="ring-2 ring-indigo-400 bg-white h-[50px] w-[50px] rounded-full mr-3" fit="contain"
-                    :image="$author->getThumbnail(['w' => 100])">
-                </x-tenant.system.image>
+                <a href="{{ $author->getPermalink() }}" class="">
+                    <x-tenant.system.image alt="{{ get_site_name() }} logo"
+                        class="ring-2 ring-indigo-400 bg-white h-[50px] w-[50px] rounded-full mr-3" fit="contain"
+                        :image="$author->getThumbnail(['w' => 100])">
+                    </x-tenant.system.image>
+                </a>
+                
 
                 {{-- Authors --}}
                 <div class="flex flex-col">
