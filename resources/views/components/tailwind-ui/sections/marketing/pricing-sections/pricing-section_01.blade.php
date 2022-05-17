@@ -24,13 +24,19 @@
                 
                 <div class="price-description">
                       <h3 class="font-bold text-18 text-gray-700 pb-2">{{ $model->name }}</h3>
-                      <div class="flex items-end">
-                          <h3 class="text-36 text-dark font-bold mb-0" x-text="pricing_mode === 'annual' ? annual_price : month_price"></h3>
-                          <span class="text-lg2 text-dark font-bold mb-2">/{{ translate('month') }}</span>
-                      </div>
-                      <div class="w-full text-gray-500 text-14" x-show="pricing_mode === 'annual'" x-cloak>
-                        {{ translate('Billed annually') }}
-                      </div>
+                      @if($model->non_standard)
+                          <div class="flex items-end">
+                              <h3 class="text-36 text-dark font-bold mb-0">{{ translate('Contact Us') }}</h3>
+                          </div>
+                      @else
+                        <div class="flex items-end">
+                            <h3 class="text-36 text-dark font-bold mb-0" x-text="pricing_mode === 'annual' ? annual_price : month_price"></h3>
+                            <span class="text-lg2 text-dark font-bold mb-2">/{{ translate('month') }}</span>
+                        </div>
+                        <div class="w-full text-gray-500 text-14" x-show="pricing_mode === 'annual'" x-cloak>
+                          {{ translate('Billed annually') }}
+                        </div>
+                      @endif
 
                       <p class=" text-sm text-lightDark py-6 mb-4">
                         {{ $model->excerpt }}
@@ -48,22 +54,28 @@
                       </div>
                   </div>
                   <div>
-                      <div class="w-full text-danger text-center pb-3 text-14" x-show="pricing_mode === 'annual'" x-cloak>
-                        {{ str_replace('%d%', \FX::formatPrice(abs($model->getTotalAnnualPrice() - ($model->getTotalPrice() * 12))), translate('You save %d% per year')) }}
-                      </div>
+                      @if(!$model->non_standard)
+                        <div class="w-full text-danger text-center pb-3 text-14" x-show="pricing_mode === 'annual'" x-cloak>
+                          {{ str_replace('%d%', \FX::formatPrice(abs($model->getTotalAnnualPrice() - ($model->getTotalPrice() * 12))), translate('You save %d% per year')) }}
+                        </div>
 
-                      @auth
-                        <a href="{{ route('my.plans.management') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
-                            {{ translate('Try it free') }}
-                        </a>
-                      @endauth
+                        @auth
+                          <a href="{{ route('my.plans.management') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                              {{ translate('Try it free') }}
+                          </a>
+                        @endauth
 
-                      @guest
-                        <a href="{{ route('user.registration') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
-                            {{ translate('Try it free') }}
+                        @guest
+                          <a href="{{ route('user.registration') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                              {{ translate('Try it free') }}
+                          </a>
+                        @endguest
+
+                      @else
+                        <a href="{{ $model->getCoreMeta('custom_redirect_url') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                            {{ $model->getCoreMeta('custom_cta_label') }}
                         </a>
-                      @endguest
-                      
+                      @endif
                   </div>
               </div>
             </div>
