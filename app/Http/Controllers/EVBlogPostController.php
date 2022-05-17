@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
+use App\Models\SocialPost;
 use Categories;
 use Cookie;
 use Illuminate\Http\Request;
@@ -55,6 +56,19 @@ class EVBlogPostController extends Controller
 
         if (! empty($blog_post)) {
             return view('frontend.blog.blog-post-single', compact('blog_post', 'authors', 'shop', 'related_blog_posts', 'latest_blog_posts'));
+        }
+
+        abort(404);
+    }
+
+    public function social_post_single(Request $request, $id) {
+        $social_post = SocialPost::find($id);
+        $author = $social_post->user;
+
+        $latest_social_posts = SocialPost::where('id', '!=', $social_post->id)->published()->with(['user'])->latest()->take(3)->get();
+
+        if (!empty($social_post)) {
+            return view('frontend.blog.social-post-single', compact('social_post', 'author', 'latest_social_posts'));
         }
 
         abort(404);

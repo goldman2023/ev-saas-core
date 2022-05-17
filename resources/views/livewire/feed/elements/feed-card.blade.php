@@ -53,6 +53,14 @@
                     @endforeach
                 </div>
             @endif
+
+            @if($item->subject::class === \App\Models\SocialPost::class)
+                <div class="w-full flex justify-end">
+                    <a href="{{ $item->subject->getPermalink() }}" class="text-typ-3 text-12">
+                        {{ translate('View full post') }}
+                    </a>
+                </div>
+            @endif
         </div>
 
         <div class="py-4 @if($showComments) my-4 @else mt-4 mb-0 @endif px-3 flex justify-between border-y border-gray-100">

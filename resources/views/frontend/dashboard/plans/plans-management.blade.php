@@ -36,30 +36,35 @@
                         x-data="{
                             qty: 1
                         }">
-                        <div class=" flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green"
-                            style="height: 505px;">
-                            <div class="price-description">
+                        <div class=" flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green h-full">
+                            <div class="price-description flex flex-col grow">
                                 <h3 class="font-bold text-18 text-gray-700 pb-2">{{ $plan->name }}</h3>
-                                <div class="flex items-end">
-                                    <h3 class="text-36 text-dark font-bold mb-0">{{ $plan->getTotalPrice(true) }}</h3>
-                                    <span class="text-lg2 text-dark font-bold mb-2">/{{ translate('month') }}</span>
-                                </div>
-                                <p class=" text-sm text-lightDark py-6 mb-4">
+                                @if($plan->non_standard)
+                                    <div class="flex items-end">
+                                        <h3 class="text-36 text-dark font-bold mb-0">{{ translate('Contact Us') }}</h3>
+                                    </div>
+                                @else
+                                    <div class="flex items-end">
+                                        <h3 class="text-36 text-dark font-bold mb-0">{{ $plan->getTotalPrice(true) }}</h3>
+                                        <span class="text-lg2 text-dark font-bold mb-2">/{{ translate('month') }}</span>
+                                    </div>
+                                @endif
+                                <p class=" text-sm text-gray-700 py-4 mb-4">
                                     {{ $plan->excerpt }}
                                 </p>
 
-                                <div class="w-full space-y-3">
+                                <div class="w-full space-y-3 grow overflow-y-auto max-h-[350px]">
                                     @if(!empty($plan->features))
-                                    @foreach($plan->features as $feature)
-                                    <div class="d-flex mb-2 flex items-center gap-3">
-                                        @svg('heroicon-s-check-circle', ['class' => 'w-5 h-5 text-primary'])
-                                        <p class="text-sm text-gray-700 mb-0">{{ $feature }}</p>
-                                    </div>
-                                    @endforeach
+                                        @foreach($plan->features as $feature)
+                                        <div class="d-flex mb-2 flex items-center gap-3">
+                                            @svg('heroicon-s-check-circle', ['class' => 'w-5 h-5 text-primary'])
+                                            <p class="text-sm text-gray-700 mb-0">{{ $feature }}</p>
+                                        </div>
+                                        @endforeach
                                     @endif
                                 </div>
                             </div>
-                            <div>
+                            <div class="pt-4">
                                 {{-- @if(get_tenant_setting('multiplan_purchase'))
                                 <div class="w-full pb-3">
                                     <label for="account-number" class="block text-sm font-medium text-gray-700">{{
@@ -74,24 +79,33 @@
                                 </div>
                                 @endif --}}
 
-                                <a href="{{ auth()->user()->isSubscribed() ? route('stripe.portal_session') : $plan->getStripeCheckoutPermalink() }}" target="_blank"
-                                    class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                                @if($plan->non_standard)
+                                    <a href="{{ $plan->getCoreMeta('custom_redirect_url') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                                        {{ $plan->getCoreMeta('custom_cta_label') }}
+                                    </a>
+                                @else
+                                    <a href="{{ auth()->user()->isSubscribed() ? route('stripe.portal_session') : $plan->getStripeCheckoutPermalink() }}" target="_blank"
+                                        class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
 
-                                    {{-- We should support following scenarios:
-                                        1. *If trial mode is disabled and no plan is purchased: Buy now
-                                        2. *If trial mode is enabled and no plan is purchased: Try for free
-                                        3. *If trial mode is disabled and plan is purchased: Upgrade plan
-                                        4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
-                                    @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                        <span>{{ translate('Buy now') }}</span>
-                                    @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                        <span>{{ translate('Try for free') }}</span>
-                                    @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                        <span>{{ translate('Change plan') }}</span>
-                                    @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                        <span>{{ translate('Change plan') }}</span>
-                                    @endif
-                                </a>
+                                        {{-- We should support following scenarios:
+                                            1. *If trial mode is disabled and no plan is purchased: Buy now
+                                            2. *If trial mode is enabled and no plan is purchased: Try for free
+                                            3. *If trial mode is disabled and plan is purchased: Upgrade plan
+                                            4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
+                                        @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                            <span>{{ translate('Buy now') }}</span>
+                                        @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                            <span>{{ translate('Try for free') }}</span>
+                                        @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                            <span>{{ translate('Change plan') }}</span>
+                                        @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                            <span>{{ translate('Change plan') }}</span>
+                                        @endif
+                                    </a>
+                                @endif
+
+                                
+                                
                             </div>
                         </div>
                     </div>
