@@ -5,6 +5,7 @@ namespace App\Traits\Livewire;
 use App\Models\CoreMeta;
 use App\Models\Product;
 use App\Models\Plan;
+use App\Models\BlogPost;
 use DB;
 
 trait HasCoreMeta
@@ -17,7 +18,11 @@ trait HasCoreMeta
             // Skip predefined CoreMeta keys
             if($model instanceof Product && array_key_exists($item->key, CoreMeta::metaProductDataTypes())) {
                 return false;
-            } else {
+            } else if($model instanceof Plan && array_key_exists($item->key, CoreMeta::metaPlanDataTypes()) ) {
+                return false;
+            } else if($model instanceof BlogPost && array_key_exists($item->key, CoreMeta::metaBlogPostDataTypes()) ) {
+                return false;
+            }  else {
                 return true;
             }
         })->map(fn($item) => ['key' => $item->key, 'value' => $item->value])->toArray());
@@ -34,6 +39,8 @@ trait HasCoreMeta
                 if($model instanceof Product && array_key_exists($meta['key'], CoreMeta::metaProductDataTypes()) ) {
                     continue;
                 } else if($model instanceof Plan && array_key_exists($meta['key'], CoreMeta::metaPlanDataTypes()) ) {
+                    continue;
+                } else if($model instanceof BlogPost && array_key_exists($meta['key'], CoreMeta::metaBlogPostDataTypes()) ) {
                     continue;
                 }
 

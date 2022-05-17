@@ -79,24 +79,33 @@
                                 </div>
                                 @endif --}}
 
-                                <a href="{{ auth()->user()->isSubscribed() ? route('stripe.portal_session') : $plan->getStripeCheckoutPermalink() }}" target="_blank"
-                                    class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                                @if($plan->non_standard)
+                                    <a href="{{ $plan->getCoreMeta('custom_redirect_url') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                                        {{ $plan->getCoreMeta('custom_cta_label') }}
+                                    </a>
+                                @else
+                                    <a href="{{ auth()->user()->isSubscribed() ? route('stripe.portal_session') : $plan->getStripeCheckoutPermalink() }}" target="_blank"
+                                        class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
 
-                                    {{-- We should support following scenarios:
-                                        1. *If trial mode is disabled and no plan is purchased: Buy now
-                                        2. *If trial mode is enabled and no plan is purchased: Try for free
-                                        3. *If trial mode is disabled and plan is purchased: Upgrade plan
-                                        4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
-                                    @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                        <span>{{ translate('Buy now') }}</span>
-                                    @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                        <span>{{ translate('Try for free') }}</span>
-                                    @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                        <span>{{ translate('Change plan') }}</span>
-                                    @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                        <span>{{ translate('Change plan') }}</span>
-                                    @endif
-                                </a>
+                                        {{-- We should support following scenarios:
+                                            1. *If trial mode is disabled and no plan is purchased: Buy now
+                                            2. *If trial mode is enabled and no plan is purchased: Try for free
+                                            3. *If trial mode is disabled and plan is purchased: Upgrade plan
+                                            4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
+                                        @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                            <span>{{ translate('Buy now') }}</span>
+                                        @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                            <span>{{ translate('Try for free') }}</span>
+                                        @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                            <span>{{ translate('Change plan') }}</span>
+                                        @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                            <span>{{ translate('Change plan') }}</span>
+                                        @endif
+                                    </a>
+                                @endif
+
+                                
+                                
                             </div>
                         </div>
                     </div>
