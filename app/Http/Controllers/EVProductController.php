@@ -11,6 +11,7 @@ use Categories;
 use EVS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Notifications\NovaNotification;
 use Spatie\Activitylog\Models\Activity;
 use Stripe;
 
@@ -146,7 +147,8 @@ class EVProductController extends Controller
                 $user = null;
             }
 
-            activity()
+            if($user) {
+                activity()
                 ->performedOn($product)
                 ->causedBy($user)
                 ->withProperties([
@@ -154,6 +156,16 @@ class EVProductController extends Controller
                     'action_title' => 'Viewed a product',
                 ])
                 ->log('viewed');
+
+                $request->user()->notify(
+                    NovaNotification::make()
+                        ->message('Product was viewed.')
+                        ->action('Product', $product->getPermalink())
+                        ->icon('View')
+                        ->type('info')
+                );
+            }
+
         }
         /* TODO: Make this optional (style1/style2/etc) per tenant/vendor */
 
@@ -180,6 +192,9 @@ class EVProductController extends Controller
                 'action_title' => 'Viewed a purchased content',
             ])
             ->log('viewed');
+
+
+
         }
 
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "585e910e666473b65458a5567157fac6",
+    "content-hash": "4f395092e3bc275959325eb69561d8b1",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -2239,6 +2239,66 @@
                 }
             ],
             "time": "2021-10-11T09:18:27+00:00"
+        },
+        {
+            "name": "eminiarts/nova-tabs",
+            "version": "2.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eminiarts/nova-tabs.git",
+                "reference": "bbb36761138726bdb4c7a52cb4df709f76fdb722"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eminiarts/nova-tabs/zipball/bbb36761138726bdb4c7a52cb4df709f76fdb722",
+                "reference": "bbb36761138726bdb4c7a52cb4df709f76fdb722",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "laravel/nova": "^4.0",
+                "php": "^7.4|^8"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2",
+                "orchestra/testbench": "^6",
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Eminiarts\\Tabs\\TabsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Eminiarts\\Tabs\\": "src/",
+                    "Eminiarts\\Tabs\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Emini Arts GmbH",
+                    "email": "support@eminiarts.ch",
+                    "homepage": "https://eminiarts.ch"
+                }
+            ],
+            "description": "Laravel Nova - Tabs.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/eminiarts/nova-tabs/issues",
+                "source": "https://github.com/eminiarts/nova-tabs/tree/2.0.7"
+            },
+            "time": "2022-05-16T08:26:28+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",

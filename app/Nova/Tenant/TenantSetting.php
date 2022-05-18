@@ -1,24 +1,19 @@
 <?php
 
-namespace App\Nova;
+namespace App\Nova\Tenant;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Code;
-use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class WooImport extends Resource
+class TenantSetting extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\WeWooImport::class;
+    public static $model = \App\Models\Tenant\TenantSetting::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -46,16 +41,6 @@ class WooImport extends Resource
     {
         return [
             ID::make()->sortable(),
-            Code::make('Data')->json(),
-            Text::make('Type'),
-            Text::make('Status'),
-            Number::make('Runs'),
-            Text::make('Source'),
-            Text::make('Refference ID'),
-            Text::make('Destination Refference ID'),
-            Text::make('Destination')->hideFromIndex(),
-            DateTime::make('Updated At')->hideFromIndex(),
-            DateTime::make('Created At')->hideFromIndex()
         ];
     }
 

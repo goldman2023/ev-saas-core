@@ -14,6 +14,8 @@ use App\Nova\Tenant\Shop;
 use App\Nova\Tenant\Wishlist;
 use App\Nova\Tenant\Activity;
 use App\Nova\Tenant\Category;
+use App\Nova\Tenant\OrderDetail;
+use App\Nova\Tenant\Page;
 use App\Nova\Tenant\PaymentMethodUniversal;
 use App\Nova\Tenant\Plan;
 use App\Nova\Tenant\Product;
@@ -24,9 +26,16 @@ use App\Nova\Tenant\Translation;
 use App\Nova\WeWorkflow;
 use App\Nova\WooImport;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Blade;
 use Laravel\Nova\Cards\Help;
+use Laravel\Nova\Menu\Menu;
+use Laravel\Nova\Menu\MenuItem;
+use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Outl1ne\MenuBuilder\Models\Menu as ModelsMenu;
+use Outl1ne\MenuBuilder\Models\MenuItem as ModelsMenuItem;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -39,6 +48,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
+
+
         Nova::serving(function () {
             Tenant::creating(function (Tenant $tenant) {
                 $tenant->ready = false;
@@ -48,6 +59,69 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 $tenant->createAsStripeCustomer();
             });
         });
+
+        Nova::userMenu(function (Request $request, Menu $menu) {
+            return $menu
+                ->append(MenuItem::externalLink('API Docs', 'https://docs.we-saas.com'))
+                ->prepend(MenuItem::link('My Profile', '/resources/users/'.$request->user()->getKey()));
+            });
+
+        Nova::mainMenu(function (Request $request) {
+            return [
+                MenuSection::dashboard(Main::class)->icon('chart-bar'),
+
+                MenuSection::make('General', [
+                    MenuItem::resource(Page::class),
+                ])->icon('user')->collapsable(),
+
+                MenuSection::make('Business', [
+                    MenuItem::resource(Plan::class),
+                    MenuItem::resource(Product::class),
+                    MenuItem::resource(Order::class),
+                    MenuItem::externalLink('Stripe Payments', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
+
+                ])->icon('credit-card')->collapsable(),
+
+                MenuSection::make('Content', [
+                    MenuItem::resource(Activity::class),
+                    MenuItem::resource(Category::class),
+                    MenuItem::resource(Page::class),
+                    MenuItem::resource(Blog::class),
+
+                ])->icon('document')->collapsable(),
+
+
+                MenuSection::make('Commerce', [
+
+
+                ])->icon('document-text')->collapsable(),
+
+                MenuSection::make('Users & Customers', [
+                    MenuItem::resource(User::class),
+                    MenuItem::resource(Shop::class),
+                    MenuItem::externalLink('Mailerlite & Newsletters', 'https://dashboard.mailerlite.com/subscribers?status=active'),
+
+                ])->icon('document-text')->collapsable(),
+
+                MenuSection::make('Advanced', [
+                    MenuItem::resource(WooImport::class),
+                    MenuItem::resource(WeWorkflow::class),
+                    MenuItem::externalLink('SMTP and transactional emails', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
+
+
+                ])->icon('adjustments')->collapsable(),
+
+
+
+
+
+
+            ];
+
+
+        });
+
+
     }
 
     /**
@@ -139,6 +213,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
     protected function resources()
     {
+
         if (tenancy()->initialized) {
             Nova::resources([
                 Blog::class,
@@ -155,7 +230,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 Shop::class,
                 Order::class,
                 WeWorkflow::class,
-                WooImport::class
+                WooImport::class,
+                Page::class
             ]);
         } else {
             Nova::resources([

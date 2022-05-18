@@ -13,6 +13,10 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Heading;
+use Laravel\Nova\Fields\File;
+use Laravel\Nova\Fields\Image;
+
 
 class Shop extends Resource
 {
@@ -28,7 +32,7 @@ class Shop extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -50,6 +54,16 @@ class Shop extends Resource
         return [
 
             Text::make('Name'),
+            Image::make('Thumbnail')
+                ->disk('s3')
+                ->preview(function ($value, $disk) {
+                    return $this->getThumbnail();
+                }),
+
+
+            Text::make('Permalink', function () {
+                return $this->getPermalink();
+            }),
             Text::make('slug'),
             Text::make('email'),
             HasMany::make('products'),
