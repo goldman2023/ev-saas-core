@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9729618edaec9be031c3cdf7f6ed122a",
+    "content-hash": "585e910e666473b65458a5567157fac6",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -2403,65 +2403,6 @@
                 "source": "https://github.com/firebase/php-jwt/tree/v6.1.2"
             },
             "time": "2022-04-21T14:37:18+00:00"
-        },
-        {
-            "name": "froala/wysiwyg-editor-php-sdk",
-            "version": "4.0.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/froala/wysiwyg-editor-php-sdk.git",
-                "reference": "954488a8fe4206b5e70a13d94a364cc23d9881ae"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/froala/wysiwyg-editor-php-sdk/zipball/954488a8fe4206b5e70a13d94a364cc23d9881ae",
-                "reference": "954488a8fe4206b5e70a13d94a364cc23d9881ae",
-                "shasum": ""
-            },
-            "type": "php-plugin",
-            "extra": {
-                "installer-name": "FroalaEditor"
-            },
-            "autoload": {
-                "psr-0": {
-                    "FroalaEditor": "lib/"
-                },
-                "psr-4": {
-                    "FroalaEditor\\": "lib/FroalaEditor"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "proprietary"
-            ],
-            "authors": [
-                {
-                    "name": "Froala Labs",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "PHP SDK for Froala WYSIWYG Editor",
-            "homepage": "https://www.froala.com/wysiwyg-editor",
-            "keywords": [
-                "editor",
-                "froala",
-                "html",
-                "php",
-                "php rich text editor",
-                "php rte",
-                "php wysiwyg",
-                "rich editor",
-                "rich text editor",
-                "rte",
-                "sdk",
-                "text",
-                "wysiwyg"
-            ],
-            "support": {
-                "issues": "https://github.com/froala/froala-editor-php-sdk/issues",
-                "source": "https://www.froala.com/wysiwyg-editor"
-            },
-            "time": "2022-03-15T14:52:59+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -6685,6 +6626,130 @@
                 }
             ],
             "time": "2022-02-02T18:37:57+00:00"
+        },
+        {
+            "name": "outl1ne/nova-menu-builder",
+            "version": "7.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/outl1ne/nova-menu-builder.git",
+                "reference": "37532de4786d2b69cf502bb566559ed77deadb68"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/outl1ne/nova-menu-builder/zipball/37532de4786d2b69cf502bb566559ed77deadb68",
+                "reference": "37532de4786d2b69cf502bb566559ed77deadb68",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": ">=2.0.0",
+                "laravel/nova": "^4.0",
+                "outl1ne/nova-translations-loader": "^5.0.0",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.0",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Outl1ne\\MenuBuilder\\MenuBuilderServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Outl1ne\\MenuBuilder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tarvo Reinpalu",
+                    "email": "tarvoreinpalu@gmail.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Optimist Digital",
+                    "email": "info@optimistdigital.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "This Laravel Nova package allows you to create and manage menus and menu items.",
+            "keywords": [
+                "builder",
+                "laravel",
+                "menu",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/outl1ne/nova-menu-builder/issues",
+                "source": "https://github.com/outl1ne/nova-menu-builder/tree/7.0.6"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/outl1ne",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-05-17T07:27:22+00:00"
+        },
+        {
+            "name": "outl1ne/nova-translations-loader",
+            "version": "5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/outl1ne/nova-translations-loader.git",
+                "reference": "a005e37d105473b0cfc4a1586d87bfc7d45ffcba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/outl1ne/nova-translations-loader/zipball/a005e37d105473b0cfc4a1586d87bfc7d45ffcba",
+                "reference": "a005e37d105473b0cfc4a1586d87bfc7d45ffcba",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^8.0|^9.0",
+                "laravel/nova": "^4.0",
+                "php": ">=8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [],
+                    "aliases": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Outl1ne\\NovaTranslationsLoader\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "This Laravel Nova package helps developers load translations into their packages.",
+            "keywords": [
+                "laravel",
+                "nova",
+                "optimistdigital",
+                "outl1ne",
+                "translations"
+            ],
+            "support": {
+                "issues": "https://github.com/outl1ne/nova-translations-loader/issues",
+                "source": "https://github.com/outl1ne/nova-translations-loader/tree/5.0.0"
+            },
+            "time": "2022-04-29T14:58:51+00:00"
         },
         {
             "name": "owen-it/laravel-auditing",
@@ -16419,5 +16484,5 @@
         "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.0.0"
 }

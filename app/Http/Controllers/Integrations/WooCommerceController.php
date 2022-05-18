@@ -239,7 +239,11 @@ class WooCommerceController extends Controller
         return view('frontend.dashboard.integrations.woocommerce.import-results');
     }
 
-    public function transfer_woocommerce_produts_to_destination($all = true, $mode = 'export') {
+    public function transfer_woocommerce_produts_to_destination(Request $request, $all = true, $mode = 'export') {
+
+        /* TODO: Wtft is this, session()->save? It's cool I guess :D  */
+        session(['import_mode' => 'export']);
+        session()->save();
 
         $destination = 'woo_export';
         $count = 0;
@@ -268,6 +272,8 @@ class WooCommerceController extends Controller
 
     public function transfer_woocommerce_produts($all = true, $mode = 'import') {
 
+        $import_mode = session('import_mode');
+
         $count = 0;
         if($mode == 'import') {
             $products = WooProduct::all($this->request_options);
@@ -277,6 +283,7 @@ class WooCommerceController extends Controller
                     $import = new WeWooImport();
                     $import->data = json_encode($prooduct);
                     $import->refference_id = $prooduct->id;
+                    $import->source =
                     $import->save();
                     $count++;
                 }
