@@ -18,8 +18,9 @@ use Str;
 
 class IntegrationsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+
         return view('frontend.dashboard.integrations.index');
     }
 
