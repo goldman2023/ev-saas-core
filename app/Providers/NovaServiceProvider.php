@@ -117,7 +117,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         if (tenancy()->initialized) {
             return [
-
+                new \Outl1ne\MenuBuilder\MenuBuilder(),
                 // new \Bolechen\NovaActivitylog\NovaActivitylog(),
             ];
         } else {
