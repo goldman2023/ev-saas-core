@@ -6,7 +6,7 @@ return [
      * Store URL eg: http://example.com
      *================================================================================.
      */
-    'store_url'         => env('WOOCOMMERCE_STORE_URL', 'https://debesunamai.lt'),
+    'store_url'         => env('WOOCOMMERCE_STORE_URL', 'https://we-saas.tempurl.host/'),
 
     /**
      *================================================================================

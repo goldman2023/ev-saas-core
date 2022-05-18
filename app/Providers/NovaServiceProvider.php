@@ -22,6 +22,7 @@ use App\Nova\Tenant\ProductVariations;
 use App\Nova\Tenant\ShopSetting;
 use App\Nova\Tenant\Translation;
 use App\Nova\WeWorkflow;
+use App\Nova\WooImport;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
@@ -154,6 +155,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 Shop::class,
                 Order::class,
                 WeWorkflow::class,
+                WooImport::class
             ]);
         } else {
             Nova::resources([
