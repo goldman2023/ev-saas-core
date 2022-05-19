@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Dashboard\Forms\Plans;
 
 use App\Enums\AmountPercentTypeEnum;
 use App\Enums\StatusEnum;
+use App\Facades\FX;
 use App\Facades\MyShop;
 use App\Models\Address;
 use App\Models\Category;
@@ -19,7 +20,6 @@ use App\Traits\Livewire\HasAttributes;
 use Categories;
 use DB;
 use EVS;
-use FX;
 use Log;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -89,7 +89,7 @@ class PlanForm extends Component
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
     }
-    
+
     protected function rules()
     {
         return [
@@ -104,7 +104,10 @@ class PlanForm extends Component
             'plan.excerpt' => 'required|min:10',
             'plan.content' => 'nullable', //'required|min:10',
             'plan.features' => 'required|array',
-            'plan.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn ($item) => $item->code)->toArray())],
+
+            'plan.base_currency' => 'nullable',
+            /* TODO: @vukasin plan.base_currency FX RULE not working all the time (check if we need some currency seeds or whatever) */
+            // 'plan.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn ($item) => $item->code)->toArray())],
             'plan.price' => 'nullable|numeric',
             'plan.discount' => 'nullable|numeric',
             'plan.discount_type' => [Rule::in(AmountPercentTypeEnum::toValues())],

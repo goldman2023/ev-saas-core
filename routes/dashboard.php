@@ -17,6 +17,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\Integrations\IntegrationsController;
+use App\Http\Controllers\Integrations\WooCommerceController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
@@ -181,6 +182,8 @@ Route::middleware([
     Route::get('/integrations/woocommerce', [WooCommerceController::class, 'index'])->name('integrations.woocommerce');
     Route::get('/integrations/woocommerce/import/{type}', [WooCommerceController::class, 'import'])->name('integrations.woocommerce.import');
     Route::get('/integrations/woocommerce/import-results/{type}', [WooCommerceController::class, 'import_results'])->name('integrations.woocommerce.import-results');
+    Route::get('/integrations/woocommerce/transfer/import', [WooCommerceController::class, 'transfer_woocommerce_produts'])->name('integrations.woocommerce.transfer-1');
+    Route::get('/integrations/woocommerce/transfer/export', [WooCommerceController::class, 'transfer_woocommerce_produts_to_destination'])->name('integrations.woocommerce.transfer-2');
 
     /* FEED Routes */
     /* TODO: Add this to separate feed.php routes file */

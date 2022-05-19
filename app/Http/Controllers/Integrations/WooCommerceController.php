@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\Upload;
+use App\Models\WeWooImport;
 use Codexshaper\WooCommerce\Facades\Category as WooCategory;
 use Codexshaper\WooCommerce\Facades\Coupon as WooCoupon;
 use Codexshaper\WooCommerce\Facades\Order as WooOrder;
@@ -238,8 +239,66 @@ class WooCommerceController extends Controller
         return view('frontend.dashboard.integrations.woocommerce.import-results');
     }
 
+    public function transfer_woocommerce_produts_to_destination(Request $request, $all = true, $mode = 'export') {
 
-    public function transfer_woocommerce_produts($all = true) {
+        /* TODO: Wtft is this, session()->save? It's cool I guess :D  */
+        session(['import_mode' => 'export']);
+        session()->save();
+
+        $destination = 'woo_export';
+        $count = 0;
+        if($mode == 'export') {
+            $products = WeWooImport::where('runs', 0)->get();
+
+            foreach($products as $product) {
+                try {
+                    $transfer_data = (json_decode($product->data, true));
+                    $transfer_data['status'] = 'draft';
+                    $product_to_create = WooProduct::create($transfer_data);
+                    /* TODO: Send data via rest api to woocommerce */
+                    $product->runs++;
+                    $product->destination = $destination;
+                    $product->save();
+                    $count++;
+                } catch(Exception $e) {
+                    dd($e->getMessage());
+                }
+            }
+
+        }
+
+        dd($count . "Transfered Products");
+    }
+
+    public function transfer_woocommerce_produts($all = true, $mode = 'import') {
+
+        $import_mode = session('import_mode');
+
+        $count = 0;
+        if($mode == 'import') {
+            $products = WooProduct::all($this->request_options);
+
+            foreach($products as $prooduct) {
+                if(WeWooImport::where('source', 'woo_import')->where('refference_id', $prooduct->id)->count() == 0) {
+                    $import = new WeWooImport();
+                    $import->data = json_encode($prooduct);
+                    $import->refference_id = $prooduct->id;
+                    $import->source =
+                    $import->save();
+                    $count++;
+                }
+
+            }
+
+        } else {
+            $products = WooProduct::all($this->request_options);
+
+        }
+
+        dd($count . " Products Imported For Transfer");
+
+
+
 
         $data = [
             'name' => 'Variable Product',

@@ -9,7 +9,7 @@
     <!-- Header -->
     <div class="card-header">
         <h5 class="card-header-title mb-6 font-medium text-xl">
-            {{ translate('Available Integrations') }}
+            {{ translate('Available Data Integrations') }}
         </h5>
     </div>
 

@@ -3,13 +3,18 @@
 namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
+use App\Nova\User;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasOne;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Select;
 
 class Blog extends Resource
 {
@@ -25,7 +30,7 @@ class Blog extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -45,11 +50,35 @@ class Blog extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
+            Image::make('Thumbnail')
+                ->disk('s3')
+                ->preview(function ($value, $disk) {
+                    return $this->getThumbnail();
+                }),
+
+                Image::make('Cover')
+                ->disk('s3')
+                ->preview(function ($value, $disk) {
+                    return $this->getCover();
+                }),
+
+
+            Text::make('Name'),
+
+
+            Heading::make('Details'),
+            Select::make('Status', function () {
+                return $this->status;
+            }),
+
+
 
             Text::make('Name'),
             Textarea::make('Content'),
             MorphMany::make('Activity', 'activities'),
+
+            ID::make()->sortable(),
+
 
             // BelongsTo::make('Author', 'author', User::class),
         ];

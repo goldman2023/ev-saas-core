@@ -11,6 +11,8 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\MorphMany;
 
 class Plan extends Resource
 {
@@ -26,7 +28,7 @@ class Plan extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -46,10 +48,30 @@ class Plan extends Resource
     public function fields(Request $request)
     {
         return [
+            Image::make('Thumbnail')
+                ->disk('s3')
+                ->preview(function ($value, $disk) {
+                    return $this->getThumbnail(['w' => 100]);
+                })->thumbnail(
+                    function ($value, $disk) {
+                        return $this->getThumbnail(['w' => 100]);
+                    }
+                ),
+            Text::make('Name'),
+
+            Text::make('Base Price', function () {
+                return $this->getBasePrice(true);
+            })->sortable(),
+
+
+            Text::make('Permalink', function () {
+                return $this->getPermalink();
+            })->hideFromIndex(),
             ID::make()->sortable(),
 
-            Text::make('Title'),
-            Number::make('Price'),
+            // MorphMany::make('Activity', 'activities'),
+            HasOne::make('Shop'),
+
             // Textarea::make('Content'),
 
             // HasOne::make('Parent', 'parent', Category::class),
