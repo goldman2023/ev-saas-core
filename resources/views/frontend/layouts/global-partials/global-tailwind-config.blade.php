@@ -91,7 +91,6 @@ $colors = TenantSettings::get('colors');
                     'indigo-700': '{{ $colors['indigo-700'] ?: '#f40000' }}',
                     'indigo-800': '{{ $colors['indigo-800'] ?: '#f40000' }}',
                     'indigo-900': '{{ $colors['indigo-900'] ?: '#f40000' }}',
-
                 }
             }
           }
