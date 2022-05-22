@@ -3,14 +3,17 @@
 namespace App\Nova\MenuItemTypes;
 
 use App\Models\Page;
+use App\Models\Category;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Select;
 use Outl1ne\MenuBuilder\MenuItemTypes\BaseMenuItemType;
+use Categories;
 
-class PageMenuItemType extends BaseMenuItemType
+class BlogArchiveMenuItemType extends BaseMenuItemType
 {
     public static function getType(): string
     {
-        return 'select';
+        return 'text';
     }
 
     /**
@@ -20,7 +23,7 @@ class PageMenuItemType extends BaseMenuItemType
      * @return string
      **/
     public static function getIdentifier(): string {
-        return 'page';
+        return 'blog-archive';
     }
 
     /**
@@ -30,20 +33,7 @@ class PageMenuItemType extends BaseMenuItemType
      * @return string
      **/
     public static function getName(): string {
-        return 'Page Link';
-    }
-
-    /**
-     * Get list of options shown in a select dropdown.
-     *
-     * Should be a map of [key => value, ...], where key is a unique identifier
-     * and value is the displayed string.
-     *
-     * @return array
-     **/
-    public static function getOptions($locale): array {
-        $pages = Page::published()->get()->keyBy('id')->map(fn($item) => $item->name.' (ID: '.$item->id.')')->toArray();
-        return $pages;
+        return 'Blog Archive';
     }
 
     /**
@@ -55,8 +45,12 @@ class PageMenuItemType extends BaseMenuItemType
      * @return string
      **/
     public static function getDisplayValue($value, ?array $data, $locale) {
-        $page = Page::find($value);
-        return 'Page: '.$page->name.' (ID: '.$page->id.')';
+        if($data['from_specific_category'] ?? null) {
+            $category = Categories::getByID($data['from_specific_category']);
+
+            return 'Blog Archive (Category: '.$category->name.')';
+        }
+        return 'Blog Archive';
     }
 
     /**
@@ -75,7 +69,14 @@ class PageMenuItemType extends BaseMenuItemType
      */
     public static function getValue($value, ?array $data, $locale)
     {
-        return Page::find($value)?->getPermalink() ?? '#';
+        if($data['from_specific_category'] ?? null) {
+            $category = Categories::getByID($data['from_specific_category']);
+
+            if(!empty($category)) {
+                return route('blog.category.archive', ['category_slug' => $category->slug]);
+            }
+        }
+        return route('blog.archive');
     }
 
     /**
@@ -85,8 +86,12 @@ class PageMenuItemType extends BaseMenuItemType
      */
     public static function getFields(): array
     {
-        return [
+        $all_categories = Categories::getAll(true)->keyBy('id')->map(fn($item) => str_repeat('-', $item->level).$item->name)->toArray();
 
+        return [
+            Select::make('From Specific Category')->options([
+                'all' => translate('All'),
+            ] + $all_categories)
         ];
     }
 
@@ -98,7 +103,7 @@ class PageMenuItemType extends BaseMenuItemType
     public static function getRules(): array
     {
         return [
-            'value' => 'required',
+            // 'value' => 'required',
         ];
     }
 

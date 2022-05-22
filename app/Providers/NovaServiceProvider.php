@@ -49,7 +49,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
-
+        Nova::style('admin', asset('nova/css/custom-nova-styles.css'));
 
         Nova::serving(function () {
             Tenant::creating(function (Tenant $tenant) {

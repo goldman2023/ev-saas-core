@@ -66,6 +66,7 @@ return [
         \Outl1ne\MenuBuilder\MenuItemTypes\MenuItemTextType::class,
         \Outl1ne\MenuBuilder\MenuItemTypes\MenuItemStaticURLType::class,
         \App\Nova\MenuItemTypes\PageMenuItemType::class,
+        \App\Nova\MenuItemTypes\BlogArchiveMenuItemType::class,
     ],
 
     /*

@@ -182,6 +182,8 @@ Route::middleware([
 
     // Blog Posts
     Route::get('/blog', [EVBlogPostController::class, 'blog_archive'])->name('blog.archive');
+    Route::get('/blog/{category_slug}', [EVBlogPostController::class, 'blog_archive_by_category'])->name('blog.category.archive');
+
     // Route::get('/news/{slug}', [BlogController::class, 'blog_details'])->name('news.details');
     // Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
     Route::get('/shop/{shop_slug}/blog/post/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');

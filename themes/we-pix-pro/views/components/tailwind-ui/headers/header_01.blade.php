@@ -1,3 +1,7 @@
+@php
+    $header_menu = nova_get_menu_by_slug('header');
+    $header_menu_items = $header_menu['menuItems'] ?? null;
+@endphp
 <header class="" x-data="{
     show_mobile_menu: false,
 }">
@@ -22,18 +26,15 @@
                 </div>
 
                 <nav class="hidden md:flex space-x-[32px]">
-                    <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'features']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Features')
-                        }}</a>
-                    <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'plans-pricing']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Pricing')
-                        }}</a>
-                    <a href="{{ route('blog.archive') }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Blog')
-                        }}</a>
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Contact')
-                        }}</a>
-                    <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'support']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Support')
-                        }}</a>
-                    <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'download-pixpro-photogrammetry-software']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Download')
-                    }}</a>
+                    @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
+                        @foreach($header_menu_items as $menu_item)
+                            @if($menu_item['enabled']) 
+                                <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="text-base font-medium text-gray-500 hover:text-gray-900">
+                                    {{ $menu_item['name'] ?? '' }}
+                                </a>
+                            @endif
+                        @endforeach
+                    @endif
                 </nav>
 
                 {{-- TODO: Create Dashboard button (similar to 'Try for free') if user is authenticated, otherwise

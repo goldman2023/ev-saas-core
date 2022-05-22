@@ -18,7 +18,32 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     }
 
     protected function getMenuLocations(): array {
-        return [];
+        return [
+            'header' => [
+                'name' => 'Header',
+                'unique' => true,
+                'max_depth' => 3,
+                'menu_item_types' => []
+            ],
+            'footer_1' => [
+                'name' => 'Footer 1',
+                'unique' => true,
+                'max_depth' => 1,
+                'menu_item_types' => []
+            ],
+            'footer_2' => [
+                'name' => 'Footer 2',
+                'unique' => true,
+                'max_depth' => 1,
+                'menu_item_types' => []
+            ],
+            'footer_3' => [
+                'name' => 'Footer 3',
+                'unique' => true,
+                'max_depth' => 1,
+                'menu_item_types' => []
+            ],
+        ];
     }
 
     /**
