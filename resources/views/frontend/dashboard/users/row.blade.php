@@ -1,47 +1,64 @@
 <x-livewire-tables::table.cell class="align-middle ">
-    <a class="media items-center text-14" href="{{ route('plan.edit', ['id' => $row->id]) }}">
+    <a class="media items-center text-14" href="{{ route('user.details', $row->id) }}">
         #{{ $row->id }}
     </a>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle ">
-    {{ $row->getTranslation('name') }}
+    <a href="{{ route('user.details', $row->id) }}" class="flex items-center" >
+        @if(!empty($row->thumbnail))
+            <img class="h-10 w-10 rounded-full border-3 ring-2 border-gray-200 mr-3 object-cover shrink-0" src="{{ $row->getThumbnail(['w' => '120']) }}" />
+        @endif
 
-    @if($row->primary)
-        <span class="badge-info">
-            {{ translate('Primary') }}
-        </span>
-    @endif
+        <div class="w-full flex flex-col ">
+            <strong class="">{{ $row->name.' '.$row->surname }}</strong>
+            <span class="">{{ $row->email }}</span>
+        </div>
+    </a>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
-    @if($row->status === \App\Enums\StatusEnum::published()->value)
-        <span class="badge-success">
-          {{ ucfirst($row->status) }}
-        </span>
-    @elseif($row->status === \App\Enums\StatusEnum::draft()->value)
-        <span class="badge-warning">
-          {{ ucfirst($row->status) }}
-        </span>
-    @elseif($row->status === \App\Enums\StatusEnum::pending()->value)
-        <span class="badge-info">
-          {{ ucfirst($row->status) }}
-        </span>
-    @elseif($row->status === \App\Enums\StatusEnum::private()->value)
+    @if($row->user_type === \App\Enums\UserTypeEnum::customer()->value)
         <span class="badge-dark">
-          {{ ucfirst($row->status) }}
+          {{ ucfirst($row->user_type) }}
+        </span>
+    @elseif($row->user_type === \App\Enums\UserTypeEnum::staff()->value)
+        <span class="badge-warning">
+          {{ ucfirst($row->user_type) }}
+        </span>
+    @elseif($row->user_type === \App\Enums\UserTypeEnum::seller()->value)
+        <span class="badge-info">
+          {{ ucfirst($row->user_type) }}
+        </span>
+    @elseif($row->user_type === \App\Enums\UserTypeEnum::admin()->value)
+        <span class="badge-success">
+          {{ ucfirst($row->user_type) }}
         </span>
     @endif
 </x-livewire-tables::table.cell>
-
-@if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('featured')))
-<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    <strong class="{{ $row->featured ? 'badge-success' : 'badge-dark' }}">{{ $row->featured ? translate('Featured') : translate('Not featured') }}</strong>
+    
+<x-livewire-tables::table.cell class="align-middle text-center">
+    @if($row->entity === \App\Enums\UserEntityEnum::individual()->value)
+        <span class="badge-dark">
+        {{ ucfirst($row->entity) }}
+        </span>
+    @elseif($row->entity === \App\Enums\UserEntityEnum::company()->value)
+        <span class="badge-info">
+        {{ ucfirst($row->entity) }}
+        </span>
+    @endif 
 </x-livewire-tables::table.cell>
-@endif
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
+    @if($row->isVerified())
+        <span class="badge-success">
+        {{ translate('Verified') }}
+        </span>
+    @else
+        <span class="badge-danger">
+        {{ translate('Not verified') }}
+        </span>
+    @endif 
 </x-livewire-tables::table.cell>
 
 
@@ -49,17 +66,13 @@
     <span class="block text-14 mb-0">{{ $row->created_at?->format('d.m.Y') ?? '' }}</span>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle ">
-    <span class="block text-14 mb-0">{{ $row->updated_at?->format('d.m.Y') ?? '' }}</span>
-</x-livewire-tables::table.cell>
-
 <x-livewire-tables::table.cell class="align-middle static ">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        <a class="btn btn-white flex items-center mr-2" href="{{ route('plan.edit', ['id' => $row->id]) }}">
-            @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
+        <a class="btn btn-white flex items-center mr-2" href="{{ route('user.details', $row->id) }}">
+            @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a>
 
-        <button 
+        {{-- <button 
             @click="isOpen = !isOpen" 
             @keydown.escape="isOpen = false" 
             class="flex items-center btn" 
@@ -82,6 +95,6 @@
                     <span class="ml-2">{{ translate('Remove plan') }}</span>
                 </a>
             </li>
-        </ul>
+        </ul> --}}
     </div>
 </x-livewire-tables::table.cell>

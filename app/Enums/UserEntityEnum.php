@@ -19,8 +19,8 @@ class UserEntityEnum extends EVBaseEnum
     public static function labels(): array
     {
         return [
-            'individual' => 'individual',
-            'company' => 'company',
+            'individual' => 'Individual',
+            'company' => 'Company',
         ];
     }
 }

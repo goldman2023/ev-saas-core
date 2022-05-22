@@ -22,7 +22,7 @@
   
       <!-- This element is to trick the browser into centering the modal contents. -->
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-  
+
       <div class="z-[9999] relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6 {{ $class }}"
             @if(!$preventClose) x-on:click.outside="show = false" @endif
             x-show="show"
@@ -32,8 +32,15 @@
             x-transition:leave="ease-out duration-200"
             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-        <div class="w-full">
-          <h4 class="w-full text-18 pb-1 mb-3 border-b border-gray-200">{{ $title }}</h4>
+
+        <div class="w-5 h-5 absolute top-4 right-4 cursor-pointer" @click="show = false">
+          @svg('heroicon-s-x', ['class' => 'w-5 h-5 text-gray-500'])
+        </div>
+
+        <div class="w-full">  
+          @if(empty($title))
+            <h4 class="w-full text-18 pb-1 mb-3 border-b border-gray-200">{{ $title }}</h4>
+          @endif
 
           {{ $slot }}
           
