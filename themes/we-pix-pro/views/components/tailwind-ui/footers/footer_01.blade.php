@@ -1,3 +1,13 @@
+@php
+    $footer_1_menu = nova_get_menu_by_slug('footer_1');
+    $footer_1_menu_items = $footer_1_menu['menuItems'] ?? null;
+
+    $footer_2_menu = nova_get_menu_by_slug('footer_2');
+    $footer_2_menu_items = $footer_2_menu['menuItems'] ?? null;
+
+    $footer_3_menu = nova_get_menu_by_slug('footer_3');
+    $footer_3_menu_items = $footer_3_menu['menuItems'] ?? null;
+@endphp
 <footer class="bg-[#303030]" aria-labelledby="footer-heading">
     <div class="max-w-6xl mx-auto py-12 px-4 sm:px-5 lg:py-16 lg:px-8">
       <div class="lg:grid lg:grid-cols-5 lg:gap-8">
@@ -5,60 +15,51 @@
             <div>
                 <h3 class="text-sm font-semibold text-white tracking-wider uppercase">{{ translate('Product') }}</h3>
                 <ul role="list" class="mt-4 space-y-4">
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white"> {{ translate('Plans & Pricing') }} </a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('Testimonials') }}</a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('Use cases') }}</a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('Blog') }}</a>
-                    </li>
+                  @if(!empty($footer_1_menu_items) && $footer_1_menu_items->isNotEmpty())
+                      @foreach($footer_1_menu_items as $menu_item)
+                          @if($menu_item['enabled']) 
+                          <li>
+                              <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="text-base text-gray-300 hover:text-white">
+                                {{ $menu_item['name'] ?? '' }} 
+                              </a>
+                          </li>
+                          @endif
+                      @endforeach
+                  @endif
                 </ul>
             </div>
 
             <div class="mt-6 sm:mt-0">
                 <h3 class="text-sm font-semibold text-white tracking-wider uppercase">{{ translate('Company') }}</h3>
                 <ul role="list" class="mt-4 space-y-4">
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('About us') }}</a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('Contact us') }}</a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('Partners') }}</a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('EU investment') }}</a>
-                    </li>
+                  @if(!empty($footer_2_menu_items) && $footer_2_menu_items->isNotEmpty())
+                    @foreach($footer_2_menu_items as $menu_item)
+                        @if($menu_item['enabled']) 
+                          <li>
+                              <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="text-base text-gray-300 hover:text-white">
+                                {{ $menu_item['name'] ?? '' }} 
+                              </a>
+                          </li>
+                        @endif
+                    @endforeach
+                @endif
                 </ul>
             </div>
 
             <div class="mt-6 sm:mt-0">
                 <h3 class="text-sm font-semibold text-white tracking-wider uppercase">{{ translate('Support') }}</h3>
                 <ul role="list" class="mt-4 space-y-4">
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('Channels') }}</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('Videos') }}</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('FAQ') }}</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-base text-gray-300 hover:text-white">{{ translate('Help') }}</a>
-                    </li>
+                  @if(!empty($footer_3_menu_items) && $footer_3_menu_items->isNotEmpty())
+                      @foreach($footer_3_menu_items as $menu_item)
+                          @if($menu_item['enabled']) 
+                          <li>
+                              <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="text-base text-gray-300 hover:text-white">
+                                {{ $menu_item['name'] ?? '' }} 
+                              </a>
+                          </li>
+                          @endif
+                      @endforeach
+                  @endif
                 </ul>
             </div>
         </div>

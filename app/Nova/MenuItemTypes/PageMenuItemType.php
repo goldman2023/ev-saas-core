@@ -86,7 +86,7 @@ class PageMenuItemType extends BaseMenuItemType
     public static function getFields(): array
     {
         return [
-
+            'query_params' => Text::make('Query Params')
         ];
     }
 

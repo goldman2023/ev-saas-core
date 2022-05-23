@@ -45,7 +45,7 @@ class BlogArchiveMenuItemType extends BaseMenuItemType
      * @return string
      **/
     public static function getDisplayValue($value, ?array $data, $locale) {
-        if($data['from_specific_category'] ?? null) {
+        if(($data['from_specific_category'] ?? null) && $data['from_specific_category'] !== 'all') {
             $category = Categories::getByID($data['from_specific_category']);
 
             return 'Blog Archive (Category: '.$category->name.')';
@@ -69,7 +69,7 @@ class BlogArchiveMenuItemType extends BaseMenuItemType
      */
     public static function getValue($value, ?array $data, $locale)
     {
-        if($data['from_specific_category'] ?? null) {
+        if(($data['from_specific_category'] ?? null) && $data['from_specific_category'] !== 'all') {
             $category = Categories::getByID($data['from_specific_category']);
 
             if(!empty($category)) {
