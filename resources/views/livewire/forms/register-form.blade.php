@@ -1,4 +1,4 @@
-<div class="w-full relative" x-data="{
+<form class="w-full relative" wire:submit.prevent="register()" x-data="{
         entity: @js($entity),
         @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
             user_meta: {
@@ -161,7 +161,7 @@
 
         {{-- Register Action --}}
         <div class="mb-3">
-            <button type="button" class="btn bg-primary text-white w-full mt-2" 
+            <button type="submit" class="btn bg-primary text-white w-full mt-2" 
                 @click="
                     $wire.set('entity', entity, true);
                     @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
@@ -172,7 +172,6 @@
                         @endforeach
                     @endif
                 "
-                wire:click="register()"
                 data-test="we-register-submit">
                 {{ translate('Register')}}
             </button>
@@ -192,7 +191,7 @@
             </a> --}}
         </div>
     </div>
-</div>
+</form>
 
 @push('head_scripts')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">

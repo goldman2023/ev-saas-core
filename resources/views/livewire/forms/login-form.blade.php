@@ -1,4 +1,4 @@
-<div class="w-full relative">
+<form class="w-full relative" wire:submit.prevent="login()">
     <x-ev.loaders.spinner class="absolute-center z-10 hidden"
                               wire:target="login"
                               wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
@@ -72,8 +72,8 @@
         </div>
 
         <div class="mb-3">
-            <button type="button"
-                    class="btn bg-primary text-white w-full mt-2" wire:click="login()"
+            <button type="submit"
+                    class="btn bg-primary text-white w-full mt-2"
                     data-test="we-login-submit">
                 {{ translate('Login')}}
             </button>
@@ -90,4 +90,4 @@
             </a> --}}
         </div>
     </div>
-</div>
+</form>

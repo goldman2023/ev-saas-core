@@ -75,6 +75,10 @@ class RegisterForm extends Component
     protected function messages()
     {
         return [
+            'name.required' => translate('First name is required'),
+            'name.min' => translate('Minimum 2 characters required'),
+            'surname.required' => translate('Last name is required'),
+            'surname.min' => translate('Minimum 2 characters required'),
             'entity.required' => translate('User type is required'),
             'entity.in' => translate('User type can be either individual or company'),
             'email.required' => translate('Email is required'),

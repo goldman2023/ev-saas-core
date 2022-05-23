@@ -70,14 +70,14 @@
             <label for="email-address" class="sr-only">Email address</label>
             <input type="email" name="email-address" id="email-address" autocomplete="email" required class="appearance-none min-w-0 w-full bg-white border border-transparent rounded-md py-2 px-4 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white focus:border-white focus:placeholder-gray-400" placeholder="Enter your email">
             <div class="mt-3 rounded-md sm:mt-0 sm:ml-3 sm:flex-shrink-0">
-              <button type="submit" class="w-full bg-indigo-900 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500">
+              <button type="submit" class="w-full btn-primary h-full">
                   {{ translate('Subscribe') }}
-                </button>
+              </button>
             </div>
           </form>
         </div>
       </div>
-      <div class="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
+      <div class="mt-8 border-t border-gray-600 pt-8 md:flex md:items-center md:justify-between">
         <div class="flex space-x-6 md:order-2">
           <a href="#" class="text-gray-400 hover:text-gray-300">
             <span class="sr-only">Facebook</span>
