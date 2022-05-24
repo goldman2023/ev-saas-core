@@ -1,19 +1,8 @@
-<section class="relative  lg:pt-[120px]  lg:pb-[120px]  sm:pt-[80px]  sm:pb-[80px]  pt-[50px]  pb-[50px]   bg-[#f5f5f5]   ">
-    <div class="mx-auto max-w-7xl px-4">
-        <div class="text-center">
-            <div we-slot="" name="title_slot" we-title="Section Title" class="w-full mb-4">
-                <h1 we-name="section_title" we-title="Title" class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl ">
-                    Plans &amp; Pricing
-                </h1>
-            </div>
-            <div we-slot="" name="text_slot" we-title="Section Text" class="w-full ">
-                <span we-name="section_text" we-title="Text" class="block mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl ">
-                    Nor again is there anyone who loves or pursues or desires to obtain pain
-                </span>
-            </div>
-        </div>
-    </div>
-</section>
+@include('components.custom.pix-pro-page-header', [
+    'header_title' => translate('Plans & Pricing'),
+    'header_subtitle' => null,
+])
+
 
 @php
     $models = \App\Models\Plan::published()->get();
@@ -115,23 +104,23 @@
     <div>
         <div class=" py-4 overflow-x-auto">
             <div class="inline-block min-w-full overflow-hidden">
-                <table class="min-w-[900px] w-full leading-normal leading-normal">
+                <table class="min-w-[900px] w-full leading-normal">
                     <thead>
                         <tr class=" bg-darkGray ">
                             <th class="px-5 py-3 border-1  bg-gray-100 text-left text-lg2 font-bold text-lightDark">
                                 Features
                             </th>
                             <th class="px-5 py-3 border-1  bg-gray-100 text-left text-lg2 font-bold text-lightDark">
-                            Solo
+                                Solo
                             </th>
                             <th class="px-5 py-3 border-1  bg-gray-100 text-lg2 font-bold text-lightDark text-center">
-                            Solo plus
+                                Solo plus
                             </th>
                             <th class="px-5 py-3 border-1  bg-gray-100 text-lg2 font-bold text-lightDark text-center">
-                            Premium
+                                Premium
                             </th>
                             <th class="px-5 py-3 border-1  bg-gray-100 text-lg2 font-bold text-lightDark text-center">
-                            Enterprise
+                                Enterprise
                             </th>
                         </tr>
                     </thead>
@@ -567,45 +556,4 @@
     </div>
 </section>
 
-{{-- FULL WIDTH CTA --}}
-<section
-    class="relative  lg:pt-[80px]  lg:pb-[80px]  sm:pt-[50px]  sm:pb-[50px]  pt-[40px]  pb-[40px]   bg-primary ">
-    <div class="w-full">
-        <div class="container !max-w-[90%] sm:!max-w-2xl">
-            <div class="action-content text-center">
-
-                <div we-slot="" name="title_slot" we-title="Section Title" class="w-full mb-4">
-                    <h2 we-name="section_title" we-title="Title"
-                        class="text-[48px]  font-black leading-none mb-5 text-white">
-                        Ready to get started with your project?
-                    </h2>
-                </div>
-
-                <div we-slot="" name="text_slot" we-title="Section Text" class="w-full mb-8">
-                    <p we-name="section_text" we-title="Text" class="text-20 font-medium text-white">
-                        Choose from our 3 different plans or ask for a custom solution where you can process as many
-                        photos as you can!
-                    </p>
-                </div>
-
-                <div we-slot="" name="button_group_slot" we-title="Buttons" class="w-full">
-                    <div class="mb-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8 ">
-                        <div class="rounded-md shadow ">
-                            <a href="/page/plans-pricing/"
-                                class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-gray-700 bg-primary hover:bg-primary md:py-4 md:text-lg md:px-10 !bg-white"
-                                target="_self">
-                                Get started free
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div we-slot="" name="info_slot" we-title="Section Info Text" class="w-full ">
-                    <p we-name="section_info" we-title="Text" class="text-20 font-medium text-white">
-                        Start free 1 month trial now, cancel at any time
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+@include('components.custom.full-width-cta')

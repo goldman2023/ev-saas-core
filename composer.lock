@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d566428d29102e1eeec02364c87cec65",
+    "content-hash": "647b58b9987c1c0e300812760129f14a",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -9400,6 +9400,62 @@
                 "source": "https://github.com/silviolleite/laravel-pwa/tree/2.0.3"
             },
             "time": "2020-08-20T12:19:16+00:00"
+        },
+        {
+            "name": "soved/laravel-gdpr",
+            "version": "v1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sander3/laravel-gdpr.git",
+                "reference": "fabb463e68e5280db28f829aa1b7d5e08a92505e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sander3/laravel-gdpr/zipball/fabb463e68e5280db28f829aa1b7d5e08a92505e",
+                "reference": "fabb463e68e5280db28f829aa1b7d5e08a92505e",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "~5.5|~6.0|~7.0|~8.0|^9.0",
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Soved\\Laravel\\Gdpr\\GdprServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Soved\\Laravel\\Gdpr\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sander de Vos",
+                    "email": "sander@tutanota.de"
+                }
+            ],
+            "description": "GDPR compliance with ease",
+            "keywords": [
+                "data-portability",
+                "data-retention",
+                "encryption",
+                "gdpr",
+                "laravel",
+                "soved"
+            ],
+            "support": {
+                "issues": "https://github.com/sander3/laravel-gdpr/issues",
+                "source": "https://github.com/sander3/laravel-gdpr/tree/v1.6.1"
+            },
+            "time": "2022-02-24T07:06:55+00:00"
         },
         {
             "name": "spatie/backtrace",
