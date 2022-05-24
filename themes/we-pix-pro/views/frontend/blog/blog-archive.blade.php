@@ -34,7 +34,6 @@
                 {{ $blog_posts->onEachSide(3)->links('pagination::tailwind') }}
             </div>
         @endif
-        
     </div> 
 </section>
 

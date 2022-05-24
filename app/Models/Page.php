@@ -22,7 +22,7 @@ class Page extends WeBaseModel
 
     protected $table = 'pages';
 
-    protected $fillable = ['name', 'type', 'status', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'type', 'template', 'status', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
 
     protected $casts = [
         // 'id' => 'string',

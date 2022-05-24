@@ -1,6 +1,7 @@
 <div class="w-full" x-data="{
     status: @js($page->status ?? App\Enums\StatusEnum::draft()->value),
     type: @js($page->type ?? 'wysiwyg'),
+    template: @js($page->template ?? ''),
     meta_img: @js(['id' => $page->meta_img->id ?? null, 'file_name' => $page->meta_img->file_name ?? '']),
     content: @entangle('page.content').defer,
 }" x-init="$watch('type', () => {
@@ -99,6 +100,18 @@
                     </div>
                     <!-- END Type -->
 
+                    <!-- Template -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                        <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                            <span class="mr-2">{{ translate('Template') }}</span>
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.select :items="$available_templates" selected="template" :nullable="true"></x-dashboard.form.select>
+                        </div>
+                    </div>
+                    <!-- END Template -->
+
                     <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                         <a href="{{ route('grape.index', ['pageID' => $page->id]) }}" class="btn-info">
                             {{ translate('Open in builder') }}
@@ -114,6 +127,7 @@
                             @click="
                                 $wire.set('page.status', status, true);
                                 $wire.set('page.type', type, true);
+                                $wire.set('page.template', template, true);
                                 $wire.set('page.content', content, true);
                                 {{-- $wire.set('page.meta_img', meta_img.id, true); --}}
                             "
