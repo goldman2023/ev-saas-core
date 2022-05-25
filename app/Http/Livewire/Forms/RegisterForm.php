@@ -157,6 +157,7 @@ class RegisterForm extends Component
                     if($this->invite->new_user_type === UserTypeEnum::staff()->value) {
                         $this->user->user_type = UserTypeEnum::staff()->value;
                         $this->user->shop()->syncWithoutDetaching([$this->invite->shop_id]);
+                        $this->user->save();
 
                         // Sync permissions and roles
                         if(Permissions::getRoleNames()->contains($this->invite->new_user_role)) {

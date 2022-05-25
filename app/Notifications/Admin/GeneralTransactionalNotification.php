@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Admin;
 
 use Carbon\Carbon;
 use Illuminate\Notifications\Notification;
@@ -15,10 +15,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class GeneralTransactionalNotification extends Notification
 {
-    
-    public function __construct()
-    {
 
+    public $subject = '';
+    public $text = '';
+
+    public function __construct($subject, $text)
+    {
+        $this->subject = $subject;
+        $this->text = $text;
     }
 
     public function via($notifiable)
@@ -32,14 +36,8 @@ class GeneralTransactionalNotification extends Notification
             return (new WeMailMessage)
                 ->markdown('vendor.notifications.email')
                 // ->text('mail.text.message')
-                ->subject(translate('Welcome to '.get_tenant_setting('site_name')))
-                ->greeting(translate('Hello, ').$notifiable->name)
-                ->line(translate('Welcome to our site. This is an example text :)'))
-                ->action('Go to dashboard', route('dashboard'))
-                ->line(translate('Thank you for using our application!'));
-                // ->mailersend();
-            // Mail::to($notifiable->email)
-            //     ->send(new EmailVerification(user: $notifiable, data: $array));
+                ->subject($this->subject)
+                ->line($this->text);
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
