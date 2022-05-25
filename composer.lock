@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f395092e3bc275959325eb69561d8b1",
+    "content-hash": "647b58b9987c1c0e300812760129f14a",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -2463,6 +2463,65 @@
                 "source": "https://github.com/firebase/php-jwt/tree/v6.1.2"
             },
             "time": "2022-04-21T14:37:18+00:00"
+        },
+        {
+            "name": "froala/wysiwyg-editor-php-sdk",
+            "version": "4.0.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/froala/wysiwyg-editor-php-sdk.git",
+                "reference": "6efe1363d39f05409117211346c7344697fd185d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/froala/wysiwyg-editor-php-sdk/zipball/6efe1363d39f05409117211346c7344697fd185d",
+                "reference": "6efe1363d39f05409117211346c7344697fd185d",
+                "shasum": ""
+            },
+            "type": "php-plugin",
+            "extra": {
+                "installer-name": "FroalaEditor"
+            },
+            "autoload": {
+                "psr-0": {
+                    "FroalaEditor": "lib/"
+                },
+                "psr-4": {
+                    "FroalaEditor\\": "lib/FroalaEditor"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Froala Labs",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "PHP SDK for Froala WYSIWYG Editor",
+            "homepage": "https://www.froala.com/wysiwyg-editor",
+            "keywords": [
+                "editor",
+                "froala",
+                "html",
+                "php",
+                "php rich text editor",
+                "php rte",
+                "php wysiwyg",
+                "rich editor",
+                "rich text editor",
+                "rte",
+                "sdk",
+                "text",
+                "wysiwyg"
+            ],
+            "support": {
+                "issues": "https://github.com/froala/froala-editor-php-sdk/issues",
+                "source": "https://www.froala.com/wysiwyg-editor"
+            },
+            "time": "2022-05-09T12:57:06+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -9341,6 +9400,62 @@
                 "source": "https://github.com/silviolleite/laravel-pwa/tree/2.0.3"
             },
             "time": "2020-08-20T12:19:16+00:00"
+        },
+        {
+            "name": "soved/laravel-gdpr",
+            "version": "v1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sander3/laravel-gdpr.git",
+                "reference": "fabb463e68e5280db28f829aa1b7d5e08a92505e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sander3/laravel-gdpr/zipball/fabb463e68e5280db28f829aa1b7d5e08a92505e",
+                "reference": "fabb463e68e5280db28f829aa1b7d5e08a92505e",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "~5.5|~6.0|~7.0|~8.0|^9.0",
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Soved\\Laravel\\Gdpr\\GdprServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Soved\\Laravel\\Gdpr\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sander de Vos",
+                    "email": "sander@tutanota.de"
+                }
+            ],
+            "description": "GDPR compliance with ease",
+            "keywords": [
+                "data-portability",
+                "data-retention",
+                "encryption",
+                "gdpr",
+                "laravel",
+                "soved"
+            ],
+            "support": {
+                "issues": "https://github.com/sander3/laravel-gdpr/issues",
+                "source": "https://github.com/sander3/laravel-gdpr/tree/v1.6.1"
+            },
+            "time": "2022-02-24T07:06:55+00:00"
         },
         {
             "name": "spatie/backtrace",
@@ -16544,5 +16659,5 @@
         "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }

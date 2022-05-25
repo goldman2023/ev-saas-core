@@ -15,13 +15,14 @@ class Select extends Component
     public $selectorClass;
     public $multiple;
     public $hideError = false;
+    public $class;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($items = null, $multiple = false, $selected = null, $field = '', $placeholder = 'Please select', $nullable = true, $search = false, $selectorClass = '', $hideError = false)
+    public function __construct($items = null, $multiple = false, $selected = null, $field = '', $placeholder = 'Please select', $nullable = true, $search = false, $selectorClass = '', $hideError = false, $class = '')
     {
         $this->items = empty($items) ? [] : $items;
         $this->multiple = $multiple;
@@ -32,6 +33,7 @@ class Select extends Component
         $this->search = $search;
         $this->selectorClass = $selectorClass;
         $this->hideError = $hideError;
+        $this->class = $class;
     }
 
     /**

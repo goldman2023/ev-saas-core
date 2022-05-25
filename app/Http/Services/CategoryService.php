@@ -161,7 +161,7 @@ class CategoryService
     /*
      * IMPORTANT: For some weird reason, $this->categories->toArray() doesn't properly turn children to slug => $child assoc array and instead, resets all keys of each children property to 0,1,2 etc.
      * In order to properly use categories in JS WE NEED children items to be keyed by their slug so we can access them in JS by using dot notation, like:
-     * `Airsoft-a0I2y.children.Airsoft-accessories-BaX7G.children.Airsoft-grenades-59hlx` -> This is not possible if children keys are numeric (o,1,2,3 etc.)
+     * `Airsoft-a0I2y.children.Airsoft-accessories-BaX7G.children.Airsoft-grenades-59hlx` -> This is not possible if children keys are numeric (0,1,2,3 etc.)
      * This actually worked properly before but for some weird reason, it doesn't work anymore ---___---
      *
      * If $for_js is set to true, it means that data should be used in JS and alpineJS and should be reduced in size, so we need to apply mapping too.
@@ -200,6 +200,17 @@ class CategoryService
     public function getBySlugPath(string $slug_path = null)
     {
         return $slug_path ? $this->pluckable_categories->pluck(Str::replace(Category::PATH_SEPARATOR, '.children.', $slug_path))->first() : null;
+    }
+
+    /**
+     * Get specific category by ID
+     *
+     * @param mixed $id
+     * @return mixed|null
+     */
+    public function getByID($id = null)
+    {
+        return $id ? $this->categories_flat->filter(fn($item) => $item->id === (int) $id)->first() : null;
     }
 
     /**

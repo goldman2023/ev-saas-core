@@ -15,19 +15,19 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
-    @if($row->status === App\Enums\StatusEnum::published()->value)
+    @if($row->status === \App\Enums\StatusEnum::published()->value)
         <span class="badge-success">
           {{ ucfirst($row->status) }}
         </span>
-    @elseif($row->status === App\Enums\StatusEnum::draft()->value)
+    @elseif($row->status === \App\Enums\StatusEnum::draft()->value)
         <span class="badge-warning">
           {{ ucfirst($row->status) }}
         </span>
-    @elseif($row->status === App\Enums\StatusEnum::pending()->value)
+    @elseif($row->status === \App\Enums\StatusEnum::pending()->value)
         <span class="badge-info">
           {{ ucfirst($row->status) }}
         </span>
-    @elseif($row->status === App\Enums\StatusEnum::private()->value)
+    @elseif($row->status === \App\Enums\StatusEnum::private()->value)
         <span class="badge-dark">
           {{ ucfirst($row->status) }}
         </span>

@@ -12,9 +12,10 @@ use MailerService;
 use StripeService;
 use App\Enums\WeMailingListsEnum;
 use App\Mail\EmailVerification;
-
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\UserWelcomeNotification;
+use App\Notifications\Admin\GeneralTransactionalNotification;
 
 class UserObserver
 {
@@ -70,6 +71,9 @@ class UserObserver
         if(Payments::isStripeEnabled()) {
             StripeService::createStripeCustomer($user);
         }
+
+        // Notify Admin about user registration
+        send_admin_notification(translate('New user Registered on').' '.get_tenant_setting('site_name'), translate('New user with following email ('.$user->email.'). registered.'));
     }
 
     /**

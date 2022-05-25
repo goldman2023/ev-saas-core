@@ -11,6 +11,9 @@
         {!! $page->content !!}
     </div>
 @elseif($page->type === 'system')
+    @if(!empty($page->template) && \File::exists(Theme::path($path = '/views/frontend/page-templates').'/'.$page->template.'.blade.php'))
+        @include('frontend.page-templates.'.$page->template)
+    @endif
 @else
     @if(!empty($sections))
         @foreach ($sections as $key => $section)

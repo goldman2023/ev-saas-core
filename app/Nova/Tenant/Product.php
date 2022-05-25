@@ -66,10 +66,12 @@ class Product extends Resource
             new Tabs('Some Title', [
                 'General'    => [
                     Image::make('Thumbnail')
-                    ->disk('s3')
-                    ->thumbnail(function ($value, $disk) {
-                        return $this->getThumbnail(['w' => 100]);
-                    }),
+                        ->disk('s3')
+                        ->thumbnail(function ($value, $disk) {
+                            return $this->getThumbnail(['w' => 100]);
+                        })->preview(function ($value, $disk) {
+                            return $this->getThumbnail(['w' => 100]);
+                        }),
                     Text::make('Name'),
                     Text::make('Permalink', function () {
                         return $this->getPermalink();
@@ -86,12 +88,12 @@ class Product extends Resource
                         ->disk('s3')
                         ->preview(function ($value, $disk) {
                             return $this->getThumbnail();
-                        }),
+                        })->hideFromIndex(),
                     Image::make('Cover')
                         ->disk('s3')
                         ->preview(function ($value, $disk) {
                             return $this->getCover();
-                        }),
+                        })->hideFromIndex(),
                 ],
                 'Shipping' => [
                     Boolean::make('Shippable', function () {

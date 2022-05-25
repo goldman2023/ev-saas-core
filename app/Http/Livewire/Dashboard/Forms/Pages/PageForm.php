@@ -22,6 +22,8 @@ use Permissions;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use App\Enums\PageTypeEnum;
+use Theme;
+use File;
 
 class PageForm extends Component
 {
@@ -29,6 +31,7 @@ class PageForm extends Component
     use DispatchSupport;
 
     public $page;
+    public $available_templates;
 
     public $is_update;
 
@@ -46,12 +49,22 @@ class PageForm extends Component
             // If insert
             $this->page->status = StatusEnum::draft()->value;
         }
+
+        try {
+            $page_templates = File::allFiles(Theme::path($path = '/views/frontend/page-templates'));
+            $this->available_templates = collect($page_templates)->keyBy(fn($item) => str_replace(".blade.php", "", $item->getFilename()) )->map(fn($item) => str_replace(".blade.php", "", $item->getFilename()))->toArray();
+        } catch(\Exception $e) {
+            dd($e);
+            $this->available_templates = [];
+        }        
+        
     }
 
     protected function rules()
     {
         return [
             'page.type' => [ 'required' ], //  Rule::in(PageTypeEnum::implodedValues())
+            'page.template' => [''],
             'page.name' => 'required|min:2',
             'page.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'page.content' => [''],

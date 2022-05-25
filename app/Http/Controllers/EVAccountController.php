@@ -41,6 +41,17 @@ class EVAccountController extends Controller
         }
     }
 
+    public function user_details(Request $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            return view('frontend.dashboard.users.user-details', compact('user'));
+        } catch (\Exception $e) {
+            // Create error handling for not found exception to go to 404 page...
+        }
+    }
+
     public function account_settings()
     {
         $me = auth()->user()->load('social_accounts');

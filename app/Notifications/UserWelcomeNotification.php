@@ -37,8 +37,8 @@ class UserWelcomeNotification extends Notification
                 ->greeting(translate('Hello, ').$notifiable->name)
                 ->line(translate('Welcome to our site. This is an example text :)'))
                 ->action('Go to dashboard', route('dashboard'))
-                ->line(translate('Thank you for using our application!'))
-                ->mailersend();
+                ->line(translate('Thank you for using our application!'));
+                // ->mailersend();
             // Mail::to($notifiable->email)
             //     ->send(new EmailVerification(user: $notifiable, data: $array));
         } catch(\Exception $e) {

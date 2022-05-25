@@ -18,6 +18,8 @@ use Auth;
 use Log;
 use App\Models\User;
 USE App\Models\UserMeta;
+use App\Models\UserInvite;
+use App\Enums\UserTypeEnum;
 use App\Traits\Livewire\RulesSets;
 use App\Traits\Livewire\DispatchSupport;
 use MailerService;
@@ -25,7 +27,7 @@ use App\Enums\WeMailingListsEnum;
 
 use Illuminate\Auth\Events\Registered;
 use MikeMcLin\WpPassword\Facades\WpPassword;
-
+use Permissions;
 use Carbon;
 use Illuminate\Support\Facades\Mail;
 
@@ -41,6 +43,8 @@ class RegisterForm extends Component
     public $password;
     public $password_confirmation;
     public $terms_consent;
+    public $token;
+    protected $invite = null;
     public $available_meta;
     public $user_meta = [];
 
@@ -75,6 +79,10 @@ class RegisterForm extends Component
     protected function messages()
     {
         return [
+            'name.required' => translate('First name is required'),
+            'name.min' => translate('Minimum 2 characters required'),
+            'surname.required' => translate('Last name is required'),
+            'surname.min' => translate('Minimum 2 characters required'),
             'entity.required' => translate('User type is required'),
             'entity.in' => translate('User type can be either individual or company'),
             'email.required' => translate('Email is required'),
@@ -96,6 +104,12 @@ class RegisterForm extends Component
      */
     public function mount()
     {
+        $this->token = request()->token ?? null;
+        if(!empty($this->token)) {
+            $this->invite = UserInvite::where('token', $this->token)->first();
+            $this->email = $this->invite->email;
+        }
+
         $this->available_meta = collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true);
 
         if($this->available_meta->count() > 0) {
@@ -130,6 +144,31 @@ class RegisterForm extends Component
                     ]);
                 }
             }
+
+            // Invite processing (if any)
+            if(!empty($this->token)) {
+                $this->invite = UserInvite::where('token', $this->token)->first();
+
+                if(!empty($this->invite) && $this->invite->email === $this->user->email && !$this->invite->accepted) {
+                    $this->invite->accepted = true;
+                    $this->invite->save();
+
+                    // If invited user if for new staff member, change the user_type and relate it to specified Shop from invite.
+                    if($this->invite->new_user_type === UserTypeEnum::staff()->value) {
+                        $this->user->user_type = UserTypeEnum::staff()->value;
+                        $this->user->shop()->syncWithoutDetaching([$this->invite->shop_id]);
+                        $this->user->save();
+
+                        // Sync permissions and roles
+                        if(Permissions::getRoleNames()->contains($this->invite->new_user_role)) {
+                            $permissions = Permissions::getRolePermissions($this->invite->new_user_role);
+                            $this->user->syncPermissions($permissions);
+                            $this->user->syncRoles([$this->invite->new_user_role]);
+                        }
+                    }
+                }
+            }
+
             DB::commit();
 
             // Login user and start display `verification` or `onboarding` flow

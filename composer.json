@@ -22,6 +22,7 @@
         "devpartners/auditable-log": "^1.0",
         "diglactic/laravel-breadcrumbs": "^7.1",
         "doctrine/dbal": "^3.3",
+        "eminiarts/nova-tabs": "^2.0",
         "froala/wysiwyg-editor-php-sdk": "^4.0",
         "google/apiclient": "^2.12.1",
         "guzzlehttp/guzzle": "^7.2",
@@ -46,6 +47,7 @@
         "mews/purifier": "^3.3",
         "mikemclin/laravel-wp-password": "^2.0",
         "nerdroid23/blade-icomoon": "^1.0",
+        "outl1ne/nova-menu-builder": "^7.0",
         "owen-it/laravel-auditing": "^13.0",
         "paypal/paypal-checkout-sdk": "dev-master",
         "predis/predis": "^1.1",
@@ -54,6 +56,7 @@
         "romanzipp/laravel-seo": "^2.5",
         "sentry/sentry-laravel": "^2.12",
         "silviolleite/laravelpwa": "^2.0",
+        "soved/laravel-gdpr": "^1.6",
         "spatie/enum": "^3.12",
         "spatie/laravel-activitylog": "^4.5",
         "spatie/laravel-ignition": "^1.0",
@@ -107,7 +110,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                
+            ]
         }
     },
     "scripts": {

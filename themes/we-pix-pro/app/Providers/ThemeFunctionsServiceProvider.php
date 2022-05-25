@@ -3,6 +3,7 @@
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
+use File;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
@@ -14,6 +15,35 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             'pix_pro_api_endpoint' => 'string',
             'pix_pro_api_username' => 'string',
             'pix_pro_api_password' => 'string',
+        ];
+    }
+
+    protected function getMenuLocations(): array {
+        return [
+            'header' => [
+                'name' => 'Header',
+                'unique' => true,
+                'max_depth' => 3,
+                'menu_item_types' => []
+            ],
+            'footer_1' => [
+                'name' => 'Footer 1',
+                'unique' => true,
+                'max_depth' => 1,
+                'menu_item_types' => []
+            ],
+            'footer_2' => [
+                'name' => 'Footer 2',
+                'unique' => true,
+                'max_depth' => 1,
+                'menu_item_types' => []
+            ],
+            'footer_3' => [
+                'name' => 'Footer 3',
+                'unique' => true,
+                'max_depth' => 1,
+                'menu_item_types' => []
+            ],
         ];
     }
 
@@ -43,6 +73,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'settings.pix_pro_software_download_url' => 'nullable',
                     'settings.pix_pro_downloads' => 'nullable',
                 ]);
+            }, 10, 1);
+
+            // Add Theme specific sections
+            add_filter('theme-section-components', function($base_sections) {
+                return array_merge(File::allFiles($this->theme_root.'/views/components/custom/'), $base_sections);
             }, 10, 1);
         }
         

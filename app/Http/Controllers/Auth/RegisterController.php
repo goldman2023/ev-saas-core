@@ -33,10 +33,14 @@ class RegisterController extends Controller
     /**
      * Display users registration page
      */
-    public function user_registration(Request $request)
+    public function user_registration(Request $request, $token = null)
     {
         if (Auth::check()) {
             return redirect()->route('home');
+        }
+
+        if(!empty($token)) {
+            return view('auth.register', compact('token'));
         }
 
         return view('auth.register');

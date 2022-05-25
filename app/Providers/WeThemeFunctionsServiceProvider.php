@@ -12,10 +12,14 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
     protected $theme_helpers;
 
     /**
-     * Used to define Tenan
+     * Used to define Tenant
      */
     abstract protected function getTenantAppSettings() : array;
+    abstract protected function getMenuLocations() : array;
 
+    /**
+     * This function extends App/Tenant settings with custom settings required in a specific theme (for a specific tenant)!
+     */
     protected function extendAppSettings() {
         if (function_exists('add_filter')) {
             // Add Tenant Settings
@@ -29,11 +33,31 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
     }
 
     /**
+     * Registers all possible locations for dynamic menus in a theme.
+     * This function overrides the nova-menu.menus setting from config files
+     * and forces nova to take into consideration registered menu locations from the theme instead.
+     * If getMenuLocations() retuns empty array, default menu locations from config will be used!
+     * 
+     * Template e.g:
+     * 
+     * 'header' => [
+     *       'name' => 'Header',
+     *       'unique' => true,
+     *       'max_depth' => 10,
+     *       'menu_item_types' => []
+     *   ]
+     */
+    protected function registerMenuLocations() {
+        $this->app['config']->set('nova-menu.menus', !empty($this->getMenuLocations()) ? $this->getMenuLocations() : $this->app['config']->get('nova-menu.menus', []));
+    }
+
+    /**
      * Bootstrap the theme function services.
      */
     public function boot()
     {
         $this->extendAppSettings();
+        $this->registerMenuLocations();
     }
 
     /**

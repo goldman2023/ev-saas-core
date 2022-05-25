@@ -22,6 +22,9 @@ use App\Models\Country;
 use App\Models\Models\EVLabel;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\Admin\GeneralTransactionalNotification;
+use Log;
 
 
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
@@ -152,6 +155,20 @@ if (!function_exists('castValuesForGet')) {
         return $settings;
     }
 }
+
+if (!function_exists('sendAdminNotification')) {
+    function send_admin_notification($subject, $text) {
+        try {
+            Notification::send(
+                \App\Models\User::where('user_type', 'admin')->get(), 
+                new GeneralTransactionalNotification($subject, $text)
+            );
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+        }
+    }
+}
+
 
 
 

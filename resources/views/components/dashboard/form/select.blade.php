@@ -1,4 +1,4 @@
-<div x-data="{
+<div class="{{ $class }}" x-data="{
     open_dropdown: false,
     multiple: @js($multiple),
     items: @js($items),

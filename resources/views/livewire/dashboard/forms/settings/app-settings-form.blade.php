@@ -650,11 +650,11 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.select field="settings.system_default_currency"
+                                        <x-dashboard.form.select field="settings.system_default_currency.code"
                                             :items="\FX::getAllCurrencies(true, true)"
                                             selected="settings.system_default_currency.code" :nullable="false">
                                         </x-dashboard.form.select>
-                                        <x-system.invalid-msg field="settings.system_default_currency">
+                                        <x-system.invalid-msg field="settings.system_default_currency.code">
                                         </x-system.invalid-msg>
                                     </div>
                                 </div>
@@ -733,6 +733,7 @@
                                 <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
                                     x-data="{}">
                                     <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                        console.log(settings.system_default_currency);
                                         $wire.set('settings.symbol_format', settings.symbol_format, true);
                                         $wire.set('settings.currency_format', settings.currency_format, true);
                                         $wire.set('settings.decimal_separator', settings.decimal_separator, true);

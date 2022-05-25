@@ -34,6 +34,7 @@ use Laravel\Nova\Menu\MenuItem;
 use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Outl1ne\MenuBuilder\MenuBuilder;
 use Outl1ne\MenuBuilder\Models\Menu as ModelsMenu;
 use Outl1ne\MenuBuilder\Models\MenuItem as ModelsMenuItem;
 
@@ -48,7 +49,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
-
+        Nova::style('admin', asset('nova/css/custom-nova-styles.css'));
 
         Nova::serving(function () {
             Tenant::creating(function (Tenant $tenant) {
@@ -67,11 +68,15 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             });
 
         Nova::mainMenu(function (Request $request) {
+            
             return [
                 MenuSection::dashboard(Main::class)->icon('chart-bar'),
 
                 MenuSection::make('General', [
                     MenuItem::resource(Page::class),
+
+                    // @EIM TODO: Why doesn't it add MenuResource to the left menu even though it seems referenced correctly?
+                    MenuItem::resource(MenuBuilder::getMenuResource()),
                 ])->icon('user')->collapsable(),
 
                 MenuSection::make('Business', [
@@ -110,11 +115,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
 
                 ])->icon('adjustments')->collapsable(),
-
-
-
-
-
 
             ];
 
@@ -191,7 +191,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         if (tenancy()->initialized) {
             return [
-                new \Outl1ne\MenuBuilder\MenuBuilder(),
+                MenuBuilder::make(),
                 // new \Bolechen\NovaActivitylog\NovaActivitylog(),
             ];
         } else {
@@ -231,7 +231,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 Order::class,
                 WeWorkflow::class,
                 WooImport::class,
-                Page::class
+                Page::class,
+                MenuBuilder::getMenuResource()
             ]);
         } else {
             Nova::resources([

@@ -79,7 +79,7 @@
     <livewire:modals.delete-modal />
     <x-system.validation-errors-toast timeout="5000" ></x-system.validation-errors-toast>
 
-    
+    @stack('modal')
 
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 

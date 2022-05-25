@@ -1,7 +1,7 @@
 <div x-data="{
   nullable: @js($nullable),
   required: @js($required),
-}" class="w-full">
+}" class="w-full {{ $class }}">
   <input type="{{ $type }}" 
           class="form-standard @error($field) is-invalid @enderror"
           placeholder="{{ $placeholder }}"

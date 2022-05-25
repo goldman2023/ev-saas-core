@@ -10,6 +10,7 @@ use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use App\Traits\HasStatus;
 
 class Page extends WeBaseModel
 {
@@ -17,10 +18,11 @@ class Page extends WeBaseModel
     use PermalinkTrait;
     use UploadTrait;
     use GalleryTrait;
+    use HasStatus;
 
     protected $table = 'pages';
 
-    protected $fillable = ['name', 'type', 'status', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'type', 'template', 'status', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
 
     protected $casts = [
         // 'id' => 'string',

@@ -14,8 +14,8 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'menus_table_name' => 'nova_menu_menus',
-    'menu_items_table_name' => 'nova_menu_menu_items',
+    'menus_table_name' => 'we_menus',
+    'menu_items_table_name' => 'we_menu_items',
 
 
     /*
@@ -65,6 +65,8 @@ return [
     'menu_item_types' => [
         \Outl1ne\MenuBuilder\MenuItemTypes\MenuItemTextType::class,
         \Outl1ne\MenuBuilder\MenuItemTypes\MenuItemStaticURLType::class,
+        \App\Nova\MenuItemTypes\PageMenuItemType::class,
+        \App\Nova\MenuItemTypes\BlogArchiveMenuItemType::class,
     ],
 
     /*
@@ -97,7 +99,7 @@ return [
     |
     */
 
-    'menu_model' => Outl1ne\MenuBuilder\Models\Menu::class,
+    'menu_model' => App\Models\WeMenu::class,
 
 
     /*
@@ -109,7 +111,7 @@ return [
     |
     */
 
-    'menu_item_model' => Outl1ne\MenuBuilder\Models\MenuItem::class,
+    'menu_item_model' => App\Models\WeMenuItem::class,
 
 
     /*

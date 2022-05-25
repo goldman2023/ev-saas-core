@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
 use App\Models\SocialPost;
+use App\Models\Category;
 use Categories;
 use Cookie;
 use Illuminate\Http\Request;
@@ -38,6 +39,28 @@ class EVBlogPostController extends Controller
                         ->paginate(9)->withQueryString();
 
         return view('frontend.blog.blog-archive', compact('blog_posts'));
+    }
+
+    public function blog_archive_by_category($category_slug = null) {
+        if(!empty($category_slug)) {
+            $category = Category::where('slug', $category_slug)->first();
+
+            if(!empty($category)) {
+                $categories_ids = $category->descendantsAndSelf()->select('id')->get()->pluck('id')->toArray(); // Get all descedants and desired category's IDs
+
+                $blog_posts = BlogPost::whereNull('shop_id')->orwhere('shop_id', '=', 1)->whereHas('categories', function($query) use ($categories_ids) {
+                    $query->whereIn('category_relationships.category_id', $categories_ids);
+                })
+                ->published()->latest()->with(['authors'])
+                ->paginate(9)->withQueryString();
+
+                return view('frontend.blog.blog-archive', compact('blog_posts'));
+            }
+            
+        } 
+        
+        return $this->blog_archive();
+        
     }
 
     public function single(Request $request, $slug)

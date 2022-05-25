@@ -102,6 +102,7 @@ Route::middleware([
     Route::get('/business/register', [RegisterController::class, 'business_registration'])->name('business.registration');
     Route::get('/users/login', [LoginController::class, 'user_login'])->name('user.login');
     Route::get('/users/register', [RegisterController::class, 'user_registration'])->name('user.registration');
+    Route::get('/users/register/{token}', [RegisterController::class, 'user_registration'])->name('user.invite.registration'); // invite user route
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::post('/password/reset/email/submit', [HomeController::class, 'reset_password_with_code'])->name('user.password.update');
@@ -182,6 +183,8 @@ Route::middleware([
 
     // Blog Posts
     Route::get('/blog', [EVBlogPostController::class, 'blog_archive'])->name('blog.archive');
+    Route::get('/blog/{category_slug}', [EVBlogPostController::class, 'blog_archive_by_category'])->name('blog.category.archive');
+
     // Route::get('/news/{slug}', [BlogController::class, 'blog_details'])->name('news.details');
     // Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
     Route::get('/shop/{shop_slug}/blog/post/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
