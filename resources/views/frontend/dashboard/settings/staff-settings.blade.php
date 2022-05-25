@@ -22,7 +22,7 @@
 
 @push('modal')
 <x-system.form-modal title="{{ translate('Invite new staff') }}" id="invite-new-staff-member"> 
-    
+    <livewire:dashboard.forms.users.invite-staff-form />
 </x-system.form-modal>
 @endpush
 

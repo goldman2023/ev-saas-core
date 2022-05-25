@@ -102,6 +102,7 @@ Route::middleware([
     Route::get('/business/register', [RegisterController::class, 'business_registration'])->name('business.registration');
     Route::get('/users/login', [LoginController::class, 'user_login'])->name('user.login');
     Route::get('/users/register', [RegisterController::class, 'user_registration'])->name('user.registration');
+    Route::get('/users/register/{token}', [RegisterController::class, 'user_registration'])->name('user.invite.registration'); // invite user route
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::post('/password/reset/email/submit', [HomeController::class, 'reset_password_with_code'])->name('user.password.update');

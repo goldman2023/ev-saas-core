@@ -52,6 +52,12 @@ class PermissionsService
                 ->map(fn ($item) => array_merge($item, ['selected' => isset($user_permissions[$item['id']])]))->keyBy($key_by);
     }
 
+    public function getRoleNames() {
+        $data = app(config('permission.models.role'))->with('permissions')->get();
+
+        return $data->pluck('name');
+    }
+
     public function getRoles($only_role_names = false, $from_db = true)
     {
         if ($from_db) {

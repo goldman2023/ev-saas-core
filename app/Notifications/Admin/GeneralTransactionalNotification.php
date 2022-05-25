@@ -13,10 +13,9 @@ use App\Mail\EmailVerification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-
-class UserWelcomeNotification extends Notification
+class GeneralTransactionalNotification extends Notification
 {
-
+    
     public function __construct()
     {
 
