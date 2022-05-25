@@ -14,9 +14,9 @@
                         <span class="text-typ-3">{{ $edu['degree_title'] ?? '' }}</span>
                     </div>
                     <div class="flex flex-row items-center text-12 mt-1">
-                        @if(!empty($edu['start_date']) && !empty($edu['end_date']))
+                        @if(!empty($edu['start_date'] ?? null) && !empty($edu['end_date'] ?? null))
                             @php
-                                $start_end_diff = \Carbon::createFromTimestamp($edu['end_date'] ?? )->diff(\Carbon::createFromTimestamp($edu['start_date']));
+                                $start_end_diff = \Carbon::createFromTimestamp($edu['end_date'])->diff(\Carbon::createFromTimestamp($edu['start_date']));
                                 $human_diff = ($start_end_diff?->y ?? '') . ' years ' . ($start_end_diff?->d ?? '') . ' days';
                             @endphp
                             <span class="text-typ-3">{{ \Carbon::createFromTimestamp($edu['start_date'])->format('M Y').' - '.\Carbon::createFromTimestamp($edu['end_date'])->format('M Y') }}</span>
@@ -24,6 +24,14 @@
                                 <span class="text-10 text-typ-4 mx-1">•</span>
                                 <strong class="text-typ-3">{{ $human_diff }}</strong>
                             @endif
+                        @elseif(!empty($edu['start_date'] ?? null) && empty($edu['end_date'] ?? null))
+                            @php
+                                $start_end_diff = \Carbon::createFromTimestamp(time())->diff(\Carbon::createFromTimestamp($edu['start_date']));
+                                $human_diff = ($start_end_diff?->y ?? '') . ' years ' . ($start_end_diff?->d ?? '') . ' days';
+                            @endphp
+                            <span class="text-typ-3">{{ \Carbon::createFromTimestamp($edu['start_date'])->format('M Y').' - '.translate('Present') }}</span>
+                            <span class="text-10 text-typ-4 mx-1">•</span>
+                            <strong class="text-typ-3">{{ $human_diff }}</strong>
                         @endif
                     </div>
                     
