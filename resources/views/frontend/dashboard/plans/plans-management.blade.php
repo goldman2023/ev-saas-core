@@ -41,7 +41,7 @@
                                 <h3 class="font-bold text-18 text-gray-700 pb-2">{{ $plan->name }}</h3>
                                 @if($plan->non_standard)
                                     <div class="flex items-end">
-                                        <h3 class="text-36 text-dark font-bold mb-0">{{ translate('Contact Us') }}</h3>
+                                        <h3 class="text-36 text-dark font-bold mb-0">{{  !empty($plan->getCoreMeta('custom_pricing_label')) ? $plan->getCoreMeta('custom_pricing_label') : translate('Contact Us') }}</h3>
                                     </div>
                                 @else
                                     <div class="flex items-end">
@@ -81,7 +81,7 @@
 
                                 @if($plan->non_standard)
                                     <a href="{{ $plan->getCoreMeta('custom_redirect_url') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
-                                        {{ $plan->getCoreMeta('custom_cta_label') }}
+                                        {{ !empty($plan->getCoreMeta('custom_cta_label')) ? $plan->getCoreMeta('custom_cta_label') : translate('Contact Us') }}
                                     </a>
                                 @else
                                     <a href="{{ auth()->user()->isSubscribed() ? route('stripe.portal_session') : $plan->getStripeCheckoutPermalink() }}" target="_blank"
