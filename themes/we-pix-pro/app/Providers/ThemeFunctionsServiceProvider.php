@@ -3,7 +3,6 @@
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\File;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {

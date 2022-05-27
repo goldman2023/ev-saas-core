@@ -5,6 +5,8 @@ use Illuminate\Support\ServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
 use TenantSettings;
+use Illuminate\Support\Facades\File;
+
 
 abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
 {
