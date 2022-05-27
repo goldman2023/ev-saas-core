@@ -15,8 +15,8 @@
       {{-- <h1 class="text-5xl font-extrabold text-gray-900 sm:text-center">Pricing Plans</h1>
       <p class="mt-5 text-xl text-gray-500 sm:text-center">Start building for free, then add a site plan to go live. Account plans unlock additional features.</p> --}}
       <div class="relative self-center bg-gray-100 rounded-lg p-0.5 flex ">
-        <button type="button" @click="pricing_mode = 'month'" :class="{'bg-primary text-white':pricing_mode == 'month', 'gray-900':pricing_mode == 'month'}" class="relative w-1/2 border border-transparent rounded-md shadow-sm py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">{{ translate('Monthly billing') }}</button>
-        <button type="button" @click="pricing_mode = 'annual'" :class="{'bg-primary text-white':pricing_mode == 'annual', 'gray-900':pricing_mode == 'month'}" class="ml-0.5 relative w-1/2 border border-transparent rounded-md py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">{{ translate('Yearly billing') }}</button>
+        <button type="button" @click="pricing_mode = 'month'" :class="{'bg-primary text-white':pricing_mode == 'month', 'gray-900':pricing_mode != 'month'}" class="relative w-1/2 border border-transparent rounded-md shadow-sm py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">{{ translate('Monthly billing') }}</button>
+        <button type="button" @click="pricing_mode = 'annual'" :class="{'bg-primary text-white':pricing_mode == 'annual', 'gray-900':pricing_mode != 'annual'}" class="ml-0.5 relative w-1/2 border border-transparent rounded-md py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">{{ translate('Yearly billing') }}</button>
       </div>
     </div>
 

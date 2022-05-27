@@ -25,16 +25,30 @@
         </div>
     @endif
 
-    <div class="w-full">
+    <div class="w-full" x-data="{
+            pricing_mode: 'month',
+        }">
         @if(auth()->user()?->isSubscribed() ?? false)
             <h2 class="text-32 text-gray-700 font-semibold mb-5">{{ translate('Explore other plans')}}</h2>
         @endif
-        <div class="grid gap-10 grid-cols-12">
+
+        <div class="w-full sm:flex sm:flex-col sm:align-center mb-[40px]">
+            {{-- <h1 class="text-5xl font-extrabold text-gray-900 sm:text-center">Pricing Plans</h1>
+            <p class="mt-5 text-xl text-gray-500 sm:text-center">Start building for free, then add a site plan to go live. Account plans unlock additional features.</p> --}}
+            <div class="relative self-center bg-gray-100 rounded-lg p-0.5 flex ">
+              <button type="button" @click="pricing_mode = 'month'" :class="{'bg-primary text-white':pricing_mode == 'month', 'bg-white gray-900':pricing_mode != 'month'}" class="relative w-1/2 border border-transparent rounded-md shadow-sm py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8 mr-2">{{ translate('Monthly billing') }}</button>
+              <button type="button" @click="pricing_mode = 'annual'" :class="{'bg-primary text-white':pricing_mode == 'annual', 'bg-white gray-900':pricing_mode != 'annual'}" class="ml-0.5 relative w-1/2 border border-transparent rounded-md py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">{{ translate('Yearly billing') }}</button>
+            </div>
+          </div>
+
+        <div class="grid gap-10 grid-cols-12" >
             @if($plans->isNotEmpty())
                 @foreach($plans as $plan)
                     <div class="bg-white border border-gray-200 hover:border-primary rounded-lg col-span-12 sm:col-span-6 lg:col-span-3"
                         x-data="{
-                            qty: 1
+                            qty: 1,
+                            month_price: @js($plan->getTotalPrice(true)),
+                            annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice() / 12)),
                         }">
                         <div class=" flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green h-full">
                             <div class="price-description flex flex-col grow">
@@ -45,8 +59,11 @@
                                     </div>
                                 @else
                                     <div class="flex items-end">
-                                        <h3 class="text-36 text-dark font-bold mb-0">{{ $plan->getTotalPrice(true) }}</h3>
+                                        <h3 class="text-36 text-dark font-bold mb-0" x-text="pricing_mode === 'annual' ? annual_price : month_price"></h3>
                                         <span class="text-lg2 text-dark font-bold mb-2">/{{ translate('month') }}</span>
+                                    </div>
+                                    <div class="w-full text-gray-500 text-14" x-show="pricing_mode === 'annual'" x-cloak>
+                                        {{ translate('Billed annually') }}
                                     </div>
                                 @endif
                                 <p class=" text-sm text-gray-700 py-4 mb-4">
@@ -84,7 +101,12 @@
                                         {{ !empty($plan->getCoreMeta('custom_cta_label')) ? $plan->getCoreMeta('custom_cta_label') : translate('Contact Us') }}
                                     </a>
                                 @else
-                                    <a href="{{ auth()->user()->isSubscribed() ? route('stripe.portal_session') : $plan->getStripeCheckoutPermalink() }}" target="_blank"
+
+                                    <div class="w-full text-danger text-center pb-3 text-14" x-show="pricing_mode === 'annual'" x-cloak>
+                                        {{ str_replace('%d%', \FX::formatPrice(abs($plan->getTotalAnnualPrice() - ($plan->getTotalPrice() * 12))), translate('You save %d% per year')) }}
+                                    </div>
+
+                                    <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
                                         class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
 
                                         {{-- We should support following scenarios:

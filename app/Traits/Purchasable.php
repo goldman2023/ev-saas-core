@@ -56,12 +56,13 @@ trait Purchasable
         return route('checkout.single.page').'?data='.$data;
     }
 
-    public function getStripeCheckoutPermalink($qty = 1, $preview = false) {
+    public function getStripeCheckoutPermalink($qty = 1, $preview = false, $interval = null) {
         $data = base64_encode(json_encode([
             'id' => $this->id,
             'class' => $this::class,
             'qty' => $qty, // TODO: need to fix this
-            'preview' => $preview
+            'preview' => $preview,
+            'interval' => $interval
         ]));
 
         return route('stripe.checkout_redirect').'?data='.$data;

@@ -50,8 +50,6 @@ class PlanForm extends Component
      */
     public function mount($plan = null)
     {
-
-        // dd(Categories::getAllFormatted());
         $this->plan = empty($plan) ? new Plan() : $plan;
         $this->is_update = isset($this->plan->id) && ! empty($this->plan->id);
 
