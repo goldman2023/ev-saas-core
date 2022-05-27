@@ -5,6 +5,8 @@ use Illuminate\Support\ServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
 use TenantSettings;
+use Illuminate\Support\Facades\File;
+
 
 abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
 {
@@ -58,6 +60,11 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
     {
         $this->extendAppSettings();
         $this->registerMenuLocations();
+
+        // Add Theme specific sections
+        add_filter('theme-section-components', function($base_sections) {
+            return array_merge(File::allFiles($this->theme_root.'/views/components/custom/'), $base_sections);
+        }, 10, 1);
     }
 
     /**

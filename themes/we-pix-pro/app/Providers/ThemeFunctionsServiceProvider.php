@@ -1,9 +1,8 @@
 <?php
-
+// Because this file service provider is loaded after tenant is initated and has no namespace, it cannot use Aliases from `app.php`, like: use Log or use File; Instead full namespaces must be used!
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
-use File;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
@@ -75,10 +74,6 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
-            // Add Theme specific sections
-            add_filter('theme-section-components', function($base_sections) {
-                return array_merge(File::allFiles($this->theme_root.'/views/components/custom/'), $base_sections);
-            }, 10, 1);
         }
         
         if (function_exists('add_action')) {
