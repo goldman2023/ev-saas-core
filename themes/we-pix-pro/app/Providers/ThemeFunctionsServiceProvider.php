@@ -75,10 +75,6 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
-            // Add Theme specific sections
-            add_filter('theme-section-components', function($base_sections) {
-                return array_merge(File::allFiles($this->theme_root.'/views/components/custom/'), $base_sections);
-            }, 10, 1);
         }
         
         if (function_exists('add_action')) {
