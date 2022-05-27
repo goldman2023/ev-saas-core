@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('user_invites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('user_id')->nullable();
             $table->integer('shop_id')->nullable();
             $table->string('new_user_type')->index();
             $table->string('new_user_role');
