@@ -208,13 +208,17 @@ class PlanForm extends Component
             DB::commit();
 
             if ($this->is_update) {
-                $this->inform(translate('Subscription plan successfully updated!').' '.$msg, '', 'success');
+                $this->inform(translate('Subscription plan successfully updated!'), $msg, 'success');
             } else {
-                $this->inform(translate('Subscription plan successfully created!').' '.$msg, '', 'success');
+                $this->inform(translate('Subscription plan successfully created!'), $msg, 'success');
+            }
+
+            if (!$this->is_update) {
+                return redirect()->route('plan.edit', $this->plan->id);
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            
             if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a subscription plan...Please try again.'));
                 $this->inform(translate('There was an error while updating a subscription plan...Please try again.'), '', 'fail');
