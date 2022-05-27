@@ -1,5 +1,5 @@
 <?php
-
+// Because this file is loaded through composer.json file, it cannot use Aliases from `app.php`, like: use Log; Instead full namespaces must be used!
 use App\Facades\TenantSettings;
 use App\Models\Currency;
 use App\Models\TenantSetting;
@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Admin\GeneralTransactionalNotification;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
