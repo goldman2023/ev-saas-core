@@ -64,6 +64,7 @@ class PlanForm extends Component
             $this->plan->discount_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->yearly_discount_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->tax_type = AmountPercentTypeEnum::amount()->value;
+            $this->plan->non_standard = false;
         }
 
         $this->initCategories($this->plan);
@@ -81,6 +82,7 @@ class PlanForm extends Component
             'meta' => [
                 'model_core_meta.custom_redirect_url' => 'nullable',
                 'model_core_meta.custom_cta_label' => 'nullable',
+                'model_core_meta.custom_pricing_label' => 'nullable',
             ],
             'core_meta' => [
                 'core_meta' => '',

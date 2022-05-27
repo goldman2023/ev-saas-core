@@ -49,7 +49,8 @@ class CoreMeta extends Model
     {
         return [
             'custom_redirect_url' => 'string',
-            'custom_cta_label' => 'string'
+            'custom_cta_label' => 'string',
+            'custom_pricing_label' => 'string',
         ];
     }
 

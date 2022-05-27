@@ -6,7 +6,7 @@
     base_currency: @js($plan->base_currency),
     primary: @js($plan->primary ?? false),
     featured: @js($plan->featured ?? false),
-    non_standard: @js($plan->non_standard ?? 'true'),
+    non_standard: @js($plan->non_standard ?? 'false'),
     discount_type: @js($plan->discount_type),
     yearly_discount_type: @js($plan->yearly_discount_type),
     tax_type: @js($plan->tax_type),
@@ -99,6 +99,19 @@
             
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <x-dashboard.form.input field="model_core_meta.custom_cta_label" />
+                            </div>
+                        </div>
+                        <!-- END Custom CTA Label Meta -->
+
+                        <!-- Custom CTA Label Meta -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="non_standard">
+                            <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                <span class="text-sm font-medium text-gray-900">{{ translate('Custom Pricing Label') }}</span>
+                                <p class="text-gray-500 text-12">{{ translate('This text will be used instead of price. Default is `Contact Us`') }}</p>
+                            </div>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.input field="model_core_meta.custom_pricing_label" />
                             </div>
                         </div>
                         <!-- END Custom CTA Label Meta -->

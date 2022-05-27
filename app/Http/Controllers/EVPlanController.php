@@ -35,7 +35,7 @@ class EVPlanController extends Controller
 
     public function my_plans_management(Request $request)
     {
-        $plans = Plan::all();
+        $plans = Plan::published()->get();
 
         return view('frontend.dashboard.plans.plans-management', compact('plans'));
     }
