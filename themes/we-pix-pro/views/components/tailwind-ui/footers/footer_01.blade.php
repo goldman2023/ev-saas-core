@@ -52,11 +52,11 @@
                   @if(!empty($footer_3_menu_items) && $footer_3_menu_items->isNotEmpty())
                       @foreach($footer_3_menu_items as $menu_item)
                           @if($menu_item['enabled']) 
-                          <li>
-                              <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="text-base text-gray-300 hover:text-white">
-                                {{ $menu_item['name'] ?? '' }} 
-                              </a>
-                          </li>
+                            <li>
+                                <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="text-base text-gray-300 hover:text-white">
+                                  {{ $menu_item['name'] ?? '' }} 
+                                </a>
+                            </li>
                           @endif
                       @endforeach
                   @endif

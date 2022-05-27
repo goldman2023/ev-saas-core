@@ -75,7 +75,13 @@ class PageMenuItemType extends BaseMenuItemType
      */
     public static function getValue($value, ?array $data, $locale)
     {
-        return Page::find($value)?->getPermalink() ?? '#';
+        if(!empty($data['query_params'] ?? null)) {
+            $href = (Page::find($value)?->getPermalink() ?? '#').'?'.$data['query_params'];
+        } else {
+            $href = Page::find($value)?->getPermalink();
+        }
+
+        return $href;
     }
 
     /**
