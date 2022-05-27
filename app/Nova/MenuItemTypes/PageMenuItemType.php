@@ -78,7 +78,7 @@ class PageMenuItemType extends BaseMenuItemType
         if(!empty($data['query_params'] ?? null)) {
             $href = (Page::find($value)?->getPermalink() ?? '#').'?'.$data['query_params'];
         } else {
-            $href = Page::find($value)?->getPermalink();
+            $href = Page::find($value)?->getPermalink() ?? '#';
         }
 
         return $href;
