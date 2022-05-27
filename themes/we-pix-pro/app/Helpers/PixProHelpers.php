@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log as FacadesLog;
+use Illuminate\Support\Facades\Log;
 
 use App\Facades\StripeService;
 
@@ -23,7 +23,7 @@ if (!function_exists('pix_pro_register_user')) {
         if(!empty($response_json['status'] ?? null)) {
             // If status is not success for any reason, throw an error
             if($response_json['status'] !== 'success') {
-                FacadesLog::error(pix_pro_error($route, 'There was an error while trying to create user in pix-pro API DB, check the response below.', $response_json));
+                Log::error(pix_pro_error($route, 'There was an error while trying to create user in pix-pro API DB, check the response below.', $response_json));
             }
         }
     }
@@ -75,13 +75,13 @@ if (!function_exists('pix_pro_create_license')) {
 
                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                         // If status is not success for any reason, throw an error
-                        FacadesLog::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
+                        Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
                     } else {
                         // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
                     }
                     
                 } else {
-                    FacadesLog::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, Could not get the user y email from pix-pro api', $response_json));
+                    Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, Could not get the user y email from pix-pro api', $response_json));
                 }
             }
         }
@@ -102,7 +102,7 @@ if (!function_exists('pix_pro_get_user')) {
         if(!empty($response_json['status'] ?? null)) {
             // If status is not success for any reason, throw an error
             if($response_json['status'] !== 'success') {
-                FacadesLog::error(pix_pro_error($route, 'There was an error while trying to get a user', $response_json));
+                Log::error(pix_pro_error($route, 'There was an error while trying to get a user', $response_json));
             }
         }
 
@@ -124,7 +124,7 @@ if (!function_exists('pix_pro_get_user_licenses')) {
         // if(!empty($response_json['status'] ?? null)) {
         //     // If status is not success for any reason, throw an error
         //     if($response_json['status'] !== 'success') {
-        //         FacadesLog::error(pix_pro_error($route, 'There was an error while trying to get a user', $response_json));
+        //         Log::error(pix_pro_error($route, 'There was an error while trying to get a user', $response_json));
         //     }
         // }
 
