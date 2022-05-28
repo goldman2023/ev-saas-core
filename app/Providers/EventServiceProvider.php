@@ -16,6 +16,8 @@ use App\Models\Order;
 use App\Models\Invoice;
 use App\Models\User;
 use App\Models\Plan;
+use App\Models\Category;
+use App\Observers\CategoriesObserver;
 use App\Observers\CategoryRelationshipsObserver;
 use App\Observers\ProductsObserver;
 use App\Observers\ProductStocksObserver;
@@ -84,7 +86,7 @@ class EventServiceProvider extends ServiceProvider
             ProductStock::class => [ProductStocksObserver::class],
             SerialNumber::class => [SerialNumbersObserver::class],
             Plan::class => [PlansObserver::class],
-            CategoryRelationship::class => [CategoryRelationshipsObserver::class],
+            Category::class => [CategoriesObserver::class],
             Attribute::class => [AttributeObserver::class],
             AttributeValue::class => [AttributeValuesObserver::class],
             Order::class => [OrdersObserver::class],

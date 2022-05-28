@@ -1432,6 +1432,61 @@
                                     </x-system.form-modal>
                                     {{-- END Google ReCaptcha --}}
 
+                                    {{-- WP API --}}
+                                    <li
+                                        class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
+                                        <div class="flex-1 flex flex-col p-8">
+                                            <img class="mx-auto h-[32px]" alt="Google Analytics"
+                                                src="https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/WordPress_logo.svg/1280px-WordPress_logo.svg.png@webp"
+                                                loading="lazy">
+                                            <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ translate('WordPress API') }}</h3>
+                                        </div>
+                                        <div>
+                                            <div class="-mt-px flex divide-x divide-gray-200">
+                                                <div class="w-0 flex-1 flex">
+                                                    <div @click="$dispatch('display-modal', {'id': 'app-settings-wordpress-api'})"
+                                                        class="cursor-pointer relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                                                        @svg('heroicon-o-pencil', ['class' => 'w-5 h-5'])
+                                                        <span class="ml-2">{{ translate('Edit') }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <x-system.form-modal id="app-settings-wordpress-api" title="WordPress API">
+                                        <!-- WordPress API Enabled-->
+                                        <div class="flex flex-col mb-3" x-data="{}">
+                                            <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                {{ translate('Enable WordPress API') }}
+                                            </label>
+
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                <x-dashboard.form.toggle field="settings.wordpress_api_enabled" />
+                                            </div>
+                                        </div>
+                                        <!-- END WordPress API Enabled -->
+
+                                        <!-- WordPress API Route-->
+                                        <div class="flex flex-col mb-3" x-data="{}">
+                                            <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                {{ translate('WordPress API Route') }}
+                                            </label>
+
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                <x-dashboard.form.input field="settings.wordpress_api_route" />
+                                            </div>
+                                        </div>
+                                        <!-- END WordPress API Route -->
+
+                                        <div class="w-full flex justify-end mt-4" x-data="{}">
+                                            <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                                        $wire.set('settings.wordpress_api_enabled', settings.wordpress_api_enabled, true);
+                                                    " wire:click="saveIntegrations('integrations.wordpress_api')">
+                                                {{ translate('Save') }}
+                                            </button>
+                                        </div>
+                                    </x-system.form-modal>
+                                    {{-- END WP API --}}
 
                                     {{-- Woo Import --}}
                                     <li
@@ -1572,6 +1627,7 @@
                                         </div>
                                     </x-system.form-modal>
                                     {{-- END Woo Export --}}
+                                    
 
                                     {{-- Facebook Pixel --}}
                                     <li

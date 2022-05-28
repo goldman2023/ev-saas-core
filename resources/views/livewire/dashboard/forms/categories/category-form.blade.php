@@ -119,8 +119,14 @@
                 <div class="col-span-4">
                     {{-- Actions --}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
-                        <div class="w-full flex">
-                        
+                        <div class="w-full flex justify-between">
+                            @if($is_update)
+                                <button type="button" class="btn btn-danger btn-sm" wire:click="removeCategory()">
+                                    {{ translate('Delete') }}
+                                </button>
+                            @endif
+                            
+
                             <button type="button" class="btn btn-primary ml-auto btn-sm"
                                 @click="
                                     $wire.set('category.thumbnail', thumbnail.id, true);

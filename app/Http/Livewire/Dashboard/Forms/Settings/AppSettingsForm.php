@@ -93,6 +93,15 @@ class AppSettingsForm extends Component
                 'settings.google_tag_manager_enabled' => ['boolean'],
                 'settings.google_tag_manager_id' => ['exclude_if:settings.google_tag_manager_enabled,false', 'required'],
             ],
+            'integrations.wordpress_api' => [
+                'settings.wordpress_api_enabled' => ['boolean'],
+                'settings.wordpress_api_route' => ['exclude_if:settings.wordpress_api_enabled,false', 'required'],
+            ],
+            'integrations.woo_import' => [
+                'settings.woo_import_enabled' => ['boolean'],
+                'settings.woo_import_api_key' => ['exclude_if:settings.woo_import_enabled,false', 'required'],
+                'settings.woo_import_rest_api_secret_key' => ['exclude_if:settings.woo_import_enabled,false', 'required'],
+            ],
             /* TODO: Add woocommerce rules here */
             'integrations.facebook_pixel' => [
                 'settings.facebook_pixel_enabled' => ['boolean'],

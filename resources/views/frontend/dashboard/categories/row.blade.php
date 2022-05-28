@@ -47,10 +47,10 @@
             class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow"
         >
             <li>
-                <a href="#" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t">
+                <div wire:click="removeCategory({{ $row->id }})" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t cursor-pointer">
                     @svg('heroicon-o-trash', ['class' => 'text-danger w-[18px] h-[18px]'])
                     <span class="ml-2">{{ translate('Remove category') }}</span>
-                </a>
+                </div>
             </li>
         </ul>
     </div>

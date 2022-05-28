@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
+use DB;
 
 class CategoriesTable extends DataTableComponent
 {
@@ -90,5 +91,23 @@ class CategoriesTable extends DataTableComponent
     public function rowView(): string
     {
         return 'frontend.dashboard.categories.row';
+    }
+
+    public function removeCategory($id)
+    {
+        $category = Category::findOrFail($id);
+
+        DB::beginTransaction();
+
+        try {
+            $category->delete();
+
+            DB::commit();
+
+            $this->inform(translate('Category successfully deleted!'), '', 'success');
+        } catch (\Exception $e) {
+            $this->dispatchGeneralError(translate('There was an error while trying to remove category and it\'s relationships: ').$e->getMessage());
+            $this->inform(translate('There was an error while trying to remove category and it\'s relationships: '), $e->getMessage(), 'danger');
+        }
     }
 }

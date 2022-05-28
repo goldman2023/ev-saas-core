@@ -8,7 +8,7 @@
 
 @section('panel_content')
     <section>
-        <x-dashboard.section-headers.section-header title="{{ translate('New category') }}" text="">
+        <x-dashboard.section-headers.section-header title="{{ translate('Edit category') }}" text="">
             <x-slot name="content">
                 <a href="{{ route('categories.index') }}" class="btn-standard">
                     @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
