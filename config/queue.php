@@ -64,11 +64,11 @@ return [
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => 'default',
+            'connection' => 'queue',
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => 5,
-            'after_commit' => true, // if job is dispatched while DB transaction is in progress, first commit transactions and only yhen dispatch the job
+            'after_commit' => false, // if job is dispatched while DB transaction is in progress, first commit transactions and only then dispatch the job
         ],
 
     ],

@@ -17,17 +17,18 @@ use App\Http\Services\Integrations\WordPressAPIService;
 use DB;
 use MediaService;
 use Storage;
+use Log;
 
-class ImportWordPressBlogPosts extends Action
+class ImportWordPressBlogPosts extends Action implements ShouldQueue
 {
     use InteractsWithQueue, Queueable;
 
     public $name = 'Import From WordPress';
+    public $initiator;
 
-    public function __construct()
+    public function __construct($initiator)
     {
-        $this->connection = 'redis';
-        $this->queue = 'import_wp_blog_posts';
+        $this->initiator = $initiator;
     }
 
     /**
@@ -47,16 +48,25 @@ class ImportWordPressBlogPosts extends Action
 
             // $all_blog_posts = [];
 
+            Log::info('---------- Starting WP Posts import ----------');
+
             do {
                 $res = $wp->getBlogPosts($page);
                 $total_pages = $res['total_pages'] ?? null;
+
+                Log::info('Page: '.$page);
+                Log::info('Total pages: '.$total_pages);
+
                 $page++;
 
                 $data = $res['data'] ?? [];
-                // $all_categories = array_merge($all_categories, $data);
+
+                Log::info(collect($data)->pluck('id')->toArray());
+                
 
                 if(!empty($data)) {
                     foreach($data as $key => $blogPost) {
+                        
                         DB::beginTransaction();
                         try {
                             $new_blog_post = BlogPost::updateOrCreate(
@@ -72,7 +82,7 @@ class ImportWordPressBlogPosts extends Action
                                     'content' => $blogPost['content']['rendered'] ?? '',
                                     'meta_title' => html_entity_decode($blogPost['yoast_head_json']['title'] ?? ''),
                                     'meta_description' => html_entity_decode(strip_tags($blogPost['yoast_head_json']['description'] ?? '')),
-                                    'user_id' => auth()->user()->id,
+                                    'user_id' => $this->initiator->id,
                                     'created_at' => $blogPost['date'],
                                     'updated_at' => $blogPost['modified'],
                                 ]
@@ -87,8 +97,8 @@ class ImportWordPressBlogPosts extends Action
                             // Importer is the author for now
                             DB::table('blog_post_relationships')->upsert([
                                 [
-                                    'subject_type' => auth()->user()::class, 
-                                    'subject_id' => auth()->user()->id, 
+                                    'subject_type' => $this->initiator::class, 
+                                    'subject_id' => $this->initiator->id, 
                                     'blog_post_id' => $new_blog_post->id, 
                                     'created_at' => date("Y-m-d H:i:s", time()), 
                                     'updated_at' => date("Y-m-d H:i:s", time()), 
@@ -140,7 +150,7 @@ class ImportWordPressBlogPosts extends Action
                                     $upload->extension = $extension;
                                     $upload->file_original_name = $wp_media['data']['media_details']['sizes']['full']['file'] ?? '';
                                     $upload->file_name = $s3_image_path;
-                                    $upload->user_id = auth()->user()->id;
+                                    $upload->user_id = $this->initiator->id;
                                     $upload->shop_id = 1;
                                     $upload->type = MediaService::getPermittedExtensions()[$extension];
                                     $upload->file_size = $file_size;
@@ -155,18 +165,19 @@ class ImportWordPressBlogPosts extends Action
                             }
                             DB::commit();
 
+                            Log::info('(#'.$new_blog_post->id.') '.$new_blog_post->name.' - successfully imported!');
                         } catch(\Exception $e) {
                             DB::rollBack();
                             dd($e);
                             return Action::danger('Something went wrong!');
                         }
                     }
-
-                    return Action::message('Blog Posts impoorted successfully!');
                 }
             } while ($page <= $total_pages);
     
-            // dd($all_categories);
+            Log::info('---------- Ending WP Posts import ----------');
+
+            return Action::message('Blog Posts imported successfully!');
         }
     }
 

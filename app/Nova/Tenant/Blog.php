@@ -124,7 +124,7 @@ class Blog extends Resource
     public function actions(Request $request)
     {
         return [
-            (new \App\Nova\Actions\ImportWordPressBlogPosts())->standalone()
+            (new \App\Nova\Actions\ImportWordPressBlogPosts(auth()->user()))->standalone()
         ];
     }
 }
