@@ -4,7 +4,64 @@
 
 @section('meta')
 {{-- <x-default.products.single.head-meta-tags :product="$product"></x-default.products.single.head-meta-tags> --}}
+
 @endsection
+
+@push('head_scripts')
+<style>
+    #blog_post_single_content img {
+        overflow-x: hidden;
+    }
+    #blog_post_single_content h2, #blog_post_single_content h3, #blog_post_single_content h4 {
+        font-size: 36px;
+        line-height: 46px;
+        margin-bottom: 40px;
+        font-weight: 600;
+    }
+    #blog_post_single_content p {
+        font-size: 18px;
+        line-height: 28px;
+        margin-bottom: 40px;
+    }
+    #blog_post_single_content figure {
+        margin-bottom: 40px;
+    }
+    #blog_post_single_content ol {
+        overflow-wrap: break-word;
+        padding-left: 20px;
+        margin-top: 0;
+        margin-bottom: 40px;
+        list-style-type: none;
+        counter-reset: item;
+        list-style: decimal;
+    }
+    #blog_post_single_content ul {
+        overflow-wrap: break-word;
+        padding-left: 20px;
+        margin-top: 0;
+        margin-bottom: 40px;
+        list-style-type: none;
+        counter-reset: item;
+        list-style: disc;
+    }
+    #blog_post_single_content .wp-block-separator {
+        height: 2px !important;
+        color: #ccc !important;
+        margin-top: 0 !important;
+        margin-bottom: 40px !important;
+    }
+    @media(max-width: 1200px) {
+        #blog_post_single_content h2, #blog_post_single_content h3, #blog_post_single_content h4 {
+            font-size: 28px;
+            line-height: 38px;
+        }
+        #blog_post_single_content p {
+            font-size: 16px;
+            line-height: 26px;
+        }
+    }
+</style>
+@endpush
 
 @section('content')
 <section class="relative  lg:pt-[120px]  lg:pb-[120px]  sm:pt-[90px]  sm:pb-[90px]  pt-[50px]  pb-[50px]   bg-[#f5f5f5]   ">
@@ -34,12 +91,12 @@
     <div class="mx-auto max-w-6xl px-8 sm:px-4">
         
         <div class="grid grid-cols-12 gap-8">
-            <div class="col-span-8 flex flex-col">
+            <div class="col-span-12 flex flex-col">
                 <div class="w-full aspect-square inline-flex items-center justify-center rounded-md mb-10">
                     <img src="{{ $blog_post->getThumbnail(['w' => 1000]) }}" alt="" class="w-full object-contain">
                 </div>
 
-                <div class="w-full block pb-5 mb-[30px] border-b border-gray-300">
+                <div id="blog_post_single_content" class="w-full block pb-5 mb-[30px] border-b border-gray-300">
                     {!! $blog_post->content !!}
                 </div>
 
@@ -63,11 +120,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-4">
-                {{-- <div class="w-full">
+            {{-- <div class="col-span-4">
+                <div class="w-full">
 
-                </div> --}}
-            </div>
+                </div>
+            </div> --}}
         </div>
     </div>
 </section>

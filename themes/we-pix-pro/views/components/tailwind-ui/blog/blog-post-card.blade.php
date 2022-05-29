@@ -1,6 +1,6 @@
 <a href="{{ $blogPost->getPermalink() }}" class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg h-full pb-4">
     <div class="w-full">
-        <div class="w-full aspect-square inline-flex items-center justify-center rounded-t-md mb-5 overflow-hidden">
+        <div class="w-full aspect-square inline-flex items-center justify-center rounded-t-md border-b border-gray-200 mb-5 overflow-hidden">
             <img src="{{ $blogPost->getThumbnail(['h' => 300]) }}" alt="" class="w-full h-[220px] object-cover">
         </div>
 
