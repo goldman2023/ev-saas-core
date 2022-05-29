@@ -31,7 +31,7 @@
                         </div>
                     </div>
 
-                    <div we-slot="" name="hero_info_slot" we-title="Info Label" class="w-full mt-4 text-center md:text-left">
+                    <div we-slot="" name="hero_info_slot" we-title="Info Label" class="w-full mt-4 text-center lg:text-left">
                         <span we-name="hero_info_label" we-title="Info label" class="mt-2 text-base text-gray-500">
                             1 month free trial now
                         </span>
