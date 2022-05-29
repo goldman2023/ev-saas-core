@@ -110,7 +110,7 @@
                   </button>
                   
                   <div class="mt-6 mb-4 max-w-xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
-                    <ol class="list-decimal space-y-1"><li>Open the installer executable, or double-click on the shortcut to it.</li><li>If you are asked about it, allow changes to be made to your computer.</li><li>Pixpro setup will pop up. Read the instructions, then proceed to next step by clicking<em> Next</em>.</li><li>In order to proceed,&nbsp;click I <em>Agree.</em></li><li>Specify the directory where the program and its files will be stored.</li><li>Please, wait until the installation procedure is completed. The green progress bar represents the process. A shortcut will be created on your desktop that will launch the application.</li><li>Click <em>Finish</em> to complete the&nbsp;installation. If you leave<em> Run Pixpro </em>checked, the application will start automatically.</li></ol>
+                    <ol class="list-decimal space-y-1  pl-5"><li>Open the installer executable, or double-click on the shortcut to it.</li><li>If you are asked about it, allow changes to be made to your computer.</li><li>Pixpro setup will pop up. Read the instructions, then proceed to next step by clicking<em> Next</em>.</li><li>In order to proceed,&nbsp;click I <em>Agree.</em></li><li>Specify the directory where the program and its files will be stored.</li><li>Please, wait until the installation procedure is completed. The green progress bar represents the process. A shortcut will be created on your desktop that will launch the application.</li><li>Click <em>Finish</em> to complete the&nbsp;installation. If you leave<em> Run Pixpro </em>checked, the application will start automatically.</li></ol>
                   </div>
                 </li>
                 <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
@@ -219,7 +219,7 @@
                       <!-- /wp:paragraph -->
                       
                       <!-- wp:list {"ordered":true} -->
-                      <ol class="list-decimal space-y-2"><li><strong>Resolution:</strong> 12 megapixels is a good starting point. Any less than that introduces a little risk that not enough detail could be captured for good 3D reconstruction results.</li><li><strong>Lens focal length:</strong> anything between 16 and 135 millimeters of 35 mm equivalency should be good for photogrammetry, sweet spot being 24 - 50 mm equivalent lenses. All manufacturers specify the equivalent lens focal length because it’s the most common unit to determine how wide or zoomed-in the lens is. Always refer to the cameras or lens' manual to find the equivalent focal length. Anything wider (less) than 16 millimeters is ultra-wide angle which might introduce heavy distortion that might compromise reconstruction results. Anything longer or more 'tele' than 135 millimeters can result in shallow depth of field which also can make 3D reconstruction impossible. Specialty lenses such as fish-eye, tilt-shift, soft-focus should be generally avoided. Although macro lenses are usually well suited for photogrammetry due to their excellent optical properties.</li><li><strong>GPS geotagging:</strong> GPS data embedded in the photo helps to create projects with scale and position which is required if any measurements are to be made. This is most applicable to drones. Almost all drones embed GPS data because having a GPS sensor is an essential part of their operation. Some handheld cameras and most smartphones have GPS as well.</li></ol>
+                      <ol class="list-decimal space-y-2  pl-5"><li><strong>Resolution:</strong> 12 megapixels is a good starting point. Any less than that introduces a little risk that not enough detail could be captured for good 3D reconstruction results.</li><li><strong>Lens focal length:</strong> anything between 16 and 135 millimeters of 35 mm equivalency should be good for photogrammetry, sweet spot being 24 - 50 mm equivalent lenses. All manufacturers specify the equivalent lens focal length because it’s the most common unit to determine how wide or zoomed-in the lens is. Always refer to the cameras or lens' manual to find the equivalent focal length. Anything wider (less) than 16 millimeters is ultra-wide angle which might introduce heavy distortion that might compromise reconstruction results. Anything longer or more 'tele' than 135 millimeters can result in shallow depth of field which also can make 3D reconstruction impossible. Specialty lenses such as fish-eye, tilt-shift, soft-focus should be generally avoided. Although macro lenses are usually well suited for photogrammetry due to their excellent optical properties.</li><li><strong>GPS geotagging:</strong> GPS data embedded in the photo helps to create projects with scale and position which is required if any measurements are to be made. This is most applicable to drones. Almost all drones embed GPS data because having a GPS sensor is an essential part of their operation. Some handheld cameras and most smartphones have GPS as well.</li></ol>
                       <!-- /wp:list --></div>
                     </div>
                 </li>
@@ -380,7 +380,7 @@
                   </button>
                   
                   <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
-                    <ol class="list-decimal space-y-1">
+                    <ol class="list-decimal space-y-1 pl-5">
                       <li>The overlap between the 2 consecutive photos should be at least 75% side and 75% front.</li>
                       <li>The flight altitude should be as constant as possible.</li>
                       <li>The camera position angle varies respect to the type of target scanned subject. The optimal result is acquired with the angle:
@@ -415,6 +415,284 @@
                       </li>
                     </ol>
                   </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          {{-- Accuracy --}}
+          <section class="py-10 2xl:py-40">
+            <div class="container px-4 mx-auto">
+              <div class="text-center">
+                <h2 class="text-28 font-bold font-heading">{{ translate('Accuracy') }}</h2>
+              </div>
+            </div>
+            <div class="max-w-4xl mx-auto pt-5 border-t border-gray-50">
+              <ul>
+                <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
+                    show: false
+                  }">
+                  <button class="flex w-full text-left" @click="show = !show">
+                    <div class="w-auto mr-8 cursor-pointer" >
+                      <span :class="{'bg-primary text-white':show, 'bg-[#f5f5f5] text-gray-900': !show}" class="flex items-center justify-center w-12 h-12  text-lg font-bold rounded-full">1</span>
+                    </div>
+                    <div class="w-full mt-3">
+                      <div class="flex items-center justify-between">
+                        <h3 class="text-xl text-primary font-bold" :class="{'text-primary':show, 'text-gray-900': !show}">
+                          {{ translate('How to get a high resolution orthophoto?') }}
+                        </h3>
+                        <span class="ml-4">
+                          @svg('heroicon-s-chevron-down', ['class' => 'w-6 h-6 text-primary', ':class' => "{'rotate-180':show}"])
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
+                    <div itemprop="text"><!-- wp:paragraph -->
+                      <div itemprop="text"><!-- wp:paragraph -->
+                        <p class="pb-4">Orthophoto is an orthorectified image representing the area from above. DEM is needed to make a true orthophoto.</p>
+                        <!-- /wp:paragraph -->
+                        
+                        <!-- wp:paragraph -->
+                        <p class="pb-4">In the Orthophoto dialogue window, select the digital elevation map for the basis. To increase or decrease the resolution of the orthophoto, select the GSD value. The smaller the value, the higher the resolution.</p>
+                        <!-- /wp:paragraph -->
+                        
+                        <!-- wp:paragraph -->
+                        <p class="pb-4">Suggested value is 4 times smaller than the used digital elevation map. The value can be even smaller, but it might cause the longer processing.</p>
+                        <!-- /wp:paragraph -->
+                        
+                        <!-- wp:paragraph -->
+                        <p >It is no use going smaller than the photo GSD that is calculated during the flight planning stage, which is the maximum quality available. If there is need for better quality, a lower altitude flight must be performed.</p>
+                        <!-- /wp:paragraph --></div>
+                    </div>
+                </li>
+                
+                <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
+                    show: false
+                  }">
+                  <button class="flex w-full text-left" @click="show = !show">
+                    <div class="w-auto mr-8 cursor-pointer" >
+                      <span :class="{'bg-primary text-white':show, 'bg-[#f5f5f5] text-gray-900': !show}" class="flex items-center justify-center w-12 h-12  text-lg font-bold rounded-full">2</span>
+                    </div>
+                    <div class="w-full mt-3">
+                      <div class="flex items-center justify-between">
+                        <h3 class="text-xl text-primary font-bold" :class="{'text-primary':show, 'text-gray-900': !show}">
+                          {{  translate('What GCPs (ground control points) are used for?')  }}
+                        </h3>
+                        <span class="ml-4">
+                          @svg('heroicon-s-chevron-down', ['class' => 'w-6 h-6 text-primary', ':class' => "{'rotate-180':show}"])
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
+                    <div itemprop="text"><!-- wp:paragraph -->
+                      <p class="mb-4">Ground Control points (GCPs) are not obligatory for good 3D reconstruction. But they can be used for extremely accurate Georeferencing and scaling, meaning that the measurements will be even more accurate and the placement of the reconstructed terrain is flawless on an absolute scale.</p>
+                      <!-- /wp:paragraph -->
+                      
+                      <!-- wp:paragraph -->
+                      <p>In case of perfect conditions consumer grade GPS device (such as drone) can provide horizontal accuracy up to 5 meters and vertical up to 10. With professional survey grade ground control points, accuracy of a few centimeters can be achieved. As an alternative Real Time Kinematic (RTK) or Post Process Kinematic (PPK) systems can be used which utilize a base station for GPS signal correction in real time or in post-processing. Drones and cameras equipped with RTK or PPK compatible devices are an order of magnitude more expensive but provide comparable accuracy to survey grade GCP's while eliminating the need to physically measure GCP's.</p>
+                      <!-- /wp:paragraph -->
+                    </div>
+                </li>
+
+                <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
+                    show: false
+                  }">
+                  <button class="flex w-full text-left" @click="show = !show">
+                    <div class="w-auto mr-8 cursor-pointer" >
+                      <span :class="{'bg-primary text-white':show, 'bg-[#f5f5f5] text-gray-900': !show}" class="flex items-center justify-center w-12 h-12  text-lg font-bold rounded-full">3</span>
+                    </div>
+                    <div class="w-full mt-3">
+                      <div class="flex items-center justify-between">
+                        <h3 class="text-xl text-primary font-bold" :class="{'text-primary':show, 'text-gray-900': !show}">
+                          {{  translate('How to prepare a GCP text file?')  }}
+                        </h3>
+                        <span class="ml-4">
+                          @svg('heroicon-s-chevron-down', ['class' => 'w-6 h-6 text-primary', ':class' => "{'rotate-180':show}"])
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
+                    <div itemprop="text">
+                      <p class="mb-4">GCP information is usually stored in simple text file formats such as .txt and .csv. These files may come from the professional surveying station, or they can be created by the user.</p>
+                      <p class="mb-4">To create a GCP text file one must follow a simple column structure. In each row of text data should contain the same structure. The most convenient and simple line structure for the GCP data would be: GCP label-space-latitude-space-longitude-space-altitude. Using this structure we can create a text document using notepad that should look like this.</p>
+                      <p>Coordinates can be entered in any coordinate system, and the coordinate system can be selected while importing the file.</p>  
+                    </div>
+                  </div>
+                </li>
+
+                <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
+                    show: false
+                  }">
+                    <button class="flex w-full text-left" @click="show = !show">
+                      <div class="w-auto mr-8 cursor-pointer" >
+                        <span :class="{'bg-primary text-white':show, 'bg-[#f5f5f5] text-gray-900': !show}" class="flex items-center justify-center w-12 h-12  text-lg font-bold rounded-full">4</span>
+                      </div>
+                      <div class="w-full mt-3">
+                        <div class="flex items-center justify-between">
+                          <h3 class="text-xl text-primary font-bold" :class="{'text-primary':show, 'text-gray-900': !show}">
+                            {{  translate('Can I modify the density of the contour lines?')  }}
+                          </h3>
+                          <span class="ml-4">
+                            @svg('heroicon-s-chevron-down', ['class' => 'w-6 h-6 text-primary', ':class' => "{'rotate-180':show}"])
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                    
+                    <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
+                      <div itemprop="text"><!-- wp:paragraph -->
+                        <p class="pb-4">Yes. In the <em>Contour Lines</em> dialogue window, select the digital elevation map for the basis. Set the interval value and offset value if needed. The smaller the interval value the denser the contour lines. The default value is 1 meter.</p>
+                        <!-- /wp:paragraph -->
+
+                        <!-- wp:paragraph -->
+                        <p class="pb-4">Height Offset just offsets the lines up or down by a defined amount.</p>
+                        <!-- /wp:paragraph -->
+
+                        <!-- wp:paragraph -->
+                        <p>The contour lines can be viewed in the map or 3D view section.</p>
+                        <!-- /wp:paragraph -->
+                      </div>
+                    </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+
+          {{-- Creating a 3D structure --}}
+          <section class="py-10 2xl:py-40">
+            <div class="container px-4 mx-auto">
+              <div class="text-center">
+                <h2 class="text-28 font-bold font-heading">{{ translate('Creating a 3D structure') }}</h2>
+              </div>
+            </div>
+            <div class="max-w-4xl mx-auto pt-5 border-t border-gray-50">
+              <ul>
+                <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
+                    show: false
+                  }">
+                  <button class="flex w-full text-left" @click="show = !show">
+                    <div class="w-auto mr-8 cursor-pointer" >
+                      <span :class="{'bg-primary text-white':show, 'bg-[#f5f5f5] text-gray-900': !show}" class="flex items-center justify-center w-12 h-12  text-lg font-bold rounded-full">1</span>
+                    </div>
+                    <div class="w-full mt-3">
+                      <div class="flex items-center justify-between">
+                        <h3 class="text-xl text-primary font-bold" :class="{'text-primary':show, 'text-gray-900': !show}">
+                          {{ translate('How to choose the best processing speed?') }}
+                        </h3>
+                        <span class="ml-4">
+                          @svg('heroicon-s-chevron-down', ['class' => 'w-6 h-6 text-primary', ':class' => "{'rotate-180':show}"])
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
+                    <div itemprop="text">
+                      <p class="pb-4">Processing speed setting affects the reconstruction speed and quality.</p>
+                      
+                      <p class="pb-4"><strong>Fast</strong> processing takes the least amount of time, but it also requires the best possible image quality. This means that the 'Fast' setting is best for those who are confident that the photos taken for the reconstruction are more than suitable. This includes the overlap, general image quality and object coverage with room to spare.</p>
+                      
+                      <p class="pb-4"><strong>Medium</strong> setting, the default, is usually a good choice for most cases.</p>
+                      
+                      <p><strong>Slow</strong> setting allows using poorer quality pictures and provides more coverage while taking considerably more time to finish. If the Slow reconstruction setting combined with optimize cameras setting fail – there’s a high probability that the pictures were taken inadequately for the 3D reconstruction.</p>
+                    </div>
+                </li>
+                
+                <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
+                    show: false
+                  }">
+                  <button class="flex w-full text-left" @click="show = !show">
+                    <div class="w-auto mr-8 cursor-pointer" >
+                      <span :class="{'bg-primary text-white':show, 'bg-[#f5f5f5] text-gray-900': !show}" class="flex items-center justify-center w-12 h-12  text-lg font-bold rounded-full">2</span>
+                    </div>
+                    <div class="w-full mt-3">
+                      <div class="flex items-center justify-between">
+                        <h3 class="text-xl text-primary font-bold" :class="{'text-primary':show, 'text-gray-900': !show}">
+                          {{  translate('How to make a reconstruction from a part of a photo set?')  }}
+                        </h3>
+                        <span class="ml-4">
+                          @svg('heroicon-s-chevron-down', ['class' => 'w-6 h-6 text-primary', ':class' => "{'rotate-180':show}"])
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
+                    <div itemprop="text">
+                      <p class="pb-4">There are two possible ways to select a bundle of photos for reconstruction:</p>
+
+                      <ol class="list-decimal space-y-1 pl-5"><li>After uploading a photo set, select the photos from the list on the Layers Panel by checking / unchecking the relevant photos. Then click <em>Start 3D Reconstruction</em>. The reconstruction will be performed only from the checked photos.</li><li>After uploading photo set, select the photos on the map by drawing the polygon around the cameras. To do this, right-click the Photos on the Layers Panel. Click <em>Select workspace area</em>, and start marking around the needed area on the map. When finished marking, right-click to close the perimeter of the selected area. The photos within only the selected area will be used for reconstruction. Please note that the workspace selection option can be done only when the photos come with the GPS data in order to display them on the map.</li></ol>
+                    </div>
+                </li>
+
+                <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
+                    show: false
+                  }">
+                  <button class="flex w-full text-left" @click="show = !show">
+                    <div class="w-auto mr-8 cursor-pointer" >
+                      <span :class="{'bg-primary text-white':show, 'bg-[#f5f5f5] text-gray-900': !show}" class="flex items-center justify-center w-12 h-12  text-lg font-bold rounded-full">3</span>
+                    </div>
+                    <div class="w-full mt-3">
+                      <div class="flex items-center justify-between">
+                        <h3 class="text-xl text-primary font-bold" :class="{'text-primary':show, 'text-gray-900': !show}">
+                          {{  translate('What is the difference between sparse and dense clouds?')  }}
+                        </h3>
+                        <span class="ml-4">
+                          @svg('heroicon-s-chevron-down', ['class' => 'w-6 h-6 text-primary', ':class' => "{'rotate-180':show}"])
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
+                    <div itemprop="text">
+                      <p class="pb-4"><strong><em>Sparse point cloud</em></strong> is only the first stage of creating a workable model. In the sparse point cloud, as the name suggests, there are only few points in comparison to the dense point cloud, so the object itself can be hard to discern at this stage.</p>
+                      
+                      <p><strong><em>Dense point cloud</em></strong> is the second stage of processing, and it is required to start measuring and creating digital elevation maps and orthophotos down the line. Dense point cloud creation is also the lengthiest step.</p>
+                    </div>
+                  </div>
+                </li>
+
+                <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
+                    show: false
+                  }">
+                    <button class="flex w-full text-left" @click="show = !show">
+                      <div class="w-auto mr-8 cursor-pointer" >
+                        <span :class="{'bg-primary text-white':show, 'bg-[#f5f5f5] text-gray-900': !show}" class="flex items-center justify-center w-12 h-12  text-lg font-bold rounded-full">4</span>
+                      </div>
+                      <div class="w-full mt-3">
+                        <div class="flex items-center justify-between">
+                          <h3 class="text-xl text-primary font-bold" :class="{'text-primary':show, 'text-gray-900': !show}">
+                            {{  translate('What density of the point cloud to select?')  }}
+                          </h3>
+                          <span class="ml-4">
+                            @svg('heroicon-s-chevron-down', ['class' => 'w-6 h-6 text-primary', ':class' => "{'rotate-180':show}"])
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                    
+                    <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
+                      <div itemprop="text"><!-- wp:paragraph -->
+                        <p class="pb-4"><strong>High</strong> density point cloud will provide more points and better GSD values later as a consequence, but it will take longer to create.</p>
+                        <!-- /wp:paragraph -->
+                        
+                        <!-- wp:paragraph -->
+                        <p class="pb-4"><strong>Low</strong> density point cloud will take less time to process while providing fewer points.</p>
+                        <!-- /wp:paragraph -->
+                        
+                        <!-- wp:paragraph -->
+                        <p><strong>Medium</strong> density is a happy medium.</p>
+                        <!-- /wp:paragraph -->
+                      </div>
+                    </div>
                 </li>
               </ul>
             </div>
