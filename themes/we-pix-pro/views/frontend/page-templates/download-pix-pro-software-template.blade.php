@@ -1,5 +1,5 @@
 {{-- Download PixPro Software Section --}}
-<section class="py-24 pt-16 bg-white">
+<section class="py-10 sm:py-24 bg-white">
     <div class="container px-4 mx-auto">
         <div class="text-center">
             <span class="inline-block py-px px-2 mb-4 text-xs leading-5 text-green-500 bg-green-100 font-medium rounded-full shadow-sm">Software</span>
@@ -10,7 +10,7 @@
             <p class="mb-6 mx-auto text-lg md:text-xl text-coolGray-500 font-medium max-w-4xl">Our philosophy is simple — hire a team of diverse, passionate people and foster a culture that empowers you to do you best work.</p>
             <div class="flex flex-wrap justify-center">
                 <div class="w-full md:w-auto py-1 md:py-0 md:mr-6">
-                    <a href="{{ get_tenant_setting('pix_pro_software_download_url', '#') }}" class="inline-block py-5 px-7 w-full text-base md:text-lg leading-4 text-green-50 font-medium text-center bg-primary hover:bg-primary-dark   shadow-sm rounded-lg" >
+                    <a href="{{ get_tenant_setting('pix_pro_software_download_url', '#') }}" class="inline-block py-5 px-7 w-full text-base md:text-lg leading-4 text-green-50 font-medium text-center bg-primary hover:bg-primary-dark   shadow-sm rounded-md" >
                         {{ translate('Download') }}
                     </a>
                 </div>

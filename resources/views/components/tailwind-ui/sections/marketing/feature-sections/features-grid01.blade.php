@@ -18,7 +18,7 @@
                   <a class="block w-full" href="{{ $itt['href'] }}" target="{{ $itt['target'] ?? '_self' }}">
                 @endif
 
-                <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg h-full pb-6">
+                <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg h-full pb-6 overflow-hidden">
                   <div class="w-full">
                     @if(!empty($itt['image'] ?? null))
                       <div class="w-full aspect-square inline-flex items-center justify-center rounded-md ">

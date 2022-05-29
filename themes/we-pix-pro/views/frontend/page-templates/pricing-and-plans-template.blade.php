@@ -20,10 +20,10 @@
       </div>
     </div>
 
-    <div class="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    <div class="flex overflow-x-scroll md:overflow-x-hidden md:grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 pb-5 md:pb-0 pr-3 md:pr-0">
       @if($models->isNotEmpty())
         @foreach($models as $model)
-          <div class="w-full" x-data="{
+          <div class="w-full min-w-[250px] md:min-w-inherit" x-data="{
               month_price: @js($model->getTotalPrice(true)),
               annual_price: @js(\FX::formatPrice($model->getTotalAnnualPrice() / 12)),
               {{-- discount_percent: @js(abs($model->getTotalAnnualPrice() - ($model->getTotalPrice() * 12))), --}}
@@ -102,7 +102,7 @@
 {{-- Plan Features table --}}
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div>
-        <div class=" py-4 overflow-x-auto">
+        <div class="mb-5 md:mb-0 py-4 overflow-x-auto">
             <div class="inline-block min-w-full overflow-hidden">
                 <table class="min-w-[900px] w-full leading-normal">
                     <thead>
