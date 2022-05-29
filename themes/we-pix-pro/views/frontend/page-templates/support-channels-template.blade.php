@@ -110,7 +110,7 @@
                   </button>
                   
                   <div class="mt-6 mb-4 max-w-xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
-                    <ol class="list-decimal space-y-1"><li>Open the installer executable, or double-click on the shortcut to it.</li><li>If you are asked about it, allow changes to be made to your computer.</li><li>Pixpro setup will pop up. Read the instructions, then proceed to next step by clicking<em> Next</em>.</li><li>In order to proceed,&nbsp;click I <em>Agree.</em></li><li>Specify the directory where the program and its files will be stored.</li><li>Please, wait until the installation procedure is completed. The green progress bar represents the process. A shortcut will be created on your desktop that will launch the application.</li><li>Click <em>Finish</em> to complete the&nbsp;installation. If you leave<em> Run Pixpro </em>checked, the application will start automatically.</li></ol>
+                    <ol class="list-decimal space-y-1  pl-5"><li>Open the installer executable, or double-click on the shortcut to it.</li><li>If you are asked about it, allow changes to be made to your computer.</li><li>Pixpro setup will pop up. Read the instructions, then proceed to next step by clicking<em> Next</em>.</li><li>In order to proceed,&nbsp;click I <em>Agree.</em></li><li>Specify the directory where the program and its files will be stored.</li><li>Please, wait until the installation procedure is completed. The green progress bar represents the process. A shortcut will be created on your desktop that will launch the application.</li><li>Click <em>Finish</em> to complete the&nbsp;installation. If you leave<em> Run Pixpro </em>checked, the application will start automatically.</li></ol>
                   </div>
                 </li>
                 <li class="px-4 lg:px-12 py-5 border-b border-gray-50" x-data="{
@@ -219,7 +219,7 @@
                       <!-- /wp:paragraph -->
                       
                       <!-- wp:list {"ordered":true} -->
-                      <ol class="list-decimal space-y-2"><li><strong>Resolution:</strong> 12 megapixels is a good starting point. Any less than that introduces a little risk that not enough detail could be captured for good 3D reconstruction results.</li><li><strong>Lens focal length:</strong> anything between 16 and 135 millimeters of 35 mm equivalency should be good for photogrammetry, sweet spot being 24 - 50 mm equivalent lenses. All manufacturers specify the equivalent lens focal length because it’s the most common unit to determine how wide or zoomed-in the lens is. Always refer to the cameras or lens' manual to find the equivalent focal length. Anything wider (less) than 16 millimeters is ultra-wide angle which might introduce heavy distortion that might compromise reconstruction results. Anything longer or more 'tele' than 135 millimeters can result in shallow depth of field which also can make 3D reconstruction impossible. Specialty lenses such as fish-eye, tilt-shift, soft-focus should be generally avoided. Although macro lenses are usually well suited for photogrammetry due to their excellent optical properties.</li><li><strong>GPS geotagging:</strong> GPS data embedded in the photo helps to create projects with scale and position which is required if any measurements are to be made. This is most applicable to drones. Almost all drones embed GPS data because having a GPS sensor is an essential part of their operation. Some handheld cameras and most smartphones have GPS as well.</li></ol>
+                      <ol class="list-decimal space-y-2  pl-5"><li><strong>Resolution:</strong> 12 megapixels is a good starting point. Any less than that introduces a little risk that not enough detail could be captured for good 3D reconstruction results.</li><li><strong>Lens focal length:</strong> anything between 16 and 135 millimeters of 35 mm equivalency should be good for photogrammetry, sweet spot being 24 - 50 mm equivalent lenses. All manufacturers specify the equivalent lens focal length because it’s the most common unit to determine how wide or zoomed-in the lens is. Always refer to the cameras or lens' manual to find the equivalent focal length. Anything wider (less) than 16 millimeters is ultra-wide angle which might introduce heavy distortion that might compromise reconstruction results. Anything longer or more 'tele' than 135 millimeters can result in shallow depth of field which also can make 3D reconstruction impossible. Specialty lenses such as fish-eye, tilt-shift, soft-focus should be generally avoided. Although macro lenses are usually well suited for photogrammetry due to their excellent optical properties.</li><li><strong>GPS geotagging:</strong> GPS data embedded in the photo helps to create projects with scale and position which is required if any measurements are to be made. This is most applicable to drones. Almost all drones embed GPS data because having a GPS sensor is an essential part of their operation. Some handheld cameras and most smartphones have GPS as well.</li></ol>
                       <!-- /wp:list --></div>
                     </div>
                 </li>
@@ -380,7 +380,7 @@
                   </button>
                   
                   <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
-                    <ol class="list-decimal space-y-1">
+                    <ol class="list-decimal space-y-1 pl-5">
                       <li>The overlap between the 2 consecutive photos should be at least 75% side and 75% front.</li>
                       <li>The flight altitude should be as constant as possible.</li>
                       <li>The camera position angle varies respect to the type of target scanned subject. The optimal result is acquired with the angle:
@@ -627,7 +627,7 @@
                   <div class="mt-6 mb-4 max-w-3xl border-l-2 border-gray-50 pl-4 lg:pl-10" x-show="show">
                     <div itemprop="text">
                       <p class="pb-4">There are two possible ways to select a bundle of photos for reconstruction:</p>
-                      
+
                       <ol class="list-decimal space-y-1 pl-5"><li>After uploading a photo set, select the photos from the list on the Layers Panel by checking / unchecking the relevant photos. Then click <em>Start 3D Reconstruction</em>. The reconstruction will be performed only from the checked photos.</li><li>After uploading photo set, select the photos on the map by drawing the polygon around the cameras. To do this, right-click the Photos on the Layers Panel. Click <em>Select workspace area</em>, and start marking around the needed area on the map. When finished marking, right-click to close the perimeter of the selected area. The photos within only the selected area will be used for reconstruction. Please note that the workspace selection option can be done only when the photos come with the GPS data in order to display them on the map.</li></ol>
                     </div>
                 </li>
