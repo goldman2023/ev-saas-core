@@ -3,7 +3,7 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-5">
         <main class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="lg:grid lg:grid-cols-12 lg:gap-8">
-                <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-7 lg:text-left">
+                <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
                     <div we-slot="" name="title_slot" we-title="Hero Title" class="w-full">
                         <h1 we-name="hero_title" we-title="Title"
                             class="block text-center lg:text-left font-bold lg:font-black leading-none text-gray-900 text-28 sm:text-36 lg:text-[48px] xl:text-[60px] lg:pr-[3rem]">
@@ -39,11 +39,10 @@
                 </div>
 
                 <div
-                    class="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-5 lg:flex lg:items-center">
+                    class="mt-12 relative sm:max-w-lg sm:mx-auto lg:-mt-32 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
                     <div we-slot="" name="image_slot" we-title="Hero Image" class="w-full mt-4">
                         @include('svg.pix-pro-hero-animation')
-                        {{-- <img src="https://images.we-saas.com/insecure/fill/600/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/200203e2-4466-464d-a2fe-df1bc05bc2fa/1650038976_pix-pro-home-banner-animation.svg@webp"
-                            alt="Pix-pro photogrammetry" class="w-full lg:max-w-[540px]" /> --}}
+
                     </div>
                 </div>
             </div>
