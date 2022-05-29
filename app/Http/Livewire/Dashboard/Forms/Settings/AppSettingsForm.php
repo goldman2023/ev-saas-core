@@ -42,7 +42,8 @@ class AppSettingsForm extends Component
                 'settings.site_logo' => ['required'],
                 'settings.site_logo_dark' => ['nullable'],
                 'settings.site_name' => ['required'],
-                'settings.site_motto' => ['required', ],
+                'settings.site_motto' => ['required'],
+                'settings.site_contact_email' => ['email:rfc,dns'],
                 'settings.maintenance_mode' => ['required'],
                 'settings.brands_ct_enabled' => ['required'],
                 'settings.tos_url' => [''],
@@ -161,6 +162,7 @@ class AppSettingsForm extends Component
         return [
             'shop.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
             'shop.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
+            'settings.site_contact_email.email' => translate('Invalid email address'),
         ];
     }
 

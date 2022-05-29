@@ -183,6 +183,20 @@
                                 </div>
                                 <!-- END Site motto -->
 
+                                <!-- Site Contact Email -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
+                                    x-data="{}">
+
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Site Contact Email') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.site_contact_email" type="email" placeholder="{{ translate('Contact email') }}" />
+                                    </div>
+                                </div>
+                                <!-- END Site Contact Email -->
+
                                 {{-- Maintenance mode --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
                                     x-data="{}">

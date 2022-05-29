@@ -100,6 +100,7 @@ class TenantSettingsService
             'site_icon' => Upload::class,
             'site_name' => 'string',
             'site_motto' => 'string',
+            'site_contact_email' => 'string',
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
 

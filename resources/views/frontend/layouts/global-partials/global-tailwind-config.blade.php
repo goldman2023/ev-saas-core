@@ -167,7 +167,7 @@ $colors = TenantSettings::get('colors');
         }
 
         .form-standard {
-            @apply flex-1 block w-full max-w-lg focus:ring-primary focus:border-primary min-w-0 rounded-md sm:text-sm border-gray-300 shadow-sm;
+            @apply flex-1 block w-full focus:ring-primary focus:border-primary min-w-0 rounded-md sm:text-sm border-gray-300 shadow-sm;
         }
 
         .form-checkbox-standard {
