@@ -80,8 +80,7 @@
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
                             <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
-                                <img src="https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/200203e2-4466-464d-a2fe-df1bc05bc2fa/1650039313_3d-measurements.svg@webp"
-                                    alt="" class="w-[180px] sm:w-full" />
+                                @include('svg.features.icon-1')
                             </div>
 
                             <div class="w-full">
@@ -96,8 +95,7 @@
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
                             <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
-                                <img src="https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/200203e2-4466-464d-a2fe-df1bc05bc2fa/1650039310_interactive-digital-elevation-map.svg@webp"
-                                    alt="" class="w-[180px] sm:w-full" />
+                                @include('svg.features.icon-2')
                             </div>
 
                             <div class="w-full">
@@ -112,8 +110,8 @@
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
                             <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
-                                <img src="https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/200203e2-4466-464d-a2fe-df1bc05bc2fa/1650039311_orthophoto-imagery.svg@webp"
-                                    alt="" class="w-[180px] sm:w-full" />
+                                @include('svg.features.icon-3')
+
                             </div>
 
                             <div class="w-full">
@@ -128,8 +126,8 @@
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
                             <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
-                                <img src="https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/200203e2-4466-464d-a2fe-df1bc05bc2fa/1650039310_3d-mesh-animation.svg@webp"
-                                    alt="" class="w-[180px] sm:w-full" />
+                                @include('svg.features.icon-4')
+
                             </div>
 
                             <div class="w-full">
@@ -144,8 +142,8 @@
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
                             <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
-                                <img src="https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/200203e2-4466-464d-a2fe-df1bc05bc2fa/1650039311_realistic-textures.svg@webp"
-                                    alt="" class="w-[180px] sm:w-full" />
+                                @include('svg.features.icon-5')
+
                             </div>
 
                             <div class="w-full">
@@ -160,8 +158,7 @@
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
                             <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
-                                <img src="https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/200203e2-4466-464d-a2fe-df1bc05bc2fa/1650039310_single-and-generated-conture-lines.svg@webp"
-                                    alt="" class="w-[180px] sm:w-full" />
+                                @include('svg.features.icon-6')
                             </div>
 
                             <div class="w-full">
