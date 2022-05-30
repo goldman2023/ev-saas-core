@@ -1,4 +1,4 @@
-<svg width="1343" height="482" viewBox="0 0 1343 482" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg class="w-[700px] md:w-[inherit] h-[300px] md:h-[inherit]" width="1343" height="482" viewBox="0 0 1343 482" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g opacity="0.5" filter="url(#filter0_d_1626_1793)">
 <circle r="15.5" transform="matrix(1 0 0 -1 1289.5 301.5)" fill="url(#paint0_linear_1626_1793)"/>
 </g>
