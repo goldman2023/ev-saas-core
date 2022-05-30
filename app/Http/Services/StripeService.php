@@ -249,7 +249,7 @@ class StripeService
             $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
         }
 
-        $main_currency = get_tenant_setting('base_currency');
+        $main_currency = get_tenant_setting('system_default_currency');
         if($model->base_currency != 0 && $model->base_currency != false && $model->base_currency != $main_currency) {
             $main_currency = $model->base_currency;
         }
