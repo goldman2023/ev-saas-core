@@ -192,6 +192,10 @@ class PlanForm extends Component
                 Plan::where('primary', 1)->update(['primary' => 0]);
             }
 
+            if(!empty($this->plan->features)) {
+                $this->plan->features = array_filter($this->plan->features);
+            }
+
             $this->plan->save();
             $this->plan->syncUploads();
 

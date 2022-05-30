@@ -19,6 +19,7 @@
     model_core_meta: @js($model_core_meta),
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
+     @init-form.window="features = features.filter(x => x);"
      x-cloak>
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden"
