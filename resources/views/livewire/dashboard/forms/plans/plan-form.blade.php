@@ -10,7 +10,7 @@
     discount_type: @js($plan->discount_type),
     yearly_discount_type: @js($plan->yearly_discount_type),
     tax_type: @js($plan->tax_type),
-    features: @js($plan->features),
+    features: @js(array_values($plan->features)),
     content: @entangle('plan.content').defer,
     selected_categories: @js($selected_categories),
     attributes: @js($custom_attributes),
@@ -19,7 +19,7 @@
     model_core_meta: @js($model_core_meta),
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
-     @init-form.window="features = features.filter(x => x);"
+     @init-form.window="features = features.filter(x => x).filter(x => true);"
      x-cloak>
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden"
