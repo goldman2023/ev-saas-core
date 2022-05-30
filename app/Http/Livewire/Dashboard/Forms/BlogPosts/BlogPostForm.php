@@ -206,6 +206,7 @@ class BlogPostForm extends Component
         return view('livewire.dashboard.forms.blog-posts.blog-post-form');
     }
 
+    // TODO: Move this to Trait and replace this function in PlanForm and in ProductForm
     protected function saveModelCoreMeta()
     {
         foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {

@@ -7,13 +7,13 @@
 
                 <div we-slot="" name="title_slot" we-title="Section Title" class="w-full mb-4">
                     <h2 we-name="section_title" we-title="Title"
-                        class="text-[48px]  font-black leading-none mb-5 text-white">
+                        class="text-[28px]  sm:text-[48px]  font-black leading-none mb-5 text-white">
                         Ready to get started with your project?
                     </h2>
                 </div>
 
                 <div we-slot="" name="text_slot" we-title="Section Text" class="w-full mb-8">
-                    <p we-name="section_text" we-title="Text" class="text-20 font-medium text-white">
+                    <p we-name="section_text" we-title="Text" class="text-16 sm:text-20 font-medium text-white">
                         Choose from our 3 different plans or ask for a custom solution where you can process as many
                         photos as you can!
                     </p>
@@ -32,7 +32,7 @@
                 </div>
 
                 <div we-slot="" name="info_slot" we-title="Section Info Text" class="w-full ">
-                    <p we-name="section_info" we-title="Text" class="text-20 font-medium text-white">
+                    <p we-name="section_info" we-title="Text" class="text-16 sm:text-20 font-medium text-white">
                         Start free 1 month trial now, cancel at any time
                     </p>
                 </div>

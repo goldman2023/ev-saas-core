@@ -15,15 +15,15 @@
       {{-- <h1 class="text-5xl font-extrabold text-gray-900 sm:text-center">Pricing Plans</h1>
       <p class="mt-5 text-xl text-gray-500 sm:text-center">Start building for free, then add a site plan to go live. Account plans unlock additional features.</p> --}}
       <div class="relative self-center bg-gray-100 rounded-lg p-0.5 flex ">
-        <button type="button" @click="pricing_mode = 'month'" :class="{'bg-primary text-white':pricing_mode == 'month', 'gray-900':pricing_mode == 'month'}" class="relative w-1/2 border border-transparent rounded-md shadow-sm py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">{{ translate('Monthly billing') }}</button>
-        <button type="button" @click="pricing_mode = 'annual'" :class="{'bg-primary text-white':pricing_mode == 'annual', 'gray-900':pricing_mode == 'month'}" class="ml-0.5 relative w-1/2 border border-transparent rounded-md py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">{{ translate('Yearly billing') }}</button>
+        <button type="button" @click="pricing_mode = 'month'" :class="{'bg-primary text-white':pricing_mode == 'month', 'gray-900':pricing_mode != 'month'}" class="relative w-1/2 border border-transparent rounded-md shadow-sm py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">{{ translate('Monthly billing') }}</button>
+        <button type="button" @click="pricing_mode = 'annual'" :class="{'bg-primary text-white':pricing_mode == 'annual', 'gray-900':pricing_mode != 'annual'}" class="ml-0.5 relative w-1/2 border border-transparent rounded-md py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">{{ translate('Yearly billing') }}</button>
       </div>
     </div>
 
-    <div class="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    <div class="flex overflow-x-scroll md:overflow-x-hidden md:grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 pb-5 md:pb-0 pr-3 md:pr-0">
       @if($models->isNotEmpty())
         @foreach($models as $model)
-          <div class="w-full" x-data="{
+          <div class="w-full min-w-[250px] md:min-w-inherit" x-data="{
               month_price: @js($model->getTotalPrice(true)),
               annual_price: @js(\FX::formatPrice($model->getTotalAnnualPrice() / 12)),
               {{-- discount_percent: @js(abs($model->getTotalAnnualPrice() - ($model->getTotalPrice() * 12))), --}}
@@ -102,7 +102,7 @@
 {{-- Plan Features table --}}
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div>
-        <div class=" py-4 overflow-x-auto">
+        <div class="mb-5 md:mb-0 py-4 overflow-x-auto">
             <div class="inline-block min-w-full overflow-hidden">
                 <table class="min-w-[900px] w-full leading-normal">
                     <thead>

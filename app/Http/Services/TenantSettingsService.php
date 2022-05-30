@@ -100,6 +100,7 @@ class TenantSettingsService
             'site_icon' => Upload::class,
             'site_name' => 'string',
             'site_motto' => 'string',
+            'site_contact_email' => 'string',
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
 
@@ -206,8 +207,9 @@ class TenantSettingsService
             'google_tag_manager_enabled' => 'boolean',
             'google_tag_manager_id' => 'string',
 
-            // Pix-Pro integration (this should be only on pix-pro tenant!)
-            
+            // Standard WP Blog Posts and categories
+            'wordpress_api_enabled' => 'boolean',
+            'wordpress_api_route' => 'string',
 
             // Mail
             'mail_from_address' => 'string',

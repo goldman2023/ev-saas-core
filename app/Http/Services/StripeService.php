@@ -95,22 +95,29 @@ class StripeService
             $description = strip_tags($model->description);
         }
 
+        $images = [];
+        $product_args = [
+            'id' => $this->generateStripeProductID($model),
+            'name' => $model->name,
+            'active' => true,
+            // 'livemode' => false, // TODO: Make it true in Production
+            'description' => $description,
+            'shippable' => $model->isShippable(),
+            // 'tax_code' => '',
+            'url' => $model->getPermalink(),
+            'unit_label' => substr($model?->unit ?? 'pc', 0, 12),
+            'metadata' => []
+        ];
+
+        // Stripe doesn't support svg images -> let's just use `png, jpg, gif`
+        if(!empty($model->thumbnail) && in_array($model->thumbnail?->extension ?? 'xxx', ['png', 'jpg', 'gif'])) {
+            $images[] = $model->getThumbnail(['w' => 500]);
+            $product_args['images'] = $images;
+        }
 
         try {
             // Create Stripe Product
-            $stripe_product = $this->stripe->products->create([
-                'id' => $this->generateStripeProductID($model),
-                'name' => $model->name,
-                'active' => true,
-                // 'livemode' => false, // TODO: Make it true in Production
-                'description' => $description,
-                'images' => [$model->getThumbnail(['w' => 500])],
-                'shippable' => $model->isShippable(),
-                // 'tax_code' => '',
-                'url' => $model->getPermalink(),
-                'unit_label' => substr($model?->unit ?? 'pc', 0, 12),
-                'metadata' => []
-            ]);
+            $stripe_product = $this->stripe->products->create($product_args);
         } catch (\Exception $e) {
             // This means that Product under $model->id already exists, BUT FOR SOME REASON tenant doesn't have the proper CoreMeta key.
             // 1. Get Stripe Product
@@ -143,23 +150,33 @@ class StripeService
             $description = strip_tags($model->description);
         }
         
+        $images = [];
+
+        $product_args = [
+            'name' => $model->name,
+            'active' => true,
+            'description' => $description,
+            'shippable' => $model->isShippable(),
+            // 'tax_code' => '',
+            'url' => $model->getPermalink(),
+            'unit_label' => substr($model?->unit ?? 'pc', 0, 12),
+            'metadata' => []
+        ];
+
+        // Stripe doesn't support svg images -> let's just use `png, jpg, gif`
+        if(!empty($model->thumbnail) && in_array($model->thumbnail?->extension ?? 'xxx', ['png', 'jpg', 'gif'])) {
+            $images[] = $model->getThumbnail(['w' => 500]);
+            $product_args['images'] = $images;
+        }
+
         try {
             // Update Stripe Product
             $stripe_product = $this->stripe->products->update(
                 $stripe_product_id,
-                [
-                    'name' => $model->name,
-                    'active' => true,
-                    'description' => $description,
-                    'images' => [$model->getThumbnail(['w' => 500])],
-                    'shippable' => $model->isShippable(),
-                    // 'tax_code' => '',
-                    'url' => $model->getPermalink(),
-                    'unit_label' => substr($model?->unit ?? 'pc', 0, 12),
-                    'metadata' => []
-                ]
+                $product_args
             );
         } catch (\Exception $e) {
+            dd($e);
             // Cannot update product with ID: $stripe_product_id,
             // TODO: Should we create another product and assign new stripe_product_id to our product in DB?
             Log::error($e);
@@ -167,30 +184,65 @@ class StripeService
             return;
         }
 
-        // Create Stripe Price
-        $stripe_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_price_id')->first()?->value ?? null;
+        // Create Stripe Price(s)        
+        if($model instanceof Plan) { 
+            // We need to check for both monthly and anual price here
+            $stripe_monthly_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_monthly_price_id')->first()?->value ?? null;
+            $stripe_annual_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_annual_price_id')->first()?->value ?? null;
 
-        try {
-            $stripe_price = $this->stripe->prices->retrieve($stripe_price_id, []);
-        } catch (\Exception $e) {
-            // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
-            // 1. Create a new stripe price if price is missing in Stripe
-            $stripe_price = $this->createStripePrice($model, $stripe_product_id);
-        }
+            // Monthly price check BLOCK
+            try {
+                $stripe_monthly_price = $this->stripe->prices->retrieve($stripe_monthly_price_id, []);
+            } catch (\Exception $e) {
+                // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
+                // 1. Create a new stripe price if monthly price is missing in Stripe
+                $stripe_monthly_price = $this->createStripePrice($model, $stripe_product_id, 'monthly');
+            }
 
-        
-        // Compare current model price and Last Stripe Price and if it does not match, create a new price
-        if ((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
-            // There is a difference between stripe price and our local price of the product
+            if ((float) $stripe_monthly_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
+                // There is a difference between monthly stripe price and our local monthly price of the Plan
+                $stripe_monthly_price = $this->createStripePrice($model, $stripe_product_id, 'monthly');
+            }
 
-            // Create new Stripe Price
-            $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+            // Annual price check BLOCK
+            try {
+                $stripe_annual_price = $this->stripe->prices->retrieve($stripe_annual_price_id, []);
+            } catch (\Exception $e) {
+                // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
+                // 1. Create a new stripe MONTHLY price if MONTHLY price is missing in Stripe
+                $stripe_annual_price = $this->createStripePrice($model, $stripe_product_id, 'annual');
+            }
+
+            if ((float) $stripe_annual_price->unit_amount !== (float) $model->getTotalAnnualPrice() * 100) {
+                // There is a difference between ANNUAL stripe price and our local ANNUAL price of the Plan
+                $stripe_annual_price = $this->createStripePrice($model, $stripe_product_id, 'annual');
+            }
+        } else {
+            $stripe_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_price_id')->first()?->value ?? null;
+
+            try {
+                $stripe_price = $this->stripe->prices->retrieve($stripe_price_id, []);
+            } catch (\Exception $e) {
+                // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
+                // 1. Create a new stripe price if price is missing in Stripe
+                $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+            }
+    
+            
+            // Compare current model price and Last Stripe Price and if it does not match, create a new price
+            if ((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
+                // There is a difference between stripe price and our local price of the product
+    
+                // Create new Stripe Price
+                $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+            }
+    
         }
 
         return $stripe_product;
     }
 
-    protected function createStripePrice($model, $stripe_product_id = null)
+    protected function createStripePrice($model, $stripe_product_id = null, $for_interval = null)
     {
         // Get stripe product iD
         if (empty($stripe_product_id)) {
@@ -204,11 +256,33 @@ class StripeService
                 'currency' => strtolower($model->base_currency),
                 'product' => $stripe_product_id,
                 'recurring' => [
-                    "interval" => "month", // TODO: Can be 'year'
+                    "interval" => "month",
                     "interval_count" => 1,
                     "usage_type" => "licensed"
                 ]
             ];
+
+            if($model instanceof Plan) {
+                // Create both monthly and annual price
+                $monthly_args = array_merge($args, [
+                    'unit_amount' => $model->getTotalPrice() * 100,
+                    'recurring' => [
+                        "interval" => "month",
+                        "interval_count" => 1,
+                        "usage_type" => "licensed"
+                    ]
+                ]);
+    
+                $annual_args = array_merge($args, [
+                    'unit_amount' => ($model->getTotalAnnualPrice() * 100),
+                    'recurring' => [
+                        "interval" => "year", 
+                        "interval_count" => 1,
+                        "usage_type" => "licensed"
+                    ]
+                ]);
+            }
+            
         } else {
             // Create a new price and attach it to stripe product ID
             $args = [
@@ -218,20 +292,64 @@ class StripeService
             ];
         }
 
-        $stripe_product_price = $this->stripe->prices->create($args);
+        if($model instanceof Plan) {
 
-        CoreMeta::updateOrCreate(
-            [
-                'subject_id' => $model->id,
-                'subject_type' => $model::class,
-                'key' => $this->mode_prefix . 'stripe_price_id',
-            ],
-            [
-                'value' => $stripe_product_price->id
-            ]
-        );
+            if(empty($for_interval) || $for_interval === 'monthly') {
+                $stripe_product_monthly_price = $this->stripe->prices->create($monthly_args);
+                CoreMeta::updateOrCreate(
+                    [
+                        'subject_id' => $model->id,
+                        'subject_type' => $model::class,
+                        'key' => $this->mode_prefix . 'stripe_monthly_price_id',
+                    ],
+                    [
+                        'value' => $stripe_product_monthly_price->id
+                    ]
+                );
+            }
+            
+            // Annual price must be changed when monthly price is changed
+            if(empty($for_interval) || ($for_interval === 'annual' || $for_interval === 'annual')) {
+                $stripe_product_annual_price = $this->stripe->prices->create($annual_args);
 
-        return $stripe_product_price;
+                CoreMeta::updateOrCreate(
+                    [
+                        'subject_id' => $model->id,
+                        'subject_type' => $model::class,
+                        'key' => $this->mode_prefix . 'stripe_annual_price_id',
+                    ],
+                    [
+                        'value' => $stripe_product_annual_price->id
+                    ]
+                );
+            }
+            
+            if($for_interval === 'monthly') {
+                return $stripe_product_monthly_price;
+            } elseif($for_interval === 'annual') {
+                return $stripe_product_annual_price;
+            } else {
+                return [
+                    'monthly' => $stripe_product_monthly_price,
+                    'annual' => $stripe_product_annual_price
+                ];
+            }
+        } else {
+            $stripe_product_price = $this->stripe->prices->create($args);
+
+            CoreMeta::updateOrCreate(
+                [
+                    'subject_id' => $model->id,
+                    'subject_type' => $model::class,
+                    'key' => $this->mode_prefix . 'stripe_price_id',
+                ],
+                [
+                    'value' => $stripe_product_price->id
+                ]
+            );
+
+            return $stripe_product_price;
+        }
     }
 
     public function createStripeCustomer($user = null)
@@ -291,10 +409,11 @@ class StripeService
         return $stripe_customer;
     }
 
-    public function createCheckoutLink($model, $qty = 1, $preview = false, $abandoned_order_id = null)
+    public function createCheckoutLink($model, $qty = 1, $interval = null, $preview = false, $abandoned_order_id = null)
     {
         // Check if Stripe Product actually exists
         $order = null;
+
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
 
         try {
@@ -309,24 +428,66 @@ class StripeService
 
 
         // Check latest price existance
-        $stripe_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_price_id')->first()?->value ?? null;
+        if($model instanceof Plan) { 
+            // We need to check for both monthly and anual price here
+            $stripe_monthly_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_monthly_price_id')->first()?->value ?? null;
+            $stripe_annual_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_annual_price_id')->first()?->value ?? null;
 
-        try {
-            $stripe_price = $this->stripe->prices->retrieve($stripe_price_id, []);
-        } catch (\Exception $e) {
-            // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
-            // 1. Create a new stripe price if price is missing in Stripe
-            $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+            // Monthly price check BLOCK
+            try {
+                $stripe_monthly_price = $this->stripe->prices->retrieve($stripe_monthly_price_id, []);
+            } catch (\Exception $e) {
+                // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
+                // 1. Create a new stripe price if monthly price is missing in Stripe
+                $stripe_monthly_price = $this->createStripePrice($model, $stripe_product_id, 'monthly');
+            }
+
+            if ((float) $stripe_monthly_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
+                // There is a difference between monthly stripe price and our local monthly price of the Plan
+                $stripe_monthly_price = $this->createStripePrice($model, $stripe_product_id, 'monthly');
+            }
+
+            // Annual price check BLOCK
+            try {
+                $stripe_annual_price = $this->stripe->prices->retrieve($stripe_annual_price_id, []);
+            } catch (\Exception $e) {
+                // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
+                // 1. Create a new stripe MONTHLY price if MONTHLY price is missing in Stripe
+                $stripe_annual_price = $this->createStripePrice($model, $stripe_product_id, 'annual');
+            }
+
+            if ((float) $stripe_annual_price->unit_amount !== (float) $model->getTotalAnnualPrice() * 100) {
+                // There is a difference between ANNUAL stripe price and our local ANNUAL price of the Plan
+                $stripe_annual_price = $this->createStripePrice($model, $stripe_product_id, 'annual');
+            }
+
+            // Determine price by given interval
+            if(empty($interval) || $interval === 'month') {
+                $stripe_price = $stripe_monthly_price;
+            } else if($interval === 'annual') {
+                $stripe_price = $stripe_annual_price;
+            }
+        } else {
+            $stripe_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_price_id')->first()?->value ?? null;
+
+            try {
+                $stripe_price = $this->stripe->prices->retrieve($stripe_price_id, []);
+            } catch (\Exception $e) {
+                // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
+                // 1. Create a new stripe price if price is missing in Stripe
+                $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+            }
+    
+    
+            // Compare current model price and Last Stripe Price and if it does not match, create a new price
+            if ((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
+                // There is a difference between stripe price and our local price of the product
+    
+                // Create new Stripe Price
+                $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+            }
         }
-
-
-        // Compare current model price and Last Stripe Price and if it does not match, create a new price
-        if ((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
-            // There is a difference between stripe price and our local price of the product
-
-            // Create new Stripe Price
-            $stripe_price = $this->createStripePrice($model, $stripe_product_id);
-        }
+        
         
 
         $is_preview = false;
@@ -1219,23 +1380,23 @@ class StripeService
             }
 
             DB::commit();
+
+            // Fire Subscription(s) is created and paid Event
+            if($stripe_billing_reason === 'subscription_create') {
+                do_action('invoice.paid.subscription_create', $user_subscriptions);
+            } 
+            // Fire Subscription(s) is updated and paid Event
+            else if($stripe_billing_reason === 'subscription_update') {
+                do_action('invoice.paid.subscription_update', $user_subscriptions);
+            } 
+            // Fire Subscription(s) is cycled and paid Event
+            else if($stripe_billing_reason === 'subscription_cycle') {
+                do_action('invoice.paid.subscription_cycle', $user_subscriptions);
+            }
         } catch (\Throwable $e) {
             Log::error($e);
             DB::rollBack();
             http_response_code(400);
-        }
-
-        // Fire Subscription(s) is created and paid Event
-        if($stripe_billing_reason === 'subscription_create') {
-            do_action('invoice.paid.subscription_create', $user_subscriptions);
-        } 
-        // Fire Subscription(s) is updated and paid Event
-        else if($stripe_billing_reason === 'subscription_update') {
-            do_action('invoice.paid.subscription_update', $user_subscriptions);
-        } 
-        // Fire Subscription(s) is cycled and paid Event
-        else if($stripe_billing_reason === 'subscription_cycle') {
-            do_action('invoice.paid.subscription_cycle', $user_subscriptions);
         }
 
         http_response_code(200);

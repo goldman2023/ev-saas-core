@@ -90,6 +90,8 @@ class HomeController extends Controller
     {
         if (auth()->user()->isSeller()) {
             return view('frontend.user.seller.dashboard');
+        } elseif (auth()->user()->isStaff()) {
+            return view('frontend.user.staff.dashboard');
         } elseif (auth()->user()->isCustomer()) {
             return view('frontend.user.customer.dashboard');
         } elseif (auth()->user()->isAdmin()) {

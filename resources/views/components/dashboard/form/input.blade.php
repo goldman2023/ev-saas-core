@@ -3,7 +3,7 @@
   required: @js($required),
 }" class="w-full {{ $class }}">
   <input type="{{ $type }}" 
-          class="form-standard @error($field) is-invalid @enderror"
+          class="form-standard {{ $inputClass }} @error($field) is-invalid @enderror"
           placeholder="{{ $placeholder }}"
           @if($type === 'number')
             @if(!empty($min) || $min === 0) min="{{ $min }}" @endif

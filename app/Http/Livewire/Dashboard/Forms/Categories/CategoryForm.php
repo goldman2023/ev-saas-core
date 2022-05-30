@@ -21,6 +21,7 @@ class CategoryForm extends Component
     use DispatchSupport;
 
     public $category;
+    public $is_update;
 
     /**
      * Create a new component instance.
@@ -30,6 +31,9 @@ class CategoryForm extends Component
     public function mount($category = null)
     {
         $this->category = empty($category) ? new Category() : $category;
+
+        $this->is_update = isset($this->category->id) && ! empty($this->category->id);
+
     }
 
     protected function rules()
@@ -80,7 +84,6 @@ class CategoryForm extends Component
 
     public function saveCategory()
     {
-        $is_update = isset($this->category->id) && ! empty($this->category->id);
 
         try {
             $this->validate();
@@ -106,15 +109,15 @@ class CategoryForm extends Component
 
             Categories::clearCache(); // clear cache after category is added/updated
 
-            if ($is_update) {
+            if ($this->is_update) {
                 $this->inform('Category successfully updated!', '', 'success');
             } else {
                 $this->inform('Category successfully created!', '', 'success');
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
-            if ($is_update) {
+
+            if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a category...Please try again.'));
                 $this->inform('There was an error while updating a category...Please try again.', '', 'fail');
             } else {
@@ -126,7 +129,17 @@ class CategoryForm extends Component
 
     public function removeCategory()
     {
-//        $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
-//        $address->remove();
+        DB::beginTransaction();
+
+        try {
+            $this->category->delete();
+
+            DB::commit();
+
+            $this->inform(translate('Category successfully deleted!'), '', 'success');
+        } catch (\Exception $e) {
+            $this->dispatchGeneralError(translate('There was an error while trying to remove category and it\'s relationships: ').$e->getMessage());
+            $this->inform(translate('There was an error while trying to remove category and it\'s relationships: '), $e->getMessage(), 'danger');
+        }
     }
 }

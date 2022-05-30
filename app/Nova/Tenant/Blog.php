@@ -78,8 +78,6 @@ class Blog extends Resource
             MorphMany::make('Activity', 'activities'),
 
             ID::make()->sortable(),
-
-
             // BelongsTo::make('Author', 'author', User::class),
         ];
     }
@@ -125,6 +123,8 @@ class Blog extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            (new \App\Nova\Actions\ImportWordPressBlogPosts(auth()->user()))->standalone()
+        ];
     }
 }

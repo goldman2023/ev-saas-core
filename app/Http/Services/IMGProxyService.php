@@ -84,9 +84,13 @@ class IMGProxyService
         ];
     }
 
-    public function get($path, $options = [], $static = false)
+    public function get($path, $options = [], $static = false, $proxify = true)
     {
-        return $this->proxify($this->getFrom($path, $static), $options, $static);
+        if($proxify) {
+            return $this->proxify($this->getFrom($path, $static), $options, $static);
+        } else { 
+            return $this->getFrom($path, $static)['url'] ?? '';
+        }
     }
 
     public function getPlaceholder($proxify = true): mixed

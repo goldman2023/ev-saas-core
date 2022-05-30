@@ -43,7 +43,7 @@ class BlogPost extends WeBaseModel
 
     protected $table = 'blog_posts';
 
-    protected $fillable = ['shop_id', 'type', 'name', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['shop_id', 'type', 'name', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords', 'created_at', 'updated_at'];
 
     protected $casts = [
         'subscription_only' => 'boolean',
@@ -66,7 +66,8 @@ class BlogPost extends WeBaseModel
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 
     public function getRouteKeyName()

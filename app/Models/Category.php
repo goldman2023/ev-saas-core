@@ -128,14 +128,20 @@ class Category extends WeBaseModel
             $builder->orderBy('name', 'ASC');
         });
 
-        if (Vendor::isVendorSite()) {
-            // If Vendor Site, add global scope to restrict categories by categories in which vendor actually has any models
-            static::addGlobalScope('single_vendor', function (Builder $builder) {
-                if(!empty(Vendor::getVendorCategoriesIDs())) {
-                    $builder->whereIn('categories.id', Vendor::getVendorCategoriesIDs());
-                }
-            });
+        try {
+            if (Vendor::isVendorSite()) {
+                // If Vendor Site, add global scope to restrict categories by categories in which vendor actually has any models
+                static::addGlobalScope('single_vendor', function (Builder $builder) {
+                    if(!empty(Vendor::getVendorCategoriesIDs())) {
+                        $builder->whereIn('categories.id', Vendor::getVendorCategoriesIDs());
+                    }
+                });
+            }
+        } catch(\Throwable $e) {
+            // reason for this try/catch is actually EventServiceProvider which registers Observers before EVServiceProvider boot() method is loaded
+            // Observers are loaded for Category class with method Category::observe() which has to run booted method of Category (current function), and this happens before Vendor facade is properly initated, hence the error!
         }
+        
     }
 
     /*

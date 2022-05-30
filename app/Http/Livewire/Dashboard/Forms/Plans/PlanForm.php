@@ -50,8 +50,6 @@ class PlanForm extends Component
      */
     public function mount($plan = null)
     {
-
-        // dd(Categories::getAllFormatted());
         $this->plan = empty($plan) ? new Plan() : $plan;
         $this->is_update = isset($this->plan->id) && ! empty($this->plan->id);
 
@@ -106,6 +104,7 @@ class PlanForm extends Component
             'plan.excerpt' => 'required|min:10',
             'plan.content' => 'nullable', //'required|min:10',
             'plan.features' => 'required|array',
+            'plan.features.*' => 'required|string|distinct|min:4',
 
             'plan.base_currency' => 'nullable',
             /* TODO: @vukasin plan.base_currency FX RULE not working all the time (check if we need some currency seeds or whatever) */
@@ -154,6 +153,8 @@ class PlanForm extends Component
             'plan.discount_type.in' => translate('Discount type must be one of the following:').' '.AmountPercentTypeEnum::implodedLabels(),
             'plan.tax.numeric' => translate('Tax must be a valid number'),
             'plan.tax_type.in' => translate('Tax type must be one of the following:').' '.AmountPercentTypeEnum::implodedLabels(),
+
+            'plan.features.*.min' => translate('Minimum 4 chars is required for each feature'),
         ];
     }
 
@@ -194,6 +195,10 @@ class PlanForm extends Component
                 Plan::where('primary', 1)->update(['primary' => 0]);
             }
 
+            if(!empty($this->plan->features)) {
+                $this->plan->features = array_filter($this->plan->features);
+            }
+
             $this->plan->save();
             $this->plan->syncUploads();
 
@@ -208,13 +213,17 @@ class PlanForm extends Component
             DB::commit();
 
             if ($this->is_update) {
-                $this->inform(translate('Subscription plan successfully updated!').' '.$msg, '', 'success');
+                $this->inform(translate('Subscription plan successfully updated!'), $msg, 'success');
             } else {
-                $this->inform(translate('Subscription plan successfully created!').' '.$msg, '', 'success');
+                $this->inform(translate('Subscription plan successfully created!'), $msg, 'success');
+            }
+
+            if (!$this->is_update) {
+                return redirect()->route('plan.edit', $this->plan->id);
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            
             if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a subscription plan...Please try again.'));
                 $this->inform(translate('There was an error while updating a subscription plan...Please try again.'), '', 'fail');

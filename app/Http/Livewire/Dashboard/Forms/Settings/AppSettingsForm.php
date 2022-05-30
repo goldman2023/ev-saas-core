@@ -42,7 +42,8 @@ class AppSettingsForm extends Component
                 'settings.site_logo' => ['required'],
                 'settings.site_logo_dark' => ['nullable'],
                 'settings.site_name' => ['required'],
-                'settings.site_motto' => ['required', ],
+                'settings.site_motto' => ['required'],
+                'settings.site_contact_email' => ['email:rfc,dns'],
                 'settings.maintenance_mode' => ['required'],
                 'settings.brands_ct_enabled' => ['required'],
                 'settings.tos_url' => [''],
@@ -92,6 +93,15 @@ class AppSettingsForm extends Component
             'integrations.google_tag_manager' => [
                 'settings.google_tag_manager_enabled' => ['boolean'],
                 'settings.google_tag_manager_id' => ['exclude_if:settings.google_tag_manager_enabled,false', 'required'],
+            ],
+            'integrations.wordpress_api' => [
+                'settings.wordpress_api_enabled' => ['boolean'],
+                'settings.wordpress_api_route' => ['exclude_if:settings.wordpress_api_enabled,false', 'required'],
+            ],
+            'integrations.woo_import' => [
+                'settings.woo_import_enabled' => ['boolean'],
+                'settings.woo_import_api_key' => ['exclude_if:settings.woo_import_enabled,false', 'required'],
+                'settings.woo_import_rest_api_secret_key' => ['exclude_if:settings.woo_import_enabled,false', 'required'],
             ],
             /* TODO: Add woocommerce rules here */
             'integrations.facebook_pixel' => [
@@ -152,6 +162,7 @@ class AppSettingsForm extends Component
         return [
             'shop.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
             'shop.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
+            'settings.site_contact_email.email' => translate('Invalid email address'),
         ];
     }
 

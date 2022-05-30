@@ -6,7 +6,6 @@ use App\Nova\Resource;
 use Comodolab\Nova\Fields\Help\Help;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
@@ -50,12 +49,12 @@ class Category extends Resource
             ID::make()->sortable(),
 
             Text::make('Name'),
-            // Textarea::make('Content'),
 
-            HasOne::make('Parent', 'parent', self::class),
+            BelongsTo::make('Parent', 'parent', self::class),
 
             Number::make('Commision Rate'),
 
+            Textarea::make('Description'),
         ];
     }
 
@@ -100,6 +99,8 @@ class Category extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            (new \App\Nova\Actions\ImportWordPressCategories())->standalone()
+        ];
     }
 }

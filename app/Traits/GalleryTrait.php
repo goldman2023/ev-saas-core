@@ -104,9 +104,9 @@ trait GalleryTrait
      * @param array $options If IMGProxy is enabled, $options will be used to generate proxified image URL
      * @return mixed
      */
-    public function getThumbnail(array $options = []): mixed
+    public function getThumbnail(array $options = [], $proxify = true): mixed
     {
-        return IMG::get($this->thumbnail, IMG::mergeWithDefaultOptions($options, 'thumbnail'));
+        return IMG::get($this->thumbnail, IMG::mergeWithDefaultOptions($options, 'thumbnail'), proxify: $proxify);
     }
 
     public function hasThumbnail() {
@@ -131,9 +131,9 @@ trait GalleryTrait
      * @param array $options If IMGProxy is enabled, $options will be used to generate proxified image URL
      * @return mixed
      */
-    public function getCover(array $options = []): mixed
+    public function getCover(array $options = [], $proxify = true): mixed
     {
-        return IMG::get($this->cover, IMG::mergeWithDefaultOptions($options, 'cover'));
+        return IMG::get($this->cover, IMG::mergeWithDefaultOptions($options, 'cover'), $proxify);
     }
 
     public function hasCover() {
@@ -194,9 +194,9 @@ trait GalleryTrait
      * @param array $options If IMGProxy is enabled, $options will be used to generate proxified image URL
      * @return mixed
      */
-    public function getMetaImg(array $options = []): mixed
+    public function getMetaImg(array $options = [], $proxify = true) : mixed
     {
-        return IMG::get($this->meta_img, IMG::mergeWithDefaultOptions($options, 'meta_img'));
+        return IMG::get($this->meta_img, IMG::mergeWithDefaultOptions($options, 'meta_img'), $proxify);
     }
 
     /**

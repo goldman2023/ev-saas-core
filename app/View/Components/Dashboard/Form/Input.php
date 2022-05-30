@@ -16,13 +16,14 @@ class Input extends Component
     public $step;
     public $x;
     public $class;
+    public $inputClass;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($field = '', $type = 'text', $placeholder = '', $nullable = true, $required = false, $min = 0, $max = null, $step = 1, $x = false, $class = '')
+    public function __construct($field = '', $type = 'text', $placeholder = '', $nullable = true, $required = false, $min = 0, $max = null, $step = 1, $x = false, $class = '', $inputClass = '')
     {
         $this->field = $field;
         $this->type = $type;
@@ -34,6 +35,7 @@ class Input extends Component
         $this->step = $step;
         $this->x = $x;
         $this->class = $class;
+        $this->inputClass = $inputClass;
     }
 
     /**

@@ -71,7 +71,7 @@
         From: "opacity-100 scale-100"
         To: "opacity-0 scale-95"
     -->
-        <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden z-10"
+        <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden z-[20]"
             x-show="show_mobile_menu" x-transition:enter="ease-out duration-200"
             x-cloak
             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
@@ -99,26 +99,15 @@
 
                     <div class="mt-6">
                         <nav class="grid gap-y-8">
-                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'features']) }}" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900">{{ translate('Features') }}</span>
-                            </a>
-
-                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'plans-pricing']) }}" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900"> {{ translate('Pricing') }} </span>
-                            </a>
-
-                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'blog']) }}" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900"> {{ translate('Blog') }} </span>
-                            </a>
-
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900"> {{ translate('Contact') }} </span>
-                            </a>
-
-                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'support']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Support')
-                            }}</a>
-                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'download-pixpro-photogrammetry-software']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Download')
-                            }}</a>
+                            @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
+                                @foreach($header_menu_items as $menu_item)
+                                    @if($menu_item['enabled']) 
+                                        <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                                            {{ $menu_item['name'] ?? '' }}
+                                        </a>
+                                    @endif
+                                @endforeach
+                            @endif
                         </nav>
                     </div>
                 </div>

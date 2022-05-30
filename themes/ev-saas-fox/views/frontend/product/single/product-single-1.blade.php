@@ -1,31 +1,31 @@
-@extends('frontend.layouts.' . $globalLayout)
+@extends('frontend.layouts.feed')
 
 @section('meta')
 <x-default.products.single.head-meta-tags :product="$product"></x-default.products.single.head-meta-tags>
 @endsection
 
-@section('content')
-<div class="bg-white">
+@section('feed_content')
+<div class="bg-white col-span-12 rounded-lg">
     <div class="mx-auto py-8 px-4 sm:py-18 sm:px-6 lg:max-w-7xl lg:px-4">
         <!-- Product -->
-        <div class="lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-3 xl:gap-x-16">
+        <div class="lg:grid lg:grid-rows-1 lg:grid-cols-12 lg:gap-x-5 lg:gap-y-3 xl:gap-x-8">
             <!-- Product Gallery -->
-            <div class="lg:row-end-1 lg:col-span-4">
-                <x-galleries.main-gallery template="product-gallery" :model="$product" class="">
+            <div class="lg:row-end-1 lg:col-span-6">
+                <x-galleries.main-gallery template="product-gallery" :model="$product" class="rounded-lg">
                 </x-galleries.main-gallery>
             </div>
 
             <!-- Product details -->
-            <div class="w-full mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-4">
+            <div class="w-full mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-6">
                 <div class="flex flex-col">
-                    <div class="w-full flex space-x-3 ">
+                    <div class="w-full flex space-x-3 overflow-x-hidden flex-wrap">
                         @foreach($product->categories as $category)
-                        @if(empty($category->parent_id))
-                        <div class="badge-primary !text-14 !py-1">{{ $category->name }}</div>
-                        @endif
+                            @if(empty($category->parent_id))
+                                <div class="badge-primary !text-14 !py-1 mb-2">{{ $category->name }}</div>
+                            @endif
                         @endforeach
                     </div>
-                    <div class="w-full mt-3 flex flex-col">
+                    <div class="w-full mt-1 flex flex-col">
                         <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl mb-3">
                             {{ $product->getTranslation('name') }}
                         </h1>
@@ -213,7 +213,7 @@
 
         </div>
         <div
-            class="mx-auto py-8 px-4 sm:py-18 sm:px-6 lg:max-w-7xl lg:px-4 w-full mt-16 lg:max-w-none lg:mt-0 lg:col-span-8 mb-10">
+            class="mx-auto py-8 px-4 sm:py-18 sm:px-6 lg:px-4 w-full mt-16 lg:mt-0 lg:col-span-12">
             <div class="lg:row-end-1 lg:col-span-4" x-data="{
                     current: 'description'
                 }">
@@ -305,11 +305,12 @@
         </div>
     </div>
 </div>
-<div class="bg-gray-100">
+
+{{-- <div class="bg-gray-100">
     <div class="container  mt-[200px]">
         <x-default.products.recently-viewed-products class="p-3"></x-default.products.recently-viewed-products>
     </div>
-</div>
+</div> --}}
 
 
 

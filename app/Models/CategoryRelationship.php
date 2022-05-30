@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Auditable;
 
-class CategoryRelationship extends Model implements \OwenIt\Auditing\Contracts\Auditable
+class CategoryRelationship extends WeBaseModel
 {
-    use HasFactory, Auditable;
+    use HasFactory;
+
+    protected $fillable = ['subject_type', 'subject_id', 'category_id'];
+
+    public $timestamps = false;
 
     public function subject()
     {
