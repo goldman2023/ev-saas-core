@@ -22,8 +22,9 @@ class BootstrapThemeFunctions
             // Check if ThemeFunctionsServiceProvider exists in `themes/{theme_name}/app/Providers/` and boot it
             if(file_exists($theme_functions_file_path)) {
                 require_once($theme_functions_file_path);
-
-                App::register(\ThemeFunctionsServiceProvider::class);
+                if(!class_exists(\ThemeFunctionsServiceProvider::class)) {
+                    App::register(\ThemeFunctionsServiceProvider::class);
+                }
             }
         }
 
