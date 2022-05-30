@@ -253,7 +253,7 @@ class StripeService
         if ($model->isSubscribable()) {
             $args = [
                 'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
-                'currency' => strtolower($model->base_currency ?? 'eur'),
+                'currency' => strtolower($model->base_currency ? $model->base_currency : 'eur'),
                 'product' => $stripe_product_id,
                 'recurring' => [
                     "interval" => "month",
@@ -287,7 +287,7 @@ class StripeService
             // Create a new price and attach it to stripe product ID
             $args = [
                 'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
-                'currency' => strtolower($model->base_currency ?? 'eur'),
+                'currency' => strtolower($model->base_currency ? $model->base_currency : 'eur'),
                 'product' => $stripe_product_id,
             ];
         }
@@ -1596,7 +1596,7 @@ class StripeService
                         $subscription->data = $data;
 
                         // Check if subscription was upgraded/downgraded
-                        if(count($previous_attributes?->items?->data ?? null) > 0) {
+                        if(count($previous_attributes?->items?->data ?? 0) > 0) {
                             if(get_tenant_setting('multiplan_purchase')) {
                                 // Upgrade/Downgrade when multiple subsriptions feature is enabled
                             } else {
