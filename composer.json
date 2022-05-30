@@ -33,6 +33,7 @@
         "laravel/cashier": "^13.8",
         "laravel/framework": "^9.9",
         "laravel/nova": "^4.0",
+        "laravel/nova-log-viewer": "^0.1.2",
         "laravel/passport": "^10.4",
         "laravel/slack-notification-channel": "^2.4",
         "laravel/socialite": "^5.5",

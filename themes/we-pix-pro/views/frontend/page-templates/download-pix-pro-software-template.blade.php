@@ -24,5 +24,4 @@
     </div>
 </section>
 
-
 @include('components.custom.full-width-cta')
