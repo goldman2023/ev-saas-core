@@ -194,7 +194,7 @@ trait GalleryTrait
      * @param array $options If IMGProxy is enabled, $options will be used to generate proxified image URL
      * @return mixed
      */
-    public function getMetaImg(array $options = [], $proxify): mixed
+    public function getMetaImg(array $options = [], $proxify = true) : mixed
     {
         return IMG::get($this->meta_img, IMG::mergeWithDefaultOptions($options, 'meta_img'), $proxify);
     }
