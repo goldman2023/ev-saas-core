@@ -10,6 +10,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         return [
             'pix_pro_software_download_url' => 'string',
             'pix_pro_downloads' => 'array',
+            'pix_pro_dataset_samples' => 'array',
             'pix_pro_api_enabled' => 'boolean',
             'pix_pro_api_endpoint' => 'string',
             'pix_pro_api_username' => 'string',
@@ -71,6 +72,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return array_merge($rules_array, [
                     'settings.pix_pro_software_download_url' => 'nullable',
                     'settings.pix_pro_downloads' => 'nullable',
+                    'settings.pix_pro_dataset_samples' => 'nullable',
                 ]);
             }, 10, 1);
 
@@ -115,6 +117,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_action('view.app-settings-form.general.wire_set', function() {
                 ?>
                     $wire.set('settings.pix_pro_downloads', settings.pix_pro_downloads, true);
+                    $wire.set('settings.pix_pro_dataset_samples', settings.pix_pro_dataset_samples, true);
                 <?php
             });
 
