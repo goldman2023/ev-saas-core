@@ -1,4 +1,4 @@
-<section class="relative  lg:pt-[120px]  lg:pb-[120px]  sm:pt-[80px]  sm:pb-[80px]  pt-[50px]  pb-[50px]   bg-[#f5f5f5]   ">
+<section class="relative  mt-[-90px] lg:pt-[210px]  lg:pb-[120px]  sm:pt-[170px]  sm:pb-[80px]  pt-[130px]  pb-[50px]   bg-[#f5f5f5]   ">
     <div class="mx-auto max-w-7xl px-4">
         <div class="text-center">
             <div we-slot="" name="title_slot" we-title="Section Title" class="w-full mb-4">

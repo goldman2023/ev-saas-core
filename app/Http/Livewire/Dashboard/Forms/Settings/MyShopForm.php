@@ -106,7 +106,7 @@ class MyShopForm extends Component
         $this->domains = $this->shop->domains;
 
         // User Meta
-        ShopSetting::createMissingSettings($this->shop);
+        ShopSetting::createMissingSettings($this->shop->id);
         $shop_settings = $this->shop->settings()->select('id', 'setting', 'value')->get()->keyBy('setting')->toArray();
         castValuesForGet($shop_settings, ShopSetting::metaDataTypes());
         

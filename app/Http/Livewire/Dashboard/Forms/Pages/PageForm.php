@@ -54,7 +54,6 @@ class PageForm extends Component
             $page_templates = File::allFiles(Theme::path($path = '/views/frontend/page-templates'));
             $this->available_templates = collect($page_templates)->keyBy(fn($item) => str_replace(".blade.php", "", $item->getFilename()) )->map(fn($item) => str_replace(".blade.php", "", $item->getFilename()))->toArray();
         } catch(\Exception $e) {
-            dd($e);
             $this->available_templates = [];
         }        
         
@@ -62,7 +61,7 @@ class PageForm extends Component
 
     protected function rules()
     {
-        return [
+        $rules =  [
             'page.type' => [ 'required' ], //  Rule::in(PageTypeEnum::implodedValues())
             'page.template' => [''],
             'page.name' => 'required|min:2',
@@ -71,11 +70,19 @@ class PageForm extends Component
             'page.meta_title' => [''],
             'page.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
         ];
+
+        if($this->is_update) {
+            $rules['page.slug'] = 'required|unique:App\Models\Page,slug,'.$this->page->id;
+        }
+
+        return $rules;
     }
 
     protected function messages()
     {
-        return [];
+        return [
+            'page.type.required' => translate('Page type is required.')
+        ];
     }
 
     public function dehydrate()

@@ -6,7 +6,7 @@
     show_mobile_menu: false,
 }">
     {{-- Header settings should include Background among other things + Sticky behavior (yes/no) --}}
-    <div class="relative bg-transparent">
+    <div class="relative bg-transparent z-10">
         <div class="max-w-6xl mx-auto px-4 sm:px-5">
             <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">

@@ -1,21 +1,21 @@
 {{-- HERO --}}
-<section class="relative lg:pt-[120px] lg:pb-[120px] sm:pt-[80px] sm:pb-[80px] pt-[50px] pb-[50px] bg-[#F5F5F5]">
+<section class="relative mt-[-90px] lg:pt-[210px]  lg:pb-[120px]  sm:pt-[170px]  sm:pb-[40px]  pt-[130px]  pb-[20px]  bg-[#F5F5F5]">
+    
     <div class="max-w-6xl mx-auto px-4 sm:px-5">
         <main class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="lg:grid lg:grid-cols-12 lg:gap-8">
                 <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
                     <div we-slot="" name="title_slot" we-title="Hero Title" class="w-full">
                         <h1 we-name="hero_title" we-title="Title"
-                            class="block text-center lg:text-left font-bold lg:font-black leading-none text-gray-900 text-28 sm:text-36 lg:text-[48px] xl:text-[60px] lg:pr-[3rem]">
-                            Convert photos to 3D models with pro-grade tools
+                            class="block text-center lg:text-left font-bold lg:font-black leading-none text-gray-900 text-28 sm:text-36 lg:text-[48px] xl:text-[50px] lg:pr-[3rem]">
+                            {{ translate('Convert photos to 3D models with pro-grade tools') }}
                         </h1>
                     </div>
 
                     <div we-slot="" name="text_slot" we-title="Hero Subtitle" class="w-full">
                         <p we-name="hero_text" we-title="Subtitle"
                             class="mt-3 text-center lg:text-left text-base text-gray-500 sm:mt-5 sm:text-18 lg:text-24 leading-6 lg:leading-8 lg:pr-[3rem]">
-                            PixPro – professional photogrammetry for everyone.
-                            Measure easily in 3D.
+                            {{ translate('PixPro – professional photogrammetry for everyone. Measure easily in 3D.') }}
                         </p>
                     </div>
 
@@ -25,7 +25,7 @@
                                 <a href="#"
                                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary md:py-4 md:text-lg md:px-10"
                                     target="_blank">
-                                    Get started free
+                                    {{ translate('Get started free') }}
                                 </a>
                             </div>
                         </div>
@@ -33,16 +33,15 @@
 
                     <div we-slot="" name="hero_info_slot" we-title="Info Label" class="w-full mt-4 text-center lg:text-left">
                         <span we-name="hero_info_label" we-title="Info label" class="mt-2 text-base text-gray-500">
-                            1 month free trial now
+                            {{ translate('1 month free trial now') }}
                         </span>
                     </div>
                 </div>
 
                 <div
-                    class="mt-12 relative sm:max-w-lg sm:mx-auto lg:-mt-32 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
+                    class="sm:-mt-[55px] relative sm:max-w-lg sm:mx-auto lg:-mt-32 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
                     <div we-slot="" name="image_slot" we-title="Hero Image" class="w-full mt-4">
                         @include('svg.pix-pro-hero-animation')
-
                     </div>
                 </div>
             </div>
@@ -61,7 +60,7 @@
 
         <div we-slot="" name="title_slot" we-title="Title" class="w-full">
             <h2 we-name="title" we-title="Title"
-                class="px-4 mt-2 text-26 font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+                class="px-4 mt-2 font-bold md:font-extrabold tracking-tight text-gray-900 text-28 sm:text-36 lg:text-[48px] xl:text-[60px]">
                 Every tool needed under one roof
             </h2>
         </div>
@@ -79,12 +78,12 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-1')
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-2 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     Detailed, quick, precise 2D, 3D measurements
                                 </h4>
                             </div>
@@ -94,12 +93,12 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-2')
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-2 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     Interactive digital elevation maps
                                 </h4>
                             </div>
@@ -109,13 +108,13 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-3')
 
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-2 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     True Orthophoto imagery
                                 </h4>
                             </div>
@@ -125,13 +124,13 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-4')
 
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-2 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     3D meshes for various applications
                                 </h4>
                             </div>
@@ -141,13 +140,13 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-5')
 
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-2 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     Realistic textures
                                 </h4>
                             </div>
@@ -157,12 +156,12 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-6')
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-2 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     Single and generated contour lines
                                 </h4>
                             </div>
@@ -196,7 +195,7 @@
                     {{ translate('Testimonials') }}
                 </h3>
             </div>
-            <h2 class="mt-2 text-26 md:text-[48px] font-black leading-[28px] md:leading-[48px] text-gray-900 mb-3">{{ translate('We put our clients first') }}</h2>
+            <h2 class="mt-2 font-bold md:font-extrabold text-28 sm:text-36 lg:text-[48px] xl:text-[60px] leading-[28px] md:leading-[48px]  text-gray-900 mb-3">{{ translate('We put our clients first') }}</h2>
             <p class="text-16 sm:text-xl text-gray-600">All of our tools and technologies are designed, modiefied &amp; <br class="d-inline"> updated keeping your needs in mind</p>
         </div>
         <div class="client-content pt-10 grid grid-cols-2 gap-10">
