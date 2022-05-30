@@ -68,13 +68,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             });
 
         Nova::mainMenu(function (Request $request) {
-            
+
             return [
                 MenuSection::dashboard(Main::class)->icon('chart-bar'),
 
                 MenuSection::make('General', [
                     MenuItem::resource(Page::class),
-
+                    MenuItem::make('Menu Management')
+                    ->path('/menus'),
                     // @EIM TODO: Why doesn't it add MenuResource to the left menu even though it seems referenced correctly?
                     MenuItem::resource(MenuBuilder::getMenuResource()),
                 ])->icon('user')->collapsable(),
@@ -109,6 +110,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 ])->icon('document-text')->collapsable(),
 
                 MenuSection::make('Advanced', [
+
                     MenuItem::resource(WooImport::class),
                     MenuItem::resource(WeWorkflow::class),
                     MenuItem::externalLink('SMTP and transactional emails', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
