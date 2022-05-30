@@ -43,24 +43,6 @@
 </x-livewire-tables::table.cell>
 @endif
 
-@if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('shipping_status')))
-<x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
-    @if($row->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
-        <span class="badge-success">
-            {{ ucfirst($row->shipping_status) }}
-        </span>
-    @elseif($row->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
-        <span class="badge-warning">
-            {{ ucfirst($row->shipping_status) }}
-        </span>
-    @elseif($row->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
-        <span class="badge-danger">
-            {{ \Str::replace('_', ' ', ucfirst($row->shipping_status)) }}
-        </span>
-    @endif
-</x-livewire-tables::table.cell>
-@endif
-
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
 </x-livewire-tables::table.cell>
