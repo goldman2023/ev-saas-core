@@ -1,4 +1,4 @@
-<svg width="1521" height="487" viewBox="0 0 1521 487" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg class="w-[999px] md:w-[inherit] h-[333px] md:h-[inherit]" width="1521" height="487" viewBox="0 0 1521 487" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path opacity="0.08" d="M223.134 335.468L252.317 327.648L244.498 356.832L223.134 335.468Z" stroke="url(#paint0_linear_2123_2038)" stroke-width="8"/>
 <path opacity="0.08" d="M1165.5 367.352L1240.86 347.161L1220.67 422.513L1165.5 367.352Z" stroke="url(#paint1_linear_2123_2038)" stroke-width="8"/>
 <rect opacity="0.08" x="19.1778" y="126.899" width="55.169" height="55.169" transform="rotate(15 19.1778 126.899)" stroke="url(#paint2_linear_2123_2038)" stroke-width="8"/>

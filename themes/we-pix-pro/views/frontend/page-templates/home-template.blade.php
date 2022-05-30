@@ -1,5 +1,8 @@
 {{-- HERO --}}
-<section class="relative mt-[-90px] lg:pt-[210px]  lg:pb-[120px]  sm:pt-[170px]  sm:pb-[40px]  pt-[130px]  pb-[20px]  bg-[#F5F5F5]">
+<section class="relative z-[2] mt-[-90px] lg:pt-[210px]  lg:pb-[120px]  sm:pt-[170px]  sm:pb-[40px]  pt-[130px]  pb-[20px]  bg-[#F5F5F5]">
+    <div class="z-[-1] absolute top-0 bottom-0 left-0 right-0 justify-end hidden md:flex">
+        @include('svg.bkgs.home-shapes')
+    </div>
     
     <div class="max-w-6xl mx-auto px-4 sm:px-5">
         <main class="mx-auto max-w-7xl px-4 sm:px-6">
@@ -186,9 +189,13 @@
 </div>
 
 {{-- TESTIMONIALS --}}
-<section class="bg-[#F5F5F5] py-[40px] sm:py-[50px] md:py-[80px]">
+<section class="relative bg-[#F5F5F5] py-[40px] sm:py-[50px] md:py-[80px] z-[2]">
+    <div class="absolute top-0 bottom-0 left-0 right-0 flex justify-end z-[-1]">
+        @include('svg.bkgs.testimonials-shape')
+    </div>
+
     <div class="container max-w-full sm:!max-w-[90%]">
-        <div class=" text-center">
+        <div class="text-center">
             <div we-slot="" name="tagline_slot" we-title="Tagline" class="w-full">
                 <h3 we-name="tagline" we-title="Title"
                     class="text-14 sm:text-18 font-semibold tracking-wider text-primary uppercase mb-2">
