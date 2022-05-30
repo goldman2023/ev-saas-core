@@ -37,7 +37,7 @@ class ShopSetting extends Model
         if ($shop_id instanceof Shop) {
             $shop = $shop_id;
         } else {
-            $shop = User::find($shop_id);
+            $shop = Shop::find($shop_id);
         }
 
         if (!empty($shop)) {

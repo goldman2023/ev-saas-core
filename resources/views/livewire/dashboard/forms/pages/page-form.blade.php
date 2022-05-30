@@ -40,6 +40,25 @@
                         </div>
                         <!-- END Title -->
 
+                        @if($is_update)
+                            <!-- Slug -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Slug') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
+                                    <x-dashboard.form.input field="page.slug" class="mb-2" />
+                                    <div class="text-12">
+                                        {{ translate('Link').': ' }}
+                                        <a href="{{ $page->getPermalink() }}" class="ml-1 text-primary" target="_blank">{{ $page->getPermalink() }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Slug -->
+                        @endif
+
                         @if($page->type === \App\Enums\PageTypeEnum::wysiwyg()->value)
                             <!-- Content -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
@@ -96,6 +115,9 @@
 
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                             <x-dashboard.form.select :items="\App\Enums\PageTypeEnum::toArray()" selected="type" :nullable="false"></x-dashboard.form.select>
+
+                            <x-system.invalid-msg field="page.type"></x-system.invalid-msg>
+
                         </div>
                     </div>
                     <!-- END Type -->
