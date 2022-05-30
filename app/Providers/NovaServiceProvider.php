@@ -114,6 +114,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(WooImport::class),
                     MenuItem::resource(WeWorkflow::class),
                     MenuItem::externalLink('SMTP and transactional emails', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
+                    MenuItem::make('Logs')->path('/logs'),
 
 
                 ])->icon('adjustments')->collapsable(),
@@ -194,6 +195,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         if (tenancy()->initialized) {
             return [
                 MenuBuilder::make(),
+                \Laravel\Nova\LogViewer\LogViewer::make(),
                 // new \Bolechen\NovaActivitylog\NovaActivitylog(),
             ];
         } else {

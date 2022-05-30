@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "647b58b9987c1c0e300812760129f14a",
+    "content-hash": "20519110d51abb64ea6cb3721c2d12b7",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -3957,6 +3957,50 @@
                 "source": "https://github.com/laravel/nova/tree/v4.2.5"
             },
             "time": "2022-04-21T15:42:54+00:00"
+        },
+        {
+            "name": "laravel/nova-log-viewer",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/nova-log-viewer.git",
+                "reference": "07e88d1e0aa24f8781c9fbb28ba80c214b731a58"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/nova-log-viewer/zipball/07e88d1e0aa24f8781c9fbb28ba80c214b731a58",
+                "reference": "07e88d1e0aa24f8781c9fbb28ba80c214b731a58",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Nova\\LogViewer\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Nova\\LogViewer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova tool for viewing your application logs.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "source": "https://github.com/laravel/nova-log-viewer/tree/v0.1.2"
+            },
+            "time": "2022-05-05T14:06:16+00:00"
         },
         {
             "name": "laravel/passport",

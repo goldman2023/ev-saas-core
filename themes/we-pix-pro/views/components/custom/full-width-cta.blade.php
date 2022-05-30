@@ -1,19 +1,21 @@
 {{-- FULL WIDTH CTA --}}
-<section
-    class="relative  lg:pt-[80px]  lg:pb-[80px]  sm:pt-[50px]  sm:pb-[50px]  pt-[40px]  pb-[40px]   bg-primary ">
+<section class="relative z-[2] lg:pt-[80px]  lg:pb-[80px]  sm:pt-[50px]  sm:pb-[50px]  pt-[40px]  pb-[40px]   bg-primary ">
+    <div class="absolute z-[-1] top-0 bottom-0 left-0 right-0 flex justify-center">
+        @include('svg.bkgs.cta-shapes')
+    </div>
+
     <div class="w-full">
         <div class="container !max-w-[90%] sm:!max-w-2xl">
             <div class="action-content text-center">
 
                 <div we-slot="" name="title_slot" we-title="Section Title" class="w-full mb-4">
-                    <h2 we-name="section_title" we-title="Title"
-                        class="text-[28px]  sm:text-[48px]  font-black leading-none mb-5 text-white">
+                    <h2 we-name="section_title" we-title="Title" class="text-[28px]  md:text-[48px]  font-black leading-none mb-5 text-white">
                         {{ translate('Ready to get started with your project?') }}
                     </h2>
                 </div>
 
                 <div we-slot="" name="text_slot" we-title="Section Text" class="w-full mb-8">
-                    <p we-name="section_text" we-title="Text" class="text-16 sm:text-20 font-medium text-white">
+                    <p we-name="section_text" we-title="Text" class="text-16 md:text-20 font-medium text-white">
                         {{ translate('Choose from our 3 different plans or ask for a custom solution where you can process as many photos as you can!') }}
                     </p>
                 </div>
@@ -31,7 +33,7 @@
                 </div>
 
                 <div we-slot="" name="info_slot" we-title="Section Info Text" class="w-full ">
-                    <p we-name="section_info" we-title="Text" class="text-16 sm:text-20 font-medium text-white">
+                    <p we-name="section_info" we-title="Text" class="text-16 md:text-20 font-medium text-white">
                         {{ translate('Start free 1 month trial now, cancel at any time') }}
                     </p>
                 </div>
