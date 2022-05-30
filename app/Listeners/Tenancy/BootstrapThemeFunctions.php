@@ -23,6 +23,7 @@ class BootstrapThemeFunctions
             if(file_exists($theme_functions_file_path)) {
                 require_once($theme_functions_file_path);
 
+                // TODO: Find a way to bypass tenats:migration duplicate class initialization after tenant is manually changed in the function...
                 App::register(\ThemeFunctionsServiceProvider::class);
             }
         }
