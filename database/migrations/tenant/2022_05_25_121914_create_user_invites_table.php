@@ -13,6 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('user_invites');
+
         Schema::create('user_invites', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('user_id')->nullable();
