@@ -23,7 +23,6 @@
         "diglactic/laravel-breadcrumbs": "^7.1",
         "doctrine/dbal": "^3.3",
         "eminiarts/nova-tabs": "^2.0",
-        "froala/wysiwyg-editor-php-sdk": "^4.0",
         "google/apiclient": "^2.12.1",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
@@ -97,8 +96,7 @@
         "files": [
             "app/Http/Helpers.php",
             "app/Http/Helpers/HookHelpers.php",
-            "vendor/webtopay/libwebtopay/WebToPay.php",
-            "vendor/froala/wysiwyg-editor-php-sdk/lib/FroalaEditor.php"
+            "vendor/webtopay/libwebtopay/WebToPay.php"
         ]
     },
     "autoload-dev": {
@@ -112,7 +110,7 @@
     "extra": {
         "laravel": {
             "dont-discover": [
-                
+
             ]
         }
     },
