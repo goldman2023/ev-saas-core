@@ -104,6 +104,7 @@ class PlanForm extends Component
             'plan.excerpt' => 'required|min:10',
             'plan.content' => 'nullable', //'required|min:10',
             'plan.features' => 'required|array',
+            'plan.features.*' => 'required|string|distinct|min:4',
 
             'plan.base_currency' => 'nullable',
             /* TODO: @vukasin plan.base_currency FX RULE not working all the time (check if we need some currency seeds or whatever) */
@@ -152,6 +153,8 @@ class PlanForm extends Component
             'plan.discount_type.in' => translate('Discount type must be one of the following:').' '.AmountPercentTypeEnum::implodedLabels(),
             'plan.tax.numeric' => translate('Tax must be a valid number'),
             'plan.tax_type.in' => translate('Tax type must be one of the following:').' '.AmountPercentTypeEnum::implodedLabels(),
+
+            'plan.features.*.min' => translate('Minimum 4 chars is required for each feature'),
         ];
     }
 
