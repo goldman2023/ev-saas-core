@@ -20,6 +20,7 @@ class PageForm extends Component
     use DispatchSupport;
 
     public $page;
+    public $is_update;
 
     protected $listeners = [
 
@@ -32,15 +33,20 @@ class PageForm extends Component
 
     public function rules()
     {
+        
         return [
             'page.name' => 'required|min:2',
+            'page.slug' => 'required|unique:App\Models\Page,slug',
+            'page.template' => 'nullable',
             'page.status' => [Rule::in(StatusEnum::toValues('archived'))],
         ];
     }
 
     public function messages()
     {
-        return [];
+        return [
+            'page.slug.unique' => translate('Slug must be unique. Some other page is already using it.')
+        ];
     }
 
     public function dehydrate()

@@ -94,6 +94,7 @@ class PlanForm extends Component
     {
         return [
             'selected_categories' => 'required',
+            // 'plan.slug' => 'unique:App\Models\P,id'
             'plan.featured' => ['boolean'],
             'plan.primary' => ['boolean'],
             'plan.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
