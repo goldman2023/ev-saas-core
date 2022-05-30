@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::table('plans', function (Blueprint $table) {
             $table->string('base_currency', 10)->default('eur')->change();
         });
-
     }
 
     /**

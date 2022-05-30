@@ -1596,7 +1596,7 @@ class StripeService
                         $subscription->data = $data;
 
                         // Check if subscription was upgraded/downgraded
-                        if(count($previous_attributes?->items?->data ?? null) > 0) {
+                        if(count($previous_attributes?->items?->data ?? 0) > 0) {
                             if(get_tenant_setting('multiplan_purchase')) {
                                 // Upgrade/Downgrade when multiple subsriptions feature is enabled
                             } else {
