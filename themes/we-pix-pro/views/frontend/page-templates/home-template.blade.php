@@ -3,7 +3,7 @@
     <div class="z-[-1] absolute top-0 bottom-0 left-0 right-0 justify-end hidden md:flex">
         @include('svg.bkgs.home-shapes')
     </div>
-    
+
     <div class="max-w-6xl mx-auto px-4 sm:px-5">
         <main class="mx-auto max-w-7xl px-4 sm:px-6">
             <div class="lg:grid lg:grid-cols-12 lg:gap-8">
@@ -25,10 +25,10 @@
                     <div we-slot="" name="button_group_slot" we-title="Buttons" class="w-full">
                         <div class="mt-5 flex justify-center lg:justify-start lg:mt-8">
                             <div class="rounded-md shadow">
-                                <a href="#"
+                                <a href="/pricing"
                                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary md:py-4 md:text-lg md:px-10"
-                                    target="_blank">
-                                    {{ translate('Get started free') }}
+                                    >
+                                    {{ translate('Start for free') }}
                                 </a>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
 
                     <div we-slot="" name="hero_info_slot" we-title="Info Label" class="w-full mt-4 text-center lg:text-left">
                         <span we-name="hero_info_label" we-title="Info label" class="mt-2 text-base text-gray-500">
-                            {{ translate('1 month free trial now') }}
+                            {{ translate('* 1 month free trial available, cancel anytime') }}
                         </span>
                     </div>
                 </div>
