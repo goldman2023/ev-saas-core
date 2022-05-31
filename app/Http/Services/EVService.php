@@ -315,17 +315,16 @@ class EVService
                         'is_active' => areActiveRoutes(['my.plans.management']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
-                        'children' => [
-                            [
-                                'label' => translate('Invoices'),
-                                'icon' => 'heroicon-o-document-text',
-                                'route' => route('plans.index'),
-                                'is_active' => areActiveRoutes(['my.purchases.all']),
-                                'user_types' => User::$user_types,
-                                'permissions' => [],
-                            ],
-                        ]
                     ],
+                    [
+                        'label' => translate('Invoices'),
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('plans.index'),
+                        'is_active' => areActiveRoutes(['my.purchases.all']),
+                        'user_types' => User::$user_types,
+                        'permissions' => [],
+                    ],
+
 
                     /*   [
                         'label' => translate('My Wishlist'),
