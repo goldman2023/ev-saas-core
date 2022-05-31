@@ -17,8 +17,19 @@
                 </a>
             </x-slot>
         </x-dashboard.section-headers.section-header>
+        <div class="grid grid-cols-12 gap-8">
+            <div class="col-span-6">
+                <livewire:dashboard.forms.pages.page-form :page="$page"></livewire:dashboard.forms.pages.page-form>
 
-        <livewire:dashboard.forms.pages.page-form :page="$page"></livewire:dashboard.forms.pages.page-form>
+            </div>
+
+            <div class="col-span-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">
+                    {{ translate('Preview') }}
+                </h3>
+                <iframe class="rounded-md bg-white w-full min-h-[600px]" src="{{ $page->getPermalink() }}?preview=true"> </iframe>
+            </div>
+        </div>
     </section>
 @endsection
 

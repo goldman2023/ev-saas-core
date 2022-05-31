@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class WeWorkflow extends Model
 {
     use HasFactory;
+
+    protected $table = "we_workflow";
 }
