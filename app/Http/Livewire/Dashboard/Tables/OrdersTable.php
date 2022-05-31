@@ -127,9 +127,9 @@ class OrdersTable extends DataTableComponent
             Column::make('Payment status', 'payment_status')
                 ->sortable()
                 ->addClass('hidden md:table-cell'),
-            Column::make('Shipping status', 'shipping_status')
-                ->sortable()
-                ->addClass('hidden md:table-cell'),
+            // Column::make('Shipping status', 'shipping_status')
+            //     ->sortable()
+            //     ->addClass('hidden md:table-cell'),
             Column::make('Total', 'total')
                 ->excludeFromSelectable()
                 ->sortable(),

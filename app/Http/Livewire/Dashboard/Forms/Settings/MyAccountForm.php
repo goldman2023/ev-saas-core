@@ -125,7 +125,7 @@ class MyAccountForm extends Component
         $this->me = auth()->user();
 
         // User Meta
-        UserMeta::createMissingMeta($this->me);
+        UserMeta::createMissingMeta($this->me->id);
         $user_meta = $this->me->user_meta()->select('id', 'key', 'value')->get()->keyBy('key')->toArray();
         castValuesForGet($user_meta, UserMeta::metaDataTypes());
         
