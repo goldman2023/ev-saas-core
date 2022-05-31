@@ -52,6 +52,28 @@ class WordPressAPIService
         ];
     }
 
+    public function getCustomPostType($base = null, $page = 1, $per_age = 10) {
+        if(empty($base))
+            return null;
+
+        $res = Http::get($this->route.'/'.$base, [
+            '_fields' => 'id,date,modified,slug,status,type,featured_media,title,content,excerpt,categories,yoast_head_json',
+            'per_page' => $per_age,
+            'page' => $page
+        ]);
+
+        $data = $res->json();
+        $total_items = $res->header('x-wp-total');
+        $total_pages = $res->header('x-wp-totalpages');
+
+        return [
+            'data' => $data,
+            'total_items' => (int) $total_items,
+            'total_pages' => (int) $total_pages,
+        ];
+    }
+
+
     public function getCategoriesByIDs($categories_ids) {
         if(empty($categories_ids))
             return [];

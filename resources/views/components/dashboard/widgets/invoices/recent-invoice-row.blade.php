@@ -1,6 +1,11 @@
 <x-livewire-tables::table.cell class="align-middle text-left">
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->id]) }}">
         #{{ $row->id }}
+
+        @if(!empty($row->order?->order_items?->first() ?? null) && !empty($row->order?->order_items?->first()?->subject ?? null) && $row->order?->order_items?->first()?->subject?->isSubscribable() ?? null)
+            <span class="ml-2 font-semibold">{{ $row->order?->order_items?->first()?->subject?->name }}</span>
+        @endif
+
         @if(!$row->viewed)
             <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
         @endif
@@ -34,17 +39,17 @@
 
 
 <x-livewire-tables::table.cell class="align-middle text-left">
-    <span class="d-block text-14 mb-0">{{ $row->updated_at->format('d M, Y') }}</span>
+    <span class="d-block text-14 mb-0">{{ !empty($row->end_date) ? date('d M, Y', $row->end_date) : '' }}</span>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        <a class="btn btn-primary flex items-center mr-2" href="#">
+        <a class="btn btn-primary flex items-center mr-2" target="_blank" href="{{ $row->meta[\StripeService::getStripeMode().'stripe_hosted_invoice_url'] ?? '#' }}">
             {{-- {{ route('order.details', ['id' => $row->id]) }} --}}
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] '])
         </a>
 
-        <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ $row->meta[\StripeService::getStripeMode().'stripe_hosted_invoice_url'] ?? '#' }} ">
+        <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ $row->meta[\StripeService::getStripeMode().'stripe_invoice_pdf_url'] ?? '#' }} ">
             @svg('heroicon-s-download', ['class' => 'w-[18px] h-[18px] '])
         </a>
 
