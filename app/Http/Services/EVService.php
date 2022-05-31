@@ -292,23 +292,16 @@ class EVService
                 'label' => translate('Customer zone'),
                 'items' => apply_filters('dashboard.sidebar.customer-zone.items', [
                     [
-                        'label' => translate('Account'),
+                        'label' => translate('My Account'),
                         'icon' => 'heroicon-o-user',
                         'route' => route('my.account.settings'),
                         'is_active' => areActiveRoutes(['my.account.settings']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
                     ],
+
                     [
-                        'label' => translate('My Purchases'),
-                        'icon' => 'heroicon-o-document-text',
-                        'route' => route('my.purchases.all'),
-                        'is_active' => areActiveRoutes(['my.purchases.all']),
-                        'user_types' => User::$user_types,
-                        'permissions' => [],
-                    ],
-                    [
-                        'label' => translate('Downloads and Unlocked Content'),
+                        'label' => translate('Downloads'),
                         'icon' => 'heroicon-o-download',
                         'route' => route('my.downloads.all'),
                         'is_active' => areActiveRoutes(['my.downloads.all']),
@@ -316,13 +309,24 @@ class EVService
                         'permissions' => [],
                     ],
                     [
-                        'label' => translate('Plans Management'),
+                        'label' => translate('My Subscriptions'),
                         'icon' => 'heroicon-o-document',
                         'route' => route('my.plans.management'),
                         'is_active' => areActiveRoutes(['my.plans.management']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
+                        'children' => [
+                            [
+                                'label' => translate('Invoices'),
+                                'icon' => 'heroicon-o-document-text',
+                                'route' => route('plans.index'),
+                                'is_active' => areActiveRoutes(['my.purchases.all']),
+                                'user_types' => User::$user_types,
+                                'permissions' => [],
+                            ],
+                        ]
                     ],
+
                     /*   [
                         'label' => translate('My Wishlist'),
                         'icon' => 'heroicon-o-heart',
@@ -346,6 +350,15 @@ class EVService
             [
                 'label' => translate('Settings'),
                 'items' => [
+                    [
+                        'label' => translate('Staff settings'),
+                        'icon' => 'heroicon-s-user-group',
+                        'route' => route('settings.staff_settings'),
+                        'is_active' => areActiveRoutes(['settings.staff_settings']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => ['browse_staff'], // TODO: Add users managing permissions,
+                        'enabled' => get_tenant_setting('staff_enabled', true),
+                    ],
                     [
                         'label' => translate('Shop settings'),
                         'icon' => 'heroicon-o-office-building',
@@ -379,35 +392,27 @@ class EVService
                     //     'user_types' => User::$tenant_user_types,
                     //     'permissions' => ['browse_uni_payment_methods']
                     // ],
-                    [
-                        'label' => translate('Staff settings'),
-                        'icon' => 'heroicon-s-user-group',
-                        'route' => route('settings.staff_settings'),
-                        'is_active' => areActiveRoutes(['settings.staff_settings']),
-                        'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_staff'], // TODO: Add users managing permissions,
-                        'enabled' => get_tenant_setting('staff_enabled', true),
-                    ],
 
-                    [
-                        'label' => translate('Analytics'),
-                        'icon' => 'heroicon-s-chart-pie',
-                        'route' => route('analytics.index'),
-                        'is_active' => areActiveRoutes(['analytics.index']),
-                        'user_types' => User::$tenant_user_types,
-                        'permissions' => ['view_analytics'], // TODO: Add users managing permissions,
-                        'enabled' => get_tenant_setting('we_analytics_enabled', true),
-                    ],
 
-                    [
-                        'label' => translate('Integrations'),
-                        'icon' => 'heroicon-s-adjustments',
-                        'route' => route('analytics.index'),
-                        'is_active' => areActiveRoutes(['analytics.index']),
-                        'user_types' => User::$tenant_user_types,
-                        'permissions' => ['view_analytics'], // TODO: Add users managing permissions,
-                        'enabled' => get_tenant_setting('integrations_enabled', true),
-                    ],
+                    // [
+                    //     'label' => translate('Analytics'),
+                    //     'icon' => 'heroicon-s-chart-pie',
+                    //     'route' => route('analytics.index'),
+                    //     'is_active' => areActiveRoutes(['analytics.index']),
+                    //     'user_types' => User::$tenant_user_types,
+                    //     'permissions' => ['view_analytics'], // TODO: Add users managing permissions,
+                    //     'enabled' => get_tenant_setting('we_analytics_enabled', true),
+                    // ],
+
+                    // [
+                    //     'label' => translate('Integrations'),
+                    //     'icon' => 'heroicon-s-adjustments',
+                    //     'route' => route('analytics.index'),
+                    //     'is_active' => areActiveRoutes(['analytics.index']),
+                    //     'user_types' => User::$tenant_user_types,
+                    //     'permissions' => ['view_analytics'], // TODO: Add users managing permissions,
+                    //     'enabled' => get_tenant_setting('integrations_enabled', true),
+                    // ],
 
                     [
                         'label' => translate('Super Admin'),
