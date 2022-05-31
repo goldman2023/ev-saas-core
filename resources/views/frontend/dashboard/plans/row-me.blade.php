@@ -1,8 +1,6 @@
-{{-- <x-livewire-tables::table.cell class="align-middle ">
-    <a class="media items-center text-14" href="{{ route('plan.edit', ['id' => $row->id]) }}">
-        #{{ $row->id }}
-    </a>
-</x-livewire-tables::table.cell> --}}
+<x-livewire-tables::table.cell class="align-middle text-center ">
+    #{{ $row->id }}
+</x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle ">
     {{ $row->getTranslation('name') }}

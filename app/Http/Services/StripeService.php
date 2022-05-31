@@ -149,7 +149,7 @@ class StripeService
         if (empty($description)) {
             $description = strip_tags($model->description);
         }
-
+        
         $images = [];
 
         $product_args = [
@@ -184,8 +184,8 @@ class StripeService
             return;
         }
 
-        // Create Stripe Price(s)
-        if($model instanceof Plan) {
+        // Create Stripe Price(s)        
+        if($model instanceof Plan) { 
             // We need to check for both monthly and anual price here
             $stripe_monthly_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_monthly_price_id')->first()?->value ?? null;
             $stripe_annual_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_annual_price_id')->first()?->value ?? null;
@@ -227,16 +227,16 @@ class StripeService
                 // 1. Create a new stripe price if price is missing in Stripe
                 $stripe_price = $this->createStripePrice($model, $stripe_product_id);
             }
-
-
+    
+            
             // Compare current model price and Last Stripe Price and if it does not match, create a new price
             if ((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
                 // There is a difference between stripe price and our local price of the product
-
+    
                 // Create new Stripe Price
                 $stripe_price = $this->createStripePrice($model, $stripe_product_id);
             }
-
+    
         }
 
         return $stripe_product;
@@ -249,16 +249,11 @@ class StripeService
             $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
         }
 
-        $main_currency = get_tenant_setting('system_default_currency')->code;
-        if($model->base_currency != 0 && $model->base_currency != false && $model->base_currency != $main_currency) {
-            $main_currency = $model->base_currency;
-        }
-
         // Create reccuring price if $model is Plan or a Subscription Product
         if ($model->isSubscribable()) {
             $args = [
                 'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
-                'currency' => strtolower($main_currency),
+                'currency' => strtolower($model->base_currency ? $model->base_currency : 'eur'),
                 'product' => $stripe_product_id,
                 'recurring' => [
                     "interval" => "month",
@@ -277,17 +272,17 @@ class StripeService
                         "usage_type" => "licensed"
                     ]
                 ]);
-
+    
                 $annual_args = array_merge($args, [
                     'unit_amount' => ($model->getTotalAnnualPrice() * 100),
                     'recurring' => [
-                        "interval" => "year",
+                        "interval" => "year", 
                         "interval_count" => 1,
                         "usage_type" => "licensed"
                     ]
                 ]);
             }
-
+            
         } else {
             // Create a new price and attach it to stripe product ID
             $args = [
@@ -312,7 +307,7 @@ class StripeService
                     ]
                 );
             }
-
+            
             // Annual price must be changed when monthly price is changed
             if(empty($for_interval) || ($for_interval === 'annual' || $for_interval === 'annual')) {
                 $stripe_product_annual_price = $this->stripe->prices->create($annual_args);
@@ -328,7 +323,7 @@ class StripeService
                     ]
                 );
             }
-
+            
             if($for_interval === 'monthly') {
                 return $stripe_product_monthly_price;
             } elseif($for_interval === 'annual') {
@@ -433,7 +428,7 @@ class StripeService
 
 
         // Check latest price existance
-        if($model instanceof Plan) {
+        if($model instanceof Plan) { 
             // We need to check for both monthly and anual price here
             $stripe_monthly_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_monthly_price_id')->first()?->value ?? null;
             $stripe_annual_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_annual_price_id')->first()?->value ?? null;
@@ -482,18 +477,18 @@ class StripeService
                 // 1. Create a new stripe price if price is missing in Stripe
                 $stripe_price = $this->createStripePrice($model, $stripe_product_id);
             }
-
-
+    
+    
             // Compare current model price and Last Stripe Price and if it does not match, create a new price
             if ((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
                 // There is a difference between stripe price and our local price of the product
-
+    
                 // Create new Stripe Price
                 $stripe_price = $this->createStripePrice($model, $stripe_product_id);
             }
         }
-
-
+        
+        
 
         $is_preview = false;
         // Create temporary order and invoice if $review is false and $abandoned_order_id is empty
@@ -712,8 +707,8 @@ class StripeService
             $order_item->total_price = $model->total_price;
             $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
             $order_item->saveQuietly(); // there could be memory leaks if we use just save()
-
-
+            
+            
             /*
             * Create Invoice
             */
@@ -728,7 +723,7 @@ class StripeService
             $invoice->user_id = $order->user_id;
             $invoice->payment_status = PaymentStatusEnum::pending()->value;
             $invoice->invoice_number = 'invoice-draft-'.Uuid::generate(4)->string; // this is an invoice draft, hence we can write a random Uuid number, it'll be overriten if real stripe invoice is created
-
+            
             $invoice->email = $order->email;
             $invoice->billing_first_name = $order->billing_first_name;
             $invoice->billing_last_name = $order->billing_last_name;
@@ -738,12 +733,12 @@ class StripeService
             $invoice->billing_state = $order->billing_state;
             $invoice->billing_city = $order->billing_city;
             $invoice->billing_zip = $order->billing_zip;
-
+            
             // TODO: add base_currency for invoice! and take it from stripe!
 
             $invoice->start_date = 0; // will be updated on stripe webhooks
             $invoice->end_date = 0; // will be updated on stripe webhooks
-
+            
             $invoice->saveQuietly(); // there could be memory leaks if we use just save()
 
 
@@ -810,10 +805,10 @@ class StripeService
             $invoice->discount_amount = $order->discount_amount;
             $invoice->subtotal_price = $stripe_invoice->subtotal / 100; // take from stripe and divide by 100
             $invoice->total_price = $stripe_invoice->total / 100; // take from stripe and divide by 100
-            // TODO: What happens when you downgrade???? Total/Subtotal are prorated BUT the proration is in user favor!
+            // TODO: What happens when you downgrade???? Total/Subtotal are prorated BUT the proration is in user favor! 
             // NOTE: When user downgrade, stripe invoice creates proration in user's favor, and the amount in invoice is the difference between two plans.
             // TODO: How to display this?
-
+            
             $invoice->email = $order->email;
             $invoice->billing_first_name = $order->billing_first_name;
             $invoice->billing_last_name = $order->billing_last_name;
@@ -847,19 +842,19 @@ class StripeService
         $meta[$this->mode_prefix .'stripe_request_id'] = null;
         $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
         $meta[$this->mode_prefix .'stripe_billing_reason'] = $stripe_invoice->billing_reason ?? '';
-
+        
         // On subscription_cycle, this is probably empty, but let it be just in case
         if(!empty($stripe_invoice->payment_intent ?? null)) {
             $pi = $this->stripe->paymentIntents->retrieve(
                 $stripe_invoice->payment_intent,
                 []
             );
-
+            
             if(!empty($pi?->charges?->data[0]?->receipt_url ?? null)) {
-                $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
+                $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;   
             }
         }
-
+        
         $invoice->meta = $meta;
 
         $invoice->save();
@@ -1064,7 +1059,7 @@ class StripeService
             $invoice->billing_zip = $order->billing_zip;
 
             // Take invoice totals from $order itself
-
+            
 
             // Take the info from stripe...
             $meta = $invoice->meta;
@@ -1209,11 +1204,11 @@ class StripeService
         try {
             // IMPORTANT: Invoice `payment_status` MUST DEPEND ONLY ON Stripe invoice ->paid or not paid
             $order = Order::withoutGlobalScopes()->findOrFail($stripe_subscription->metadata->order_id);
-
+            
             if($stripe_billing_reason === 'subscription_create') {
                 // This means that subscription is created for the first time
                 $invoice = $order->invoices()->withoutGlobalScopes()->first();
-
+                
                 if (!empty($invoice)) {
                     $invoice->is_temp = false; // Make this Invoice real!
 
@@ -1253,20 +1248,20 @@ class StripeService
                             $stripe_invoice->payment_intent,
                             []
                         );
-
+                        
                         if(!empty($pi?->charges?->data[0]?->receipt_url ?? null)) {
-                            $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
+                            $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;   
                         }
                     }
-
+                    
                     $invoice->meta = $meta;
-
+                    
                     $invoice->save();
 
                     DB::commit();
                 }
 
-            } else if($stripe_billing_reason === 'subscription_cycle') {
+            } else if($stripe_billing_reason === 'subscription_cycle') {                
                 // Subscription is cycled
                 $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
 
@@ -1287,7 +1282,7 @@ class StripeService
         die();
     }
 
-
+    
 
     // invoice.paid
     public function whInvoicePaid($event)
@@ -1314,7 +1309,7 @@ class StripeService
             if($stripe_billing_reason === 'subscription_create') {
                 // This means that subscription is created for the first time
                 $invoice = $order->invoices()->withoutGlobalScopes()->firstOrFail();
-
+                
                 if (!empty($invoice)) {
                     $invoice->is_temp = false; // Make this Invoice real!!!
                     $invoice->payment_status = PaymentStatusEnum::paid()->value;
@@ -1336,12 +1331,12 @@ class StripeService
                             $stripe_invoice->payment_intent,
                             []
                         );
-
+                        
                         if(!empty($pi?->charges?->data[0]?->receipt_url ?? null)) {
-                            $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
+                            $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;   
                         }
                     }
-
+                    
                     $invoice->meta = $meta;
 
                     $invoice->save();
@@ -1350,7 +1345,7 @@ class StripeService
             } else if($stripe_billing_reason === 'subscription_cycle') {
                 // This means that subscription is cycled
                 $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
-
+                
             } else if($stripe_billing_reason === 'subscription_update') {
                 // Subscription is updated (downgraded, upgraded etc.)
                 $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
@@ -1370,7 +1365,7 @@ class StripeService
                         $subscription->status = UserSubscriptionStatusEnum::active()->value;
                         $subscription->payment_status = PaymentStatusEnum::paid()->value;
                     }
-
+                    
 
                     if(empty($subscription->start_date)) {
                         $subscription->start_date = $stripe_subscription->current_period_start;
@@ -1385,24 +1380,29 @@ class StripeService
             }
 
             DB::commit();
-
-            // Fire Subscription(s) is created and paid Event
-            if($stripe_billing_reason === 'subscription_create') {
-                do_action('invoice.paid.subscription_create', $user_subscriptions);
-            }
-            // Fire Subscription(s) is updated and paid Event
-            else if($stripe_billing_reason === 'subscription_update') {
-                do_action('invoice.paid.subscription_update', $user_subscriptions);
-            }
-            // Fire Subscription(s) is cycled and paid Event
-            else if($stripe_billing_reason === 'subscription_cycle') {
-                do_action('invoice.paid.subscription_cycle', $user_subscriptions);
-            }
         } catch (\Throwable $e) {
             Log::error($e);
             DB::rollBack();
             http_response_code(400);
         }
+
+        try {
+            // Fire Subscription(s) is created and paid Event
+            if($stripe_billing_reason === 'subscription_create') {
+                do_action('invoice.paid.subscription_create', $user_subscriptions);
+            } 
+            // Fire Subscription(s) is updated and paid Event
+            else if($stripe_billing_reason === 'subscription_update') {
+                do_action('invoice.paid.subscription_update', $user_subscriptions);
+            } 
+            // Fire Subscription(sinvoice.paid.subscription_create) is cycled and paid Event
+            else if($stripe_billing_reason === 'subscription_cycle') {
+                do_action('invoice.paid.subscription_cycle', $user_subscriptions);
+            }
+        } catch(\Exception $e) {
+            Log::error($e);
+        }
+        
 
         http_response_code(200);
         die();
@@ -1433,7 +1433,7 @@ class StripeService
             if($stripe_billing_reason === 'subscription_create') {
                 // This means that subscription is created for the first time
                 $invoice = $order->invoices()->withoutGlobalScopes()->firstOrFail();
-
+                
                 if (!empty($invoice)) {
                     $invoice->is_temp = false; // Make this Invoice real!!!
                     $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
@@ -1457,12 +1457,12 @@ class StripeService
                             $stripe_invoice->payment_intent,
                             []
                         );
-
+                        
                         if(!empty($pi?->charges?->data[0]?->receipt_url ?? null)) {
-                            $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
+                            $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;   
                         }
                     }
-
+                    
                     $invoice->meta = $meta;
 
                     $invoice->save();
@@ -1471,7 +1471,7 @@ class StripeService
             } else if($stripe_billing_reason === 'subscription_cycle') {
                 // This means that subscription is cycled
                 $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription, payment_failed: true);
-
+                
             } else if($stripe_billing_reason === 'subscription_update') {
                 // Subscription is updated (downgraded, upgraded etc.)
                 $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription, payment_failed: true);
@@ -1484,7 +1484,7 @@ class StripeService
                 foreach($user_subscriptions as $subscription) {
                     $subscription->status = UserSubscriptionStatusEnum::inactive()->value;
                     $subscription->payment_status = PaymentStatusEnum::unpaid()->value;
-
+                    
 
                     if(empty($subscription->start_date)) {
                         $subscription->start_date = $stripe_subscription->current_period_start;
@@ -1530,14 +1530,14 @@ class StripeService
                     $data[$this->mode_prefix .'stripe_latest_invoice_id'] = $stripe_subscription->latest_invoice ?? null;
                     $subscription->data = $data;
 
-
+                    
                     // Only change status if user_subscription is trial!
                     if(!empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null)) {
                         $subscription->status = UserSubscriptionStatusEnum::trial()->value;
                     }
 
                     $subscription->save();
-
+                    
                     // Status of subscription in this webhook is always: "status": "incomplete",
                     // So we should just update start and end date and not change status and payment_status! these will be changed in subscription.updated
                 }
@@ -1578,11 +1578,11 @@ class StripeService
                         // Renew
                         // Check if previous state was canceled subscription and new `cancel_at_period_end` is null - revive if true
                         $subscription->status = UserSubscriptionStatusEnum::active()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
-
+    
                     } else {
                         $subscription->start_date = $stripe_subscription->current_period_start;
                         $subscription->end_date = $stripe_subscription->current_period_end;
-
+                        
                         // Check if invoice is paid or not, and based on that determine what status this one has
                         $latest_invoice_id = $stripe_subscription->latest_invoice ?? null;
                         $stripe_invoice = $this->stripe->invoices->retrieve(
@@ -1595,7 +1595,7 @@ class StripeService
                             $subscription->status = UserSubscriptionStatusEnum::active()->value;
                             $subscription->payment_status = PaymentStatusEnum::paid()->value;
                         }
-
+    
                         $data = $subscription->data;
                         $data[$this->mode_prefix .'stripe_latest_invoice_id'] = $latest_invoice_id;
                         $subscription->data = $data;
@@ -1668,5 +1668,5 @@ class StripeService
         }
     }
 
-
+    
 }

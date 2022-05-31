@@ -23,6 +23,8 @@
         <div class="w-full mb-7">
             <livewire:dashboard.tables.plans-table for="me" />
         </div>
+
+        @do_action('view.dashboard.plans-management.plans-table.end')
     @endif
 
     <div class="w-full" x-data="{
@@ -101,7 +103,6 @@
                                         {{ !empty($plan->getCoreMeta('custom_cta_label')) ? $plan->getCoreMeta('custom_cta_label') : translate('Contact Us') }}
                                     </a>
                                 @else
-
                                     <div class="w-full text-danger text-center pb-3 text-14" x-show="pricing_mode === 'annual'" x-cloak>
                                         {{ str_replace('%d%', \FX::formatPrice(abs($plan->getTotalAnnualPrice() - ($plan->getTotalPrice() * 12))), translate('You save %d% per year')) }}
                                     </div>
@@ -119,15 +120,15 @@
                                         @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
                                             <span>{{ translate('Try for free') }}</span>
                                         @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                            <span>{{ translate('Change plan') }}</span>
+                                            <a href="{{ route('stripe.portal_session') }}">{{ translate('Change plan') }}</a>
                                         @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                            <span>{{ translate('Change plan') }}</span>
+                                            <a href="{{ route('stripe.portal_session') }}">{{ translate('Change plan') }}</a>
                                         @endif
                                     </a>
                                 @endif
 
-                                
-                                
+
+
                             </div>
                         </div>
                     </div>

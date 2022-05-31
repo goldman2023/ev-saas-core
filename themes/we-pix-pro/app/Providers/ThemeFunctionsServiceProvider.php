@@ -128,6 +128,14 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     ]);
                 }
             });
+
+            add_action('view.dashboard.plans-management.plans-table.end', function() {
+                if (View::exists('frontend.partials.pix-pro-licenses-table')) {
+                    echo view('frontend.partials.pix-pro-licenses-table', [
+                        // 'downloads' => collect(TenantSettings::get('pix_pro_downloads'))
+                    ]);
+                }
+            });
         }
     }
 
