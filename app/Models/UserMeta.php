@@ -89,7 +89,7 @@ class UserMeta extends WeBaseModel
             $user = User::find($user_id);
         }
 
-        if (! empty($user)) {
+        if (!empty($user)) {
             $meta = $user->user_meta()->select('id', 'key', 'value')->get()->keyBy('key')->toArray();
             $data_types = self::metaDataTypes();
 
@@ -97,7 +97,7 @@ class UserMeta extends WeBaseModel
             if (! empty($missing)) {
                 foreach ($missing as $key => $type) {
                     self::updateOrCreate(
-                        ['user_id' => $user_id, 'key' => $key],
+                        ['user_id' => $user->id, 'key' => $key],
                         ['value' => $type === 'boolean' ? false : null]
                     );
                 }
