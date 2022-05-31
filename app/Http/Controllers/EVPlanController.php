@@ -37,6 +37,7 @@ class EVPlanController extends Controller
     {
         $plans = Plan::published()->get();
 
+
         return view('frontend.dashboard.plans.plans-management', compact('plans'));
     }
 

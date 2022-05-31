@@ -1380,7 +1380,13 @@ class StripeService
             }
 
             DB::commit();
+        } catch (\Throwable $e) {
+            Log::error($e);
+            DB::rollBack();
+            http_response_code(400);
+        }
 
+        try {
             // Fire Subscription(s) is created and paid Event
             if($stripe_billing_reason === 'subscription_create') {
                 do_action('invoice.paid.subscription_create', $user_subscriptions);
@@ -1389,15 +1395,14 @@ class StripeService
             else if($stripe_billing_reason === 'subscription_update') {
                 do_action('invoice.paid.subscription_update', $user_subscriptions);
             } 
-            // Fire Subscription(s) is cycled and paid Event
+            // Fire Subscription(sinvoice.paid.subscription_create) is cycled and paid Event
             else if($stripe_billing_reason === 'subscription_cycle') {
                 do_action('invoice.paid.subscription_cycle', $user_subscriptions);
             }
-        } catch (\Throwable $e) {
+        } catch(\Exception $e) {
             Log::error($e);
-            DB::rollBack();
-            http_response_code(400);
         }
+        
 
         http_response_code(200);
         die();

@@ -67,6 +67,8 @@ class PlansTable extends DataTableComponent
 
         if($this->for == 'me') {
             return [
+                Column::make('ID')
+                    ->excludeFromSelectable(),
                 Column::make('Title')
                     ->sortable()
                     ->excludeFromSelectable(),

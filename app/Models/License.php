@@ -26,17 +26,19 @@ class License extends WeBaseModel
 
     protected $casts = [
     ];
+    
+    public function user_subscription() {
+        return $this->morphedToMany(License::class, 'subject', 'user_subscription_relationships');
+    }
 
-    public function user_subscription()
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
     {
-        return $this->belongsTo(UserSubscription::class);
-    }
-
-    public function subject() {
-        return $this->morphTo('subject')->withoutGlobalScopes();
-    }
-
-    public function getDynamicModelUploadProperties() : array {
-        return [];
+        return $query->where(
+            fn ($query) =>  $query->where('serial_number', 'like', '%'.$term.'%')
+                ->orWhere('license_name', 'like', '%'.$term.'%')
+        );
     }
 }
