@@ -108,7 +108,7 @@
                                     </div>
 
                                     <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
-                                        class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                                        class="cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
 
                                         {{-- We should support following scenarios:
                                             1. *If trial mode is disabled and no plan is purchased: Buy now
@@ -120,9 +120,9 @@
                                         @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
                                             <span>{{ translate('Try for free') }}</span>
                                         @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                            <a href="{{ route('stripe.portal_session') }}">{{ translate('Change plan') }}</a>
+                                            <span>{{ translate('Change plan') }}</span>
                                         @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                            <a href="{{ route('stripe.portal_session') }}">{{ translate('Change plan') }}</a>
+                                            <span>{{ translate('Change plan') }}</span>
                                         @endif
                                     </a>
                                 @endif
