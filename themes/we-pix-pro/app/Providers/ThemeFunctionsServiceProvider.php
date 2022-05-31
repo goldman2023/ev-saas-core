@@ -136,6 +136,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     ]);
                 }
             });
+
+            // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT
+            // add_action('import.wordpress.blog-posts.end', function($data) {
+            //     dd($data);
+            // }, 10, 1);
         }
     }
 

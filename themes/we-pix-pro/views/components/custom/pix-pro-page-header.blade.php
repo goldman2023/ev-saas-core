@@ -1,5 +1,5 @@
 <section class="relative z-[2]  mt-[-90px] lg:pt-[210px]  lg:pb-[120px]  sm:pt-[170px]  sm:pb-[80px]  pt-[130px]  pb-[50px]   bg-[#f5f5f5]   ">
-    <div class="absolute z-[-1] top-0 bottom-0 left-0 right-0 flex justify-end">
+    <div class="absolute z-[-1] top-0 bottom-0 left-0 right-0 flex justify-end overflow-y-hidden">
         @include('svg.bkgs.hero-shapes')
     </div>
 

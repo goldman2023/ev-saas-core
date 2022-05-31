@@ -144,7 +144,7 @@
               </h3>
           </div>
             <h2 class="text-28 md:text-[48px] font-black leading-[28px] md:leading-[48px] text-gray-900 mb-3">{{ translate('Our Related Posts') }}</h2>
-            <p class="text-18 text-gray-600">{{ translate('All of our tools and technologies are designed, modiefied and updated keeping your needs in mind') }}</p>
+            <p class="text-18 text-gray-600">{{ translate('All of our tools and technologies are designed, modified and updated keeping your needs in mind') }}</p>
         </div>
         <div class="client-content pt-10 grid grid-cols-1 lg:grid-cols-3 gap-7">
             @if($related_blog_posts->isNotEmpty())
