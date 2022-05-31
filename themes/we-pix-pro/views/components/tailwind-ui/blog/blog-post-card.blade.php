@@ -5,7 +5,7 @@
         </div>
 
         <div class="w-full text-left px-6">
-            @if(!empty($blogPost->primary_category))
+            @if(!empty($blogPost->primary_category ?? null))
                 <div class="flex flex-row mb-2.5">
                     <span class="badge-info !rounded">{{ $blogPost->primary_category->name }}</span>
                 </div>
@@ -19,16 +19,18 @@
                 {{ $blogPost->excerpt }}
             </p>
 
-            <div class="w-full grid grid-cols-2">
-                <div class="flex items-center">
-                    <img src="{{ $blogPost->authors->first()->getThumbnail(['w' => 100]) }}" class="rounded-full object-cover w-8 h-8 mr-2.5" />
-                    <span class="text-14 text-gray-500 line-clamp-1">{{ $blogPost->authors->first()->name.' '.$blogPost->authors->first()->surname }}</span>
+            @if(!empty($blogPost->authors?->first() ?? null))
+                <div class="w-full grid grid-cols-2">
+                    <div class="flex items-center">
+                        <img src="{{ $blogPost->authors->first()->getThumbnail(['w' => 100]) }}" class="rounded-full object-cover w-8 h-8 mr-2.5" />
+                        <span class="text-14 text-gray-500 line-clamp-1">{{ $blogPost->authors->first()->name.' '.$blogPost->authors->first()->surname }}</span>
+                    </div>
+                    <div class="flex items-center justify-end md:justify-center text-gray-500">
+                        @svg('heroicon-o-calendar', ['class' => 'w-4 h-4 mr-2'])
+                        <span class="text-14">{{ $blogPost->created_at->format('M d, Y') }}</span>
+                    </div>
                 </div>
-                <div class="flex items-center justify-end md:justify-center text-gray-500">
-                    @svg('heroicon-o-calendar', ['class' => 'w-4 h-4 mr-2'])
-                    <span class="text-14">{{ $blogPost->created_at->format('M d, Y') }}</span>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 </a>
