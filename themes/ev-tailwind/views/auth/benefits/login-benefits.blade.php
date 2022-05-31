@@ -3,7 +3,7 @@
     <div class="">our community</div>
 </div>
 <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400 ">
-    {{ get_tenant_setting('registration_text', 'Join the global community of likeminded people') }}
+    {{ get_tenant_setting('Join the global community of likeminded people') }}
 </div>
 <div class="flex items-center mt-8 ">
     <div class="flex flex-0 items-center -space-x-1.5 ">
