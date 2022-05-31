@@ -25,9 +25,8 @@
                     <div we-slot="" name="button_group_slot" we-title="Buttons" class="w-full">
                         <div class="mt-5 flex justify-center lg:justify-start lg:mt-8">
                             <div class="rounded-md shadow">
-                                <a href="#"
-                                    class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary md:py-4 md:text-lg md:px-10"
-                                    target="_blank">
+                                <a href="/page/plans-pricing"
+                                    class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary md:py-4 md:text-lg md:px-10">
                                     {{ translate('Get started free') }}
                                 </a>
                             </div>
@@ -203,7 +202,7 @@
                 </h3>
             </div>
             <h2 class="mt-2 font-bold md:font-extrabold text-28 sm:text-36 lg:text-[48px] xl:text-[60px] leading-[28px] md:leading-[48px]  text-gray-900 mb-3">{{ translate('We put our clients first') }}</h2>
-            <p class="text-16 sm:text-xl text-gray-600">All of our tools and technologies are designed, modiefied &amp; <br class="d-inline"> updated keeping your needs in mind</p>
+            <p class="text-16 sm:text-xl text-gray-600">All of our tools and technologies are designed, modified &amp; <br class="d-inline"> updated keeping your needs in mind</p>
         </div>
         <div class="client-content pt-10 grid grid-cols-2 gap-10">
             <div class="col-span-2 md:col-span-1">
@@ -236,7 +235,7 @@
             </div>
         </div>
         <div class="flex items-center justify-center mt-8 gap-3">
-            <a href="/users/login" class="mb-0 text-lg2 font-bold text-primary-dark underline ">Start Free 1 Month Trial Now</a>
+            <a href="/page/plans-pricing" class="mb-0 text-lg2 font-bold text-primary-dark underline ">{{ translate('Start Free 1 Month Trial Now') }}</a>
         </div>
     </div>
 </section>
