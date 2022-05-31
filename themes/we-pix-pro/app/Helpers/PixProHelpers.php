@@ -55,7 +55,7 @@ if (!function_exists('pix_pro_create_license')) {
                 $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
                 
                 $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
-
+                
                 if(!empty($pix_pro_user['user_id'] ?? null)) {
                     $body = pix_pro_add_auth_params([
                         "UserID" => $pix_pro_user['user_id'],
@@ -70,7 +70,7 @@ if (!function_exists('pix_pro_create_license')) {
                     // if(!$is_trial) {
                         // If license is not trial, append more params
                         $body['SubscriptionId'] = $subscription->id;
-                        $body['LicenseSubscriptionType'] = $subscription->name;
+                        $body['LicenseSubscriptionType'] = $subscription->plan->name;
                         $body['Status'] = 'active';
                         $body['PurchaseDate'] = date('Y-m-d H:i:s', $subscription->start_date);
                         $body['ExpirationDate'] = date('Y-m-d H:i:s', $subscription->end_date);
@@ -85,6 +85,7 @@ if (!function_exists('pix_pro_create_license')) {
 
                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                         // If status is not success for any reason, throw an error
+                        http_response_code(400);
                         Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
                     } else {
 
@@ -110,7 +111,7 @@ if (!function_exists('pix_pro_create_license')) {
                                 DB::commit();
                             } catch(\Throwable $e) {
                                 DB::rollback();
-                                http_response_code(200);
+                                http_response_code(400);
                                 print_r($e);
                                 Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license on WeSaaS end and link it to user_subscription.', $e));
 
