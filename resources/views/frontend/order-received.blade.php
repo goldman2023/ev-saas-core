@@ -20,7 +20,7 @@
 
 <section class="bg-white">
   
-    <div class="max-w-3xl mx-auto px-4 py-16 sm:px-6 sm:py-16 lg:px-8">
+    <div class="max-w-3xl mx-auto px-4 py-8 sm:px-6 sm:py-16 lg:px-8">
       <div class="w-full mb-3">
         @if($order->isAbandoned())
           <h1 class="text-sm font-semibold uppercase tracking-wide text-danger">{{ translate('Not processed') }}</h1>
@@ -108,9 +108,22 @@
         
         @do_action('view.order-received.items.end', $order)
 
-        <div class="sm:ml-40 sm:pl-6">
+        <div class="grid grid-cols-3">
           @if(!$order->is_temp)
-            <dl class="grid grid-cols-2 gap-x-6 text-sm py-6">
+            <div class="col-span-3 md:col-span-1 py-4 md:py-6 space-y-0 space-x-3 md:space-x-0 md:space-y-3 border-b border-gray-200 md:border-none">
+              @if(!empty($order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? null))
+                <a href="{{ $order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? '#' }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
+                  {{ translate('Latest invoice') }}
+                </a>
+              @endif
+
+              @if($order->order_items?->first()?->subject?->isSubscribable() ?? false)
+                <a href="{{ route('stripe.portal_session') }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
+                  {{ translate('Billing portal') }}
+                </a>
+              @endif
+            </div>
+            <dl class="grid grid-cols-2 col-span-3 md:col-span-2 gap-x-6 text-sm py-6">
               @if($order->same_billing_shipping || !empty($order->shipping_address))
                 <div>
                   @if($order->same_billing_shipping)
@@ -148,31 +161,12 @@
                   </address>
                 </dd>
               </div>
+
+
             </dl>
           @endif
-  
-          <h4 class="sr-only">Payment</h4>
-          {{-- <dl class="grid grid-cols-2 gap-x-6 border-t border-gray-200 text-sm py-10">
-            <div>
-              <dt class="font-medium text-gray-900">Payment method</dt>
-              <dd class="mt-2 text-gray-700">
-                <p>Apple Pay</p>
-                <p>Mastercard</p>
-                <p><span aria-hidden="true">•••• </span><span class="sr-only">Ending in </span>1545</p>
-              </dd>
-            </div>
-            <div>
-              <dt class="font-medium text-gray-900">Shipping method</dt>
-              <dd class="mt-2 text-gray-700">
-                <p>DHL</p>
-                <p>Takes up to 3 working days</p>
-              </dd>
-            </div>
-          </dl> --}}
-  
-          <h3 class="sr-only">Summary</h3>
-  
-          <dl class="space-y-6 border-t border-gray-200 text-sm pt-6">
+
+          <dl class="space-y-6 border-t border-gray-200 text-sm pt-6 col-start-1 md:col-start-2 col-end-4">
             <div class="flex justify-between">
               <dt class="font-medium text-gray-900">{{ translate('Subtotal') }}</dt>
               <dd class="text-gray-700">{{ \FX::formatPrice($order->base_price) }}</dd>
