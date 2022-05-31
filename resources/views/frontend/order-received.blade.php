@@ -112,13 +112,13 @@
           @if(!$order->is_temp)
             <div class="col-span-3 md:col-span-1 py-4 md:py-6 space-y-0 space-x-3 md:space-x-0 md:space-y-3 border-b border-gray-200 md:border-none">
               @if(!empty($order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? null))
-                <a href="{{ $order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? '#' }}" target="_blank" class="btn-primary">
+                <a href="{{ $order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? '#' }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
                   {{ translate('Latest invoice') }}
                 </a>
               @endif
 
               @if($order->order_items?->first()?->subject?->isSubscribable() ?? false)
-                <a href="{{ route('stripe.portal_session') }}" target="_blank" class="btn-primary">
+                <a href="{{ route('stripe.portal_session') }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
                   {{ translate('Billing portal') }}
                 </a>
               @endif
