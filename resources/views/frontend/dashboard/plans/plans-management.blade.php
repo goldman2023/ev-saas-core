@@ -119,15 +119,15 @@
                                         @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
                                             <span>{{ translate('Try for free') }}</span>
                                         @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                            <span>{{ translate('Change plan') }}</span>
+                                            <a href="{{ route('stripe.portal_session') }}">{{ translate('Change plan') }}</a>
                                         @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                            <span>{{ translate('Change plan') }}</span>
+                                            <a href="{{ route('stripe.portal_session') }}">{{ translate('Change plan') }}</a>
                                         @endif
                                     </a>
                                 @endif
 
-                                
-                                
+
+
                             </div>
                         </div>
                     </div>
