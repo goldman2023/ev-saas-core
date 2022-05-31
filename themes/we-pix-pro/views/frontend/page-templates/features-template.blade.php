@@ -7,7 +7,7 @@
 {{-- Features table --}}
 <div class="bg-gradient-to-b from-white to-[#EFF0F4] py-16 sm:py-24 lg:py-32">
     <div class="relative mx-auto max-w-full px-4 text-center sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
-  
+
         @php
             $items = [
                 [
@@ -135,7 +135,7 @@
             @endforeach
         </div>
 
-        
+
 
       {{-- ITT Group --}}
       {{-- <div we-slot name="itt_group_slot" we-title="Features" class="w-full">
@@ -145,7 +145,7 @@
             class="grid gap-8 grid-cols-1  sm:grid-cols-2 lg:grid-cols-3 "
             :per_row="$weData['itt_group_slot']['components']['itts']['data']['per_row'] ?? []"
             :itt-group="$weData['itt_group_slot']['components']['itts']['data']['itt_group'] ?? []">
-  
+
             Add component content here instead of the image-title-text-group.blade and use $component->{property} to get the properties
             @if(!empty($component->ittGroup))
               @foreach($component->ittGroup as $itt)
@@ -153,23 +153,23 @@
                   @if(!empty($itt['href'] ?? null))
                     <a class="block w-full" href="{{ $itt['href'] }}" target="{{ $itt['target'] ?? '_self' }}">
                   @endif
-  
+
                   <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg h-full pb-6 overflow-hidden">
                     <div class="w-full">
                       @if(!empty($itt['image'] ?? null))
                         <div class="w-full aspect-square inline-flex items-center justify-center rounded-md ">
-                          <img src="{{ IMG::get($itt['image']['file_name'], IMG::mergeWithDefaultOptions($itt['options'] ?? [], 'original')) }}" alt="{{ $itt['image_alt_text'] ?? '' }}" 
+                          <img src="{{ IMG::get($itt['image']['file_name'], IMG::mergeWithDefaultOptions($itt['options'] ?? [], 'original')) }}" alt="{{ $itt['image_alt_text'] ?? '' }}"
                                 class="w-full object-cover" />
                         </div>
                       @endif
-  
+
                       <div class="w-full text-left px-6">
                         @if(!empty($itt['title'] ?? null) && !empty($itt['title_tag'] ?? null))
                           <{{ $itt['title_tag'] }} class="mt-6 text-20 font-medium tracking-tight text-gray-900">
                             {{ $itt['title'] }}
                           </{{ $itt['title_tag'] }}>
                         @endif
-  
+
                         @if(!empty($itt['text'] ?? null))
                           <p class="mt-3 text-base text-gray-500 line-clamp-5">
                             {{ $itt['text'] }}
@@ -178,28 +178,28 @@
                       </div>
                     </div>
                   </div>
-  
+
                   @if(!empty($itt['href'] ?? null))
                     </a>
                   @endif
                 </div>
               @endforeach
             @endif
-  
+
         </x-ev.image-title-text-group>
       </div> --}}
-  
+
       {{-- Buttons --}}
       {{-- <div we-slot name="button_group_slot" we-title="Buttons" class="w-full mt-[40px]">
         <x-ev.link-button-group
             we-name="buttons"
             we-title="Buttons"
             class="{{ $data['button_group_slot']['components']['buttons']['data']['class'] ?? '' }}""
-            class="w-full flex justify-center" 
+            class="w-full flex justify-center"
             :button-group="$weData['button_group_slot']['components']['buttons']['data']['button_group'] ?? []">
         </x-ev.link-button-group>
       </div> --}}
-  
+
     </div>
   </div>
 
@@ -210,33 +210,35 @@
             {{-- <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8"> --}}
             <div class="relative">
                 <h2 class="sr-only">Contact us</h2>
-    
+
                 <div class="grid grid-cols-1 lg:grid-cols-3">
                     <!-- Contact form -->
                     <div class="py-10 px-6 sm:px-10 lg:col-span-2 xl:p-12">
                         <h3 class="text-18 font-bold text-gray-900">{{ translate('Have Questions? Reach Out To Us') }}</h3>
                         <livewire:forms.contact-form />
                     </div>
-    
+
                     <!-- Contact information -->
                     <div class="relative overflow-hidden py-10 px-6  sm:px-10 xl:p-12">
                         <h3 class="text-[20px] font-bold text-typ-1">{{ translate('Technical & Support Center') }}</h3>
-                        <p class="mt-3 sm:mt-6 text-14 text-typ-2 max-w-3xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <p class="mt-3 sm:mt-6 text-14 text-typ-2 max-w-3xl">
+                            {{ translate('Contact us and we will reach out to you in 1 working day.') }}
+                        </p>
                         <div class="flex flex-col space-y-1 text-14 py-6 text-typ-2">
                             <span>{{ translate('Aušros al. 39,') }}</span>
                             <span>{{ translate('LT-76300') }}</span>
                             <span>{{ translate('Šiauliai, Lithuania') }}</span>
                         </div>
                         <dl class="mt-2 space-y-3">
-                            <dt><span class="sr-only">Phone number</span></dt>
+                            <dt><span class="sr-only">{{ translate('Phone number') }}</span></dt>
                             <dd class="flex text-base text-typ-3">
                                 @svg('heroicon-o-phone', ['class' => 'flex-shrink-0 w-6 h-6 text-primary'])
-                                <span class="ml-3">+1 (555) 123-4567</span>
+                                <span class="ml-3">{{ translate('+1 (555) 123-4567') }}</span>
                             </dd>
-                            <dt><span class="sr-only">Email</span></dt>
+                            <dt><span class="sr-only">{{ translate('Email') }}</span></dt>
                             <dd class="flex text-base text-typ-3">
                                 @svg('heroicon-o-mail', ['class' => 'flex-shrink-0 w-6 h-6 text-primary'])
-                                <span class="ml-3">support@example.com</span>
+                                <span class="ml-3">{{ translate('support@example.com') }}</span>
                             </dd>
                         </dl>
                     </div>
