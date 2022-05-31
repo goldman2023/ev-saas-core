@@ -34,10 +34,10 @@ class WordPressAPIService
         ];
     }
 
-    public function getBlogPosts($page = 1) {
+    public function getBlogPosts($page = 1, $per_age = 10) {
         $res = Http::get($this->route.'/posts', [
             '_fields' => 'id,date,modified,slug,status,type,featured_media,title,content,excerpt,categories,yoast_head_json',
-            'per_page' => 10,
+            'per_page' => $per_age,
             'page' => $page
         ]);
 

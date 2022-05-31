@@ -1395,7 +1395,7 @@ class StripeService
             else if($stripe_billing_reason === 'subscription_update') {
                 do_action('invoice.paid.subscription_update', $user_subscriptions);
             } 
-            // Fire Subscription(sinvoice.paid.subscription_create) is cycled and paid Event
+            // Fire Subscription(s) is cycled and paid Event
             else if($stripe_billing_reason === 'subscription_cycle') {
                 do_action('invoice.paid.subscription_cycle', $user_subscriptions);
             }
@@ -1601,7 +1601,7 @@ class StripeService
                         $subscription->data = $data;
 
                         // Check if subscription was upgraded/downgraded
-                        if(count($previous_attributes?->items?->data ?? 0) > 0) {
+                        if(count($previous_attributes?->items?->data ?? []) > 0) {
                             if(get_tenant_setting('multiplan_purchase')) {
                                 // Upgrade/Downgrade when multiple subsriptions feature is enabled
                             } else {

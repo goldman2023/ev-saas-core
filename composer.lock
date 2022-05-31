@@ -4,8 +4,71 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20519110d51abb64ea6cb3721c2d12b7",
+    "content-hash": "d8d87c1364d89e3b41a6a4f0e88b85f9",
     "packages": [
+        {
+            "name": "ammardev/laravel-wp-hash-driver",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ammardev/laravel-wp-hash-driver.git",
+                "reference": "7a18c9ebbed0fbbb4f0f8e9634e05c267389e149"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ammardev/laravel-wp-hash-driver/zipball/7a18c9ebbed0fbbb4f0f8e9634e05c267389e149",
+                "reference": "7a18c9ebbed0fbbb4f0f8e9634e05c267389e149",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/hashing": "^6.0|^7.0|^8.0|^9.0",
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0",
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Ammardev\\LaravelWpHashDriver\\LaravelWpHashDriverServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ammardev\\LaravelWpHashDriver\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ammar Al-Khawaldeh",
+                    "email": "me@ammar.dev",
+                    "homepage": "https://ammar.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Supports Wordpress passwords hashing and checking in Laravel's Hash facade.",
+            "homepage": "https://github.com/ammardev/laravel-wp-hash-driver",
+            "keywords": [
+                "hash",
+                "hashing",
+                "laravel",
+                "passwords",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/ammardev/laravel-wp-hash-driver/issues",
+                "source": "https://github.com/ammardev/laravel-wp-hash-driver/tree/v1.0.3"
+            },
+            "time": "2022-02-10T22:34:06+00:00"
+        },
         {
             "name": "automattic/woocommerce",
             "version": "3.1.0",

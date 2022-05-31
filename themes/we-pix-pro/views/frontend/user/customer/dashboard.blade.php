@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="px-4 lg:px-7 py-5 flex flex-col items-center text-center">
-                        <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-15 rounded-full object-cover"
+                        <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-15 object-cover"
                             :image="get_site_logo()">
                         </x-tenant.system.image>
 

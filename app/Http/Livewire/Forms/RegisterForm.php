@@ -204,8 +204,8 @@ class RegisterForm extends Component
             'password' => Hash::make($this->password),
         ]);
 
-        // Save md5 password in core_meta
-        $this->user->saveCoreMeta('password_md5', WpPassword::make($this->password));
+        // Save WP md5 password in core_meta
+        $this->user->saveCoreMeta('password_md5', Hash::driver('wp')->make($this->password));
 
         if (Cookie::has('referral_code')) {
             $referral_code = Cookie::get('referral_code');
