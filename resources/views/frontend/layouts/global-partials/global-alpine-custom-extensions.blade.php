@@ -3,7 +3,7 @@
         // Get Stripe Checkout permalink from provided parameters
         Alpine.magic('getStripeCheckoutPermalink', () => {
             @if(Auth::check() && auth()->user()->isSubscribed())
-                return "{{ route('stripe.portal_session') }}";
+                return () => { return "{{ route('stripe.portal_session') }}"};
             @else
                 return (params) => {
                     let data_params = {
