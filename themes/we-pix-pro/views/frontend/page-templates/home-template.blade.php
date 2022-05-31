@@ -25,7 +25,7 @@
                     <div we-slot="" name="button_group_slot" we-title="Buttons" class="w-full">
                         <div class="mt-5 flex justify-center lg:justify-start lg:mt-8">
                             <div class="rounded-md shadow">
-                                <a href="/pricing"
+                                <a href="/page/pricing"
                                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary md:py-4 md:text-lg md:px-10"
                                     >
                                     {{ translate('Start for free') }}
