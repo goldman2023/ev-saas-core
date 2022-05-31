@@ -71,7 +71,7 @@ if (!function_exists('pix_pro_create_license')) {
                         // If license is not trial, append more params
                         $body['SubscriptionId'] = $subscription->id;
                         $body['LicenseSubscriptionType'] = $subscription->name;
-                        $body['Status'] = 'pending';
+                        $body['Status'] = 'active';
                         $body['PurchaseDate'] = date('Y-m-d H:i:s', $subscription->start_date);
                         $body['ExpirationDate'] = date('Y-m-d H:i:s', $subscription->end_date);
                         $body['OrderCurrency'] = $stripe_subscription->items->data[0]->price->currency ?? 'eur'; // TODO: This is different when multiplan is enabled

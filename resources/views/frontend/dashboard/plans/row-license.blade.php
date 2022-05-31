@@ -11,7 +11,7 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle  text-center">
-    {{ $row->license?->first()?->serial_number ?? '' }}
+    {{ empty($row->license?->first()?->serial_number ?? null) ? translate('Generating...') : ($row->license?->first()?->serial_number ?? '') }}
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle  text-center">

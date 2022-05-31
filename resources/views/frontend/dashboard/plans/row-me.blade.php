@@ -27,23 +27,30 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
-    @if($row->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
-        <span class="badge-success">
-            {{ \App\Enums\PaymentStatusEnum::paid()->label }}
+    @if($row->status === \App\Enums\UserSubscriptionStatusEnum::trial()->value)
+        <span class="badge-warning">
+            {{ translate('Payment on: ').Carbon::createFromTimestamp($row->end_date)->format('d. M Y, H:i') }}
         </span>
-    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
-        <span class="badge-danger">
-            {{ \App\Enums\PaymentStatusEnum::unpaid()->label }}
-        </span>
-    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value)
-        <span class="badge-dark">
-            {{ \App\Enums\PaymentStatusEnum::canceled()->label }}
-        </span>
-    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
-        <span class="badge-info">
-            {{ \App\Enums\PaymentStatusEnum::pending()->label }}
-        </span>
+    @else
+        @if($row->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
+            <span class="badge-success">
+                {{ \App\Enums\PaymentStatusEnum::paid()->label }}
+            </span>
+        @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
+            <span class="badge-danger">
+                {{ \App\Enums\PaymentStatusEnum::unpaid()->label }}
+            </span>
+        @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value)
+            <span class="badge-dark">
+                {{ \App\Enums\PaymentStatusEnum::canceled()->label }}
+            </span>
+        @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
+            <span class="badge-info">
+                {{ \App\Enums\PaymentStatusEnum::pending()->label }}
+            </span>
+        @endif
     @endif
+    
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">

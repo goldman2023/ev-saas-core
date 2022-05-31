@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.0|^7.4",
         "ext-gd": "*",
+        "ammardev/laravel-wp-hash-driver": "^1.0",
         "bavix/laravel-wallet": "^8.3",
         "bkwld/cloner": "^3.10",
         "blade-ui-kit/blade-heroicons": "^1.3",
