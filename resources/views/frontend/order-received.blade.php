@@ -20,7 +20,7 @@
 
 <section class="bg-white">
   
-    <div class="max-w-3xl mx-auto px-4 py-16 sm:px-6 sm:py-16 lg:px-8">
+    <div class="max-w-3xl mx-auto px-4 py-8 sm:px-6 sm:py-16 lg:px-8">
       <div class="w-full mb-3">
         @if($order->isAbandoned())
           <h1 class="text-sm font-semibold uppercase tracking-wide text-danger">{{ translate('Not processed') }}</h1>
