@@ -74,10 +74,12 @@
             </div>
             
             <div class="w-full flex flex-col sm:flex-row justify-center items-center">
-                <div class="flex items-center mb-3 sm:mb-0 mr-0 sm:mr-10">
-                    <img src="{{ $authors?->first()?->getThumbnail(['w' => 100]) ?? '' }}" class="rounded-full object-cover w-8 h-8 mr-2.5" />
-                    <span class="text-14 text-700 line-clamp-1 text-typ-2">{{ ($authors?->first()?->name ?? '').' '.($authors->first()?->surname ?? '') }}</span>
-                </div>
+                @if(!empty($authors?->first()))
+                    <div class="flex items-center mb-3 sm:mb-0 mr-0 sm:mr-10">
+                        <img src="{{ $authors?->first()?->getThumbnail(['w' => 100]) ?? '' }}" class="rounded-full object-cover w-8 h-8 mr-2.5" />
+                        <span class="text-14 text-700 line-clamp-1 text-typ-2">{{ ($authors?->first()?->name ?? '').' '.($authors->first()?->surname ?? '') }}</span>
+                    </div>
+                @endif
                 <div class="flex items-center justify-end md:justify-center text-typ-2">
                     @svg('heroicon-o-calendar', ['class' => 'w-4 h-4 mr-2'])
                     <span class="text-14">{{ $blog_post->created_at->format('M d, Y') }}</span>
@@ -100,25 +102,28 @@
                     {!! $blog_post->content !!}
                 </div>
 
-                <div class="w-full block pb-5">
-                    <strong class="block text-24 font-bold mb-[24px] text-typ-2">{{ translate('About the author') }}</strong>
+                @if(!empty($authors?->first()))
+                    <div class="w-full block pb-5">
+                        <strong class="block text-24 font-bold mb-[24px] text-typ-2">{{ translate('About the author') }}</strong>
 
-                    <div class="w-full border-lg border-primary bg-primary-light p-6 sm:p-[30px]">
-                        <div class="w-full flex items-start">
-                            <img src="{{ $authors?->first()?->getThumbnail(['w' => 100]) ?? '' }}" alt="" class="w-[100px] h-[100px] object-cover rounded-full mr-[30px] sm:mr-6">
+                        <div class="w-full border-lg border-primary bg-primary-light p-6 sm:p-[30px]">
+                            <div class="w-full flex items-start">
+                                <img src="{{ $authors?->first()?->getThumbnail(['w' => 100]) ?? '' }}" alt="" class="w-[100px] h-[100px] object-cover rounded-full mr-[30px] sm:mr-6">
 
-                            <div class="w-full flex-col">
-                                <strong class="text-18 sm:text-20 text-typ-2">
-                                    {{ ($authors?->first()?->name ?? '').' '.($authors->first()?->surname ?? '') }}
-                                </strong>
+                                <div class="w-full flex-col">
+                                    <strong class="text-18 sm:text-20 text-typ-2">
+                                        {{ ($authors?->first()?->name ?? '').' '.($authors->first()?->surname ?? '') }}
+                                    </strong>
 
-                                <p class="text-16 text-typ-3">
-                                    {{ $authors?->first()?->getUserMeta('short_about_me') ?? '' }}
-                                </p>
+                                    <p class="text-16 text-typ-3">
+                                        {{ $authors?->first()?->getUserMeta('short_about_me') ?? '' }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
+                
             </div>
             {{-- <div class="col-span-4">
                 <div class="w-full">
