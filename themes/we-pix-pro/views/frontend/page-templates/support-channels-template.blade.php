@@ -74,7 +74,7 @@
           <div class="col-span-12 md:col-span-6 flex flex-col" @click="replaceVideo($el.querySelector('.iframe-wrapper'), video_src)" x-data="{video_src: 'https://www.youtube.com/embed/8rXemRWyKMM'}">
             <div class="cursor-pointer relative iframe-wrapper h-[200px] md:h-[300px] mb-6 overflow-hidden">
               {{-- <div class="absolute w-full h-full bg-gradient-to-b from-transparent to-primary"></div> --}}
-              <div class="shadow-lg absolute w-12 h-12 bg-primary flex justify-center items-center top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-full border border-gray-900">
+              <div class="shadow-lg absolute w-12 h-12 bg-gray-900 flex justify-center items-center top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-full border border-gray-900">
                 @svg('heroicon-o-play', ['class' => 'w-9 h-9 text-white'])
               </div>
               <img src="https://i.ytimg.com/vi/8rXemRWyKMM/hqdefault.jpg" class="w-full h-full object-cover cursor-pointer rounded-lg border border-gray-200" />
@@ -83,7 +83,7 @@
           </div>
           <div class="col-span-12 md:col-span-6 flex flex-col" @click="replaceVideo($el.querySelector('.iframe-wrapper'), video_src)" x-data="{video_src: 'https://www.youtube.com/embed/dPqoldgyT2M'}">
             <div class="cursor-pointer relative iframe-wrapper h-[200px] md:h-[300px] mb-6">
-              <div class="shadow-lg absolute w-12 h-12 bg-primary flex justify-center items-center top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-full border border-gray-900">
+              <div class="shadow-lg absolute w-12 h-12 bg-gray-900 flex justify-center items-center top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-full border border-gray-900">
                 @svg('heroicon-o-play', ['class' => 'w-9 h-9 text-white'])
               </div>
               <img src="https://i.ytimg.com/vi/8rXemRWyKMM/hqdefault.jpg" class="w-full h-full object-cover cursor-pointer rounded-lg border border-gray-200" />
