@@ -452,6 +452,30 @@
                     </div>
                     <!-- END Enable Stripe Checkout  -->
 
+                    <!-- Stripe Enable Stripe Automatic Tax -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Enable Stripe Automatic Tax') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.toggle field="paymentMethod.stripe_automatic_tax_enabled" />
+                        </div>
+                    </div>
+                    <!-- END Enable Stripe Automatic Tax  -->
+
+                    <!-- Stripe Price Tax Behavior -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}" x-show="paymentMethod.stripe_automatic_tax_enabled">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Include tax in prices?') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.select field="paymentMethod.stripe_price_tax_behavior" :items="['inclusive' => translate('Yes'), 'exclusive' => translate('No')]" selected="paymentMethod.stripe_price_tax_behavior" :nullable="false"></x-dashboard.form.select>
+                        </div>
+                    </div>
+                    <!-- END Price Tax Behavior  -->
+
                     <!-- Stripe Inline Credit Card Mode -->
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                         <label class="block text-sm font-medium text-gray-900 ">
@@ -507,6 +531,8 @@
                         @click="
                             $wire.set('paymentMethod.stripe_mode', paymentMethod.stripe_mode, true);
                             $wire.set('paymentMethod.stripe_checkout_enabled', paymentMethod.stripe_checkout_enabled, true);
+                            $wire.set('paymentMethod.stripe_automatic_tax_enabled', paymentMethod.stripe_automatic_tax_enabled, true);
+                            $wire.set('paymentMethod.stripe_price_tax_behavior', paymentMethod.stripe_price_tax_behavior, true);
                             $wire.set('paymentMethod.stripe_inline_credit_card_form', paymentMethod.stripe_inline_credit_card_form, true);
                             $wire.set('paymentMethod.stripe_capture_charge', paymentMethod.stripe_capture_charge, true);
                             $wire.set('paymentMethod.stripe_saved_cards_payment', paymentMethod.stripe_saved_cards_payment, true);
