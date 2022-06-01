@@ -59,7 +59,7 @@ $datasets = get_tenant_setting('pix_pro_dataset_samples');
                 {{-- <p class="mt-3 text-16 md:text-18 text-gray-500 sm:mt-4">Nullam risus blandit ac aliquam justo
                     ipsum. Quam mauris volutpat massa dictumst amet. Sapien tortor lacus arcu.</p> --}}
             </div>
-            <div class="mt-8 grid gap-16 pt-8 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-12">
+            <div class="grid gap-16 pt-8 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-12">
                 @foreach($datasets as $dataset)
                 <div>
                     <div class="h-full block mt-4 text-center py-6 px-4 border border-gray-200 rounded-lg">
