@@ -91,6 +91,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 pix_pro_create_license($user_subscriptions);
             }, 20, 1);
 
+            add_action('invoice.paid.subscription_cycle', function($user_subscriptions) {
+                pix_pro_extend_license($user_subscriptions);
+            }, 20, 1);
+
 
             // View actions
             add_action('view.order-received.items.end', function($order) {

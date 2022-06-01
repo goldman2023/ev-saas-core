@@ -129,97 +129,60 @@ if (!function_exists('pix_pro_create_license')) {
     }
 }
 
-// RENEW LICENSE
-// if (!function_exists('pix_pro_renew_license')) {
-//     function pix_pro_renew_license($user_subscriptions) {
-//         $route_trial = pix_pro_endpoint().'/paid/renew_licenses/';
-//         $route_paid = pix_pro_endpoint().'/paid/renew_licenses/';
+// EXTEND LICENSE
+if (!function_exists('pix_pro_extend_license')) {
+    function pix_pro_extend_license($user_subscriptions) {
+        $route_trial = pix_pro_endpoint().'/paid/renew_licenses/';
+        $route_paid = pix_pro_endpoint().'/paid/renew_licenses/';
 
-//         if ($user_subscriptions->isNotEmpty()) {
-//             foreach($user_subscriptions as $subscription) {
+        if ($user_subscriptions->isNotEmpty()) {
+            foreach($user_subscriptions as $subscription) {
 
-//                 $stripe_subscription_id = $subscription->data[StripeService::getStripeMode().'stripe_subscription_id'];
+                $stripe_subscription_id = $subscription->data[StripeService::getStripeMode().'stripe_subscription_id'];
 
-//                 $stripe_subscription = StripeService::stripe()->subscriptions->retrieve(
-//                     $stripe_subscription_id,
-//                     []
-//                   );
+                $stripe_subscription = StripeService::stripe()->subscriptions->retrieve(
+                    $stripe_subscription_id,
+                    []
+                  );
 
-//                 $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
+                $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
                 
-//                 $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
+                $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
-//                 if(!empty($pix_pro_user['user_id'] ?? null)) {
-//                     $body = pix_pro_add_auth_params([
-//                         "UserID" => $pix_pro_user['user_id'],
-//                         "Qty" => 1, // THIS IS NUMBER OF TRIAL LICENSES TO BE CREATED! - WE SHOULD ALWAYS PUT 1, since we loop it on our end!
-//                         "LicenseType" => 'full', // TODO: Can be `manual` too
-//                         "LicenseCloudService" => 0, // TODO: Take from plan attributes
-//                         "LicenseOfflineService" => 1, // TODO: Take from plan attributes
-//                         "LicenseImageLimit" => 150, // TODO: Take from plan attributes
-//                         "PackageTypes" => 'mining', // TODO: Take from plan attributes
-//                     ]);
+                if(!empty($pix_pro_user['user_id'] ?? null)) {
+                    $body = pix_pro_add_auth_params([
+                        "LicenseImageLimit" => 150, // TODO: Take from plan attributes
+                    ]);
     
 //                     // if(!$is_trial) {
 //                         // If license is not trial, append more params
-//                         $body['SubscriptionId'] = $subscription->id;
-//                         $body['LicenseSubscriptionType'] = $subscription->name;
-//                         $body['Status'] = 'pending';
-//                         $body['PurchaseDate'] = date('Y-m-d H:i:s', $subscription->start_date);
-//                         $body['ExpirationDate'] = date('Y-m-d H:i:s', $subscription->end_date);
-//                         $body['OrderCurrency'] = $stripe_subscription->items->data[0]->price->currency ?? 'eur'; // TODO: This is different when multiplan is enabled
-//                         $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
-//                         $body['Tax'] = 21; // TODO: Make this respect Stripe tax!
+                        $body['SubscriptionId'] = $subscription->id;
+                        $body['NewStatus'] = 'active';
+                        $body['PurchaseDate'] = date('Y-m-d H:i:s', $subscription->start_date);
+                        $body['ExpirationDate'] = date('Y-m-d H:i:s', $subscription->end_date);
+                        $body['OrderCurrency'] = $stripe_subscription->items->data[0]->price->currency ?? 'eur'; // TODO: This is different when multiplan is enabled
+                        $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
+                        $body['Tax'] = 21; // TODO: Make this respect Stripe tax!
 //                     // }
 
-//                     $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
+                    $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
                     
-//                     $response_json = $response->json(); 
+                    $response_json = $response->json(); 
 
-//                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
-//                         // If status is not success for any reason, throw an error
-//                         Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
-//                     } else {
-
-//                         if(!empty($response_json['data'] ?? null)) {
-//                             // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
-//                             $pix_license = $response_json['data'];
-                            
-//                             DB::beginTransaction();
-
-//                             try {
-//                                 $license = new License();
-//                                 $license->license_name = $pix_license['license_name'] ?? '';
-//                                 $license->serial_number = $pix_license['serial_number'] ?? '';
-//                                 $license->license_type = $pix_license['license_type'] ?? '';
-//                                 $license->save();
-
-//                                 // Add a license <-> user_subscription relationship
-//                                 DB::table('user_subscription_relationships')->updateOrInsert(
-//                                     ['user_subscription_id' => $subscription->id, 'subject_id' => $license->id, 'subject_type' => $license::class],
-//                                     ['created_at' => date('Y:m:d H:i:s'), 'updated_at' => date('Y:m:d H:i:s')]
-//                                 );
-
-//                                 DB::commit();
-//                             } catch(\Throwable $e) {
-//                                 DB::rollback();
-//                                 http_response_code(200);
-//                                 print_r($e);
-//                                 Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license on WeSaaS end and link it to user_subscription.', $e));
-
-//                                 die();
-//                             }
-                            
-//                         }
-//                     }
+                    if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                        // If status is not success for any reason, throw an error
+                        Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to EXTEND a license(order) in pix-pro API DB. check the response below.', $response_json));
+                    } else {
+                        // If everything is ok...should we add anything else???
+                    }
                     
-//                 } else {
-//                     Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, Could not get the user y email from pix-pro api', ''));
-//                 }
-//             }
-//         }
-//     }
-// }
+                } else {
+                    Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to EXTEND a license(order) in pix-pro API DB. Could not get the user by email from pix-pro api', ''));
+                }
+            }
+        }
+    }
+}
 
 if (!function_exists('pix_pro_get_user')) {
     function pix_pro_get_user($user) {

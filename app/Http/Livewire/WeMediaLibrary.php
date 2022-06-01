@@ -160,7 +160,7 @@ class WeMediaLibrary extends Component
 
                     }
 
-                    $new_filename = time().'_'.$media->getClientOriginalName();
+                    $new_filename = time().'_'.preg_replace("/\s+/", "", $media->getClientOriginalName());
 
                     $wtf = $media->storeAs($tenant_path, $new_filename, 'do');
                     $upload->extension = $extension;
