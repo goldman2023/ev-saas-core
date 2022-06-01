@@ -41,7 +41,7 @@ class PlansObserver
      * @param Plan $plan
      * @return void
      */
-    public function deleting(Plan $plan)
+    public function deleted(Plan $plan)
     {
         // TODO: Add removing stocks/uplaods-relations/attribute-relations/and other polymorphic relations!
         //TODO: IT SHOULD BE ON FORCE DELETE!!!

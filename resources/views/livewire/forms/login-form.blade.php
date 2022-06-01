@@ -80,8 +80,8 @@
         </div>
 
         <div class="text-center">
-            <span class="text-12 w-full text-muted">{{ translate('Do not have an account?') }}</span>
-            <a class="text-12 font-semibold" href="{{ route('user.registration').(!empty($redirect_url) ? '?redirect_url='.urlencode($redirect_url) : '') }}">
+            <span class="text-16 w-full text-muted">{{ translate('Do not have an account?') }}</span>
+            <a class="text-16 text-primary font-semibold" href="{{ route('user.registration').(!empty($redirect_url) ? '?redirect_url='.urlencode($redirect_url) : '') }}">
                 {{ translate('Sign Up') }}
             </a>
 
