@@ -11,7 +11,7 @@
         </svg>
     </button>
     @endguest
-    <button type="button" @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'})"
+   {{--  <button type="button" @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'})"
         class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         <span class="sr-only">{{ translate('View Cart') }}</span>
         <!-- Heroicon name: outline/bell -->
@@ -26,7 +26,7 @@
         @svg('heroicon-o-heart', ['class' => 'h-6 w-6'])
 
     </button>
-
+ --}}
     <!-- Profile dropdown -->
     <div class="ml-3 relative" x-data="{
         show: false,
