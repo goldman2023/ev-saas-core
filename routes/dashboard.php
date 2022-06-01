@@ -15,6 +15,7 @@ use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EVDownloadsController;
+use App\Http\Controllers\CRMController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\Integrations\IntegrationsController;
 use App\Http\Controllers\Integrations\WooCommerceController;
@@ -123,6 +124,9 @@ Route::middleware([
         Route::get('/account-settings/shops', [EVAccountController::class, 'account_shops_settings'])->name('my.account.shops');
         Route::get('/profile/{id}', [EVAccountController::class, 'user_profile'])->name('user.profile');
         Route::get('/user/{id}/details', [EVAccountController::class, 'user_details'])->name('user.details');
+
+        /* CRM */
+        Route::get('/crm/customers', [CRMController::class, 'customers_index'])->name('crm.all_customers');
         
 
         /* Settings pages*/

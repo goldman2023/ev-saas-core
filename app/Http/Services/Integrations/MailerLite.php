@@ -70,7 +70,7 @@ class MailerLite
         try {
             $groups = $this->getGroups();
 
-            // Try by name andthen by ID
+            // Try by name and then by ID
             if(empty($group = $groups->where('name', $identifier)->first())) {
                 $group = $groups->where('id', $identifier)->first();
             }
@@ -119,6 +119,25 @@ class MailerLite
                 'name' => $user->name.' '.$user->surname,
                 'type' => 'active',
                 'fields' => $fields
+            ]);
+
+            return $subscriber;
+        } catch(\Throwable $e) {
+            // TODO: Discern between different Response error codes...
+            Log::warning($e->getMessage());
+        }
+
+        return false;
+    }
+
+    public function addEmailToNewsletterGroup($email) {
+        try {
+            $group = $this->getGroup(WeMailingListsEnum::newsletter()->label);
+
+            $subscriber = $this->mailerlite->groups()->addSubscriber($group->id, [
+                'email' => $email,
+                'name' => $email,
+                'type' => 'active',
             ]);
 
             return $subscriber;
