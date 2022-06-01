@@ -280,6 +280,23 @@ trait IsPaymentMethod
                     ],
                 ],
                 [
+                    'property_name' => 'stripe_automatic_tax_enabled',
+                    'value' => $this->data->stripe_automatic_tax_enabled ?? '',
+                    'rules' => ['boolean'],
+                    'messages' => [
+                        'boolean' => translate('Stripe automatic tax should either be enabled or disabled'),
+                    ],
+                ],
+                [
+                    'property_name' => 'stripe_price_tax_behavior',
+                    'value' => $this->data->stripe_price_tax_behavior ?? '',
+                    'rules' => ['exclude_if:paymentMethod.stripe_automatic_tax_enabled,false', 'required', 'in:inclusive,exclusive'],
+                    'messages' => [
+                        'required' => translate('Stripe price tax behavior must be set'),
+                        'in' => translate('Stripe price tax behavior must either be `inclusive` or `exclusive`'),
+                    ],
+                ],
+                [
                     'property_name' => 'stripe_statement_descriptor',
                     'value' => $this->data->stripe_statement_descriptor ?? '',
                     'rules' => [],
