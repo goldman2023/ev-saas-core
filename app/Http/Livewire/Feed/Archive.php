@@ -123,7 +123,7 @@ class Archive extends Component
     protected function query()
     {
         return  app($this->model_class)::query()
-            ->where('status' , 'published')
+            ->where('status' , StatusEnum::published()->value)
             ->when($this->sort_by === 'discount', fn ($query, $value) => $query->discountDesc())
             ->when($this->sort_by === 'price', fn ($query, $value) => $query->priceAsc())
             ->when($this->sort_by === 'newest', fn ($query, $value) => $query->newest())
