@@ -110,7 +110,7 @@ class StripeService
         ];
 
         // Stripe doesn't support svg images -> let's just use `png, jpg, gif`
-        if(!empty($model->thumbnail) && in_array($model->thumbnail?->extension ?? 'xxx', ['png', 'jpg', 'gif'])) {
+        if(strpos($model->getThumbnail(['w' => 500], true), ' ') === false && !empty($model->thumbnail) && in_array($model->thumbnail?->extension ?? 'xxx', ['png', 'jpg', 'gif'])) {
             $images[] = $model->getThumbnail(['w' => 500]);
             $product_args['images'] = $images;
         }
@@ -121,6 +121,10 @@ class StripeService
         } catch (\Exception $e) {
             // This means that Product under $model->id already exists, BUT FOR SOME REASON tenant doesn't have the proper CoreMeta key.
             // 1. Get Stripe Product
+            Log::error($e);
+            Log::error($e->getMessage());
+
+            // TODO: Check Stripe exceptio and based on that see if you can retrieve the product or no.
             $stripe_product = $this->stripe->products->retrieve($this->generateStripeProductID($model), []);
         }
 
@@ -164,7 +168,7 @@ class StripeService
         ];
 
         // Stripe doesn't support svg images -> let's just use `png, jpg, gif`
-        if(!empty($model->thumbnail) && in_array($model->thumbnail?->extension ?? 'xxx', ['png', 'jpg', 'gif'])) {
+        if(strpos($model->getThumbnail(['w' => 500], true), ' ') === false && !empty($model->thumbnail) && in_array($model->thumbnail?->extension ?? 'xxx', ['png', 'jpg', 'gif'])) {
             $images[] = $model->getThumbnail(['w' => 500]);
             $product_args['images'] = $images;
         }
@@ -176,11 +180,13 @@ class StripeService
                 $product_args
             );
         } catch (\Exception $e) {
-            dd($e);
             // Cannot update product with ID: $stripe_product_id,
             // TODO: Should we create another product and assign new stripe_product_id to our product in DB?
             Log::error($e);
+            Log::error($e->getMessage());
             Log::error('stripe_product_id in our core_meta for product ('.$model->id.') is obsolete, should we create a new stripe product for this product?');
+
+            // TODO: Check Stripe exceptio and based on that see if you can retrieve the product or no.
             return;
         }
 
@@ -535,7 +541,7 @@ class StripeService
             'success_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'cancel_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'automatic_tax' => [
-                'enabled' => true,
+                'enabled' => Payments::stripe()->stripe_automatic_tax_enabled ?? false,
             ],
             'tax_id_collection' => [
                 'enabled' => true,
@@ -585,7 +591,11 @@ class StripeService
         }
 
         // Create a Stripe Checkout Link
-        $checkout_link = $this->stripe->checkout->sessions->create($stripe_args);
+        try {
+            $checkout_link = $this->stripe->checkout->sessions->create($stripe_args);
+        } catch(\Exception $e) {
+            dd($e);
+        }
 
         // Update order if it's not a preview session!!!
         if (!$is_preview) {
