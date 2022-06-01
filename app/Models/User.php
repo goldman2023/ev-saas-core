@@ -95,7 +95,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     }
 
     public function hasShop() {
-        return ($this->isAdmin() || $this->isSeller() || $this->isStaff()) && ($this->shop?->isNotEmpty() ?? false);
+        return ($this->isAdmin() || $this->isSeller() || $this->isStaff()) && ($this->shop?->count() > 0);
     }
 
     public function isAdmin()
@@ -157,7 +157,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     {
         return $this->morphedByMany(Shop::class, 'subject', 'user_relationships');
     }
-
+    
     public function blog_posts()
     {
         return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
