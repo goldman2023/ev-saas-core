@@ -40,7 +40,7 @@ class UserObserver
             }
         } catch(\Exception $e) {
             Log::error($e->getMessage());
-        } 
+        }
 
         try {
             $user->notify(new UserWelcomeNotification());

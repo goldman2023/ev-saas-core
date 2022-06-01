@@ -2,26 +2,12 @@
 
 namespace App\Http\Livewire\Forms;
 
-use App\Models\Address;
-use App\Models\Invoice;
-use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\RulesSets;
-use Auth;
-use Carbon;
-use Categories;
-use DB;
-use EVS;
 use MailerService;
 use App\Enums\WeMailingListsEnum;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
-use Spatie\ValidationRules\Rules\ModelsExist;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Admin\ContactNotification;
 use Str;
@@ -118,5 +104,6 @@ class ContactForm extends Component
         $this->subject = '';
         $this->message = '';
         $this->phone = '';
+        $this->consent = false;
     }
 }

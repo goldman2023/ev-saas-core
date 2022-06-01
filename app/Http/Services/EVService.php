@@ -266,6 +266,14 @@ class EVService
             [
                 'label' => translate('CRM'),
                 'items' => [
+                    [
+                        'label' => translate('Customers'),
+                        'icon' => 'heroicon-o-user-group',
+                        'route' => route('crm.all_customers'),
+                        'is_active' => areActiveRoutes(['crm.all_customers']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => ['browse_customers'],
+                    ],
 
                     /* TODO: Uncomment this once we have customers page */
                     /* [
