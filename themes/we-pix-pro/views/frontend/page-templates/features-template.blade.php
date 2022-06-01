@@ -1,6 +1,6 @@
 {{-- NOT BEING USED BY PAGE...Features page is using features-grid-01 component along with buttong-group component from WeBuilder deprecated way of building pages --}}
 @include('components.custom.pix-pro-page-header', [
-    'header_title' => translate('Pix-pro Features'),
+    'header_title' => translate('Pixpro Features'),
     'header_subtitle' => null,
 ])
 
