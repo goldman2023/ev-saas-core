@@ -20,6 +20,8 @@
 
 <x-livewire-tables::table.cell class="align-middle static ">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
+        @do_action('view.dashboard.plans.row-license.actions.start')
+        
         {{-- <a class="btn btn-white flex items-center mr-2" href="{{ route('plan.edit', ['id' => $row->id]) }}">
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>
