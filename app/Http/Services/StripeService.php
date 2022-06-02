@@ -593,7 +593,7 @@ class StripeService
         // Create a Stripe Checkout Link
         $checkout_link = $this->stripe->checkout->sessions->create($stripe_args);
         try {
-            
+
         } catch(\Exception $e) {
             // dd($e);
         }
@@ -621,7 +621,7 @@ class StripeService
 
             $billing_session = $this->stripe->billingPortal->sessions->create([
                 'customer' => $stripe_customer->id,
-                'return_url' => back()->getRequest()->url(),
+                'return_url' => route('my.plans.management')
             ]);
 
             return $billing_session['url'] ?? null;
