@@ -117,7 +117,12 @@ class Plan extends WeBaseModel
         return $this->belongsTo(Shop::class);
     }
 
-    public function users()
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function subscribers()
     {
         return $this->morphToMany(User::class, 'subject', 'user_subscriptions');
     }
@@ -125,6 +130,11 @@ class Plan extends WeBaseModel
     public function blog_posts()
     {
         return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
+    }
+
+    public function hasSubscribers()
+    {
+        return $this->subscribers()->count() > 0;
     }
 
     public function getFeaturesAttribute($value)

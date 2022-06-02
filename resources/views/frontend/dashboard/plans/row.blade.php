@@ -77,10 +77,10 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t">
+                <div wire:click="removePlan({{ $row->id }})" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t cursor-pointer">
                     @svg('heroicon-o-trash', ['class' => 'text-danger w-[18px] h-[18px]'])
                     <span class="ml-2">{{ translate('Remove plan') }}</span>
-                </a>
+                </div>
             </li>
         </ul>
     </div>

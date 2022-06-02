@@ -3,13 +3,12 @@
 namespace App\Http\Livewire\Dashboard\Tables;
 
 use Carbon;
+use DB;
 use App\Events\Plans\PlanSubscriptionCancel;
 use App\Events\Plans\PlanSubscriptionRevive;
 use App\Enums\StatusEnum;
 use App\Facades\MyShop;
-use App\Models\BlogPost;
 use App\Models\Order;
-use App\Models\Orders;
 use App\Models\Plan;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
@@ -132,6 +131,30 @@ class PlansTable extends DataTableComponent
         }
 
         return 'frontend.dashboard.plans.row';
+    }
+
+    public function removePlan($id)
+    {
+        $plan = Plan::findOrFail($id);
+
+        if($plan->hasSubscribers()) {
+            $this->inform(translate('Cannot delete the Plan because there are users subscribed to it.'), '', 'danger');
+
+            return;
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $plan->delete();
+
+            DB::commit();
+
+            $this->inform(translate('Plan successfully deleted!'), '', 'success');
+        } catch (\Exception $e) {
+            $this->dispatchGeneralError(translate('There was an error while trying to remove plan and it\'s relationships: ').$e->getMessage());
+            $this->inform(translate('There was an error while trying to plan and it\'s relationships: '), $e->getMessage(), 'danger');
+        }
     }
 
     public function cancelPlan($user_subscription_id) {

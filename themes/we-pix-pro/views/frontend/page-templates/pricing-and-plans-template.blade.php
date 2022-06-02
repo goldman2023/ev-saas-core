@@ -110,7 +110,7 @@
                             <th class="px-5 py-3 border-1  bg-gray-100 text-left text-lg2 font-bold text-lightDark">
                                 Features
                             </th>
-                            <th class="px-5 py-3 border-1  bg-gray-100 text-left text-lg2 font-bold text-lightDark">
+                            <th class="px-5 py-3 border-1  bg-gray-100 text-center text-lg2 font-bold text-lightDark">
                                 Solo
                             </th>
                             <th class="px-5 py-3 border-1  bg-gray-100 text-lg2 font-bold text-lightDark text-center">
@@ -134,7 +134,7 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center justify-center">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5 13L9 17L19 7" stroke="#8BC53F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
@@ -142,7 +142,7 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center justify-center">
+                                <div class="flex items-center justify-center ">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5 13L9 17L19 7" stroke="#8BC53F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
@@ -177,7 +177,7 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center justify-center">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5 13L9 17L19 7" stroke="#8BC53F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
@@ -220,7 +220,7 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center justify-center">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5 13L9 17L19 7" stroke="#8BC53F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
@@ -263,7 +263,7 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center justify-center">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5 13L9 17L19 7" stroke="#8BC53F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
@@ -299,14 +299,14 @@
                         </tr>
                         <tr>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center ">
                                         <p class="text-md font-medium text-dark2 whitespace-no-wrap">
                                     Cloud proc essing
                                         </p>
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center justify-center">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5 13L9 17L19 7" stroke="#8BC53F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
@@ -349,7 +349,7 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center justify-center">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6 18L18 6M6 6L18 18" stroke="#FF4E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
@@ -393,7 +393,7 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center justify-center">
                                <p class="mb-0 font-md font-bold text-dark2">150</p>
                                 </div>
                             </td>
@@ -425,7 +425,7 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center justify-center">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 18L18 6M6 6L18 18" stroke="#FF4E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                             </svg>
@@ -469,7 +469,7 @@
                                 </div>
                             </td>
                             <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center">
+                                <div class="flex items-center justify-center">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M6 18L18 6M6 6L18 18" stroke="#FF4E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                             </svg>
@@ -510,44 +510,32 @@
                                         
                                 </div>
                             </td>
-                            <td class="px-0 py-5 border-1 bg-white ">
-                                <div class="flex  items-center">
-                            <a href="/users/login" class="btn-primary">
-                                Try it free
-                            </a>
 
-                                </div>
-                            </td>
-                            <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center justify-center">
-                            <a href="/users/login" class="btn-primary">
-                                Try it free
-                            </a>
-
-                                </div>
-                            </td>
-                            <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center justify-center">
-                            <a href="/users/login" class="btn-primary">
-                                Try it free
-                            </a>
-
-                                </div>
-                            </td>
-                            <td class="px-5 py-5 border-1 bg-white ">
-                                <div class="flex items-center justify-center">
-                        <a href="/users/login" class="btn-primary">
-                            Try it free
-                        </a>
-
-                                </div>
-                            </td>
-                            
-                          
+                            @if($models->isNotEmpty())
+                                @foreach($models as $key => $model)
+                                    @if(!$model->non_standard)
+                                        @php
+                                            $url = \Auth::check() ? route('my.plans.management') : route('user.registration');
+                                        @endphp
+                                        <td class="px-0 py-5 border-1 bg-white ">
+                                            <div class="flex justify-center  items-center">
+                                                <a href="{{ $url }}" class="btn-primary">
+                                                    {{ translate('Try it free') }}
+                                                </a>
+                                            </div>
+                                        </td>
+                                    @else
+                                        <td class="px-0 py-5 border-1 bg-white ">
+                                            <div class="flex  items-center">
+                                                <a href="{{ $model->getCoreMeta('custom_redirect_url') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-16 font-medium py-2 px-4 rounded-lg">
+                                                    {{ !empty($model->getCoreMeta('custom_cta_label')) ? $model->getCoreMeta('custom_cta_label') : translate('Contact Us') }}
+                                                </a>
+                                            </div>
+                                        </td>
+                                    @endif
+                                @endforeach
+                            @endif
                         </tr>
-                      
-                      
-                      
                     </tbody>
                 </table>
                 

@@ -541,7 +541,7 @@ class StripeService
             'success_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'cancel_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'automatic_tax' => [
-                'enabled' => Payments::stripe()->stripe_automatic_tax_enabled ?? false,
+                'enabled' => Payments::stripe()->stripe_automatic_tax_enabled === true ? true : false,
             ],
             'tax_id_collection' => [
                 'enabled' => true,
@@ -591,10 +591,11 @@ class StripeService
         }
 
         // Create a Stripe Checkout Link
+        $checkout_link = $this->stripe->checkout->sessions->create($stripe_args);
         try {
-            $checkout_link = $this->stripe->checkout->sessions->create($stripe_args);
+
         } catch(\Exception $e) {
-            dd($e);
+            // dd($e);
         }
 
         // Update order if it's not a preview session!!!
@@ -620,7 +621,7 @@ class StripeService
 
             $billing_session = $this->stripe->billingPortal->sessions->create([
                 'customer' => $stripe_customer->id,
-                'return_url' => back()->getRequest()->url(),
+                'return_url' => route('my.plans.management')
             ]);
 
             return $billing_session['url'] ?? null;

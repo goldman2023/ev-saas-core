@@ -76,7 +76,7 @@
             <div class="w-full flex flex-col sm:flex-row justify-center items-center">
                 @if(!empty($authors?->first()))
                     <div class="flex items-center mb-3 sm:mb-0 mr-0 sm:mr-10">
-                        <img src="{{ $authors?->first()?->getThumbnail(['w' => 100]) ?? '' }}" class="rounded-full object-cover w-8 h-8 mr-2.5" />
+                        <img src="{{ $authors?->first()?->getThumbnail(['w' => 100]) ?? '' }}" class="border-full border-gray-200 rounded-full object-cover w-8 h-8 mr-2.5" />
                         <span class="text-14 text-700 line-clamp-1 text-typ-2">{{ ($authors?->first()?->name ?? '').' '.($authors->first()?->surname ?? '') }}</span>
                     </div>
                 @endif
@@ -98,12 +98,12 @@
                     <img src="{{ $blog_post->getThumbnail(['w' => 1000]) }}" alt="" class="w-full object-contain">
                 </div>
 
-                <div id="blog_post_single_content" class="w-full block pb-5 mb-[30px] border-b border-gray-300">
+                <div id="blog_post_single_content" class="w-full block pb-5 mb-[15px]">
                     {!! $blog_post->content !!}
                 </div>
 
                 @if(!empty($authors?->first()))
-                    <div class="w-full block pb-5">
+                    {{-- <div class="w-full block pb-5">
                         <strong class="block text-24 font-bold mb-[24px] text-typ-2">{{ translate('About the author') }}</strong>
 
                         <div class="w-full border-lg border-primary bg-primary-light p-6 sm:p-[30px]">
@@ -121,7 +121,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 @endif
                 
             </div>
