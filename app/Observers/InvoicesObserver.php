@@ -44,19 +44,19 @@ class InvoicesObserver
     public function updated(Invoice $invoice)
     {
         if(!$invoice->is_temp) {
-            try {
-                if($invoice->payment_status === PaymentStatusEnum::paid()->value && !($invoice->meta['invoice_paid_email_sent'] ?? false)) {
-                    Mail::to($invoice->user->email)
-                            ->send(new InvoicePaidEmail($invoice));
+            // try {
+            //     if($invoice->payment_status === PaymentStatusEnum::paid()->value && !($invoice->meta['invoice_paid_email_sent'] ?? false)) {
+            //         Mail::to($invoice->user->email)
+            //                 ->send(new InvoicePaidEmail($invoice));
                     
-                    $meta = $invoice->meta;
-                    $meta['invoice_paid_email_sent'] = true;
-                    $invoice->meta = $meta;
-                    $invoice->save();
-                }
-            } catch(\Exception $e) {
-                Log::error($e->getMessage());
-            }
+            //         $meta = $invoice->meta;
+            //         $meta['invoice_paid_email_sent'] = true;
+            //         $invoice->meta = $meta;
+            //         $invoice->save();
+            //     }
+            // } catch(\Exception $e) {
+            //     Log::error($e->getMessage());
+            // }
         }
     }
 

@@ -142,6 +142,14 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             });
 
+            add_action('view.dashboard.plans.row-license.actions.start', function() {
+                // if (View::exists('frontend.partials.row-license-actions')) {
+                //     echo view('frontend.partials.row-license-actions', [
+                //         // 'downloads' => collect(TenantSettings::get('pix_pro_downloads'))
+                //     ]);
+                // }
+            });
+
             // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT
             // add_action('import.wordpress.blog-posts.end', function($data) {
             //     dd($data);

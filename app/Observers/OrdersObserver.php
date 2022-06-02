@@ -19,18 +19,18 @@ class OrdersObserver
     {
         // If order which is created is not temp, then send a transacional email
         if(!$order->is_temp) {
-            try {
-                // Send order in email to user
-                Mail::to($order->user->email)
-                    ->send(new OrderReceivedEmail($order));
+            // try {
+            //     // Send order in email to user
+            //     Mail::to($order->user->email)
+            //         ->send(new OrderReceivedEmail($order));
     
-                $meta = $order->meta;
-                $meta['email_sent'] = true;
-                $order->meta = $meta;
-                $order->save();
-            } catch(\Exception $e) {
-                Log::error($e->getMessage());
-            }
+            //     $meta = $order->meta;
+            //     $meta['email_sent'] = true;
+            //     $order->meta = $meta;
+            //     $order->save();
+            // } catch(\Exception $e) {
+            //     Log::error($e->getMessage());
+            // }
         }
     }
 
@@ -43,20 +43,20 @@ class OrdersObserver
     public function updated(Order $order)
     {
         // If order is not temp AND email is not yet sent, send it
-        if(!$order->is_temp && !($order->meta['email_sent']??null)) {
-            try {
-                // Send order in email to user
-                Mail::to($order->user->email)
-                    ->send(new OrderReceivedEmail($order));
+        // if(!$order->is_temp && !($order->meta['email_sent']??null)) {
+        //     try {
+        //         // Send order in email to user
+        //         Mail::to($order->user->email)
+        //             ->send(new OrderReceivedEmail($order));
     
-                $meta = $order->meta;
-                $meta['email_sent'] = true;
-                $order->meta = $meta;
-                $order->save();
-            } catch(\Exception $e) {
-                Log::error($e->getMessage());
-            }
-        }
+        //         $meta = $order->meta;
+        //         $meta['email_sent'] = true;
+        //         $order->meta = $meta;
+        //         $order->save();
+        //     } catch(\Exception $e) {
+        //         Log::error($e->getMessage());
+        //     }
+        // }
     }
 
     /**

@@ -21,7 +21,7 @@
 
     @if(auth()->user()?->isSubscribed() ?? false)
         <div class="w-full mb-7">
-            <livewire:dashboard.tables.plans-table for="me" />
+            <livewire:dashboard.tables.plans-table for="me" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
         </div>
 
         @do_action('view.dashboard.plans-management.plans-table.end')
