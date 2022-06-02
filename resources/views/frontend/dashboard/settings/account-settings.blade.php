@@ -6,12 +6,7 @@
     <section>
         <x-dashboard.section-headers.section-header title="{{ translate('Account settings') }}" text="">
             <x-slot name="content">
-                <a href="{{ $me->getPermalink() }}"
-                    target="_blank"
-                    class="btn-primary">
-                    @svg('heroicon-o-user', ['class' => 'h-4 h-4 mr-2'])
-                    <span>{{ translate('My profile') }}</span>
-                </a>
+                
             </x-slot>
         </x-dashboard.section-headers.section-header>
 

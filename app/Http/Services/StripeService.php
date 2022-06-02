@@ -519,9 +519,9 @@ class StripeService
                 [
                     # Provide the exact Price ID (e.g. pr_1234) of the model you want to sell
                     'price' => $stripe_price->id,
-                    'quantity' => $qty,
+                    'quantity' => get_tenant_setting('multiplan_purchase') === true ? $qty : 1,
                     'adjustable_quantity' => [
-                        'enabled' => true,
+                        'enabled' => get_tenant_setting('multiplan_purchase') === true ? true : false,
                         // 'minimum' => 0,
                         // 'maximum' => 99
                     ]
