@@ -25,7 +25,7 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-tailwind') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
 
 
     @include('frontend.layouts.global-partials.all')
@@ -93,8 +93,8 @@
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
 
-    <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
-    <script src="{{ mix('js/alpine.js', 'themes/ev-tailwind') }}" defer></script>
+    <script src="{{ mix('js/app.js', 'themes/EvTailwind') }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/EvTailwind') }}" defer></script>
 
     <!-- Scripts -->
     @livewireScripts

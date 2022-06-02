@@ -77,14 +77,14 @@ class PullTenants extends FreshCommand
             $tenant = Tenant::create([
                 'id' => 'demo',
                 'tenancy_db_name' => 'demo_tenant',
-                'theme' => 'ev-tailwind',
+                'theme' => 'EvTailwind',
                 'stripe_id' => '123',
                 'email' => 'demo@example.com',
                 'card_brand' => 'visa',
                 'card_last_four' => '0000',
                 'trial_ends_at' => date('Y-m-d', strtotime('+999 day')),
             ]);
-            $tenant->domains()->create(['domain' => 'demo-ev.localhost', 'theme' => 'ev-tailwind']);
+            $tenant->domains()->create(['domain' => 'demo-ev.localhost', 'theme' => 'EvTailwind']);
 
             $tenant->save();
 

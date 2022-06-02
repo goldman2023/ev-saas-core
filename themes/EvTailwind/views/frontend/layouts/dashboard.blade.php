@@ -7,19 +7,25 @@
     <meta name="robots" content="index, follow">
     <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
     <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
+
+    <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
+    <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
+    <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
+
     @yield('meta')
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
+    <title>@yield('meta_title', get_site_name() .' | '.get_setting('site_motto'))</title>
 
     <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
-    
+
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-tailwind') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
+    <script src="{{ mix('js/app.js', 'themes/EvTailwind') }}" defer></script>
+
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
     @include('frontend.layouts.global-partials.all')
@@ -33,16 +39,25 @@
 
     @stack('head_scripts')
 </head>
-<body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
-    <div class="min-h-screen">
-        @yield('content')
-    </div>
 
-    <x-default.footers.app-bar>
-    </x-default.footers.app-bar>
+<body class="font-sans antialiased bg-gray-100 {{ Route::currentRouteName() }}" x-data="{
+    all_categories: @js(Categories::getAllFormatted(true)),
+    all_categories_flat: @js(Categories::getAllFormatted(true, true)),
+}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
+    <div class="min-h-screen">
+        {{-- <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header> --}}
+
+        <!-- Page Content -->
+        <main>
+            @yield('content')
+        </main>
+
+        {{-- <x-tailwind-ui.footers.footer></x-tailwind-ui.headers.header> --}}
+    </div>
 
     <!-- Carts -->
     <livewire:cart.cart template="flyout-cart" />
+    <livewire:we-media-library />
 
     <!-- Wishlist -->
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
@@ -57,18 +72,20 @@
         <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
 
-    <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
-        :is_x="true" :timeout="4000">
-    </x-ev.toast>
+    {{-- App bar --}}
+    <x-default.footers.app-bar></x-default.footers.app-bar>
+
+    <x-system.info-modal></x-system.info-modal>
+    <livewire:modals.delete-modal />
+    <x-system.validation-errors-toast timeout="5000" ></x-system.validation-errors-toast>
+
+    @stack('modal')
+
+    <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
     @yield('script')
 
-    @auth
-        <x-default.chat.widget-chat></x-default.chat.widget-chat>
-    @endauth
     @stack('footer_scripts')
-
-
 </body>
 
 </html>

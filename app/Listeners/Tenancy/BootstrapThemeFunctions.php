@@ -17,7 +17,7 @@ class BootstrapThemeFunctions
          */
         if(!empty(tenant()->domains->first())) {
             $theme_folder = tenant()->domains->first()->theme;
-            $theme_functions_file_path = base_path().'/themes/'.$theme_folder.'/app/Providers/ThemeFunctionsServiceProvider.php';
+            $theme_functions_file_path = base_path().'/themes/'.$theme_folder.'/App/Providers/ThemeFunctionsServiceProvider.php';
 
             // Check if ThemeFunctionsServiceProvider exists in `themes/{theme_name}/app/Providers/` and boot it
             if(file_exists($theme_functions_file_path)) {

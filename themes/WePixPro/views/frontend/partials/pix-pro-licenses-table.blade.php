@@ -3,3 +3,9 @@
 
     <livewire:dashboard.tables.licenses-table for="me" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
 </div>
+
+@push('modal')
+<x-system.form-modal id="pix-pro-generate-license" title="Online License Activation" class="!max-w-3xl">
+    <livewire:forms.generate-license-form />
+</x-system.form-modal>
+@endpush

@@ -47,8 +47,8 @@ composer.phar
 storage/*
 public/themes/ev-saas-default/css/*
 public/themes/ev-saas-default/js/*
-public/themes/ev-tailwind/js/*
-public/themes/ev-tailwind/css/*
+public/themes/EvTailwind/js/*
+public/themes/EvTailwind/css/*
 resources/scss/tenants/*
 resources/scss/dependencies/*.css
 resources/scss/dependencies/*.css.map

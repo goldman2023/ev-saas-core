@@ -1,5 +1,5 @@
 {{-- This is a separate file, you can overide global config in a child theme
-Example in themes/ev-saas-fox/views/frontend/layouts/global-partials/global-tailwind-config.blade.php
+Example in themes/EvSaasFox/views/frontend/layouts/global-partials/global-tailwind-config.blade.php
 TODO: you can overide it with data from a database a sa setting --}}
 @php
 $colors = TenantSettings::get('colors');
