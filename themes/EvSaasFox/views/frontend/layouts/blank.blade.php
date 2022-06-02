@@ -15,10 +15,10 @@
 
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-tailwind') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
+    <script src="{{ mix('js/app.js', 'themes/EvTailwind') }}" defer></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
     @include('frontend.layouts.global-partials.all')

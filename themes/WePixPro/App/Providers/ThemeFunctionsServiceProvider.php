@@ -1,4 +1,7 @@
 <?php
+
+// namespace WeThemes\WePixPro\App\Providers;
+
 // Because this file service provider is loaded after tenant is initated and has no namespace, it cannot use Aliases from `app.php`, like: use Log or use File; Instead full namespaces must be used!
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
@@ -53,6 +56,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     public function boot()
     {
         parent::boot();
+        
+        // TODO: Create Livewire components registration abstract class in WeThemeFunctionsServiceProvider, where we should register all theme specific Livewire components
+        Livewire::component('forms.generate-license-form', \WeThemes\WePixPro\App\Http\Livewire\Forms\GenerateLicenseForm::class);
 
         if (function_exists('add_filter')) {
             // Filter
@@ -142,13 +148,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             });
 
-            add_action('view.dashboard.plans.row-license.actions.start', function() {
-                // if (View::exists('frontend.partials.row-license-actions')) {
-                //     echo view('frontend.partials.row-license-actions', [
-                //         // 'downloads' => collect(TenantSettings::get('pix_pro_downloads'))
-                //     ]);
-                // }
-            });
+            add_action('view.dashboard.plans.row-license.actions.start', function($license) {
+                if (View::exists('frontend.partials.row-license-actions')) {
+                    echo view('frontend.partials.row-license-actions', compact('license'));
+                }
+            }, 20, 1);
 
             // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT
             // add_action('import.wordpress.blog-posts.end', function($data) {

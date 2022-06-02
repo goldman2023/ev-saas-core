@@ -29,9 +29,9 @@ const { hideBin } = require('yargs/helpers');
 
 // NOTE: These webpacks are compiled from root folder by running ./development.sh! This means that paths are relative to the ROOT folder!
 // That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
-let theme = 'ev-tailwind';
+let theme = 'EvTailwind';
 
-let childThemes = ['ev-saas-fox', 'ev-saas-gun'];
+let childThemes = ['EvSaasFox', 'ev-saas-gun'];
 
 mix.setPublicPath(`public/themes/${theme}`)
     .webpackConfig({
