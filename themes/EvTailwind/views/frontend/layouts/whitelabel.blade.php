@@ -9,7 +9,7 @@
         @yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))
     </title>
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-tailwind') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
 
     {{ seo()->render() }}
 
@@ -28,7 +28,7 @@
     {{-- <x-tailwind.system.countdown></x-tailwind.system.countdown> --}}
 
     <!-- Scripts -->
-    {{-- <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script> --}}
+    {{-- <script src="{{ mix('js/app.js', 'themes/EvTailwind') }}" defer></script> --}}
     @livewireScripts
     @yield('script')
 </body>

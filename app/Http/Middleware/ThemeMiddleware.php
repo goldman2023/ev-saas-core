@@ -40,7 +40,7 @@ class ThemeMiddleware
                 // Set active theme
                 /* Set parent theme for tailwind child themes */
                 if (str_contains($domain->theme, 'tailwind')) {
-                    Theme::set($domain->theme, 'ev-tailwind');
+                    Theme::set($domain->theme, 'EvTailwind');
 
                     session(['style_framework' => 'tailwind']);
 
@@ -48,7 +48,7 @@ class ThemeMiddleware
                     TODO: Define this better but dashboard allways uses boostrap version for now
                 */
                 } else {
-                    Theme::set($domain->theme, 'ev-tailwind');
+                    Theme::set($domain->theme, 'EvTailwind');
                     session(['style_framework' => 'tailwind']);
                 }
             }

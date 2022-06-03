@@ -11,9 +11,9 @@ const mix = require("laravel-mix");
  |
  */
 
-let theme = 'ev-tailwind-kingas';
+let theme = 'EvTailwind-kingas';
 
-mix.setPublicPath("public/themes/ev-tailwind-kingas")
+mix.setPublicPath("public/themes/EvTailwind-kingas")
     .js(`${__dirname}/js/app.js`, "js")
     .postCss(`${__dirname}/css/app.css`, "css", [
         require("postcss-import"),

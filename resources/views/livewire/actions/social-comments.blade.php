@@ -4,14 +4,14 @@
         @if(!is_null($replyCommentId))
             <h3 class="text-14 mt-2 mb-2">{{ is_null($replyCommentId) ? '' : translate('Replying to a comment') }}</h3>
         @endif
-        
+
         <div class="flex items-start" wire:target="save_comment" wire:loading.class="pointer-events-none opacity-40">
             <div class="shrink-0 pr-3 mt-1">
                 <img src="{{ auth()->user()->getThumbnail(['w' => 65]) }}" class="h-[32px] w-[32px] object-cover border border-gray-200 rounded-full"/>
             </div>
             <div class="grow flex flex-col">
-                <textarea wire:model.defer="comment_text" class="mb-2 w-full bg-bg-3 px-3 py-2 text-typ-3 rounded-xl border-0 border-none focus:ring-0 focus:border-0 focus:outline-0 outline-0 focus:shadow-none resize-none" 
-                        rows="1" 
+                <textarea wire:model.defer="comment_text" class="mb-2 w-full bg-bg-3 px-3 py-2 text-typ-3 rounded-xl border-0 border-none focus:ring-0 focus:border-0 focus:outline-0 outline-0 focus:shadow-none resize-none"
+                        rows="1"
                         placeholder="{{ translate('Write your comment…') }}"
                         x-data="{ resizeTextArea: () => { if($el.scrollHeight < 200) $el.style.height = $el.scrollHeight + 'px'; else $el.style.height = '200px'; } }"
                         x-init="resizeTextArea()"
@@ -107,8 +107,8 @@
             {{-- </div>
         </div> --}}
     {{-- </div> --}}
-    
 
+    @auth
     @forelse ($comments as $comment)
         <div class="mb-2 mt-4">
             <div class="flex items-start">
@@ -123,7 +123,7 @@
 
                         <span class="text-12 text-typ-3">{{ $comment->created_at->diffForHumans() }}</span>
                     </div>
-                    
+
                     <p class="w-full text-14 text-typ-3">
                         {{ $comment->comment_text }}
                     </p>
@@ -134,7 +134,7 @@
                 style="text-decoration: underline; font-size: 12px">Reply
                 to this comment</a> --}}
         </div>
-        
+
         {{-- @foreach ($comment->replies as $reply)
             <div style="padding-left: 30px;" class="mb-3">
                 <div class="flex items-center">
@@ -151,11 +151,12 @@
             </div>
         @endforeach --}}
     @endforeach
+    @endauth
 
     @if($hasMorePages && !empty($nextCursor))
     <div class="w-full flex justify-between mt-4">
         <span class="text-12 text-typ-3 cursor-pointer" wire:click="loadComments()">{{ translate('View more comments') }}</span>
-    
+
         {{-- TODO: Repalce with $item->comments_count once it starts working! --}}
         <span class="text-12 text-typ-3">{{ (($this->page-1) * $this->perPage).' of '.$item->comments()->count() }}</span>
     </div>

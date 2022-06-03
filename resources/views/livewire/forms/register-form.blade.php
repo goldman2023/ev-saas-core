@@ -71,14 +71,16 @@
         </div>
         {{-- END Email --}}
 
-        <div class="mb-3">
+        <div class="hidden mb-3">
             <fieldset class="mt-4">
               <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
                 <div class="flex items-center">
-                  <input id="entity_individual" name="entity_field" type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                  <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Individual') }} </label>
+                  <input id="entity_individual" name="entity_field" selected type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700">
+                      {{ translate('Individual') }}
+                </label>
                 </div>
-          
+
                 <div class="flex items-center">
                   <input id="entity_company" name="entity_field" type="radio" x-model="entity"  value="company" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
                   <label for="entity_company" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Company') }} </label>
@@ -116,7 +118,7 @@
             <x-system.invalid-msg field="password_confirmation" />
         </div>
         {{-- END Password Confirmation --}}
-        
+
         @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
             @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
                 <div class="mb-4" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif >
@@ -133,7 +135,7 @@
                     </div>
                 </div>
             @endforeach
-        @endif        
+        @endif
 
         {{-- Consent Terms and Conditions --}}
         <div class="mb-2 flex items-center justify-between">
@@ -146,7 +148,7 @@
                     <label for="register-form-terms-consent"
                         class=font-medium text-gray-700 inline @error('terms_consent') text-danger @enderror">
                         <span>
-                            {{ translate('By Registering I agree to ') }} {{ get_site_name() }} 
+                            {{ translate('By Registering I agree to ') }} {{ get_site_name() }}
                         </span>
                         <a href="{{ get_tenant_setting('tos_url', '#')  }}" target="_blank" class="text-primary">
                             {{ translate('Terms of Service') }}
@@ -161,7 +163,7 @@
 
         {{-- Register Action --}}
         <div class="mb-3">
-            <button type="submit" class="btn bg-primary text-white w-full mt-2" 
+            <button type="submit" class="btn bg-primary text-white w-full mt-2"
                 @click="
                     $wire.set('entity', entity, true);
                     @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
