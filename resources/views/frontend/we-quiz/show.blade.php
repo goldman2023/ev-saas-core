@@ -34,6 +34,8 @@
         });
 
         survey.completedHtml =  "{{ translate('You completed the quiz!') }}";
+        survey.showPreviewBeforeComplete = 'showAllQuestions';
+
     </script>
 </body>
 

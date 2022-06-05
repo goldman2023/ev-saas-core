@@ -25,7 +25,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
     protected function extendAppSettings() {
         if (function_exists('add_filter')) {
             // Add Tenant Settings
-            add_filter( 'app-settings-definition', function($app_settings) { 
+            add_filter( 'app-settings-definition', function($app_settings) {
                 return array_merge($app_settings, $this->getTenantAppSettings());
             }, 20, 1);
         }
@@ -39,9 +39,9 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
      * This function overrides the nova-menu.menus setting from config files
      * and forces nova to take into consideration registered menu locations from the theme instead.
      * If getMenuLocations() retuns empty array, default menu locations from config will be used!
-     * 
+     *
      * Template e.g:
-     * 
+     *
      * 'header' => [
      *       'name' => 'Header',
      *       'unique' => true,
@@ -63,7 +63,11 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
 
         // Add Theme specific sections
         add_filter('theme-section-components', function($base_sections) {
-            return array_merge(File::allFiles($this->theme_root.'/views/components/custom/'), $base_sections);
+            if(file_exists($this->theme_root.'/views/components/custom/')) {
+                return array_merge(File::allFiles($this->theme_root.'/views/components/custom/'), $base_sections);
+            } else {
+                return [];
+            }
         }, 10, 1);
     }
 
@@ -84,7 +88,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
                 foreach ($theme_helpers as $filename) {
                     require_once($filename);
                 }
-            }      
+            }
         }
     }
 }

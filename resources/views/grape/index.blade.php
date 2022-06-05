@@ -1,4 +1,4 @@
-@extends('frontend.layouts.we-edit-layout')
+@extends('frontend.layouts.app')
 
 @section('meta_title')
 {{ translate('GrapeJS Page Builder') }}
@@ -20,8 +20,10 @@
 @endpush
 
 @section('content')
+ <x-dashboard.form.editor-js field="{!! $content !!}" id="course-item-content-editor"></x-dashboard.form.editor-js>
 
-<div class="w-full" x-data="grapeEditor" x-init="initGrapeEditor()">
+
+<div class="hidden w-full" x-data="grapeEditor" x-init="initGrapeEditor()">
     <div id="gjs" style="min-height: 100vh;">
         <div data-gjs-editable="false">
             {!! $content !!}
