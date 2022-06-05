@@ -32,6 +32,9 @@
             model: survey,
             onComplete: sendDataToServer
         });
+
+        var myloc = Survey.surveyLocalization.locales["localename"];
+        myloc.completingSurvey=  {{ translate('You completed the quiz!') }}
     </script>
 </body>
 
