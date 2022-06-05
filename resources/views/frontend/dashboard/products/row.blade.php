@@ -63,8 +63,9 @@
 
 <x-livewire-tables::table.cell class="align-middle static">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        <a class="btn btn-white flex items-center mr-2" href="{{ route('product.edit', ['id' => $row->id]) }}">
-            @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
+        <a class="btn btn-white flex items-center mr-2" href="{{ route('product.details', ['id' => $row->id]) }}">
+             {{ translate('Details') }}
+             @svg('heroicon-o-chevron-right', ['class' => 'w-[18px] h-[18px] ml-2'])
         </a>
 
         <button

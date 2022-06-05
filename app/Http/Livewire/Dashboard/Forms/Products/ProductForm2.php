@@ -54,7 +54,9 @@ class ProductForm2 extends Component
 
     public $is_update;
 
-    protected $listeners = [];
+    protected $listeners = [
+        'refreshProductForm' => '$refresh'
+    ];
 
     protected function getRuleSet($set = null)
     {

@@ -174,6 +174,9 @@ class EVProductController extends Controller
         return view('frontend.product.single.' . $template, compact('product'));
     }
 
+    public function course_item_show(Request $request, $slug) {
+        dd();
+    }
 
     public function show_unlockable_content(Request $request, $slug)
     {
@@ -210,4 +213,6 @@ class EVProductController extends Controller
 
         return redirect($link);
     }
+
+    
 }
