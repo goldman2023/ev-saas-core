@@ -19,6 +19,7 @@ import ToggleBlock from 'editorjs-toggle-block';
 import Undo from 'editorjs-undo';
 import Hyperlink from 'editorjs-hyperlink';
 import Underline from '@editorjs/underline';
+import AttachesTool from '@editorjs/attaches';
 
 import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 
@@ -88,6 +89,13 @@ window.getEditorJsDefaultConfig = function($id) {
                 }
             },
             underline: Underline,
+            //TODO: configure API endpoint to upload files/images to WeMediaLibrary
+            // attaches: {
+            //     class: AttachesTool,
+            //     config: {
+            //       endpoint: 'http://localhost:8008/uploadFile'
+            //     }
+            // },
             alignmentTune: {
                 class:AlignmentTuneTool,
                 config:{
