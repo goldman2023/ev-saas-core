@@ -89,6 +89,10 @@
                 {{-- Left side --}}
                 <div class="col-span-8  ">
 
+                    @if($is_update && $product->type === 'course')
+                        <livewire:dashboard.forms.products.course-items-form :product="$product" />
+                    @endif
+
                     {{-- Card Basic --}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                         <div>
