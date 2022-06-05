@@ -3,6 +3,10 @@ Example in themes/EvSaasFox/views/frontend/layouts/global-partials/global-tailwi
 TODO: you can overide it with data from a database a sa setting --}}
 @php
 $colors = TenantSettings::get('colors');
+
+if($colors) {
+
+}
 @endphp
 
 <script>
@@ -55,6 +59,7 @@ $colors = TenantSettings::get('colors');
                     11: '11',
                     12: '12',
                 },
+                @if($colors)
                 colors: {
                     /* Indigo is a primary brand color */
                     'primary': '{{ $colors['primary'] ?: '#f40000' }}',
@@ -92,6 +97,7 @@ $colors = TenantSettings::get('colors');
                     'indigo-800': '{{ $colors['indigo-800'] ?: '#f40000' }}',
                     'indigo-900': '{{ $colors['indigo-900'] ?: '#f40000' }}',
                 }
+                @endif
             }
           }
         }
@@ -106,7 +112,7 @@ $colors = TenantSettings::get('colors');
         *::-webkit-scrollbar { width: 0 !important }
 
         body::-webkit-scrollbar { width: 5px !important }
-
+        @if($colors)
         .btn-standard {
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700;
         }
@@ -166,6 +172,8 @@ $colors = TenantSettings::get('colors');
             @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-900 text-white;
         }
 
+        @endif
+
         .form-standard {
             @apply flex-1 block w-full focus:ring-primary focus:border-primary min-w-0 rounded-md sm:text-sm border-gray-300 shadow-sm;
         }
@@ -205,11 +213,12 @@ $colors = TenantSettings::get('colors');
         .has-tooltip:hover .tooltip {
             @apply visible z-50;
         }
-
+        @if($colors)
         @if($colors['sidebar-bg'])
         .we-dashboard-sidebar-background {
             background-color: {{ $colors['sidebar-bg'] }} !important;
         }
+        @endif
         @endif
 
         .we-sidebar-menu-item {
