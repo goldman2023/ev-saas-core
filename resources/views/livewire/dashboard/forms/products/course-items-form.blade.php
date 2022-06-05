@@ -169,7 +169,7 @@
                 </label>
 
                 <div class="mt-1 sm:mt-0 sm:col-span-3">
-                    <x-dashboard.form.froala field="current_item.content" id="course-item-content-wysiwyg"></x-dashboard.form.froala>
+                    <x-dashboard.form.editor-js field="current_item.content" id="course-item-content-editor"></x-dashboard.form.editor-js>
                     <x-system.invalid-msg class="w-full" field="current_item.content"></x-system.invalid-msg>
                 </div>
             </div>
