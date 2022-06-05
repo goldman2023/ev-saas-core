@@ -23,6 +23,7 @@ use App\Nova\Tenant\ProductVariation;
 use App\Nova\Tenant\ProductVariations;
 use App\Nova\Tenant\ShopSetting;
 use App\Nova\Tenant\Translation;
+use App\Nova\Tenant\WeQuiz;
 use App\Nova\WeWorkflow;
 use App\Nova\WooImport;
 use Illuminate\Support\Facades\Gate;
@@ -93,6 +94,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(Category::class),
                     MenuItem::resource(Page::class),
                     MenuItem::resource(Blog::class),
+                    MenuItem::resource(WeQuiz::class),
 
                 ])->icon('document')->collapsable(),
 
@@ -236,6 +238,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 WeWorkflow::class,
                 WooImport::class,
                 Page::class,
+                WeQuiz::class,
                 MenuBuilder::getMenuResource()
             ]);
         } else {
