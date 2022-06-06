@@ -19,7 +19,7 @@
                   class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold"
                   :class="{ 'flex': base_price !== total_price, 'hidden': base_price === total_price }">
                 @svg('heroicon-s-tag', ['class' => 'w-4 h-4 mr-1'])
-                <span x-text="'{{ translate('%x%%!') }}'.replace('%x%', (100-(100*total_price/base_price)).toFixed(2) )"></span>
+                <span x-text="'{{ translate('%x%%') }}'.replace('%x%', (100-(100*total_price/base_price)).toFixed(0) )"></span>
             </span>
         @endif
     </div>

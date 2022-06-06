@@ -171,7 +171,8 @@ Route::middleware([
     Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::getRouteName());
     Route::get('/product/{slug}/content', [EVProductController::class, 'show_unlockable_content'])->name(Product::getRouteName() . '.unlockable_content')->middleware('purchased_or_owner');
     Route::get('/product/{id}/checkout-link', [EVProductController::class, 'createProductCheckoutRedirect'])->name('product.generate_checkout_link');
-    Route::get('/course/item/{slug}', [EVProductController::class, 'course_item_show'])->name(CourseItem::getRouteName());
+    // Route::get('/course/item/{slug}', [EVProductController::class, 'course_item_show'])->name(CourseItem::getRouteName());
+    Route::get('/product/{product_slug}/course/item/{slug}', [EVProductController::class, 'course_item_show'])->name(CourseItem::getRouteName());
 
     Route::get('/plan/{slug}', [EVPlanController::class, 'show'])->name(Plan::getRouteName());
     Route::get('/plan/{id}/checkout-link', [EVPlanController::class, 'createPlanCheckoutRedirect'])->name('plan.generate_checkout_link');

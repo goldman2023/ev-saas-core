@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\CoreMeta;
+use App\Enums\ProductTypeEnum;
 use Route;
 use StripeService;
 
@@ -30,6 +31,11 @@ trait CoreMetaTrait
     {
         // TODO: Implement castValuesForGet($core_meta, $data_types); here
 
+        if($this->type === ProductTypeEnum::course()->value) {
+            $setting = $fresh ? $this->core_meta()->where('key', $key)->keyBy('key')->toArray() : $this->core_meta->where('key', $key)->keyBy('key')->toArray();
+            return castValuesForGet($setting, CoreMeta::metaProductDataTypes())[$key] ?? null;
+        }
+        
         if($fresh) {
             return $this->core_meta()->where('key', $key)?->first()?->value;
         } else {

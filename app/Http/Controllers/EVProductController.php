@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ProductTypeEnum;
 use App\Facades\MyShop;
 use App\Facades\StripeService;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Models\CourseItem;
 use Auth;
 use Categories;
 use EVS;
@@ -127,7 +129,7 @@ class EVProductController extends Controller
     public function show(Request $request, $slug)
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        if (Product::where('slug', $slug)->first()) {
+        if (Product::where('slug', $slug)->exists()) {
             $product = Product::where('slug', $slug)->first()->load(['shop']);
         } else {
             return abort(404);
@@ -169,13 +171,43 @@ class EVProductController extends Controller
         }
         /* TODO: Make this optional (style1/style2/etc) per tenant/vendor */
 
-        $template = 'product-single-1';
-
-        return view('frontend.product.single.' . $template, compact('product'));
+        if($product->type === ProductTypeEnum::course()->value) {
+            $template = 'product-course-single';
+            $data = [
+                'product' => $product,
+                'course_items' => $product->course_items->toTree()->filter(fn($item) => $item->parent_id === null),
+            ];
+        } else {
+            $template = 'product-single-1';
+            $data = [
+                'product' => $product,
+            ];
+        }
+        
+        
+        return view('frontend.product.single.' . $template, $data);
     }
 
-    public function course_item_show(Request $request, $slug) {
-        dd();
+    public function course_item_show(Request $request, $product_slug, $slug) {
+        if (Product::where('slug', $product_slug)->exists()) {
+            $product = Product::where('slug', $product_slug)->first()->load(['shop']);
+        } else {
+            return abort(404);
+        }
+
+        if (CourseItem::where('slug', $slug)->exists()) {
+            $course_item = CourseItem::where('slug', $slug)->first();
+        } else {
+            return abort(404);
+        }
+
+        $data = [
+            'product' => $product,
+            'course_items' => $product->course_items->toTree()->filter(fn($item) => $item->parent_id === null),
+            'course_item' => $course_item
+        ];
+        
+        return view('frontend.product.single.product-course-item-single', $data);
     }
 
     public function show_unlockable_content(Request $request, $slug)

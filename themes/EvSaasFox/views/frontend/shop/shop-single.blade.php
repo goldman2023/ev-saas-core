@@ -239,7 +239,7 @@
 
             <x-feed.elements.shop.shop-information :shop="$shop" class="" />
 
-            {{-- Contacy info --}}
+            {{-- Contact info --}}
             <div class="w-full bg-white rounded-xl shadow ">
                 <div class="w-full px-5 py-4 pb-3 mb-3 flex justify-between items-center border-b border-gray-200">
                     <h5 class="text-14 font-semibold">{{ translate('Contact information') }}</h5>

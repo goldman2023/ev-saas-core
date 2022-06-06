@@ -30,11 +30,21 @@ class CoreMeta extends Model
             'location_link' => 'string',
             'unlockables' => 'string', // for now it's a string/wysiwyg
             'calendly_link' => 'string',
+
+            // Course core_meta
+            'course_what_you_will_learn' => 'array',
+            'course_requirements' => 'array',
+            'course_target_audience' => 'array',
+            'course_includes' => 'array',
+            'course_intro_video_url' => 'string',
+
+
             // 'custom_cta_title' => 'string',
             'thank_you_cta_custom_title' => 'string',
             'thank_you_cta_custom_text' => 'string',
             'thank_you_cta_custom_url' => 'string',
-            'thank_you_cta_custom_button_title' => 'string'
+            'thank_you_cta_custom_button_title' => 'string',
+            
         ];
     }
 

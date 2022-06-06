@@ -140,6 +140,12 @@ class ProductForm2 extends Component
                 'model_core_meta.thank_you_cta_custom_text' => 'nullable',
                 'model_core_meta.thank_you_cta_custom_url' => 'nullable',
                 'model_core_meta.thank_you_cta_custom_button_title' => 'nullable',
+
+                // Course
+                'model_core_meta.course_what_you_will_learn' => ['exclude_unless:product.type,course', 'nullable', 'array'],
+                'model_core_meta.course_requirements' => ['exclude_unless:product.type,course', 'nullable', 'array'],
+                'model_core_meta.course_target_audience' => ['exclude_unless:product.type,course', 'nullable', 'array'],
+                'model_core_meta.course_includes' => ['exclude_unless:product.type,course', 'nullable', 'array'],
             ],
             'core_meta' => [
                 'core_meta' => '',
