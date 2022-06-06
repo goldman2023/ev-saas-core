@@ -39,15 +39,7 @@
                     <ul class="w-full flex-flex-col space-y-3">
                         @if($course_items->isNotEmpty())
                             @foreach($course_items as $course_item)
-                                <li class="w-full flex items-center justify-between border border-gray-200 rounded-md py-2 px-3">
-                                    <strong>{{ $course_item->name }}</strong>
-
-                                    <div class="">
-                                        <button type="button" class="btn" @click="$dispatch('display-modal', {'id': 'add-course-item-modal', 'current_item_id': {{ $course_item->id }}})">
-                                            @svg('heroicon-o-pencil-alt', ['class' => 'w-4 h-4'])
-                                        </button>
-                                    </div>
-                                </li>
+                                @php course_item_template($course_item); @endphp
                             @endforeach
                         @endif
                     </ul>
@@ -99,7 +91,7 @@
 
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                     @php
-                        $course_items = \App\Models\CourseItem::tree(true)->get()->keyBy('id')->map(fn($item) => $item->name);
+                        $course_items = \App\Models\CourseItem::tree(true)->get()->keyBy('id')->map(fn($item) => str_repeat('-', $item->depth).$item->name);
                     @endphp
                     <x-dashboard.form.select :items="$course_items" selected="current_item.parent_id"></x-dashboard.form.select>
                 </div>
@@ -200,4 +192,31 @@
             
         </div>
     </x-system.form-modal>
+
+    <?php
+        function course_item_template($course_item) {
+    ?>
+        <li class="w-full flex flex-col border border-gray-200 rounded-md py-2 px-3">
+            <div class="flex items-center justify-between">
+                <strong>{{ $course_item->name }}</strong>
+
+                <div class="">
+                    <button type="button" class="btn" @click="$dispatch('display-modal', {'id': 'add-course-item-modal', 'current_item_id': {{ $course_item->id }}})">
+                        @svg('heroicon-o-pencil-alt', ['class' => 'w-4 h-4'])
+                    </button>
+                </div>
+            </div>
+            
+            @if($course_item->children?->isNotEmpty() ?? null)
+                <ul class="w-full flex-flex-col space-y-3 mt-3 mb-2 pt-3 border-t border-gray-200">
+                    {{-- {{ 'p-'.($course_item->children->first()->depth*3)  }} --}}
+                    <?php foreach($course_item->children as $child) { 
+                        course_item_template($child);
+                     } ?>
+                </ul>
+            @endif
+        </li>
+    <?php
+        }
+    ?>
 </div>

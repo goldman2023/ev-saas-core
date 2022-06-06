@@ -40,6 +40,8 @@ class CourseItemsForm extends Component
     public $course_items;
     public $current_item;
 
+    protected $listeners = ['refreshCourseItemsForm' => '$refresh'];
+    
     protected function rules()
     {
         return [
@@ -74,8 +76,8 @@ class CourseItemsForm extends Component
     public function mount($product)
     {
         $this->product = $product;
-        $this->course_items = $this->product->course_items;
-        
+        $this->course_items = $this->product->course_items->toTree()->filter(fn($item) => $item->parent_id === null);
+
         $this->addCourseItem();
     }
 
@@ -108,8 +110,8 @@ class CourseItemsForm extends Component
 
             $this->inform('Course item successfully saved!', '', 'success');
 
-            $this->emit('refreshProductForm');
-            $this->refreshCourseItems();
+            $this->emit('refreshCourseItemsForm');
+            // $this->refreshCourseItems();
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -119,7 +121,7 @@ class CourseItemsForm extends Component
     }
 
     protected function refreshCourseItems() {
-        $this->course_items = $this->product->course_items()->get();
+        $this->course_items = $this->product->course_items()->toTree()->filter(fn($item) => $item->parent_id === null);
     }
 
     public function addCourseItem() {
