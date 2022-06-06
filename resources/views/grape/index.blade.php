@@ -53,7 +53,7 @@
               this.editor = grapesjs.init({
                   canvas: {
                   scripts: [
-                  'https://cdn.tailwindcss.com'
+                  'https://cdn.tailwindcss.com/3.0.24?plugins=forms@0.5.0,typography@0.5.2,aspect-ratio@0.4.0,line-clamp@0.3.1'
                   ],
                 },
                 container: '#gjs',
