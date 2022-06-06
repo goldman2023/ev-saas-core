@@ -53,7 +53,7 @@
                     </ul>
                 </div>
 
-                <div class="col-span-12 w-full mt-4 pt-4 border-t border-gray-200">
+                <div class="col-span-12 w-full flex mt-4 pt-4 border-t border-gray-200">
                     <button type="button" class="btn btn-primary ml-auto btn-sm"
                         @click="$dispatch('display-modal', {'id': 'add-course-item-modal'})">
                         {{ translate('Add Course Item') }}
