@@ -55,29 +55,27 @@ class Invoice extends Resource
             Number::make('Total Price')->required(),
             Text::make('Payment Status')->required(),
             BelongsTo::make('User', 'user', 'App\Nova\Tenant\User'),
-            BelongsTo::make('Order', 'order', 'App\Nova\Tenant\Order'),
-            BelongsTo::make('Shop', 'shop', 'App\Nova\Tenant\Shop'),
+            BelongsTo::make('Order', 'order', 'App\Nova\Tenant\Order')->hideFromIndex(),
+            BelongsTo::make('Shop', 'shop', 'App\Nova\Tenant\Shop')->hideFromIndex(),
             MorphTo::make('Payment Method', 'payment_method', PaymentMethodUniversal::class),
 
             new Tabs(
                 'Some Title',
                 [
                     'Billing Information'    => [
-                        Text::make('Billing First Name')->required(),
-                        Text::make('Billing Last Name')->required(),
-                        Text::make('Billing Company'),
-                        Text::make('Billing Address')->required(),
-                        Text::make('Billing Country')->required(),
-                        Text::make('Billing City')->required(),
-                        Text::make('Billing ZIP')->required(),
-                        Text::make('Billing State')->required(),
+                        Text::make('Billing First Name')->required()->hideFromIndex(),
+                        Text::make('Billing Last Name')->required()->hideFromIndex(),
+                        Text::make('Billing Company')->hideFromIndex(),
+                        Text::make('Billing Address')->required()->hideFromIndex(),
+                        Text::make('Billing Country')->required()->hideFromIndex(),
+                        Text::make('Billing City')->required()->hideFromIndex(),
+                        Text::make('Billing ZIP')->required()->hideFromIndex(),
+                        Text::make('Billing State')->required()->hideFromIndex(),
 
                     ],
                     'Shipping Information'    => [
-                        Text::make('Billing Address')->required(),
                         Text::make('Billing Country')->required(),
-                        Text::make('Billing City')->required(),
-                        Text::make('Billing ZIP')->required(),
+                        Number::make('Shipping cost'),
 
                     ],
                     'Price & Tax Breakdown'    => [
@@ -92,6 +90,7 @@ class Invoice extends Resource
                     ],
                     'Other'    => [
                         Boolean::make('Viewed by customer')->required(),
+                        Boolean::make('Is temporary', 'is_temp')->required(),
                         DateTime::make('Created at')->required(),
                         DateTime::make('Updated at')->required(),
 
