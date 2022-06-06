@@ -67,8 +67,9 @@ class Shop extends Resource
             Text::make('slug'),
             Text::make('email'),
             HasMany::make('products'),
-            MorphMany::make('Activity', 'activities'),
-            DateTime::make('Created At')
+            DateTime::make('Created At'),
+            HasMany::make('Invoices'),
+            HasMany::make('Orders'),
 
 
         ];
