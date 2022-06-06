@@ -78,6 +78,10 @@ class CourseItem extends WeBaseModel
         return 'id';
     }
 
+    public function getDepthName() {
+        return 'depth';
+    }
+
     public function getPathName()
     {
         return 'path';

@@ -63,7 +63,6 @@
                 <div class="w-full">
 
                     @if(!$product->isInStock())
-                        <!-- This example requires Tailwind CSS v2.0+ -->
                         <div class="rounded-md bg-yellow-50 p-4 mb-6 mt-6">
                             <div class="flex">
                                 <div class="flex-shrink-0">
