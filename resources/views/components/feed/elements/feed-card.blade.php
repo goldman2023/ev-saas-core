@@ -6,7 +6,7 @@
                     <div class="inline-block relative">
                         {{-- TODO: Implement quick view for person and for product click --}}
                         <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-10 w-10 rounded-full border-3"
-                            :image="$item->causer->getAvatar()">
+                            :image="$item->causer->getThumbnail()">
                         </x-tenant.system.image>
                         <span
                             class="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-2 ring-white bg-green-400"></span>

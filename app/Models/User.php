@@ -251,11 +251,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return [];
     }
 
-    public function getAvatar(array $options = [])
-    {
-        return $this->getUpload('thumbnail', $options);
-    }
-
     public static function getAvailableUserTypes($only_vendor_types = true)
     {
         // Vendor types ar: Seller and Staff. Admin and moderator are tenant user types!

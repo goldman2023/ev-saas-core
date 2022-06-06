@@ -9,7 +9,7 @@
 
                 <x-tenant.system.image alt="{{ get_site_name() }} logo"
                     class="h-11 w-11 rounded-full border-3 ring-2 ring-gray-200" fit="contain"
-                    :image="$user->getAvatar()">
+                    :image="$user->getThumbnail()">
                 </x-tenant.system.image>
             </a>
             {{-- <span class="absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-green-400"></span> --}}

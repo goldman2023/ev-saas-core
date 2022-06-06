@@ -13,7 +13,7 @@
             <!-- Contributors List -->
             <div class="avatar-group mr-2">
               <div class="avatar avatar-xs avatar-circle">
-                <img class="avatar-img" src="{{ $user->getAvatar() }}" alt="Image Description">
+                <img class="avatar-img" src="{{ $user->getThumbnail() }}" alt="Image Description">
               </div>
 
             </div>
