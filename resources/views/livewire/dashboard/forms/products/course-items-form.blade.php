@@ -61,10 +61,11 @@
                 if($event.detail.current_item_id !== undefined && $event.detail.current_item_id !== null) {
                     $wire.selectCourseItem($event.detail.current_item_id);
                 } else {
-                    $wire.addCourseItem();
+                    $wire.resetCurrentCourseItem();
                 }
             }
-        ">
+        " @hide-course-items-form.window="show = false;" 
+            wire:loading.class="opacity-30 pointer-events-none">
 
             <div>
                 <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Course Item') }}</h3>
@@ -166,7 +167,7 @@
                 </div>
             </div>
 
-            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 sm:mt-5" x-data="{}" x-show="current_item.type === 'video'">
+            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}" x-show="current_item.type === 'video'">
                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {{ translate('Content (video embed link)') }}
                 </label>
@@ -178,16 +179,25 @@
             <!-- END Content -->
 
             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
-                <button type="button" class="btn btn-outline-standard btn-sm"
-                    @click="show = false">
-                    {{ translate('Cancel') }}
-                </button>
+                @if(!empty($current_item->id))
+                    <button type="button" class="btn btn-danger  btn-sm"
+                            wire:click="removeCourseItem({{ $current_item->id }});">
+                            {{ translate('Delete') }}
+                    </button>
+                @endif
+                
+                <div class="ml-auto">
+                    <button type="button" class="btn btn-outline-standard btn-sm text-14"
+                        @click="show = false">
+                        {{ translate('Cancel') }}
+                    </button>
 
-                <button type="button" class="btn btn-primary ml-auto btn-sm"
-                    @click="onSave()"
-                    wire:click="saveCourseItem()">
-                    {{ translate('Save') }}
-                </button>
+                    <button type="button" class="btn btn-primary ml-2 btn-sm"
+                        @click="onSave()"
+                        wire:click="saveCourseItem()">
+                        {{ translate('Save') }}
+                    </button>
+                </div>
             </div>
             
         </div>
@@ -198,7 +208,13 @@
     ?>
         <li class="w-full flex flex-col border border-gray-200 rounded-md py-2 px-3">
             <div class="flex items-center justify-between">
-                <strong>{{ $course_item->name }}</strong>
+                <strong class="inline-flex items-center">
+                    {{ $course_item->name }}
+                    @if($course_item->free)
+                        <span class="badge-success ml-2">{{ translate('Free') }}</span>
+                    @endif
+                </strong>
+
 
                 <div class="">
                     <button type="button" class="btn" @click="$dispatch('display-modal', {'id': 'add-course-item-modal', 'current_item_id': {{ $course_item->id }}})">

@@ -78,7 +78,7 @@ class CourseItemsForm extends Component
         $this->product = $product;
         $this->course_items = $this->product->course_items->toTree()->filter(fn($item) => $item->parent_id === null);
 
-        $this->addCourseItem();
+        $this->resetCurrentCourseItem();
     }
 
     public function saveCourseItem() {
@@ -120,11 +120,11 @@ class CourseItemsForm extends Component
         }
     }
 
-    protected function refreshCourseItems() {
-        $this->course_items = $this->product->course_items()->toTree()->filter(fn($item) => $item->parent_id === null);
-    }
+    // protected function refreshCourseItems() {
+    //     $this->course_items = $this->product->course_items()->toTree()->filter(fn($item) => $item->parent_id === null);
+    // }
 
-    public function addCourseItem() {
+    public function resetCurrentCourseItem() {
         $this->current_item = new CourseItem();
         $this->current_item->product_id = $this->product->id;
         $this->current_item->type = 'wysiwyg';
@@ -134,6 +134,25 @@ class CourseItemsForm extends Component
 
     public function selectCourseItem($course_item_id) {
         $this->current_item = CourseItem::find($course_item_id);
+    }
+
+    public function removeCourseItem($course_item_id) {
+        $course_item = CourseItem::find($course_item_id);
+
+        DB::beginTransaction();
+
+        try {
+            $course_item->delete();
+
+            DB::commit();
+            $this->emit('refreshCourseItemsForm');
+            $this->resetCurrentCourseItem(); // reset current
+            $this->dispatchBrowserEvent('hide-course-items-form');
+            $this->inform(translate('Course Item successfully deleted!'), '', 'success');
+        } catch (\Exception $e) {
+            $this->dispatchGeneralError(translate('There was an error while trying to remove course item and it\'s relationships: ').$e->getMessage());
+            $this->inform(translate('There was an error while trying to remove course item and it\'s relationships: '), $e->getMessage(), 'danger');
+        }
     }
 
     public function dehydrate()
