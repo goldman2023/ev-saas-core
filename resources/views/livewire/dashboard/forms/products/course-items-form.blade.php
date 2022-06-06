@@ -39,21 +39,13 @@
                     <ul class="w-full flex-flex-col space-y-3">
                         @if($course_items->isNotEmpty())
                             @foreach($course_items as $course_item)
-                                <li class="w-full flex items-center justify-between border border-gray-200 rounded-md py-2 px-3">
-                                    <strong>{{ $course_item->name }}</strong>
-
-                                    <div class="">
-                                        <button type="button" class="btn" @click="$dispatch('display-modal', {'id': 'add-course-item-modal', 'current_item_id': {{ $course_item->id }}})">
-                                            @svg('heroicon-o-pencil-alt', ['class' => 'w-4 h-4'])
-                                        </button>
-                                    </div>
-                                </li>
+                                @php course_item_template($course_item); @endphp
                             @endforeach
                         @endif
                     </ul>
                 </div>
 
-                <div class="col-span-12 w-full mt-4 pt-4 border-t border-gray-200">
+                <div class="col-span-12 w-full flex mt-4 pt-4 border-t border-gray-200">
                     <button type="button" class="btn btn-primary ml-auto btn-sm"
                         @click="$dispatch('display-modal', {'id': 'add-course-item-modal'})">
                         {{ translate('Add Course Item') }}
@@ -69,10 +61,11 @@
                 if($event.detail.current_item_id !== undefined && $event.detail.current_item_id !== null) {
                     $wire.selectCourseItem($event.detail.current_item_id);
                 } else {
-                    $wire.addCourseItem();
+                    $wire.resetCurrentCourseItem();
                 }
             }
-        ">
+        " @hide-course-items-form.window="show = false;" 
+            wire:loading.class="opacity-30 pointer-events-none">
 
             <div>
                 <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Course Item') }}</h3>
@@ -99,7 +92,7 @@
 
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                     @php
-                        $course_items = \App\Models\CourseItem::tree(true)->get()->keyBy('id')->map(fn($item) => $item->name);
+                        $course_items = \App\Models\CourseItem::tree(true)->get()->keyBy('id')->map(fn($item) => str_repeat('-', $item->depth).$item->name);
                     @endphp
                     <x-dashboard.form.select :items="$course_items" selected="current_item.parent_id"></x-dashboard.form.select>
                 </div>
@@ -174,7 +167,7 @@
                 </div>
             </div>
 
-            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5 sm:mt-5" x-data="{}" x-show="current_item.type === 'video'">
+            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}" x-show="current_item.type === 'video'">
                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {{ translate('Content (video embed link)') }}
                 </label>
@@ -186,18 +179,60 @@
             <!-- END Content -->
 
             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
-                <button type="button" class="btn btn-outline-standard btn-sm"
-                    @click="show = false">
-                    {{ translate('Cancel') }}
-                </button>
+                @if(!empty($current_item->id))
+                    <button type="button" class="btn btn-danger  btn-sm"
+                            wire:click="removeCourseItem({{ $current_item->id }});">
+                            {{ translate('Delete') }}
+                    </button>
+                @endif
+                
+                <div class="ml-auto">
+                    <button type="button" class="btn btn-outline-standard btn-sm text-14"
+                        @click="show = false">
+                        {{ translate('Cancel') }}
+                    </button>
 
-                <button type="button" class="btn btn-primary ml-auto btn-sm"
-                    @click="onSave()"
-                    wire:click="saveCourseItem()">
-                    {{ translate('Save') }}
-                </button>
+                    <button type="button" class="btn btn-primary ml-2 btn-sm"
+                        @click="onSave()"
+                        wire:click="saveCourseItem()">
+                        {{ translate('Save') }}
+                    </button>
+                </div>
             </div>
             
         </div>
     </x-system.form-modal>
+
+    <?php
+        function course_item_template($course_item) {
+    ?>
+        <li class="w-full flex flex-col border border-gray-200 rounded-md py-2 px-3">
+            <div class="flex items-center justify-between">
+                <strong class="inline-flex items-center">
+                    {{ $course_item->name }}
+                    @if($course_item->free)
+                        <span class="badge-success ml-2">{{ translate('Free') }}</span>
+                    @endif
+                </strong>
+
+
+                <div class="">
+                    <button type="button" class="btn" @click="$dispatch('display-modal', {'id': 'add-course-item-modal', 'current_item_id': {{ $course_item->id }}})">
+                        @svg('heroicon-o-pencil-alt', ['class' => 'w-4 h-4'])
+                    </button>
+                </div>
+            </div>
+            
+            @if($course_item->children?->isNotEmpty() ?? null)
+                <ul class="w-full flex-flex-col space-y-3 mt-3 mb-2 pt-3 border-t border-gray-200">
+                    {{-- {{ 'p-'.($course_item->children->first()->depth*3)  }} --}}
+                    <?php foreach($course_item->children as $child) { 
+                        course_item_template($child);
+                     } ?>
+                </ul>
+            @endif
+        </li>
+    <?php
+        }
+    ?>
 </div>

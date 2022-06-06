@@ -16,13 +16,15 @@
                     }, --}}
                     onChange: _.debounce((ed) => { 
                         ed.saver.save().then((outputData) => {
-                            {{ $field }} = outputData.blocks;
+                            {{ $field }} = (window.edjsHTML()).parse(outputData).join('');
                         });
                     }, 400)
                 })
             );
             await this.editor.isReady;
-            this.editor.blocks.renderFromHTML({{ $field }});
+            if({{ $field }} !== null && {{ $field }} != '' && {{ $field }}.length > 0) {
+                this.editor.blocks.renderFromHTML({{ $field }});
+            }
                 
             {{-- {
                 {{-- heightMin: 200,

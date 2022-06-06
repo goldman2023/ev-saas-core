@@ -20,11 +20,13 @@ import Undo from 'editorjs-undo';
 import Hyperlink from 'editorjs-hyperlink';
 import Underline from '@editorjs/underline';
 import AttachesTool from '@editorjs/attaches';
+import edjsHTML from 'editorjs-html';
 
 import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 
 window.EditorJS = EditorJS;
 window.EditorJSUndoPlugin = Undo;
+window.edjsHTML = edjsHTML;
 window.getEditorJsDefaultConfig = function($id) {
     return { 
         holder: $id, 
@@ -34,7 +36,7 @@ window.getEditorJsDefaultConfig = function($id) {
          * Pass Tool's class or Settings object for each Tool you want to use 
          */ 
         tools: { 
-            heading: {
+            header: {
                 class: Header,
                 inlineToolbar : true,
                 tunes: ['alignmentTune'],
