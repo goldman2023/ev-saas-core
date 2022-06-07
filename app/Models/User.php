@@ -46,6 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         'trial_ends_at' => 'datetime',
         'banned' => 'boolean',
         'verified' => 'boolean',
+        'is_temp' => 'boolean',
     ];
 
     public static array $user_types = ['admin', 'moderator', 'seller', 'staff', 'customer'];
@@ -80,7 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code',
+        'name', 'surname', 'email', 'is_temp', 'entity', 'password', 'phone', 'provider_id', 'email_verified_at', 'verification_code',
     ];
 
     /**

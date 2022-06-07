@@ -105,6 +105,8 @@ Route::middleware([
     Route::get('/users/login', [LoginController::class, 'user_login'])->name('user.login');
     Route::get('/users/register', [RegisterController::class, 'user_registration'])->name('user.registration');
     Route::get('/users/register/{token}', [RegisterController::class, 'user_registration'])->name('user.invite.registration'); // invite user route
+    Route::get('/users/register/finalize/{id}/{hash}', [RegisterController::class, 'user_finalize_registration'])->name('user.registration.finalize');
+
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::post('/password/reset/email/submit', [HomeController::class, 'reset_password_with_code'])->name('user.password.update');
@@ -123,7 +125,6 @@ Route::middleware([
     Route::get('/email/verify', [EVAccountVerificationController::class, 'verification_page'])->name('user.email.verification.page');
     Route::get('/email/verify/{id}/{hash}', [EVAccountVerificationController::class, 'verify'])->name('user.email.verification.verify');
     Route::get('/email/verify/resend', [EVAccountVerificationController::class, 'resend'])->name('user.email.verification.resend');
-    // Route::get('/email/verification', [EVAccountController::class, 'user_email_verification_page'])->name('user.email.verification.page');
 
     // Homepage For Multi/Single Vendor mode
     Route::get('/', [HomeController::class, 'index'])->name('home');

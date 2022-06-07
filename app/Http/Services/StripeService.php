@@ -8,6 +8,8 @@ use App\Facades\CartService;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\UserSubscriptionStatusEnum;
+use App\Enums\UserTypeEnum;
+use App\Enums\UserEntityEnum;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
@@ -547,11 +549,7 @@ class StripeService
             'tax_id_collection' => [
                 'enabled' => true,
             ],
-            'customer_update' => [
-                'name' => 'auto',
-                'address' => 'auto',
-                'shipping' => 'auto',
-            ],
+            
         ];
 
         // Check whether mode is 'subscription' or 'payment'
@@ -589,6 +587,12 @@ class StripeService
                     'receipt_email' => auth()->user()->email,
                 ];
             }
+
+            $stripe_args['customer_update'] = [
+                'name' => 'auto',
+                'address' => 'auto',
+                'shipping' => 'auto',
+            ];
         }
 
         // Create a Stripe Checkout Link
@@ -878,7 +882,6 @@ class StripeService
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
         $endpoint_secret = Payments::isStripeLiveMode() ? Payments::stripe()->stripe_webhook_live_secret : Payments::stripe()->stripe_webhook_test_secret;
 
-        // TODO:
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
@@ -995,12 +998,33 @@ class StripeService
             $meta[$this->mode_prefix .'stripe_request_id'] = $stripe_request_id; // store webhook request id
             $order->meta = $meta;
 
+            $initiator = User::find($order->user_id);
+
+            // If Initiator is not registered, create a ghost user
+            if(empty($initiator) && !User::where('email', $order->email)->exists()) {
+                $initiator = User::updateOrCreate(
+                    [
+                        'email' => $session->customer_details->email,
+                    ],
+                    [
+                        'is_temp' => true,
+                        'user_type' => UserTypeEnum::customer()->value,
+                        'entity' => UserEntityEnum::individual()->value,
+                        'name' => explode(' ', $session->customer_details->name)[0] ?? $session->customer_details->name,
+                        'surname' => explode(' ', $session->customer_details->name)[1] ?? ' ',
+                        'phone' => $session->customer_details->phone ?? '',
+                    ]
+                );
+
+                $order->user_id = $initiator->id;
+            }
+
             $order->save();
 
             // Check if $model has stock and reduce it if it does!!!
             $order_item = $order->order_items->first();
             $model = $order_item->subject;
-            $initiator = User::find($order->user_id);
+            
 
             if (method_exists($model, 'stock') && $model->track_inventory) {
                 // Reduce the stock quantity of an $model
@@ -1044,6 +1068,7 @@ class StripeService
             * Create Invoice here because 'invoice.paid'  hook won't be sent for one-time payments!!!
             */
             $invoice = Invoice::withoutGlobalScopes()->findOrFail($session->metadata->invoice_id ?? -1);;
+            $invoice->user_id = $initiator->id;
 
             if($session->mode === 'payment') {
                 // One-time payments do not send invoice.created/paid hook, so we must change some invoice properties here!

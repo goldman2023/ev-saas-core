@@ -15,6 +15,7 @@ use App\Mail\EmailVerification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\UserWelcomeNotification;
+use App\Notifications\UserFinalizeRegistration;
 use App\Notifications\Admin\GeneralTransactionalNotification;
 
 class UserObserver
@@ -50,7 +51,7 @@ class UserObserver
             Log::error($e->getMessage());
         }
 
-        if(get_tenant_setting('force_email_verification')) {
+        if(!$user->is_temp && get_tenant_setting('force_email_verification')) {
             $data= [];
 
             $data['view'] = 'emails.users.email-verification'; 
@@ -65,6 +66,12 @@ class UserObserver
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
             }
+        } else if($user->is_temp) {
+            // If user is ghost user, send a notification to finalize User registration!
+            $user->verification_code = sha1($user->id.'_'.$user->email);
+            $user->save();
+
+            $user->notify(new UserFinalizeRegistration($user->verification_code));
         }
 
         // Create Stripe Customer if stripe is enabled

@@ -14,12 +14,14 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 
-class UserWelcomeNotification extends Notification
+class UserFinalizeRegistration extends Notification
 {
 
-    public function __construct()
-    {
+    public $verification_code;
 
+    public function __construct($verification_code)
+    {
+        $this->verification_code = $verification_code;
     }
 
     public function via($notifiable)
@@ -35,13 +37,9 @@ class UserWelcomeNotification extends Notification
                 // ->text('mail.text.message')
                 ->subject(translate('Welcome to '.get_tenant_setting('site_name')))
                 ->greeting(translate('Hello, ').$notifiable->name)
-                ->line(translate('Welcome to our site.'))
-                ->line(translate('Thank you for using our application!'))
-                ->action('Go to dashboard', route('dashboard'));
-
-                // ->mailersend();
-            // Mail::to($notifiable->email)
-            //     ->send(new EmailVerification(user: $notifiable, data: $array));
+                ->line(translate('You have recently purchased from '.get_tenant_setting('site_name')))
+                ->line(translate('To access or manage your purchased content, please finalize your registration.'))
+                ->action('Finalize registration', route('user.registration.finalize', ['id' => $notifiable->id, 'hash' => $this->verification_code]));
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
