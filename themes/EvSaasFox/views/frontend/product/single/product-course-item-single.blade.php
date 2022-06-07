@@ -27,7 +27,6 @@
         base_price: {{ $product->base_price }},
         base_price_display: '{{ $product->getBasePrice(true) }}',
         course_items_type: @js($course_item->type),
-        quiz_data: @js($course_item->subject->quiz_json ?? []),
         video_data: null,
         init() {
             if(this.course_items_type === 'video') {
