@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('blog_post_relationships', function (Blueprint $table) {
-            $table->unique(['blog_post_id', 'subject_id', 'subject_type']);
-        });
+        // TODO: Syntax error: name too long
+        // Schema::table('blog_post_relationships', function (Blueprint $table) {
+        //     $table->unique(['blog_post_id', 'subject_id', 'subject_type']);
+        // });
     }
 
     /**
@@ -25,8 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('blog_post_relationships', function (Blueprint $table) {
-            $table->dropUnique(['blog_post_id', 'subject_id', 'subject_type']);
-        });
+        // Schema::table('blog_post_relationships', function (Blueprint $table) {
+        //     $table->dropUnique(['blog_post_id', 'subject_id', 'subject_type']);
+        // });
     }
 };
