@@ -35,13 +35,23 @@
         },
         getEmbed() {
             if(this.course_items_type === 'video') {
-                fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(this.course_item.content), {
-                    method: 'GET',
-                    cache: 'no-cache', 
-                    mode: 'cors',
-                })
-                .then(response => response.json())
-                .then(data => this.video_data = data);
+                if(this.course_item.content.includes('youtube')) {
+                    this.video_data = `
+                        <iframe width='640' height='360' src='${this.course_item.content}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                    `;
+                } else if(this.course_item.content.includes('vimeo')) {
+                    fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(this.course_item.content), {
+                        method: 'GET',
+                        cache: 'no-cache', 
+                        mode: 'cors',
+                    })
+                    .then(response => response.json())
+                    .then(data => this.video_data = data.html);
+                } else {
+                    this.video_data = `
+                        <iframe width='640' height='360' src='${this.course_item.content}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                    `;
+                }
             }
         }
     }" x-init="init()">
@@ -55,7 +65,7 @@
 
                 @if($course_item->type === \App\Enums\CourseItemTypes::video()->value)
                     <div class="w-full pb-4" >
-                        <div class="aspect-w-16 aspect-h-9 " x-html="_.get(video_data, 'html', '')"></div>
+                        <div class="aspect-w-16 aspect-h-9 " x-html="video_data"></div>
                     </div>
                 @endif
 
