@@ -6,22 +6,49 @@
 
 @section('feed_content')
     <div class="grid grid-cols-12 gap-10 col-span-12" x-data="{
+        course_item: @js($course_item ?? []),
         qty: 1,
         total_price: {{ $product->total_price }},
         total_price_display: '{{ $product->getTotalPrice(true) }}',
         base_price: {{ $product->base_price }},
         base_price_display: '{{ $product->getBasePrice(true) }}',
-    }">
+        course_items_type: @js($course_item->type),
+        video_data: null,
+        getEmbed() {
+            if(this.course_items_type === 'video') {
+                fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(this.course_item.content), {
+                    method: 'GET',
+                    cache: 'no-cache', 
+                    mode: 'cors',
+                })
+                .then(response => response.json())
+                .then(data => this.video_data = data);
+            }
+        }
+    }" x-init="getEmbed()">
         <div class="col-span-12 md:col-span-8">
             <div class="w-full bg-white rounded-xl shadow overflow-y-auto">
-                <div class="w-full pb-8">
-                    <img class="w-full h-full max-h-[460px] object-cover" src="{{ !empty($course_item->cover) ? $course_item->getCover(['w' => 0, 'h' => 600]) : $course_item->getTHumbnail(['w' => 0, 'h' => 600]) }}" alt="" />
-                </div>
+                @if(!empty($course_item->cover) && $course_item->type !== \App\Enums\CourseItemTypes::video()->value)
+                    <div class="w-full pb-8">
+                        <img class="w-full h-full max-h-[460px] object-cover" src="{{ !empty($course_item->cover) ? $course_item->getCover(['w' => 0, 'h' => 600]) : $course_item->getTHumbnail(['w' => 0, 'h' => 600]) }}" alt="" />
+                    </div>
+                @endif
+
+                @if($course_item->type === \App\Enums\CourseItemTypes::video()->value)
+                    <div class="w-full pb-4" >
+                        <div class="aspect-w-16 aspect-h-9 " x-html="_.get(video_data, 'html', '')"></div>
+                    </div>
+                @endif
 
                 {{-- Product Header --}}
-                <div class="w-full flex flex-row items-center px-7 pb-5">
+                <div class="w-full flex flex-row items-center px-7 pb-5 @if(empty($course_item->cover) && $course_item->type !== \App\Enums\CourseItemTypes::video()->value) pt-5 @endif">
                     <div class="flex flex-col frow-1">
-                        <h1 class="text-24 leading-[36px] font-semibold text-typ-1">{{ $course_item->name }}</h1>
+                        <h1 class="text-24 leading-[36px] font-semibold text-typ-1">
+                            {{ $course_item->name }}
+                            @if($course_item->free)
+                                <span class="badge-success ml-2">{{ translate('Free') }}</span>
+                            @endif
+                        </h1>
 
                         <div class="flex flex-row flex-wrap items-center justify-start divide-x">
                             {{-- Course --}}
@@ -46,11 +73,20 @@
 
                     {{-- Excerpt --}}
                     @if(!empty($course_item->excerpt))
-                        <p class="w-full text-gray-500 mb-4">
+                        <p class="w-full text-gray-500 pb-3 mb-3 border-b border-gray-200">
                             {!! $course_item->excerpt !!}
                         </p>
                     @endif
 
+                    <div class="w-full">
+                        @if($course_item->type === \App\Enums\CourseItemTypes::video()->value)
+
+                        @elseif($course_item->type === \App\Enums\CourseItemTypes::quizz()->value)
+
+                        @elseif($course_item->type === \App\Enums\CourseItemTypes::wysiwyg()->value)
+                            {!! $course_item->content !!}
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

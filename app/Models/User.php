@@ -11,6 +11,7 @@ use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
 use App\Traits\UploadTrait;
 use App\Traits\SocialFollowingTrait;
+use App\Traits\OwnershipTrait;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\HasWalletFloat;
@@ -32,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use LogsActivity;
     use UploadTrait;
     use GalleryTrait;
+    use OwnershipTrait;
     use SocialAccounts;
     use HasWalletFloat;
     use PermalinkTrait;

@@ -54,13 +54,6 @@
                                             <span>{{ translate('Design') }}</span>
                                         </a>
 
-                                        <a href="#" @click="current_tab = 'menus'"
-                                            :class="{'border-primary text-primary':current_tab === 'menus', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'menus'}"
-                                            class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
-                                            @svg('heroicon-o-menu', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
-                                            <span>{{ translate('Menus') }}</span>
-                                        </a>
-
                                         <a href="#" @click="current_tab = 'currency'"
                                             :class="{'border-primary text-primary':current_tab === 'currency', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'currency'}"
                                             class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
@@ -87,13 +80,6 @@
                                             class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
                                             @svg('heroicon-o-currency-euro', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
                                             <span>{{ translate('Payments') }}</span>
-                                        </a>
-
-                                        <a href="#" @click="current_tab = 'checkout'"
-                                            :class="{'border-primary text-primary':current_tab === 'checkout', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'checkout'}"
-                                            class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
-                                            @svg('heroicon-o-credit-card', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
-                                            <span>{{ translate('Checkout') }}</span>
                                         </a>
 
                                         <a href="#" @click="current_tab = 'integrations'"

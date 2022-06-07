@@ -15,6 +15,7 @@ use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Plan;
 use App\Models\UserSubscription;
+use App\Models\Ownership;
 use Cache;
 use Illuminate\Database\Eloquent\Collection;
 use Session;
@@ -999,6 +1000,7 @@ class StripeService
             // Check if $model has stock and reduce it if it does!!!
             $order_item = $order->order_items->first();
             $model = $order_item->subject;
+            $initiator = User::find($order->user_id);
 
             if (method_exists($model, 'stock') && $model->track_inventory) {
                 // Reduce the stock quantity of an $model
@@ -1019,7 +1021,7 @@ class StripeService
                     // Single Plan Subscription mode: THIS PART CREATES ONE UserSubscription AND "detaches all other" (hence sync)
                     // IMPORTANT: Attach stripe_subscription_id to our UserSubscription
                     // If multiplan purchase is not available, 1) synch user subscription and 2) update stripe data
-                    User::find($order->user_id)->plans()->sync([
+                    $initiator->plans()->sync([
                         $model->id => [
                             'order_id' => $order->id,
                             'payment_status' => PaymentStatusEnum::pending()->value, // set payment_status to `pending` because only when invoice.paid, we are sure that payment is 100% successful
@@ -1100,6 +1102,26 @@ class StripeService
                 $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
                 $order->meta = $meta;
                 $order->save();
+
+                /**
+                 * Product Ownership logic (status must be complete and payment_status must be paid)
+                 * 1. $session->mode === 'payment'
+                 * 2. $session->status === 'complete'
+                 * 3. $session->payment_status === 'paid'
+                 **/
+                if($session->status === 'complete' && $session->payment_status === 'paid') {
+                    Ownership::updateOrCreate(
+                        [
+                            'subject_id' => $model->id,
+                            'subject_type' => $model::class,
+                            'owner_id' => $initiator->id,
+                            'owner_type' => $initiator::class
+                        ],
+                        [
+                            'updated_at' => date('Y-m-d H:i:s', time())
+                        ]
+                    );
+                }
             } else {
                 $invoice->meta = $meta;
                 $invoice->saveQuietly(); // there could be memory leaks if we use just save (no need for events right now)

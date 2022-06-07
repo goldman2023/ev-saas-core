@@ -9,6 +9,7 @@ use App\Traits\GalleryTrait;
 use App\Traits\ReviewTrait;
 use App\Traits\UploadTrait;
 use App\Traits\SocialFollowingTrait;
+use App\Traits\OwnershipTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\PermalinkTrait;
 use Spatie\Sluggable\HasSlug;
@@ -27,6 +28,7 @@ class Shop extends WeBaseModel
     use GalleryTrait;
     use ReviewTrait;
     use PermalinkTrait;
+    use OwnershipTrait;
     use SocialFollowingTrait;
 
     protected $table = 'shops';
