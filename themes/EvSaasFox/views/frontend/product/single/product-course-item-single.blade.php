@@ -4,6 +4,20 @@
 <x-default.products.single.head-meta-tags :product="$product"></x-default.products.single.head-meta-tags>
 @endsection
 
+@push('head_scripts')
+    @if($course_item->type === \App\Enums\CourseItemTypes::quizz()->value)
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+        <link href="https://unpkg.com/survey-jquery@1.9.33/modern.css" type="text/css" rel="stylesheet" />
+        <script src="https://unpkg.com/survey-jquery@1.9.33/survey.jquery.min.js"></script>
+
+        <style>
+
+        </style>
+    @endif
+@endpush
+
 @section('feed_content')
     <div class="grid grid-cols-12 gap-10 col-span-12" x-data="{
         course_item: @js($course_item ?? []),
@@ -13,7 +27,15 @@
         base_price: {{ $product->base_price }},
         base_price_display: '{{ $product->getBasePrice(true) }}',
         course_items_type: @js($course_item->type),
+        quiz_data: @js($course_item->subject->quiz_json ?? []),
         video_data: null,
+        init() {
+            if(this.course_items_type === 'video') {
+                this.getEmbed();
+            } else if(this.course_items_type === 'quizz') {
+                this.initQuiz();
+            }
+        },
         getEmbed() {
             if(this.course_items_type === 'video') {
                 fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(this.course_item.content), {
@@ -24,8 +46,28 @@
                 .then(response => response.json())
                 .then(data => this.video_data = data);
             }
+        },
+        initQuiz() {
+            Survey.StylesManager.applyTheme('modern');
+
+            var surveyJSON = this.quiz_data;
+
+            var survey = new Survey.Model(surveyJSON);
+            
+            function sendDataToServer(survey) {
+                // Send Ajax request to your web server
+                {{-- TODO: Save into `we_quiz_results` --}}
+                alert('The results are: ' + JSON.stringify(survey.data));
+            }
+            $('#we-quiz-container').Survey({
+                model: survey,
+                onComplete: sendDataToServer
+            });
+
+            survey.completedHtml =  '{{ translate('You completed the quiz!') }}';
+            survey.showPreviewBeforeComplete = 'showAllQuestions';
         }
-    }" x-init="getEmbed()">
+    }" x-init="init()">
         <div class="col-span-12 md:col-span-8">
             <div class="w-full bg-white rounded-xl shadow overflow-y-auto">
                 @if(!empty($course_item->cover) && $course_item->type !== \App\Enums\CourseItemTypes::video()->value)
@@ -82,7 +124,7 @@
                         @if($course_item->type === \App\Enums\CourseItemTypes::video()->value)
 
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::quizz()->value)
-
+                            <div class="w-full" id="we-quiz-container"></div>
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::wysiwyg()->value)
                             {!! $course_item->content !!}
                         @endif

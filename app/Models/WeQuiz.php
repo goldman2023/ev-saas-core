@@ -13,6 +13,10 @@ class WeQuiz extends WeBaseModel
 
     protected $table = "we_quizzes";
 
+    protected $casts = [
+        'quiz_json' => 'array',
+    ];
+
     public function user() {
         return $this->belongsTo(User::class);
     }

@@ -70,15 +70,22 @@ class AppSettingsForm extends Component
                 'settings.plans_trial_duration' => ['exclude_if:settings.plans_trial_mode,false', 'required', 'numeric', 'gt:0'],
 
             ]),
+            'integrations.smtp_server' => [
+                'settings.smtp_mail_enabled' => ['boolean'],
+                'settings.smtp_mail_host' => ['required'],
+                'settings.smtp_mail_port' => ['required'],
+                'settings.smtp_mail_username' => ['required'],
+                'settings.smtp_mail_password' => ['required'],
+                'settings.mail_from_address' => ['required'],
+                'settings.mail_from_name' => ['nullable'],
+                'settings.mail_reply_to_address' => ['required'],
+                'settings.mail_reply_to_name' => ['nullable'],
+            ],
             'integrations.mailerlite' => [
                 'settings.mailerlite_api_token' => [''],
             ],
             'integrations.mailersend' => [
                 'settings.mailersend_api_token' => [''],
-                'settings.mail_from_address' => ['required'],
-                'settings.mail_from_name' => ['nullable'],
-                'settings.mail_reply_to_address' => ['required'],
-                'settings.mail_reply_to_name' => ['nullable'],
                 'settings.transactional_email_templates_list' => [''],
             ],
             'integrations.google_analytics' => [
