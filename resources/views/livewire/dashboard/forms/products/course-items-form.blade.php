@@ -6,13 +6,16 @@
         course_items: @js($course_items ?? []),
         current_item: @entangle('current_item').defer,
         onSave() {
+            $wire.set('current_item.name', this.current_item.name, true);
+            $wire.set('current_item.excerpt', this.current_item.excerpt, true);
             $wire.set('current_item.type', this.current_item.type, true);
             $wire.set('current_item.parent_id', this.current_item.parent_id, true);
             $wire.set('current_item.free', this.current_item.free, true);
             $wire.set('current_item.accessible_after', this.current_item.accessible_after, true);
+            $wire.set('current_item.content', this.current_item.content, true);
 
-            if(this.current_item.type === 'wysiwyg') {
-                $wire.set('current_item.content', this.current_item.content, true);
+            if(this.current_item.type === 'quizz') {
+                $wire.set('current_item.subject_id', this.current_item.subject_id, true);
             }
         }
     }"
@@ -79,7 +82,7 @@
                 </label>
 
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <x-dashboard.form.input field="current_item.name" />
+                    <x-dashboard.form.input field="current_item.name" :x="true" />
                 </div>
             </div>
             <!-- END Name -->
@@ -121,7 +124,7 @@
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <textarea type="text" class="form-standard h-[80px] @error('current_item.excerpt') is-invalid @enderror"
                                 placeholder="{{ translate('Write a short description for this course item') }}"
-                                wire:model.defer="current_item.excerpt">
+                                x-model="current_item.excerpt">
                     </textarea>
 
                     <x-system.invalid-msg class="w-full" field="current_item.excerpt"></x-system.invalid-msg>
@@ -154,7 +157,7 @@
             <!-- END Accessible after -->
 
 
-            <!-- Content -->
+            <!-- WYSIWG Content -->
             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"x-show="current_item.type === 'wysiwyg'"  wire:ignore>
 
                 <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
@@ -167,6 +170,7 @@
                 </div>
             </div>
 
+            {{-- Video content --}}
             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}" x-show="current_item.type === 'video'">
                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {{ translate('Content (video embed link)') }}
@@ -174,6 +178,17 @@
 
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <x-dashboard.form.input field="current_item.content" />
+                </div>
+            </div>
+
+            {{-- Quizz content --}}
+            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}" x-show="current_item.type === 'quizz'">
+                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                    {{ translate('Quizz') }}
+                </label>
+
+                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                    <x-dashboard.form.select :items="$available_quizzes" selected="current_item.subject_id" :nullable="false"></x-dashboard.form.select>
                 </div>
             </div>
             <!-- END Content -->
@@ -210,8 +225,19 @@
             <div class="flex items-center justify-between">
                 <strong class="inline-flex items-center">
                     {{ $course_item->name }}
-                    @if($course_item->free)
-                        <span class="badge-success ml-2">{{ translate('Free') }}</span>
+
+                    @if($course_item->children->isEmpty())
+                        @if($course_item->type === 'video')
+                            @svg('heroicon-s-play', ['class' => 'w-4 h-4 ml-2'])
+                        @elseif($course_item->type === 'wysiwyg')
+                            @svg('heroicon-o-document', ['class' => 'w-4 h-4 ml-2'])
+                        @elseif($course_item->type === 'quizz')
+                            @svg('heroicon-o-pencil', ['class' => 'w-4 h-4 ml-2'])
+                        @endif
+                        
+                        @if($course_item->free)
+                            <span class="badge-success ml-2">{{ translate('Free') }}</span>
+                        @endif
                     @endif
                 </strong>
 
@@ -224,7 +250,7 @@
             </div>
             
             @if($course_item->children?->isNotEmpty() ?? null)
-                <ul class="w-full flex-flex-col space-y-3 mt-3 mb-2 pt-3 border-t border-gray-200">
+                <ul class="w-full flex-flex-col space-y-3 mt-1 mb-2 pt-4 border-t border-gray-200">
                     {{-- {{ 'p-'.($course_item->children->first()->depth*3)  }} --}}
                     <?php foreach($course_item->children as $child) { 
                         course_item_template($child);

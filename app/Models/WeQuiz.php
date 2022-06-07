@@ -20,4 +20,9 @@ class WeQuiz extends WeBaseModel
     public function results() {
         return $this->hasMany(WeQuizResults::class, 'quiz_id', 'id');
     }
+
+    public function scopeMy($query)
+    {
+        return $query->where('user_id', '=', auth()->user()?->id ?? null);
+    }
 }
