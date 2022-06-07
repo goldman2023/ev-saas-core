@@ -158,27 +158,33 @@
 
 
             <!-- WYSIWG Content -->
-            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"x-show="current_item.type === 'wysiwyg'"  wire:ignore>
-                <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                    {{ translate('Content (WYSIWYG)') }}
-                </label>
-
-                <div class="mt-1 sm:mt-0 sm:col-span-3">
-                    <x-dashboard.form.editor-js field="current_item.content" id="course-item-content-editor"></x-dashboard.form.editor-js>
-                    <x-system.invalid-msg class="w-full" field="current_item.content"></x-system.invalid-msg>
+            <template x-if="current_item.type === 'wysiwyg'">
+                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"  wire:ignore>
+                    <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                        {{ translate('Content (WYSIWYG)') }}
+                    </label>
+    
+                    <div class="mt-1 sm:mt-0 sm:col-span-3">
+                        <x-dashboard.form.editor-js field="current_item.content" id="course-item-content-editor"></x-dashboard.form.editor-js>
+                        <x-system.invalid-msg class="w-full" field="current_item.content"></x-system.invalid-msg>
+                    </div>
                 </div>
-            </div>
+            </template>
+            
 
             {{-- Video content --}}
-            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}" x-show="current_item.type === 'video'">
-                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                    {{ translate('Content (video embed link)') }}
-                </label>
-
-                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <x-dashboard.form.input field="current_item.content" :x="true" />
+            <template x-if="current_item.type === 'video'">
+                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}" >
+                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                        {{ translate('Content (video embed link)') }}
+                    </label>
+    
+                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                        <x-dashboard.form.input field="current_item.content" :x="true" />
+                    </div>
                 </div>
-            </div>
+            </template>
+            
 
             {{-- Quizz content --}}
             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}" x-show="current_item.type === 'quizz'">
