@@ -177,7 +177,7 @@
                 </label>
 
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <x-dashboard.form.input field="current_item.content" />
+                    <x-dashboard.form.input field="current_item.content" :x="true" />
                 </div>
             </div>
 
