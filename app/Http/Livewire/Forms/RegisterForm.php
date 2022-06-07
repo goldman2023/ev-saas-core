@@ -36,6 +36,8 @@ class RegisterForm extends Component
     use DispatchSupport;
 
     protected $user;
+    public $is_ghost;
+    public $ghostUser;
     public $entity = 'individual';
     public $name;
     public $surname;
@@ -58,6 +60,10 @@ class RegisterForm extends Component
             'password' => ['required', 'min:8', 'regex:/^.*(?=.{1,})(?=.*[a-zA-Z])(?=.*[0-9]).*$/', 'confirmed'],
             'terms_consent' => ['required', 'boolean', 'is_true']
         ];
+
+        if($this->is_ghost) {
+            $rules['email'] = ['required', 'unique:App\Models\User,email,'.$this->ghostUser->id];
+        }
 
         if($this->available_meta->count() > 0) {
             foreach($this->available_meta as $key => $options) {
@@ -102,7 +108,7 @@ class RegisterForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount($ghostUser = null)
     {
         $this->token = request()->token ?? null;
         if(!empty($this->token)) {
@@ -116,6 +122,16 @@ class RegisterForm extends Component
             foreach($this->available_meta as $key => $options) {
                 $this->user_meta[$key] = '';
             }
+        }
+
+        // If ghost user is provided, finalize registration
+        if(!empty($ghostUser)) {
+            $this->is_ghost = true;
+            $this->ghostUser = $ghostUser;
+            $this->entity = $ghostUser->entity;
+            $this->name = $ghostUser->name;
+            $this->surname = $ghostUser->surname;
+            $this->email = $ghostUser->email;
         }
     }
 
@@ -195,14 +211,30 @@ class RegisterForm extends Component
 
     protected function createUser()
     {
-        $this->user = User::create([
-            'entity' => $this->entity,
-            'name' => $this->name,
-            'surname' => $this->surname,
-            'email' => $this->email,
-            'user_type' => User::$customer_type,
-            'password' => Hash::make($this->password),
-        ]);
+        if($this->is_ghost) {
+            $this->user = User::updateOrCreate([
+                'email' => $this->email,
+            ], [
+                'is_temp' => false,
+                'entity' => $this->entity,
+                'name' => $this->name,
+                'surname' => $this->surname,
+                'email' => $this->email,
+                'user_type' => UserTypeEnum::customer()->value,
+                'password' => Hash::make($this->password),
+                'email_verified_at' => date('Y-m-d H:i:s') // must be added manually, cuz ghost user is already in DB
+            ]);
+        } else {
+            $this->user = User::create([
+                'entity' => $this->entity,
+                'name' => $this->name,
+                'surname' => $this->surname,
+                'email' => $this->email,
+                'user_type' => UserTypeEnum::customer()->value,
+                'password' => Hash::make($this->password),
+            ]);
+        }
+        
 
         // Save WP md5 password in core_meta
         $this->user->saveCoreMeta('password_md5', Hash::driver('wp')->make($this->password));

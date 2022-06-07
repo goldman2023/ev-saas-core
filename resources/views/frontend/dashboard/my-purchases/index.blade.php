@@ -18,7 +18,7 @@
 
     <div class="w-full">
         @if($orders_count > 0)
-            <livewire:dashboard.tables.my-purchases-table></livewire:dashboard.tables.my-purchases-table>
+            {{-- <livewire:dashboard.tables.my-purchases-table></livewire:dashboard.tables.my-purchases-table> --}}
         @else
             <x-dashboard.empty-states.no-items-in-collection 
                 icon="heroicon-o-document" 

@@ -71,7 +71,11 @@ class UserObserver
             $user->verification_code = sha1($user->id.'_'.$user->email);
             $user->save();
 
-            $user->notify(new UserFinalizeRegistration($user->verification_code));
+            try {
+                $user->notify(new UserFinalizeRegistration($user->verification_code));
+            } catch(\Exception $e) {
+                Log::error($e->getMessage());
+            }
         }
 
         // Create Stripe Customer if stripe is enabled

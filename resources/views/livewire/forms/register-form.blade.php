@@ -61,8 +61,8 @@
             <label class="block text-16 font-medium text-gray-700">{{ translate('Email') }}</label>
 
             <div class="mt-1 relative rounded-md shadow-sm">
-                <input type="email" name="email" class="form-standard @error('email') is-invalid @enderror"
-                    placeholder="you@example.com" wire:model.defer="email" data-test="we-register-email">
+                <input type="email" name="email" class="form-standard @if($is_ghost) form-standard opacity-50 pointer-events-none @endif @error('email') is-invalid @enderror"
+                    placeholder="you@example.com" wire:model.defer="email" data-test="we-register-email" @if($is_ghost) readonly @endif>
 
                 <x-system.invalid-icon field="email" />
             </div>
@@ -75,15 +75,15 @@
             <fieldset class="mt-4">
               <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
                 <div class="flex items-center">
-                  <input id="entity_individual" name="entity_field" selected type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700">
-                      {{ translate('Individual') }}
-                </label>
+                    <input id="entity_individual" name="entity_field" selected type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                    <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700">
+                        {{ translate('Individual') }}
+                    </label>
                 </div>
 
                 <div class="flex items-center">
-                  <input id="entity_company" name="entity_field" type="radio" x-model="entity"  value="company" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                  <label for="entity_company" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Company') }} </label>
+                    <input id="entity_company" name="entity_field" type="radio" x-model="entity"  value="company" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                    <label for="entity_company" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Company') }} </label>
                 </div>
               </div>
             </fieldset>
