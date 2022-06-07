@@ -51,7 +51,7 @@ class WeQuiz extends Resource
         return [
             ID::make()->sortable(),
             Text::make('name'),
-            Code::make('Quiz JSON', 'quiz_json'),
+            Code::make('Quiz JSON', 'quiz_json')->json(),
             BelongsTo::make('User', 'user', 'App\Nova\Tenant\User'),
             HasMany::make('Quiz Attempts', 'results', 'App\Nova\WeQuizResults')
 
