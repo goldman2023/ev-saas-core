@@ -31,6 +31,7 @@ use EVS;
 use FX;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use MyShop;
@@ -366,13 +367,13 @@ class ProductForm2 extends Component
             // $this->dispatchBrowserEvent('init-product-form', []);
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
             $this->inform(translate('There was an error while saving a product.'), $e->getMessage(), 'fail');
         }
     }
 
-    
+
     protected function saveModelCoreMeta()
     {
         foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {
@@ -665,7 +666,7 @@ class ProductForm2 extends Component
         }
     }
 
-    
+
 
     // public function updateAttributeValuesForVariations() {
     //     $atts = collect($this->product_attributes)->filter(function($att, $key) {
