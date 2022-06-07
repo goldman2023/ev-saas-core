@@ -223,6 +223,10 @@ class Product extends WeBaseModel
         return $this->hasMany(ProductTax::class);
     }
 
+    public function course_items() {
+        return $this->hasMany(CourseItem::class);
+    }
+
     /* TODO: Implement product condition in backend: new/used/refurbished */
     public function getCondition()
     {

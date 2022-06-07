@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <livewire:forms.register-form />
+                    <livewire:forms.register-form :ghost-user="!empty($ghost_user ?? null) ? $ghost_user : null" />
                 </div>
             </div>
         </div>

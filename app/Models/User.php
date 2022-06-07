@@ -11,6 +11,7 @@ use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
 use App\Traits\UploadTrait;
 use App\Traits\SocialFollowingTrait;
+use App\Traits\OwnershipTrait;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\HasWalletFloat;
@@ -32,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use LogsActivity;
     use UploadTrait;
     use GalleryTrait;
+    use OwnershipTrait;
     use SocialAccounts;
     use HasWalletFloat;
     use PermalinkTrait;
@@ -44,6 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         'trial_ends_at' => 'datetime',
         'banned' => 'boolean',
         'verified' => 'boolean',
+        'is_temp' => 'boolean',
     ];
 
     public static array $user_types = ['admin', 'moderator', 'seller', 'staff', 'customer'];
@@ -78,7 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code',
+        'name', 'surname', 'email', 'is_temp', 'entity', 'password', 'phone', 'provider_id', 'email_verified_at', 'verification_code',
     ];
 
     /**
@@ -128,6 +131,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(Wishlist::class);
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function social_accounts()
     {
         return $this->hasMany(SocialAccount::class);
@@ -157,7 +165,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     {
         return $this->morphedByMany(Shop::class, 'subject', 'user_relationships');
     }
-    
+
     public function blog_posts()
     {
         return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
@@ -222,6 +230,12 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(UserSubscription::class)->where('subject_type', Plan::class);
     }
 
+    // TODO: Shoud be appended to User model based on if Quiz Feature is added to the tenant or not!
+    public function quizzes()
+    {
+        return $this->hasMany(WeQuiz::class);
+    }
+
     /**
      * Check if user is subscribed to a specific plan
      *
@@ -244,11 +258,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function getDynamicModelUploadProperties(): array
     {
         return [];
-    }
-
-    public function getAvatar(array $options = [])
-    {
-        return $this->getUpload('thumbnail', $options);
     }
 
     public static function getAvailableUserTypes($only_vendor_types = true)

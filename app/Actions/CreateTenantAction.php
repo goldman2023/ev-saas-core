@@ -37,8 +37,9 @@ class CreateTenantAction
         /* Fuck you TODO: @vukasin */
         $tenant->run(function ($tenant) {
             $storage_path = storage_path();
-
-            mkdir("$storage_path/framework/cache", 0775, true);
+            if(!file_exists("$storage_path/framework/cache")) {
+                mkdir("$storage_path/framework/cache", 0775, true);
+            }
         });
 
         if ($createStripeCustomer) {

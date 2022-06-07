@@ -14,7 +14,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
 
-class MyPurchasesTable extends DataTableComponent
+class MyOrdersTable extends DataTableComponent
 {
     use DispatchSupport;
 

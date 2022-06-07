@@ -54,13 +54,6 @@
                                             <span>{{ translate('Design') }}</span>
                                         </a>
 
-                                        <a href="#" @click="current_tab = 'menus'"
-                                            :class="{'border-primary text-primary':current_tab === 'menus', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'menus'}"
-                                            class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
-                                            @svg('heroicon-o-menu', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
-                                            <span>{{ translate('Menus') }}</span>
-                                        </a>
-
                                         <a href="#" @click="current_tab = 'currency'"
                                             :class="{'border-primary text-primary':current_tab === 'currency', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'currency'}"
                                             class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
@@ -87,13 +80,6 @@
                                             class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
                                             @svg('heroicon-o-currency-euro', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
                                             <span>{{ translate('Payments') }}</span>
-                                        </a>
-
-                                        <a href="#" @click="current_tab = 'checkout'"
-                                            :class="{'border-primary text-primary':current_tab === 'checkout', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'checkout'}"
-                                            class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
-                                            @svg('heroicon-o-credit-card', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
-                                            <span>{{ translate('Checkout') }}</span>
                                         </a>
 
                                         <a href="#" @click="current_tab = 'integrations'"
@@ -1122,6 +1108,151 @@
                             <div class="w-full px-5" x-show="current_tab === 'integrations'">
                                 <ul role="list"
                                     class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                                    {{-- SMTP Mail --}}
+                                    <li
+                                        class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
+                                        <div class="flex-1 flex flex-col p-8">
+                                            <img src="https://wpmailsmtp.com/wp-content/uploads/2020/04/SMTP-com.jpg"
+                                                class="h-8 logo-light object-contain">
+                                            <h3 class="mt-6 text-gray-900 text-sm font-medium">{{
+                                                translate('SMTP Mail') }}</h3>
+                                        </div>
+                                        <div>
+                                            <div class="-mt-px flex divide-x divide-gray-200">
+                                                <div class="w-0 flex-1 flex">
+                                                    <a @click="$dispatch('display-modal', {'id': 'app-settings-smtp-mail'})"
+                                                        class="cursor-pointer relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                                                        @svg('heroicon-o-pencil', ['class' => 'w-5 h-5'])
+                                                        <span class="ml-2">{{ translate('Edit') }}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <x-system.form-modal id="app-settings-smtp-mail" title="SMTP Mail" >
+                                        <div class="w-full">
+                                            <!-- SMTP Enabled-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('Enable SMTP') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.toggle field="settings.smtp_mail_enabled" />
+                                                </div>
+                                            </div>
+                                            <!-- END SMTP Enabled -->
+
+                                            <!-- SMTP Host-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('SMTP Host') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.smtp_mail_host" />
+                                                </div>
+                                            </div>
+                                            <!-- END SMTP Host -->
+
+                                            <!-- SMTP Post-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('SMTP Port') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.smtp_mail_port" />
+                                                </div>
+                                            </div>
+                                            <!-- END SMTP Post -->
+
+                                            <!-- SMTP Username-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('SMTP Username') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.smtp_mail_username" />
+                                                </div>
+                                            </div>
+                                            <!-- END SMTP Username -->
+
+                                            <!-- SMTP Password-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('SMTP Password') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input type="password" field="settings.smtp_mail_password" />
+                                                </div>
+                                            </div>
+                                            <!-- END SMTP Password -->
+
+                                            <!-- Mail From Address-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('From Address') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.mail_from_address" />
+                                                </div>
+                                            </div>
+                                            <!-- END Mail From Address -->
+
+                                            <!-- Mail From Name-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('From Name') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.mail_from_name"
+                                                        placeholder="{{ translate('Site name is used by default') }}" />
+                                                </div>
+                                            </div>
+                                            <!-- END Mail From Name -->
+
+                                            <!-- Mail ReplyTo Address-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('Reply to Address') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input
+                                                        field="settings.mail_reply_to_address" />
+                                                </div>
+                                            </div>
+                                            <!-- END Mail ReplyTo Address -->
+
+                                            <!-- Mail ReplyTo Name-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('Reply to Name') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.mail_reply_to_name"
+                                                        placeholder="{{ translate('Site name is used by default') }}" />
+                                                </div>
+                                            </div>
+                                            <!-- END Mail ReplyTo Name -->
+                                        </div>
+
+                                        <div class="w-full flex justify-end mt-4" x-data="{}">
+                                            <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                                $wire.set('settings.smtp_mail_enabled', settings.smtp_mail_enabled, true);
+                                            " wire:click="saveIntegrations('integrations.smtp_server')">
+                                                {{ translate('Save') }}
+                                            </button>
+                                        </div>
+                                    </x-system.form-modal>
+                                    {{-- END SMTP Mail --}}
+
                                     {{-- MailerLite --}}
                                     <li
                                         class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
@@ -1223,57 +1354,6 @@
                                                     </div>
                                                 </div>
                                                 <!-- END MailerSend API Token -->
-
-                                                <!-- Mail From Address-->
-                                                <div class="flex flex-col mb-3" x-data="{}">
-                                                    <label class="block text-sm font-medium text-gray-900 mb-2">
-                                                        {{ translate('From Address') }}
-                                                    </label>
-
-                                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                        <x-dashboard.form.input field="settings.mail_from_address" />
-                                                    </div>
-                                                </div>
-                                                <!-- END Mail From Address -->
-
-                                                <!-- Mail From Name-->
-                                                <div class="flex flex-col mb-3" x-data="{}">
-                                                    <label class="block text-sm font-medium text-gray-900 mb-2">
-                                                        {{ translate('From Name') }}
-                                                    </label>
-
-                                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                        <x-dashboard.form.input field="settings.mail_from_name"
-                                                            placeholder="{{ translate('Site name is used by default') }}" />
-                                                    </div>
-                                                </div>
-                                                <!-- END Mail From Name -->
-
-                                                <!-- Mail ReplyTo Address-->
-                                                <div class="flex flex-col mb-3" x-data="{}">
-                                                    <label class="block text-sm font-medium text-gray-900 mb-2">
-                                                        {{ translate('Reply to Address') }}
-                                                    </label>
-
-                                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                        <x-dashboard.form.input
-                                                            field="settings.mail_reply_to_address" />
-                                                    </div>
-                                                </div>
-                                                <!-- END Mail ReplyTo Address -->
-
-                                                <!-- Mail ReplyTo Name-->
-                                                <div class="flex flex-col mb-3" x-data="{}">
-                                                    <label class="block text-sm font-medium text-gray-900 mb-2">
-                                                        {{ translate('Reply to Name') }}
-                                                    </label>
-
-                                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                        <x-dashboard.form.input field="settings.mail_reply_to_name"
-                                                            placeholder="{{ translate('Site name is used by default') }}" />
-                                                    </div>
-                                                </div>
-                                                <!-- END Mail ReplyTo Name -->
                                             </div>
                                             <div class="col-span-1 md:pl-5">
                                                 {{-- Transactional Emails Templates IDs --}}

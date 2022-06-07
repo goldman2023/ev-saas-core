@@ -48,7 +48,10 @@ class RecentInvoicesWidgetTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('Reference')
+            Column::make('Invoice ID')
+                ->excludeFromSelectable()
+                ->addClass('text-left'),
+            Column::make('Order ID')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
             Column::make('Status', 'status')
@@ -68,6 +71,7 @@ class RecentInvoicesWidgetTable extends DataTableComponent
     public function query(): Builder
     {
         return Invoice::query()
+            ->orderBy('updated_at', 'desc')
             ->when($this->for === 'me', fn ($query, $value) => $query->my())
             ->when($this->for === 'shop', fn ($query, $value) => $query->shopOrders())
             ->when($this->for === 'all', fn ($query, $value) => $query)

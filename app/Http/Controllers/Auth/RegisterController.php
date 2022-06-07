@@ -46,6 +46,20 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
+    public function user_finalize_registration(Request $request, $id, $hash) {
+        if (Auth::check() || !User::find($id)->exists()) {
+            return redirect()->route('home');
+        }
+
+        $ghost_user = User::find($id);
+        
+        if(!empty($ghost_user) && !empty($hash) && $hash === sha1($ghost_user->id.'_'.$ghost_user->email)) {
+            return view('auth.register', compact('ghost_user'));
+        }
+
+        return view('auth.register');
+    }
+
     /**
      * Display business registration page
      */

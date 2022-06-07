@@ -2,14 +2,17 @@
 
 namespace App\Nova\Tenant;
 
+use App\Enums\UserTypeEnum;
 use App\Nova\Resource;
 use Devpartners\AuditableLog\AuditableLog;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -53,19 +56,26 @@ class User extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
+
             Text::make('Email')
                 ->sortable()
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
+                Select::make('User Type')->options(
+                    UserTypeEnum::labels()
+                ),
+
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
+            HasMany::make('Invoices'),
 
-            MorphToMany::make('Wishlist', 'followers'),
             MorphMany::make('Activity', 'activities'),
+
+            // MorphToMany::make('Wishlist', 'followers'),
             // Shows audit log button on detail view, which expands audit trail
             AuditableLog::make()
             // MorphToMany::make(User::class, 'subject')

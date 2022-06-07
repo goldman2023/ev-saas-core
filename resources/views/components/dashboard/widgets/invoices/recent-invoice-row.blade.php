@@ -1,14 +1,20 @@
 <x-livewire-tables::table.cell class="align-middle text-left">
-    <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->id]) }}">
+    <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->order->id]) }}">
         #{{ $row->id }}
 
         @if(!empty($row->order?->order_items?->first() ?? null) && !empty($row->order?->order_items?->first()?->subject ?? null) && $row->order?->order_items?->first()?->subject?->isSubscribable() ?? null)
             <span class="ml-2 font-semibold">{{ $row->order?->order_items?->first()?->subject?->name }}</span>
         @endif
 
-        @if(!$row->viewed)
+        @if(!$row->viewed_by_customer && $row->user_id === auth()->user()->id)
             <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
         @endif
+    </a>
+</x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="align-middle text-left">
+    <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->order->id]) }}">
+        #{{ $row->order->id }}
     </a>
 </x-livewire-tables::table.cell>
 
@@ -39,7 +45,7 @@
 
 
 <x-livewire-tables::table.cell class="align-middle text-left">
-    <span class="d-block text-14 mb-0">{{ !empty($row->end_date) ? date('d M, Y', $row->end_date) : '' }}</span>
+    <span class="d-block text-14 mb-0">{{ !empty($row->end_date) ? date('d M, Y', $row->end_date) : '/' }}</span>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">

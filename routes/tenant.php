@@ -45,6 +45,7 @@ use App\Http\Controllers\WeMenuController;
 use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
+use App\Http\Controllers\WeQuizController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\OwnerOnly;
 use App\Http\Middleware\VendorMode;
@@ -52,6 +53,7 @@ use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Models\Plan;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Models\CourseItem;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -103,6 +105,8 @@ Route::middleware([
     Route::get('/users/login', [LoginController::class, 'user_login'])->name('user.login');
     Route::get('/users/register', [RegisterController::class, 'user_registration'])->name('user.registration');
     Route::get('/users/register/{token}', [RegisterController::class, 'user_registration'])->name('user.invite.registration'); // invite user route
+    Route::get('/users/register/finalize/{id}/{hash}', [RegisterController::class, 'user_finalize_registration'])->name('user.registration.finalize');
+
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::post('/password/reset/email/submit', [HomeController::class, 'reset_password_with_code'])->name('user.password.update');
@@ -121,7 +125,6 @@ Route::middleware([
     Route::get('/email/verify', [EVAccountVerificationController::class, 'verification_page'])->name('user.email.verification.page');
     Route::get('/email/verify/{id}/{hash}', [EVAccountVerificationController::class, 'verify'])->name('user.email.verification.verify');
     Route::get('/email/verify/resend', [EVAccountVerificationController::class, 'resend'])->name('user.email.verification.resend');
-    // Route::get('/email/verification', [EVAccountController::class, 'user_email_verification_page'])->name('user.email.verification.page');
 
     // Homepage For Multi/Single Vendor mode
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -169,6 +172,8 @@ Route::middleware([
     Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::getRouteName());
     Route::get('/product/{slug}/content', [EVProductController::class, 'show_unlockable_content'])->name(Product::getRouteName() . '.unlockable_content')->middleware('purchased_or_owner');
     Route::get('/product/{id}/checkout-link', [EVProductController::class, 'createProductCheckoutRedirect'])->name('product.generate_checkout_link');
+    // Route::get('/course/item/{slug}', [EVProductController::class, 'course_item_show'])->name(CourseItem::getRouteName());
+    Route::get('/product/{product_slug}/course/item/{slug}', [EVProductController::class, 'course_item_show'])->name(CourseItem::getRouteName());
 
     Route::get('/plan/{slug}', [EVPlanController::class, 'show'])->name(Plan::getRouteName());
     Route::get('/plan/{id}/checkout-link', [EVPlanController::class, 'createPlanCheckoutRedirect'])->name('plan.generate_checkout_link');
@@ -265,5 +270,6 @@ Route::middleware([
     Route::get('/page/{slug}', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.show_custom_page');
     Route::get('/shop/create', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
 
-
+    Route::get('/quiz/index', [WeQuizController::class, 'index'])->name('we-quiz.index');
+    Route::get('/quiz/show/{id}', [WeQuizController::class, 'show'])->name('we-quiz.show');
 });

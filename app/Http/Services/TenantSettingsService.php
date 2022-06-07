@@ -6,6 +6,7 @@ use App\Models\TenantSetting;
 use Cache;
 use App\Models\Currency;
 use App\Models\Upload;
+use Illuminate\Support\Facades\Request;
 
 /**
  * We are getting all Tenant Settings from the cache, or DB.
@@ -44,6 +45,11 @@ class TenantSettingsService
     }
 
     public function createMissingSettings() {
+        /* TODO: How to make this not trigger when creating tenancy */
+
+        if(Request::getHost() == config('tenancy.primary_central_domain')) {
+            return true;
+        }
         $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
         $data_types = $this->settingsDataTypes();
 
@@ -62,16 +68,19 @@ class TenantSettingsService
     }
 
     public function setAll($test = false) {
+        if(Request::getHost() == config('tenancy.primary_central_domain')) {
+            return true;
+        }
         $this->createMissingSettings(); // it'll clear the cache and add missing settings if there are missing settings
 
         $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
         $settings = Cache::get($cache_key.'a', null);
         $default = [];
         $data_types = $this->settingsDataTypes();
-        
+
         if (empty($settings)) {
             $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
-            
+
             castValuesForGet($settings, $data_types);
 
             // dd($settings);
@@ -105,7 +114,7 @@ class TenantSettingsService
             'contact_details' => 'array',
 
             // Content Types
-            'brands_ct_enabled' => 'boolean', 
+            'brands_ct_enabled' => 'boolean',
 
             'documentation_url' => 'string',
             'tos_url' => 'string',
@@ -190,7 +199,7 @@ class TenantSettingsService
 
             'force_email_verification' => 'boolean',
             'register_redirect_url' => 'string',
-            'login_redirect_url' => 'string', // 
+            'login_redirect_url' => 'string', //
 
             // Integrations
             'mailerlite_api_token' => 'string',
@@ -200,7 +209,7 @@ class TenantSettingsService
             'google_recaptcha_enabled' => 'boolean',
             'google_recaptcha_site_key' => 'string',
             'google_recaptcha_secret_key' => 'string',
-            
+
             'facebook_pixel_enabled' => 'string',
             'facebook_pixel_id' => 'string',
 
@@ -212,6 +221,12 @@ class TenantSettingsService
             'wordpress_api_route' => 'string',
 
             // Mail
+            'smtp_mail_enabled' => 'boolean',
+            'smtp_mail_host' => 'string',
+            'smtp_mail_port' => 'string',
+            'smtp_mail_username' => 'string',
+            'smtp_mail_password' => 'string',
+
             'mail_from_address' => 'string',
             'mail_from_name' => 'string',
             'mail_reply_to_address' => 'string',
@@ -249,7 +264,7 @@ class TenantSettingsService
 
             // Advanced
             'user_meta_fields_in_use' => 'array',
-            
+
         ];
 
         return apply_filters( 'app-settings-definition', $app_settings );

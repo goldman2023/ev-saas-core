@@ -114,6 +114,7 @@ Route::middleware([
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
+        Route::get('/orders/all', [EVOrderController::class, 'my_orders'])->name('my.orders.all');
 
         /* My Downloads (all) */
         Route::get('/downloads/all', [EVDownloadsController::class, 'my_downloads'])->name('my.downloads.all');

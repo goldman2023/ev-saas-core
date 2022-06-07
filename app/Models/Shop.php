@@ -9,6 +9,7 @@ use App\Traits\GalleryTrait;
 use App\Traits\ReviewTrait;
 use App\Traits\UploadTrait;
 use App\Traits\SocialFollowingTrait;
+use App\Traits\OwnershipTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\PermalinkTrait;
 use Spatie\Sluggable\HasSlug;
@@ -27,6 +28,7 @@ class Shop extends WeBaseModel
     use GalleryTrait;
     use ReviewTrait;
     use PermalinkTrait;
+    use OwnershipTrait;
     use SocialFollowingTrait;
 
     protected $table = 'shops';
@@ -126,6 +128,11 @@ class Shop extends WeBaseModel
         return $this->hasMany(Order::class, 'shop_id');
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function getPhonesAttribute($value) {
         if(empty($value)) {
             return [''];
@@ -186,7 +193,7 @@ class Shop extends WeBaseModel
         // Shop meta is stored in `shop_settings` table!!!!
 
         $shop_meta = $this->settings->where('setting', $key)->keyBy('setting')->toArray();
-        
+
         castValuesForGet($shop_meta, ShopSetting::metaDataTypes());
 
         return $shop_meta[$key] ?? null;

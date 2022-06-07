@@ -152,11 +152,6 @@ class Category extends WeBaseModel
         return $query->where('name', 'like', '%'.$term.'%');
     }
 
-    // TODO: FIX THIS TOO. REMOVE CLASSIFIED PRODUCTS!
-//    public function classified_products(){
-//    	return $this->hasMany(CustomerProduct::class);
-//    }
-
     public function categories()
     {
         return $this->hasManyOfDescendantsAndSelf(self::class);

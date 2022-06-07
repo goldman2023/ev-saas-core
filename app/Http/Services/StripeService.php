@@ -8,6 +8,8 @@ use App\Facades\CartService;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\UserSubscriptionStatusEnum;
+use App\Enums\UserTypeEnum;
+use App\Enums\UserEntityEnum;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
@@ -15,6 +17,7 @@ use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Plan;
 use App\Models\UserSubscription;
+use App\Models\Ownership;
 use Cache;
 use Illuminate\Database\Eloquent\Collection;
 use Session;
@@ -546,11 +549,7 @@ class StripeService
             'tax_id_collection' => [
                 'enabled' => true,
             ],
-            'customer_update' => [
-                'name' => 'auto',
-                'address' => 'auto',
-                'shipping' => 'auto',
-            ],
+            
         ];
 
         // Check whether mode is 'subscription' or 'payment'
@@ -588,6 +587,12 @@ class StripeService
                     'receipt_email' => auth()->user()->email,
                 ];
             }
+
+            $stripe_args['customer_update'] = [
+                'name' => 'auto',
+                'address' => 'auto',
+                'shipping' => 'auto',
+            ];
         }
 
         // Create a Stripe Checkout Link
@@ -877,7 +882,6 @@ class StripeService
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
         $endpoint_secret = Payments::isStripeLiveMode() ? Payments::stripe()->stripe_webhook_live_secret : Payments::stripe()->stripe_webhook_test_secret;
 
-        // TODO:
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
@@ -994,11 +998,33 @@ class StripeService
             $meta[$this->mode_prefix .'stripe_request_id'] = $stripe_request_id; // store webhook request id
             $order->meta = $meta;
 
+            $initiator = User::find($order->user_id);
+
+            // If Initiator is not registered, create a ghost user
+            if(empty($initiator) && !User::where('email', $order->email)->exists()) {
+                $initiator = User::updateOrCreate(
+                    [
+                        'email' => $session->customer_details->email,
+                    ],
+                    [
+                        'is_temp' => true,
+                        'user_type' => UserTypeEnum::customer()->value,
+                        'entity' => UserEntityEnum::individual()->value,
+                        'name' => explode(' ', $session->customer_details->name)[0] ?? $session->customer_details->name,
+                        'surname' => explode(' ', $session->customer_details->name)[1] ?? ' ',
+                        'phone' => $session->customer_details->phone ?? '',
+                    ]
+                );
+
+                $order->user_id = $initiator->id;
+            }
+
             $order->save();
 
             // Check if $model has stock and reduce it if it does!!!
             $order_item = $order->order_items->first();
             $model = $order_item->subject;
+            
 
             if (method_exists($model, 'stock') && $model->track_inventory) {
                 // Reduce the stock quantity of an $model
@@ -1019,7 +1045,7 @@ class StripeService
                     // Single Plan Subscription mode: THIS PART CREATES ONE UserSubscription AND "detaches all other" (hence sync)
                     // IMPORTANT: Attach stripe_subscription_id to our UserSubscription
                     // If multiplan purchase is not available, 1) synch user subscription and 2) update stripe data
-                    User::find($order->user_id)->plans()->sync([
+                    $initiator->plans()->sync([
                         $model->id => [
                             'order_id' => $order->id,
                             'payment_status' => PaymentStatusEnum::pending()->value, // set payment_status to `pending` because only when invoice.paid, we are sure that payment is 100% successful
@@ -1042,6 +1068,7 @@ class StripeService
             * Create Invoice here because 'invoice.paid'  hook won't be sent for one-time payments!!!
             */
             $invoice = Invoice::withoutGlobalScopes()->findOrFail($session->metadata->invoice_id ?? -1);;
+            $invoice->user_id = $initiator->id;
 
             if($session->mode === 'payment') {
                 // One-time payments do not send invoice.created/paid hook, so we must change some invoice properties here!
@@ -1100,6 +1127,26 @@ class StripeService
                 $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
                 $order->meta = $meta;
                 $order->save();
+
+                /**
+                 * Product Ownership logic (status must be complete and payment_status must be paid)
+                 * 1. $session->mode === 'payment'
+                 * 2. $session->status === 'complete'
+                 * 3. $session->payment_status === 'paid'
+                 **/
+                if($session->status === 'complete' && $session->payment_status === 'paid') {
+                    Ownership::updateOrCreate(
+                        [
+                            'subject_id' => $model->id,
+                            'subject_type' => $model::class,
+                            'owner_id' => $initiator->id,
+                            'owner_type' => $initiator::class
+                        ],
+                        [
+                            'updated_at' => date('Y-m-d H:i:s', time())
+                        ]
+                    );
+                }
             } else {
                 $invoice->meta = $meta;
                 $invoice->saveQuietly(); // there could be memory leaks if we use just save (no need for events right now)
