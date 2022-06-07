@@ -49,7 +49,8 @@ class UpcomingEvents extends Component
             return;
         }
 
-        $events = Product::select(['products.*', 'core_meta.value AS event_start_date'])->event()->with(['core_meta'])
+        $events = Product::select(['products.*', 'core_meta.value AS event_start_date'])->published()
+        ->with(['core_meta'])
             ->whereRelation('core_meta', function($query) {
                 $query->where('key', 'start_date')->where('value', '>', time());
             })
