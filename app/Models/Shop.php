@@ -128,6 +128,11 @@ class Shop extends WeBaseModel
         return $this->hasMany(Order::class, 'shop_id');
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function getPhonesAttribute($value) {
         if(empty($value)) {
             return [''];
@@ -188,7 +193,7 @@ class Shop extends WeBaseModel
         // Shop meta is stored in `shop_settings` table!!!!
 
         $shop_meta = $this->settings->where('setting', $key)->keyBy('setting')->toArray();
-        
+
         castValuesForGet($shop_meta, ShopSetting::metaDataTypes());
 
         return $shop_meta[$key] ?? null;

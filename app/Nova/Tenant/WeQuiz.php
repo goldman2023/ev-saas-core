@@ -3,22 +3,26 @@
 namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
+use App\Nova\User;
+use App\Nova\WeQuizResults;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Code;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\Text;
 
-class PaymentMethodUniversal extends Resource
+
+class WeQuiz extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\PaymentMethodUniversal::class;
+    public static $model = \App\Models\WeQuiz::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -39,30 +43,30 @@ class PaymentMethodUniversal extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function fields(Request $request)
+    public function fields(NovaRequest $request)
     {
         return [
             ID::make()->sortable(),
+            Text::make('name'),
+            Code::make('Quiz JSON', 'quiz_json'),
+            BelongsTo::make('User', 'user', 'App\Nova\Tenant\User'),
+            HasMany::make('Quiz Attempts', 'results', 'App\Nova\WeQuizResults')
 
-            Text::make('Name'),
-            Text::make('Gateway'),
-            Text::make('Instructions'),
-            Code::make(__('Data'), 'data')->json(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
 
-            // BelongsTo::make('Author', 'author', User::class),
+
         ];
     }
 
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function cards(Request $request)
+    public function cards(NovaRequest $request)
     {
         return [];
     }
@@ -70,10 +74,10 @@ class PaymentMethodUniversal extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function filters(Request $request)
+    public function filters(NovaRequest $request)
     {
         return [];
     }
@@ -81,10 +85,10 @@ class PaymentMethodUniversal extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function lenses(Request $request)
+    public function lenses(NovaRequest $request)
     {
         return [];
     }
@@ -92,10 +96,10 @@ class PaymentMethodUniversal extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
-    public function actions(Request $request)
+    public function actions(NovaRequest $request)
     {
         return [];
     }

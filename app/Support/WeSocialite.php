@@ -30,7 +30,7 @@ class WeSocialite
             $config['redirect_login'] = route('social.login.callback', ['provider' => 'facebook']);
             // TODO: If we want to get image or other data from facebook, we need to submit tenant App to Facebook review
             // Check here: https://developers.facebook.com/docs/permissions/reference/
-            $scopes = ['public_profile', 'email'];
+            $scopes = ['public_profile', 'email', 'user_hometown', 'user_birthday', 'user_gender'];
         } elseif ($driver === 'google') {
             $driver_class = GoogleProvider::class;
             $config['client_id'] = get_setting('google_oauth_client_id');

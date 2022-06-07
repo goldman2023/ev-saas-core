@@ -14,6 +14,7 @@ use App\Nova\Tenant\Shop;
 use App\Nova\Tenant\Wishlist;
 use App\Nova\Tenant\Activity;
 use App\Nova\Tenant\Category;
+use App\Nova\Tenant\Invoice;
 use App\Nova\Tenant\OrderDetail;
 use App\Nova\Tenant\Page;
 use App\Nova\Tenant\PaymentMethodUniversal;
@@ -23,6 +24,8 @@ use App\Nova\Tenant\ProductVariation;
 use App\Nova\Tenant\ProductVariations;
 use App\Nova\Tenant\ShopSetting;
 use App\Nova\Tenant\Translation;
+use App\Nova\Tenant\WeQuiz;
+use App\Nova\WeQuizResults;
 use App\Nova\WeWorkflow;
 use App\Nova\WooImport;
 use Illuminate\Support\Facades\Gate;
@@ -83,7 +86,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Business', [
                     MenuItem::resource(Plan::class),
                     MenuItem::resource(Product::class),
-                    MenuItem::resource(Order::class),
+
                     MenuItem::externalLink('Stripe Payments', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
 
                 ])->icon('credit-card')->collapsable(),
@@ -93,12 +96,15 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(Category::class),
                     MenuItem::resource(Page::class),
                     MenuItem::resource(Blog::class),
+                    MenuItem::resource(WeQuiz::class),
+                    MenuItem::resource(WeQuizResults::class),
 
                 ])->icon('document')->collapsable(),
 
 
                 MenuSection::make('Commerce', [
-
+                    MenuItem::resource(Order::class),
+                    MenuItem::resource(Invoice::class),
 
                 ])->icon('document-text')->collapsable(),
 
@@ -236,6 +242,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 WeWorkflow::class,
                 WooImport::class,
                 Page::class,
+                WeQuiz::class,
+                WeQuizResults::class,
+                Invoice::class,
                 MenuBuilder::getMenuResource()
             ]);
         } else {

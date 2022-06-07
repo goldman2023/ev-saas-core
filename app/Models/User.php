@@ -130,6 +130,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(Wishlist::class);
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function social_accounts()
     {
         return $this->hasMany(SocialAccount::class);
@@ -159,7 +164,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     {
         return $this->morphedByMany(Shop::class, 'subject', 'user_relationships');
     }
-    
+
     public function blog_posts()
     {
         return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
@@ -246,11 +251,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function getDynamicModelUploadProperties(): array
     {
         return [];
-    }
-
-    public function getAvatar(array $options = [])
-    {
-        return $this->getUpload('thumbnail', $options);
     }
 
     public static function getAvailableUserTypes($only_vendor_types = true)

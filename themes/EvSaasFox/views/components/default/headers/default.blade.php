@@ -173,7 +173,7 @@
                                    &quot;type&quot;: &quot;css-animation&quot;
                                  }" data-hs-unfold-target="#accountNavbarDropdown" data-hs-unfold-invoker="">
                                     <div class="avatar avatar-sm avatar-circle bg-light">
-                                        <img class="avatar-img" src="{{ auth()->user()->getAvatar() }}"
+                                        <img class="avatar-img" src="{{ auth()->user()->getThumbnail() }}"
                                             alt="Image Description">
                                         <span
                                             class="avatar-status avatar-sm-status avatar-status-success bg-success"></span>
@@ -188,7 +188,7 @@
                                     <div class="dropdown-item-text">
                                         <div class="media align-items-center">
                                             <div class="avatar avatar-sm avatar-circle bg-light mr-2">
-                                                <img class="avatar-img" src="{{ auth()->user()->getAvatar() }}"
+                                                <img class="avatar-img" src="{{ auth()->user()->getThumbnail() }}"
                                                     alt="Image Description">
                                             </div>
                                             <div class="media-body">

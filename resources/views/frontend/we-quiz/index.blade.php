@@ -1,0 +1,22 @@
+@extends('frontend.layouts.we-edit-layout')
+
+@section('meta_title')
+{{ translate('WeEdit Page Builder') }}
+@endsection
+
+@push('head_scripts')
+<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+@endpush
+
+@section('content')
+@foreach($quizes as $quiz)
+<div>
+    <a href="{{ route('we-quiz.show', $quiz->id) }}">
+        {{ $quiz->name }}
+    </a>
+</div>
+@endforeach
+@endsection

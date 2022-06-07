@@ -45,6 +45,7 @@ use App\Http\Controllers\WeMenuController;
 use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
+use App\Http\Controllers\WeQuizController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\OwnerOnly;
 use App\Http\Middleware\VendorMode;
@@ -268,5 +269,6 @@ Route::middleware([
     Route::get('/page/{slug}', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.show_custom_page');
     Route::get('/shop/create', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
 
-
+    Route::get('/quiz/index', [WeQuizController::class, 'index'])->name('we-quiz.index');
+    Route::get('/quiz/show/{id}', [WeQuizController::class, 'show'])->name('we-quiz.show');
 });
