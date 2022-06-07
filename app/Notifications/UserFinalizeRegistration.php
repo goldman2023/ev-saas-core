@@ -35,7 +35,7 @@ class UserFinalizeRegistration extends Notification
             return (new WeMailMessage)
                 ->markdown('vendor.notifications.email')
                 // ->text('mail.text.message')
-                ->subject(translate('Welcome to '.get_tenant_setting('site_name')))
+                ->subject(translate('Finalize your registration on '.get_tenant_setting('site_name')))
                 ->greeting(translate('Hello, ').$notifiable->name)
                 ->line(translate('You have recently purchased from '.get_tenant_setting('site_name')))
                 ->line(translate('To access or manage your purchased content, please finalize your registration.'))

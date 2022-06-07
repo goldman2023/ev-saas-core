@@ -221,6 +221,12 @@ class TenantSettingsService
             'wordpress_api_route' => 'string',
 
             // Mail
+            'smtp_mail_enabled' => 'boolean',
+            'smtp_mail_host' => 'string',
+            'smtp_mail_port' => 'string',
+            'smtp_mail_username' => 'string',
+            'smtp_mail_password' => 'string',
+
             'mail_from_address' => 'string',
             'mail_from_name' => 'string',
             'mail_reply_to_address' => 'string',
