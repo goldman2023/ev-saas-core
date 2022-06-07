@@ -52,9 +52,8 @@ class RegisterController extends Controller
         }
 
         $ghost_user = User::find($id);
-
+        
         if(!empty($ghost_user) && !empty($hash) && $hash === sha1($ghost_user->id.'_'.$ghost_user->email)) {
-            dd($ghost_user);
             return view('auth.register', compact('ghost_user'));
         }
 

@@ -45,4 +45,12 @@ class EVOrderController extends Controller
 
         return view('frontend.dashboard.my-purchases.index', compact('orders', 'orders_count'));
     }
+
+    public function my_orders(Request $request)
+    {
+        $orders = auth()->user()->orders()->orderBy('created_at', 'desc')->paginate(20);
+        $orders_count = auth()->user()->orders()->count();
+
+        return view('frontend.dashboard.my-orders.index', compact('orders', 'orders_count'));
+    }
 }
