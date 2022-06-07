@@ -50,6 +50,7 @@ class Translation extends Resource
 
             Text::make('Lang Key')
             ->sortable()
+            ->readonly()
                 ->rules('required', 'max:255'),
 
             Text::make('Lang Value')

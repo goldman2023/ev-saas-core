@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App;
+use App\Tenancy\Resolvers\ExtendedDomainTenantResolver;
 use Closure;
 use Config;
 use Session;
@@ -18,13 +19,23 @@ class Language
      */
     public function handle($request, Closure $next)
     {
+
+         $domain =  ExtendedDomainTenantResolver::$currentDomain;
+
+
         if(!empty(auth()->user()?->getUserMeta('locale') ?? null)) {
             $locale = auth()->user()->getUserMeta('locale');
         } else if (Session::has('locale')) {
             $locale = Session::get('locale');
         } else {
-            $locale = env('DEFAULT_LANGUAGE', 'en');
+            /* TODO: Add locale by domain here */
+            if($domain) {
+                $locale = $domain->domain_locale;
+            } else {
+                $locale = config('app.locale');
+            }
         }
+
 
         App::setLocale($locale);
         $request->session()->put('locale', $locale);

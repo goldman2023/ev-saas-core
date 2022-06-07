@@ -120,6 +120,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(WooImport::class),
                     MenuItem::resource(WeWorkflow::class),
                     MenuItem::externalLink('SMTP and transactional emails', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
+                    MenuItem::resource(Translation::class),
+
                     MenuItem::make('Logs')->path('/logs'),
 
 
