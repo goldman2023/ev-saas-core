@@ -32,8 +32,6 @@
         init() {
             if(this.course_items_type === 'video') {
                 this.getEmbed();
-            } else if(this.course_items_type === 'quizz') {
-                this.initQuiz();
             }
         },
         getEmbed() {
@@ -46,26 +44,6 @@
                 .then(response => response.json())
                 .then(data => this.video_data = data);
             }
-        },
-        initQuiz() {
-            Survey.StylesManager.applyTheme('modern');
-
-            var surveyJSON = this.quiz_data;
-
-            var survey = new Survey.Model(surveyJSON);
-            
-            function sendDataToServer(survey) {
-                // Send Ajax request to your web server
-                {{-- TODO: Save into `we_quiz_results` --}}
-                alert('The results are: ' + JSON.stringify(survey.data));
-            }
-            $('#we-quiz-container').Survey({
-                model: survey,
-                onComplete: sendDataToServer
-            });
-
-            survey.completedHtml =  '{{ translate('You completed the quiz!') }}';
-            survey.showPreviewBeforeComplete = 'showAllQuestions';
         }
     }" x-init="init()">
         <div class="col-span-12 md:col-span-8">
@@ -125,6 +103,29 @@
 
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::quizz()->value)
                             <div class="w-full" id="we-quiz-container"></div>
+
+                            <script>
+                                $(function() {
+                                    Survey.StylesManager.applyTheme('modern');
+
+                                    var surveyJSON = @js($course_item->subject->quiz_json ?? []);
+
+                                    var survey = new Survey.Model(surveyJSON);
+                                    
+                                    function sendDataToServer(survey) {
+                                        // Send Ajax request to your web server
+                                        {{-- TODO: Save into `we_quiz_results` --}}
+                                        alert('The results are: ' + JSON.stringify(survey.data));
+                                    }
+                                    $('#we-quiz-container').Survey({
+                                        model: survey,
+                                        onComplete: sendDataToServer
+                                    });
+
+                                    survey.completedHtml =  '{{ translate('You completed the quiz!') }}';
+                                    survey.showPreviewBeforeComplete = 'showAllQuestions';
+                                });
+                            </script>
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::wysiwyg()->value)
                             {!! $course_item->content !!}
                         @endif

@@ -159,7 +159,6 @@
 
             <!-- WYSIWG Content -->
             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"x-show="current_item.type === 'wysiwyg'"  wire:ignore>
-
                 <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                     {{ translate('Content (WYSIWYG)') }}
                 </label>
@@ -177,7 +176,7 @@
                 </label>
 
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <x-dashboard.form.input field="current_item.content" />
+                    <x-dashboard.form.input field="current_item.content" :x="true" />
                 </div>
             </div>
 

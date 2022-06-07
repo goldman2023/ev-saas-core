@@ -1,5 +1,7 @@
 <?php
 
+// namespace WeThemes\EvSaasFox\App\Providers;
+
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
