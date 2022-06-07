@@ -41,7 +41,7 @@ class CourseItem extends WeBaseModel
     public $title_path;
     public const PATH_SEPARATOR = '.';
 
-    protected $fillable = ['id', 'parent_id', 'product_id', 'type', 'free', 'name', 'slug', 'excerpt', 'content', 'order', 'accessible_after', 'meta_description', 'meta_title'];
+    protected $fillable = ['id', 'parent_id', 'product_id', 'type', 'subject_id', 'subject_type', 'free', 'name', 'slug', 'excerpt', 'content', 'order', 'accessible_after', 'meta_description', 'meta_title'];
     protected $appends = ['selected', 'title_path'];
 
     protected $casts = [
@@ -172,6 +172,11 @@ class CourseItem extends WeBaseModel
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function subject()
+    {
+        return $this->morphTo();
     }
 
     public function setSelectedAttribute($value) {
