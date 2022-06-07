@@ -3,8 +3,8 @@
 @section('feed_content')
     <div class="lg:px-16 col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8 flex flex-col">
         <div class="mb-3">
-            <x-feed.elements.stories-global>
-            </x-feed.elements.stories-global>
+            {{-- <x-feed.elements.stories-global>
+            </x-feed.elements.stories-global> --}}
         </div>
 
         <div class="grid grid-cols-12 gap-5 mt-4">
