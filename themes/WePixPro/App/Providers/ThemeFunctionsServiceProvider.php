@@ -1,6 +1,6 @@
 <?php
 
-// namespace WeThemes\WePixPro\App\Providers;
+namespace WeThemes\WePixPro\App\Providers;
 
 // Because this file service provider is loaded after tenant is initated and has no namespace, it cannot use Aliases from `app.php`, like: use Log or use File; Instead full namespaces must be used!
 use App\Providers\WeThemeFunctionsServiceProvider;

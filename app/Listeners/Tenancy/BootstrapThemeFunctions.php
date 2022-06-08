@@ -24,9 +24,14 @@ class BootstrapThemeFunctions
                 require_once($theme_functions_file_path);
 
                 // TODO: Find a way to bypass tenats:migration duplicate class initialization after tenant is manually changed in the function...
-                App::register(\ThemeFunctionsServiceProvider::class);
+                // dd('zxc');
+                App::register($this->guessThemeFunctionsNamespace());
             }
         }
 
+    }
+
+    protected function guessThemeFunctionsNamespace($theme_folder) {
+        return '\WeThemes\'..'';
     }
 }
