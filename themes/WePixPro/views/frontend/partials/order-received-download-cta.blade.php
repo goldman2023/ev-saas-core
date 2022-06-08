@@ -5,7 +5,7 @@
           <div class="max-w-md">
             <h2 class="mb-2 text-18 md:text-20 font-heading font-bold">{{ translate('Download Pixpro photogrammetry software') }}</h2>
             <p class="text-14 md:text-16 font-heading font-medium text-gray-600">
-                {{ translate('Once you download software, get your license from your dashboard and start using our software!') }}
+                {!! translate('Once you download software, get your license from your dashboard and start using our software!') !!}
             </p>
           </div>
         </div>
