@@ -32,7 +32,7 @@
             <p class="text-base text-gray-400 xl:text-center">
                 &copy; {{ date('Y') }} {{ get_site_name() }} .
                 <a href="https://we-saas.com" target="_blank">
-                    {{ __('All rights reserved. Powered by EV-SaaS Platform') }}
+                    {{ __('All rights reserved.') }}
                 </a>
             </p>
         </div>

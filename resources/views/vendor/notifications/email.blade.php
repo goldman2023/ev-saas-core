@@ -59,4 +59,9 @@
 ) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
 @endslot
 @endisset
+
+
+@slot('footer')
+    <span class="break-all">{{ get_site_name() }} {{ translate('All rights reserved.') }}</span>
+@endslot
 @endcomponent
