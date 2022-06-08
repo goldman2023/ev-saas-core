@@ -3,8 +3,10 @@
       <div class="flex flex-wrap items-center -mx-4">
         <div class="w-full md:w-1/2 px-0 md:px-4 mb-6 md:mb-0">
           <div class="max-w-md">
-            <h2 class="mb-2 text-18 md:text-20 font-heading font-bold">{{ translate('Download PixPro photogrammetry software') }}</h2>
-            <p class="text-14 md:text-16 font-heading font-medium text-gray-600">{{ translate('Once you download software, get your license from your dashboard and start using our software!') }}</p>
+            <h2 class="mb-2 text-18 md:text-20 font-heading font-bold">{{ translate('Download Pixpro photogrammetry software') }}</h2>
+            <p class="text-14 md:text-16 font-heading font-medium text-gray-600">
+                {{ translate('Once you download software, get your license from your dashboard and start using our software!') }}
+            </p>
           </div>
         </div>
         <div class="w-full md:w-1/2 px-0 md:px-4">

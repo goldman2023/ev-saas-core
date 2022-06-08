@@ -38,7 +38,7 @@ if (!function_exists('apply_filters')) {
      * @param mixed $value
      * @return mixed
      */
-    function apply_filters($tag, $value)
+    function apply_filters($tag, $value = null)
     {
         return hook()->apply_filters($tag, $value);
     }

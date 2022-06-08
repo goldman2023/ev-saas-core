@@ -152,7 +152,7 @@ if (!class_exists('Hooks')){
      * @param mixed $value
      * @return mixed
      */
-    public function apply_filters($tag, $value)
+    public function apply_filters($tag, $value = null)
     {
       $args = [];
       

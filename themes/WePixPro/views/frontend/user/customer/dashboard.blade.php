@@ -31,7 +31,12 @@
                     <div class="border-b border-gray-200 px-4 lg:px-7 py-5">
                         <div class="flex justify-between items-center flex-wrap sm:flex-nowrap">
                             <div class="w-full">
-                              <h4 class="font-semibold">{{ translate('Download Software') }}</h4>
+                              <h4 class="font-semibold">
+                                    <a href="/page/downloads">
+                                    {{ translate('Download Software') }}
+                                    </a>
+
+                                </h4>
                             </div>
                         </div>
                     </div>
