@@ -1,4 +1,4 @@
-<div class="w-full mb-7">
+<div class="w-full pb-5 mb-5 border-b border-gray-200">
     <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
         <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Licenses') }}</h4>
      </div>
