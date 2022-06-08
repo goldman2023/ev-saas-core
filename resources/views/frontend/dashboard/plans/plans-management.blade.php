@@ -9,7 +9,7 @@
 @section('panel_content')
 <section>
     <x-dashboard.section-headers.section-header title="{{ translate('Plans Management') }}"
-        text="{{ translate('Manage your subscription and billind details') }}">
+        text="{{ translate('Manage your subscriptions, licenses and billing') }}">
         <x-slot name="content">
             @if(auth()->user()?->isSubscribed() ?? false)
                 <a href="{{ route('stripe.portal_session') }}" class="btn-primary" target="_blank">
@@ -20,8 +20,12 @@
     </x-dashboard.section-headers.section-header>
 
     @if(auth()->user()?->isSubscribed() ?? false)
-        <div class="w-full mb-7">
-            <livewire:dashboard.tables.plans-table for="me" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
+        <div class="w-full pb-5 mb-5 border-b border-gray-200">
+            <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
+                <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Subscriptions') }}</h4>
+            </div>
+
+            <livewire:dashboard.tables.my-subscriptions-table :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
         </div>
 
         @do_action('view.dashboard.plans-management.plans-table.end')

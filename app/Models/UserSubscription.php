@@ -42,6 +42,10 @@ class UserSubscription extends WeBaseModel
         return $this->morphTo('subject')->withoutGlobalScopes();
     }
 
+    public function subject() {
+        return $this->morphTo('subject')->withoutGlobalScopes();
+    }
+
     public function order() {
         return $this->belongsTo(Order::class, 'order_id')->withoutGlobalScopes();
     }

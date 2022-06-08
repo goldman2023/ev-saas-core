@@ -10,7 +10,7 @@
 
 <x-livewire-tables::table.cell class="align-middle  text-center">
     @if(!empty($row->end_date))
-        {{ Carbon::createFromTimestamp($row->end_date ?? '')->format('d. M Y, H:i') }}
+        {{ $row->end_date->format('d. M Y, H:i') }}
     @else
         -
     @endif
