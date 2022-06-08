@@ -18,6 +18,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
      */
     abstract protected function getTenantAppSettings() : array;
     abstract protected function getMenuLocations() : array;
+    abstract protected function registerLivewireComponents();
 
     /**
      * This function extends App/Tenant settings with custom settings required in a specific theme (for a specific tenant)!
@@ -60,8 +61,9 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
     {
         $this->extendAppSettings();
         $this->registerMenuLocations();
+        $this->registerLivewireComponents();
 
-        // Add Theme specific sections
+        // Add Theme specific sections to GrapeJS
         add_filter('theme-section-components', function($base_sections) {
             if(file_exists($this->theme_root.'/views/components/custom/')) {
                 return array_merge(File::allFiles($this->theme_root.'/views/components/custom/'), $base_sections);

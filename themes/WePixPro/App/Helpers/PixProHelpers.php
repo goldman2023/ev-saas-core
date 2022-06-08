@@ -100,6 +100,7 @@ if (!function_exists('pix_pro_create_license')) {
                                 $license->license_name = $pix_license['license_name'] ?? '';
                                 $license->serial_number = $pix_license['serial_number'] ?? '';
                                 $license->license_type = $pix_license['license_type'] ?? '';
+                                $license->data = ['hardware_id' => '']; // Will be populaetd when user activates the license
                                 $license->save();
 
                                 // Add a license <-> user_subscription relationship

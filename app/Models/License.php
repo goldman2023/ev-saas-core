@@ -22,9 +22,10 @@ class License extends WeBaseModel
 
     protected $table = 'licenses';
 
-    protected $fillable = ['license_name', 'serial_number', 'hardware_id', 'license_type', 'created_at', 'updated_at'];
+    protected $fillable = ['license_name', 'serial_number', 'hardware_id', 'license_type', 'data', 'created_at', 'updated_at'];
 
     protected $casts = [
+        'data' => 'array'
     ];
     
     public function user_subscription() {
