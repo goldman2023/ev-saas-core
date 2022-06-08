@@ -84,6 +84,13 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
+            // Add Columns to Licenses table (livewire)
+            add_filter('dashboard.table.licenses.columns', function($columns) { 
+                return array_merge($columns, [
+                    \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
+                        ->excludeFromSelectable(),
+                ]);
+            }, 10, 1);
         }
         
         if (function_exists('add_action')) {
@@ -104,6 +111,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 pix_pro_extend_license($user_subscriptions);
             }, 20, 1);
 
+            
 
             // View actions
             add_action('view.order-received.items.end', function($order) {
@@ -149,11 +157,20 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             });
 
-            add_action('view.dashboard.plans.row-license.actions.start', function($license) {
+            // Add Columns to Licenses table (View)
+            add_action('view.dashboard.row-license.columns', function($license) {
+                if (View::exists('frontend.partials.row-license-custom-columns')) {
+                    echo view('frontend.partials.row-license-custom-columns', compact('license'));
+                }
+            });
+
+            add_action('view.dashboard.plans.row-license.actions.dropdown.start', function($license) {
                 if (View::exists('frontend.partials.row-license-actions')) {
                     echo view('frontend.partials.row-license-actions', compact('license'));
                 }
             }, 20, 1);
+
+            
 
             // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT
             // add_action('import.wordpress.blog-posts.end', function($data) {

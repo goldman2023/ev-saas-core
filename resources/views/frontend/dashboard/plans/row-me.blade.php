@@ -71,8 +71,12 @@
 
 <x-livewire-tables::table.cell class="align-middle static ">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        <a class="btn btn-white flex items-center mr-2" href="#">
+        {{-- <a class="btn btn-white flex items-center mr-2" href="#">
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
+        </a> --}}
+
+        <a class="btn btn-danger flex items-center mr-2" x-bind:href="$getStripeCheckoutPermalink()" target="_blank">
+            @svg('heroicon-o-x', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Cancel') }}
         </a>
 
         {{-- @if(!get_tenant_setting('multiplan_purchase'))

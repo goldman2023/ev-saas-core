@@ -28,6 +28,22 @@ class PermissionsService
         }
     }
 
+    public function canAccess(string|array $allowed_user_types, string|array $allowed_permissions, bool $abort = true)
+    {
+        // Super admin has the access to all pages!
+        if (auth()->user()->user_type === 'admin') {
+            return true;
+        }
+
+        /* Old version that causes the error  */
+        if (in_array(auth()->user()->user_type, $allowed_user_types, true) &&
+            (empty($allowed_permissions) || auth()->user()->hasAnyDirectPermission($allowed_permissions))) {
+            return true;
+        }
+
+        return $abort ? abort(403) : false;
+    }
+
     public function getPermissions()
     {
         return $this->permissions;
@@ -201,6 +217,7 @@ class PermissionsService
     public function getOrdersPermissions()
     {
         return [
+            'all_orders' => 'Allow accessing all orders',
             'browse_orders' => 'Browse orders',
             'view_order' => 'View order',
             'insert_order' => 'Create order',
@@ -298,27 +315,5 @@ class PermissionsService
         ];
     }
 
-    public function canAccess(string|array $allowed_user_types, string|array $allowed_permissions, bool $abort = true)
-    {
-        // Super admin has the access to all pages!
-        if (auth()->user()->user_type === 'admin') {
-            return true;
-        }
-
-        /* Old version that causes the error  */
-        if (in_array(auth()->user()->user_type, $allowed_user_types, true) &&
-            (empty($allowed_permissions) || auth()->user()->hasAnyDirectPermission($allowed_permissions))) {
-            return true;
-        }
-
-        /* @vukasin TODO: I've removed part of code this because of an error:
-        https://app.asana.com/0/1201698626580352/1201824066448387
-        */
-        // if(in_array(auth()->user()->user_type, $allowed_user_types, true) &&
-        //     (empty($allowed_permissions) )) {
-        //     return true;
-        // }
-
-        return $abort ? abort(403) : false;
-    }
+    
 }
