@@ -29,6 +29,8 @@ class UserSubscription extends WeBaseModel
 
     protected $casts = [
         'data' => 'array',
+        'start_date' => 'date',
+        'end_date' => 'date'
     ];
 
     public function user()

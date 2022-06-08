@@ -24,6 +24,7 @@ use App\Nova\Tenant\ProductVariation;
 use App\Nova\Tenant\ProductVariations;
 use App\Nova\Tenant\ShopSetting;
 use App\Nova\Tenant\Translation;
+use App\Nova\Tenant\UserSubscription;
 use App\Nova\Tenant\WeQuiz;
 use App\Nova\WeQuizResults;
 use App\Nova\WeWorkflow;
@@ -105,6 +106,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Commerce', [
                     MenuItem::resource(Order::class),
                     MenuItem::resource(Invoice::class),
+                    MenuItem::resource(UserSubscription::class),
 
                 ])->icon('document-text')->collapsable(),
 
@@ -247,6 +249,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 WeQuiz::class,
                 WeQuizResults::class,
                 Invoice::class,
+                UserSubscription::class,
                 MenuBuilder::getMenuResource()
             ]);
         } else {
