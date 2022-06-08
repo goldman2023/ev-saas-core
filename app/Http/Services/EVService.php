@@ -311,7 +311,7 @@ class EVService
                     [
                         'label' => translate('Downloads'),
                         'icon' => 'heroicon-o-download',
-                        'route' => route('my.downloads.all'),
+                        'route' => '/page/downloads',
                         'is_active' => areActiveRoutes(['my.downloads.all']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
@@ -324,14 +324,14 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => [],
                     ],
-                    [
+                   /*  [
                         'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-shopping-cart',
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
-                    ],
+                    ], */
                     [
                         'label' => translate('Invoices'),
                         'icon' => 'heroicon-o-document-text',
