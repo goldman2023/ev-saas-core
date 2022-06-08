@@ -20,7 +20,7 @@
     <script>
         Survey.StylesManager.applyTheme("modern");
 
-        var surveyJSON = {!! $quiz->quiz_json !!};
+        var surveyJSON = @js($quiz->quiz_json);
 
         var survey = new Survey.Model(surveyJSON);
 
