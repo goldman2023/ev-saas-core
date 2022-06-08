@@ -6,6 +6,7 @@ namespace WeThemes\WePixPro\App\Providers;
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
+use Livewire;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
@@ -50,15 +51,16 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         ];
     }
 
+    protected function registerLivewireComponents() {
+        Livewire::component('forms.generate-license-form', \WeThemes\WePixPro\App\Http\Livewire\Forms\GenerateLicenseForm::class);
+    }
+
     /**
      * Bootstrap the theme function services.
      */
     public function boot()
-    {
+    {   
         parent::boot();
-        
-        // TODO: Create Livewire components registration abstract class in WeThemeFunctionsServiceProvider, where we should register all theme specific Livewire components
-        Livewire::component('forms.generate-license-form', \WeThemes\WePixPro\App\Http\Livewire\Forms\GenerateLicenseForm::class);
 
         if (function_exists('add_filter')) {
             // Filter
@@ -124,12 +126,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             });
 
-            // Add Pix-Pro General Settings - WireSET
+            // Add Pix-Pro General Settings - $wire.set inside alpine/lw form
             add_action('view.app-settings-form.general.wire_set', function() {
-                ?>
-                    $wire.set('settings.pix_pro_downloads', settings.pix_pro_downloads, true);
-                    $wire.set('settings.pix_pro_dataset_samples', settings.pix_pro_dataset_samples, true);
-                <?php
+                js_wire_set('settings.pix_pro_downloads', 'settings.pix_pro_downloads');
+                js_wire_set('settings.pix_pro_dataset_samples', 'settings.pix_pro_dataset_samples');
             });
 
             add_action('view.dashboard.my-downloads.end', function() {
@@ -145,6 +145,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     echo view('frontend.partials.pix-pro-licenses-table', [
                         // 'downloads' => collect(TenantSettings::get('pix_pro_downloads'))
                     ]);
+                    
                 }
             });
 

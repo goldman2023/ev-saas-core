@@ -5,6 +5,7 @@ namespace WeThemes\EvSaasFox\App\Providers;
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
+use Livewire;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
@@ -41,15 +42,21 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         ];
     }
 
+    protected function registerLivewireComponents() {}
+
     /**
      * Bootstrap the theme function services.
      */
     public function boot()
-    {
+    { 
         parent::boot();
 
         if (function_exists('add_action')) {
             // Actions
+        }
+
+        if (function_exists('add_filter')) {
+            // Filters
         }
     }
 
