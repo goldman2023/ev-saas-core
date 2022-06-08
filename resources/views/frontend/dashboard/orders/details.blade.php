@@ -18,26 +18,27 @@
 
 <div class="bg-gray-50">
     <div class="max-w-2xl mx-auto pt-16 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0">
-            <div class="flex sm:items-baseline sm:space-x-4">
-                <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{{ translate('Order') }}:
+        <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 mb-3">
+            <div class="flex items-center sm:space-x-4">
+                <h1 class="ftext-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{{ translate('Order') }}:
                     #{{ $order->id }}</h1>
 
+                    <span class="badge-dark ml-2">{{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}</span>
                 {{-- <a href="#" class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block">View
                     invoice<span aria-hidden="true"> &rarr;</span></a> --}}
             </div>
-            <p class="text-sm text-gray-600">Order placed
-                <time datetime="2021-03-22" class="font-semibold text-gray-900">{{ $order->created_at->format('M d, Y
-                    H:i') }}</time>
+            <p class="text-sm text-gray-600">
+                {{ translate('Order placed on:') }}
+                <time datetime="2021-03-22" class="font-semibold text-gray-900">{{ $order->created_at->format('M d, Y H:i') }}</time>
             </p>
             <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:hidden">
-                View invoice
+                {{ translate('View invoice') }}
                 <span aria-hidden="true"> &rarr;</span>
             </a>
         </div>
 
         {{-- Actions --}}
-        <div class="px-4 py-2 mt-3 space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0">
+        <div class="px-4 py-2 space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0 mb-4">
             <div class="flex items-center">
                 @if($order->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
                 <span class="badge-success !py-1 !px-3 mr-3">
@@ -53,35 +54,37 @@
                 </span>
                 @endif
 
-                @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
-                <span class="badge-success !py-1 !px-3 mr-2">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                </span>
-                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
-                <span class="badge-warning !py-1 !px-3 mr-2">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                </span>
-                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
-                <span class="badge-danger !py-1 !px-3 mr-2">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                </span>
-                @endif
+                {{-- Shipping status (only for Standard Products) --}}
+                @if($order_items->filter(fn($item) => $item->subject->isProduct() && $item->subject->isShippable())->count() > 0)
+                    @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
+                        <span class="badge-success !py-1 !px-3 mr-2">
+                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                        </span>
+                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
+                        <span class="badge-warning !py-1 !px-3 mr-2">
+                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                        </span>
+                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
+                        <span class="badge-danger !py-1 !px-3 mr-2">
+                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                        </span>
+                    @endif
 
-                @if(empty($order->tracking_number))
-                <span class="badge-danger !py-1 !px-3 mr-2">
-                    {{ translate('Tracking number not added') }}
-                </span>
-                @else
-
+                    {{-- Tracking number (only for Standard Products) --}}
+                    @if(empty($order->tracking_number))
+                        <span class="badge-danger !py-1 !px-3 mr-2">
+                            {{ translate('Tracking number not added') }}
+                        </span>
+                    @endif
                 @endif
             </div>
 
             <div class="flex items-center relative" x-data="{ isOpen: false }" x-cloak>
-                <a class="flex items-center text-gray-900 mr-3" href="javascript:;"
+                {{-- <a class="flex items-center text-gray-900 mr-3" href="javascript:;"
                     onclick="window.print(); return false;">
                     @svg('heroicon-o-printer', ['class' => 'w-[18px] h-[18px] mr-2'])
                     {{ translate('Print order') }}
-                </a>
+                </a> --}}
 
                 {{-- <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="flex items-center">
                     @svg('heroicon-o-chevron-down', ['class' => 'ml-2 w-[18px] h-[18px]'])
@@ -99,7 +102,7 @@
         </div>
 
         <!-- Products -->
-        <div class="mt-6">
+        <div class="w-full">
             <div class="space-y-8">
                 @if($order_items->isNotEmpty())
                     @foreach($order_items as $item)
@@ -196,7 +199,12 @@
         </div>
 
         <div class="mt-6">
-            <livewire:dashboard.tables.recent-invoices-widget-table for="order" :order="$order"></livewire:dashboard.tables.recent-invoices-widget-table>
+            <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
+                <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
+             </div>
+
+            <livewire:dashboard.tables.recent-invoices-widget-table for="order" :order="$order" :per-page="10" :show-per-page="false" :show-search="false" :column-select="false">
+            </livewire:dashboard.tables.recent-invoices-widget-table>
         </div>
 
         <!-- Billing -->
@@ -206,31 +214,27 @@
                     <div>
                         <dt class="font-medium text-gray-900">{{ translate('Billing address') }}</dt>
                         @if($order->isPaid())
-
-                        <dd class="mt-3 text-gray-500">
-                            <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
-                            <span class="block">{{ $order->billing_address }}</span>
-                            <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
-                            <span class="block">{{ $order->billing_state == (\Countries::get(code:
-                                $order->billing_country)->name ?? '') ? \Countries::get(code:
-                                $order->billing_country)->name : $order->billing_state.', '.\Countries::get(code:
-                                $order->billing_country)->name }}</span>
-                        </dd>
+                            <dd class="mt-3 text-gray-500">
+                                <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
+                                <span class="block">{{ $order->billing_address }}</span>
+                                <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
+                                <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '') . \Countries::get(code: $order->billing_country)->name }}</span>
+                            </dd>
                         @else
-                        <dd class="mt-3 text-gray-500">
-                            <span class="block">
-                                {{ translate('Order is processing, this can take a few minutes.') }}
-                            </span>
-                        </dd>
+                            <dd class="mt-3 text-gray-500">
+                                <span class="block">
+                                    {{ translate('Order is processing, this can take a few minutes.') }}
+                                </span>
+                            </dd>
                         @endif
                     </div>
                     <div>
-                        <dt class="font-medium text-gray-900">Payment information</dt>
+                        @if((auth()->user()?->isAdmin() ?? false) && !empty($order->meta['stripe_payment_intent_id'] ?? null))
+                            <dt class="font-medium text-gray-900">{{ translate('Payment information') }}</dt>
+                        @endif
                         <div class="mt-3">
                             <dd class="-ml-4 -mt-4 flex flex-wrap">
-
-
-                                <div class="ml-4 mt-4 flex-shrink-0">
+                                {{-- <div class="ml-4 mt-4 flex-shrink-0">
                                     <svg aria-hidden="true" width="36" height="24" viewBox="0 0 36 24"
                                         xmlns="http://www.w3.org/2000/svg" class="h-6 w-auto">
                                         <rect width="36" height="24" rx="4" fill="#224DBA" />
@@ -243,7 +247,7 @@
                                 <div class="ml-4 mt-4 mb-3">
                                     <p class="text-gray-900">Ending with ****</p>
                                     <p class="text-gray-600">Expires ** / **</p>
-                                </div>
+                                </div> --}}
                                 @if((auth()->user()?->isAdmin() ?? false) && !empty($order->meta['stripe_payment_intent_id'] ?? null))
                                     @if(\StripeService::getStripeMode() === 'live')
                                         <a target="_blank" class="btn btn-primary"

@@ -202,4 +202,13 @@ class WeBaseModel extends Model
     {
         return LogOptions::defaults();
     }
+
+    // is ContentType functions
+    public function isProduct() {
+        return $this instanceof Product;
+    }
+
+    public function isPlan() {
+        return $this instanceof Plan;
+    }
 }

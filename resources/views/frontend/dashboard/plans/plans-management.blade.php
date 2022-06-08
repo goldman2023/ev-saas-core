@@ -46,15 +46,25 @@
         <div class="grid gap-10 grid-cols-12" >
             @if($plans->isNotEmpty())
                 @foreach($plans as $plan)
-                    <div class="bg-white border border-gray-200 hover:border-primary rounded-lg col-span-12 sm:col-span-6 lg:col-span-3"
+                    <div class="bg-white border border-gray-200 hover:border-primary rounded-lg col-span-12 sm:col-span-6 lg:col-span-3 @if(auth()->user()?->subscribedTo($plan->slug) ?? null) border-2 border-primary  @endif"
                         x-data="{
                             qty: 1,
                             month_price: @js($plan->getTotalPrice(true)),
                             annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice() / 12)),
                         }">
-                        <div class=" flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green h-full">
+                        <div class="relative  flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green h-full @if(auth()->user()?->subscribedTo($plan->slug) ?? null) pt-[41px] @endif">
+                            @if(auth()->user()?->subscribedTo($plan->slug) ?? null) 
+                                <div class="w-full h-[35px] flex items-center justify-center text-14 py-2 bg-primary text-white text-center absolute top-0 right-0 left-0 ">
+                                    <span>{{ translate('Current plan') }}:</span>
+                                    <strong class="pl-1">{{ $plan->name }}</strong>
+                                </div>
+                            @endif
+
                             <div class="price-description flex flex-col grow">
-                                <h3 class="font-bold text-18 text-gray-700 pb-2">{{ $plan->name }}</h3>
+                                @if(!(auth()->user()?->subscribedTo($plan->slug) ?? null)) 
+                                    <h3 class="font-bold text-18 text-gray-700 pb-2">{{ $plan->name }}</h3>
+                                @endif
+
                                 @if($plan->non_standard)
                                     <div class="flex items-end">
                                         <h3 class="text-36 text-dark font-bold mb-0">{{  !empty($plan->getCoreMeta('custom_pricing_label')) ? $plan->getCoreMeta('custom_pricing_label') : translate('Contact Us') }}</h3>
@@ -107,24 +117,35 @@
                                         {{ str_replace('%d%', \FX::formatPrice(abs($plan->getTotalAnnualPrice() - ($plan->getTotalPrice() * 12))), translate('You save %d% per year')) }}
                                     </div>
 
-                                    <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
-                                        class="cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
-
-                                        {{-- We should support following scenarios:
-                                            1. *If trial mode is disabled and no plan is purchased: Buy now
-                                            2. *If trial mode is enabled and no plan is purchased: Try for free
-                                            3. *If trial mode is disabled and plan is purchased: Upgrade plan
-                                            4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
-                                        @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                            <span>{{ translate('Buy now') }}</span>
-                                        @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                            <span>{{ translate('Try for free') }}</span>
-                                        @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                            <span>{{ translate('Change plan') }}</span>
-                                        @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                            <span>{{ translate('Change plan') }}</span>
+                                    <div class="flex flex-row gap-4">
+                                        <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
+                                            class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
+    
+                                            {{-- We should support following scenarios:
+                                                1. *If trial mode is disabled and no plan is purchased: Buy now
+                                                2. *If trial mode is enabled and no plan is purchased: Try for free
+                                                3. *If trial mode is disabled and plan is purchased: Upgrade plan
+                                                4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
+                                            @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                                <span>{{ translate('Buy now') }}</span>
+                                            @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                                <span>{{ translate('Try for free') }}</span>
+                                            @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                                <span>{{ translate('Change plan') }}</span>
+                                            @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                                <span>{{ translate('Change plan') }}</span>
+                                            @endif
+                                        </a>
+    
+                                        @if(auth()->user()?->subscribedTo($plan->slug) ?? null)
+                                            <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
+                                                    class="btn-danger btn-sm inline-block pt-2 text-danger text-14 text-center">
+                                                {{ translate('Cancel plan') }}
+                                            </a>
                                         @endif
-                                    </a>
+                                    </div>
+                                    
+
                                 @endif
 
 

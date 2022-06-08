@@ -326,7 +326,7 @@ class EVService
                     ],
                     [
                         'label' => translate('My Purchases'),
-                        'icon' => 'heroicon-o-document-text',
+                        'icon' => 'heroicon-o-shopping-cart',
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),
                         'user_types' => User::$user_types,
