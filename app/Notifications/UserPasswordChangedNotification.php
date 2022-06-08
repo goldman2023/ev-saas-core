@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 
-class UserWelcomeNotification extends Notification
+class UserPasswordChangedNotification extends Notification
 {
 
     public function __construct()
@@ -33,11 +33,11 @@ class UserWelcomeNotification extends Notification
             return (new WeMailMessage)
                 ->markdown('vendor.notifications.email')
                 // ->text('mail.text.message')
-                ->subject(translate('Welcome to '.get_tenant_setting('site_name')))
-                ->greeting(translate('Hello, ').$notifiable->name)
-                ->line(translate('Welcome to our site.'))
-                ->line(translate('Thank you for using our application!'))
-                ->action('Go to dashboard', route('dashboard'));
+                ->subject(translate('Password has been changed'))
+                ->greeting(translate('Greetings').' '.$notifiable->name)
+                ->line(translate('Your password on '.get_tenant_setting('site_name').' has been changed.'))
+                ->line(translate('If you didn\'t make this change, please contact our support or go through the "Forgot my password" process ASAP.'))
+                ->action('Login', route('user.login'));
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }

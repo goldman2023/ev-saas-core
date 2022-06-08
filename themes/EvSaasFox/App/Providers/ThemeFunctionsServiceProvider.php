@@ -48,7 +48,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
      * Bootstrap the theme function services.
      */
     public function boot()
-    { 
+    {
         parent::boot();
 
         if (function_exists('add_action')) {
@@ -57,6 +57,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
         if (function_exists('add_filter')) {
             // Filters
+
+            // FoxAsk uses usernames
+            add_filter('user.show-username', fn() => true, 20, 0);
         }
     }
 

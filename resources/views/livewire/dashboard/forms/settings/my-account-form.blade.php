@@ -214,20 +214,19 @@
                             </div>
                             <!-- END Last name -->
 
-                            <!-- First name -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                            <!-- Username -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 @if(!apply_filters('user.show-username')) !hidden @endif"
                                 x-data="{}">
 
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Username') }}
-                                    <span class="text-danger relative top-[-2px]">*</span>
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <x-dashboard.form.input field="me.username" />
                                 </div>
                             </div>
-                            <!-- END First name -->
+                            <!-- END Username -->
 
                             <!-- Email -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
@@ -429,7 +428,8 @@
                             this.newPassword = '';
                             this.newPassword_confirmation = '';
                         }
-                    }" @init-form.window="reset()">
+                    }" @init-form.window="reset()" 
+                        @user-logout-after-password-change.window="setTimeout(() => window.location.href = '{{ route('user.logout') }}', 2000)">
                         <div>
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Change password') }}
                             </h3>

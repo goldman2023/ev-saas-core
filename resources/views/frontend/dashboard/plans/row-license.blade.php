@@ -9,7 +9,11 @@
 @do_action('view.dashboard.row-license.columns', $row->license?->first())
 
 <x-livewire-tables::table.cell class="align-middle  text-center">
-    {{ date('d. M Y, H:i', $row->end_date ?? '') }}
+    @if(!empty($row->end_date))
+        {{ Carbon::createFromTimestamp($row->end_date ?? '')->format('d. M Y, H:i') }}
+    @else
+        -
+    @endif
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle static ">
