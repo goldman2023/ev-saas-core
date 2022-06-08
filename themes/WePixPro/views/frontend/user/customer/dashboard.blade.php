@@ -11,7 +11,7 @@
             <div class="col-span-6 lg:col-span-4">
                 <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
                    <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
-                   <a href="{{ route('my.purchases.all') }}" class="btn-primary">{{ translate('Manage invoices') }}</a>
+                   <a href="{{ route('my.orders.all') }}" class="btn-primary">{{ translate('Manage invoices') }}</a>
                 </div>
                 <livewire:dashboard.tables.recent-invoices-widget-table for="me" :per-page="3" :show-per-page="false" :show-search="false" :column-select="false" />
 

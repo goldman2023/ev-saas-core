@@ -60,24 +60,21 @@ class LicensesTable extends DataTableComponent
     public function columns(): array
     {
 
-        $columns = [];
-
-        return [
+        $columns = apply_filters('dashboard.table.licenses.columns', [
             Column::make('ID', 'license_id')
-                ->excludeFromSelectable(),
-            Column::make('Name', 'license_name')
-                ->excludeFromSelectable(),
-            Column::make('Type', 'license_type')
                 ->excludeFromSelectable(),
             Column::make('Serial Number', 'serial_number')
                 ->excludeFromSelectable(),
-            Column::make('Ending In', 'ending')
+        ]);
+
+        $columns = array_merge($columns, [
+            Column::make('Valid', 'ending')
                 ->excludeFromSelectable(),
-            // Column::make('Updated', 'end_date')
-            //     ->excludeFromSelectable(),
             Column::make('Actions')
                 ->excludeFromSelectable(),
-        ];
+        ]);
+
+        return $columns;
     }
 
     public function query(): Builder

@@ -83,7 +83,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
         if (!empty(tenant()->domains->first())) {
             // Set `theme_root` and `theme_helpers` paths
             $this->theme_root = base_path() . '/themes/' . tenant()->domains->first()->theme;
-            $this->theme_helpers = $this->theme_root . '/app/Helpers/*.php';
+            $this->theme_helpers = $this->theme_root . '/App/Helpers/*.php';
 
             // Loop through all helper functions in the theme, and require each php file laoded with functions!
             if(!empty($theme_helpers = glob($this->theme_helpers))) {

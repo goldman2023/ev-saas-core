@@ -103,7 +103,7 @@ Route::middleware([
         /* Orders */
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
         Route::get('/order/create', [EVOrderController::class, 'create'])->name('order.create');
-        Route::get('/order/view/{id}', [EVOrderController::class, 'details'])->name('order.details');
+        Route::get('/order/details/{id}', [EVOrderController::class, 'details'])->name('order.details');
         //        Route::resource('orders', 'EVOrderController')->parameters([
         //            'orders' => 'id',
         //        ])->except(['destroy']);
@@ -113,8 +113,8 @@ Route::middleware([
         Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
 
         /* My Purchases/Wishlist/Viewed Items */
-        Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
-        Route::get('/orders/all', [EVOrderController::class, 'my_orders'])->name('my.orders.all');
+        Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
+        Route::get('/my/orders/all', [EVOrderController::class, 'my_orders'])->name('my.orders.all');
 
         /* My Downloads (all) */
         Route::get('/downloads/all', [EVDownloadsController::class, 'my_downloads'])->name('my.downloads.all');

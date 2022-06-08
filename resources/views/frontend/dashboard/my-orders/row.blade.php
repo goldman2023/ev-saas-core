@@ -44,7 +44,7 @@
 </x-livewire-tables::table.cell>
 @endif
 
-@if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('shipping_status')))
+{{-- @if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('shipping_status')))
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     @if($row->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
         <span class="badge-success">
@@ -60,7 +60,7 @@
         </span>
     @endif
 </x-livewire-tables::table.cell>
-@endif
+@endif --}}
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>

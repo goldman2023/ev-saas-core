@@ -121,9 +121,9 @@ class MyOrdersTable extends DataTableComponent
             Column::make('Payment status', 'payment_status')
                 ->sortable()
                 ->addClass('hidden md:table-cell'),
-            Column::make('Shipping status', 'shipping_status')
-                ->sortable()
-                ->addClass('hidden md:table-cell'),
+            // Column::make('Shipping status', 'shipping_status')
+            //     ->sortable()
+            //     ->addClass('hidden md:table-cell'),
             Column::make('Total', 'total')
                 ->excludeFromSelectable()
                 ->sortable(),
@@ -145,6 +145,6 @@ class MyOrdersTable extends DataTableComponent
 
     public function rowView(): string
     {
-        return 'frontend.dashboard.my-purchases.row';
+        return 'frontend.dashboard.my-orders.row';
     }
 }
