@@ -62,11 +62,19 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    <span class="text-14">{{ Carbon::createFromTimestamp($row->start_date)->format('d. M Y, H:i') }}</span>
+    @if(!empty($row->start_date))
+        <span class="text-14">{{ Carbon::createFromTimestamp($row->start_date)->format('d. M Y, H:i') }}</span>
+    @else
+        -
+    @endif
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    <span class="text-14">{{ Carbon::createFromTimestamp($row->end_date)->format('d. M Y, H:i') }}</span>
+    @if(!empty($row->end_date))
+        <span class="text-14">{{ Carbon::createFromTimestamp($row->end_date)->format('d. M Y, H:i') }}</span>
+    @else
+        -
+    @endif
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle static ">

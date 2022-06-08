@@ -15,6 +15,7 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
+use App\Notifications\UserPasswordChangedNotification;
 
 class MyAccountForm extends Component
 {
@@ -77,7 +78,7 @@ class MyAccountForm extends Component
             ],
             'password' => [
                 'currentPassword' => ['required', 'match_password:App\Models\User,id,me'],
-                'newPassword' => ['required', 'min:8', 'regex:/^.*(?=.{1,})(?=.*[a-zA-Z])(?=.*[0-9]).*$/', 'confirmed'],
+                'newPassword' => ['required', 'min:8', 'regex:/^.(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/', 'confirmed'],
             ],
         ]);
 
@@ -246,16 +247,31 @@ class MyAccountForm extends Component
 
     public function updatePassword()
     {
-        $this->validate($this->getRuleSet('current_password'));
+        $this->validate($this->getRuleSet('password'));
 
-        // Update password
-        $this->me->password = Hash::make($this->newPassword);
-        $this->me->save();
+        DB::beginTransaction();
 
-        // TODO: Logout the User
-        // TODO: Send an email to user that password is changed
+        try {
+            // Update password
+            $this->me->password = Hash::make($this->newPassword);
+            $this->me->save();
 
-        $this->inform(translate('Your password is successfully updated. You will be logged out.'), '', 'success');
+            // Save WPmd5 password version too
+            $this->me->saveCoreMeta('password_md5', Hash::driver('wp')->make($this->newPassword));
+
+            DB::commit();
+
+            $user->notify(new UserPasswordChangedNotification());
+
+            $this->inform(translate('Your password is successfully updated. You will be logged out.'), 'You will be logged-out in 2 seconds', 'success');
+
+            $this->dispatchBrowserEvent('user-logout-after-password-change');
+        } catch (\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not change your password.'), $e->getMessage(), 'fail');
+        }
+
+        do_action('user.password.updated', $this->me);
     }
 
     /*

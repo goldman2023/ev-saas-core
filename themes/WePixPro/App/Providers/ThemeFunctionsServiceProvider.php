@@ -7,6 +7,7 @@ use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
 use Livewire;
+use TenantSettings;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
@@ -111,6 +112,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 pix_pro_extend_license($user_subscriptions);
             }, 20, 1);
 
+            // Update User password
+            add_action('user.password.updated', function($user) {
+                pix_pro_update_user_password($user);
+            }, 20, 1);
             
 
             // View actions
@@ -150,10 +155,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             add_action('view.dashboard.plans-management.plans-table.end', function() {
                 if (View::exists('frontend.partials.pix-pro-licenses-table')) {
-                    echo view('frontend.partials.pix-pro-licenses-table', [
-                        // 'downloads' => collect(TenantSettings::get('pix_pro_downloads'))
-                    ]);
-                    
+                    echo view('frontend.partials.pix-pro-licenses-table');
                 }
             });
 

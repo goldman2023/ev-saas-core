@@ -229,6 +229,14 @@ if (!function_exists('pix_pro_get_user_licenses')) {
     }
 }
 
+if (!function_exists('pix_pro_update_user_password')) {
+    function pix_pro_update_user_password($user) {
+        $new_password = $user->getCoreMeta('password_md5', true);
+
+        
+    }
+}
+
 // Basic PixPro API Config Functions
 if (!function_exists('pix_pro_enabled')) {
     function pix_pro_enabled() {
