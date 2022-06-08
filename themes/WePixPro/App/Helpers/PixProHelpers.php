@@ -72,8 +72,8 @@ if (!function_exists('pix_pro_create_license')) {
                         $body['SubscriptionId'] = $subscription->id;
                         $body['LicenseSubscriptionType'] = $subscription->plan->name;
                         $body['Status'] = 'active';
-                        $body['PurchaseDate'] = date('Y-m-d H:i:s', $subscription->start_date);
-                        $body['ExpirationDate'] = date('Y-m-d H:i:s', $subscription->end_date);
+                        $body['PurchaseDate'] = $subscription->start_date->format('Y-m-d H:i:s');
+                        $body['ExpirationDate'] = $subscription->end_date->format('Y-m-d H:i:s');
                         $body['OrderCurrency'] = $stripe_subscription->items->data[0]->price->currency ?? 'eur'; // TODO: This is different when multiplan is enabled
                         $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
                         $body['Tax'] = 21; // TODO: Make this respect Stripe tax!

@@ -29,8 +29,8 @@ class UserSubscription extends WeBaseModel
 
     protected $casts = [
         'data' => 'array',
-        'start_date' => 'date',
-        'end_date' => 'date'
+        // 'start_date' => 'date',
+        // 'end_date' => 'date'
     ];
 
     public function user()
@@ -48,6 +48,18 @@ class UserSubscription extends WeBaseModel
 
     public function license() {
         return $this->morphedByMany(License::class, 'subject', 'user_subscription_relationships');
+    }
+
+    public function getStartDateAttribute($value) {
+        $date = \Carbon::createFromTimestamp($value);
+
+        return $date;
+    }
+
+    public function getEndDateAttribute($value) {
+        $date = \Carbon::createFromTimestamp($value);
+
+        return $date;
     }
 
     // public static function getSubscriptionsAmount($subscriptions) {

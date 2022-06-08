@@ -1020,7 +1020,7 @@ class StripeService
             }
 
             $order->save();
-
+            
             // Check if $model has stock and reduce it if it does!!!
             $order_item = $order->order_items->first();
             $model = $order_item->subject;
@@ -1054,8 +1054,8 @@ class StripeService
                                 $this->mode_prefix.'stripe_subscription_id' => $session->subscription ?? null, // store stripe_subscription_id
                                 $this->mode_prefix.'stripe_request_id' => $stripe_request_id
                             ]),
-                            'created_at' => time(),
-                            'updated_at' => time()
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' =>  date('Y-m-d H:i:s')
                         ]
                     ]);
                 } else {
@@ -1345,6 +1345,7 @@ class StripeService
     // invoice.paid
     public function whInvoicePaid($event)
     {
+        
         $stripe_invoice = $event->data->object;
         $stripe_subscription_id = !empty($stripe_invoice->subscription ?? null) ? $stripe_invoice->subscription : -1;
         $stripe_request_id = $event->request->id;
@@ -1414,7 +1415,7 @@ class StripeService
             // We are sure that invoice is paid so we make user_subscription(s) active and paid too (even though they may already be active and paid as a result of subscription.updated webhook)!
             if ($user_subscriptions->isNotEmpty()) {
                 foreach($user_subscriptions as $subscription) {
-
+                    
                     // If subscription has trial start/end (provided from checkout.session)
                     if(!empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null)) {
                         $subscription->status = UserSubscriptionStatusEnum::trial()->value;
