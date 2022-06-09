@@ -38,8 +38,10 @@ class LicensesTable extends DataTableComponent
     protected string $pageName = 'licenses';
     protected string $tableName = 'licenses';
 
-    public function mount($for = 'me') {
-        $this->for = $for;
+    public $user;
+
+    public function mount($user) {
+        $this->user = $user;
         
         parent::mount();
     }
@@ -80,7 +82,7 @@ class LicensesTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return auth()->user()->plan_subscriptions()->with('license')->getQuery()
+        return $this->user->plan_subscriptions()->with('license')->getQuery()
                     // ->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
                     ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
                     // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
@@ -98,5 +100,12 @@ class LicensesTable extends DataTableComponent
         return response()->streamDownload(function () use($response) { 
             echo $response['file_contents'];
         }, $response['file_name']);
+    }
+    
+    // TODO: Create mechanism for extending any Livewire class (using Trait) - adding custom functions dynamically from the ThemeFunctions via hooks (add_filter)
+    public function disconnect(License $license) {
+        do_action('license.disconnect', $license, $this->user, $this);
+
+        $this->emit('refreshDatatable');
     }
 }

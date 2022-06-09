@@ -8,15 +8,15 @@ trait DispatchSupport
     public string $info_modal_basic_id = 'info-modal-basic';
     public string $validation_errors_toast_id = 'validation-error-toast';
 
-    protected function toastify($msg = '', $type = 'info') {
+    public function toastify($msg = '', $type = 'info') {
         $this->dispatchBrowserEvent('toastit', ['id' => $this->toast_id, 'content' => $msg, 'type' => $type ]);
     }
 
-    protected function inform($title, $text, $type, $timeout = 3000) {
+    public function inform($title, $text, $type, $timeout = 3000) {
         $this->dispatchBrowserEvent('inform', ['id' => $this->info_modal_basic_id, 'title' => $title, 'text' => $text, 'type' => $type, 'timeout' => $timeout]);
     }
 
-    protected function dispatchGeneralError(mixed $errors) {
+    public function dispatchGeneralError(mixed $errors) {
         if($errors instanceof \Exception) {
             $errors = $errors->getMessage();
         }
@@ -27,7 +27,7 @@ trait DispatchSupport
         ]]);
     }
 
-    protected function dispatchValidationErrors($obj) {
+    public function dispatchValidationErrors($obj) {
         if($obj instanceof \Illuminate\Validation\ValidationException) {
             $errors = $obj->validator->errors()->messages();
         } elseif($obj instanceof \Illuminate\Contracts\Validation\Validator) {

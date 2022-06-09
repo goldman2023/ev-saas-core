@@ -29,7 +29,7 @@
 <x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->status === \App\Enums\UserSubscriptionStatusEnum::trial()->value)
         <span class="badge-warning">
-            {{ translate('Payment on: ').Carbon::createFromTimestamp($row->end_date)->format('d. M Y, H:i') }}
+            {{ translate('Payment on: ').$row->end_date->format('d. M Y, H:i') }}
         </span>
     @else
         @if($row->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)

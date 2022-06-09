@@ -302,7 +302,7 @@ if (!class_exists('Hooks')){
      * @param mixed $arg
      * @return void
      */
-    public function do_action($tag, $arg = '')
+    public function do_action($tag, ...$arg)
     {
       if ( ! isset($this->actions) ) {
         $this->actions = array();
@@ -315,7 +315,7 @@ if (!class_exists('Hooks')){
       }
       
       if ( isset($this->filters['all']) ) {
-        $this->current_filter[] = $tag;
+        $this->current_filter[] = $tag; 
         $all_args = func_get_args();
         $this->callAllHooks($all_args);
       }
@@ -334,13 +334,18 @@ if (!class_exists('Hooks')){
       $args = [];
       if ( is_array($arg) && 1 == count($arg) && isset($arg[0]) && is_object($arg[0]) ) {
         $args[] =& $arg[0];
+      } else if(is_array($arg) && count($arg) > 1) {
+        foreach($arg as &$a) {
+          $args[] =& $a;
+        }
+        unset($a);
       } else {
         $args[] = $arg;
       }
-
-      for ( $index = 2; $index < func_num_args(); $index++ ) {
-        $args[] = func_get_arg($index);
-      }
+      // for ( $index = 2; $index < func_num_args(); $index++ ) {
+      //   $args[] = func_get_args();
+      // }
+      
       
       if ( !isset( $this->merged_filters[ $tag ] ) ) {
         ksort($this->filters[$tag]);
