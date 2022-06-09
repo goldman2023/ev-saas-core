@@ -3,6 +3,7 @@
 namespace WeThemes\WePixPro\App\Http\Livewire\Forms;
 
 use App\Models\User;
+use App\Models\License;
 use App\Traits\Livewire\DispatchSupport;
 use MailerService;
 use App\Enums\WeMailingListsEnum;
@@ -17,12 +18,14 @@ class GenerateLicenseForm extends Component
 {
     use DispatchSupport;
 
+    public $license_id;
     public $hw_id;
     public $serial_number;
 
     protected function rules()
     {
         return [
+            'license_id' => 'nullable',
             'hw_id' => 'required',
             'serial_number' => ['required'],
         ];
@@ -51,18 +54,35 @@ class GenerateLicenseForm extends Component
     }
 
     public function generate()
-    {
+    { 
         $this->validate();
-
+     
+        $license = License::findOrFail($this->license_id);
+        
         try {
-           
+            $response = pix_pro_activate_license(auth()->user(), $this->serial_number, $this->hw_id);
+            
+            if(!empty($response)) {
+                $license_data = $response['license'] ?? [];
+                $license_data['file_name'] = $response['license_file']['file_name'];
+                $license_data['file_contents'] = $response['license_file']['file_contents'];
+                
+                $license->data = $license_data;
+                $license->save();
+                
+                $this->emit('refreshDatatable');
+                $this->inform(translate('You successfully activated your license!'), translate('Serial number: ').$this->serial_number, 'success');
+
+                return response()->streamDownload(function () use($license_data) { 
+                    echo $license_data['file_contents'];
+                }, $license_data['file_name']);
+            }
+
+            $this->inform(translate('Cannot activate the license OR license is already activated...'), translate('Serial number: ').$this->serial_number, 'success');
         } catch(\Exception $e) {
             Log::error($e->getMessage());
+            dd($e);
         }
-
-        // $this->inform(translate('Thank you for successfully subscribing to our newsletter!'), '', 'success');
-
-        // $this->resetForm();
     }
 
     public function resetForm() {

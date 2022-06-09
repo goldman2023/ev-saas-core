@@ -1,12 +1,18 @@
-<div class="w-full" x-data="{
+<div class="relative w-full" x-data="{
     serial_number: null,
     hw_id: null,
+    license_id: null,
 }" 
+wire:loading.class="opacity-30 pointer-events-none"
 @display-modal.window="
     if($event.detail.id === id) {
         serial_number = $event.detail.serial_number;
+        license_id = $event.detail.license_id;
     }
 ">
+    <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
+
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:divide-x">
         <div class="col-span-1">
             <!--Serial Number-->
@@ -16,7 +22,7 @@
                 </label>
 
                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                    <x-dashboard.form.input field="serial_number" :x="true"/>
+                    <x-dashboard.form.input field="serial_number" :x="true" :disabled="true"/>
                 </div>
             </div>
             <!-- END Serial Number -->
@@ -44,6 +50,7 @@
         <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
             $wire.set('serial_number', serial_number, true);
             $wire.set('hw_id', hw_id, true);
+            $wire.set('license_id', license_id, true);
         " wire:click="generate()">
             {{ translate('Activate') }}
         </button>

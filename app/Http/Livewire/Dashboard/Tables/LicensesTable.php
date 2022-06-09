@@ -3,12 +3,13 @@
 namespace App\Http\Livewire\Dashboard\Tables;
 
 use Carbon;
+use Log;
 use App\Enums\StatusEnum;
 use App\Facades\MyShop;
 use App\Models\BlogPost;
 use App\Models\Order;
 use App\Models\Orders;
-use App\Models\Plan;
+use App\Models\License;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -39,7 +40,7 @@ class LicensesTable extends DataTableComponent
 
     public function mount($for = 'me') {
         $this->for = $for;
-
+        
         parent::mount();
     }
 
@@ -79,16 +80,23 @@ class LicensesTable extends DataTableComponent
 
     public function query(): Builder
     {
-        if($this->for === 'me') {
-            return auth()->user()->plan_subscriptions()->with('license')->getQuery()
+        return auth()->user()->plan_subscriptions()->with('license')->getQuery()
                     // ->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
                     ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
                     // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
-        }
       }
 
     public function rowView(): string
     {
         return 'frontend.dashboard.plans.row-license';
+    }
+
+    public function downloadLicense(License $license)
+    {
+        $response = apply_filters('license.download', $license);
+
+        return response()->streamDownload(function () use($response) { 
+            echo $response['file_contents'];
+        }, $response['file_name']);
     }
 }

@@ -92,6 +92,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                         ->excludeFromSelectable(),
                 ]);
             }, 10, 1);
+
+            // Download License Response
+            add_filter('license.download', function ($license) {
+                return pix_pro_download_license_logic($license);
+            }, 20, 1);
         }
         
         if (function_exists('add_action')) {
@@ -106,6 +111,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_action('invoice.paid.subscription_create', function ($user_subscriptions) {
                 pix_pro_create_license($user_subscriptions);
             }, 20, 1);
+
+            
 
             // Extend PixPro License
             add_action('invoice.paid.subscription_cycle', function($user_subscriptions) {
