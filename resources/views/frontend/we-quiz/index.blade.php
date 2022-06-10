@@ -1,22 +1,45 @@
-@extends('frontend.layouts.we-edit-layout')
+@extends('frontend.layouts.user_panel')
 
-@section('meta_title')
-{{ translate('WeEdit Page Builder') }}
-@endsection
+@section('page_title', translate('All Pages'))
 
 @push('head_scripts')
-<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
-<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
 @endpush
 
-@section('content')
-@foreach($quizes as $quiz)
-<div>
-    <a href="{{ route('we-quiz.show', $quiz->id) }}">
-        {{ $quiz->name }}
-    </a>
-</div>
-@endforeach
+@section('panel_content')
+    <x-dashboard.section-headers.section-header title="{{ translate('All Quizzes') }}" text="">
+        <x-slot name="content">
+            <a href="{{ route('we-quiz.create') }}" class="btn-primary">
+                @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
+                <span>{{ translate('New Quiz') }}</span>
+            </a>
+        </x-slot>
+    </x-dashboard.section-headers.section-header>
+
+    <div class="w-full">
+        @if($quizes->count() > 0)
+            <livewire:dashboard.tables.we-quiz-table></livewire:dashboard.tables.we-quiz-table>
+        @else
+            <x-dashboard.empty-states.no-items-in-collection
+                icon="heroicon-o-document"
+                title="{{ translate('No pages yet') }}"
+                text="{{ translate('Create your first page!') }}"
+                link-href-route="page.create"
+                link-text="{{ translate('Add new Page') }}">
+
+            </x-dashboard.empty-states.no-items-in-collection>
+        @endif
+
+        {{-- <div class="col-6">
+            <x-default.dashboard.widgets.create-card></x-default.dashboard.widgets.create-card>
+        </div>
+
+        <div class="col-6">
+            <x-default.dashboard.widgets.create-card title="Create a subscription product" description="Create a recurring digital product"></x-default.dashboard.widgets.create-card>
+        </div> --}}
+    </div>
 @endsection
+
+@push('footer_scripts')
+
+@endpush

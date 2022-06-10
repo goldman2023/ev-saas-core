@@ -103,15 +103,6 @@ class EVService
                         'permissions' => [],
                         'enabled' => get_tenant_setting('chat_feature', true),
                     ],
-                    [
-                        'label' => translate('Pages'),
-                        'icon' => 'heroicon-o-document-text',
-                        'route' => route('pages.index'),
-                        'is_active' => areActiveRoutes(['pages.index']),
-                        'user_types' => User::$tenant_user_types,
-                        'permissions' => [], // TODO: Add App Pages Permissions
-                        'enabled' => true,
-                    ],
                 ],
             ],
             [
@@ -227,7 +218,7 @@ class EVService
                 ],
             ],
             [
-                'label' => translate('Marketing'),
+                'label' => translate('Content'),
                 'items' => [
                     [
                         'label' => translate('Blog'),
@@ -236,6 +227,24 @@ class EVService
                         'is_active' => areActiveRoutes(['blog.posts.index']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_posts', 'browse_posts'],
+                    ],
+                    [
+                        'label' => translate('Pages'),
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('pages.index'),
+                        'is_active' => areActiveRoutes(['pages.index']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => [], // TODO: Add App Pages Permissions
+                        'enabled' => true,
+                    ],
+                    [
+                        'label' => translate('Quizzes'),
+                        'icon' => 'heroicon-o-user',
+                        'route' => route('dashboard.we-quiz.index'),
+                        'is_active' => areActiveRoutes(['dashboard.we-quiz.index']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => [],
+                        'enabled' => true,
                     ],
                     //                    [
                     //                        'label' => translate('Website'),
@@ -296,6 +305,7 @@ class EVService
                     // TODO: Do we need another route/menu-item for admin/moderator/support Support page? We should have to support panels: one for customers/vendors and one for admin/moderator/support
                 ],
             ],
+
             [
                 'label' => translate('Customer zone'),
                 'items' => apply_filters('dashboard.sidebar.customer-zone.items', [
