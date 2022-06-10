@@ -1,9 +1,24 @@
+@php
+    $header_menu = nova_get_menu_by_slug('header');
+    $header_menu_items = $header_menu['menuItems'] ?? null;
+@endphp
 <div id="topbar" class="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
     <button type="button" @click="$dispatch('display-flyout-panel', {'id': 'dashboard-sidebar-panel'})" class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary lg:hidden">
       @svg('heroicon-o-menu-alt-2', ['class' => 'h-6 w-6'])
     </button>
     <div class="flex-1 px-4 flex justify-between">
-      <div class="flex-1 flex">
+      <div class="flex-1 flex text-center">
+        <nav class="w-full md:flex space-x-[32px] items-center">
+            @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
+                @foreach($header_menu_items as $menu_item)
+                    @if($menu_item['enabled'])
+                        <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="text-base font-medium text-gray-500 hover:text-gray-900">
+                            {{ $menu_item['name'] ?? '' }}
+                        </a>
+                    @endif
+                @endforeach
+            @endif
+        </nav>
         <form class="w-full flex md:ml-0" action="#" method="GET">
           <label for="search-field" class="sr-only">Search</label>
           <div class="hidden relative w-full text-gray-400 focus-within:text-gray-600">

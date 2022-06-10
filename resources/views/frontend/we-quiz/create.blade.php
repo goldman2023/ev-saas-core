@@ -7,13 +7,13 @@
     .we-user-panel__container {
         padding: 0 !important;
     }
-    </style>
+</style>
 @endpush
 
 @section('panel_content')
-    <section>
-        <div id="surveyCreator" style="height: 100vh;"></div>
-    </section>
+<section>
+    <div id="surveyCreator" style="height: 100vh;"></div>
+</section>
 @endsection
 
 @push('footer_scripts')
@@ -42,7 +42,19 @@
     document.addEventListener("DOMContentLoaded", function() {
         creator.render("surveyCreator");
     });
+
+    // If you use a web service:
+    function saveSurveyJson(url, json, saveNo, callback) {
+        const request = new XMLHttpRequest();
+        request.open('POST', url);
+        request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        request.addEventListener('load', () => {
+            callback(saveNo, true);
+        });
+        request.addEventListener('error', () => {
+            callback(saveNo, false);
+        });
+        request.send(JSON.stringify(json));
+    }
 </script>
 @endpush
-
-

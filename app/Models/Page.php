@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App\Traits\HasStatus;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Page extends WeBaseModel
 {
@@ -19,6 +20,7 @@ class Page extends WeBaseModel
     use UploadTrait;
     use GalleryTrait;
     use HasStatus;
+    use LogsActivity;
 
     protected $table = 'pages';
 

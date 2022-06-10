@@ -15,6 +15,7 @@ class WeQuiz extends WeBaseModel
     use LogsActivity;
     use HasSlug;
     use PermalinkTrait;
+    use LogsActivity;
 
     protected $table = "we_quizzes";
 
