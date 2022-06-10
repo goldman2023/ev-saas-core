@@ -23,6 +23,7 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\WeMediaController;
+use App\Http\Controllers\WeQuizController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\SetDashboard;
 use App\Http\Middleware\VendorMode;
@@ -128,7 +129,7 @@ Route::middleware([
 
         /* CRM */
         Route::get('/crm/customers', [CRMController::class, 'customers_index'])->name('crm.all_customers');
-        
+
 
         /* Settings pages*/
         Route::post('/ev-design-settings', [EVAccountController::class, 'design_settings_store'])->name('settings.design.store');
@@ -202,6 +203,12 @@ Route::middleware([
     Route::get('/feed/bookmarks', [FeedController::class, 'bookmarks'])->name('feed.bookmarks');
     Route::get('/feed/shops', [FeedController::class, 'shops'])->name('feed.shops');
     Route::get('/feed/products', [FeedController::class, 'products'])->name('feed.products');
+
+
+    Route::get('/dashboard/quiz/index', [WeQuizController::class, 'index'])->name('dashboard.we-quiz.index');
+    Route::get('/dashboard/quiz/create', [WeQuizController::class, 'create'])->name('we-quiz.create')->middleware('auth');
+    Route::get('/dashboard/quiz/show/{id}', [WeQuizController::class, 'show'])->name('we-quiz.show')->middleware('auth');
+
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');
 

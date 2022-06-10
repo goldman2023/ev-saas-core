@@ -36,6 +36,121 @@ if (!function_exists('pix_pro_register_user')) {
     }
 }
 
+// ACTIVATE LICENSE
+if (!function_exists('pix_pro_activate_license')) {
+    function pix_pro_activate_license($user, $serial_number, $hardware_id) {
+        $route = pix_pro_endpoint().'/licenses/activate_paid_license/';
+
+        $body = pix_pro_add_auth_params([
+            "UserPassword" => $user->getCoreMeta('password_md5', true),
+            "UserEmail" => $user->email,
+            "UserSn" => $serial_number,
+            "HardwareId" => $hardware_id,
+        ]);
+        
+        $response = Http::post($route, $body);
+        $response_json = $response->json();
+
+        if(!empty($response_json['status'] ?? null)) {
+            // If status is not success for any reason, throw an error
+            if($response_json['status'] !== 'success') {
+                Log::error(pix_pro_error($route, 'There was an error while trying to activate your license.', $response_json));
+                return null;
+            } else {
+                return $response_json;
+            }
+        }
+
+        return null;
+    }
+}
+
+// DOWNLOAD .DAT
+if (!function_exists('pix_pro_download_license')) {
+    function pix_pro_download_license($license_id, $user) {
+        $route = pix_pro_endpoint().'/licenses/download_license/';
+
+        $body = pix_pro_add_auth_params([
+            "UserPassword" => $user->getCoreMeta('password_md5', true),
+            "UserEmail" => $user->email,
+            "LicenseId" => $license_id,
+        ]);
+        
+        $response = Http::post($route, $body);
+        $response_json = $response->json();
+
+        if(!empty($response_json['status'] ?? null)) {
+            // If status is not success for any reason, throw an error
+            if($response_json['status'] !== 'success') {
+                Log::error(pix_pro_error($route, 'There was an error while trying to download your license .dat file.', $response_json));
+                return null;
+            } else {
+                return $response_json;
+            }
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('pix_pro_download_license_logic')) {
+    function pix_pro_download_license_logic($license) {
+        try { 
+            $response = pix_pro_download_license($license->data['id'] ?? -1, auth()->user());
+            
+            if(!empty($response)) {
+                return $response;
+            }
+        
+            $this->inform(translate('Error: Cannot download license .DAT file...'), translate('Serial number: ').$license->serial_number, 'fail');
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+            dd($e);
+        }
+    }
+}
+
+if (!function_exists('pix_pro_disconnect_license')) {
+    function pix_pro_disconnect_license($license, $user, $form) {
+        try {
+            $route = pix_pro_endpoint().'/licenses/deactivate_license_hw_id/';
+
+            $body = pix_pro_add_auth_params([
+                "UserPassword" => $user->getCoreMeta('password_md5', true),
+                "UserEmail" => $user->email,
+                "LicenseId" => $license->data['id'] ?? '',
+                "HardwareId" => $license->data['hardware_id'] ?? ''
+            ]);
+
+            $response = Http::post($route, $body);
+            $response_json = $response->json();
+
+            if(!empty($response_json['status'] ?? null)) {
+                // If status is not success for any reason, throw an error
+                if($response_json['status'] !== 'success') {
+                    Log::error(pix_pro_error($route, 'There was an error while trying to disconnect a license.', translate('Serial number: ').$license->serial_number , $response_json));
+                    return null;
+                } else {
+                    // Disconnect license on our end
+                    $data = $license->data;
+                    $data['hardware_id'] = null;
+                    $license->data = $data;
+                    $license->save();
+
+                    $form->inform(translate('You successfully activated your license!'), translate('Serial number: ').$license->serial_number, 'success');
+                    return $response_json;
+                }
+            }
+        
+            $form->inform(translate('Error: Cannot disconnect license from hardware...'), translate('Serial number: ').$license->serial_number, 'fail');
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+            dd($e);
+        }
+    }
+}
+
+
 // CREATE LICENSE
 if (!function_exists('pix_pro_create_license')) {
     function pix_pro_create_license($user_subscriptions) {
@@ -230,10 +345,27 @@ if (!function_exists('pix_pro_get_user_licenses')) {
 }
 
 if (!function_exists('pix_pro_update_user_password')) {
-    function pix_pro_update_user_password($user) {
-        $new_password = $user->getCoreMeta('password_md5', true);
+    function pix_pro_update_user_password($user, $newPassword, $oldPassword) {
+        $route = pix_pro_endpoint().'/users/update_user_password/';
 
-        
+        $body = pix_pro_add_auth_params([
+            "UserEmail" => $user->email,
+            "UserPassword" => $oldPassword['wp_md5'],
+            "UserNewPassword" => $newPassword['wp_md5'],
+        ]);
+
+        $response = Http::post($route, $body);
+        $response_json = $response->json();
+        // dd($response_json);
+        if(!empty($response_json['status'] ?? null)) {
+            // If status is not success for any reason, throw an error
+            if($response_json['status'] !== 'success') {
+                Log::error(pix_pro_error($route, 'There was an error while trying to change password.', $response_json));
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 }
 

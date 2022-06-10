@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\PermalinkTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class WeQuiz extends WeBaseModel
 {
     use HasFactory;
+    use LogsActivity;
+    use HasSlug;
+    use PermalinkTrait;
     use LogsActivity;
 
     protected $table = "we_quizzes";
@@ -28,5 +34,22 @@ class WeQuiz extends WeBaseModel
     public function scopeMy($query)
     {
         return $query->where('user_id', '=', auth()->user()?->id ?? null);
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public static function getRouteName()
+    {
+        return 'custom-pages.show_custom_page';
     }
 }
