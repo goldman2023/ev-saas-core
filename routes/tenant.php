@@ -270,7 +270,5 @@ Route::middleware([
     Route::get('/page/{slug}', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.show_custom_page');
     Route::get('/shop/create', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
 
-    Route::get('/dashboard/quiz/index', [WeQuizController::class, 'index'])->name('dashboard.we-quiz.index');
-    Route::get('/dashboard/quiz/create', [WeQuizController::class, 'create'])->name('we-quiz.create')->middleware('auth');
-    Route::get('/dashboard/quiz/show/{id}', [WeQuizController::class, 'show'])->name('we-quiz.show')->middleware('auth');
+
 });

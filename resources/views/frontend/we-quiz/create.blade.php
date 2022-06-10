@@ -3,8 +3,11 @@
 @section('page_title', translate('Add new Quiz'))
 
 @push('head_scripts')
-<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
+<style>
+    .we-user-panel__container {
+        padding: 0 !important;
+    }
+    </style>
 @endpush
 
 @section('panel_content')
@@ -29,8 +32,9 @@
 <script>
     /* Documentation can be found here: https://surveyjs.io/Documentation/Survey-Creator?id=get-started-knockout-jquery */
     const creatorOptions = {
-        showLogicTab: true,
-        isAutoSave: true
+        showLogicTab: false,
+        isAutoSave: false,
+        haveCommercialLicense: true
     };
 
     const creator = new SurveyCreator.SurveyCreator(creatorOptions);

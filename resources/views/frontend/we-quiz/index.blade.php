@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('All Pages'))
+@section('page_title', translate('All Quizzes'))
 
 @push('head_scripts')
 
@@ -22,21 +22,14 @@
         @else
             <x-dashboard.empty-states.no-items-in-collection
                 icon="heroicon-o-document"
-                title="{{ translate('No pages yet') }}"
-                text="{{ translate('Create your first page!') }}"
-                link-href-route="page.create"
-                link-text="{{ translate('Add new Page') }}">
+                title="{{ translate('No quizzes yet') }}"
+                text="{{ translate('Create your first quiz!') }}"
+                link-href-route="dashboard.we-quiz.create"
+                link-text="{{ translate('Add new Quiz') }}">
 
             </x-dashboard.empty-states.no-items-in-collection>
         @endif
 
-        {{-- <div class="col-6">
-            <x-default.dashboard.widgets.create-card></x-default.dashboard.widgets.create-card>
-        </div>
-
-        <div class="col-6">
-            <x-default.dashboard.widgets.create-card title="Create a subscription product" description="Create a recurring digital product"></x-default.dashboard.widgets.create-card>
-        </div> --}}
     </div>
 @endsection
 
