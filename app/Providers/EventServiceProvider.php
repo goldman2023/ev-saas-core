@@ -17,6 +17,7 @@ use App\Models\Invoice;
 use App\Models\User;
 use App\Models\Plan;
 use App\Models\Category;
+use App\Models\UserSubscription;
 use App\Observers\CategoriesObserver;
 use App\Observers\CategoryRelationshipsObserver;
 use App\Observers\ProductsObserver;
@@ -30,6 +31,7 @@ use App\Observers\OrdersObserver;
 use App\Observers\InvoicesObserver;
 use App\Observers\UserObserver;
 use App\Observers\PlansObserver;
+use App\Observers\UserSubscriptionsObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -86,6 +88,7 @@ class EventServiceProvider extends ServiceProvider
             ProductStock::class => [ProductStocksObserver::class],
             SerialNumber::class => [SerialNumbersObserver::class],
             Plan::class => [PlansObserver::class],
+            UserSubscription::class => [UserSubscriptionsObserver::class],
             Category::class => [CategoriesObserver::class],
             Attribute::class => [AttributeObserver::class],
             AttributeValue::class => [AttributeValuesObserver::class],

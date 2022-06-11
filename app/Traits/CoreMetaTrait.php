@@ -6,6 +6,7 @@ use App\Models\CoreMeta;
 use App\Enums\ProductTypeEnum;
 use Route;
 use StripeService;
+use Log;
 
 trait CoreMetaTrait
 {
@@ -30,10 +31,14 @@ trait CoreMetaTrait
     public function getCoreMeta($key, $fresh = false)
     {
         // TODO: Implement castValuesForGet($core_meta, $data_types); here
+        $setting = $fresh ? $this->core_meta()->where('key', $key)->get()->keyBy('key')->toArray() : $this->core_meta->where('key', $key)->keyBy('key')->toArray();
 
-        if($this->type === ProductTypeEnum::course()->value) {
-            $setting = $fresh ? $this->core_meta()->where('key', $key)->keyBy('key')->toArray() : $this->core_meta->where('key', $key)->keyBy('key')->toArray();
+        if($this->isProduct() && $this->type === ProductTypeEnum::course()->value) {
             return castValuesForGet($setting, CoreMeta::metaProductDataTypes())[$key] ?? null;
+        }
+
+        if($this->isPlan()) {die(print_r());
+            return castValuesForGet($setting, CoreMeta::metaPlanDataTypes())[$key] ?? null;
         }
         
         if($fresh) {
@@ -59,7 +64,7 @@ trait CoreMetaTrait
 
             return true;
         } catch (\Exception $e) {
-            return dd($e);
+            Log::error($e->getMessage);
         }
     }
 

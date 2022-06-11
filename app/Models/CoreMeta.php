@@ -57,11 +57,11 @@ class CoreMeta extends Model
 
     public static function metaPlanDataTypes()
     {
-        return [
+        return apply_filters('plan.meta.data-types', [
             'custom_redirect_url' => 'string',
             'custom_cta_label' => 'string',
             'custom_pricing_label' => 'string',
-        ];
+        ]);
     }
 
     public static function getMeta($core_meta, $content_type, $strict = false)

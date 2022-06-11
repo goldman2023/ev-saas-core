@@ -176,12 +176,12 @@ if (!function_exists('pix_pro_create_license')) {
                         "UserID" => $pix_pro_user['user_id'],
                         "Qty" => 1, // THIS IS NUMBER OF TRIAL LICENSES TO BE CREATED! - WE SHOULD ALWAYS PUT 1, since we loop it on our end!
                         "LicenseType" => 'full', // TODO: Can be `manual` too
-                        "LicenseCloudService" => 0, // TODO: Take from plan attributes
-                        "LicenseOfflineService" => 1, // TODO: Take from plan attributes
-                        "LicenseImageLimit" => 150, // TODO: Take from plan attributes
-                        "PackageTypes" => 'mining', // TODO: Take from plan attributes
+                        "LicenseCloudService" => $subscription->getCoreMeta('includes_cloud') === true ? 1 : 0,
+                        "LicenseOfflineService" => $subscription->getCoreMeta('includes_offline') === true ? 1 : 0,
+                        "LicenseImageLimit" => $subscription->getCoreMeta('number_of_images'),
+                        "PackageTypes" => 'mining',
                     ]);
-    
+                    die(var_dump($subscription->getCoreMeta('includes_cloud')));
                     // if(!$is_trial) {
                         // If license is not trial, append more params
                         $body['SubscriptionId'] = $subscription->id;
@@ -193,9 +193,9 @@ if (!function_exists('pix_pro_create_license')) {
                         $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
                         $body['Tax'] = 21; // TODO: Make this respect Stripe tax!
                     // }
-
-                    $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
                     
+                    $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
+                    die(print_r($response->body()));
                     $response_json = $response->json(); 
 
                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
@@ -302,10 +302,10 @@ if (!function_exists('pix_pro_extend_license')) {
 
 if (!function_exists('pix_pro_get_user')) {
     function pix_pro_get_user($user) {
-        $route = pix_pro_endpoint().'/users/get_user/';
+        $route = pix_pro_endpoint().'/users/get_user_by_email/';
 
         $body = [
-            "Email" => $user->email
+            "UserEmail" => $user->email
         ];
 
         $response = Http::post($route, $body);
@@ -356,7 +356,7 @@ if (!function_exists('pix_pro_update_user_password')) {
 
         $response = Http::post($route, $body);
         $response_json = $response->json();
-        // dd($response_json);
+
         if(!empty($response_json['status'] ?? null)) {
             // If status is not success for any reason, throw an error
             if($response_json['status'] !== 'success') {
