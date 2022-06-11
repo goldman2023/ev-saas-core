@@ -181,7 +181,7 @@ if (!function_exists('pix_pro_create_license')) {
                         "LicenseImageLimit" => $subscription->getCoreMeta('number_of_images'),
                         "PackageTypes" => 'mining',
                     ]);
-                    die(var_dump($subscription->getCoreMeta('includes_cloud')));
+                    // die(var_dump($subscription->getCoreMeta('includes_cloud')));
                     // if(!$is_trial) {
                         // If license is not trial, append more params
                         $body['SubscriptionId'] = $subscription->id;
@@ -195,7 +195,7 @@ if (!function_exists('pix_pro_create_license')) {
                     // }
                     
                     $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
-                    die(print_r($response->body()));
+                    // die(print_r($response->body()));
                     $response_json = $response->json(); 
 
                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
