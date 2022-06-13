@@ -32,24 +32,50 @@ trait CoreMetaTrait
     {
         // TODO: Implement castValuesForGet($core_meta, $data_types); here
         $setting = $fresh ? $this->core_meta()->where('key', $key)->get()->keyBy('key')->toArray() : $this->core_meta->where('key', $key)->keyBy('key')->toArray();
+        $data_types = [];
 
-        if($this->isProduct() && $this->type === ProductTypeEnum::course()->value) {
-            return castValuesForGet($setting, CoreMeta::metaProductDataTypes())[$key] ?? null;
+        if($this->isProduct()) {
+            $data_types = CoreMeta::metaProductDataTypes();
         }
 
-        if($this->isPlan()) {die(print_r());
-            return castValuesForGet($setting, CoreMeta::metaPlanDataTypes())[$key] ?? null;
+        if($this->isPlan()) {
+            $data_types = CoreMeta::metaPlanDataTypes();
+        }
+
+        if($this->isUserSubscription()) {
+            $data_types = CoreMeta::metaUserSubscriptionDataTypes();
+            
         }
         
-        if($fresh) {
-            return $this->core_meta()->where('key', $key)?->first()?->value;
+        if(!empty($data_types)) {
+            return castValuesForGet($setting, $data_types)[$key] ?? null;
         } else {
-            return $this->core_meta->where('key', $key)?->first()?->value ?? null;
+            if($fresh) {
+                return $this->core_meta()->where('key', $key)?->first()?->value;
+            } else {
+                return $this->core_meta->where('key', $key)?->first()?->value ?? null;
+            }
         }
+
+        
     }
 
     public function saveCoreMeta($key, $value)
     {
+        $data_types = [];
+
+        if($this->isProduct()) {
+            $data_types = CoreMeta::metaProductDataTypes();
+        }
+
+        if($this->isPlan()) {
+            $data_types = CoreMeta::metaPlanDataTypes();
+        }
+
+        if($this->isUserSubscription()) {
+            $data_types = CoreMeta::metaUserSubscriptionDataTypes();    
+        }
+
         try {
             CoreMeta::updateOrCreate(
                 [
@@ -58,7 +84,7 @@ trait CoreMetaTrait
                     'key' => $key,
                 ],
                 [
-                    'value' => $value,
+                    'value' => castValueForSave($key, $value, $data_types),
                 ]
             );
 

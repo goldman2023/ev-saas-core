@@ -47,10 +47,10 @@ if (!function_exists('pix_pro_activate_license')) {
             "UserSn" => $serial_number,
             "HardwareId" => $hardware_id,
         ]);
-        
+
         $response = Http::post($route, $body);
         $response_json = $response->json();
-
+        
         if(!empty($response_json['status'] ?? null)) {
             // If status is not success for any reason, throw an error
             if($response_json['status'] !== 'success') {
@@ -170,10 +170,11 @@ if (!function_exists('pix_pro_create_license')) {
                 $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
                 
                 $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
-                
+
                 if(!empty($pix_pro_user['user_id'] ?? null)) {
                     $body = pix_pro_add_auth_params([
-                        "UserID" => $pix_pro_user['user_id'],
+                        "UserEmail" => $pix_pro_user['email'],
+                        "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
                         "Qty" => 1, // THIS IS NUMBER OF TRIAL LICENSES TO BE CREATED! - WE SHOULD ALWAYS PUT 1, since we loop it on our end!
                         "LicenseType" => 'full', // TODO: Can be `manual` too
                         "LicenseCloudService" => $subscription->getCoreMeta('includes_cloud') === true ? 1 : 0,
@@ -181,7 +182,7 @@ if (!function_exists('pix_pro_create_license')) {
                         "LicenseImageLimit" => $subscription->getCoreMeta('number_of_images'),
                         "PackageTypes" => 'mining',
                     ]);
-                    // die(var_dump($subscription->getCoreMeta('includes_cloud')));
+
                     // if(!$is_trial) {
                         // If license is not trial, append more params
                         $body['SubscriptionId'] = $subscription->id;
@@ -267,7 +268,9 @@ if (!function_exists('pix_pro_extend_license')) {
 
                 if(!empty($pix_pro_user['user_id'] ?? null)) {
                     $body = pix_pro_add_auth_params([
-                        "LicenseImageLimit" => 150, // TODO: Take from plan attributes
+                        "UserEmail" => $pix_pro_user['email'],
+                        "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
+                        "LicenseImageLimit" => $subscription->getCoreMeta('number_of_images'),
                     ]);
     
 //                     // if(!$is_trial) {

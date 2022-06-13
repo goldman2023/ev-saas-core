@@ -64,6 +64,13 @@ class CoreMeta extends Model
         ]);
     }
 
+    public static function metaUserSubscriptionDataTypes()
+    {
+        return apply_filters('user-subscription.meta.data-types', [
+            
+        ]);
+    }
+
     public static function getMeta($core_meta, $content_type, $strict = false)
     {
         if (is_array($core_meta)) {

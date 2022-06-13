@@ -103,7 +103,16 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return array_merge($plan_meta, [
                     'includes_cloud' => 'boolean',
                     'includes_offline' => 'boolean',
-                    'number_of_images' => 'nullable',
+                    'number_of_images' => 'number',
+                ]);
+            }, 10, 1);
+
+            // Add custom core meta to UserSubscription
+            add_filter('user-subscription.meta.data-types', function($user_subscription_meta) {
+                return array_merge($user_subscription_meta, [
+                    'includes_cloud' => 'boolean',
+                    'includes_offline' => 'boolean',
+                    'number_of_images' => 'number',
                 ]);
             }, 10, 1);
         }
