@@ -172,6 +172,14 @@ if (!function_exists('pix_pro_create_license')) {
                 $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
                 if(!empty($pix_pro_user['user_id'] ?? null)) {
+                    $number_of_images = $subscription->getCoreMeta('number_of_images');
+
+                    if(!empty($number_of_images) && (is_int($number_of_images || ctype_digit($number_of_images)))) {
+                        $number_of_images = $subscription->getCoreMeta('number_of_images') ?? 150;
+                    } else {
+                        $number_of_images = 150;
+                    }
+
                     $body = pix_pro_add_auth_params([
                         "UserEmail" => $pix_pro_user['email'],
                         "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
@@ -179,7 +187,7 @@ if (!function_exists('pix_pro_create_license')) {
                         "LicenseType" => 'full', // TODO: Can be `manual` too
                         "LicenseCloudService" => $subscription->getCoreMeta('includes_cloud') === true ? 1 : 0,
                         "LicenseOfflineService" => $subscription->getCoreMeta('includes_offline') === true ? 1 : 0,
-                        "LicenseImageLimit" => $subscription->getCoreMeta('number_of_images'),
+                        "LicenseImageLimit" => $number_of_images,
                         "PackageTypes" => 'mining',
                     ]);
 
