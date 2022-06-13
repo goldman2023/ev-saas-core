@@ -97,6 +97,24 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_filter('license.download', function ($license) {
                 return pix_pro_download_license_logic($license);
             }, 20, 1);
+
+            // Add custom core meta to Plans
+            add_filter('plan.meta.data-types', function($plan_meta) {
+                return array_merge($plan_meta, [
+                    'includes_cloud' => 'boolean',
+                    'includes_offline' => 'boolean',
+                    'number_of_images' => 'number',
+                ]);
+            }, 10, 1);
+
+            // Add custom core meta to UserSubscription
+            add_filter('user-subscription.meta.data-types', function($user_subscription_meta) {
+                return array_merge($user_subscription_meta, [
+                    'includes_cloud' => 'boolean',
+                    'includes_offline' => 'boolean',
+                    'number_of_images' => 'number',
+                ]);
+            }, 10, 1);
         }
         
         if (function_exists('add_action')) {
@@ -129,6 +147,29 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             
 
             // View actions
+            add_action('view.dashboard.form.left.end', function($plan) {
+                if (View::exists('frontend.partials.plan-form-custom-meta-box')) {
+                    echo view('frontend.partials.plan-form-custom-meta-box', compact('plan'));
+                }
+            });
+            add_action('view.plan-form.wire_set', function() {
+                js_wire_set('model_core_meta.includes_cloud', 'model_core_meta.includes_cloud');
+                js_wire_set('model_core_meta.includes_offline', 'model_core_meta.includes_offline');
+            });
+            add_filter('dashboard.plan-form.meta', function($meta) {
+                return array_merge($meta, [
+                    'model_core_meta.number_of_images' => 'nullable',
+                    'model_core_meta.includes_cloud' => 'nullable',
+                    'model_core_meta.includes_offline' => 'nullable',
+                ]);
+            });
+            // When new subscription is created, take the plans core_meta and add it to the subscription!
+            add_action('observer.user_subscription.created', function ($user_subscription) {
+                $user_subscription->saveCoreMeta('number_of_images', $user_subscription->plan->getCoreMeta('number_of_images', true));
+                $user_subscription->saveCoreMeta('includes_cloud', $user_subscription->plan->getCoreMeta('includes_cloud', true));
+                $user_subscription->saveCoreMeta('includes_offline', $user_subscription->plan->getCoreMeta('includes_offline', true));
+            });
+
             add_action('view.order-received.items.end', function($order) {
                 if (View::exists('frontend.partials.order-received-download-cta')) {
                     echo view('frontend.partials.order-received-download-cta', compact('order'));
@@ -154,6 +195,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 js_wire_set('settings.pix_pro_downloads', 'settings.pix_pro_downloads');
                 js_wire_set('settings.pix_pro_dataset_samples', 'settings.pix_pro_dataset_samples');
             });
+            
 
             add_action('view.dashboard.my-downloads.end', function() {
                 if (View::exists('frontend.partials.pix-pro-software-downloads-table')) {
@@ -182,6 +224,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             }, 20, 1);
 
+
+            
             
 
             // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT

@@ -211,4 +211,8 @@ class WeBaseModel extends Model
     public function isPlan() {
         return $this instanceof Plan;
     }
+
+    public function isUserSubscription() {
+        return $this instanceof UserSubscription;
+    }
 }

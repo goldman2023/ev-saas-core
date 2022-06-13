@@ -77,11 +77,11 @@ class PlanForm extends Component
     protected function getRuleSet($set = null)
     {
         $rulesSets = collect([
-            'meta' => [
+            'meta' => apply_filters('dashboard.plan-form.meta', [
                 'model_core_meta.custom_redirect_url' => 'nullable',
                 'model_core_meta.custom_cta_label' => 'nullable',
                 'model_core_meta.custom_pricing_label' => 'nullable',
-            ],
+            ]),
             'core_meta' => [
                 'core_meta' => '',
             ]
@@ -213,11 +213,7 @@ class PlanForm extends Component
 
             DB::commit();
 
-            if ($this->is_update) {
-                $this->inform(translate('Subscription plan successfully updated!'), $msg, 'success');
-            } else {
-                $this->inform(translate('Subscription plan successfully created!'), $msg, 'success');
-            }
+            $this->inform(translate('Subscription plan saved successfully updated!'), $msg, 'success');
 
             if (!$this->is_update) {
                 return redirect()->route('plan.edit', $this->plan->id);

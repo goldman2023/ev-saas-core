@@ -1042,21 +1042,23 @@ class StripeService
             // Associate User with Plan (if plan is bought)
             if ($model->isSubscribable()) {
                 if (!get_tenant_setting('multiplan_purchase')) {
-                    // Single Plan Subscription mode: THIS PART CREATES ONE UserSubscription AND "detaches all other" (hence sync)
+                    // Single Plan Subscription mode: THIS PART CREATES ONE UserSubscription AND delete all other Plan UserSubscriptions
                     // IMPORTANT: Attach stripe_subscription_id to our UserSubscription
                     // If multiplan purchase is not available, 1) synch user subscription and 2) update stripe data
-                    $initiator->plans()->sync([
-                        $model->id => [
-                            'order_id' => $order->id,
-                            'payment_status' => PaymentStatusEnum::pending()->value, // set payment_status to `pending` because only when invoice.paid, we are sure that payment is 100% successful
-                            'status' => UserSubscriptionStatusEnum::inactive()->value, // User subscription is still not active because we need to wait for invoice.paid!
-                            'data' => json_encode([
-                                $this->mode_prefix.'stripe_subscription_id' => $session->subscription ?? null, // store stripe_subscription_id
-                                $this->mode_prefix.'stripe_request_id' => $stripe_request_id
-                            ]),
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' =>  date('Y-m-d H:i:s')
-                        ]
+                    $initiator->plan_subscriptions()->forceDelete(); // delete all subscriptions
+                    $subscription = UserSubscription::create([
+                        'user_id' => $initiator->id,
+                        'subject_id' => $model->id,
+                        'subject_type' => $model::class,
+                        'order_id' => $order->id,
+                        'payment_status' => PaymentStatusEnum::pending()->value, // set payment_status to `pending` because only when invoice.paid, we are sure that payment is 100% successful
+                        'status' => UserSubscriptionStatusEnum::inactive()->value, // User subscription is still not active because we need to wait for invoice.paid!
+                        'data' => [
+                            $this->mode_prefix.'stripe_subscription_id' => $session->subscription ?? null, // store stripe_subscription_id
+                            $this->mode_prefix.'stripe_request_id' => $stripe_request_id
+                        ],
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' =>  date('Y-m-d H:i:s')
                     ]);
                 } else {
                     // TODO: If multiplan purchase is available, logic is different!
@@ -1424,13 +1426,12 @@ class StripeService
                         $subscription->status = UserSubscriptionStatusEnum::active()->value;
                         $subscription->payment_status = PaymentStatusEnum::paid()->value;
                     }
-
-
-                    if(empty($subscription->start_date)) {
+              
+                    if(empty($subscription->getRawOriginal('start_date'))) {
                         $subscription->start_date = $stripe_subscription->current_period_start;
                     }
 
-                    if(empty($subscription->end_date)) {
+                    if(empty($subscription->getRawOriginal('end_date'))) {
                         $subscription->end_date = $stripe_subscription->current_period_end;
                     }
 
@@ -1545,11 +1546,11 @@ class StripeService
                     $subscription->payment_status = PaymentStatusEnum::unpaid()->value;
 
 
-                    if(empty($subscription->start_date)) {
+                    if(empty($subscription->getRawOriginal('start_date'))) {
                         $subscription->start_date = $stripe_subscription->current_period_start;
                     }
 
-                    if(empty($subscription->end_date)) {
+                    if(empty($subscription->getRawOriginal('end_date'))) {
                         $subscription->end_date = $stripe_subscription->current_period_end;
                     }
 
