@@ -37,7 +37,7 @@
                 <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                     <div>
                         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Subscription plan') }}</h3>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p>
+                        <p class="mt-1 max-w-2xl text-sm text-gray-500">THere you can edit all plan basic information</p>
                     </div>
             
                     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
@@ -282,6 +282,8 @@
                         <!-- END Content -->
                     </div>
                 </div>
+
+                @do_action('view.dashboard.form.left.end', $plan)
             </div>
 
 
@@ -357,6 +359,7 @@
                                 $wire.set('plan.non_standard', non_standard, true);
                                 $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
                                 $wire.set('custom_attributes', this.attributes, true);
+                                @do_action('view.plan-form.wire_set')
                             "
                             wire:click="savePlan()">
                         {{ translate('Save') }}

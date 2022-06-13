@@ -222,7 +222,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function plans()
     {
-        return $this->morphedByMany(Plan::class, 'subject', 'user_subscriptions')->withPivot('start_date', 'end_date', 'qty', 'data');
+        return $this->morphedByMany(Plan::class, 'subject', 'user_subscriptions')
+                ->withPivot('start_date', 'end_date', 'qty', 'data');
     }
 
     public function plan_subscriptions()

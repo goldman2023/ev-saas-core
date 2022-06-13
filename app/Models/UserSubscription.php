@@ -15,6 +15,7 @@ use App\Notifications\EmailVerificationNotification;
 use App\Traits\PermalinkTrait;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Relations\MorphPivot;
 
 class UserSubscription extends WeBaseModel
 {
