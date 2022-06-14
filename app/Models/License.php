@@ -27,9 +27,9 @@ class License extends WeBaseModel
     protected $casts = [
         'data' => 'array'
     ];
-    
+
     public function user_subscription() {
-        return $this->morphedToMany(License::class, 'subject', 'user_subscription_relationships');
+        return $this->morphToMany(License::class, 'subject', 'user_subscription_relationships');
     }
 
     /*
