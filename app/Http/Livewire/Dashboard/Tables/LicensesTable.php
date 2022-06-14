@@ -44,6 +44,8 @@ class LicensesTable extends DataTableComponent
         $this->user = $user;
         
         parent::mount();
+
+        do_action('dashboard.table.licenses.mount.end', $this->user);
     }
 
     public function filters(): array

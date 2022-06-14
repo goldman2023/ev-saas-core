@@ -62,7 +62,7 @@ class GenerateLicenseForm extends Component
         try {
             $response = pix_pro_activate_license(auth()->user(), $this->serial_number, $this->hw_id);
             
-            if(!empty($response)) {
+            if(!empty($response) && !empty($response['status'] ?? null) && $response['status'] === 'success') {
                 $license_data = $response['license'] ?? [];
                 $license_data['file_name'] = $response['license_file']['file_name'];
                 $license_data['file_contents'] = $response['license_file']['file_contents'];
@@ -78,7 +78,7 @@ class GenerateLicenseForm extends Component
                 }, $license_data['file_name']);
             }
 
-            $this->inform(translate('Cannot activate the license OR license is already activated...'), translate('Serial number: ').$this->serial_number, 'success');
+            $this->inform(translate('Cannot activate the license(invalid Hardware ID) OR license is already activated...'), translate('Serial number: ').$this->serial_number, 'fail');
         } catch(\Exception $e) {
             Log::error($e->getMessage());
             dd($e);
