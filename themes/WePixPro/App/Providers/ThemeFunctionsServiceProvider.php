@@ -60,7 +60,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
      * Bootstrap the theme function services.
      */
     public function boot()
-    {
+    {   
         parent::boot();
 
         if (function_exists('add_filter')) {
@@ -86,7 +86,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 1);
 
             // Add Columns to Licenses table (livewire)
-            add_filter('dashboard.table.licenses.columns', function($columns) {
+            add_filter('dashboard.table.licenses.columns', function($columns) { 
                 return array_merge($columns, [
                     \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
                         ->excludeFromSelectable(),
@@ -116,7 +116,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
         }
-
+        
         if (function_exists('add_action')) {
             // Actions
 
@@ -144,7 +144,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_action('user.password.updated', function($user, $newPassword, $oldPassword) {
                 pix_pro_update_user_password($user, $newPassword, $oldPassword);
             }, 20, 3);
-
+            
 
             // View actions
             add_action('view.dashboard.form.left.end', function($plan) {
@@ -195,7 +195,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 js_wire_set('settings.pix_pro_downloads', 'settings.pix_pro_downloads');
                 js_wire_set('settings.pix_pro_dataset_samples', 'settings.pix_pro_dataset_samples');
             });
-
+            
 
             add_action('view.dashboard.my-downloads.end', function() {
                 if (View::exists('frontend.partials.pix-pro-software-downloads-table')) {
@@ -205,10 +205,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             });
 
-            add_action('view.dashboard.plans-management.plans-table.end', function($user) {
+            add_action('view.dashboard.plans-management.plans-table.end', function() {
                 if (View::exists('frontend.partials.pix-pro-licenses-table')) {
-
-                    echo view('frontend.partials.pix-pro-licenses-table', compact('user'));
+                    echo view('frontend.partials.pix-pro-licenses-table');
                 }
             });
 
@@ -225,9 +224,25 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             }, 20, 1);
 
+            // Fetch all licenses for desired user and get the latest data about license from Pixpro DB. Update hardware_id if hardware_id is different!
+            add_action('dashboard.table.licenses.mount.end', function($user) {
+                $subscriptions = $user->plan_subscriptions()->with('license')->get();
+                if(!empty($subscriptions)) {
+                    foreach($subscriptions as $subscription) {
+                        $license = $subscription->license->first();
+                        $data = $license->get_license(); // gets the license from Pixpro DB
 
-
-
+                        if(($license->data['hardware_id'] ?? null) !== ($data['hardware_id'] ?? null)) {
+                            $license_data = $license->data;
+                            $license_data['hardware_id'] = $data['hardware_id'];
+                            $license->data = $license_data;
+                            $license->save();
+                        }
+                    }
+                }
+            }, 20, 1);
+            
+            
 
             // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT
             // add_action('import.wordpress.blog-posts.end', function($data) {
