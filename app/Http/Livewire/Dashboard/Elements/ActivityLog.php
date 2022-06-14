@@ -11,15 +11,15 @@ class ActivityLog extends Component
 
     public $scope;
 
-    public function mount($scope = 'all')
+    public function mount($scope = 'all', $user = 'all')
     {
         $this->scope = $scope;
         if ($this->scope == 'all') {
             $this->acitivites = Activity::latest()->whereNotNull('causer_id')->take(10)->get();
         } elseif ($scope == 'seller') {
             $this->acitivites = Activity::latest()->whereNotNull('causer_id')->take(10)->get();
-        } else {
-            $this->scope = 'customer';
+        } elseif($scope == 'customer') {
+            $this->acitivites = Activity::latest()->where('causer_id', $user->id)->take(10)->get();
         }
     }
 

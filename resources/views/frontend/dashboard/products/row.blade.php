@@ -42,6 +42,10 @@
     <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
 </x-livewire-tables::table.cell>
 
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
+    <span class="badge-dark capitalize text-14">{{ $row->type }}</strong>
+</x-livewire-tables::table.cell>
+
 
 <x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->public_view_count() > 10)

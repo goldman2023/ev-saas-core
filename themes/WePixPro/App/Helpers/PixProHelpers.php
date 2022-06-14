@@ -47,7 +47,7 @@ if (!function_exists('pix_pro_activate_license')) {
             "UserSn" => $serial_number,
             "HardwareId" => $hardware_id,
         ]);
-
+        
         $response = Http::post($route, $body);
         $response_json = $response->json();
         
@@ -55,10 +55,14 @@ if (!function_exists('pix_pro_activate_license')) {
             // If status is not success for any reason, throw an error
             if($response_json['status'] !== 'success') {
                 Log::error(pix_pro_error($route, 'There was an error while trying to activate your license.', $response_json));
-                return null;
-            } else {
-                return $response_json;
+
+                if(!empty($response_json['error_id'] ?? null)) {
+                    // deactivate previously set hardware_id
+                    // pix_pro_disconnect_license();
+                }
             }
+
+            return $response_json;
         }
 
         return null;
@@ -224,7 +228,7 @@ if (!function_exists('pix_pro_create_license')) {
                                 $license->license_name = $pix_license['license_name'] ?? '';
                                 $license->serial_number = $pix_license['serial_number'] ?? '';
                                 $license->license_type = $pix_license['license_type'] ?? '';
-                                $license->data = ['hardware_id' => '']; // Will be populaetd when user activates the license
+                                $license->data = $pix_license; // Will be populaetd when user activates the license
                                 $license->save();
 
                                 // Add a license <-> user_subscription relationship
@@ -308,6 +312,33 @@ if (!function_exists('pix_pro_extend_license')) {
                 }
             }
         }
+    }
+}
+
+if (!function_exists('pix_pro_get_license_by_serial_number')) {
+    function pix_pro_get_license_by_serial_number($license) {
+        $route = pix_pro_endpoint().'/licenses/get_license_by_serial_number/';
+        $user = $license->user_subscription->first()->user;
+
+        $body = pix_pro_add_auth_params([
+            "UserPassword" => $user->getCoreMeta('password_md5', true),
+            "UserEmail" => $user->email,
+            "UserSn" => $license->serial_number,
+        ]);
+        
+        $response = Http::post($route, $body);
+        $response_json = $response->json();
+        
+        if(!empty($response_json['status'] ?? null)) {
+            // If status is not success for any reason, throw an error
+            if($response_json['status'] !== 'success') {
+                Log::error(pix_pro_error($route, 'There was an error while trying to get license by following serial number: '.$serial_number, $response_json));
+            }
+
+            return $response_json;
+        }
+
+        return null;
     }
 }
 

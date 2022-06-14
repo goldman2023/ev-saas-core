@@ -256,6 +256,16 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->plan_subscriptions->count() > 0;
     }
 
+    public function isOnTrial() {
+        /* TODO: Adjust this for multiplan */
+        if($this->isSubscribed()) {
+            return $this->plan_subscriptions->first()?->status == 'trial';
+        } else {
+            return false;
+        }
+
+    }
+
     public function getDynamicModelUploadProperties(): array
     {
         return [];

@@ -25,10 +25,10 @@
                 <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Subscriptions') }}</h4>
             </div>
 
-            <livewire:dashboard.tables.my-subscriptions-table :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
+            <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
         </div>
-
-        @do_action('view.dashboard.plans-management.plans-table.end')
+        {{-- Second parameter is a variable sent to do action --}}
+        @do_action('view.dashboard.plans-management.plans-table.end', auth()->user())
     @endif
 
     <div class="w-full" x-data="{
@@ -57,7 +57,7 @@
                             annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice() / 12)),
                         }">
                         <div class="relative  flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green h-full @if(auth()->user()?->subscribedTo($plan->slug) ?? null) pt-[41px] @endif">
-                            @if(auth()->user()?->subscribedTo($plan->slug) ?? null) 
+                            @if(auth()->user()?->subscribedTo($plan->slug) ?? null)
                                 <div class="w-full h-[35px] flex items-center justify-center text-14 py-2 bg-primary text-white text-center absolute top-0 right-0 left-0 ">
                                     <span>{{ translate('Current plan') }}:</span>
                                     <strong class="pl-1">{{ $plan->name }}</strong>
@@ -65,7 +65,7 @@
                             @endif
 
                             <div class="price-description flex flex-col grow">
-                                @if(!(auth()->user()?->subscribedTo($plan->slug) ?? null)) 
+                                @if(!(auth()->user()?->subscribedTo($plan->slug) ?? null))
                                     <h3 class="font-bold text-18 text-gray-700 pb-2">{{ $plan->name }}</h3>
                                 @endif
 
@@ -124,7 +124,7 @@
                                     <div class="flex flex-row gap-4">
                                         <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
                                             class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
-    
+
                                             {{-- We should support following scenarios:
                                                 1. *If trial mode is disabled and no plan is purchased: Buy now
                                                 2. *If trial mode is enabled and no plan is purchased: Try for free
@@ -140,7 +140,7 @@
                                                 <span>{{ translate('Change plan') }}</span>
                                             @endif
                                         </a>
-    
+
                                         @if(auth()->user()?->subscribedTo($plan->slug) ?? null)
                                             <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
                                                     class="btn-danger btn-sm inline-block pt-2 text-danger text-14 text-center">
@@ -148,7 +148,7 @@
                                             </a>
                                         @endif
                                     </div>
-                                    
+
 
                                 @endif
 

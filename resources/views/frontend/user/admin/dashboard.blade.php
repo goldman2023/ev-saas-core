@@ -123,7 +123,7 @@
                     </div>
 
                     <div class="w-full">
-                        <livewire:dashboard.tables.recent-invoices-widget-table for="all" :show-per-page="false"
+                        <livewire:dashboard.tables.recent-invoices-widget-table for="all" :per-page="6" :show-per-page="false"
                             :show-search="false" :column-select="false" />
                     </div>
 

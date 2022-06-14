@@ -79,6 +79,7 @@ Route::middleware([
         Route::get('/products/edit/{id}/details/activity', [EVProductController::class, 'product_activity'])->name('product.activity');
         Route::get('/products/edit/{id}/variations', [EVProductController::class, 'edit_variations'])->name('product.edit.variations');
         Route::get('/products/edit/{id}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
+        Route::get('/products/edit/{id}/course-management', [EVProductController::class, 'edit_course'])->name('product.edit.course');
         Route::get('/products/preview/{id}/thank-you', [EVProductController::class, 'thank_you_preview'])->name('product.thank_you_preview');
 
         /* Pages */

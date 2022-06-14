@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard\Tables;
 
+use App\Enums\ProductTypeEnum;
 use App\Enums\StatusEnum;
 use App\Facades\MyShop;
 use App\Models\Order;
@@ -39,9 +40,7 @@ class ProductsTable extends DataTableComponent
         'status' => 'Status',
     ];
 
-    public array $bulkActions = [
-
-    ];
+    public array $bulkActions = [];
 
     protected string $pageName = 'products';
 
@@ -66,6 +65,15 @@ class ProductsTable extends DataTableComponent
                     StatusEnum::private()->value => translate('Private'),
                     StatusEnum::archived()->value => translate('Archived'),
                 ]),
+            'type' => Filter::make('Type')
+                ->select([
+                    '' => translate('All'),
+                    ProductTypeEnum::digital()->value => translate('Digital'),
+                    ProductTypeEnum::standard()->value => translate('Standard'),
+                    ProductTypeEnum::course()->value => translate('Course'),
+                    ProductTypeEnum::event()->value => translate('Event'),
+                    ProductTypeEnum::bookable_service()->value => translate('Bookable'),
+                ]),
         ];
     }
 
@@ -83,6 +91,8 @@ class ProductsTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Price', 'price')
                 ->excludeFromSelectable(),
+            Column::make('Type', 'type')
+                ->excludeFromSelectable(),
             Column::make('Views', 'views')
                 ->excludeFromSelectable(),
             Column::make('Last Update', 'updated_at'),
@@ -97,7 +107,8 @@ class ProductsTable extends DataTableComponent
             ->when($this->for === 'me', fn ($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
             ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
-            ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
+            ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status))
+            ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type));
     }
 
     public function rowView(): string

@@ -162,6 +162,12 @@
                                     {{ translate('Stock Management') }}
                                 </a>
 
+                                <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+                                href="{{ route('product.edit.course', $product->id) }}">
+                                @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                {{ translate('Course Material') }}
+                                </a>
+
                                 @if($product->useVariations())
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.variations', $product->id) }}">

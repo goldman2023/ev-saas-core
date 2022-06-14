@@ -15,6 +15,7 @@ use App\Nova\Tenant\Wishlist;
 use App\Nova\Tenant\Activity;
 use App\Nova\Tenant\Category;
 use App\Nova\Tenant\Invoice;
+use App\Nova\Tenant\License;
 use App\Nova\Tenant\OrderDetail;
 use App\Nova\Tenant\Page;
 use App\Nova\Tenant\PaymentMethodUniversal;
@@ -87,6 +88,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Business', [
                     MenuItem::resource(Plan::class),
                     MenuItem::resource(Product::class),
+                    MenuItem::resource(License::class),
 
                     MenuItem::externalLink('Stripe Payments', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
 
@@ -250,6 +252,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 WeQuizResults::class,
                 Invoice::class,
                 UserSubscription::class,
+                License::class,
                 MenuBuilder::getMenuResource()
             ]);
         } else {

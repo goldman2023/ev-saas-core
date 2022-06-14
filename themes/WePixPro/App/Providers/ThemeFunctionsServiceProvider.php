@@ -224,7 +224,23 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             }, 20, 1);
 
+            // Fetch all licenses for desired user and get the latest data about license from Pixpro DB. Update hardware_id if hardware_id is different!
+            add_action('dashboard.table.licenses.mount.end', function($user) {
+                $subscriptions = $user->plan_subscriptions()->with('license')->get();
+                if(!empty($subscriptions)) {
+                    foreach($subscriptions as $subscription) {
+                        $license = $subscription->license->first();
+                        $data = $license->get_license(); // gets the license from Pixpro DB
 
+                        if(($license->data['hardware_id'] ?? null) !== ($data['hardware_id'] ?? null)) {
+                            $license_data = $license->data;
+                            $license_data['hardware_id'] = $data['hardware_id'];
+                            $license->data = $license_data;
+                            $license->save();
+                        }
+                    }
+                }
+            }, 20, 1);
             
             
 

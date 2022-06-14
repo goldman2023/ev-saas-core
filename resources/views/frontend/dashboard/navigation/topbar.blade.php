@@ -8,7 +8,7 @@
     </button>
     <div class="flex-1 px-4 flex justify-between">
       <div class="flex-1 flex text-center">
-        <nav class="w-full md:flex space-x-[32px] items-center">
+        <nav class="hidden w-full md:flex space-x-[32px] items-center">
             @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
                 @foreach($header_menu_items as $menu_item)
                     @if($menu_item['enabled'])
