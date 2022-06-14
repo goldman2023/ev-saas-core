@@ -47,6 +47,14 @@ class EVProductController extends Controller
         return view('frontend.dashboard.products.create2');
     }
 
+     /* TODO: Add middleware for owner */
+     public function edit_course(Request $request, $id)
+     {
+         $product = Product::findOrFail($id);
+
+         return view('frontend.dashboard.products.edit_course')->with('product', $product);
+     }
+
     /* TODO: Add middleware for owner */
     public function edit(Request $request, $id)
     {
@@ -183,8 +191,8 @@ class EVProductController extends Controller
                 'product' => $product,
             ];
         }
-        
-        
+
+
         return view('frontend.product.single.' . $template, $data);
     }
 
@@ -206,7 +214,7 @@ class EVProductController extends Controller
             'course_items' => $product->course_items->toTree()->filter(fn($item) => $item->parent_id === null),
             'course_item' => $course_item
         ];
-        
+
         return view('frontend.product.single.product-course-item-single', $data);
     }
 
@@ -246,5 +254,5 @@ class EVProductController extends Controller
         return redirect($link);
     }
 
-    
+
 }

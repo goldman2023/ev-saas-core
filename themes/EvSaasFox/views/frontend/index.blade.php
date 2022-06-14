@@ -11,7 +11,7 @@
             background-repeat: no-repeat;
             z-index: 0;">
                 <div class="flex flex-wrap items-center">
-                    <div class="w-full lg:w-1/2 mb-20 sm:mt-20 lg:mb-0 sm:pr-10">
+                    <div class="w-full sm:w-1/2 mb-20 sm:mt-20 sm:mb-0 sm:pr-10">
                         <span
                             class="inline-block mb-4 text-xs leading-4 text-white bg-indigo-500 font-medium uppercase rounded-3xl p-4">
                             {{ translate('FoxAsk Community') }}
@@ -46,7 +46,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="w-full lg:w-1/2 sm:mt-52">
+                    <div class="w-full sm:w-1/2 sm:mt-52">
                         <div
                             class="flex flex-col items-center p-10 xl:px-24 xl:pb-12 bg-white lg:max-w-xl lg:ml-auto rounded-4xl shadow-2xl">
                             <img class="bg-white p-4 relative -top-2 -mt-16 mb-6 h-16 rounded shadow"
