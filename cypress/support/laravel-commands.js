@@ -24,7 +24,7 @@ Cypress.Commands.add('login', (attributes = {}) => {
         .type('team@eim.solutions')
 
     cy.get('[data-test="we-login-password"]')
-        .type('syska007')
+        .type('123456')
 
     cy.get('[data-test="we-login-submit"]')
         .click()
@@ -317,7 +317,6 @@ Cypress.Commands.add('artisan', (command, parameters = {}, options = {}) => {
  */
 Cypress.Commands.add('php', (command) => {
     return cy
-        .csrfToken()
         .then((token) => {
             return cy.request({
                 method: 'POST',

@@ -17,7 +17,7 @@
         "autoprefixer": "^10.4.2",
         "babel-preset-env": "^1.7.0",
         "cross-env": "^5.1",
-        "cypress": "9.4.1",
+        "cypress": "10.1.0",
         "laravel-mix": "^6.0.16",
         "postcss": "^8.4.5",
         "postcss-import": "^14.0.2",
