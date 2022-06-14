@@ -25,6 +25,7 @@ class MySubscriptionsTable extends DataTableComponent
     public string $defaultSortDirection = 'desc';
     public bool $columnSelect = true;
     public int $perPage = 10;
+    public $user = null;
     public array $perPageAccepted = [10, 25];
 
     public array $filterNames = [
@@ -79,7 +80,7 @@ class MySubscriptionsTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return auth()->user()->plan_subscriptions()->getQuery()->with(['subject', 'order'])
+        return $this->user->plan_subscriptions()->getQuery()->with(['subject', 'order'])
             // ->where('end_date', '>', now())->orWhere('end_date', null)
             // ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
@@ -105,7 +106,7 @@ class MySubscriptionsTable extends DataTableComponent
     //             $this->inform(translate('Error: Cannot cancel a subscription...'), $e->getMessage(), 'fail');
     //             return false;
     //         }
-            
+
     //         $end_date = Carbon::createFromTimestamp($plan_subscription->end_date)->format('d. M Y, H:i');
     //         $this->inform(translate('Subscription plan successfully canceled!'), 'Have in mind that you can still use the plan before ending period: '.$end_date, 'success', 5000);
     //     }
@@ -126,7 +127,7 @@ class MySubscriptionsTable extends DataTableComponent
     //             $this->inform(translate('Error: Cannot revive a subscription...'), $e->getMessage(), 'fail');
     //             return false;
     //         }
-            
+
     //         $this->inform(translate('Subscription plan successfully revived!'), '', 'success', 5000);
     //     }
     // }

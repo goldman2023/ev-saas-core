@@ -17,6 +17,35 @@
     </a>
 </x-livewire-tables::table.cell>
 
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
+    @if($row->isSubscribed())
+        <span class="badge-success">
+        {{ translate('Subsriber') }}
+        </span>
+    @else
+        <span class="badge-danger">
+        {{ translate('Not Subscriber') }}
+        </span>
+    @endif
+</x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
+    @if($row->isOnTrial())
+        <span class="badge-warning">
+        {{ translate('Trial') }}
+        </span>
+    @elseif($row->isSubscribed())
+        <span class="badge-success">
+        {{ translate('Full') }}
+        </span>
+
+        @else
+        <span class="badge-danger">
+            {{ translate('No subscription') }}
+        </span>
+    @endif
+</x-livewire-tables::table.cell>
+
 <x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->user_type === \App\Enums\UserTypeEnum::customer()->value)
         <span class="badge-dark">
@@ -36,7 +65,7 @@
         </span>
     @endif
 </x-livewire-tables::table.cell>
-    
+
 <x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->entity === \App\Enums\UserEntityEnum::individual()->value)
         <span class="badge-dark">
@@ -46,20 +75,12 @@
         <span class="badge-info">
         {{ ucfirst($row->entity) }}
         </span>
-    @endif 
+    @endif
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    @if($row->isVerified())
-        <span class="badge-success">
-        {{ translate('Verified') }}
-        </span>
-    @else
-        <span class="badge-danger">
-        {{ translate('Not verified') }}
-        </span>
-    @endif 
-</x-livewire-tables::table.cell>
+
+
+
 
 
 <x-livewire-tables::table.cell class="align-middle ">
@@ -72,10 +93,10 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a>
 
-        {{-- <button 
-            @click="isOpen = !isOpen" 
-            @keydown.escape="isOpen = false" 
-            class="flex items-center btn" 
+        {{-- <button
+            @click="isOpen = !isOpen"
+            @keydown.escape="isOpen = false"
+            class="flex items-center btn"
         >
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
