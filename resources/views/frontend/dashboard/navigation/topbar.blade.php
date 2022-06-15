@@ -7,8 +7,8 @@
       @svg('heroicon-o-menu-alt-2', ['class' => 'h-6 w-6'])
     </button>
     <div class="flex-1 px-4 flex justify-between">
-      <div class="flex-1 flex text-center">
-        <nav class="hidden w-full md:flex space-x-[32px] items-center">
+      <div class="flex-1 flex text-center justify-center">
+        <nav class="hidden md:flex space-x-[32px] items-center">
             @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
                 @foreach($header_menu_items as $menu_item)
                     @if($menu_item['enabled'])
@@ -19,7 +19,7 @@
                 @endforeach
             @endif
         </nav>
-        <form class="w-full flex md:ml-0" action="#" method="GET">
+        {{-- <form class="w-full flex md:ml-0" action="#" method="GET">
           <label for="search-field" class="sr-only">Search</label>
           <div class="hidden relative w-full text-gray-400 focus-within:text-gray-600">
             <div class="hiddenabsolute inset-y-0 left-0 flex items-center pointer-events-none">
@@ -30,7 +30,7 @@
             </div>
             <input id="search-field" class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm" placeholder="Search" type="search" name="search">
           </div>
-        </form>
+        </form> --}}
       </div>
       {{-- Top bar --}}
       <div class="ml-4 flex items-center md:ml-6">

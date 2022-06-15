@@ -40,6 +40,9 @@ class LicensesTable extends DataTableComponent
 
     public $user;
 
+    public bool $viewingModal = false;
+    public $currentModal;
+
     public function mount($user) {
         $this->user = $user;
         

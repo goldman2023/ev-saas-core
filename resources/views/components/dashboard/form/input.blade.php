@@ -16,6 +16,10 @@
           @else
             wire:model.defer="{{ $field }}"
           @endif
+
+          @if($disabled)
+          disabled
+          @endif
   />
   {{ $slot }}
   @if(!empty($field))

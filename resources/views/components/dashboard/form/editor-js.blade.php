@@ -7,6 +7,7 @@
                 this.editor.destroy();
             } catch(error) {}
 
+            {{-- console.log(window.getEditorJsDefaultConfig(this.id)); --}}
             this.editor = new window.EditorJS(_.merge(window.getEditorJsDefaultConfig(this.id), {
                     data: {{ $field }},
                     minHeight: 100,
