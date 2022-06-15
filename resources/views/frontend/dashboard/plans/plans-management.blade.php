@@ -122,6 +122,14 @@
                                     </div>
 
                                     <div class="flex flex-row gap-4">
+                                        
+
+                                        @if(auth()->user()?->subscribedTo($plan->slug) ?? null)
+                                            <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
+                                                    class="btn-danger-outline btn-sm inline-block pt-2 text-danger text-14 text-center">
+                                                {{ translate('Cancel plan') }}
+                                            </a>
+                                        @else
                                         <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
                                             class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
 
@@ -140,12 +148,6 @@
                                                 <span>{{ translate('Change plan') }}</span>
                                             @endif
                                         </a>
-
-                                        @if(auth()->user()?->subscribedTo($plan->slug) ?? null)
-                                            <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
-                                                    class="btn-danger btn-sm inline-block pt-2 text-danger text-14 text-center">
-                                                {{ translate('Cancel plan') }}
-                                            </a>
                                         @endif
                                     </div>
 

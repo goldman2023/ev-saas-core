@@ -236,13 +236,16 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 if(!empty($subscriptions)) {
                     foreach($subscriptions as $subscription) {
                         $license = $subscription->license->first();
-                        $data = $license->get_license(); // gets the license from Pixpro DB
 
-                        if(($license->data['hardware_id'] ?? null) !== ($data['hardware_id'] ?? null)) {
-                            $license_data = $license->data;
-                            $license_data['hardware_id'] = $data['hardware_id'];
-                            $license->data = $license_data;
-                            $license->save();
+                        if(!empty($license) && method_exists($license, 'get_license')) {
+                            $data = $license->get_license(); // gets the license from Pixpro DB
+
+                            if(($license->data['hardware_id'] ?? null) !== ($data['hardware_id'] ?? null)) {
+                                $license_data = $license->data;
+                                $license_data['hardware_id'] = $data['hardware_id'];
+                                $license->data = $license_data;
+                                $license->save();
+                            }
                         }
                     }
                 }

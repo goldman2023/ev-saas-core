@@ -139,6 +139,9 @@ if($colors) {
         .btn-danger {
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-danger hover:bg-danger focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger;
         }
+        .btn-danger-outline {
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-danger rounded-md shadow-sm text-sm font-medium text-danger hover:text-white bg-white hover:bg-danger focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger;
+        }
 
         .btn-ghost {
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
