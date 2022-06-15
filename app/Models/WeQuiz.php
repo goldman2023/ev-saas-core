@@ -13,7 +13,7 @@ class WeQuiz extends WeBaseModel
 {
     use HasFactory;
     use LogsActivity;
-    use HasSlug;
+    // use HasSlug;
     use PermalinkTrait;
     use LogsActivity;
 

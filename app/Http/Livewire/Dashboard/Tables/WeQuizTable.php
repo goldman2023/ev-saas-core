@@ -30,10 +30,6 @@ class WeQuizTable extends DataTableComponent
 
     public array $perPageAccepted = [10, 25, 50, 100];
 
-    public array $filterNames = [
-        'status' => 'Status',
-    ];
-
     public array $bulkActions = [
 
     ];
@@ -45,18 +41,7 @@ class WeQuizTable extends DataTableComponent
     public function filters(): array
     {
         return [
-            'status' => Filter::make('Status')
-                ->select([
-                    '' => translate('All'),
-                    StatusEnum::published()->value => translate('Published'),
-                    StatusEnum::draft()->value => translate('Draft'),
-                    StatusEnum::pending()->value => translate('Pending'),
-                    StatusEnum::private()->value => translate('Private'),
-                ]),
-            'date_created' => Filter::make('Date created')
-                ->date([
-                    'max' => now()->format('Y-m-d'),
-                ]),
+            
         ];
     }
 
@@ -66,10 +51,8 @@ class WeQuizTable extends DataTableComponent
             Column::make('ID')
                 ->sortable()
                 ->excludeFromSelectable(),
-            Column::make('Title')
+            Column::make('Title', 'name')
                 ->sortable()
-                ->excludeFromSelectable(),
-            Column::make('Status', 'status')
                 ->excludeFromSelectable(),
             Column::make('Created', 'created_at')
                 ->sortable(),
@@ -82,16 +65,13 @@ class WeQuizTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return WeQuiz::query()
-//            ->when($this->for === 'me', fn($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
-            ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
-            ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status))
-            ->when($this->getFilter('subscription_based'), fn ($query, $bool) => $query->where('subscription_only', $bool))
-            ->when($this->getFilter('date_created'), fn ($query, $date) => $query->whereDate('created_at', '=', $date));
+        // TODO: Remove my() scope and user different appraoch. Also think about relating WeQuizz with shop or something like that too...
+        return WeQuiz::query()->my()
+            ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
     }
 
     public function rowView(): string
     {
-        return 'frontend.dashboard.pages.row';
+        return 'frontend.dashboard.we-quiz.row-quiz';
     }
 }

@@ -152,6 +152,11 @@ Route::middleware([
         Route::post('/froala/upload-image', [WeMediaController::class, 'froalaImageUpload'])->name('we-media-library.froala.upload-image');
         Route::get('/froala/load-images', [WeMediaController::class, 'froalaLoadImages'])->name('we-media-library.froala.load-images');
 
+        // WeQuizz
+        Route::get('/quiz/index', [WeQuizController::class, 'index'])->name('dashboard.we-quiz.index');
+        Route::get('/quiz/create', [WeQuizController::class, 'create'])->name('dashboard.we-quiz.create');
+        Route::get('/quiz/edit/{id}', [WeQuizController::class, 'edit'])->name('dashboard.we-quiz.edit');
+        Route::get('/quiz/show/{id}', [WeQuizController::class, 'show'])->name('dashboard.we-quiz.show');
         // ---------------------------------------------------- //
 
         // Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
@@ -206,11 +211,6 @@ Route::middleware([
     Route::get('/feed/shops', [FeedController::class, 'shops'])->name('feed.shops');
     Route::get('/feed/products', [FeedController::class, 'products'])->name('feed.products');
 
-
-    Route::get('/dashboard/quiz/index', [WeQuizController::class, 'index'])->name('dashboard.we-quiz.index');
-    Route::get('/dashboard/quiz/create', [WeQuizController::class, 'create'])->name('we-quiz.create')->middleware('auth');
-    Route::get('/dashboard/quiz/show/{id}', [WeQuizController::class, 'show'])->name('we-quiz.show')->middleware('auth');
-
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');
 
@@ -222,4 +222,18 @@ Route::middleware([
     Route::fallback(function () {
         abort(404);
     });
+});
+
+
+Route::middleware([
+    'web',
+    'auth',
+    InitializeTenancyByDomainAndVendorDomains::class,
+    PreventAccessFromCentralDomains::class,
+    SetDashboard::class,
+    VendorMode::class,
+])->prefix('api')->name('api.dashboard.')->group(function () {
+    Route::post('/quiz/save', [WeQuizController::class, 'save_quiz'])->name('we-quiz.create');
+    Route::post('/quiz/save/{id}', [WeQuizController::class, 'save_quiz'])->name('we-quiz.update');
+    
 });
