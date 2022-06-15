@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\AffiliateBannerController;
 use App\Http\Controllers\AizUploadController;
 use App\Http\Controllers\App;
 use App\Http\Controllers\Auth\LoginController;
@@ -13,7 +12,6 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompareController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CustomerProductController;
@@ -113,8 +111,7 @@ Route::middleware([
 
     Route::get('/forgot-password', [ForgotPasswordController::class, 'forgot_password'])->name('user.forgot-password');
     Route::get('/reset-password', [ForgotPasswordController::class, 'reset_password'])->name('user.reset-password');
-
-
+    
     Route::get('/welcome', [OnboardingController::class, 'step2'])->name('onboarding.step1')->middleware(['auth']);
     Route::get('/welcome/step2', [OnboardingController::class, 'step2'])->name('onboarding.step2')->middleware(['auth']);
     Route::post('/welcome/profile/store', [OnboardingController::class, 'profile_store'])->name('onboarding.profile.store')->middleware(['auth']);
@@ -140,12 +137,12 @@ Route::middleware([
     });
 
     // Tracking
-    Route::get('/aff{id}', [AffiliateBannerController::class, 'track'])->name('affiliate_banner.track');
-    Route::get('/link{id}', [CompanyController::class, 'track_website_clicks'])->name('website_clicks.track');
+    // Route::get('/aff{id}', [AffiliateBannerController::class, 'track'])->name('affiliate_banner.track');
+    // Route::get('/link{id}', [CompanyController::class, 'track_website_clicks'])->name('website_clicks.track');
     // Tracking - END
 
-    Route::resource('shops', 'ShopController');
-    Route::resource('ev-social-commerce', 'SocialCommerceController');
+    // Route::resource('shops', 'ShopController');
+    Route::resource('ev-social-commerce', \App\Http\Controllers\SocialCommerceController::class);
 
     // Auth routes + email verification + password reset
 
@@ -154,8 +151,8 @@ Route::middleware([
     // Route::get('/email_change/callback', [HomeController::class, 'email_change_callback'])->name('email_change.callback');
 
 
-    Route::post('/language', [LanguageController::class, 'changeLanguage'])->name('language.change');
-    Route::post('/currency', [CurrencyController::class, 'changeCurrency'])->name('currency.change');
+    // Route::post('/language', [LanguageController::class, 'changeLanguage'])->name('language.change');
+    // Route::post('/currency', [CurrencyController::class, 'changeCurrency'])->name('currency.change');
 
     Route::get('/social-login/redirect/{provider}', [SocialController::class, 'redirectLoginToProvider'])->name('social.login');
     Route::get('/social-login/{provider}/callback', [SocialController::class, 'handleProviderLoginCallback'])->name('social.login.callback');
@@ -201,7 +198,7 @@ Route::middleware([
     // Shop pages
     Route::get('/shop/{slug}', [EVShopController::class, 'single'])->name(Shop::getRouteName());
     Route::get('/shops', [MerchantController::class, 'index'])->name('shop.index');
-    Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
+    // Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
 
     // Cart page
@@ -228,14 +225,14 @@ Route::middleware([
     Route::get('/stripe/cancel', [StripePaymentController::class, 'cancel'])->name('stripe.cancel');
     //Stripe END
 
-    Route::resource('subscribers', 'SubscriberController');
+    // Route::resource('subscribers', 'SubscriberController');
     /* TODO: Move some logic to brand, category, seller controllers as home controller holds too much logic*/
     Route::get('/brands', [HomeController::class, 'all_brands'])->name('brands.all');
     Route::get('/categories', [HomeController::class, 'all_categories'])->name('categories.all');
-    Route::get('/sellers', [CompanyController::class, 'index'])->name('sellers');
+    // Route::get('/sellers', [CompanyController::class, 'index'])->name('sellers');
 
-    Route::resource('support_ticket', 'SupportTicketController');
-    Route::post('support_ticket/reply', [App\Http\Controllers\SupportTicketController::class, 'seller_store'])->name('support_ticket.seller_store');
+    // Route::resource('support_ticket', 'SupportTicketController');
+    // Route::post('support_ticket/reply', [App\Http\Controllers\SupportTicketController::class, 'seller_store'])->name('support_ticket.seller_store');
 
     //Blog Section
     Route::get('/news', [BlogController::class, 'all_blog'])->name('news');
@@ -246,7 +243,7 @@ Route::middleware([
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
 
     /* Customer Management - BY EIM */
-    Route::resource('customers', 'CustomerController');
+    // Route::resource('customers', 'CustomerController');
 
     // Tenant Management routes - added from SaaS Boilerplate
     Route::get('/impersonate/{token}', function ($token) {
@@ -254,8 +251,8 @@ Route::middleware([
     })->name('tenant.impersonate');
 
     Route::get('/settings/user', [UserSettingsController::class, 'show'])->name('tenant.settings.user');
-    Route::post('/settings/user/personal', [App\Http\Controllers\UserSettingsController::class, 'personal'])->name('tenant.settings.user.personal');
-    Route::post('/settings/user/password', [App\Http\Controllers\UserSettingsController::class, 'password'])->name('tenant.settings.user.password');
+    Route::post('/settings/user/personal', [UserSettingsController::class, 'personal'])->name('tenant.settings.user.personal');
+    Route::post('/settings/user/password', [UserSettingsController::class, 'password'])->name('tenant.settings.user.password');
 
     Route::middleware(OwnerOnly::class)->group(function () {
         Route::get('/settings/application', [ApplicationSettingsController::class, 'show'])->name('tenant.settings.application');
@@ -271,4 +268,22 @@ Route::middleware([
     Route::get('/shop/create', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
 
 
+});
+
+/**
+ * Tenant API Routes
+ */
+Route::middleware([
+    'api',
+    InitializeTenancyByDomainAndVendorDomains::class,
+    PreventAccessFromCentralDomains::class,
+    VendorMode::class,
+])->prefix('api')->name('api.')->group(function () {
+    // Quizz Result Save
+    Route::post('/we-quizz-result/{id}', [WeQuizController::class, 'save_result'])->name('we-quiz.result.save');
+
+    // TODO: Make these api Routes PROTECTED by AUTH!
+    Route::middleware('auth')->group(function () {
+    });
+    
 });

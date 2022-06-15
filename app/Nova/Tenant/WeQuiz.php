@@ -4,7 +4,7 @@ namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
 use App\Nova\User;
-use App\Nova\WeQuizResults;
+use App\Nova\WeQuizResult;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Code;
@@ -53,7 +53,7 @@ class WeQuiz extends Resource
             Text::make('name'),
             Code::make('Quiz JSON', 'quiz_json')->json(),
             BelongsTo::make('User', 'user', 'App\Nova\Tenant\User'),
-            HasMany::make('Quiz Attempts', 'results', 'App\Nova\WeQuizResults')
+            HasMany::make('Quiz Attempts', 'results', 'App\Nova\WeQuizResult')
 
 
 

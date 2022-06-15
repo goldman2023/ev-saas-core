@@ -51,6 +51,7 @@ class EVShopController extends Controller
     /**
      * Shop Dashboard routes
      */
+    // TODO: Fix routing and create Shops archive page for admins in dashboard
     public function index(Request $request)
     {
         $blog_posts = BlogPost::all();

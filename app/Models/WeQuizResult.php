@@ -6,10 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class WeQuizResults extends WeBaseModel
+class WeQuizResult extends WeBaseModel
 {
     use HasFactory;
     use LogsActivity;
+
+    protected $table = 'we_quiz_results';
+
+    protected $fillable = ['user_id', 'quiz_id', 'quiz_answers', 'quiz_meta', 'quiz_passed'];
+
+    protected $casts = [
+        'quiz_answers' => 'array',
+    ];
 
     public function user() {
         return $this->belongsTo(User::class);

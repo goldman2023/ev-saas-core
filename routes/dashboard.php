@@ -16,6 +16,7 @@ use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\CRMController;
+use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\Integrations\IntegrationsController;
 use App\Http\Controllers\Integrations\WooCommerceController;
@@ -63,7 +64,7 @@ Route::middleware([
 
         /* Leads Management - BY EIM */
         Route::get('leads/success', [LeadController::class, 'success'])->name('leads.success');
-        Route::resource('leads', 'LeadController');
+        Route::resource('leads', LeadController::class);
 
 
         /* TODO: Admin and seller only */
@@ -153,24 +154,24 @@ Route::middleware([
 
         // ---------------------------------------------------- //
 
-        Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
-        /* TODO: Create new route for adding reviews for products, now this route is reviews for companies */
-        Route::get('/shop/{company_name}/review/create', [App\Http\Controllers\ReviewController::class, 'create'])->name('reviews.create');
-        Route::post('/review/store', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
-        Route::post('/review/published', [App\Http\Controllers\ReviewController::class, 'updatePublished'])->name('reviews.published');
+        // Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+        // /* TODO: Create new route for adding reviews for products, now this route is reviews for companies */
+        // Route::get('/shop/{company_name}/review/create', [App\Http\Controllers\ReviewController::class, 'create'])->name('reviews.create');
+        // Route::post('/review/store', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+        // Route::post('/review/published', [App\Http\Controllers\ReviewController::class, 'updatePublished'])->name('reviews.published');
 
 
 
 
         //Product Export
-        Route::get('/product-bulk-export', [App\Http\Controllers\ProductBulkUploadController::class, 'export'])->name('product_bulk_export.index');
+        // Route::get('/product-bulk-export', [App\Http\Controllers\ProductBulkUploadController::class, 'export'])->name('product_bulk_export.index');
 
 
         //Reports
-        Route::get('/commission-log', [App\Http\Controllers\ReportController::class, 'commission_history'])->name('commission-log.index');
+        // Route::get('/commission-log', [App\Http\Controllers\ReportController::class, 'commission_history'])->name('commission-log.index');
 
         //Document and Gallery
-        Route::resource('documentgallery', 'DocumentGalleryController')->parameters([
+        Route::resource('documentgallery', DocumentGalleryController::class)->parameters([
             'documentgallery' => 'id',
         ])->except(['destroy']);
         //    Route::get('/documentgallery/edit/{id}', [App\Http\Controllers\DocumentGalleryController::class, 'edit'])->name('documentgallery.edit');
@@ -178,7 +179,7 @@ Route::middleware([
         Route::get('/documentgallery/destroy/{id}', [DocumentGalleryController::class, 'destroy'])->name('documentgallery.destroy');
 
         //Notifications
-        Route::resource('notifications', 'NotificationController');
+        Route::resource('notifications', NotificationController::class);
         Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark_all_as_read');
 
         /* Document (eSignatures and SmartID)  Roiutes */

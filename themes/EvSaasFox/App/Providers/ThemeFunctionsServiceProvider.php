@@ -51,6 +51,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     {
         parent::boot();
 
+        // $this->loadRoutesFrom('../../routes.php');
+
         if (function_exists('add_action')) {
             // Actions
         }

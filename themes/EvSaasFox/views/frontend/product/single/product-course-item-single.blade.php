@@ -123,9 +123,25 @@
                                     
                                     function sendDataToServer(survey) {
                                         // Send Ajax request to your web server
-                                        {{-- TODO: Save into `we_quiz_results` --}}
-                                        alert('The results are: ' + JSON.stringify(survey.data));
+                                        fetch('{{ route('api.we-quiz.result.save', $course_item->subject->id) }}', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json'
+                                            },
+                                            body: JSON.stringify({
+                                                'user_id': {{ auth()->user()->id }},
+                                                'answers': survey.data,
+                                            }),
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if(data.error !== undefined) {
+                                                alert(data.error.message);
+                                            }
+                                        });
+                                        // alert('The results are: ' + JSON.stringify(survey.data));
                                     }
+
                                     $('#we-quiz-container').Survey({
                                         model: survey,
                                         onComplete: sendDataToServer
@@ -133,6 +149,8 @@
 
                                     survey.completedHtml =  '{{ translate('You completed the quiz!') }}';
                                     survey.showPreviewBeforeComplete = 'showAllQuestions';
+
+                                    ;
                                 });
                             </script>
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::wysiwyg()->value)
