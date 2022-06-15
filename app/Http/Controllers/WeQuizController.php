@@ -24,7 +24,9 @@ class WeQuizController extends Controller
         return view('frontend.we-quiz.create');
     }
 
-    public function store(Request $request) {
+    public function save_result(Request $request, $id) {
+        $quiz = WeQuiz::findOrFail($id);
 
+        return response()->json($quiz);    
     }
 }
