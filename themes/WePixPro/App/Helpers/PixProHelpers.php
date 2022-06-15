@@ -47,10 +47,10 @@ if (!function_exists('pix_pro_activate_license')) {
             "UserSn" => $serial_number,
             "HardwareId" => $hardware_id,
         ]);
-        
+
         $response = Http::post($route, $body);
         $response_json = $response->json();
-        
+
         if(!empty($response_json['status'] ?? null)) {
             // If status is not success for any reason, throw an error
             if($response_json['status'] !== 'success') {
@@ -79,7 +79,7 @@ if (!function_exists('pix_pro_download_license')) {
             "UserEmail" => $user->email,
             "LicenseId" => $license_id,
         ]);
-        
+
         $response = Http::post($route, $body);
         $response_json = $response->json();
 
@@ -99,13 +99,13 @@ if (!function_exists('pix_pro_download_license')) {
 
 if (!function_exists('pix_pro_download_license_logic')) {
     function pix_pro_download_license_logic($license) {
-        try { 
+        try {
             $response = pix_pro_download_license($license->data['id'] ?? -1, auth()->user());
-            
+
             if(!empty($response)) {
                 return $response;
             }
-        
+
             $this->inform(translate('Error: Cannot download license .DAT file...'), translate('Serial number: ').$license->serial_number, 'fail');
         } catch(\Exception $e) {
             Log::error($e->getMessage());
@@ -145,7 +145,7 @@ if (!function_exists('pix_pro_disconnect_license')) {
                     return $response_json;
                 }
             }
-        
+
             $form->inform(translate('Error: Cannot disconnect license from hardware...'), translate('Serial number: ').$license->serial_number, 'fail');
         } catch(\Exception $e) {
             Log::error($e->getMessage());
@@ -172,7 +172,7 @@ if (!function_exists('pix_pro_create_license')) {
                   );
 
                 $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
-                
+
                 $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
                 if(!empty($pix_pro_user['user_id'] ?? null)) {
@@ -206,10 +206,10 @@ if (!function_exists('pix_pro_create_license')) {
                         $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
                         $body['Tax'] = 21; // TODO: Make this respect Stripe tax!
                     // }
-                    
+
                     $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
                     // die(print_r($response->body()));
-                    $response_json = $response->json(); 
+                    $response_json = $response->json();
 
                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                         // If status is not success for any reason, throw an error
@@ -220,7 +220,7 @@ if (!function_exists('pix_pro_create_license')) {
                         if(!empty($response_json['data'] ?? null)) {
                             // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
                             $pix_license = $response_json['data'];
-                            
+
                             DB::beginTransaction();
 
                             try {
@@ -246,10 +246,10 @@ if (!function_exists('pix_pro_create_license')) {
 
                                 die();
                             }
-                            
+
                         }
                     }
-                    
+
                 } else {
                     Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, Could not get the user y email from pix-pro api', ''));
                 }
@@ -275,7 +275,7 @@ if (!function_exists('pix_pro_extend_license')) {
                   );
 
                 $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
-                
+
                 $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
                 if(!empty($pix_pro_user['user_id'] ?? null)) {
@@ -284,7 +284,7 @@ if (!function_exists('pix_pro_extend_license')) {
                         "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
                         "LicenseImageLimit" => $subscription->getCoreMeta('number_of_images'),
                     ]);
-    
+
 //                     // if(!$is_trial) {
 //                         // If license is not trial, append more params
                         $body['SubscriptionId'] = $subscription->id;
@@ -297,8 +297,8 @@ if (!function_exists('pix_pro_extend_license')) {
 //                     // }
 
                     $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
-                    
-                    $response_json = $response->json(); 
+
+                    $response_json = $response->json();
 
                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                         // If status is not success for any reason, throw an error
@@ -306,7 +306,7 @@ if (!function_exists('pix_pro_extend_license')) {
                     } else {
                         // If everything is ok...should we add anything else???
                     }
-                    
+
                 } else {
                     Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to EXTEND a license(order) in pix-pro API DB. Could not get the user by email from pix-pro api', ''));
                 }
@@ -317,6 +317,9 @@ if (!function_exists('pix_pro_extend_license')) {
 
 if (!function_exists('pix_pro_get_license_by_serial_number')) {
     function pix_pro_get_license_by_serial_number($license) {
+        if(empty($license)) {
+            return false;
+        }
         $route = pix_pro_endpoint().'/licenses/get_license_by_serial_number/';
         $user = $license->user_subscription->first()->user;
 
@@ -325,14 +328,14 @@ if (!function_exists('pix_pro_get_license_by_serial_number')) {
             "UserEmail" => $user->email,
             "UserSn" => $license->serial_number,
         ]);
-        
+
         $response = Http::post($route, $body);
         $response_json = $response->json();
-        
+
         if(!empty($response_json['status'] ?? null)) {
             // If status is not success for any reason, throw an error
             if($response_json['status'] !== 'success') {
-                Log::error(pix_pro_error($route, 'There was an error while trying to get license by following serial number: '.$serial_number, $response_json));
+                Log::error(pix_pro_error($route, 'There was an error while trying to get license by following serial number: '.$license->serial_number, $response_json));
             }
 
             return $response_json;
@@ -373,7 +376,7 @@ if (!function_exists('pix_pro_get_user_licenses')) {
 
         if(!empty($response_json['status'] ?? null)) {
             if(!empty($pix_user['data'])) {
-            
+
             }
 
             // If status is not success for any reason, throw an error
