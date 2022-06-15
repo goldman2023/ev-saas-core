@@ -9,7 +9,7 @@
 @section('panel_content')
     <x-dashboard.section-headers.section-header title="{{ translate('All Quizzes') }}" text="">
         <x-slot name="content">
-            <a href="{{ route('we-quiz.create') }}" class="btn-primary">
+            <a href="{{ route('dashboard.we-quiz.create') }}" class="btn-primary">
                 @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
                 <span>{{ translate('New Quiz') }}</span>
             </a>

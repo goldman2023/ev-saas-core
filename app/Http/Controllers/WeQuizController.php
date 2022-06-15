@@ -13,7 +13,7 @@ class WeQuizController extends Controller
 
     public function index() {
         $quizes = WeQuiz::all();
-        return view('frontend.we-quiz.index', compact('quizes'));
+        return view('frontend.dashboard.we-quiz.index', compact('quizes'));
     }
 
 
@@ -23,7 +23,38 @@ class WeQuizController extends Controller
     }
 
     public function create() {
-        return view('frontend.we-quiz.create');
+        return view('frontend.dashboard.we-quiz.create');
+    }
+
+    public function edit(Request $request, $id) {
+        $quiz = WeQuiz::findOrFail($id);
+        return view('frontend.dashboard.we-quiz.edit', compact('quiz'));
+    }
+
+    public function save_quiz(Request $request, $id = null) {
+        $results_data = $request->json()->all();
+
+        if (count($results_data) > 0 && !empty($results_data['user_id'] ?? null) && !empty($results_data['quiz_json'] ?? null)) {
+            if(empty($id)) {
+                // Create
+                $quiz = new WeQuiz();
+                $quiz->user_id = $results_data['user_id'];
+                $quiz->name = $results_data['quiz_json']['title'] ?? 'Quiz';
+                $quiz->quiz_json = $results_data['quiz_json'];
+                $quiz->save();
+            } else {
+                // Update
+                $quiz = WeQuiz::findOrFail($id);
+                $quiz->name = $results_data['quiz_json']['title'] ?? 'Quiz';
+                $quiz->quiz_json = $results_data['quiz_json'];
+                $quiz->save();
+            }
+
+            return response()->json($quiz);
+        }
+
+    
+        throw new WeAPIException(message: translate('Could not save quiz'), type: 'WeApiException', code: 400);
     }
 
     public function save_result(Request $request, $id) {
