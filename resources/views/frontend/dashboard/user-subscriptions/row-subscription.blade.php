@@ -83,8 +83,9 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a> --}}
 
-        <a class="btn btn-danger flex items-center mr-2" x-bind:href="$getStripeCheckoutPermalink()" target="_blank">
-            @svg('heroicon-o-x', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Cancel') }}
+        <a class="btn btn-primary flex items-center mr-2" x-bind:href="$getStripeCheckoutPermalink()" target="_blank">
+            {{-- @svg('heroicon-o-x', ['class' => 'w-[18px] h-[18px] mr-2'])  --}}
+            {{ translate('Upgrade') }}
         </a>
 
         {{-- @if(!get_tenant_setting('multiplan_purchase'))
