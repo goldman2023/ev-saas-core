@@ -64,7 +64,10 @@ window.getEditorJsDefaultConfig = function($id) {
                 }       
               },
             inlineCode:InlineCode,
-            embed:Embed,
+            // embed:{
+            //     class: Embed,
+            //     inlineToolbar: true
+            // },
             code:Code,
             Color: {
                 class: ColorPlugin,
