@@ -51,6 +51,9 @@ class RecentInvoicesWidgetTable extends DataTableComponent
             Column::make('Invoice ID')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
+            Column::make('Invoice Number')
+                ->excludeFromSelectable()
+                ->addClass('text-left'),
             Column::make('Order ID')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
@@ -72,6 +75,8 @@ class RecentInvoicesWidgetTable extends DataTableComponent
     {
         return Invoice::query()
             ->orderBy('updated_at', 'desc')
+            ->where('payment_status', 'paid')
+            ->when(auth()->user()?->isAdmin(), fn ($query, $value) => $query->orWhereIn('payment_status', PaymentStatusEnum::toValues()))
             ->when($this->for === 'me', fn ($query, $value) => $query->my())
             ->when($this->for === 'shop', fn ($query, $value) => $query->shopOrders())
             ->when($this->for === 'all', fn ($query, $value) => $query)

@@ -457,6 +457,11 @@ class EVCheckoutController extends Controller
             // Redirect non-logged user to order-received (like Thank you page)
         }
 
+        // TODO: Think about solution for Guest User and accessing this page after successful purchase...
+        if($order->user_id !== (auth()->user()?->id ?? null)) {
+            return redirect()->route('home');
+        }
+
         return view('frontend.order-received', compact('order'));
     }
 
