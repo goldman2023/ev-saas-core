@@ -3,7 +3,7 @@
     <div class="container px-4 mx-auto">
         <div class="text-center">
             <span
-                class="hidden inline-block py-px px-2 mb-4 text-xs leading-5 text-green-500 bg-green-100 font-medium rounded-full shadow-sm">
+                class="inline-block py-px px-2 mb-4 text-xs leading-5 text-green-500 bg-green-100 font-medium rounded-full shadow-sm">
                 {{ translate('Software') }}
             </span>
             <h3

@@ -27,7 +27,7 @@
             </div>
 
             <div class="col-span-6 sm:col-span-2 flex flex-col">
-                <div class="w-full bg-white border border-gray-200 rounded-lg ">
+                <div class="w-full bg-white border border-gray-200 rounded-lg cursor-pointer" @click="window.location.href = '{{ get_tenant_setting('pix_pro_software_download_url', '#') }}'">
                     <div class="border-b border-gray-200 px-4 sm:px-7 py-5">
                         <div class="flex justify-between items-center flex-wrap sm:flex-nowrap">
                             <div class="w-full">
