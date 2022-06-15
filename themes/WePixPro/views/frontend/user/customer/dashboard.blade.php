@@ -13,7 +13,7 @@
                    <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
                    <a href="{{ route('my.orders.all') }}" class="btn-primary">{{ translate('Manage invoices') }}</a>
                 </div>
-                <livewire:dashboard.tables.recent-invoices-widget-table for="me" :per-page="6" :show-per-page="false" :show-search="false" :column-select="false" />
+                <livewire:dashboard.tables.recent-invoices-widget-table :user="auth()->user()" :per-page="6" :show-per-page="false" :show-search="false" :column-select="false" />
 
                 <div class="w-full grid col-span-1 sm:grid-cols-2 gap-7 mt-6 sm:mt-8 ">
                     <div class="w-full">

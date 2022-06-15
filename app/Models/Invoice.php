@@ -44,9 +44,9 @@ class Invoice extends WeBaseModel
         });
 
         // Restrict to MyShop and My invoices
-        static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
-            $builder->real()->where('shop_id', '=', MyShop::getShop()?->id ?? -1)->orWhere('user_id', '=', auth()->user()?->id ?? null);
-        });
+        // static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
+        //     $builder->real()->where('shop_id', '=', MyShop::getShop()?->id ?? -1)->orWhere('user_id', '=', auth()->user()?->id ?? null);
+        // });
     }
 
     public function user()

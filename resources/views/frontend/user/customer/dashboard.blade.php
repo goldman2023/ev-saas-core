@@ -17,7 +17,7 @@
                 <div class="text-18 text-gray-900 font-semibold">
                     {{ translate('Invoices') }}
                 </div>
-                <livewire:dashboard.tables.recent-invoices-widget-table for="me" :show-per-page="false" :show-search="false" :column-select="false" />
+                <livewire:dashboard.tables.recent-invoices-widget-table :user="auth()->user()" :show-per-page="false" :show-search="false" :column-select="false" />
             </div>
 
             <div>

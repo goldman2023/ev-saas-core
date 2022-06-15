@@ -8,6 +8,7 @@ use App\Enums\ShippingStatusEnum;
 use App\Facades\MyShop;
 use App\Models\Order;
 use App\Models\Invoice;
+use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -36,9 +37,14 @@ class RecentInvoicesWidgetTable extends DataTableComponent
 
     protected string $tableName = 'invoices';
 
-    public function mount($for = 'me', $order = null)
+    public $user;
+    public $shop;
+    public $order;
+
+    public function mount($user = null, $shop = null, $order = null)
     {
-        $this->for = $for;
+        $this->user = $user;
+        $this->shop = $shop;
         $this->order = $order;
 
         parent::mount();
@@ -73,14 +79,24 @@ class RecentInvoicesWidgetTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return Invoice::query()
+        $query = Invoice::query();
+
+        if(empty($this->user) && empty($this->order) && empty($this->shop)) {
+            if(!\Permissions::canAccess(User::$non_customer_user_types, ['all_orders', 'browse_orders'], false)) {
+                return Invoice::query()->where('user_id', -1);
+            }
+        } else if(!empty($this->user)) {
+            $query = $query->where('user_id', $this->user->id);
+        } else if(!empty($this->shop)) {
+            $query = $query->where('shop_id', $this->shop->id);
+        } else if(!empty($this->order)) { 
+            $query = $query->where('order_id', $this->order->id);
+        }
+        
+        return $query
             ->orderBy('updated_at', 'desc')
-            ->where('payment_status', 'paid')
-            ->when(auth()->user()?->isAdmin(), fn ($query, $value) => $query->orWhereIn('payment_status', PaymentStatusEnum::toValues()))
-            ->when($this->for === 'me', fn ($query, $value) => $query->my())
-            ->when($this->for === 'shop', fn ($query, $value) => $query->shopOrders())
-            ->when($this->for === 'all', fn ($query, $value) => $query)
-            ->when($this->for === 'order', fn ($query, $value)  => $query->where('order_id', $this->order->id));
+            ->when(!auth()->user()?->isAdmin(), fn ($query, $value) => $query->where('payment_status', 'paid'))
+            ->when(auth()->user()?->isAdmin(), fn ($query, $value) => $query->whereIn('payment_status', PaymentStatusEnum::toValues()));
 
             // ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             // ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))

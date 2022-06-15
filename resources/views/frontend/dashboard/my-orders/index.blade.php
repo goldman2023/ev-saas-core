@@ -22,7 +22,7 @@
                 <h4 class="text-18 text-gray-900 font-semibold">{{ translate('All Invoices') }}</h4>
              </div>
 
-            <livewire:dashboard.tables.recent-invoices-widget-table for="me" :per-page="10" :show-per-page="false" :show-search="false" :column-select="false" />
+            <livewire:dashboard.tables.recent-invoices-widget-table :user="auth()->user()" :per-page="10" :show-per-page="false" :show-search="false" :column-select="false" />
         </div>
 
         <div class="w-full">

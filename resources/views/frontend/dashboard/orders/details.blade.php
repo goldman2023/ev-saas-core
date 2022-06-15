@@ -203,8 +203,7 @@
                 <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
              </div>
 
-            <livewire:dashboard.tables.recent-invoices-widget-table for="order" :order="$order" :per-page="10" :show-per-page="false" :show-search="false" :column-select="false">
-            </livewire:dashboard.tables.recent-invoices-widget-table>
+            <livewire:dashboard.tables.recent-invoices-widget-table :order="$order" :per-page="10" :show-per-page="false" :show-search="false" :column-select="false" />
         </div>
 
         <!-- Billing -->
