@@ -269,3 +269,21 @@ Route::middleware([
 
 
 });
+
+/**
+ * Tenant API Routes
+ */
+Route::middleware([
+    'api',
+    InitializeTenancyByDomainAndVendorDomains::class,
+    PreventAccessFromCentralDomains::class,
+    VendorMode::class,
+])->prefix('api')->name('api.')->group(function () {
+    // Quizz Result Save
+    Route::post('/we-quizz-result/{id}', [WeQuizController::class, 'save_result'])->name('we-quiz.result.save');
+
+    // TODO: Make these api Routes PROTECTED by AUTH!
+    Route::middleware('auth')->group(function () {
+    });
+    
+});

@@ -12,14 +12,14 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\Text;
 
-class WeQuizResults extends Resource
+class WeQuizResult extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\WeQuizResults::class;
+    public static $model = \App\Models\WeQuizResult::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

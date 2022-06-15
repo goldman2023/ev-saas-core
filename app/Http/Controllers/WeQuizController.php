@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\WeQuiz;
+use App\Models\WeQuizResult;
 use Illuminate\Http\Request;
+use App\Exceptions\WeAPIException;
 
 class WeQuizController extends Controller
 {
@@ -27,6 +29,18 @@ class WeQuizController extends Controller
     public function save_result(Request $request, $id) {
         $quiz = WeQuiz::findOrFail($id);
 
-        return response()->json($quiz);    
+        $results_data = $request->json()->all();
+
+        if (count($results_data) > 0 && !empty($results_data['user_id'] ?? null) && !empty($results_data['answers'] ?? null)) {
+            $quiz->results()->create([
+                'user_id' => $results_data['user_id'],
+                'quiz_answers' => $results_data['answers']
+            ]);
+
+            return response()->json($quiz->results()->where('user_id', $results_data['user_id'])->first());
+        }
+
+    
+        throw new WeAPIException(message: translate('Could not save quiz results'), type: 'WeApiException', code: 400);
     }
 }
