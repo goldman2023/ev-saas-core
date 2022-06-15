@@ -19,6 +19,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class License extends WeBaseModel
 {
     use CoreMetaTrait;
+    use LogsActivity;
 
     public $license_hardware_id;
     protected $table = 'licenses';
@@ -28,13 +29,13 @@ class License extends WeBaseModel
     protected $casts = [
         'data' => 'array'
     ];
-    
+
     public function user_subscription() {
         return $this->morphToMany(UserSubscription::class, 'subject', 'user_subscription_relationships');
     }
 
     public function getLicenseHardwareIdAttribute() {
-        // $license_hardware_id = 
+        // $license_hardware_id =
     }
 
     /*
