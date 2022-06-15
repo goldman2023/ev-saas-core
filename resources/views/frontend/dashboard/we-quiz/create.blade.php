@@ -31,30 +31,57 @@
 
 <script>
     /* Documentation can be found here: https://surveyjs.io/Documentation/Survey-Creator?id=get-started-knockout-jquery */
+
+    let saveURL = "{{ route('api.dashboard.we-quiz.create') }}";
+
+    function saveSurveyJson(url, json, saveNo, callback) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Accept': 'application/json',
+                "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify({
+                'user_id': {{ auth()->user()->id }},
+                'quiz_json': json,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.error !== undefined) {
+                alert(data.error.message);
+                return;
+            }
+
+            if(data.id !== undefined && !saveURL.endsWith(data.id)) {
+                saveURL += '/'+data.id;
+            }
+        });
+    }
+
+
     const creatorOptions = {
         showLogicTab: false,
-        isAutoSave: false,
-        haveCommercialLicense: true
+        isAutoSave: true,
+        haveCommercialLicense: true,
+    };
+    const creator = new SurveyCreator.SurveyCreator(creatorOptions);
+
+    creator.saveSurveyFunc = (saveNo, callback) => {
+        callback(saveNo, true);
+
+        saveSurveyJson(
+            saveURL,
+            creator.JSON,
+            saveNo,
+            callback
+        );
     };
 
-    const creator = new SurveyCreator.SurveyCreator(creatorOptions);
 
     document.addEventListener("DOMContentLoaded", function() {
         creator.render("surveyCreator");
     });
-
-    // If you use a web service:
-    function saveSurveyJson(url, json, saveNo, callback) {
-        const request = new XMLHttpRequest();
-        request.open('POST', url);
-        request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        request.addEventListener('load', () => {
-            callback(saveNo, true);
-        });
-        request.addEventListener('error', () => {
-            callback(saveNo, false);
-        });
-        request.send(JSON.stringify(json));
-    }
 </script>
 @endpush
