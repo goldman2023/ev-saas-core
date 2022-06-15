@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Feed\Elements;
 
+use Exception;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Spatie\Activitylog\Models\Activity;
+use Throwable;
 
 class FeedCard extends Component
 {
@@ -22,11 +24,18 @@ class FeedCard extends Component
     {
         $this->ignore = false;
 
-        if (! $item->has('subject') || empty($item->subject)) {
-            $this->ignore = true;
 
+        /* Check if subject class instance exists */
+        try {
+            if (! $item->has('subject') || empty($item->subject)) {
+                $this->ignore = true;
+
+                return false;
+            }
+        } catch(\Throwable $e) {
             return false;
         }
+
 
         if (!empty($item->properties['action'] ?? null) ) {
             $this->ignore = true;
@@ -45,7 +54,7 @@ class FeedCard extends Component
         // Following chain is prevented in Activity query builder itself with proper query clauses
         if ($item->subject_type == \App\Models\Product::class) {
             $this->product = $item->subject;
-            
+
             if ($this->product->status == 'draft') {
                 $this->ignore = true;
             }
