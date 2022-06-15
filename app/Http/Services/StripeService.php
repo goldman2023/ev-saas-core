@@ -1449,15 +1449,15 @@ class StripeService
         try {
             // Fire Subscription(s) is created and paid Event
             if($stripe_billing_reason === 'subscription_create') {
-                do_action('invoice.paid.subscription_create', $user_subscriptions);
+                do_action('invoice.paid.subscription_create', $user_subscriptions, $stripe_invoice);
             }
             // Fire Subscription(s) is updated and paid Event
             else if($stripe_billing_reason === 'subscription_update') {
-                do_action('invoice.paid.subscription_update', $user_subscriptions);
+                do_action('invoice.paid.subscription_update', $user_subscriptions, $stripe_invoice);
             }
             // Fire Subscription(s) is cycled and paid Event
             else if($stripe_billing_reason === 'subscription_cycle') {
-                do_action('invoice.paid.subscription_cycle', $user_subscriptions);
+                do_action('invoice.paid.subscription_cycle', $user_subscriptions, $stripe_invoice);
             }
         } catch(\Exception $e) {
             Log::error($e);
@@ -1665,6 +1665,7 @@ class StripeService
                             if(get_tenant_setting('multiplan_purchase')) {
                                 // Upgrade/Downgrade when multiple subsriptions feature is enabled
                             } else {
+                                // Get New Plan/Model based on `Stripe Product ID` in CoreMeta
                                 $stripe_new_plan = $stripe_subscription?->items?->data[0];
                                 $new_plan = CoreMeta::where([
                                     ['key', $this->mode_prefix.'stripe_product_id'],
@@ -1672,11 +1673,12 @@ class StripeService
                                 ])->first();
 
                                 if(!empty($new_plan)) {
+                                    // If New Plan/Model is found through CoreMeta, get the new Plan/Model and update subscription's subject columns!
                                     $new_plan = $new_plan->subject;
                                     $subscription->subject_id = $new_plan->id;
                                     $subscription->subject_type = $new_plan::class;
                                 } else {
-                                    // Raise error here
+                                    Log::error('Could not update subscription relation because the new Plan was not found through `stripe_product_id` CoreMeta');
                                 }
                                 // $subscription->
                             }
@@ -1684,8 +1686,12 @@ class StripeService
                     }
 
                     $subscription->save();
+
                 }
             }
+
+            do_action('stripe.webhook.subscriptions.updated', $user_subscriptions);
+            
         } catch (\Exception $e) {
             http_response_code(400);
             die($e->getMessage());

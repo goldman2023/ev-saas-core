@@ -126,19 +126,25 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 20, 1);
 
             // Create PixPro License
-            add_action('invoice.paid.subscription_create', function ($user_subscriptions) {
-                pix_pro_create_license($user_subscriptions);
+            add_action('invoice.paid.subscription_create', function ($user_subscriptions, $stripe_invoice) {
+                pix_pro_create_license($user_subscriptions, $stripe_invoice);
+            }, 20, 2);
+
+            // Update PixPro License
+            add_action('stripe.webhook.subscriptions.updated', function ($user_subscriptions) {
+                pix_pro_update_license($user_subscriptions);
             }, 20, 1);
+
+            // Extend PixPro License
+            add_action('invoice.paid.subscription_cycle', function($user_subscriptions, $stripe_invoice) {
+                pix_pro_extend_license($user_subscriptions, $stripe_invoice);
+            }, 20, 2);
 
             // PixPro License disconnect by removing hardware_id
             add_action('license.disconnect', function ($license, $user, $form) {
                 pix_pro_disconnect_license($license, $user, $form);
             }, 20, 3);
-
-            // Extend PixPro License
-            add_action('invoice.paid.subscription_cycle', function($user_subscriptions) {
-                pix_pro_extend_license($user_subscriptions);
-            }, 20, 1);
+            
 
             // Update User password
             add_action('user.password.updated', function($user, $newPassword, $oldPassword) {
