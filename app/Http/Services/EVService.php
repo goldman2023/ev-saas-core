@@ -317,15 +317,6 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => [],
                     ],
-
-                    [
-                        'label' => translate('Downloads'),
-                        'icon' => 'heroicon-o-download',
-                        'route' => '/page/downloads',
-                        'is_active' => areActiveRoutes(['my.downloads.all']),
-                        'user_types' => User::$user_types,
-                        'permissions' => [],
-                    ],
                     [
                         'label' => translate('My Subscriptions'),
                         'icon' => 'heroicon-o-document',
