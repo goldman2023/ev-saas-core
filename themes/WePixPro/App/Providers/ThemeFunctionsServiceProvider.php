@@ -211,18 +211,18 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             });
 
-            add_action('view.dashboard.plans-management.plans-table.end', function() {
+            add_action('view.dashboard.plans-management.plans-table.end', function($data) {
                 if (View::exists('frontend.partials.pix-pro-licenses-table')) {
-                    echo view('frontend.partials.pix-pro-licenses-table');
+                    echo view('frontend.partials.pix-pro-licenses-table', compact('data'));
                 }
-            });
+            }, 20, 1);
 
             // Add Columns to Licenses table (View)
             add_action('view.dashboard.row-license.columns', function($license) {
                 if (View::exists('frontend.partials.row-license-custom-columns')) {
                     echo view('frontend.partials.row-license-custom-columns', compact('license'));
                 }
-            });
+            }, 20, 1);
 
             add_action('view.dashboard.plans.row-license.actions.dropdown.start', function($license) {
                 if (View::exists('frontend.partials.row-license-actions')) {
