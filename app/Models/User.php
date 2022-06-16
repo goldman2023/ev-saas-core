@@ -121,6 +121,19 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->user_type === 'customer';
     }
 
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where(
+            fn ($query) =>  $query
+                ->where('name', 'like', '%' . $term . '%')
+                ->orWhere('surname', 'like', '%' . $term . '%')
+                ->orWhere('email', 'like', '%' . $term . '%')
+        );
+    }
+
     public function user_meta()
     {
         return $this->hasMany(UserMeta::class, 'user_id');

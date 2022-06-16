@@ -17,7 +17,7 @@
   });
 
   displayed_items = newItems;
-})" wire:ignore.self>
+})" x-effect="items = @js($items)" wire:ignore.self>
     <div class="relative" wire:ignore>
       <button type="button" @click="open_dropdown = !open_dropdown" 
               class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm {{ $selectorClass ?? '' }} @error($field) is-invalid @enderror">

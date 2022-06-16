@@ -39,6 +39,8 @@ class CourseItemsForm extends Component
 
     public $product;
     public $course_items;
+    public $course_items_flat;
+    public $selectable_course_items_flat;
     public $current_item;
     public $available_quizzes;
 
@@ -79,10 +81,27 @@ class CourseItemsForm extends Component
     public function mount($product)
     {
         $this->product = $product;
-        $this->course_items = $this->product->course_items->toTree()->filter(fn($item) => $item->parent_id === null);
+        $this->course_items = CourseItem::tree()->withCount(['descendants'])->where('product_id', $product->id)->get()->toTree();
         $this->available_quizzes = auth()->user()->quizzes->keyBy('id')->map(fn($item) => '(#'.$item->id.') '.$item->name)->toArray();
+        $this->recursiveChildrenSort($this->course_items);
 
         $this->resetCurrentCourseItem();
+    }
+
+    protected function recursiveChildrenSort($course_items) {
+        $arr = collect();
+        $recursive = function ($course_items) use (&$arr, &$recursive) {
+            if (! empty($course_items) && $course_items->isNotEmpty()) {
+                foreach ($course_items as $item) {
+                    $arr->put($item->id, $item);
+                    $recursive($item->children);
+                }
+            }
+        };
+        $recursive($course_items);
+
+        $this->course_items_flat = $arr;
+        $this->setSelectableCourseItems();
     }
 
     public function saveCourseItem() {
@@ -102,8 +121,11 @@ class CourseItemsForm extends Component
         }
 
         try {
-            if (empty($this->current_item->parent_id)) {
+            if (empty($this->current_item->parent_id) || $this->current_item->parent_id == 0) {
                 $this->current_item->parent_id = null;
+            } else if($this->current_item->parent_id === $this->current_item->id) {
+                $this->dispatchValidationErrors($e);
+                return;
             }
 
             if($this->current_item->type === CourseItemTypes::quizz()->value) {
@@ -138,10 +160,14 @@ class CourseItemsForm extends Component
         $this->current_item->type = 'wysiwyg';
         $this->current_item->free = false;
         $this->current_item->order = 0;
+
+        $this->setSelectableCourseItems();
     }
 
     public function selectCourseItem($course_item_id) {
         $this->current_item = CourseItem::find($course_item_id);
+
+        $this->setSelectableCourseItems($course_item_id);
     }
 
     public function removeCourseItem($course_item_id) {
@@ -160,6 +186,13 @@ class CourseItemsForm extends Component
         } catch (\Exception $e) {
             $this->dispatchGeneralError(translate('There was an error while trying to remove course item and it\'s relationships: ').$e->getMessage());
             $this->inform(translate('There was an error while trying to remove course item and it\'s relationships: '), $e->getMessage(), 'danger');
+        }
+    }
+
+    protected function setSelectableCourseItems($except_id = null) {
+        $this->selectable_course_items_flat = collect($this->course_items_flat->toArray())->map(fn($item) => str_repeat('-', $item['depth']).$item['name'])->toArray(); 
+        if(!empty($except_id)) {
+            unset($this->selectable_course_items_flat[$except_id]);
         }
     }
 
