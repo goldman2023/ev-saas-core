@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8d87c1364d89e3b41a6a4f0e88b85f9",
+    "content-hash": "8633bab271217c88ef4a79e06b2f72a0",
     "packages": [
         {
             "name": "ammardev/laravel-wp-hash-driver",
@@ -2528,65 +2528,6 @@
             "time": "2022-04-21T14:37:18+00:00"
         },
         {
-            "name": "froala/wysiwyg-editor-php-sdk",
-            "version": "4.0.11",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/froala/wysiwyg-editor-php-sdk.git",
-                "reference": "6efe1363d39f05409117211346c7344697fd185d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/froala/wysiwyg-editor-php-sdk/zipball/6efe1363d39f05409117211346c7344697fd185d",
-                "reference": "6efe1363d39f05409117211346c7344697fd185d",
-                "shasum": ""
-            },
-            "type": "php-plugin",
-            "extra": {
-                "installer-name": "FroalaEditor"
-            },
-            "autoload": {
-                "psr-0": {
-                    "FroalaEditor": "lib/"
-                },
-                "psr-4": {
-                    "FroalaEditor\\": "lib/FroalaEditor"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "proprietary"
-            ],
-            "authors": [
-                {
-                    "name": "Froala Labs",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "PHP SDK for Froala WYSIWYG Editor",
-            "homepage": "https://www.froala.com/wysiwyg-editor",
-            "keywords": [
-                "editor",
-                "froala",
-                "html",
-                "php",
-                "php rich text editor",
-                "php rte",
-                "php wysiwyg",
-                "rich editor",
-                "rich text editor",
-                "rte",
-                "sdk",
-                "text",
-                "wysiwyg"
-            ],
-            "support": {
-                "issues": "https://github.com/froala/froala-editor-php-sdk/issues",
-                "source": "https://www.froala.com/wysiwyg-editor"
-            },
-            "time": "2022-05-09T12:57:06+00:00"
-        },
-        {
             "name": "fruitcake/php-cors",
             "version": "v1.2.0",
             "source": {
@@ -3425,6 +3366,56 @@
                 }
             ],
             "time": "2021-12-16T16:49:26+00:00"
+        },
+        {
+            "name": "itsmejoshua/novaspatiepermissions",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/itsmejoshua/novaspatiepermissions.git",
+                "reference": "6d665c310586627802a4dd03a36bfd45b05eef33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/itsmejoshua/novaspatiepermissions/zipball/6d665c310586627802a4dd03a36bfd45b05eef33",
+                "reference": "6d665c310586627802a4dd03a36bfd45b05eef33",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "php": "^8.0",
+                "spatie/laravel-permission": "^5.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Itsmejoshua\\Novaspatiepermissions\\ToolServiceProvider",
+                        "Itsmejoshua\\Novaspatiepermissions\\NovaSpatiePermissionsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Itsmejoshua\\Novaspatiepermissions\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Laravel Nova tool for managing spaties roles/permissions in laravel's nova package.",
+            "keywords": [
+                "laravel",
+                "nova",
+                "permissions",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/itsmejoshua/novaspatiepermissions/issues",
+                "source": "https://github.com/itsmejoshua/novaspatiepermissions/tree/v1.0.7"
+            },
+            "time": "2022-05-16T01:34:26+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
@@ -16766,5 +16757,5 @@
         "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.0.0"
 }

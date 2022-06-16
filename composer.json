@@ -27,6 +27,7 @@
         "google/apiclient": "^2.12.1",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
+        "itsmejoshua/novaspatiepermissions": "^1.0",
         "jschaedl/iban-validation": "^1.8",
         "laracasts/flash": "^3.2",
         "laravel-validation-rules/credit-card": "^1.7",

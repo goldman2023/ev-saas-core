@@ -22,6 +22,7 @@ use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 use DB;
+use Laravel\Cashier\Billable;
 use Laravel\Nova\Auth\Impersonatable;
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
@@ -41,6 +42,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SocialReactionsTrait;
     use SocialFollowingTrait;
     use Impersonatable;
+    use Billable;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
