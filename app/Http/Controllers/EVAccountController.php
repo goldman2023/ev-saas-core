@@ -37,7 +37,7 @@ class EVAccountController extends Controller
 
             return view('frontend.dashboard.users.account-settings', compact('user'));
         } catch (\Exception $e) {
-            // Create error handling for not found exception to go to 404 page...
+            abort(404);
         }
     }
 
@@ -48,7 +48,7 @@ class EVAccountController extends Controller
 
             return view('frontend.dashboard.users.user-details', compact('user'));
         } catch (\Exception $e) {
-            // Create error handling for not found exception to go to 404 page...
+            abort(404);
         }
     }
 

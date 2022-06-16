@@ -18,7 +18,7 @@
 
 
 <x-livewire-tables::table.cell class="align-middle">
-    <span class="d-block text-14 mb-0">{{ $row->created_at->format('d.m.Y H:i') }}</span>
+    <span class="d-block text-14 mb-0">{{ $row->created_at->format('d M, Y H:i') }}</span>
 </x-livewire-tables::table.cell>
 
 

@@ -13,7 +13,7 @@
                    <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
                    <a href="{{ route('my.orders.all') }}" class="btn-primary">{{ translate('Manage invoices') }}</a>
                 </div>
-                <livewire:dashboard.tables.recent-invoices-widget-table for="me" :per-page="6" :show-per-page="false" :show-search="false" :column-select="false" />
+                <livewire:dashboard.tables.recent-invoices-widget-table :user="auth()->user()" :per-page="6" :show-per-page="false" :show-search="false" :column-select="false" />
 
                 <div class="w-full grid col-span-1 sm:grid-cols-2 gap-7 mt-6 sm:mt-8 ">
                     <div class="w-full">
@@ -27,7 +27,7 @@
             </div>
 
             <div class="col-span-6 sm:col-span-2 flex flex-col">
-                <div class="w-full bg-white border border-gray-200 rounded-lg ">
+                <div class="w-full bg-white border border-gray-200 rounded-lg cursor-pointer" @click="window.location.href = '{{ get_tenant_setting('pix_pro_software_download_url', '#') }}'">
                     <div class="border-b border-gray-200 px-4 sm:px-7 py-5">
                         <div class="flex justify-between items-center flex-wrap sm:flex-nowrap">
                             <div class="w-full">

@@ -126,7 +126,7 @@
 
                                         @if(auth()->user()?->subscribedTo($plan->slug) ?? null)
                                             <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" target="_blank"
-                                                    class="btn-danger-outline btn-sm inline-block pt-2 text-danger text-14 text-center">
+                                                    class="btn-danger-outline btn-sm inline-block pt-2 text-danger text-14 justify-center w-full text-center">
                                                 {{ translate('Cancel plan') }}
                                             </a>
                                         @else

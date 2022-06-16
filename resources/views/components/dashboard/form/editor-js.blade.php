@@ -7,14 +7,10 @@
                 this.editor.destroy();
             } catch(error) {}
 
-            {{-- console.log(window.getEditorJsDefaultConfig(this.id)); --}}
             this.editor = new window.EditorJS(_.merge(window.getEditorJsDefaultConfig(this.id), {
                     data: {{ $field }},
                     minHeight: 100,
-                    {{-- onReady: () => {
-                        const undo = new window.EditorJSUndoPlugin(this.editor);
-                        undo.initialize({{ $field }});
-                    }, --}}
+                    
                     onChange: _.debounce((ed) => { 
                         ed.saver.save().then((outputData) => {
                             {{ $field }} = (window.edjsHTML()).parse(outputData).join('');
@@ -45,8 +41,8 @@
         }); 
     }
 }" 
-x-init="initEditor()"
-x-on:init-form.window="initEditor()"
+x-init="$nextTick(() => { initEditor() });"
+{{-- x-on:init-form.window="$nextTick(() => { initEditor() })" --}}
 wire:ignore>
     <div :id="id">
 
