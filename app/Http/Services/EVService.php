@@ -82,7 +82,8 @@ class EVService
     protected function getDashboardMenuTemplate(): array
     {
         // In order to show/hide certain items based on user type and permissions, you need to define user_types and permissions for each item
-        return [
+        return
+        apply_filters('dashboard.sidebar_menu', [
             [
                 'label' => translate('General'),
                 'items' => [
@@ -496,7 +497,8 @@ class EVService
                     ],
                 ],
             ],
-        ];
+        ]
+    );
     }
 
     public function getMappedCategories()
