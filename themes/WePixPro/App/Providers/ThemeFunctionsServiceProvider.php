@@ -100,6 +100,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return pix_pro_download_license_logic($license);
             }, 20, 1);
 
+            // Set editable License data properties
+            add_filter('license.get.data.editable.keys', function () {
+                return ['license_image_limit','cloud_service', 'offline_service'];
+            }, 20, 1);
+
             // Add custom core meta to Plans
             add_filter('plan.meta.data-types', function($plan_meta) {
                 return array_merge($plan_meta, [
@@ -258,10 +263,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                         if(!empty($license) && method_exists($license, 'get_license')) {
                             $data = $license->get_license(); // gets the license from Pixpro DB
 
-                            if(($license->data['hardware_id'] ?? null) !== ($data['hardware_id'] ?? null)) {
-                                $license_data = $license->data;
-                                $license_data['hardware_id'] = $data['hardware_id'];
-                                $license->data = $license_data;
+                            if($license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
+                                $license->setData('hardware_id', $data['hardware_id']);
                                 $license->save();
                             }
                         }
@@ -269,7 +272,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             }, 20, 1);
             
-            
+            // There are changes to license on WeSaaS end, so we need to update 
+            add_action('license.saved', function(&$new_license, $old_license) {
+                pix_pro_update_single_license($new_license);
+            }, 20, 2);
 
             // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT
             // add_action('import.wordpress.blog-posts.end', function($data) {

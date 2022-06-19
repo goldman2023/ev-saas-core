@@ -109,7 +109,6 @@ if (!function_exists('pix_pro_download_license_logic')) {
             $this->inform(translate('Error: Cannot download license .DAT file...'), translate('Serial number: ').$license->serial_number, 'fail');
         } catch(\Exception $e) {
             Log::error($e->getMessage());
-            dd($e);
         }
     }
 }
@@ -228,7 +227,7 @@ if (!function_exists('pix_pro_create_license')) {
                                 $license->license_name = $pix_license['license_name'] ?? '';
                                 $license->serial_number = $pix_license['serial_number'] ?? '';
                                 $license->license_type = $pix_license['license_type'] ?? '';
-                                $license->data = $pix_license; // Will be populaetd when user activates the license
+                                $license->data = array_merge($license->data, $pix_license); // Will be populaetd when user activates the license
                                 $license->save();
 
                                 // Add a license <-> user_subscription relationship
@@ -309,7 +308,6 @@ if (!function_exists('pix_pro_update_license')) {
                         http_response_code(400);
                         Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in pix-pro API DB, check the response below.', $response_json));
                     } else {
-
                         if(!empty($response_json['license'] ?? null)) {
                             // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
                             $pix_license = $response_json['license'];
@@ -321,7 +319,7 @@ if (!function_exists('pix_pro_update_license')) {
                                 $license->license_name = $pix_license['license_name'] ?? '';
                                 // $license->serial_number = $pix_license['serial_number'] ?? '';
                                 $license->license_type = $pix_license['license_type'] ?? '';
-                                $license->data = $pix_license; // Keep in mind that expiration date is NOT YET CHANGED ON PixPro end, because this endpoint doesn't set it. We'll update each subscription expiration_date in following function: `$this->pix_pro_update_license_status($user_subscriptions);`
+                                $license->data = array_merge($license->data, $pix_license); // Keep in mind that expiration date is NOT YET CHANGED ON PixPro end, because this endpoint doesn't set it. We'll update each subscription expiration_date in following function: `$this->pix_pro_update_license_status($user_subscriptions);`
                                 $license->save();
 
                                 // Change subscription default attributes based on a new selected Plan
@@ -347,6 +345,82 @@ if (!function_exists('pix_pro_update_license')) {
 
             // Update subscription statuses AND expiration_date(s)
             pix_pro_update_license_status($user_subscriptions);
+        }
+    }
+}
+
+// UPDATE SINGLE LICENSE
+if (!function_exists('pix_pro_update_single_license')) {
+    function pix_pro_update_single_license(&$license) {
+        $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
+        
+        $subscription = $license->user_subscription()->first();
+        
+        $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
+
+        if(!empty($pix_pro_user['user_id'] ?? null)) {
+            $number_of_images = $license->getData('license_image_limit');
+
+            if(!empty($number_of_images) && (is_int($number_of_images) || ctype_digit($number_of_images))) {
+                $number_of_images = $license->getData('license_image_limit');
+            } else {
+                $number_of_images = 150;
+            }
+
+            $cloud_service_param = $license->getData('cloud_service');
+            $offline_service_param = $license->getData('offline_service');
+            $license_subscription_type = $subscription->plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+
+            $body = pix_pro_add_auth_params([
+                "UserEmail" => $pix_pro_user['email'],
+                "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
+                "SubscriptionId" => $subscription->id,
+                "LicenseName" => $license_subscription_type, // This is actually `license_subscription_type` column in PixPro DB
+                "LicenseCloudService" => $cloud_service_param,
+                "LicenseOfflineService" => $offline_service_param,
+                "LicenseImageLimit" => $number_of_images,
+            ]);
+
+            $response = Http::post($route_paid, $body);
+
+            $response_json = $response->json();
+            
+            if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                // If status is not success for any reason, throw an error
+                http_response_code(400);
+                Log::error(pix_pro_error($route_paid, 'Function: pix_pro_update_single_license(). There was an error while trying to update a license(order) in pix-pro API DB, check the response below.', $response_json));
+            } else {
+                if(!empty($response_json['license'] ?? null)) {
+                    $pix_license = $response_json['license'];
+
+                    // WTF?
+                    
+                    $license = License::findOrFail($license->id);
+                    $license->data = array_merge($license->data, $pix_license);
+                    $license->saveQuietly();
+
+                    dd($license);
+                    $subscription->saveCoreMeta('number_of_images', $number_of_images);
+                    $subscription->saveCoreMeta('includes_cloud', $cloud_service_param);
+                    $subscription->saveCoreMeta('includes_offline', $offline_service_param);
+
+                    // DB::beginTransaction();
+                    
+                    // try {
+                        
+
+                    //     DB::commit();
+                    // } catch(\Throwable $e) { 
+                    //     DB::rollback();
+                    //     http_response_code(400);
+                    //     dd($e);
+                    //     Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a single license on WeSaaS end and link it to user_subscription.', $e));
+                    // }
+                    
+                }
+            }
+        } else {
+            Log::error(pix_pro_error($route_paid, 'Function: pix_pro_update_single_license(). There was an error while trying to save a single license(order) in Pixpro API DB. Could not get the user by email from Pixpro api', ''));
         }
     }
 }
@@ -398,7 +472,7 @@ if (!function_exists('pix_pro_update_license_status')) {
                                 $license->license_name = $pix_license['license_name'] ?? '';
                                 // $license->serial_number = $pix_license['serial_number'] ?? '';
                                 $license->license_type = $pix_license['license_type'] ?? '';
-                                $license->data = $pix_license; // New ExpirationDate and NewStatus
+                                $license->data = array_merge($license->data, $pix_license); // New ExpirationDate and NewStatus
                                 $license->save();
 
                                 DB::commit();

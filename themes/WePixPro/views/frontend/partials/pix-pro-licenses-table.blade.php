@@ -14,7 +14,13 @@
 </div>
 
 @push('modal')
-<x-system.form-modal id="pix-pro-generate-license" title="Online License Activation" class="!max-w-3xl">
-    <livewire:forms.generate-license-form />
-</x-system.form-modal>
+    <x-system.form-modal id="pix-pro-generate-license" title="Online License Activation" class="!max-w-3xl">
+        <livewire:forms.generate-license-form />
+    </x-system.form-modal>
+
+    @if(auth()->user()?->isAdmin() ?? false)
+        <x-system.form-modal id="pix-pro-edit-license" title="Online License Activation" class="!max-w-3xl">
+            <livewire:dashboard.forms.licenses.license-form />
+        </x-system.form-modal>
+    @endif
 @endpush

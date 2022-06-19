@@ -63,25 +63,25 @@ class GenerateLicenseForm extends Component
             $response = pix_pro_activate_license(auth()->user(), $this->serial_number, $this->hw_id);
             
             if(!empty($response) && !empty($response['status'] ?? null) && $response['status'] === 'success') {
-                $license_data = $response['license'] ?? [];
-                $license_data['file_name'] = $response['license_file']['file_name'];
-                $license_data['file_contents'] = $response['license_file']['file_contents'];
-                
-                $license->data = $license_data;
+                $license->data = array_merge($license->data, [
+                    'file_name' => $response['license_file']['file_name'] ?? '',
+                    'file_contents' => $response['license_file']['file_contents'] ?? ''
+                ]);
                 $license->save();
                 
                 $this->emit('refreshDatatable');
                 $this->inform(translate('You successfully activated your license!'), translate('Serial number: ').$this->serial_number, 'success');
 
-                return response()->streamDownload(function () use($license_data) { 
-                    echo $license_data['file_contents'];
-                }, $license_data['file_name']);
+                return response()->streamDownload(function () { 
+                    echo $response['license_file']['file_contents'] ?? '';
+                }, $response['license_file']['file_name'] ?? '');
             }
 
             $this->inform(translate('Cannot activate the license(invalid Hardware ID) OR license is already activated...'), translate('Serial number: ').$this->serial_number, 'fail');
         } catch(\Exception $e) {
             Log::error($e->getMessage());
-            dd($e);
+            $this->inform(translate('Cannot activate the license(invalid Hardware ID) OR license is already activated...'), $e->getMessage(), 'fail');
+
         }
     }
 
