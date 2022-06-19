@@ -102,7 +102,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Set editable License data properties
             add_filter('license.get.data.editable.keys', function () {
-                return ['license_image_limit','cloud_service', 'offline_service'];
+                return ['license_image_limit','cloud_service', 'offline_service', 'hardware_id'];
             }, 20, 1);
 
             // Add custom core meta to Plans
@@ -274,7 +274,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             
             // There are changes to license on WeSaaS end, so we need to update 
             add_action('license.saved', function(&$new_license, $old_license) {
-                pix_pro_update_single_license($new_license);
+                pix_pro_update_single_license($new_license, $old_license);
             }, 20, 2);
 
             // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT
