@@ -55,10 +55,12 @@
         <a class="btn btn-primary flex items-center mr-2" target="_blank" href="{{ $row->meta[\StripeService::getStripeMode().'stripe_hosted_invoice_url'] ?? '#' }}">
             {{-- {{ route('order.details', ['id' => $row->id]) }} --}}
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] '])
+            {{ translate('View') }}
         </a>
 
         <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ $row->meta[\StripeService::getStripeMode().'stripe_invoice_pdf_url'] ?? '#' }} ">
             @svg('heroicon-s-download', ['class' => 'w-[18px] h-[18px] '])
+            {{ translate('Download') }}
         </a>
 
         {{-- <button 

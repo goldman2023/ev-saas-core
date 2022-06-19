@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Arr;
 use App\Traits\GalleryTrait;
 use App\Traits\UploadTrait;
 use App\Traits\SocialAccounts;
@@ -21,10 +22,9 @@ class License extends WeBaseModel
     use CoreMetaTrait;
     use LogsActivity;
 
-    public $license_hardware_id;
     protected $table = 'licenses';
 
-    protected $fillable = ['license_name', 'serial_number', 'hardware_id', 'license_type', 'data', 'created_at', 'updated_at'];
+    protected $fillable = ['license_name', 'serial_number', 'license_type', 'data', 'created_at', 'updated_at'];
 
     protected $casts = [
         'data' => 'array'
@@ -32,10 +32,6 @@ class License extends WeBaseModel
 
     public function user_subscription() {
         return $this->morphToMany(UserSubscription::class, 'subject', 'user_subscription_relationships');
-    }
-
-    public function getLicenseHardwareIdAttribute() {
-        // $license_hardware_id =
     }
 
     /*
@@ -47,6 +43,67 @@ class License extends WeBaseModel
             fn ($query) =>  $query->where('serial_number', 'like', '%'.$term.'%')
                 ->orWhere('license_name', 'like', '%'.$term.'%')
         );
+    }
+
+    /*
+     * Get any value from data column using a desired key (accepts dot notaion)
+     */
+    public function getData($key) {
+        return Arr::get(empty($this->data) ? [] : $this->data, $key, null);
+    }
+
+    /*
+     * Set any value from data column using a desired key (accepts dot notaion)
+     */
+    public function setData($key, $value) {
+        $data = $this->data;
+        if(empty($data)) {
+            $data = [];
+        }
+        Arr::set($data, $key, $value);
+        $this->data = $data;
+    }
+
+
+    public function getEditableData() {
+        $keys = apply_filters('license.get.data.editable.keys');
+        $data = empty($this->data) ? [] : $this->data; // init empty array if data is empty, just in case if it's null in DB
+        $editableData = [];
+
+        if(empty($keys)) {
+            // If there are no keys restriction from current theme, return whole data json!
+            return $data;
+        }
+
+        // Otherwise, if there are keys specified in current theme, return only those keys specified!
+        
+        // Get only specified keys from current $data and set it inside $editableData (IMPORTANT: dot notaion CAN BE used ;)
+        foreach($keys as $key) {
+            $value = Arr::get($data, $key, null);
+            Arr::set($editableData, $key, $value);
+        }
+
+        return $editableData;
+    }
+
+    public function setEditableData($new_data) {
+        $keys = apply_filters('license.get.data.editable.keys');
+        $data = empty($this->data) ? [] : $this->data; // init empty array if data is empty, just in case if it's null in DB
+
+        if(empty($keys)) {
+            // If there are no keys restriction from current theme, replace old $data with given $new_data!
+            $this->data = $new_data;
+            return;
+        }
+
+        // Otherwise, if there are keys specified in current theme, save only $keys from $new_data to old $data!
+        foreach($keys as $key) {
+            $value = Arr::get($new_data, $key, null);
+            
+            Arr::set($data, $key, $value);
+        }
+        
+        $this->data = $data;
     }
 
     // TODO: Refactor this through ThemeFunctions in some way and make it theme-specific! (Extending the Model functions concept)

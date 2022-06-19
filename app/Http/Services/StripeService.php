@@ -36,6 +36,7 @@ class StripeService
 {
     public $stripe = null;
     public $mode_prefix = null;
+    protected $subscription_billing_reasons = ['subscription_create', 'subscription_update', 'subscription_cycle'];
     protected $unsupported_shipping_countries = ['AS', 'CX', 'CC', 'CU', 'HM', 'IR', 'KP', 'MH', 'FM', 'NF', 'MP', 'PW', 'SD', 'SY', 'UM', 'VI'];
     protected $supported_shipping_countries = []; // TODO: Get Stripe available countries list!!!!
 
@@ -540,6 +541,8 @@ class StripeService
             'metadata' => [
                 'order_id' => $is_preview ? 'preview' : $order->id,
                 'invoice_id' => $is_preview ? 'preview' : $invoice->id,
+                'user_id' => $is_preview ? 'preview' : $order->user_id,
+                'shop_id' => $is_preview ? 'preview' : $order->shop_id,
             ],
             'success_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'cancel_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
@@ -771,6 +774,95 @@ class StripeService
         ];
     }
 
+    public function createOrder($stripe_invoice, $stripe_subscription, $payment_failed = false) {
+        /*
+        * Create Order
+        */
+        $previous_order = Order::find($stripe_subscription->metadata?->order_id ?? null);
+        $first_name = !empty(explode(' ', $stripe_invoice->customer_name)[0] ?? null) ? explode(' ', $stripe_invoice->customer_name)[0] : $previous_order->billing_first_name;
+        $last_name = !empty(explode(' ', $stripe_invoice->customer_name)[1] ?? null) ? explode(' ', $stripe_invoice->customer_name)[1] : $previous_order->billing_last_name;
+        $number_of_invoices = in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons) ? '-1' : '1';
+
+        $order = new Order();
+        $order->is_temp = false;
+        $order->type = in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons) ? 'subscription' : 'standard';
+        $order->user_id = !empty($stripe_subscription->metadata?->user_id ?? null) ? $stripe_subscription->metadata?->user_id : $previous_order->user_id;
+        $order->shop_id = !empty($stripe_subscription->metadata?->shop_id ?? null) ? $stripe_subscription->metadata?->shop_id : $previous_order->shop_id;
+        $order->email = $stripe_invoice->customer_email;
+        $order->billing_first_name = $first_name;
+        $order->billing_last_name = $last_name;
+        $order->billing_address = $stripe_invoice->customer_address->line1;
+        $order->billing_country = $stripe_invoice->customer_address->country;
+        $order->billing_state = !empty($stripe_invoice->customer_details->state) ? $stripe_invoice->customer_details->state : '';
+        $order->billing_city = $stripe_invoice->customer_address->city;
+        $order->billing_zip = $stripe_invoice->customer_address->postal_code;
+        $order->phone_numbers = !empty($stripe_invoice->customer_details->phone) ? $stripe_invoice->customer_details->phone : [];
+        $order->same_billing_shipping = false;
+        $order->shipping_first_name = $first_name;
+        $order->shipping_last_name = $last_name;
+        $order->shipping_address = !empty($previous_order?->shipping_address ?? null) ? $previous_order?->shipping_address : $stripe_invoice->customer_address->line1;
+        $order->shipping_country = !empty($previous_order?->shipping_country ?? null) ? $previous_order?->shipping_country : $stripe_invoice->customer_address->country;
+        $order->shipping_state = !empty($previous_order?->shipping_state ?? null) ? $previous_order?->shipping_state : $stripe_invoice->customer_address->state;
+        $order->shipping_city = !empty($previous_order?->shipping_city ?? null) ? $previous_order?->shipping_city : $stripe_invoice->customer_address->city;
+        $order->shipping_zip = !empty($previous_order?->shipping_zip ?? null) ? $previous_order?->shipping_zip : $stripe_invoice->customer_address->postal_code;
+        $order->number_of_invoices = $number_of_invoices;
+        $order->invoicing_period = $stripe_subscription->plan?->interval ?? '?';
+        $order->invoice_grace_period = 0;
+        $order->shipping_method = '';
+        $order->shipping_cost = 0;
+        $order->tax = 0; // TODO: SHould we add tax from stripe? :-?
+        // $order->shipping_status = 
+        $meta = [];
+        $meta[$this->mode_prefix .'stripe_payment_mode'] = in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons) ? 'subscription' : 'payment'; // IMPORTANT: when mode is `subscription`, stripe_payment_intent_id is NOT SENT, because payment intent is related to future INVOICE not one time session checkout!
+        $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription->id;
+        $meta[$this->mode_prefix .'stripe_latest_invoice_id'] = $stripe_subscription->latest_invoice;
+        $meta[$this->mode_prefix .'stripe_payment_intent_id'] = null;
+        $meta[$this->mode_prefix .'stripe_checkout_session_id'] = null;
+        $meta[$this->mode_prefix .'stripe_request_id'] = null;
+        $order->meta = $meta;
+
+        if($stripe_invoice->paid) {
+            $order->payment_status = PaymentStatusEnum::paid()->value;
+        } else if($payment_failed) {
+            $order->payment_status = PaymentStatusEnum::unpaid()->value;
+        } else {
+            $order->payment_status = PaymentStatusEnum::pending()->value;
+        }
+        // die(var_dump($order));
+        $order->save();
+
+
+        // Create order items
+        foreach ($stripe_subscription->items->data as $subscription_item) {
+            $model = CoreMeta::where([
+                ['key', $this->mode_prefix.'stripe_product_id'],
+                ['value', $subscription_item->price->product]
+            ])->first();
+
+            if(!empty($model)) {
+                $model = $model->subject;
+
+                $order_item = new OrderItem();
+                $order_item->order_id = $order->id;
+                $order_item->subject_id = $model->id;
+                $order_item->subject_type = $model::class;
+                $order_item->name = $model->name;
+                $order_item->excerpt = $model->excerpt;
+                // $order_item->variant = null;
+                $order_item->quantity = $subscription_item->quantity;
+                // $order_item->serial_numbers = $model::class;
+                $order_item->base_price = $subscription_item->price->unit_amount / 100;
+                $order_item->discount_amount = 0; // TODO: How to add discount if there's any??
+                $order_item->subtotal_price = $subscription_item->price->unit_amount / 100;
+                $order_item->total_price = $subscription_item->price->unit_amount / 100;
+                $order_item->tax = 0; // TODO: SHould we add Stripe tax rates here?
+                $order_item->save();
+            }
+        }
+
+        return $order->load('order_items');
+    }
+
     public function createInvoice($order, $stripe_invoice, $stripe_subscription, $payment_failed = false) {
         if($stripe_invoice->billing_reason === 'subscription_cycle') {
             $invoice = $order->invoices()->withoutGlobalScopes()->where([
@@ -787,12 +879,14 @@ class StripeService
             die();
         }
 
-        // if new invoice is already created at this moment, it means that invoice.paid already happened, so skip creation cuz invoice already exists and is paid
+        // If new invoice is already created at this moment, it means that invoice.paid already happened, so skip creation cuz invoice already exists and is paid
         if(empty($invoice)) {
             /*
-            * Create Invoice
+            * Create or Update Invoice (with same number)
             */
-            $invoice = new Invoice();
+            $invoice = Invoice::where('invoice_number', $stripe_invoice->number)->first(); // get invoice by number if it exists
+
+            $invoice = empty($invoice) ? new Invoice() : $invoice;
             $invoice->is_temp = false;
             $invoice->payment_method_type = (Payments::stripe())::class;
             $invoice->payment_method_id = Payments::stripe()->id;
@@ -874,6 +968,8 @@ class StripeService
         $invoice->meta = $meta;
 
         $invoice->save();
+
+        return $invoice;
     }
 
     // WEBHOOKS
@@ -1265,8 +1361,18 @@ class StripeService
             // IMPORTANT: Invoice `payment_status` MUST DEPEND ONLY ON Stripe invoice ->paid or not paid
             $order = Order::withoutGlobalScopes()->findOrFail($stripe_subscription->metadata->order_id);
 
+            // Add latest stripe invoice id to the Order meta (only if billing reasons are subscription create/cycle - because new order is not being created)
+            if($stripe_billing_reason === 'subscription_create' || $stripe_billing_reason === 'subscription_cycle') {
+                $order_meta = $order->meta;
+                $order_meta[$this->mode_prefix .'stripe_latest_invoice_id'] = $stripe_invoice->id;
+                $order->meta = $order_meta;
+                $order->save();
+            }
+            
+
             if($stripe_billing_reason === 'subscription_create') {
                 // This means that subscription is created for the first time
+
                 $invoice = $order->invoices()->withoutGlobalScopes()->first();
 
                 if (!empty($invoice)) {
@@ -1327,10 +1433,11 @@ class StripeService
 
                 DB::commit();
             } else if($stripe_billing_reason === 'subscription_update') {
-                // Subscription is updated (downgraded, upgraded etc.)
-                $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
+                // Subscription is updated (downgraded, upgraded etc.) - DON'T DO ANYTHING HERE!!!
+                // New order and invoice will be created in subscription.updated webhook
+                // $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
 
-                DB::commit();
+                // DB::commit();
             }
         } catch (\Throwable $e) {
             Log::error($e);
@@ -1347,7 +1454,6 @@ class StripeService
     // invoice.paid
     public function whInvoicePaid($event)
     {
-        
         $stripe_invoice = $event->data->object;
         $stripe_subscription_id = !empty($stripe_invoice->subscription ?? null) ? $stripe_invoice->subscription : -1;
         $stripe_request_id = $event->request->id;
@@ -1365,6 +1471,15 @@ class StripeService
 
         try {
             $order = Order::withoutGlobalScopes()->findOrFail($stripe_subscription->metadata->order_id);
+
+            // Add latest stripe invoice id to the Order meta (only if billing reasons are subscription create/cycle - because new order is not being created)
+            if($stripe_billing_reason === 'subscription_create' || $stripe_billing_reason === 'subscription_cycle') {
+                $order_meta = $order->meta;
+                $order_meta[$this->mode_prefix .'stripe_latest_invoice_id'] = $stripe_invoice->id;
+                $order->meta = $order_meta;
+                $order->save();
+            }
+
             $user_subscriptions = $order->user_subscriptions()->withoutGlobalScopes()->get();
 
             if($stripe_billing_reason === 'subscription_create') {
@@ -1403,15 +1518,8 @@ class StripeService
                     $invoice->save();
                 }
 
-            } else if($stripe_billing_reason === 'subscription_cycle') {
-                // This means that subscription is cycled
-                $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
+                // ***IMPORTANT: subscription `cycle` and `update` are moved to subscription.updated webhook
 
-            } else if($stripe_billing_reason === 'subscription_update') {
-                // Subscription is updated (downgraded, upgraded etc.)
-                $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
-            } else {
-                // No idea...
             }
 
             // We are sure that invoice is paid so we make user_subscription(s) active and paid too (even though they may already be active and paid as a result of subscription.updated webhook)!
@@ -1539,7 +1647,7 @@ class StripeService
                 // No idea...
             }
 
-            // We are sure that invoice is paid so we make user_subscription(s) active and paid too (even though they may already be active and paid as a result of subscription.updated webhook)!
+            // We are sure that invoice is NOT paid so we make user_subscription(s) inactive and unpaid too!
             if ($user_subscriptions->isNotEmpty()) {
                 foreach($user_subscriptions as $subscription) {
                     $subscription->status = UserSubscriptionStatusEnum::inactive()->value;
@@ -1618,12 +1726,12 @@ class StripeService
         $stripe_subscription = $event->data->object;
         $stripe_subscription_id = $stripe_subscription->id;
         $order_id = $stripe_subscription->metadata->order_id ?? -1;
-
+        
         try {
             $order = Order::withoutGlobalScopes()->findOrFail($order_id);
             $user_subscriptions = $order->user_subscriptions;
-            // $user_subscriptions = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->'.$this->mode_prefix.'stripe_subscription_id', $stripe_subscription_id)->first();
 
+            // $user_subscriptions = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->'.$this->mode_prefix.'stripe_subscription_id', $stripe_subscription_id)->first();
             if ($user_subscriptions->isNotEmpty()) {
                 foreach($user_subscriptions as $subscription) {
                     $subscription->start_date = $stripe_subscription->current_period_start;
@@ -1648,8 +1756,9 @@ class StripeService
                         $stripe_invoice = $this->stripe->invoices->retrieve(
                             $latest_invoice_id,
                             []
-                          );
-
+                        );
+                        $stripe_billing_reason = $stripe_invoice->billing_reason;
+                        
                         if($stripe_invoice->paid) {
                             // invoice is paid at this point in time; DON'T DO ANYTHING IF STRIPE INVOICE IS NOT PAID!
                             $subscription->status = UserSubscriptionStatusEnum::active()->value;
@@ -1659,34 +1768,106 @@ class StripeService
                         $data = $subscription->data;
                         $data[$this->mode_prefix .'stripe_latest_invoice_id'] = $latest_invoice_id;
                         $subscription->data = $data;
+                        
+                        // Determine if subscription is cycled or upgraded/downgraded
+                        if($stripe_billing_reason === 'subscription_cycle') {
+                            // This means that subscription is cycled - just create a new invoice
+                            $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
+            
+                        } else if($stripe_billing_reason === 'subscription_update' && !empty($previous_attributes?->plan?->id ?? null)) {
+                            // With condition `!empty($previous_attributes?->plan?->id ?? null)` we are preventing processing any subscription change which is NOT related to it's products/items changes, like metadata change and similar!
 
-                        // Check if subscription was upgraded/downgraded
-                        if(count($previous_attributes?->items?->data ?? []) > 0) {
+                            // Check if Order with latest_invoice_id already exists BUT ALSO CHECK IF previous plan price (if exists) is different than current plan price!
+                            // Important observation: Stripe sometimes issues the same invoice for certain subscription.changes, example is downgrade. Since there is some proration, invoice MAY stay the same,
+                            // but content of subscription is changed (different products included in subscription)
+                            // For this reaon, we cannot just depend on identifying Order only based on `latest_invoice_id`. We must include previous and new price(s) too, in order to know if subscription content really changed
+                            // *IMPORTANT* - Getting previous and new price MAY BE DIFFERENT based on multi-product subscriptions and single-product ones. Bu we'll see soon :)
+                            $existing_order = Order::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_latest_invoice_id', $stripe_subscription->latest_invoice)->first();
+                            $existing_invoice = Invoice::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_invoice_id', $stripe_subscription->latest_invoice)->first();
+                            
+                            // Code `should-procceed` ONLY if:
+                            // 1. Both Order and Invoice with `latest_invoice_id` cannot be found in our DB
+                            // OR 
+                            // 2. Previous attributes plan->id (actually previous subscription price ID) is different than current subscription price ID
+                            
                             if(get_tenant_setting('multiplan_purchase')) {
-                                // Upgrade/Downgrade when multiple subsriptions feature is enabled
+                                $should_proceed = false; // TODO: This must work according to multi-plan purchase
                             } else {
-                                // Get New Plan/Model based on `Stripe Product ID` in CoreMeta
-                                $stripe_new_plan = $stripe_subscription?->items?->data[0];
-                                $new_plan = CoreMeta::where([
-                                    ['key', $this->mode_prefix.'stripe_product_id'],
-                                    ['value', $stripe_new_plan->plan->product]
-                                ])->first();
-
-                                if(!empty($new_plan)) {
-                                    // If New Plan/Model is found through CoreMeta, get the new Plan/Model and update subscription's subject columns!
-                                    $new_plan = $new_plan->subject;
-                                    $subscription->subject_id = $new_plan->id;
-                                    $subscription->subject_type = $new_plan::class;
-                                } else {
-                                    Log::error('Could not update subscription relation because the new Plan was not found through `stripe_product_id` CoreMeta');
-                                }
-                                // $subscription->
+                                $should_proceed = (empty($existing_order) && empty($existing_invoice) || (($stripe_subscription?->plan?->id ?? 1) !== ($previous_attributes->plan->id ?? 1)));
                             }
-                        }
+                            
+                            if($should_proceed) {
+                                // Subscription is updated (downgraded, upgraded, interval changed etc.):
+                                // 1. Create a new Order 
+                                // 2. Create a new Invoice
+                                // 3. Change order_id of subscriptions on our end
+                                // 4. Change order_id in metadata of subscription on Stripe end
+
+                                DB::beginTransaction();
+
+                                try {
+                                    $new_order = $this->createOrder(stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription, payment_failed: $stripe_invoice->paid);
+
+                                    // Add Last Order ID to Stripe subscription metadata
+                                    $new_metadata = $stripe_subscription->metadata;
+                                    $new_metadata->order_id = $new_order->id;
+                                    
+                                    // IMPORTANT - This fires another subscripion.update!!! Prevent any change like this 
+                                    $this->stripe->subscriptions->update(
+                                        $stripe_subscription->id,
+                                        ['metadata' => $new_metadata->toArray()]
+                                    );
+
+                                    $new_invoice = $this->createInvoice(order: $new_order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription, payment_failed: $stripe_invoice->paid);
+
+                                    // Add latest Invoice ID on our end to Stripe subscription metadata
+                                    $new_metadata->latest_invoice_id = $new_invoice->id;
+
+                                    $this->stripe->subscriptions->update(
+                                        $stripe_subscription->id,
+                                        ['metadata' => $new_metadata->toArray()]
+                                    );
+
+                                    // Check if subscription was upgraded/downgraded
+                                    if(count($previous_attributes?->items?->data ?? []) > 0) {
+                                        if(get_tenant_setting('multiplan_purchase')) {
+                                            // Upgrade/Downgrade when multiple subsriptions feature is enabled
+                                        } else {
+                                            // Get New Plan/Model based on `Stripe Product ID` in CoreMeta
+                                            $stripe_new_plan = $stripe_subscription?->items?->data[0];
+                                            $new_plan = CoreMeta::where([
+                                                ['key', $this->mode_prefix.'stripe_product_id'],
+                                                ['value', $stripe_new_plan->plan->product]
+                                            ])->first();
+
+                                            if(!empty($new_plan)) {
+                                                // If New Plan/Model is found through CoreMeta, get the new Plan/Model and update subscription's subject columns AND order_id
+                                                $new_plan = $new_plan->subject;
+                                                $subscription->subject_id = $new_plan->id;
+                                                $subscription->subject_type = $new_plan::class;
+
+                                                if(isset($new_order)) {
+                                                    $subscription->order_id = $new_order->id;
+                                                }
+                                            } else {
+                                                Log::error('Could not update subscription relation because the new Plan was not found through `stripe_product_id` CoreMeta');
+                                            }
+                                        }
+                                    }
+
+                                    DB::commit();
+                                } catch(\Throwable $e) {
+                                    DB::rollback();
+                                    http_response_code(400);
+                                    die(print_r($e));
+                                }
+                            }
+                            
+                        } 
+
                     }
 
                     $subscription->save();
-
                 }
             }
 
@@ -1694,7 +1875,7 @@ class StripeService
             
         } catch (\Exception $e) {
             http_response_code(400);
-            die($e->getMessage());
+            die(print_r($e));
         }
 
         http_response_code(200);
