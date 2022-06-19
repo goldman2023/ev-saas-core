@@ -32,11 +32,11 @@ return new class extends Migration
     {
         Schema::table('invoices', function (Blueprint $table) {
             try {
+                $table->dropIndex(['real_invoice_number', 'real_invoice_prefix']);
                 $table->dropColumn('real_invoice_number');
                 $table->dropColumn('real_invoice_prefix');
                 $table->dropColumn('source');
                 $table->dropColumn('source_id');
-                $table->dropIndex(['real_invoice_number', 'real_invoice_prefix']);
             } catch(\Throwable $e) {
 
             }
