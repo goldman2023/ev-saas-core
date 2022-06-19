@@ -1194,9 +1194,6 @@ class StripeService
             $invoice->billing_city = $order->billing_city;
             $invoice->billing_zip = $order->billing_zip;
 
-            // Take invoice totals from $order itself
-
-
             // Take the info from stripe...
             $meta = $invoice->meta;
             $meta[$this->mode_prefix .'stripe_payment_mode'] = $session->mode ?? null;
