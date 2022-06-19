@@ -109,7 +109,6 @@ if (!function_exists('pix_pro_download_license_logic')) {
             $this->inform(translate('Error: Cannot download license .DAT file...'), translate('Serial number: ').$license->serial_number, 'fail');
         } catch(\Exception $e) {
             Log::error($e->getMessage());
-            dd($e);
         }
     }
 }
@@ -158,7 +157,6 @@ if (!function_exists('pix_pro_disconnect_license')) {
 // CREATE LICENSE
 if (!function_exists('pix_pro_create_license')) {
     function pix_pro_create_license($user_subscriptions, $stripe_invoice) {
-        $route_trial = pix_pro_endpoint().'/paid/add_license/'; //pix_pro_endpoint().'/trials/add_license/';
         $route_paid = pix_pro_endpoint().'/paid/add_license/';
 
         if ($user_subscriptions->isNotEmpty()) {
@@ -184,37 +182,38 @@ if (!function_exists('pix_pro_create_license')) {
                         $number_of_images = 150;
                     }
 
+                    $cloud_service_param = $subscription->getCoreMeta('includes_cloud') === true ? 1 : 0;
+                    $offline_service_param = $subscription->getCoreMeta('includes_offline') === true ? 1 : 0;
+                    $license_subscription_type = $subscription->plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+
                     $body = pix_pro_add_auth_params([
                         "UserEmail" => $pix_pro_user['email'],
                         "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
                         "Qty" => 1, // THIS IS NUMBER OF TRIAL LICENSES TO BE CREATED! - WE SHOULD ALWAYS PUT 1, since we loop it on our end!
                         "LicenseType" => 'full', // TODO: Can be `manual` too
-                        "LicenseCloudService" => $subscription->getCoreMeta('includes_cloud') === true ? 1 : 0,
-                        "LicenseOfflineService" => $subscription->getCoreMeta('includes_offline') === true ? 1 : 0,
+                        "LicenseCloudService" => $cloud_service_param,
+                        "LicenseOfflineService" => $offline_service_param,
                         "LicenseImageLimit" => $number_of_images,
                         "PackageTypes" => 'mining',
+                        "SubscriptionId" => $subscription->id,
+                        "LicenseSubscriptionType" => $license_subscription_type,
+                        "Status" => 'active',
+                        "Tax" => 21, // TODO: Make this respect Stripe tax!
                     ]);
 
-                    // if(!$is_trial) {
-                        // If license is not trial, append more params
-                        $body['SubscriptionId'] = $subscription->id;
-                        $body['LicenseSubscriptionType'] = $subscription->plan->name;
-                        $body['Status'] = 'active';
-                        $body['PurchaseDate'] = $subscription->start_date->format('Y-m-d H:i:s');
-                        $body['ExpirationDate'] = $subscription->end_date->format('Y-m-d H:i:s');
-                        $body['OrderCurrency'] = $stripe_subscription->items->data[0]->price->currency ?? 'eur'; // TODO: This is different when multiplan is enabled
-                        $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
-                        $body['Tax'] = 21; // TODO: Make this respect Stripe tax!
-                    // }
+                    $body['PurchaseDate'] = $subscription->start_date->format('Y-m-d H:i:s');
+                    $body['ExpirationDate'] = $subscription->end_date->format('Y-m-d H:i:s');
+                    $body['OrderCurrency'] = $stripe_subscription->items->data[0]->price->currency ?? 'eur'; // TODO: This is different when multiplan is enabled
+                    $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
 
-                    $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
+                    $response = Http::post($route_paid, $body);
                     // die(print_r($response->body()));
                     $response_json = $response->json();
 
                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                         // If status is not success for any reason, throw an error
                         http_response_code(400);
-                        Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
+                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
                     } else {
 
                         if(!empty($response_json['data'] ?? null)) {
@@ -228,7 +227,7 @@ if (!function_exists('pix_pro_create_license')) {
                                 $license->license_name = $pix_license['license_name'] ?? '';
                                 $license->serial_number = $pix_license['serial_number'] ?? '';
                                 $license->license_type = $pix_license['license_type'] ?? '';
-                                $license->data = $pix_license; // Will be populaetd when user activates the license
+                                $license->data = array_merge($license->data, $pix_license); // Will be populaetd when user activates the license
                                 $license->save();
 
                                 // Add a license <-> user_subscription relationship
@@ -242,7 +241,7 @@ if (!function_exists('pix_pro_create_license')) {
                                 DB::rollback();
                                 http_response_code(400);
                                 print_r($e);
-                                Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license on WeSaaS end and link it to user_subscription.', $e));
+                                Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license on WeSaaS end and link it to user_subscription.', $e));
 
                                 die();
                             }
@@ -251,7 +250,7 @@ if (!function_exists('pix_pro_create_license')) {
                     }
 
                 } else {
-                    Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, Could not get the user y email from pix-pro api', ''));
+                    Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, Could not get the user y email from pix-pro api', ''));
                 }
             }
         }
@@ -278,21 +277,25 @@ if (!function_exists('pix_pro_update_license')) {
                 $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
                 if(!empty($pix_pro_user['user_id'] ?? null)) {
-                    $number_of_images = $subscription->subject->getCoreMeta('number_of_images');
+                    $number_of_images = $subscription->subject->getCoreMeta('number_of_images'); // get default meta from Plan, not previous subscription!
                     
                     if(!empty($number_of_images) && (is_int($number_of_images) || ctype_digit($number_of_images))) {
-                        $number_of_images = $subscription->subject->getCoreMeta('number_of_images') ?? 150;
+                        $number_of_images = $subscription->subject->getCoreMeta('number_of_images') ?? 150; // get default meta from Plan, not previous subscription!
                     } else {
                         $number_of_images = 150;
                     }
+
+                    $cloud_service_param = $subscription->subject->getCoreMeta('includes_cloud') === true ? 1 : 0;
+                    $offline_service_param = $subscription->subject->getCoreMeta('includes_offline') === true ? 1 : 0;
+                    $license_subscription_type = $subscription->plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
 
                     $body = pix_pro_add_auth_params([
                         "UserEmail" => $pix_pro_user['email'],
                         "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
                         "SubscriptionId" => $subscription->id,
-                        "LicenseName" => $subscription->plan->name,
-                        "LicenseCloudService" => $subscription->subject->getCoreMeta('includes_cloud') === true ? 1 : 0,
-                        "LicenseOfflineService" => $subscription->subject->getCoreMeta('includes_offline') === true ? 1 : 0,
+                        "LicenseName" => $license_subscription_type, // This is actually `license_subscription_type` column in PixPro DB
+                        "LicenseCloudService" => $cloud_service_param,
+                        "LicenseOfflineService" => $offline_service_param,
                         "LicenseImageLimit" => $number_of_images,
                     ]);
 
@@ -305,7 +308,6 @@ if (!function_exists('pix_pro_update_license')) {
                         http_response_code(400);
                         Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in pix-pro API DB, check the response below.', $response_json));
                     } else {
-
                         if(!empty($response_json['license'] ?? null)) {
                             // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
                             $pix_license = $response_json['license'];
@@ -317,10 +319,10 @@ if (!function_exists('pix_pro_update_license')) {
                                 $license->license_name = $pix_license['license_name'] ?? '';
                                 // $license->serial_number = $pix_license['serial_number'] ?? '';
                                 $license->license_type = $pix_license['license_type'] ?? '';
-                                $license->data = $pix_license; // Will be populaetd when user activates the license
+                                $license->data = array_merge($license->data, $pix_license); // Keep in mind that expiration date is NOT YET CHANGED ON PixPro end, because this endpoint doesn't set it. We'll update each subscription expiration_date in following function: `$this->pix_pro_update_license_status($user_subscriptions);`
                                 $license->save();
 
-                                // Change subscription default attributes based on new plan
+                                // Change subscription default attributes based on a new selected Plan
                                 $subscription->saveCoreMeta('number_of_images', $number_of_images);
                                 $subscription->saveCoreMeta('includes_cloud', $subscription->subject->getCoreMeta('includes_cloud'));
                                 $subscription->saveCoreMeta('includes_offline', $subscription->subject->getCoreMeta('includes_offline'));
@@ -334,21 +336,168 @@ if (!function_exists('pix_pro_update_license')) {
 
                                 die();
                             }
-
                         }
                     }
                 } else {
                     Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in pix-pro API DB, Could not get the user by email from pix-pro api', ''));
                 }
             }
+
+            // Update subscription statuses AND expiration_date(s)
+            pix_pro_update_license_status($user_subscriptions);
         }
     }
 }
 
+// UPDATE SINGLE LICENSE
+if (!function_exists('pix_pro_update_single_license')) {
+    function pix_pro_update_single_license(&$license) {
+        $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
+        
+        $subscription = $license->user_subscription()->first();
+        
+        $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
+
+        if(!empty($pix_pro_user['user_id'] ?? null)) {
+            $number_of_images = $license->getData('license_image_limit');
+
+            if(!empty($number_of_images) && (is_int($number_of_images) || ctype_digit($number_of_images))) {
+                $number_of_images = $license->getData('license_image_limit');
+            } else {
+                $number_of_images = 150;
+            }
+
+            $cloud_service_param = $license->getData('cloud_service');
+            $offline_service_param = $license->getData('offline_service');
+            $license_subscription_type = $subscription->plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+
+            $body = pix_pro_add_auth_params([
+                "UserEmail" => $pix_pro_user['email'],
+                "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
+                "SubscriptionId" => $subscription->id,
+                "LicenseName" => $license_subscription_type, // This is actually `license_subscription_type` column in PixPro DB
+                "LicenseCloudService" => $cloud_service_param,
+                "LicenseOfflineService" => $offline_service_param,
+                "LicenseImageLimit" => $number_of_images,
+            ]);
+
+            $response = Http::post($route_paid, $body);
+
+            $response_json = $response->json();
+            
+            if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                // If status is not success for any reason, throw an error
+                http_response_code(400);
+                Log::error(pix_pro_error($route_paid, 'Function: pix_pro_update_single_license(). There was an error while trying to update a license(order) in pix-pro API DB, check the response below.', $response_json));
+            } else {
+                if(!empty($response_json['license'] ?? null)) {
+                    $pix_license = $response_json['license'];
+
+                    // WTF?
+                    
+                    $license = License::findOrFail($license->id);
+                    $license->data = array_merge($license->data, $pix_license);
+                    $license->saveQuietly();
+
+                    dd($license);
+                    $subscription->saveCoreMeta('number_of_images', $number_of_images);
+                    $subscription->saveCoreMeta('includes_cloud', $cloud_service_param);
+                    $subscription->saveCoreMeta('includes_offline', $offline_service_param);
+
+                    // DB::beginTransaction();
+                    
+                    // try {
+                        
+
+                    //     DB::commit();
+                    // } catch(\Throwable $e) { 
+                    //     DB::rollback();
+                    //     http_response_code(400);
+                    //     dd($e);
+                    //     Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a single license on WeSaaS end and link it to user_subscription.', $e));
+                    // }
+                    
+                }
+            }
+        } else {
+            Log::error(pix_pro_error($route_paid, 'Function: pix_pro_update_single_license(). There was an error while trying to save a single license(order) in Pixpro API DB. Could not get the user by email from Pixpro api', ''));
+        }
+    }
+}
+
+// UPDATE LICENSE STATUS
+if (!function_exists('pix_pro_update_license_status')) {
+    function pix_pro_update_license_status($user_subscriptions) {
+        $route_paid = pix_pro_endpoint().'/paid/update_license_status/';
+        
+        if ($user_subscriptions->isNotEmpty()) {
+            foreach($user_subscriptions as $subscription) {
+                $stripe_subscription_id = $subscription->data[StripeService::getStripeMode().'stripe_subscription_id'];
+
+                $stripe_subscription = StripeService::stripe()->subscriptions->retrieve(
+                    $stripe_subscription_id,
+                    []
+                  );
+
+                $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
+
+                $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
+                
+                if(!empty($pix_pro_user['user_id'] ?? null)) {
+                    $body = pix_pro_add_auth_params([
+                        "UserEmail" => $pix_pro_user['email'],
+                        "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
+                        "LicenseId" => $subscription->license->first()->data['id'] ?? null,
+                        "SubscriptionId" => $subscription->id,
+                        "ExpirationDate" => $subscription->end_date->format('Y-m-d H:i:s'),
+                        "NewStatus" => in_array($subscription->status, ['active', 'active_until_end', 'trial']) ? 'active' : 'cancelled',
+                    ]);
+                    $response = Http::post($route_paid, $body);
+                    $response_json = $response->json();
+                    
+                    if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                        // If status is not success for any reason, throw an error
+                        http_response_code(400);
+                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to update license status and expiration date in pix-pro API DB, check the response below.', $response_json));
+                    } else {
+
+                        if(!empty($response_json['data'] ?? null)) {
+                            // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
+                            $pix_license = $response_json['data'];
+
+                            DB::beginTransaction();
+
+                            try {
+                                $license = $subscription->license->first();
+                                $license->license_name = $pix_license['license_name'] ?? '';
+                                // $license->serial_number = $pix_license['serial_number'] ?? '';
+                                $license->license_type = $pix_license['license_type'] ?? '';
+                                $license->data = array_merge($license->data, $pix_license); // New ExpirationDate and NewStatus
+                                $license->save();
+
+                                DB::commit();
+                            } catch(\Throwable $e) {
+                                DB::rollback();
+                                http_response_code(400);
+                                print_r($e);
+                                Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license on WeSaaS (after status and expiration_date are updated on PixPro end)', $e));
+
+                                die();
+                            }
+                        }
+                    }
+                } else {
+                    Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in Pixpro API DB. Could not get the user by email from Pixpro api', ''));
+                }
+            }
+        }
+    }
+}
+
+
 // EXTEND LICENSE
 if (!function_exists('pix_pro_extend_license')) {
     function pix_pro_extend_license($user_subscriptions, $stripe_invoice) {
-        $route_trial = pix_pro_endpoint().'/paid/renew_licenses/';
         $route_paid = pix_pro_endpoint().'/paid/renew_licenses/';
 
         if ($user_subscriptions->isNotEmpty()) {
@@ -370,32 +519,29 @@ if (!function_exists('pix_pro_extend_license')) {
                         "UserEmail" => $pix_pro_user['email'],
                         "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
                         "LicenseImageLimit" => $subscription->getCoreMeta('number_of_images'),
+                        "SubscriptionId" => $subscription->id,
+                        "NewStatus" => 'active',
+                        "Tax" => 21, // TODO: Make this respect Stripe tax!
                     ]);
 
-//                     // if(!$is_trial) {
-//                         // If license is not trial, append more params
-                        $body['SubscriptionId'] = $subscription->id;
-                        $body['NewStatus'] = 'active';
-                        $body['PurchaseDate'] = date('Y-m-d H:i:s', $subscription->start_date);
-                        $body['ExpirationDate'] = date('Y-m-d H:i:s', $subscription->end_date);
-                        $body['OrderCurrency'] = $stripe_subscription->items->data[0]->price->currency ?? 'eur'; // TODO: This is different when multiplan is enabled
-                        $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
-                        $body['Tax'] = 21; // TODO: Make this respect Stripe tax!
-//                     // }
+                    $body['PurchaseDate'] = $subscription->start_date->format('Y-m-d H:i:s');
+                    $body['ExpirationDate'] = $subscription->end_date->format('Y-m-d H:i:s');
+                    $body['OrderCurrency'] = $stripe_subscription->items->data[0]->price->currency ?? 'eur'; // TODO: This is different when multiplan is enabled
+                    $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
 
-                    $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
+                    $response = Http::post($route_paid, $body);
 
                     $response_json = $response->json();
 
                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                         // If status is not success for any reason, throw an error
-                        Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to EXTEND a license(order) in pix-pro API DB. check the response below.', $response_json));
+                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to EXTEND a license(order) in pix-pro API DB. check the response below.', $response_json));
                     } else {
                         // If everything is ok...should we add anything else???
                     }
 
                 } else {
-                    Log::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to EXTEND a license(order) in pix-pro API DB. Could not get the user by email from pix-pro api', ''));
+                    Log::error(pix_pro_error($route_paid, 'There was an error while trying to EXTEND a license(order) in pix-pro API DB. Could not get the user by email from pix-pro api', ''));
                 }
             }
         }

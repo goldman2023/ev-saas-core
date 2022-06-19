@@ -90,12 +90,19 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return array_merge($columns, [
                     \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
                         ->excludeFromSelectable(),
+                    \Rappasoft\LaravelLivewireTables\Views\Column::make('Type', 'license_subscription_type')
+                        ->excludeFromSelectable(),
                 ]);
             }, 10, 1);
 
             // Download License Response
             add_filter('license.download', function ($license) {
                 return pix_pro_download_license_logic($license);
+            }, 20, 1);
+
+            // Set editable License data properties
+            add_filter('license.get.data.editable.keys', function () {
+                return ['license_image_limit','cloud_service', 'offline_service'];
             }, 20, 1);
 
             // Add custom core meta to Plans
@@ -110,6 +117,22 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // Add custom core meta to UserSubscription
             add_filter('user-subscription.meta.data-types', function($user_subscription_meta) {
                 return array_merge($user_subscription_meta, [
+                    'includes_cloud' => 'boolean',
+                    'includes_offline' => 'boolean',
+                    'number_of_images' => 'number',
+                ]);
+            }, 10, 1);
+
+            add_filter('user-subscription.meta.data-types', function($user_subscription_meta) {
+                return array_merge($user_subscription_meta, [
+                    'includes_cloud' => 'boolean',
+                    'includes_offline' => 'boolean',
+                    'number_of_images' => 'number',
+                ]);
+            }, 10, 1);
+
+            add_filter('dashboard.sidebar.menu', function($menu) {
+                return array_merge($menu, [
                     'includes_cloud' => 'boolean',
                     'includes_offline' => 'boolean',
                     'number_of_images' => 'number',
@@ -240,10 +263,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                         if(!empty($license) && method_exists($license, 'get_license')) {
                             $data = $license->get_license(); // gets the license from Pixpro DB
 
-                            if(($license->data['hardware_id'] ?? null) !== ($data['hardware_id'] ?? null)) {
-                                $license_data = $license->data;
-                                $license_data['hardware_id'] = $data['hardware_id'];
-                                $license->data = $license_data;
+                            if($license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
+                                $license->setData('hardware_id', $data['hardware_id']);
                                 $license->save();
                             }
                         }
@@ -251,7 +272,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             }, 20, 1);
             
-            
+            // There are changes to license on WeSaaS end, so we need to update 
+            add_action('license.saved', function(&$new_license, $old_license) {
+                pix_pro_update_single_license($new_license);
+            }, 20, 2);
 
             // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT
             // add_action('import.wordpress.blog-posts.end', function($data) {

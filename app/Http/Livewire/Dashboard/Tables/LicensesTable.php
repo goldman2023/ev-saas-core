@@ -98,16 +98,26 @@ class LicensesTable extends DataTableComponent
         return 'frontend.dashboard.plans.row-license';
     }
 
+    // Rest of code should be Pixpro specific!
+    // TODO: Create mechanism for extending any Livewire class (using Trait) - adding custom functions dynamically from the ThemeFunctions via hooks (add_filter)
     public function downloadLicense(License $license)
     {
         $response = apply_filters('license.download', $license);
 
-        return response()->streamDownload(function () use($response) { 
-            echo $response['file_contents'];
-        }, $response['file_name']);
+        if(!empty($response['file_name'] ?? null) && !empty($response['file_contents'] ?? null)) {
+            // Save file name & contents in data col
+            $license->setData('file_name', $response['file_name']);
+            $license->setData('file_contents', $response['file_contents']);
+            $license->save();
+            
+            return response()->streamDownload(function () use($response) { 
+                echo $response['file_contents'];
+            }, $response['file_name']);
+        }
+
+        $this->inform(translate('Error: Coudld not download latest .DAT file...'), translate('Please refresh and try again.'), 'fail');
     }
     
-    // TODO: Create mechanism for extending any Livewire class (using Trait) - adding custom functions dynamically from the ThemeFunctions via hooks (add_filter)
     public function disconnect(License $license) {
         do_action('license.disconnect', $license, $this->user, $this);
 

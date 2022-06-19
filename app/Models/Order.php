@@ -112,7 +112,11 @@ class Order extends WeBaseModel
 
             foreach ($sums_properties as $property) {
                 foreach ($order->order_items as $item) {
-                    $order->{$property} += $item->{$property} * $item->quantity;
+                    // if($item->subject->isSubscribable() && $order->invoicing_period === 'year') {
+                    //     $order->{$property} += $item->{$property} * $item->quantity;
+                    // } else {
+                        $order->{$property} += $item->{$property} * $item->quantity;
+                    // }
                 }
             }
         });

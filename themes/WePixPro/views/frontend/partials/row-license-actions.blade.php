@@ -27,7 +27,8 @@
 
 @if(auth()->user()?->isAdmin() ?? false)
     <li class="border-t border-gray-200">
-        <button type="button" wire:click.prevent="viewModal({{ $license->id }})'" class="w-full flex items-center px-3 py-3 pr-4 text-gray-900 text-14 hover:bg-danger hover:text-white">
+        <button type="button" class="w-full flex items-center px-3 py-3 pr-4 text-gray-900 text-14 hover:bg-danger hover:text-white"
+        @click="$dispatch('display-modal', {'id': 'pix-pro-edit-license', 'license_id': '{{ $license->id ?? '' }}'})">
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) 
             <span class="ml-2">{{ translate('Edit License') }}</span>
         </button>
