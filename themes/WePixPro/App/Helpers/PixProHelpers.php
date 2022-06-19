@@ -355,7 +355,7 @@ if (!function_exists('pix_pro_update_single_license')) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
         
         $subscription = $license->user_subscription()->first();
-        
+
         $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
         if(!empty($pix_pro_user['user_id'] ?? null)) {
@@ -384,7 +384,7 @@ if (!function_exists('pix_pro_update_single_license')) {
             $response = Http::post($route_paid, $body);
 
             $response_json = $response->json();
-            
+
             if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                 // If status is not success for any reason, throw an error
                 http_response_code(400);
@@ -393,30 +393,12 @@ if (!function_exists('pix_pro_update_single_license')) {
                 if(!empty($response_json['license'] ?? null)) {
                     $pix_license = $response_json['license'];
 
-                    // WTF?
-                    
-                    $license = License::findOrFail($license->id);
-                    $license->data = array_merge($license->data, $pix_license);
-                    $license->saveQuietly();
+                    $license->setData('license_subscription_type', $pix_license['license_subscription_type'] ?? null, null);
+                    $license->save();
 
-                    dd($license);
                     $subscription->saveCoreMeta('number_of_images', $number_of_images);
                     $subscription->saveCoreMeta('includes_cloud', $cloud_service_param);
                     $subscription->saveCoreMeta('includes_offline', $offline_service_param);
-
-                    // DB::beginTransaction();
-                    
-                    // try {
-                        
-
-                    //     DB::commit();
-                    // } catch(\Throwable $e) { 
-                    //     DB::rollback();
-                    //     http_response_code(400);
-                    //     dd($e);
-                    //     Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a single license on WeSaaS end and link it to user_subscription.', $e));
-                    // }
-                    
                 }
             }
         } else {
