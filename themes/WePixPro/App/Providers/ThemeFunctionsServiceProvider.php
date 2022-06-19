@@ -90,6 +90,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return array_merge($columns, [
                     \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
                         ->excludeFromSelectable(),
+                    \Rappasoft\LaravelLivewireTables\Views\Column::make('Type', 'license_subscription_type')
+                        ->excludeFromSelectable(),
                 ]);
             }, 10, 1);
 
@@ -110,6 +112,22 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // Add custom core meta to UserSubscription
             add_filter('user-subscription.meta.data-types', function($user_subscription_meta) {
                 return array_merge($user_subscription_meta, [
+                    'includes_cloud' => 'boolean',
+                    'includes_offline' => 'boolean',
+                    'number_of_images' => 'number',
+                ]);
+            }, 10, 1);
+
+            add_filter('user-subscription.meta.data-types', function($user_subscription_meta) {
+                return array_merge($user_subscription_meta, [
+                    'includes_cloud' => 'boolean',
+                    'includes_offline' => 'boolean',
+                    'number_of_images' => 'number',
+                ]);
+            }, 10, 1);
+
+            add_filter('dashboard.sidebar.menu', function($menu) {
+                return array_merge($menu, [
                     'includes_cloud' => 'boolean',
                     'includes_offline' => 'boolean',
                     'number_of_images' => 'number',
