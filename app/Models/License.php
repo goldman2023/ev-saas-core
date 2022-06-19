@@ -64,6 +64,15 @@ class License extends WeBaseModel
         $this->data = $data;
     }
 
+    public function mergeData($new_data = []) {
+        $old_data = $this->data;
+
+        // if(is_array()) {
+
+        // }
+        // $this->data = 
+    }
+
 
     public function getEditableData() {
         $keys = apply_filters('license.get.data.editable.keys');

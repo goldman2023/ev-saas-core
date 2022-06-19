@@ -58,20 +58,21 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    <strong class="text-14">{{ \FX::formatPrice($row->order->total_price) }}</strong>
+    <strong class="text-14">{{ \FX::formatPrice($row->order->total_price) }}</strong><span class="text-14">{{ '/'.$row->order->invoicing_period }}</span>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
+{{-- <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
     @if(!empty($row->start_date))
         <span class="text-14">{{ $row->start_date->format('d. M Y, H:i') }}</span>
     @else
         -
     @endif
-</x-livewire-tables::table.cell>
+</x-livewire-tables::table.cell> --}}
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
     @if(!empty($row->end_date))
-        <span class="text-14">{{ $row->end_date->format('d. M Y, H:i') }}</span>
+        <span class="text-14">{{ $row->end_date->diffForHumans() }}</span>
+        {{-- <span class="text-14">{{ $row->end_date->format('d. M Y, H:i') }}</span> --}}
     @else
         -
     @endif
