@@ -91,8 +91,7 @@ class LicenseForm extends Component
             $license->save();
             
             do_action('license.saved', $license, $old_license);
-
-            dd(License::findOrFail($this->license['id']));
+            
             $this->license = License::findOrFail($this->license['id'])->toArray();
             $this->license_data = $license->getEditableData();
             

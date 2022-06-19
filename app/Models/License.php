@@ -55,12 +55,12 @@ class License extends WeBaseModel
     /*
      * Set any value from data column using a desired key (accepts dot notaion)
      */
-    public function setData($key, $value) {
+    public function setData($key, $value = null, $default = null) {
         $data = $this->data;
         if(empty($data)) {
             $data = [];
         }
-        Arr::set($data, $key, $value);
+        Arr::set($data, $key, empty($value) ? $default : $value);
         $this->data = $data;
     }
 
