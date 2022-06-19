@@ -54,7 +54,7 @@ if (!function_exists('pix_pro_activate_license')) {
         if(!empty($response_json['status'] ?? null)) {
             // If status is not success for any reason, throw an error
             if($response_json['status'] !== 'success') {
-                Log::error(pix_pro_error($route, 'There was an error while trying to activate your license.', $response_json));
+                Log::error(pix_pro_error($route, 'There was an error while trying to activate desired license.', $response_json));
 
                 if(!empty($response_json['error_id'] ?? null)) {
                     // deactivate previously set hardware_id
@@ -114,7 +114,7 @@ if (!function_exists('pix_pro_download_license_logic')) {
 }
 
 if (!function_exists('pix_pro_disconnect_license')) {
-    function pix_pro_disconnect_license($license, $user, $form) {
+    function pix_pro_disconnect_license($license, $user, $form = null) {
         try {
             $route = pix_pro_endpoint().'/licenses/deactivate_license_hw_id/';
 
@@ -135,20 +135,23 @@ if (!function_exists('pix_pro_disconnect_license')) {
                     return null;
                 } else {
                     // Disconnect license on our end
-                    $data = $license->data;
-                    $data['hardware_id'] = null;
-                    $license->data = $data;
+                    $license->setData('hardware_id', null);
                     $license->save();
 
-                    $form->inform(translate('You successfully disconnected your license!'), translate('Serial number: ').$license->serial_number, 'success');
+                    if(!empty($form)) {
+                        $form->inform(translate('You successfully disconnected your license!'), translate('Serial number: ').$license->serial_number, 'success');
+                    }
+
                     return $response_json;
                 }
             }
 
-            $form->inform(translate('Error: Cannot disconnect license from hardware...'), translate('Serial number: ').$license->serial_number, 'fail');
+            if(!empty($form)) {
+                $form->inform(translate('Error: Cannot disconnect license from hardware...'), translate('Serial number: ').$license->serial_number, 'fail');
+            }
         } catch(\Exception $e) {
             Log::error($e->getMessage());
-            dd($e);
+            // dd($e);
         }
     }
 }
@@ -351,11 +354,11 @@ if (!function_exists('pix_pro_update_license')) {
 
 // UPDATE SINGLE LICENSE
 if (!function_exists('pix_pro_update_single_license')) {
-    function pix_pro_update_single_license(&$license) {
+    function pix_pro_update_single_license(&$license, $old_license) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
         
         $subscription = $license->user_subscription()->first();
-        
+
         $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
         if(!empty($pix_pro_user['user_id'] ?? null)) {
@@ -384,7 +387,7 @@ if (!function_exists('pix_pro_update_single_license')) {
             $response = Http::post($route_paid, $body);
 
             $response_json = $response->json();
-            
+
             if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                 // If status is not success for any reason, throw an error
                 http_response_code(400);
@@ -393,29 +396,36 @@ if (!function_exists('pix_pro_update_single_license')) {
                 if(!empty($response_json['license'] ?? null)) {
                     $pix_license = $response_json['license'];
 
-                    // WTF?
-                    
-                    $license = License::findOrFail($license->id);
-                    $license->data = array_merge($license->data, $pix_license);
-                    $license->saveQuietly();
+                    $license->setData('license_subscription_type', $pix_license['license_subscription_type'] ?? null, null);
+                    $license->save();
 
-                    dd($license);
                     $subscription->saveCoreMeta('number_of_images', $number_of_images);
                     $subscription->saveCoreMeta('includes_cloud', $cloud_service_param);
                     $subscription->saveCoreMeta('includes_offline', $offline_service_param);
 
-                    // DB::beginTransaction();
-                    
-                    // try {
-                        
+                    // If hardware_id is changed on our end, change it on pixpro end too (by activating license)
+                    // 1. Hardware ID was not present in license data -> activate license
+                    // 2. Hardware ID was present in license data -> disconnect and then activate with new hardware_id
 
-                    //     DB::commit();
-                    // } catch(\Throwable $e) { 
-                    //     DB::rollback();
-                    //     http_response_code(400);
-                    //     dd($e);
-                    //     Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a single license on WeSaaS end and link it to user_subscription.', $e));
-                    // }
+                    if(!empty($license->getData('hardware_id'))) {
+                        // There was a hardware_id before, and new hardware_id is different than before -> deactive license first
+                        if(!empty($pix_license['hardware_id'] ?? null) && $license->getData('hardware_id') != $pix_license['hardware_id']) {
+                            pix_pro_disconnect_license($old_license, $subscription->user);
+                        }
+
+                        // Just activate license now
+                        $activation_response = pix_pro_activate_license($subscription->user, $license->serial_number, $license->getData('hardware_id'));
+                            
+                        $new_license_file = $activation_response['license_file'] ?? null;
+
+                        if(!empty($new_license_file)) {
+                            if(!empty($new_license_file['file_name'] ?? null) && !empty($new_license_file['file_contents'] ?? null)) {
+                                $license->setData('file_name', $new_license_file['file_name']);
+                                $license->setData('file_contents', $new_license_file['file_contents']);
+                                $license->save();
+                            }
+                        }
+                    }
                     
                 }
             }
