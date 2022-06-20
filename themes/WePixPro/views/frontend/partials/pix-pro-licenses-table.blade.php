@@ -10,7 +10,7 @@
      @endphp
     <livewire:dashboard.tables.licenses-table :user="$data" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
 
-    
+
 </div>
 
 @push('modal')
@@ -21,6 +21,12 @@
     @if(auth()->user()?->isAdmin() ?? false)
         <x-system.form-modal id="pix-pro-edit-license" title="Online License Activation" class="!max-w-3xl">
             <livewire:dashboard.forms.licenses.license-form />
+        </x-system.form-modal>
+    @endif
+
+    @if(auth()->user()?->isAdmin() ?? false)
+        <x-system.form-modal id="pix-pro-license-history" title="License History" class="!max-w-3xl">
+            <livewire:dashboard.forms.licenses.license-history />
         </x-system.form-modal>
     @endif
 @endpush
