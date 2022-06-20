@@ -135,7 +135,7 @@
             </div>
 
             <div class="col-span-1">
-                @livewire('dashboard.elements.activity-log')
+                @livewire('dashboard.elements.activity-log', ['causer' => auth()->user()])
 
             </div>
         </div>

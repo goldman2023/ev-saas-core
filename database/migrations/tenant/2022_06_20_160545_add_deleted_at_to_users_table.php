@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('deleted_at')->after('updated_at');
+            $table->timestamp('deleted_at')->nullable()->after('updated_at');
         });
     }
 

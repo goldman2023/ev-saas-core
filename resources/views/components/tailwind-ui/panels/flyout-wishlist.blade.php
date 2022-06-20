@@ -35,7 +35,7 @@
     </div>
 
     <div class="flyout-wishlist__bottom-cta  pt-3 mt-2 pb-0 bottom-0  bg-white border-t">
-        <a href="{{ route('my.purchases.all') }}" class="block px-3 py-2 rounded w-full bg-primary text-white text-center">
+        <a href="{{ route('my.wishlist.index') }}" class="block px-3 py-2 rounded w-full bg-primary text-white text-center">
             {{ translate('My wishlist') }}
         </a>
     </div>

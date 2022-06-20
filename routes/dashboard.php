@@ -116,7 +116,8 @@ Route::middleware([
         Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
 
         /* My Purchases/Wishlist/Viewed Items */
-        Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
+        Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.index');
+        Route::get('/my/wishlist/all', [EVOrderController::class, 'my_purchases'])->name('my.wishlist.index');
         Route::get('/my/orders/all', [EVOrderController::class, 'my_orders'])->name('my.orders.all');
 
         /* My Downloads (all) */
