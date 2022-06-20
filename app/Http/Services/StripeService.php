@@ -543,6 +543,7 @@ class StripeService
                 'invoice_id' => $is_preview ? 'preview' : $invoice->id,
                 'user_id' => $is_preview ? 'preview' : $order->user_id,
                 'shop_id' => $is_preview ? 'preview' : $order->shop_id,
+                'session_id' => Session::getId(),
             ],
             'success_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'cancel_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
@@ -1109,6 +1110,7 @@ class StripeService
                         'name' => explode(' ', $session->customer_details->name)[0] ?? $session->customer_details->name,
                         'surname' => explode(' ', $session->customer_details->name)[1] ?? ' ',
                         'phone' => $session->customer_details->phone ?? '',
+                        'session_id' => $session->metadata->session_id ?? '' // ghost users will be redirected to proper order-received page based on this!
                     ]
                 );
 

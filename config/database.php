@@ -93,6 +93,15 @@ return [
             'prefix' => '',
         ],
 
+        'redis-sessions' => [
+            'driver' => 'redis',
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 4,
+            'username' => '',
+            'password' => env('REDIS_PASSWORD', null),
+            'prefix' => ':ses',
+        ],
     ],
 
     /*
@@ -117,41 +126,55 @@ return [
     | provides a richer set of commands than a typical key-value systems
     | such as APC or Memcached. Laravel makes it easy to dig right in.
     |
+    | Redis DBs can be anything from 1 to 15, except 0 (or what is set in default)
+    | 1. Default - 0
+    | 2. Cache - 1
+    | 3. Queue - 2
+    | 4. Visits - 3
+    | 5. Sessions - 4
     */
 
     'redis' => [
 
         'client' => 'predis',
 
-        'laravel-visits' => [
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', 6379),
-            'database' => 3, // anything from 1 to 15, except 0 (or what is set in default)
-        ],
         'default' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
-            'database' => env('REDIS_DB', 0),
-        ],
-
-        'queue' => [
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', 6379),
-            'database' => env('REDIS_DB', 0),
-            'prefix' => 'q:'
+            'database' => 0,
         ],
 
         'cache' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
-            'database' => env('REDIS_CACHE_DB', 1),
+            'database' => 1,
         ],
 
-        
+        'queue' => [
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 2,
+            'prefix' => 'q:'
+        ],
+
+        'laravel-visits' => [
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 3,
+            'prefix' => 'visit:'
+        ],
+
+        'sessions' => [
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 4, // anything from 1 to 15, except 0 (or what is set in default)
+            'prefix' => 'ses:'
+        ],
 
     ],
 

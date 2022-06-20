@@ -21,12 +21,14 @@ use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
-use DB;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Nova\Auth\Impersonatable;
+use DB;
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
 {
     use Notifiable, HasApiTokens;
+    use SoftDeletes;
     use HasRoles;
     use HasApiTokens;
     use Notifiable;

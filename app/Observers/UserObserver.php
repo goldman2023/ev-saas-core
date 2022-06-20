@@ -67,7 +67,7 @@ class UserObserver
                 Log::error($e->getMessage());
             }
         } else if($user->is_temp) {
-            // If user is ghost user, send a notification to finalize User registration!
+            // If user is ghost user, send a notification to finalize User registration and add a sessionID of guest user to this ghost user!
             $user->verification_code = sha1($user->id.'_'.$user->email);
             $user->save();
 
