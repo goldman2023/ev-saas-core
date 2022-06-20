@@ -13,6 +13,7 @@ use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -55,7 +56,7 @@ class Order extends Resource
             Select::make(__('Payment Status'), 'payment_status')->options(PaymentStatusEnum::values()),
             Select::make(__('Shipping Status'), 'shiping_status')->options(ShippingStatusEnum::values()),
             Select::make(__('Type'), 'type')->options(OrderTypeEnum::values())->sortable(),
-            Currency::make(__('Order Value'), 'total_price')->sortable(),
+            Number::make(__('Order Value'), 'total_price')->sortable(),
             Text::make(__('Email'), 'email')->sortable(),
             DateTime::make('Last update', 'created_at')->sortable()
         ];

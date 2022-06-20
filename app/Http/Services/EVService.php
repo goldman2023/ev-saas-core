@@ -82,7 +82,8 @@ class EVService
     protected function getDashboardMenuTemplate(): array
     {
         // In order to show/hide certain items based on user type and permissions, you need to define user_types and permissions for each item
-        return [
+        return
+        apply_filters('dashboard.sidebar_menu', [
             [
                 'label' => translate('General'),
                 'items' => [
@@ -317,15 +318,6 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => [],
                     ],
-
-                    [
-                        'label' => translate('Downloads'),
-                        'icon' => 'heroicon-o-download',
-                        'route' => '/page/downloads',
-                        'is_active' => areActiveRoutes(['my.downloads.all']),
-                        'user_types' => User::$user_types,
-                        'permissions' => [],
-                    ],
                     [
                         'label' => translate('My Subscriptions'),
                         'icon' => 'heroicon-o-document',
@@ -505,7 +497,8 @@ class EVService
                     ],
                 ],
             ],
-        ];
+        ]
+    );
     }
 
     public function getMappedCategories()

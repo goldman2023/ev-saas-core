@@ -42,6 +42,9 @@ use Laravel\Nova\NovaApplicationServiceProvider;
 use Outl1ne\MenuBuilder\MenuBuilder;
 use Outl1ne\MenuBuilder\Models\Menu as ModelsMenu;
 use Outl1ne\MenuBuilder\Models\MenuItem as ModelsMenuItem;
+use Itsmejoshua\Novaspatiepermissions\Novaspatiepermissions;
+
+
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -67,6 +70,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         });
 
         Nova::userMenu(function (Request $request, Menu $menu) {
+            return $menu;
             return $menu
                 ->append(MenuItem::externalLink('API Docs', 'https://docs.we-saas.com'))
                 ->prepend(MenuItem::link('My Profile', '/resources/users/'.$request->user()->getKey()));
@@ -89,9 +93,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(Plan::class),
                     MenuItem::resource(Product::class),
                     MenuItem::resource(License::class),
-
-                    MenuItem::externalLink('Stripe Payments', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
-
                 ])->icon('credit-card')->collapsable(),
 
                 MenuSection::make('Content', [
@@ -119,13 +120,20 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
                 ])->icon('document-text')->collapsable(),
 
+                MenuSection::make('Integrations', [
+                    MenuItem::externalLink('Stripe Dashboard', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
+                    MenuItem::externalLink('Mailerlite & Newsletters', 'https://dashboard.mailerlite.com/subscribers?status=active'),
+                    MenuItem::externalLink('SMTP and transactional emails', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
+
+                ]),
+
                 MenuSection::make('Advanced', [
 
+                    MenuItem::link('Roles', '/resources/roles/'),
+                    MenuItem::link('Permissions', '/resources/permissions/'),
                     MenuItem::resource(WooImport::class),
                     MenuItem::resource(WeWorkflow::class),
-                    MenuItem::externalLink('SMTP and transactional emails', 'https://dashboard.stripe.com/payments?status%5B%5D=successful'),
                     MenuItem::resource(Translation::class),
-
                     MenuItem::make('Logs')->path('/logs'),
 
 
@@ -208,6 +216,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             return [
                 MenuBuilder::make(),
                 \Laravel\Nova\LogViewer\LogViewer::make(),
+                Novaspatiepermissions::make(),
+
                 // new \Bolechen\NovaActivitylog\NovaActivitylog(),
             ];
         } else {
