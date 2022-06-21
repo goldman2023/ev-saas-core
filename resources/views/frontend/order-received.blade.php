@@ -9,12 +9,12 @@
 
 @section('meta_keywords'){{ translate('order, thank you page, checkout, cart, purchase, ecommerce') }}@stop
 
-@section('meta')
+@push('head_scripts')
   @if($is_bookable_product)
   <link href="https://calendly.com/assets/external/widget.css" rel="stylesheet">
   <script src="https://calendly.com/assets/external/widget.js" type="text/javascript"></script>
   @endif
-@endsection
+@endpush
 
 @section('content')
 

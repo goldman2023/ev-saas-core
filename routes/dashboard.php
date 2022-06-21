@@ -131,7 +131,8 @@ Route::middleware([
         Route::get('/user/{id}/details', [EVAccountController::class, 'user_details'])->name('user.details');
 
         /* CRM */
-        Route::get('/crm/customers', [CRMController::class, 'customers_index'])->name('crm.all_customers');
+        Route::get('/crm/customers', [CRMController::class, 'customers_index'])->name('crm.all_customers')->middleware('admin'); // TODO: THink about handling permissions a bit differently
+
 
 
         /* Settings pages*/

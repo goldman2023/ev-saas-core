@@ -19,7 +19,9 @@
     <div class="w-full grid grid-cols-12 gap-8">
         <div class="col-span-12 md:col-span-8">
             @if($ownerships_count_all > 0)
-                
+                @livewire('dashboard.my-purchases-list', [
+                    'per_page' => 10
+                ])
             @else
                 <x-dashboard.empty-states.no-items-in-collection 
                     icon="heroicon-o-shopping-bag" 
