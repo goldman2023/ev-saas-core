@@ -84,7 +84,7 @@ class UserObserver
         }
 
         // Notify Admin about user registration
-        send_admin_notification(translate('New user Registered on').' '.get_tenant_setting('site_name'), translate('New user with following email ('.$user->email.'). registered.'));
+        send_admin_notification(translate('New user Registered on').' '.get_tenant_setting('site_name'), translate('New user with following email registered:').' '.$user->email);
     }
 
     /**
