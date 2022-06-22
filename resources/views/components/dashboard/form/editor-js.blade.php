@@ -1,4 +1,4 @@
-<div class="w-full" x-data="{
+<div class="w-full border border-gray-200 pt-5" x-data="{
     id: '{{ $id }}',
     editor: null,
     setEditorContent() {
