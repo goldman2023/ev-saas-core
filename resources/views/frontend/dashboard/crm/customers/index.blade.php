@@ -7,10 +7,13 @@
     <section>
         <x-dashboard.section-headers.section-header title="{{ translate('Customers') }}" text="{{ translate('Browse all the customers of your shop.') }}">
             <x-slot name="content">
-                
+
             </x-slot>
         </x-dashboard.section-headers.section-header>
+<div class="mb-6">
+    <x-dashboard.widgets.business.dynamic-k-p-i></x-dashboard.widgets.business.dynamic-k-p-i>
 
+</div>
         <div class="w-full">
             <livewire:dashboard.tables.users-table for="customer"></livewire:dashboard.tables.users-table>
         </div>

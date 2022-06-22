@@ -58,4 +58,6 @@ class ActivityLog extends Component
 
         return $query->take($this->per_page);
     }
+
+
 }
