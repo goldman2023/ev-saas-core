@@ -628,10 +628,9 @@ class StripeService
             // Create Stripe customer if it doesn't exist
             $stripe_customer = $this->createStripeCustomer();
             $stripe_args['customer'] = $stripe_customer->id;
-
             $billing_session = $this->stripe->billingPortal->sessions->create([
                 'customer' => $stripe_customer->id,
-                'return_url' => Route::getCurrentRoute()->url,
+                'return_url' => url()->previous(),
             ]);
 
             return $billing_session['url'] ?? null;
