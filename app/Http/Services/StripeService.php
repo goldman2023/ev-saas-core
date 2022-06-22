@@ -1233,17 +1233,7 @@ class StripeService
                  * 3. $session->payment_status === 'paid'
                  **/
                 if($session->status === 'complete' && $session->payment_status === 'paid') {
-                    Ownership::updateOrCreate(
-                        [
-                            'subject_id' => $model->id,
-                            'subject_type' => $model::class,
-                            'owner_id' => $initiator->id,
-                            'owner_type' => $initiator::class
-                        ],
-                        [
-                            'updated_at' => date('Y-m-d H:i:s', time())
-                        ]
-                    );
+                    //TODO: Moved ownership creation logic to OrdersObserver create/update
                 }
             } else {
                 $invoice->meta = $meta;

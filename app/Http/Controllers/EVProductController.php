@@ -209,13 +209,18 @@ class EVProductController extends Controller
             return abort(404);
         }
 
-        $data = [
-            'product' => $product,
-            'course_items' => $product->course_items->toTree()->filter(fn($item) => $item->parent_id === null),
-            'course_item' => $course_item
-        ];
+        // Check if Course item is free or product owned by user
+        if($course_item->free || (auth()->user()?->bought($product) ?? false) || (auth()->user()->manages($product) ?? false)) {
+            $data = [
+                'product' => $product,
+                'course_items' => $product->course_items->toTree()->filter(fn($item) => $item->parent_id === null),
+                'course_item' => $course_item
+            ];
+    
+            return view('frontend.product.single.product-course-item-single', $data);
+        }
 
-        return view('frontend.product.single.product-course-item-single', $data);
+        return redirect()->route(Product::getRouteName(), $product_slug);
     }
 
     public function show_unlockable_content(Request $request, $slug)

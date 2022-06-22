@@ -24,6 +24,8 @@
                 <div class="w-full mb-3 flex">
                     @if($item->subject::class === \App\Models\Product::class && $item->subject->isEvent())
                         <span class="badge-success">{{ translate('Event') }}</span>
+                    @elseif($item->subject::class === \App\Models\Product::class && $item->subject->isCourse())
+                        <span class="badge-dark">{{ translate('Course') }}</span>
                     @elseif($item->subject::class === \App\Models\BlogPost::class && $item->subject->isPortfolio())
                         <span class="badge-warning">{{ translate('Portfolio') }}</span>
                     @else

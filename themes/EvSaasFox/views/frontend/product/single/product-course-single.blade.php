@@ -153,13 +153,13 @@
 
                     <span x-data="{}"
                         class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold"
-                        :class="{ 'flex': base_price !== total_price, 'hidden': base_price === total_price }">
+                        :class="{ 'flex': base_price !== total_price, '!hidden': base_price === total_price }">
                         @svg('heroicon-s-tag', ['class' => 'w-4 h-4 mr-1'])
                         <span x-text="'{{ translate('%x%%') }}'.replace('%x%', (100-(100*total_price/base_price)).toFixed(0) )"></span>
                     </span>
                 </div>
                 
-                <div class="w-full mb-4">
+                <div class="w-full">
                     @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
                         <x-system.buy-now-button :model="$product" class="" label="{{ translate('Buy now') }}"
                             label-not-in-stock="{{ translate('Not in stock') }}">
@@ -173,18 +173,18 @@
 
                 {{-- Course Includes --}}
                 @if(!empty($product->getCoreMeta('course_includes')))
-                <div class="w-full">
-                    <h4 class="text-16 font-bold mb-2">{{ translate('This course includes') }}:</h4>
+                    <div class="w-full mt-4">
+                        <h4 class="text-16 font-bold mb-2">{{ translate('This course includes') }}:</h4>
 
-                    <ul class="w-full flex flex-col list-disc pl-5 space-y-1">
-                        @foreach($product->getCoreMeta('course_includes') as $inc)
-                            <li class="text-14 text-typ-1">
-                                <span class="">{{ $inc }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+                        <ul class="w-full flex flex-col list-disc pl-5 space-y-1">
+                            @foreach($product->getCoreMeta('course_includes') as $inc)
+                                <li class="text-14 text-typ-1">
+                                    <span class="">{{ $inc }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
 
             {{-- Chapters --}}
@@ -197,7 +197,7 @@
                     <ul class="w-full flex-flex-col space-y-3">
                         @if($course_items->isNotEmpty())
                             @foreach($course_items as $course_item)
-                                @php course_item_template($course_item, $product); @endphp
+                                @include('frontend.product.single.partials.course-item-list-template', ['product' => $product, 'course_item' => $course_item])
                             @endforeach
                         @endif
                     </ul>
@@ -205,45 +205,20 @@
             </div>
         </div>
     </div>
-@endsection
 
-<?php
-    function course_item_template($course_item, $product)  {
-?>
-    <li class="w-full flex flex-col">
-        <div class="flex items-center justify-between">
-            {{-- TODO: Link to chapter if it's free, link to chapter if it's bought, display gated content modal or redirect to checkout link in order to buy course --}}
-            @if($course_item->children?->isNotEmpty() ?? null)
-                <div class="inline-flex items-center text-14">
-                    {{ $course_item->name }}
-                </div>
-            @else
-                <a href="{{ route(\App\Models\CourseItem::getRouteName(), [
-                    'product_slug' => $product->slug, 
-                    'slug' => $course_item->slug
-                ]) }}" class="inline-flex items-center text-14">
-                    @svg('heroicon-s-play', ['class' => 'w-4 h-4 mr-2'])
+    <x-system.form-modal id="gated-content-cta-modal" title="{{ translate('Want to access the full course?') }}" class="sm:max-w-2xl">
+        <div class="w-full flex flex-col">
+            {{-- <h3 class="w-full text-22 mb-2"></h3> --}}
+            <p class="text-16 mb-4">{{ translate('Join now and buy this course to have an access to content') }}</p>
 
-                    {{ $course_item->name }}
-
-                    @if($course_item->free)
-                        <span class="badge-success ml-2">{{ translate('Free') }}</span>
-                    @endif
+            <div class="w-full flex gap-4">
+                <a href="{{ route('user.login') }}" class="btn-primary">
+                    {{ translate('Log in') }}
                 </a>
-            @endif
-            
+                <a href="{{ route('user.registration') }}" class="btn-primary-outline">
+                    {{ translate('Join now') }}
+                </a>
+            </div>
         </div>
-        
-        @if($course_item->children?->isNotEmpty() ?? null)
-            <ul class="w-full flex-flex-col space-y-2 mt-2 mb-2 pt-2 border-t border-gray-200 pl-4">
-                {{-- TODO: Fix ->tree() function when using hasMany relationship! Only then `depth` is available --}}
-                {{-- {{ 'p-'.($course_item->children->first()->depth*3)  }} --}}
-                <?php foreach($course_item->children as $child) { 
-                    course_item_template($child, $product);
-                } ?>
-            </ul>
-        @endif
-    </li>
-<?php
-    }
-?>
+    </x-system.form-modal>
+@endsection
