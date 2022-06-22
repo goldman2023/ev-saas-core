@@ -14,6 +14,8 @@
     <x-dashboard.widgets.business.dynamic-k-p-i></x-dashboard.widgets.business.dynamic-k-p-i>
 
 </div>
+
+
         <div class="w-full">
             <livewire:dashboard.tables.users-table for="customer"></livewire:dashboard.tables.users-table>
         </div>
