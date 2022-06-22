@@ -54,7 +54,7 @@ class Order extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Select::make(__('Payment Status'), 'payment_status')->options(PaymentStatusEnum::values()),
-            Select::make(__('Shipping Status'), 'shiping_status')->options(ShippingStatusEnum::values()),
+            // Select::make(__('Shipping Status'), 'shiping_status')->options(ShippingStatusEnum::values()),
             Select::make(__('Type'), 'type')->options(OrderTypeEnum::values())->sortable(),
             Number::make(__('Order Value'), 'total_price')->sortable(),
             Text::make(__('Email'), 'email')->sortable(),
