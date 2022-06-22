@@ -5,35 +5,58 @@
     <div class="row">
         <div class="grid w-full">
             <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
+
+
         </div>
         <div class="sm:grid sm:grid-cols-6 gap-10 mb-12">
 
-            <div class="col-span-6 sm:col-span-4">
-                <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
-                   <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
-                   <a href="{{ route('my.orders.all') }}" class="btn-primary">{{ translate('Manage invoices') }}</a>
-                </div>
-                <livewire:dashboard.tables.recent-invoices-widget-table :user="auth()->user()" :per-page="6" :show-per-page="false" :show-search="false" :column-select="false" />
+            @if(auth()->user()?->isSubscribed() ?? false)
+            <div class="col-span-12">
+                <x-dashboard.widgets.customer.dynamic-stats>
+                    </x-dashboard.widgets.business.dynamic-stats>
+            </div>
+            @endif
 
-                <div class="w-full grid col-span-1 sm:grid-cols-2 gap-7 mt-6 sm:mt-8 ">
-                    <div class="w-full">
-                        <x-dashboard.elements.plan-subscriptions-list class="">
-                        </x-dashboard.elements.plan-subscriptions-list>
-                    </div>
-                    <div class="w-full">
+            @if(auth()->user()?->isSubscribed() ?? false)
+            <div class="col-span-12">
 
-                    </div>
-                </div>
+
+                <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
+                    :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
+
             </div>
 
-            <div class="col-span-6 sm:col-span-2 flex flex-col">
-                <div class="w-full bg-white border border-gray-200 rounded-lg cursor-pointer" @click="window.location.href = '{{ get_tenant_setting('pix_pro_software_download_url', '#') }}'">
+            @else
+            <div class="col-span-12">
+
+
+                <div
+                    class="p-5 mb-5 border bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
+                    <div class="">
+                        <h3 class="text-24 leading-6 font-semibold text-gray-900">Welcome to {{ get_site_name() }}</h3>
+                        <p class="mt-2 max-w-2xl text-sm text-gray-500">Select your plan and start your free trial</p>
+                    </div>
+
+                </div>
+                <x-dashboard.widgets.customer.pricing-table>
+                </x-dashboard.widgets.customer.pricing-table>
+            </div>
+            @endif
+
+            <div class="col-span-6 sm:col-span-6">
+                <x-dashboard.elements.plan-subscriptions-list class="">
+                </x-dashboard.elements.plan-subscriptions-list>
+            </div>
+
+            <div class="col-span-6 sm:col-span-6 flex flex-col">
+                <div class="w-full bg-white border border-gray-200 rounded-lg cursor-pointer"
+                    @click="window.location.href = '{{ get_tenant_setting('pix_pro_software_download_url', '#') }}'">
                     <div class="border-b border-gray-200 px-4 sm:px-7 py-5">
                         <div class="flex justify-between items-center flex-wrap sm:flex-nowrap">
                             <div class="w-full">
-                              <h4 class="font-semibold">
+                                <h4 class="font-semibold">
                                     <a href="/page/downloads">
-                                    {{ translate('Download Software') }}
+                                        {{ translate('Support Channels') }}
                                     </a>
 
                                 </h4>
@@ -45,8 +68,9 @@
                             :image="get_site_logo()">
                         </x-tenant.system.image>
 
-                        <a href="{{ get_tenant_setting('pix_pro_software_download_url') }}" class="w-full btn-primary mt-5 text-center justify-center">
-                            {{ translate('Download') }}
+                        <a href="{{ get_tenant_setting('pix_pro_software_download_url') }}"
+                            class="w-full btn-primary mt-5 text-center justify-center">
+                            {{ translate('Pixpro support & community') }}
                         </a>
                     </div>
                 </div>

@@ -11,7 +11,8 @@ use TenantSettings;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
-    protected function getTenantAppSettings(): array {
+    protected function getTenantAppSettings(): array
+    {
         return [
             'pix_pro_software_download_url' => 'string',
             'pix_pro_downloads' => 'array',
@@ -23,7 +24,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         ];
     }
 
-    protected function getMenuLocations(): array {
+    protected function getMenuLocations(): array
+    {
         return [
             'header' => [
                 'name' => 'Header',
@@ -52,7 +54,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         ];
     }
 
-    protected function registerLivewireComponents() {
+    protected function registerLivewireComponents()
+    {
         Livewire::component('forms.generate-license-form', \WeThemes\WePixPro\App\Http\Livewire\Forms\GenerateLicenseForm::class);
     }
 
@@ -60,12 +63,12 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
      * Bootstrap the theme function services.
      */
     public function boot()
-    {   
+    {
         parent::boot();
 
         if (function_exists('add_filter')) {
             // Filter
-            add_filter('app-settings-rules', function($rulesSets) {
+            add_filter('app-settings-rules', function ($rulesSets) {
                 // Add pix-pro integration
                 $rulesSets->put('integrations.pix_pro_api', [
                     'settings.pix_pro_api_enabled' => ['boolean'],
@@ -77,7 +80,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 1);
 
             // Add pix-pro general rules
-            add_filter('app-settings-general-rules', function($rules_array) {
+            add_filter('app-settings-general-rules', function ($rules_array) {
                 return array_merge($rules_array, [
                     'settings.pix_pro_software_download_url' => 'nullable',
                     'settings.pix_pro_downloads' => 'nullable',
@@ -86,7 +89,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 1);
 
             // Add Columns to Licenses table (livewire)
-            add_filter('dashboard.table.licenses.columns', function($columns) { 
+            add_filter('dashboard.table.licenses.columns', function ($columns) {
                 return array_merge($columns, [
                     \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
                         ->excludeFromSelectable(),
@@ -102,11 +105,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Set editable License data properties
             add_filter('license.get.data.editable.keys', function () {
-                return ['license_image_limit','cloud_service', 'offline_service', 'hardware_id'];
+                return ['license_image_limit', 'cloud_service', 'offline_service', 'hardware_id'];
             }, 20, 1);
 
             // Add custom core meta to Plans
-            add_filter('plan.meta.data-types', function($plan_meta) {
+            add_filter('plan.meta.data-types', function ($plan_meta) {
                 return array_merge($plan_meta, [
                     'includes_cloud' => 'boolean',
                     'includes_offline' => 'boolean',
@@ -115,7 +118,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 1);
 
             // Add custom core meta to UserSubscription
-            add_filter('user-subscription.meta.data-types', function($user_subscription_meta) {
+            add_filter('user-subscription.meta.data-types', function ($user_subscription_meta) {
                 return array_merge($user_subscription_meta, [
                     'includes_cloud' => 'boolean',
                     'includes_offline' => 'boolean',
@@ -123,7 +126,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
-            add_filter('user-subscription.meta.data-types', function($user_subscription_meta) {
+            add_filter('user-subscription.meta.data-types', function ($user_subscription_meta) {
                 return array_merge($user_subscription_meta, [
                     'includes_cloud' => 'boolean',
                     'includes_offline' => 'boolean',
@@ -131,15 +134,41 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
-            add_filter('dashboard.sidebar.menu', function($menu) {
-                return array_merge($menu, [
-                    'includes_cloud' => 'boolean',
-                    'includes_offline' => 'boolean',
-                    'number_of_images' => 'number',
-                ]);
+            add_filter('dashboard.sidebar.menu', function ($menu) {
+                $included_items = [
+                    'dashboard',
+                    'stripe.portal_session',
+                    'plans.index',
+                    'attributes.index',
+                    'categories.index',
+                    'orders.index',
+                    'blog.posts.index',
+                    'pages.index',
+                    'crm.all_customers',
+                    'my.account.settings',
+                    'my.plans.management',
+                    'my.orders.all',
+                    'settings.staff_settings',
+                    'settings.app_settings',
+                    'settings.super_admin'
+                ];
+
+
+                /* TODO: Use this approach for overiding child themes, menu */
+                foreach ($menu as $menuKey => $items) {
+                    foreach ($items['items'] as $key => $item) {
+                        if (isset($item['route_name'])) {
+                            if (in_array($item['route_name'], $included_items)) {
+                            } else {
+                                unset($menu[$menuKey]['items'][$key]);
+                            }
+                        }
+                    }
+                }
+                return $menu;
             }, 10, 1);
         }
-        
+
         if (function_exists('add_action')) {
             // Actions
 
@@ -159,7 +188,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 20, 1);
 
             // Extend PixPro License
-            add_action('invoice.paid.subscription_cycle', function($user_subscriptions, $stripe_invoice) {
+            add_action('invoice.paid.subscription_cycle', function ($user_subscriptions, $stripe_invoice) {
                 pix_pro_extend_license($user_subscriptions, $stripe_invoice);
             }, 20, 2);
 
@@ -167,25 +196,25 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_action('license.disconnect', function ($license, $user, $form) {
                 pix_pro_disconnect_license($license, $user, $form);
             }, 20, 3);
-            
+
 
             // Update User password
-            add_action('user.password.updated', function($user, $newPassword, $oldPassword) {
+            add_action('user.password.updated', function ($user, $newPassword, $oldPassword) {
                 pix_pro_update_user_password($user, $newPassword, $oldPassword);
             }, 20, 3);
-            
+
 
             // View actions
-            add_action('view.dashboard.form.left.end', function($plan) {
+            add_action('view.dashboard.form.left.end', function ($plan) {
                 if (View::exists('frontend.partials.plan-form-custom-meta-box')) {
                     echo view('frontend.partials.plan-form-custom-meta-box', compact('plan'));
                 }
             });
-            add_action('view.plan-form.wire_set', function() {
+            add_action('view.plan-form.wire_set', function () {
                 js_wire_set('model_core_meta.includes_cloud', 'model_core_meta.includes_cloud');
                 js_wire_set('model_core_meta.includes_offline', 'model_core_meta.includes_offline');
             });
-            add_filter('dashboard.plan-form.meta', function($meta) {
+            add_filter('dashboard.plan-form.meta', function ($meta) {
                 return array_merge($meta, [
                     'model_core_meta.number_of_images' => 'nullable',
                     'model_core_meta.includes_cloud' => 'nullable',
@@ -199,34 +228,34 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 $user_subscription->saveCoreMeta('includes_offline', $user_subscription->plan->getCoreMeta('includes_offline', true));
             });
 
-            add_action('view.order-received.items.end', function($order) {
+            add_action('view.order-received.items.end', function ($order) {
                 if (View::exists('frontend.partials.order-received-download-cta')) {
                     echo view('frontend.partials.order-received-download-cta', compact('order'));
                 }
             });
 
             // Add Pix-Pro API Integration Form
-            add_action('view.integrations.end', function() {
+            add_action('view.integrations.end', function () {
                 if (View::exists('frontend.partials.pix-pro-api-integration-form')) {
                     echo view('frontend.partials.pix-pro-api-integration-form');
                 }
             });
 
             // Add Pix-Pro General Settings
-            add_action('view.app-settings-form.general.end', function() {
+            add_action('view.app-settings-form.general.end', function () {
                 if (View::exists('frontend.partials.pix-pro-general-settings')) {
                     echo view('frontend.partials.pix-pro-general-settings');
                 }
             });
 
             // Add Pix-Pro General Settings - $wire.set inside alpine/lw form
-            add_action('view.app-settings-form.general.wire_set', function() {
+            add_action('view.app-settings-form.general.wire_set', function () {
                 js_wire_set('settings.pix_pro_downloads', 'settings.pix_pro_downloads');
                 js_wire_set('settings.pix_pro_dataset_samples', 'settings.pix_pro_dataset_samples');
             });
-            
 
-            add_action('view.dashboard.my-downloads.end', function() {
+
+            add_action('view.dashboard.my-downloads.end', function () {
                 if (View::exists('frontend.partials.pix-pro-software-downloads-table')) {
                     echo view('frontend.partials.pix-pro-software-downloads-table', [
                         'downloads' => collect(TenantSettings::get('pix_pro_downloads'))
@@ -234,36 +263,36 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             });
 
-            add_action('view.dashboard.plans-management.plans-table.end', function($data) {
+            add_action('view.dashboard.plans-management.plans-table.end', function ($data) {
                 if (View::exists('frontend.partials.pix-pro-licenses-table')) {
                     echo view('frontend.partials.pix-pro-licenses-table', compact('data'));
                 }
             }, 20, 1);
 
             // Add Columns to Licenses table (View)
-            add_action('view.dashboard.row-license.columns', function($license) {
+            add_action('view.dashboard.row-license.columns', function ($license) {
                 if (View::exists('frontend.partials.row-license-custom-columns')) {
                     echo view('frontend.partials.row-license-custom-columns', compact('license'));
                 }
             }, 20, 1);
 
-            add_action('view.dashboard.plans.row-license.actions.dropdown.start', function($license) {
+            add_action('view.dashboard.plans.row-license.actions.dropdown.start', function ($license) {
                 if (View::exists('frontend.partials.row-license-actions')) {
                     echo view('frontend.partials.row-license-actions', compact('license'));
                 }
             }, 20, 1);
 
             // Fetch all licenses for desired user and get the latest data about license from Pixpro DB. Update hardware_id if hardware_id is different!
-            add_action('dashboard.table.licenses.mount.end', function($user) {
+            add_action('dashboard.table.licenses.mount.end', function ($user) {
                 $subscriptions = $user->plan_subscriptions()->with('license')->get();
-                if(!empty($subscriptions)) {
-                    foreach($subscriptions as $subscription) {
+                if (!empty($subscriptions)) {
+                    foreach ($subscriptions as $subscription) {
                         $license = $subscription->license->first();
 
-                        if(!empty($license) && method_exists($license, 'get_license')) {
+                        if (!empty($license) && method_exists($license, 'get_license')) {
                             $data = $license->get_license(); // gets the license from Pixpro DB
 
-                            if($license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
+                            if ($license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
                                 $license->setData('hardware_id', $data['hardware_id']);
                                 $license->save();
                             }
@@ -271,9 +300,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     }
                 }
             }, 20, 1);
-            
-            // There are changes to license on WeSaaS end, so we need to update 
-            add_action('license.saved', function(&$new_license, $old_license) {
+
+            // There are changes to license on WeSaaS end, so we need to update
+            add_action('license.saved', function (&$new_license, $old_license) {
                 pix_pro_update_single_license($new_license, $old_license);
             }, 20, 2);
 

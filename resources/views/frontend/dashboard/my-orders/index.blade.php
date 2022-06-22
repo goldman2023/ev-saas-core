@@ -1,13 +1,13 @@
 @extends('frontend.layouts.user_panel')
 
-@section('meta_title', translate('My Orders and Invoices'))
+@section('meta_title', translate('Invoices and Orders'))
 
 @push('head_scripts')
-    
+
 @endpush
 
 @section('panel_content')
-    <x-dashboard.section-headers.section-header title="{{ translate('My Orders and Invoices') }}" text="{{ translate('You can view, manage and download your orders and invoices here.') }}">
+    <x-dashboard.section-headers.section-header title="{{ translate('Invoices and Orders') }}" text="{{ translate('You can view, manage and download your orders and invoices here.') }}">
         <x-slot name="content">
             {{-- <a href="{{ route('order.create') }}" class="btn-primary">
                 @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
@@ -34,8 +34,8 @@
                 {{-- TODO: Showing filters and tweaking anything regarding the tables should be managed per tenant from app-settings or something like that --}}
                 <livewire:dashboard.tables.my-orders-table :show-filters="auth()->user()->isCustomer() ? false : true" :show-filter-dropdown="auth()->user()->isCustomer() ? false : true"></livewire:dashboard.tables.my-orders-table>
             @else
-                <x-dashboard.empty-states.no-items-in-collection 
-                    icon="heroicon-o-shopping-cart" 
+                <x-dashboard.empty-states.no-items-in-collection
+                    icon="heroicon-o-shopping-cart"
                     title="{{ translate('No orders and invoices yet') }}"
                     {{-- text="{{ translate('You haven\'t made any purchases yet!') }}" --}}
                     link-href-route="feed.products"
@@ -45,7 +45,7 @@
             @endif
         </div>
 
-        
+
     </div>
 
 @endsection

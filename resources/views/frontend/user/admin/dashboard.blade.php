@@ -17,7 +17,9 @@
 <section>
     <div class="row">
         <div class="grid">
-            <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
+            <div class="mb-6">
+                <x-dashboard.widgets.business.dynamic-k-p-i></x-dashboard.widgets.business.dynamic-k-p-i>
+            </div>
         </div>
         <div class="grid sm:grid-cols-3 gap-8">
             <div class="col-span-2">
@@ -123,7 +125,7 @@
                     </div>
 
                     <div class="w-full">
-                        <livewire:dashboard.tables.recent-invoices-widget-table :per-page="6" :show-per-page="false" :show-search="false" :column-select="false" />
+                        <livewire:dashboard.tables.recent-invoices-widget-table :per-page="10" :show-per-page="false" :show-search="false" :column-select="false" />
                     </div>
 
                     <div class="w-full">
@@ -135,7 +137,7 @@
             </div>
 
             <div class="col-span-1">
-                @livewire('dashboard.elements.activity-log')
+                @livewire('dashboard.elements.activity-log', ['causer' => auth()->user()])
 
             </div>
         </div>

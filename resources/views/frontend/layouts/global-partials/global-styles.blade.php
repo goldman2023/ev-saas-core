@@ -15,4 +15,15 @@
 	border-radius: 5px;
 	background-color: #F5F5F5;
 }
+
+/* EditorJS */
+.ce-block__content, .ce-toolbar__content { 
+	max-width:calc(100% - 80px) !important; 
+} 
+.cdx-block { max-width: 100% !important; }
+
+.codex-editor__redactor {
+	padding-bottom: 30px !important;
+}
+
 </style>

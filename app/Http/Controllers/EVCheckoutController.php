@@ -13,6 +13,7 @@ use App\Models\OrderItem;
 use App\Models\PaymentMethodUniversal;
 use App\Models\User;
 use Auth;
+use Session;
 use CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -451,14 +452,17 @@ class EVCheckoutController extends Controller
     {
         $order = Order::find($order_id);
 
-        if (auth()->user()->id ?? null) {
-            // Redirect user to proper Order Details page
-        } else {
-            // Redirect non-logged user to order-received (like Thank you page)
-        }
+        /** 
+         * Order Received page (or Thank you page) can be accessed only by user who bought it.
+         * But what are we going to do with Guest users?
+         * 1. They will be identified by session ID
+         * 2. Email will be sent to them to finalize registration (when ghost/guest user is created in our DB after purchase)
+        */
 
-        // TODO: Think about solution for Guest User and accessing this page after successful purchase...
-        if($order->user_id !== (auth()->user()?->id ?? null)) {
+        if(!Auth::check() && $order->user_id !== (User::where('session_id', Session::getId())->first()?->id ?? null)) {
+            // Guest users - identify them by session_id and check if any user has that session_id, if not redirect!
+            return redirect()->route('user.registration');
+        } else if(Auth::check() && $order->user_id !== (auth()->user()?->id ?? null) && !auth()->user()->isAdmin()) {
             return redirect()->route('home');
         }
 

@@ -121,30 +121,30 @@ if($colors) {
         }
 
         .btn-primary {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+            @apply cursor-pointer inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
         }
         .btn-primary-outline {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-primary rounded-md shadow-sm text-sm font-medium text-primary bg-white hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+            @apply cursor-pointer inline-flex justify-center items-center px-4 py-2 border border-primary rounded-md shadow-sm text-sm font-medium text-primary bg-white hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
         }
 
         .btn-success {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success hover:bg-success focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-success;
+            @apply cursor-pointer inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success hover:bg-success focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-success;
         }
         .btn-warning {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-warning hover:bg-warning focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-warning;
+            @apply cursor-pointer inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-warning hover:bg-warning focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-warning;
         }
         .btn-info {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-info hover:bg-info focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-info;
+            @apply cursor-pointer inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-info hover:bg-info focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-info;
         }
         .btn-danger {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-danger hover:bg-danger focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger;
+            @apply cursor-pointer inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-danger hover:bg-danger focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger;
         }
         .btn-danger-outline {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-danger rounded-md shadow-sm text-sm font-medium text-danger hover:text-white bg-white hover:bg-danger focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger;
+            @apply cursor-pointer inline-flex justify-center items-center px-4 py-2 border border-danger rounded-md shadow-sm text-sm font-medium text-danger hover:text-white bg-white hover:bg-danger focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger;
         }
 
         .btn-ghost {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
+            @apply cursor-pointer inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
         }
 
         .badge {

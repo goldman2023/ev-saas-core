@@ -251,7 +251,7 @@ class RegisterForm extends Component
 
     protected function registered()
     {
-        do_action('user.registered', $this->user); // If there's any hook attached to `user.registered` action, do it!   
+        do_action('user.registered', $this->user);
 
         if(get_tenant_setting('onboarding_flow')) {
             return redirect()->route('onboarding.step1');

@@ -312,6 +312,10 @@ class Product extends WeBaseModel
         return $this->type === ProductTypeEnum::event()->value;
     }
 
+    public function isCourse() {
+        return $this->type === ProductTypeEnum::course()->value;
+    }
+
     public function isStandard() {
         return $this->type === ProductTypeEnum::standard()->value;
     }

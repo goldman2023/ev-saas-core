@@ -44,6 +44,7 @@ use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
 use App\Http\Controllers\WeQuizController;
+use App\Http\Controllers\WeSubscriptionsController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\OwnerOnly;
 use App\Http\Middleware\VendorMode;
@@ -111,7 +112,7 @@ Route::middleware([
 
     Route::get('/forgot-password', [ForgotPasswordController::class, 'forgot_password'])->name('user.forgot-password');
     Route::get('/reset-password', [ForgotPasswordController::class, 'reset_password'])->name('user.reset-password');
-    
+
     Route::get('/welcome', [OnboardingController::class, 'step2'])->name('onboarding.step1')->middleware(['auth']);
     Route::get('/welcome/step2', [OnboardingController::class, 'step2'])->name('onboarding.step2')->middleware(['auth']);
     Route::post('/welcome/profile/store', [OnboardingController::class, 'profile_store'])->name('onboarding.profile.store')->middleware(['auth']);
@@ -174,6 +175,8 @@ Route::middleware([
 
     Route::get('/plan/{slug}', [EVPlanController::class, 'show'])->name(Plan::getRouteName());
     Route::get('/plan/{id}/checkout-link', [EVPlanController::class, 'createPlanCheckoutRedirect'])->name('plan.generate_checkout_link');
+
+    Route::get('/subscription/{id}/change-free-trial-plan', [WeSubscriptionsController::class, 'changeFreeTrialPlan'])->name('subscription.change-free-trial-plan');
 
     // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
@@ -285,5 +288,5 @@ Route::middleware([
     // TODO: Make these api Routes PROTECTED by AUTH!
     Route::middleware('auth')->group(function () {
     });
-    
+
 });

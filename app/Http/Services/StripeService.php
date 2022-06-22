@@ -30,6 +30,7 @@ use Carbon;
 use Log;
 use Uuid;
 use App\Models\CoreMeta;
+use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
 class StripeService
@@ -543,6 +544,7 @@ class StripeService
                 'invoice_id' => $is_preview ? 'preview' : $invoice->id,
                 'user_id' => $is_preview ? 'preview' : $order->user_id,
                 'shop_id' => $is_preview ? 'preview' : $order->shop_id,
+                'session_id' => Session::getId(),
             ],
             'success_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'cancel_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
@@ -552,7 +554,7 @@ class StripeService
             'tax_id_collection' => [
                 'enabled' => true,
             ],
-            
+
         ];
 
         // Check whether mode is 'subscription' or 'payment'
@@ -626,10 +628,9 @@ class StripeService
             // Create Stripe customer if it doesn't exist
             $stripe_customer = $this->createStripeCustomer();
             $stripe_args['customer'] = $stripe_customer->id;
-
             $billing_session = $this->stripe->billingPortal->sessions->create([
                 'customer' => $stripe_customer->id,
-                'return_url' => route('my.plans.management')
+                'return_url' => url()->previous(),
             ]);
 
             return $billing_session['url'] ?? null;
@@ -811,7 +812,7 @@ class StripeService
         $order->shipping_method = '';
         $order->shipping_cost = 0;
         $order->tax = 0; // TODO: SHould we add tax from stripe? :-?
-        // $order->shipping_status = 
+        // $order->shipping_status =
         $meta = [];
         $meta[$this->mode_prefix .'stripe_payment_mode'] = in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons) ? 'subscription' : 'payment'; // IMPORTANT: when mode is `subscription`, stripe_payment_intent_id is NOT SENT, because payment intent is related to future INVOICE not one time session checkout!
         $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription->id;
@@ -1109,6 +1110,7 @@ class StripeService
                         'name' => explode(' ', $session->customer_details->name)[0] ?? $session->customer_details->name,
                         'surname' => explode(' ', $session->customer_details->name)[1] ?? ' ',
                         'phone' => $session->customer_details->phone ?? '',
+                        'session_id' => $session->metadata->session_id ?? '' // ghost users will be redirected to proper order-received page based on this!
                     ]
                 );
 
@@ -1116,11 +1118,11 @@ class StripeService
             }
 
             $order->save();
-            
+
             // Check if $model has stock and reduce it if it does!!!
             $order_item = $order->order_items->first();
             $model = $order_item->subject;
-            
+
 
             if (method_exists($model, 'stock') && $model->track_inventory) {
                 // Reduce the stock quantity of an $model
@@ -1230,17 +1232,7 @@ class StripeService
                  * 3. $session->payment_status === 'paid'
                  **/
                 if($session->status === 'complete' && $session->payment_status === 'paid') {
-                    Ownership::updateOrCreate(
-                        [
-                            'subject_id' => $model->id,
-                            'subject_type' => $model::class,
-                            'owner_id' => $initiator->id,
-                            'owner_type' => $initiator::class
-                        ],
-                        [
-                            'updated_at' => date('Y-m-d H:i:s', time())
-                        ]
-                    );
+                    //TODO: Moved ownership creation logic to OrdersObserver create/update
                 }
             } else {
                 $invoice->meta = $meta;
@@ -1365,7 +1357,7 @@ class StripeService
                 $order->meta = $order_meta;
                 $order->save();
             }
-            
+
 
             if($stripe_billing_reason === 'subscription_create') {
                 // This means that subscription is created for the first time
@@ -1522,7 +1514,7 @@ class StripeService
             // We are sure that invoice is paid so we make user_subscription(s) active and paid too (even though they may already be active and paid as a result of subscription.updated webhook)!
             if ($user_subscriptions->isNotEmpty()) {
                 foreach($user_subscriptions as $subscription) {
-                    
+
                     // If subscription has trial start/end (provided from checkout.session)
                     if(!empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null)) {
                         $subscription->status = UserSubscriptionStatusEnum::trial()->value;
@@ -1531,7 +1523,7 @@ class StripeService
                         $subscription->status = UserSubscriptionStatusEnum::active()->value;
                         $subscription->payment_status = PaymentStatusEnum::paid()->value;
                     }
-              
+
                     if(empty($subscription->getRawOriginal('start_date'))) {
                         $subscription->start_date = $stripe_subscription->current_period_start;
                     }
@@ -1723,7 +1715,7 @@ class StripeService
         $stripe_subscription = $event->data->object;
         $stripe_subscription_id = $stripe_subscription->id;
         $order_id = $stripe_subscription->metadata->order_id ?? -1;
-        
+
         try {
             $order = Order::withoutGlobalScopes()->findOrFail($order_id);
             $user_subscriptions = $order->user_subscriptions;
@@ -1755,7 +1747,7 @@ class StripeService
                             []
                         );
                         $stripe_billing_reason = $stripe_invoice->billing_reason;
-                        
+
                         if($stripe_invoice->paid) {
                             // invoice is paid at this point in time; DON'T DO ANYTHING IF STRIPE INVOICE IS NOT PAID!
                             $subscription->status = UserSubscriptionStatusEnum::active()->value;
@@ -1765,12 +1757,12 @@ class StripeService
                         $data = $subscription->data;
                         $data[$this->mode_prefix .'stripe_latest_invoice_id'] = $latest_invoice_id;
                         $subscription->data = $data;
-                        
+
                         // Determine if subscription is cycled or upgraded/downgraded
                         if($stripe_billing_reason === 'subscription_cycle') {
                             // This means that subscription is cycled - just create a new invoice
                             $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
-            
+
                         } else if($stripe_billing_reason === 'subscription_update' && !empty($previous_attributes?->plan?->id ?? null)) {
                             // With condition `!empty($previous_attributes?->plan?->id ?? null)` we are preventing processing any subscription change which is NOT related to it's products/items changes, like metadata change and similar!
 
@@ -1781,21 +1773,21 @@ class StripeService
                             // *IMPORTANT* - Getting previous and new price MAY BE DIFFERENT based on multi-product subscriptions and single-product ones. Bu we'll see soon :)
                             $existing_order = Order::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_latest_invoice_id', $stripe_subscription->latest_invoice)->first();
                             $existing_invoice = Invoice::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_invoice_id', $stripe_subscription->latest_invoice)->first();
-                            
+
                             // Code `should-procceed` ONLY if:
                             // 1. Both Order and Invoice with `latest_invoice_id` cannot be found in our DB
-                            // OR 
+                            // OR
                             // 2. Previous attributes plan->id (actually previous subscription price ID) is different than current subscription price ID
-                            
+
                             if(get_tenant_setting('multiplan_purchase')) {
                                 $should_proceed = false; // TODO: This must work according to multi-plan purchase
                             } else {
                                 $should_proceed = (empty($existing_order) && empty($existing_invoice) || (($stripe_subscription?->plan?->id ?? 1) !== ($previous_attributes->plan->id ?? 1)));
                             }
-                            
+
                             if($should_proceed) {
                                 // Subscription is updated (downgraded, upgraded, interval changed etc.):
-                                // 1. Create a new Order 
+                                // 1. Create a new Order
                                 // 2. Create a new Invoice
                                 // 3. Change order_id of subscriptions on our end
                                 // 4. Change order_id in metadata of subscription on Stripe end
@@ -1808,8 +1800,8 @@ class StripeService
                                     // Add Last Order ID to Stripe subscription metadata
                                     $new_metadata = $stripe_subscription->metadata;
                                     $new_metadata->order_id = $new_order->id;
-                                    
-                                    // IMPORTANT - This fires another subscripion.update!!! Prevent any change like this 
+
+                                    // IMPORTANT - This fires another subscripion.update!!! Prevent any change like this
                                     $this->stripe->subscriptions->update(
                                         $stripe_subscription->id,
                                         ['metadata' => $new_metadata->toArray()]
@@ -1859,8 +1851,8 @@ class StripeService
                                     die(print_r($e));
                                 }
                             }
-                            
-                        } 
+
+                        }
 
                     }
 
@@ -1869,7 +1861,7 @@ class StripeService
             }
 
             do_action('stripe.webhook.subscriptions.updated', $user_subscriptions);
-            
+
         } catch (\Exception $e) {
             http_response_code(400);
             die(print_r($e));

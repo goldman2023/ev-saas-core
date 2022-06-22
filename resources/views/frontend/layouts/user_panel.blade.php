@@ -9,7 +9,6 @@
                     <div class="d-none d-lg-block">
                         <h1 class="h2 text-white">@yield('page_title')</h1>
                     </div>
-
                     {{-- TODO: Add section for Breadcrumbs @section('dashboard_top_breadcrumbs')--}}
                 </div>
 
@@ -41,7 +40,7 @@
         <div class="row">
             <div class="c-user-side-nav d-none d-sm-block">
             </div>
-            <div class="aiz-user-panel c-user-panel ">
+            <div class="c-user-panel ">
                 @yield('panel_content')
             </div>
         </div>

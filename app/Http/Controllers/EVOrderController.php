@@ -43,10 +43,10 @@ class EVOrderController extends Controller
 
     public function my_purchases(Request $request)
     {
-        $orders = auth()->user()->orders()->orderBy('created_at', 'desc')->paginate(20);
-        $orders_count = auth()->user()->orders()->count();
+        $ownerships = auth()->user()->owned_assets()->orderBy('created_at', 'desc')->paginate(20);
+        $ownerships_count_all = auth()->user()->owned_assets()->count();
 
-        return view('frontend.dashboard.my-purchases.index', compact('orders', 'orders_count'));
+        return view('frontend.dashboard.my-purchases.index', compact('ownerships', 'ownerships_count_all'));
     }
 
     public function my_orders(Request $request)

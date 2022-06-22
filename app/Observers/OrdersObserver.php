@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Order;
+use App\Models\Ownership;
 use App\Mail\OrderReceivedEmail;
 use Illuminate\Support\Facades\Mail;
 use Log;
@@ -32,6 +33,22 @@ class OrdersObserver
             //     Log::error($e->getMessage());
             // }
         }
+
+        if($order->payment_status === 'paid' && $order->type === 'standard') {
+            foreach($order->order_items as $item) {
+                Ownership::updateOrCreate(
+                    [
+                        'subject_id' => $item->subject->id,
+                        'subject_type' => $item->subject::class,
+                        'owner_id' => $order->user->id,
+                        'owner_type' => $order->user::class
+                    ],
+                    [
+                        'updated_at' => date('Y-m-d H:i:s', time())
+                    ]
+                );
+            }
+        }
     }
 
     /**
@@ -57,6 +74,23 @@ class OrdersObserver
         //         Log::error($e->getMessage());
         //     }
         // }
+
+        if($order->payment_status === 'paid' && $order->type === 'standard') {
+            foreach($order->order_items as $item) {
+                Ownership::updateOrCreate(
+                    [
+                        'subject_id' => $item->subject->id,
+                        'subject_type' => $item->subject::class,
+                        'owner_id' => $order->user->id,
+                        'owner_type' => $order->user::class,
+                        'order_id' => $order->id,
+                    ],
+                    [
+                        'updated_at' => date('Y-m-d H:i:s', time())
+                    ]
+                );
+            }
+        }
     }
 
     /**

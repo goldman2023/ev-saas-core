@@ -116,7 +116,8 @@ Route::middleware([
         Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
 
         /* My Purchases/Wishlist/Viewed Items */
-        Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
+        Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.index');
+        Route::get('/my/wishlist/all', [EVOrderController::class, 'my_purchases'])->name('my.wishlist.index');
         Route::get('/my/orders/all', [EVOrderController::class, 'my_orders'])->name('my.orders.all');
 
         /* My Downloads (all) */
@@ -130,7 +131,8 @@ Route::middleware([
         Route::get('/user/{id}/details', [EVAccountController::class, 'user_details'])->name('user.details');
 
         /* CRM */
-        Route::get('/crm/customers', [CRMController::class, 'customers_index'])->name('crm.all_customers');
+        Route::get('/crm/customers', [CRMController::class, 'customers_index'])->name('crm.all_customers')->middleware('admin'); // TODO: THink about handling permissions a bit differently
+
 
 
         /* Settings pages*/

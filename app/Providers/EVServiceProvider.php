@@ -35,7 +35,7 @@ class EVServiceProvider extends ServiceProvider
         // Add EV dynamic components to EV namespace
         Blade::componentNamespace('App\\View\\Components\\EV', 'ev');
 
-        // Register IMG (IMGProxy) Singleton
+        // MyShop
         $this->app->singleton('myshop', function() {
             return new MyShopService(fn () => Container::getInstance());
         });

@@ -38,7 +38,7 @@
         </div>
 
         <div class="w-full">  
-          @if(empty($title))
+          @if(!empty($title))
             <h4 class="w-full text-18 pb-1 mb-3 border-b border-gray-200">{{ $title }}</h4>
           @endif
 

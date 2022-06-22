@@ -79,7 +79,9 @@ class User extends Resource
 
             // MorphToMany::make('Wishlist', 'followers'),
             // Shows audit log button on detail view, which expands audit trail
-            AuditableLog::make()
+            AuditableLog::make(),
+            MorphToMany::make('Roles', 'roles', \Itsmejoshua\Novaspatiepermissions\Role::class),
+            MorphToMany::make('Permissions', 'permissions', \Itsmejoshua\Novaspatiepermissions\Permission::class),
             // MorphToMany::make(User::class, 'subject')
         ];
     }

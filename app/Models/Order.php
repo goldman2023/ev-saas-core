@@ -141,7 +141,7 @@ class Order extends WeBaseModel
         return $query->where('user_id', '=', auth()->user()?->id ?? null);
     }
 
-    public function scopeShopOrders()
+    public function scopeShopOrders($query)
     {
         return $query->where('shop_id', '=', MyShop::getShop()?->id ?? -1);
     }

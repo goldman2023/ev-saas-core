@@ -48,4 +48,8 @@ class EVBaseEnum extends Enum
     {
         return implode($separator, self::toLabels($skip));
     }
+
+    public static function getLabel($key) {
+        return static::labels()[$key] ?? null;
+    }
 }

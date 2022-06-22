@@ -1,8 +1,5 @@
 @push('head_scripts')
-<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet"
-    type="text/css" />
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js">
-</script>
+<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
 {{--
@@ -70,12 +67,6 @@
             $wire.set('model_core_meta.end_date', this.model_core_meta.end_date, true);
             $wire.set('model_core_meta.location_type', this.model_core_meta.location_type, true);
             $wire.set('model_core_meta.unlockables', this.model_core_meta.unlockables, true);
-
-            $wire.set('model_core_meta.course_what_you_will_learn', this.model_core_meta.course_what_you_will_learn, true);
-            $wire.set('model_core_meta.course_requirements', this.model_core_meta.course_requirements, true);
-            $wire.set('model_core_meta.course_target_audience', this.model_core_meta.course_target_audience, true);
-            $wire.set('model_core_meta.course_includes', this.model_core_meta.course_includes, true);
-            $wire.set('model_core_meta.course_intro_video_url', this.model_core_meta.course_intro_video_url, true);
 
         }
     }" class="lw-form container-fluid" @init-product-form.window=""
@@ -170,99 +161,15 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                    <x-dashboard.form.froala field="description" id="product-description-wysiwyg">
-                                    </x-dashboard.form.froala>
+                                    <x-dashboard.form.editor-js field="description" id="product-description-wysiwyg" />
 
-                                    <x-system.invalid-msg class="w-full" field="product.description">
-                                    </x-system.invalid-msg>
+                                    <x-system.invalid-msg class="w-full" field="product.description" />
                                 </div>
                             </div>
                             <!-- END Description -->
                         </div>
                     </div>
                     {{-- END Card Basic --}}
-
-                    {{-- Course Meta --}}
-                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8"
-                        x-show="type === 'course'">
-                        <div class="pb-3 mb-5 border-b border-gray-200">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Course Info') }}</h3>
-                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Write more about the course,
-                                like what people will learn, what is included in course, requierments etc.') }}</p>
-                        </div>
-
-                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-3">
-                            <!-- Course Requirements-->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
-                                <div class="text-sm font-medium text-gray-900 grow-0 flex flex-col mr-3">
-                                    <span class="text-14 font-medium text-gray-900 mb-1">{{ translate('Requirements')
-                                        }}</span>
-                                    <p class="text-gray-500 text-14">{{ translate('Describe important requirements
-                                        students should have.') }}</p>
-                                </div>
-
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.text-repeater field="model_core_meta.course_requirements"
-                                        placeholder="{{ translate('Requirement') }}"></x-dashboard.form.text-repeater>
-                                </div>
-                            </div>
-                            <!-- END Course Requirements -->
-
-                            <!-- Course Includes-->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{}">
-                                <div class="text-sm font-medium text-gray-900 grow-0 flex flex-col mr-3">
-                                    <span class="text-14 font-medium text-gray-900 mb-1">{{ translate('Course includes')
-                                        }}</span>
-                                    <p class="text-gray-500 text-14">{{ translate('Describe what\'s included in the
-                                        course.') }}</p>
-                                </div>
-
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.text-repeater field="model_core_meta.course_includes"
-                                        placeholder="{{ translate('Includes') }}"></x-dashboard.form.text-repeater>
-                                </div>
-                            </div>
-                            <!-- END Course Includes -->
-
-                            <!-- What users will learn-->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{}">
-                                <div class="text-sm font-medium text-gray-900 grow-0 flex flex-col mr-3">
-                                    <span class="text-14 font-medium text-gray-900 mb-1">{{ translate('Learned skills')
-                                        }}</span>
-                                    <p class="text-gray-500 text-14">{{ translate('Describe which skills all students
-                                        will learn after completing the course. ') }}</p>
-                                </div>
-
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.text-repeater field="model_core_meta.course_what_you_will_learn"
-                                        placeholder="{{ translate('Skill') }}"></x-dashboard.form.text-repeater>
-                                </div>
-                            </div>
-                            <!-- END WHat users will learn -->
-
-                            <!-- Course Target Audience-->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{}">
-                                <div class="text-sm font-medium text-gray-900 grow-0 flex flex-col mr-3">
-                                    <span class="text-14 font-medium text-gray-900 mb-1">{{ translate('Target audience')
-                                        }}</span>
-                                    <p class="text-gray-500 text-14">{{ translate('Describe target audiences this course
-                                        is made for.') }}</p>
-                                </div>
-
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.text-repeater field="model_core_meta.course_target_audience"
-                                        placeholder="{{ translate('Describe target audience') }}">
-                                    </x-dashboard.form.text-repeater>
-                                </div>
-                            </div>
-                            <!-- END Course Target Audience -->
-
-                        </div>
-                    </div>
-                    {{-- END Course Meta --}}
 
                     {{-- Card Unlockables --}}
                     {{-- <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
@@ -1253,8 +1160,8 @@
                                 x-data="{}" wire:ignore>
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                        <x-dashboard.form.froala field="model_core_meta.unlockables"
-                                            id="product-unlockables-wysiwyg"></x-dashboard.form.froala>
+                                        <x-dashboard.form.editor-js field="model_core_meta.unlockables"
+                                            id="product-unlockables-wysiwyg" />
 
                                         <x-system.invalid-msg class="w-full" field="model_core_meta.unlockables">
                                         </x-system.invalid-msg>

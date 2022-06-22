@@ -61,7 +61,8 @@ class Plan extends WeBaseModel
                 $builder->where('shop_id', '=', 1);
             } else {
                 if (request()->is_dashboard) {
-                    $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
+                    $builder->where('shop_id', '=', 1);
+                    // $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
                 }
             }
         });

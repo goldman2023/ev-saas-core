@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="col-span-4">
-            @livewire('dashboard.elements.activity-log', ['user' => $user, 'scope' => 'customer'])
+            @livewire('dashboard.elements.activity-log', ['causer' => $user])
         </div>
     </div>
 
