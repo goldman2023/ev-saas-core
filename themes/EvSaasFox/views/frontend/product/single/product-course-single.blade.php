@@ -65,24 +65,12 @@
                         </p>
                     @endif
 
-                    {{-- Price and Buy --}}
-                    <div class="w-full flex justify-between py-2 border-y border-gray-200 mb-5" >
-                        <livewire:tenant.product.price :model="$product" :with_label="true" :with-discount-label="true"
-                            original-price-class="text-body text-16" base-price-class="text-16" total-price-class="text-20 fw-700 text-primary">
-                        </livewire:tenant.product.price>
 
-                        <div class="">
-                            @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
-                                <x-system.buy-now-button :model="$product" class="" label="{{ translate('Buy now') }}"
-                                    label-not-in-stock="{{ translate('Not in stock') }}">
-                                </x-system.buy-now-button>
-                            @else
-                                <x-system.add-to-cart-button :model="$product" class="" label="{{ translate('Add to cart') }}"
-                                    label-not-in-stock="{{ translate('Not in stock') }}">
-                                </x-system.add-to-cart-button>
-                            @endif
-                        </div>
-                    </div>
+                    @include('frontend.product.single.partials.course-purchase-cta', [
+                        'product' => $product,
+                        'course_items' => $course_items
+                    ])
+
 
                     {{-- What you'll learn --}}
                     @if(!empty($product->getCoreMeta('course_what_you_will_learn')))
@@ -144,32 +132,45 @@
         <div class="col-span-12 md:col-span-4">
             {{-- Course Right Card --}}
             <div class="w-full flex flex-col bg-white rounded-xl shadow p-5 mb-5">
-                <div class="w-full flex items-center mb-3">
-                    <strong class="text-28 font-semibold text-gray-900 mb-0" x-text="total_price_display"> </strong>
 
-                    <span class="text-18 font-semibold line-through text-gray-400 ml-3" x-show="base_price !== total_price">
-                        <del x-text="base_price_display"></del>
-                    </span>
-
-                    <span x-data="{}"
-                        class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold"
-                        :class="{ 'flex': base_price !== total_price, '!hidden': base_price === total_price }">
-                        @svg('heroicon-s-tag', ['class' => 'w-4 h-4 mr-1'])
-                        <span x-text="'{{ translate('%x%%') }}'.replace('%x%', (100-(100*total_price/base_price)).toFixed(0) )"></span>
-                    </span>
-                </div>
                 
-                <div class="w-full">
-                    @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
-                        <x-system.buy-now-button :model="$product" class="" label="{{ translate('Buy now') }}"
-                            label-not-in-stock="{{ translate('Not in stock') }}">
-                        </x-system.buy-now-button>
-                    @else
-                        <x-system.add-to-cart-button :model="$product" class="" label="{{ translate('Add to cart') }}"
-                            label-not-in-stock="{{ translate('Not in stock') }}">
-                        </x-system.add-to-cart-button>
-                    @endif
-                </div>
+                @if(!auth()->user()?->bought($product) ?? false)
+                    <div class="w-full flex items-center mb-3">
+                        <strong class="text-28 font-semibold text-gray-900 mb-0" x-text="total_price_display"> </strong>
+
+                        <span class="text-18 font-semibold line-through text-gray-400 ml-3" x-show="base_price !== total_price">
+                            <del x-text="base_price_display"></del>
+                        </span>
+
+                        <span x-data="{}"
+                            class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold"
+                            :class="{ 'flex': base_price !== total_price, '!hidden': base_price === total_price }">
+                            @svg('heroicon-s-tag', ['class' => 'w-4 h-4 mr-1'])
+                            <span x-text="'{{ translate('%x%%') }}'.replace('%x%', (100-(100*total_price/base_price)).toFixed(0) )"></span>
+                        </span>
+                    </div>
+
+                    <div class="w-full">
+                        @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
+                            <x-system.buy-now-button :model="$product" class="" label="{{ translate('Buy now') }}"
+                                label-not-in-stock="{{ translate('Not in stock') }}">
+                            </x-system.buy-now-button>
+                        @else
+                            <x-system.add-to-cart-button :model="$product" class="" label="{{ translate('Add to cart') }}"
+                                label-not-in-stock="{{ translate('Not in stock') }}">
+                            </x-system.add-to-cart-button>
+                        @endif
+                    </div>
+                @else
+                    <a href="{{ route(\App\Models\CourseItem::getRouteName(), [
+                        'product_slug' => $product->slug, 
+                        'slug' => $course_items->first()?->slug ?? ' ',
+                    ]) }}" class="w-full btn-success">
+                        {{ translate('View course') }}
+                    </a>
+                @endif
+                
+                
 
                 {{-- Course Includes --}}
                 @if(!empty($product->getCoreMeta('course_includes')))
@@ -204,21 +205,35 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <x-system.form-modal id="gated-content-cta-modal" title="{{ translate('Want to access the full course?') }}" class="sm:max-w-2xl">
-        <div class="w-full flex flex-col">
-            {{-- <h3 class="w-full text-22 mb-2"></h3> --}}
-            <p class="text-16 mb-4">{{ translate('Join now and buy this course to have an access to content') }}</p>
-
-            <div class="w-full flex gap-4">
-                <a href="{{ route('user.login') }}" class="btn-primary">
-                    {{ translate('Log in') }}
-                </a>
-                <a href="{{ route('user.registration') }}" class="btn-primary-outline">
-                    {{ translate('Join now') }}
-                </a>
+        <x-system.form-modal id="gated-content-cta-modal" title="{{ translate('Want to access the full course?') }}" class="sm:max-w-2xl">
+            <div class="w-full flex flex-col">
+                {{-- <h3 class="w-full text-22 mb-2"></h3> --}}
+                <p class="text-16 mb-4">{{ translate('Join now and buy this course to have an access to content') }}</p>
+    
+                <div class="w-full flex gap-4">
+                    @auth
+                        @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
+                            <x-system.buy-now-button :model="$product" class="!w-auto" label="{{ translate('Buy now') }}"
+                                label-not-in-stock="{{ translate('Not in stock') }}">
+                            </x-system.buy-now-button>
+                        @else
+                            <x-system.add-to-cart-button :model="$product" class="!w-auto" label="{{ translate('Add to cart') }}"
+                                label-not-in-stock="{{ translate('Not in stock') }}">
+                            </x-system.add-to-cart-button>
+                        @endif
+                    @endauth
+    
+                    @guest
+                        <a href="{{ route('user.login') }}" class="btn-primary">
+                            {{ translate('Log in') }}
+                        </a>
+                        <a href="{{ route('user.registration') }}" class="btn-primary-outline">
+                            {{ translate('Join now') }}
+                        </a>
+                    @endguest
+                </div>
             </div>
-        </div>
-    </x-system.form-modal>
+        </x-system.form-modal>
+    </div>
 @endsection

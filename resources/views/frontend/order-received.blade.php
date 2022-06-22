@@ -61,6 +61,19 @@
           <div class="badge-info py-2 mb-2 text-18">{{ translate('processing') }}</div>
 
           <p class="text-base text-gray-500">{{ translate('Orders usually ship withing 2 days and you will receive tracking number and order tracking details.') }}</p>
+
+        @elseif($first_item->type === \App\Enums\ProductTypeEnum::course()->value)
+          <p class="mb-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Successfully bought a course!') }}</p>
+          <p class="mb-2 text-base text-gray-500">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. You successfully bought a course.') }}</p>
+
+          <div class="w-full mb-4">
+            <a href="{{ route(\App\Models\CourseItem::getRouteName(), [
+                'product_slug' => $first_item->slug, 
+                'slug' => $first_item->course_items->first()?->slug ?? ' ',
+            ]) }}" class="btn-success">
+                {{ translate('View course') }}
+            </a>
+          </div>
         @endif
 
         
@@ -70,10 +83,7 @@
         </dl> --}}
       </div>
   
-      <div class="border-t border-gray-200">
-        <h2 class="sr-only">Your order</h2>
-  
-        <h3 class="sr-only">Items</h3>
+      <div class="border-t border-gray-200">  
   
         @if($order->order_items->isNotEmpty())
             @foreach($order->order_items as $item)
@@ -171,18 +181,20 @@
               <dt class="font-medium text-gray-900">{{ translate('Subtotal') }}</dt>
               <dd class="text-gray-700">{{ \FX::formatPrice($order->base_price) }}</dd>
             </div>
-            <div class="flex justify-between">
-              <dt class="flex font-medium text-gray-900">
-                {{ translate('Discount') }}
-                {{-- <span class="rounded-full bg-gray-200 text-xs text-gray-600 py-0.5 px-2 ml-2">STUDENT50</span> --}}
-              </dt>
-              <dd class="text-gray-700">-{{ \FX::formatPrice($order->discount_amount) }}</dd>
-            </div>
+            @if($order->discount_amount > 0)
+              <div class="flex justify-between">
+                <dt class="flex font-medium text-gray-900">
+                  {{ translate('Discount') }}
+                  {{-- <span class="rounded-full bg-gray-200 text-xs text-gray-600 py-0.5 px-2 ml-2">STUDENT50</span> --}}
+                </dt>
+                <dd class="text-gray-700">-{{ \FX::formatPrice($order->discount_amount) }}</dd>
+              </div>
+            @endif
             <div class="flex justify-between">
               <dt class="font-medium text-gray-900">{{ translate('Shipping') }}</dt>
-              <dd class="text-gray-700">0</dd>
+              <dd class="text-gray-700">{{  \FX::formatPrice(0) }}</dd>
             </div>
-            <div class="flex justify-between">
+            <div class="flex justify-between pt-3 mb-1 border-t border-gray-200">
               <dt class="font-semibold text-gray-900">{{ translate('Total') }}</dt>
               <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
             </div>

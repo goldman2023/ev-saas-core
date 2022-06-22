@@ -180,6 +180,10 @@ class CourseItem extends WeBaseModel
         return $this->morphTo();
     }
 
+    public function comments() {
+        return $this->morphMany(SocialComment::class, 'subject');
+    }
+
     public function setSelectedAttribute($value) {
         $this->selected = $value;
     }
