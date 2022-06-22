@@ -100,6 +100,30 @@
                 {{-- Product Info --}}
                 <div class="w-full flex flex-col items-center px-7 pb-8">
 
+                    @if(\Auth::check() && !auth()->user()?->bought($product))
+                        {{-- SHow CTA to buy if user didn't buy this course --}}
+                        {{-- Price and Buy --}}
+                        <div class="w-full flex justify-between py-2 border-y border-gray-200 mb-5" >
+                            <livewire:tenant.product.price :model="$product" :with_label="true" :with-discount-label="true"
+                                original-price-class="text-body text-16" base-price-class="text-16" total-price-class="text-20 fw-700 text-primary">
+                            </livewire:tenant.product.price>
+
+                            <div class="">
+                                @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
+                                    <x-system.buy-now-button :model="$product" class="" label="{{ translate('Buy now') }}"
+                                        label-not-in-stock="{{ translate('Not in stock') }}">
+                                    </x-system.buy-now-button>
+                                @else
+                                    <x-system.add-to-cart-button :model="$product" class="" label="{{ translate('Add to cart') }}"
+                                        label-not-in-stock="{{ translate('Not in stock') }}">
+                                    </x-system.add-to-cart-button>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                    
+
+
                     {{-- Excerpt --}}
                     @if(!empty($course_item->excerpt))
                         <p class="w-full text-gray-500 pb-3 mb-3 border-b border-gray-200">
