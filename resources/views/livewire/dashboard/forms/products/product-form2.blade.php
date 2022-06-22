@@ -1,8 +1,5 @@
 @push('head_scripts')
-<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet"
-    type="text/css" />
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js">
-</script>
+<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
 {{--
@@ -164,11 +161,9 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                    <x-dashboard.form.froala field="description" id="product-description-wysiwyg">
-                                    </x-dashboard.form.froala>
+                                    <x-dashboard.form.editor-js field="description" id="product-description-wysiwyg" />
 
-                                    <x-system.invalid-msg class="w-full" field="product.description">
-                                    </x-system.invalid-msg>
+                                    <x-system.invalid-msg class="w-full" field="product.description" />
                                 </div>
                             </div>
                             <!-- END Description -->
@@ -1165,8 +1160,8 @@
                                 x-data="{}" wire:ignore>
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                        <x-dashboard.form.froala field="model_core_meta.unlockables"
-                                            id="product-unlockables-wysiwyg"></x-dashboard.form.froala>
+                                        <x-dashboard.form.editor-js field="model_core_meta.unlockables"
+                                            id="product-unlockables-wysiwyg" />
 
                                         <x-system.invalid-msg class="w-full" field="model_core_meta.unlockables">
                                         </x-system.invalid-msg>
