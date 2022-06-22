@@ -210,12 +210,22 @@ class EVProductController extends Controller
         }
 
         // Check if Course item is free or product owned by user
-        if($course_item->free || (auth()->user()?->bought($product) ?? false) || (auth()->user()->manages($product) ?? false)) {
+        if($course_item->free || (Auth::check() && ((auth()->user()?->bought($product) ?? false) || (auth()->user()?->manages($product) ?? false)))) {
             $data = [
                 'product' => $product,
                 'course_items' => $product->course_items->toTree()->filter(fn($item) => $item->parent_id === null),
                 'course_item' => $course_item
             ];
+
+            if(auth()->user()) {
+                activity()
+                ->performedOn($course_item)
+                ->causedBy(auth()->user())
+                ->withProperties([
+                    'action' => 'viewed',
+                ])
+                ->log('viewed');
+            }
     
             return view('frontend.product.single.product-course-item-single', $data);
         }

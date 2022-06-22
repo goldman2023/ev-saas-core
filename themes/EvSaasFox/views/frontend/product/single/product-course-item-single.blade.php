@@ -35,12 +35,12 @@
         },
         getEmbed() {
             if(this.course_items_type === 'video') {
-                if(this.course_item.content.includes('youtube')) {
+                if(this.course_item.video.includes('youtube')) {
                     this.video_data = `
-                        <iframe width='640' height='360' src='${this.course_item.content}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                        <iframe width='640' height='360' src='${this.course_item.video}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
                     `;
-                } else if(this.course_item.content.includes('vimeo')) {
-                    fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(this.course_item.content), {
+                } else if(this.course_item.video.includes('vimeo')) {
+                    fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(this.course_item.video)+'&width=640&height=360', {
                         method: 'GET',
                         cache: 'no-cache', 
                         mode: 'cors',
@@ -49,14 +49,14 @@
                     .then(data => this.video_data = data.html);
                 } else {
                     this.video_data = `
-                        <iframe width='640' height='360' src='${this.course_item.content}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                        <iframe width='640' height='360' src='${this.course_item.video}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
                     `;
                 }
             }
         }
     }" x-init="init()">
         <div class="col-span-12 md:col-span-8">
-            <div class="w-full bg-white rounded-xl shadow overflow-y-auto">
+            <div class="w-full bg-white rounded-xl shadow overflow-y-auto mb-4">
                 @if(!empty($course_item->cover) && $course_item->type !== \App\Enums\CourseItemTypes::video()->value)
                     <div class="w-full pb-8">
                         <img class="w-full h-full max-h-[460px] object-cover" src="{{ !empty($course_item->cover) ? $course_item->getCover(['w' => 0, 'h' => 600]) : $course_item->getTHumbnail(['w' => 0, 'h' => 600]) }}" alt="" />
@@ -100,29 +100,11 @@
                 {{-- Product Info --}}
                 <div class="w-full flex flex-col items-center px-7 pb-8">
 
-                    @if(\Auth::check() && !auth()->user()?->bought($product))
-                        {{-- SHow CTA to buy if user didn't buy this course --}}
-                        {{-- Price and Buy --}}
-                        <div class="w-full flex justify-between py-2 border-y border-gray-200 mb-5" >
-                            <livewire:tenant.product.price :model="$product" :with_label="true" :with-discount-label="true"
-                                original-price-class="text-body text-16" base-price-class="text-16" total-price-class="text-20 fw-700 text-primary">
-                            </livewire:tenant.product.price>
-
-                            <div class="">
-                                @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
-                                    <x-system.buy-now-button :model="$product" class="" label="{{ translate('Buy now') }}"
-                                        label-not-in-stock="{{ translate('Not in stock') }}">
-                                    </x-system.buy-now-button>
-                                @else
-                                    <x-system.add-to-cart-button :model="$product" class="" label="{{ translate('Add to cart') }}"
-                                        label-not-in-stock="{{ translate('Not in stock') }}">
-                                    </x-system.add-to-cart-button>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
-                    
-
+                    @include('frontend.product.single.partials.course-purchase-cta', [
+                        'product' => $product,
+                        'course_items' => $course_items,
+                        'showing_single_course_item' => true
+                    ])
 
                     {{-- Excerpt --}}
                     @if(!empty($course_item->excerpt))
@@ -131,7 +113,7 @@
                         </p>
                     @endif
 
-                    <div class="w-full">
+                    <div class="w-full mb-2">
                         @if($course_item->type === \App\Enums\CourseItemTypes::video()->value)
 
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::quizz()->value)
@@ -183,6 +165,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="w-full bg-white rounded-xl shadow overflow-y-auto px-6 py-6">
+                <div class="w-full">
+                    {{-- Comments --}}
+                    <h3 class="text-lg font-bold mb-3">
+                        {{ translate('Comments and Questions') }} ({{ $course_item->comments->count() }})
+                    </h3>
+                    <livewire:actions.social-comments :item="$course_item">
+                    </livewire:actions.social-comments>
+                </div>
+            </div>
+
+            
         </div>
 
         <div class="col-span-12 md:col-span-4">
@@ -203,22 +198,37 @@
                 </div>
             </div>
         </div>
-    </div>
 
 
-    <x-system.form-modal id="gated-content-cta-modal" title="{{ translate('Want to access the full course?') }}" class="sm:max-w-2xl">
-        <div class="w-full flex flex-col">
-            {{-- <h3 class="w-full text-22 mb-2"></h3> --}}
-            <p class="text-16 mb-4">{{ translate('Join now and buy this course to have an access to content') }}</p>
-
-            <div class="w-full flex gap-4">
-                <a href="{{ route('user.login') }}" class="btn-primary">
-                    {{ translate('Log in') }}
-                </a>
-                <a href="{{ route('user.registration') }}" class="btn-primary-outline">
-                    {{ translate('Join now') }}
-                </a>
+        <x-system.form-modal id="gated-content-cta-modal" title="{{ translate('Want to access the full course?') }}" class="sm:max-w-2xl">
+            <div class="w-full flex flex-col">
+                {{-- <h3 class="w-full text-22 mb-2"></h3> --}}
+                <p class="text-16 mb-4">{{ translate('Join now and buy this course to have an access to content') }}</p>
+    
+                <div class="w-full flex gap-4 justify-start">
+                    @auth
+                        @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
+                            <x-system.buy-now-button :model="$product" class="!w-auto" label="{{ translate('Buy now') }}"
+                                label-not-in-stock="{{ translate('Not in stock') }}">
+                            </x-system.buy-now-button>
+                        @else
+                            <x-system.add-to-cart-button :model="$product" class="!w-auto" label="{{ translate('Add to cart') }}"
+                                label-not-in-stock="{{ translate('Not in stock') }}">
+                            </x-system.add-to-cart-button>
+                        @endif
+                    @endauth
+    
+                    @guest
+                        <a href="{{ route('user.login') }}" class="btn-primary">
+                            {{ translate('Log in') }}
+                        </a>
+                        <a href="{{ route('user.registration') }}" class="btn-primary-outline">
+                            {{ translate('Join now') }}
+                        </a>
+                    @endguest
+                    
+                </div>
             </div>
-        </div>
-    </x-system.form-modal>
+        </x-system.form-modal>
+    </div> 
 @endsection

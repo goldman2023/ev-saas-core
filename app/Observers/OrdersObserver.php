@@ -82,7 +82,8 @@ class OrdersObserver
                         'subject_id' => $item->subject->id,
                         'subject_type' => $item->subject::class,
                         'owner_id' => $order->user->id,
-                        'owner_type' => $order->user::class
+                        'owner_type' => $order->user::class,
+                        'order_id' => $order->id,
                     ],
                     [
                         'updated_at' => date('Y-m-d H:i:s', time())

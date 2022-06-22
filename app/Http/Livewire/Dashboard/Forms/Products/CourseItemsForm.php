@@ -61,6 +61,7 @@ class CourseItemsForm extends Component
             'current_item.name' => 'required',
             'current_item.excerpt' => 'nullable',
             'current_item.content' => 'nullable',
+            'current_item.video' => 'nullable',
             'current_item.order' => 'nullable',
             'current_item.accessible_after' => 'nullable',
             'current_item.meta_title' => 'nullable',

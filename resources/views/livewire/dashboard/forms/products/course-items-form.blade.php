@@ -14,6 +14,7 @@
             $wire.set('current_item.free', this.current_item.free, true);
             $wire.set('current_item.accessible_after', this.current_item.accessible_after, true);
             $wire.set('current_item.content', this.current_item.content, true);
+            $wire.set('current_item.video', this.current_item.video, true);
 
             if(this.current_item.type === 'quizz') {
                 $wire.set('current_item.subject_id', this.current_item.subject_id, true);
@@ -178,7 +179,7 @@
                     </label>
     
                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                        <x-dashboard.form.input field="current_item.content" :x="true" />
+                        <x-dashboard.form.input field="current_item.video" :x="true" />
                     </div>
                 </div>
             </template>

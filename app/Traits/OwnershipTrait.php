@@ -13,6 +13,10 @@ trait OwnershipTrait
     }
 
     public function bought($model) {
+        if(auth()->user()?->isAdmin() ?? null) {
+            return true;
+        }
+
         return $this->owned_assets()->where([
             ['subject_id', $model->id],
             ['subject_type', $model::class]
@@ -20,6 +24,10 @@ trait OwnershipTrait
     }
 
     public function manages($model) {
+        if(auth()->user()?->isAdmin() ?? null) {
+            return true;
+        }
+        
         if(\Auth::check() && auth()->user()->hasShop()) {
             if($model instanceof Product) {
                 return $model->user_id === auth()->user()->id || $model->shop_id === \MyShop::getShopID();

@@ -41,7 +41,7 @@ class CourseItem extends WeBaseModel
     public $title_path;
     public const PATH_SEPARATOR = '.';
 
-    protected $fillable = ['id', 'parent_id', 'product_id', 'type', 'subject_id', 'subject_type', 'free', 'name', 'slug', 'excerpt', 'content', 'order', 'accessible_after', 'meta_description', 'meta_title'];
+    protected $fillable = ['id', 'parent_id', 'product_id', 'type', 'subject_id', 'subject_type', 'free', 'name', 'slug', 'excerpt', 'video', 'content', 'order', 'accessible_after', 'meta_description', 'meta_title'];
     protected $appends = ['selected', 'title_path'];
 
     protected $casts = [
@@ -178,6 +178,10 @@ class CourseItem extends WeBaseModel
     public function subject()
     {
         return $this->morphTo();
+    }
+
+    public function comments() {
+        return $this->morphMany(SocialComment::class, 'subject');
     }
 
     public function setSelectedAttribute($value) {
