@@ -35,12 +35,12 @@
         },
         getEmbed() {
             if(this.course_items_type === 'video') {
-                if(this.course_item.content.includes('youtube')) {
+                if(this.course_item.video.includes('youtube')) {
                     this.video_data = `
-                        <iframe width='640' height='360' src='${this.course_item.content}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                        <iframe width='640' height='360' src='${this.course_item.video}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
                     `;
-                } else if(this.course_item.content.includes('vimeo')) {
-                    fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(this.course_item.content), {
+                } else if(this.course_item.video.includes('vimeo')) {
+                    fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(this.course_item.video)+'&width=640&height=360', {
                         method: 'GET',
                         cache: 'no-cache', 
                         mode: 'cors',
@@ -49,7 +49,7 @@
                     .then(data => this.video_data = data.html);
                 } else {
                     this.video_data = `
-                        <iframe width='640' height='360' src='${this.course_item.content}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                        <iframe width='640' height='360' src='${this.course_item.video}' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
                     `;
                 }
             }

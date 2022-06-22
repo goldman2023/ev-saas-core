@@ -1,12 +1,11 @@
 <div class="w-full" x-data="{
     id: '{{ $id }}',
     editor: null,
+    setEditorContent() {
+        this.editor.blocks.renderFromHTML({{ $field }});
+    },
     initEditor() {
         $nextTick(async () => {
-            try {
-                this.editor.destroy();
-            } catch(error) {}
-
             this.editor = new window.EditorJS(_.merge(window.getEditorJsDefaultConfig(this.id), {
                     data: {{ $field }},
                     minHeight: 100,
@@ -20,7 +19,7 @@
             );
             await this.editor.isReady;
             if({{ $field }} !== null && {{ $field }} != '' && {{ $field }}.length > 0) {
-                this.editor.blocks.renderFromHTML({{ $field }});
+                this.setEditorContent();
             }
                 
             {{-- {
@@ -42,9 +41,9 @@
     }
 }" 
 x-init="$nextTick(() => { initEditor() });"
-{{-- x-on:init-form.window="$nextTick(() => { initEditor() })" --}}
+x-on:init-form.window="$nextTick(() => { setEditorContent() })"
 wire:ignore>
-    <div :id="id">
+    <div :id="id" class="w-full">
 
     </div>
 </div>
