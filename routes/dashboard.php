@@ -159,6 +159,7 @@ Route::middleware([
         Route::get('/quiz/create', [WeQuizController::class, 'create'])->name('dashboard.we-quiz.create');
         Route::get('/quiz/details/{id}', [WeQuizController::class, 'details'])->name('dashboard.we-quiz.details');
         Route::get('/quiz/{id}/results', [WeQuizController::class, 'results'])->name('dashboard.we-quiz.results');
+        Route::get('/quiz/result/{id}', [WeQuizController::class, 'quiz_result_details'])->name('dashboard.we-quiz.result.details');
         Route::get('/quiz/edit/{id}', [WeQuizController::class, 'edit'])->name('dashboard.we-quiz.edit');
         Route::get('/quiz/show/{id}', [WeQuizController::class, 'show'])->name('dashboard.we-quiz.show');
         // ---------------------------------------------------- //

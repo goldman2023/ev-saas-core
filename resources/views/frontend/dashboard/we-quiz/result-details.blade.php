@@ -20,12 +20,19 @@
                                     <div class="sm:flex sm:space-x-5">
                                         <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                                             <p class="text-xl font-bold text-gray-900 sm:text-2xl mb-3">
-                                                {{ $quiz->name }}
+                                                {{ translate('Results for') }}: {{ $quiz->name }}
                                             </p>
                                             <div class="text-sm font-medium text-gray-600">
-                                                <div class="text-clip overflow-hidden max-h-[30px]">
-                                                    <span class="badge-primary">{{ translate('Quiz') }}</span>
-                                                </div>
+                                                <a href="{{ route('user.details', $user->id) }}" class="flex items-center" >
+                                                    @if(!empty($user->thumbnail))
+                                                        <img class="h-10 w-10 rounded-full border-3 ring-2 border-gray-200 mr-3 object-cover shrink-0" src="{{ $user->getThumbnail(['w' => '120']) }}" />
+                                                    @endif
+                                            
+                                                    <div class="w-full flex flex-col ">
+                                                        <strong class="">{{ $user->name.' '.$user->surname }}</strong>
+                                                        <span class="">{{ $user->email }}</span>
+                                                    </div>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -33,16 +40,7 @@
                                         <div class="text-center">
                                             <a href="{{ route('dashboard.we-quiz.show', $quiz->id) }}" target="_blank"
                                                 class="min-w-[200px] flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-200 bg-primary hover:bg-gray-50 hover:text-gray-900">
-
-                                                {{ translate('Preview') }} {{ translate('Quiz') }}
-                                                <svg class="gray-600 flex-shrink-0 h-6 w-6 ml-2"
-                                                    xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                </svg>
+                                                {{ translate('Mark as passed') }}
                                             </a>
 
                                             {{-- <div>
@@ -59,72 +57,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
-                                <div class="px-6 py-5 text-sm font-medium text-center">
-                                    <span class="text-gray-900">
-                                        {{-- {{ $quiz->public_view_count() }} --}}
-                                        0
-                                    </span>
-                                    <span class="text-gray-600">
-                                        {{ translate('Total views') }}
-                                    </span>
-                                </div>
-
-                                <div class="px-6 py-5 text-sm font-medium text-center">
-                                    <span class="text-gray-600">{{ translate('Used in') }}</span>
-                                    <span class="text-gray-900">
-                                        {{ $quiz->course_items()->count() }}
-                                    </span>
-                                    <span class="text-gray-600">{{ translate('course chapters') }}</span>
-                                </div>
-
-                                <div class="px-6 py-5 text-sm font-medium text-center">
-                                    <span class="text-gray-900">{{ $quiz->results()->count() }}</span>
-                                    <span class="text-gray-600">{{ translate('Results') }}</span>
-                                </div>
-                            </div>
                         </div>
                     </section>
 
-                    <!-- Actions panel -->
-                    <section aria-labelledby="quick-links-title">
-                        <div class="flex flex-wrap items-center py-4">
-                            <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center mr-2 mb-2 bg-white"
-                                href="{{ route('dashboard.we-quiz.show', $quiz->id) }}" target="_blank">
-                                @svg('heroicon-o-eye', ['style' => 'height: 16px;', 'class' => 'mr-2'])
-                                {{ translate('Preview') }}
-                            </a>
-
-                            <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center mr-2 mb-2 bg-white"
-                                href="{{ route('dashboard.we-quiz.edit', $quiz->id) }}">
-                                {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;',
-                                'class' => 'ml-2'])
-                            </a>
-
-                            <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center mr-2 mb-2 bg-white"
-                                href="{{ route('dashboard.we-quiz.results', $quiz->id) }}">
-                                {{ translate('Results') }} @svg('heroicon-o-pencil-alt', ['style' => 'height:
-                                16px;', 'class' => 'ml-2'])
-                            </a>
-
-                            <a class=" ml-auto btn btn-soft-danger btn-circle btn-xs d-inline-flex align-items-center confirm-delete mr-2 mb-2 bg-white"
-                                href="javascript:void(0)">
-                                {{ translate('Delete') }} @svg('heroicon-o-trash', ['style' => 'height: 16px;',
-                                'class' => 'ml-2'])
-                            </a>
-                        </div>
-
-
-                        <div class="mt-2">
+                    <!-- Quiz Results -->
+                    <section class="w-full">
+                        <div class="w-full">
                             <div class="rounded-lg bg-white overflow-hidden shadow">
                                 <div class="p-6 relative">
                                     <h3 class="text-base font-medium text-gray-900 relative">
-                                        {{ translate('Quiz Activity') }}
+                                        {{ translate('Quiz Results') }}
                                     </h3>
                                 
-
-                                    {{-- <livewire:product-activity :product="$product" /> --}}
                                 </div>
                             </div>
                         </div>

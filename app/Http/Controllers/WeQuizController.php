@@ -12,28 +12,49 @@ class WeQuizController extends Controller
     //
 
     public function index() {
+        // TODO: Add canAccess!
         $quizes = WeQuiz::all();
         return view('frontend.dashboard.we-quiz.index', compact('quizes'));
     }
 
 
     public function show($quiz_id) {
+        // TODO: Add canAccess!
         $quiz = WeQuiz::findOrFail($quiz_id);
         return view('frontend.we-quiz.show', compact('quiz') );
     }
 
     public function details(Request $request, $id) {
+        // TODO: Add canAccess!
         $quiz = WeQuiz::findOrFail($id);
         return view('frontend.dashboard.we-quiz.details', compact('quiz'));
     }
 
     public function create() {
+        // TODO: Add canAccess!
         return view('frontend.dashboard.we-quiz.create');
     }
 
     public function edit(Request $request, $id) {
+        // TODO: Add canAccess!
         $quiz = WeQuiz::findOrFail($id);
         return view('frontend.dashboard.we-quiz.edit', compact('quiz'));
+    }
+
+    public function results(Request $request, $id) {
+        // TODO: Add canAccess!
+        $quiz = WeQuiz::findOrFail($id);
+        return view('frontend.dashboard.we-quiz.results', compact('quiz'));
+    }
+
+    public function quiz_result_details(Request $request, $id) {
+        // TODO: Add canAccess!
+        $quiz_result = WeQuizResult::findOrFail($id);
+        $quiz = $quiz_result->quiz;
+        $user = $quiz_result->user;
+
+        return view('frontend.dashboard.we-quiz.result-details', compact('quiz', 'quiz_result', 'user'));
+
     }
 
     public function save_quiz(Request $request, $id = null) {
