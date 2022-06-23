@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use StripeService;
 use App\Traits\GalleryTrait;
 use App\Traits\UploadTrait;
 use App\Traits\SocialAccounts;
 use App\Traits\CoreMetaTrait;
+use App\Enums\UserSubscriptionStatusEnum;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Auth\User as Authenticatable;
@@ -67,11 +69,20 @@ class UserSubscription extends WeBaseModel
         return $date;
     }
 
+    public function isTrial() {
+        return $this->status === UserSubscriptionStatusEnum::trial()->value;
+    }
+
     // public static function getSubscriptionsAmount($subscriptions) {
     //     return $subscriptions->where([])
     // }
 
     public function getDynamicModelUploadProperties() : array {
         return [];
+    }
+
+    // STRIPE
+    public function getStripeSubscriptionID() {
+        return $this->data[StripeService::getStripeMode().'stripe_subscription_id'];
     }
 }

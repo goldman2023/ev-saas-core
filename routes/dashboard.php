@@ -17,6 +17,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\CRMController;
 use App\Http\Controllers\DocumentsController;
+use App\Http\Controllers\WeSubscriptionsController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\Integrations\IntegrationsController;
 use App\Http\Controllers\Integrations\WooCommerceController;
@@ -143,6 +144,8 @@ Route::middleware([
         Route::get('/shop-settings', [EVAccountController::class, 'shop_settings'])->name('settings.shop_settings');
         Route::get('/app-settings', [EVAccountController::class, 'app_settings'])->name('settings.app_settings');
         Route::get('/plans-management', [EVPlanController::class, 'my_plans_management'])->name('my.plans.management');
+        Route::get('/subscription/{subscription_id}/change-free-trial-plan/{new_plan_id}', [WeSubscriptionsController::class, 'change_free_trial_plan'])->name('subscription.change-free-trial-plan');
+
 
         // Payment Methods callback routes
         Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
