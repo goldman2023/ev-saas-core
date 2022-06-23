@@ -6,7 +6,7 @@
                 {{ $course_item->name }}
             </div>
         @else
-            @if($course_item->free || (\Auth::check() && auth()->user()?->bought($product)))
+            @if($course_item->free || (\Auth::check() && (auth()->user()?->bought($product) || auth()->user()?->manages($product))))
                 <a href="{{ route(\App\Models\CourseItem::getRouteName(), [
                     'product_slug' => $product->slug, 
                     'slug' => $course_item->slug
