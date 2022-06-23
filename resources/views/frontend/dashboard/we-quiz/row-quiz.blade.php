@@ -18,9 +18,9 @@
 
 <x-livewire-tables::table.cell class="align-middle">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        <a href="{{ route('dashboard.we-quiz.show', ['id' => $row->id]) }}" target="_blank" class="btn btn-white flex items-center mr-2">
+        <a href="{{ route('dashboard.we-quiz.details', ['id' => $row->id]) }}" class="btn btn-white flex items-center mr-2">
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px]'])
-            <span class="ml-2">{{ translate('Preview') }}</span>
+            <span class="ml-2">{{ translate('Details') }}</span>
         </a>
         <a class="btn btn-white flex items-center mr-2" href="{{ route('dashboard.we-quiz.edit', ['id' => $row->id]) }}">
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}

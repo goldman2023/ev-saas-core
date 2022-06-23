@@ -28,7 +28,16 @@ class WeQuiz extends WeBaseModel
     }
 
     public function results() {
-        return $this->hasMany(WeQuizResult::class, 'quiz_id', 'id');
+        return $this->hasMany(WeQuizResult::class, 'quiz_id', 'id')->orderBy('created_at', 'desc');
+    }
+
+    public function course_items() {
+        return CourseItem::where([
+            ['subject_id', $this->id],
+            ['subject_type', $this::class],
+
+        ]);
+        // return $this->morphToMany(CourseItem::class, 'subject', 'course_items');
     }
 
     public function scopeMy($query)

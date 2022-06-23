@@ -129,7 +129,7 @@
                                     
                                     function sendDataToServer(survey) {
                                         // Send Ajax request to your web server
-                                        fetch('{{ route('api.we-quiz.result.save', $course_item->subject->id) }}', {
+                                        fetch('{{ route('api.we-quiz.result.save', $course_item->subject?->id ?? -1) }}', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/json'
