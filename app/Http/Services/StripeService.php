@@ -822,9 +822,9 @@ class StripeService
         $meta[$this->mode_prefix .'stripe_request_id'] = null;
         $order->meta = $meta;
 
-        if($stripe_invoice->paid) {
+        if($stripe_invoice->paid && $stripe_subscription->status === 'active') {
             $order->payment_status = PaymentStatusEnum::paid()->value;
-        } else if($payment_failed) {
+        } else if($payment_failed || $stripe_subscription->status === 'trialing') {
             $order->payment_status = PaymentStatusEnum::unpaid()->value;
         } else {
             $order->payment_status = PaymentStatusEnum::pending()->value;
@@ -885,7 +885,7 @@ class StripeService
             /*
             * Create or Update Invoice (with same number)
             */
-            $invoice = Invoice::where('invoice_number', $stripe_invoice->number)->first(); // get invoice by number if it exists
+            $invoice = Invoice::withoutGlobalScopes()->where('invoice_number', $stripe_invoice->number)->first(); // get invoice by number if it exists
 
             $invoice = empty($invoice) ? new Invoice() : $invoice;
             $invoice->is_temp = false;
@@ -898,9 +898,9 @@ class StripeService
             $invoice->user_id = $order->user_id;
             $invoice->invoice_number = !empty($stripe_invoice->number) ? $stripe_invoice->number : 'invoice-draft-'.Uuid::generate(4)->string;
 
-            if($stripe_invoice->paid) {
+            if($stripe_invoice->paid && $stripe_subscription->status === 'active') {
                 $invoice->payment_status = PaymentStatusEnum::paid()->value;
-            } else if($payment_failed) {
+            } else if($payment_failed || $stripe_subscription->status === 'trialing') {
                 $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
             } else {
                 $invoice->payment_status = PaymentStatusEnum::pending()->value;
@@ -930,9 +930,9 @@ class StripeService
             $invoice->billing_city = $order->billing_city;
             $invoice->billing_zip = $order->billing_zip;
         } else {
-            if($stripe_invoice->paid) {
+            if($stripe_invoice->paid && $stripe_subscription->status === 'active') {
                 $invoice->payment_status = PaymentStatusEnum::paid()->value;
-            } else if($payment_failed) {
+            } else if($payment_failed || $stripe_subscription->status === 'trialing') {
                 $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
             } else {
                 $invoice->payment_status = PaymentStatusEnum::pending()->value;
@@ -1066,7 +1066,7 @@ class StripeService
         try {
             // Populate Order with data from stripe
             $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
-            $order->payment_status = PaymentStatusEnum::paid()->value;
+            $order->payment_status = $session->mode === 'payment' ? PaymentStatusEnum::paid()->value : PaymentStatusEnum::pending()->value;
             $order->is_temp = false;
             $order->email = empty($order->email) ? $session->customer_details->email : $order->email;
             $order->billing_company = '';
@@ -1692,6 +1692,9 @@ class StripeService
                     if($stripe_subscription->status === 'trialing') {
                         $subscription->status = UserSubscriptionStatusEnum::trial()->value;
                         $subscription->payment_status = PaymentStatusEnum::unpaid()->value;
+
+                        $order->payment_status = PaymentStatusEnum::unpaid()->value;
+                        $order->save();
                     }
 
                     $subscription->save();
@@ -1777,8 +1780,8 @@ class StripeService
                             // but content of subscription is changed (different products included in subscription)
                             // For this reaon, we cannot just depend on identifying Order only based on `latest_invoice_id`. We must include previous and new price(s) too, in order to know if subscription content really changed
                             // *IMPORTANT* - Getting previous and new price MAY BE DIFFERENT based on multi-product subscriptions and single-product ones. Bu we'll see soon :)
-                            $existing_order = Order::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_latest_invoice_id', $stripe_subscription->latest_invoice)->first();
-                            $existing_invoice = Invoice::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_invoice_id', $stripe_subscription->latest_invoice)->first();
+                            $existing_order = Order::query()->withoutGlobalScopes()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_latest_invoice_id', $stripe_subscription->latest_invoice)->first();
+                            $existing_invoice = Invoice::query()->withoutGlobalScopes()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_invoice_id', $stripe_subscription->latest_invoice)->first();
 
                             
                             // Code `should-procceed` ONLY if:
