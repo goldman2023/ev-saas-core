@@ -32,7 +32,8 @@
 
     {{ seo()->render() }}
 
-    @livewireScripts
+
+
     @livewireStyles
 
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
@@ -83,7 +84,10 @@
 
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
+    @livewireScripts
+    @livewireChartsScripts
     @yield('script')
+
 
     @stack('footer_scripts')
 </body>

@@ -198,8 +198,24 @@ if($colors) {
         }
 
         .card {
-            @apply bg-white border-2 border-gray-300 rounded-lg shadow-lg p-3;
+            @apply relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden;
         }
+
+        @media(max-width: 768px) {
+            .we-horizontal-slider {
+                display: grid;
+                grid-template-columns: repeat(auto-fill,minmax(70%,1fr));
+                grid-auto-flow: column;
+                grid-auto-columns: minmax(70%,1fr);
+                overflow-x: auto;
+                grid-auto-flow: column;
+                grid-auto-columns: minmax(70%,1fr);
+                overflow-x: auto;
+                padding-bottom: 20px;
+            }
+        }
+
+
 
         .container {
             @apply w-[1140px] max-w-[100%] px-5 lg:px-0 my-0 mx-auto;
