@@ -47,7 +47,10 @@
         echo get_setting('header_script');
     @endphp
 
+
     @stack('head_scripts')
+
+    @laravelPWA
 </head>
 <body>
 <!-- aiz-main-wrapper -->

@@ -223,4 +223,17 @@ class Order extends WeBaseModel
 
         return $percentChange;
     }
+
+
+    /* TODO: Make this into reporting Trait */
+    public function scopeByDays($query, $days)
+    {
+        //one day (today)
+        $date = \Carbon::now();
+
+        //one month / 30 days
+        $date = \Carbon::now()->subDays($days);
+
+        return $query->where('created_at', '>' , $date);
+    }
 }

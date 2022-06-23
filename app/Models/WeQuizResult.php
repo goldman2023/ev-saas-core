@@ -17,6 +17,7 @@ class WeQuizResult extends WeBaseModel
 
     protected $casts = [
         'quiz_answers' => 'array',
+        'quiz_passed' => 'boolean',
     ];
 
     public function user() {

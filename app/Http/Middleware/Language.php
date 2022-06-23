@@ -22,19 +22,23 @@ class Language
 
          $domain =  ExtendedDomainTenantResolver::$currentDomain;
 
-
-        if(!empty(auth()->user()?->getUserMeta('locale') ?? null)) {
-            $locale = auth()->user()->getUserMeta('locale');
-        } else if (Session::has('locale')) {
-            $locale = Session::get('locale');
-        } else {
-            /* TODO: Add locale by domain here */
-            if($domain) {
-                $locale = $domain->domain_locale;
+        if(auth()->user()) {
+            if(!empty(auth()->user()?->getUserMeta('locale') ?? null)) {
+                $locale = auth()->user()->getUserMeta('locale');
+            } else if (Session::has('locale')) {
+                $locale = Session::get('locale');
             } else {
-                $locale = config('app.locale');
+                /* TODO: Add locale by domain here */
+                if($domain) {
+                    $locale = $domain->domain_locale;
+                } else {
+                    $locale = config('app.locale');
+                }
             }
+        }else {
+            $locale = config('app.locale');
         }
+
 
 
         App::setLocale($locale);

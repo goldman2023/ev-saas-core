@@ -8,7 +8,7 @@
 
 
         </div>
-        <div class="sm:grid sm:grid-cols-6 gap-10 mb-12">
+        <div class="grid sm:grid-cols-12 gap-8 mb-12">
 
             @if(auth()->user()?->isSubscribed() ?? false)
             <div class="col-span-12">
@@ -33,8 +33,8 @@
                 <div
                     class="p-5 mb-5 border bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
                     <div class="">
-                        <h3 class="text-24 leading-6 font-semibold text-gray-900">Welcome to {{ get_site_name() }}</h3>
-                        <p class="mt-2 max-w-2xl text-sm text-gray-500">Select your plan and start your free trial</p>
+                        <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('Welcome to') }} {{ get_site_name() }}</h3>
+                        <p class="mt-2 max-w-2xl text-sm text-gray-500">{{ translate('Select your plan and start your free trial') }}</p>
                     </div>
 
                 </div>
@@ -44,7 +44,7 @@
             @endif
 
             <div class="col-span-6 sm:col-span-6">
-                <x-dashboard.elements.plan-subscriptions-list class="">
+                <x-dashboard.elements.plan-subscriptions-list class="h-full">
                 </x-dashboard.elements.plan-subscriptions-list>
             </div>
 
@@ -83,9 +83,4 @@
     </div>
 </section>
 
-<section class="recently-viewed-products mb-3">
-    <div class="">
-        <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
-    </div>
-</section>
 @endsection

@@ -20,11 +20,46 @@
             <div class="mb-6">
                 <x-dashboard.widgets.business.dynamic-k-p-i></x-dashboard.widgets.business.dynamic-k-p-i>
             </div>
+
+
         </div>
+
+
         <div class="grid sm:grid-cols-3 gap-8">
+
             <div class="col-span-2">
+                <div>
+                    <x-dashboard.elements.card class="mb-6">
+                        <x-slot name="cardHeader" class="flow-root mt-6">
+                            <div class="h5 fw-600">{{ translate('Quick Actions') }} </div>
+                        </x-slot>
+                        <x-slot name="cardBody" class="">
+                            {{-- TODO : make this company name dynamic --}}
+                            <p>{{ translate('') }}</p>
+                        </x-slot>
+                        <x-slot name="cardFooter">
+                            <div class="overflow-x-auto sm:flex lg:block">
+                                <a href="{{ route('orders.index') }}" class="btn btn-soft-primary mb-3">
+                                    🚚 {{ translate('Process Orders') }}
+                                </a>
+
+                                <a href="https://dashboard.stripe.com/invoices" taget="_blank" class="btn btn-soft-primary mb-3">
+                                    📄 {{ translate('Invoices & Payments') }}
+                                </a>
+
+                                <a href="{{ route('plans.index') }}" class="btn btn-soft-primary mb-3">
+                                    📦 {{ translate('Manage Plans') }}
+                                </a>
+
+                                <a href="{{ route('blog.posts.index') }}" class="btn btn-soft-primary">
+                                    🏷️ {{ translate('Manage Blog') }}
+                                </a>
+                            </div>
+                        </x-slot>
+                    </x-dashboard.elements.card>
+                </div>
                 <div class="sm:grid sm:grid-cols-1 gap-5 mb-12">
-                    <div class="sm:grid grid-cols-3 gap-5">
+                    <div class="sm:grid grid-cols-2 gap-5">
                         <x-dashboard.elements.card>
                             <x-slot name="cardHeader" class="flow-root mt-6">
                                 <div class="h5 fw-600">{{ translate('Plans & Subscribers') }} </div>
@@ -86,6 +121,7 @@
                             </x-slot>
                         </x-dashboard.elements.card>
                     </div>
+
                     <div>
 
                         <x-dashboard.elements.support-card class="card mb-3">
@@ -93,36 +129,7 @@
 
                     </div>
 
-                    <div>
-                        <x-dashboard.elements.card>
-                            <x-slot name="cardHeader" class="flow-root mt-6">
-                                <div class="h5 fw-600">{{ translate('Quick Actions') }} </div>
-                            </x-slot>
-                            <x-slot name="cardBody" class="">
-                                {{-- TODO : make this company name dynamic --}}
-                                <p>{{ translate('') }}</p>
-                            </x-slot>
-                            <x-slot name="cardFooter">
-                                <div class="overflow-x-auto sm:flex lg:block">
-                                    <a href="{{ route('orders.index') }}" class="btn btn-soft-primary mb-3">
-                                        🚚 {{ translate('Process Orders') }}
-                                    </a>
 
-                                    <a href="https://dashboard.stripe.com/invoices" taget="_blank" class="btn btn-soft-primary mb-3">
-                                        📄 {{ translate('Invoices & Payments') }}
-                                    </a>
-
-                                    <a href="{{ route('plans.index') }}" class="btn btn-soft-primary mb-3">
-                                        📦 {{ translate('Manage Plans') }}
-                                    </a>
-
-                                    <a href="{{ route('blog.posts.index') }}" class="btn btn-soft-primary">
-                                        🏷️ {{ translate('Manage Blog') }}
-                                    </a>
-                                </div>
-                            </x-slot>
-                        </x-dashboard.elements.card>
-                    </div>
 
                     <div class="w-full">
                         <livewire:dashboard.tables.recent-invoices-widget-table :per-page="10" :show-per-page="false" :show-search="false" :column-select="false" />
@@ -137,6 +144,11 @@
             </div>
 
             <div class="col-span-1">
+                <div class="hidden mb-6 bg-white p-6 rounded-xl shadow">
+                    <x-dashboard.widgets.business.calendar-summary></x-dashboard.widgets.business.calendar-summary>
+
+                </div>
+
                 @livewire('dashboard.elements.activity-log', ['causer' => auth()->user()])
 
             </div>

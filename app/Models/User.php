@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Cashier\Billable;
 use Laravel\Nova\Auth\Impersonatable;
 use DB;
+use Carbon\Carbon;
+
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
 {
@@ -48,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
+        'created_at' => 'date',
         'banned' => 'boolean',
         'verified' => 'boolean',
         'is_temp' => 'boolean',
@@ -97,11 +100,13 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         'password', 'remember_token',
     ];
 
-    public function isEmailVerified() {
+    public function isEmailVerified()
+    {
         return !empty($this->email_verified_at);
     }
 
-    public function hasShop() {
+    public function hasShop()
+    {
         return ($this->isAdmin() || $this->isSeller() || $this->isStaff()) && ($this->shop?->count() > 0);
     }
 
@@ -208,7 +213,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(Order::class);
     }
 
-    public function purchasedProducts() {
+    public function purchasedProducts()
+    {
         // return DB::table('products')->;
     }
 
@@ -240,7 +246,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function plans()
     {
         return $this->morphedByMany(Plan::class, 'subject', 'user_subscriptions')
-                ->withPivot('start_date', 'end_date', 'qty', 'data');
+            ->withPivot('start_date', 'end_date', 'qty', 'data');
     }
 
     public function plan_subscriptions()
@@ -273,14 +279,14 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->plan_subscriptions->count() > 0;
     }
 
-    public function isOnTrial() {
+    public function isOnTrial()
+    {
         /* TODO: Adjust this for multiplan */
-        if($this->isSubscribed()) {
+        if ($this->isSubscribed()) {
             return $this->plan_subscriptions->first()?->status == 'trial';
         } else {
             return false;
         }
-
     }
 
     public function getDynamicModelUploadProperties(): array
@@ -297,7 +303,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
             ->toArray();
     }
 
-    public function userTypeAttribute() {
+    public function userTypeAttribute()
+    {
         return $this->type;
     }
 
@@ -362,5 +369,17 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public static function getRouteName()
     {
         return 'user.profile.single';
+    }
+
+    /* TODO: Make this into reporting Trait */
+    public function scopeByDays($query, $days)
+    {
+        //one day (today)
+        $date = Carbon::now();
+
+        //one month / 30 days
+        $date = Carbon::now()->subDays($days);
+
+        return $query->where('created_at', '>' , $date);
     }
 }

@@ -25,5 +25,4 @@
 .codex-editor__redactor {
 	padding-bottom: 30px !important;
 }
-
 </style>
