@@ -144,7 +144,7 @@
             </div>
 
             <div class="col-span-1">
-                <div class="mb-6 bg-white p-6 rounded-xl shadow">
+                <div class="hidden mb-6 bg-white p-6 rounded-xl shadow">
                     <x-dashboard.widgets.business.calendar-summary></x-dashboard.widgets.business.calendar-summary>
 
                 </div>
