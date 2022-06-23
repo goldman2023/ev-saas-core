@@ -22,6 +22,11 @@ class WeQuizController extends Controller
         return view('frontend.we-quiz.show', compact('quiz') );
     }
 
+    public function details(Request $request, $id) {
+        $quiz = WeQuiz::findOrFail($id);
+        return view('frontend.dashboard.we-quiz.details', compact('quiz'));
+    }
+
     public function create() {
         return view('frontend.dashboard.we-quiz.create');
     }
