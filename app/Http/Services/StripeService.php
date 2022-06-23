@@ -885,7 +885,7 @@ class StripeService
             /*
             * Create or Update Invoice (with same number)
             */
-            $invoice = Invoice::where('invoice_number', $stripe_invoice->number)->first(); // get invoice by number if it exists
+            $invoice = Invoice::withoutGlobalScopes()->where('invoice_number', $stripe_invoice->number)->first(); // get invoice by number if it exists
 
             $invoice = empty($invoice) ? new Invoice() : $invoice;
             $invoice->is_temp = false;
@@ -1777,8 +1777,8 @@ class StripeService
                             // but content of subscription is changed (different products included in subscription)
                             // For this reaon, we cannot just depend on identifying Order only based on `latest_invoice_id`. We must include previous and new price(s) too, in order to know if subscription content really changed
                             // *IMPORTANT* - Getting previous and new price MAY BE DIFFERENT based on multi-product subscriptions and single-product ones. Bu we'll see soon :)
-                            $existing_order = Order::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_latest_invoice_id', $stripe_subscription->latest_invoice)->first();
-                            $existing_invoice = Invoice::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_invoice_id', $stripe_subscription->latest_invoice)->first();
+                            $existing_order = Order::query()->withoutGlobalScopes()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_latest_invoice_id', $stripe_subscription->latest_invoice)->first();
+                            $existing_invoice = Invoice::query()->withoutGlobalScopes()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_invoice_id', $stripe_subscription->latest_invoice)->first();
 
                             
                             // Code `should-procceed` ONLY if:
