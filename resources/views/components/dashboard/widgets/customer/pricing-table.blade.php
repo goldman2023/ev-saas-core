@@ -39,7 +39,7 @@
                 :class="{'border-2 border-primary':  is_active() }">
             <div
                 class="relative  flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green h-full"
-                :class="{'pt-[41px]':  is_active() }">
+                :class="{'pt-[41px]': is_active() }">
                 
                 <template x-if="is_active()">
                     <div 
