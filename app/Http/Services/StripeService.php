@@ -1689,13 +1689,14 @@ class StripeService
 
 
                     // Only change status if user_subscription is trial!
-                    if(!empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null)) {
+                    if($stripe_subscription->status === 'trialing') {
                         $subscription->status = UserSubscriptionStatusEnum::trial()->value;
+                        $subscription->payment_status = PaymentStatusEnum::unpaid()->value;
                     }
 
                     $subscription->save();
 
-                    // Status of subscription in this webhook is always: "status": "incomplete",
+                    // Status of subscription in this webhook is always: "status": "incomplete" or "trialing"
                     // So we should just update start and end date and not change status and payment_status! these will be changed in subscription.updated
                 }
             }
@@ -1748,7 +1749,12 @@ class StripeService
                         );
                         $stripe_billing_reason = $stripe_invoice->billing_reason;
 
-                        if($stripe_invoice->paid) {
+                        // In order to change status of subscription here, we need status of stripe subscription to NOT BE trailing and that invoice is paid
+                        if($stripe_subscription->status === 'trialing') {
+                            // If invoice is `trialing`, set status to trial and unpaid
+                            $subscription->status = UserSubscriptionStatusEnum::trial()->value;
+                            $subscription->payment_status = PaymentStatusEnum::unpaid()->value;
+                        } else if($stripe_subscription->status != 'trialing' && $stripe_invoice->paid) {
                             // invoice is paid at this point in time; DON'T DO ANYTHING IF STRIPE INVOICE IS NOT PAID!
                             $subscription->status = UserSubscriptionStatusEnum::active()->value;
                             $subscription->payment_status = PaymentStatusEnum::paid()->value;
@@ -1774,6 +1780,7 @@ class StripeService
                             $existing_order = Order::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_latest_invoice_id', $stripe_subscription->latest_invoice)->first();
                             $existing_invoice = Invoice::query()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_invoice_id', $stripe_subscription->latest_invoice)->first();
 
+                            
                             // Code `should-procceed` ONLY if:
                             // 1. Both Order and Invoice with `latest_invoice_id` cannot be found in our DB
                             // OR
@@ -1784,7 +1791,7 @@ class StripeService
                             } else {
                                 $should_proceed = (empty($existing_order) && empty($existing_invoice) || (($stripe_subscription?->plan?->id ?? 1) !== ($previous_attributes->plan->id ?? 1)));
                             }
-
+                            
                             if($should_proceed) {
                                 // Subscription is updated (downgraded, upgraded, interval changed etc.):
                                 // 1. Create a new Order
@@ -1807,15 +1814,18 @@ class StripeService
                                         ['metadata' => $new_metadata->toArray()]
                                     );
 
-                                    $new_invoice = $this->createInvoice(order: $new_order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription, payment_failed: $stripe_invoice->paid);
+                                    if($stripe_subscription->status != 'trialing') {
+                                        $new_invoice = $this->createInvoice(order: $new_order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription, payment_failed: $stripe_invoice->paid);
 
-                                    // Add latest Invoice ID on our end to Stripe subscription metadata
-                                    $new_metadata->latest_invoice_id = $new_invoice->id;
+                                        // Add latest Invoice ID on our end to Stripe subscription metadata
+                                        $new_metadata->latest_invoice_id = $new_invoice->id;
 
-                                    $this->stripe->subscriptions->update(
-                                        $stripe_subscription->id,
-                                        ['metadata' => $new_metadata->toArray()]
-                                    );
+                                        $this->stripe->subscriptions->update(
+                                            $stripe_subscription->id,
+                                            ['metadata' => $new_metadata->toArray()]
+                                        );
+                                    }
+                                    
 
                                     // Check if subscription was upgraded/downgraded
                                     if(count($previous_attributes?->items?->data ?? []) > 0) {
@@ -1834,6 +1844,12 @@ class StripeService
                                                 $new_plan = $new_plan->subject;
                                                 $subscription->subject_id = $new_plan->id;
                                                 $subscription->subject_type = $new_plan::class;
+
+                                                // Check if subscription status is still `trialing` on Stripe
+                                                if($stripe_subscription->status == 'trialing') {
+                                                    $subscription->status = UserSubscriptionStatusEnum::trial()->value;
+                                                    $subscription->payment_status = PaymentStatusEnum::unpaid()->value;
+                                                }
 
                                                 if(isset($new_order)) {
                                                     $subscription->order_id = $new_order->id;

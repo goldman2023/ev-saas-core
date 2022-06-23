@@ -176,7 +176,6 @@ Route::middleware([
     Route::get('/plan/{slug}', [EVPlanController::class, 'show'])->name(Plan::getRouteName());
     Route::get('/plan/{id}/checkout-link', [EVPlanController::class, 'createPlanCheckoutRedirect'])->name('plan.generate_checkout_link');
 
-    Route::get('/subscription/{id}/change-free-trial-plan', [WeSubscriptionsController::class, 'changeFreeTrialPlan'])->name('subscription.change-free-trial-plan');
 
     // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');

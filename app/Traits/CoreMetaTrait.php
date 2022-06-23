@@ -98,8 +98,16 @@ trait CoreMetaTrait
     public function getStripeProductID() {
         return $this->getCoreMeta(StripeService::getStripeMode().'stripe_product_id');
     }
-
+    
     public function getStripePriceID() {
         return $this->getCoreMeta(StripeService::getStripeMode().'stripe_price_id');
+    }
+
+    public function getStripeAnnualPriceID() {
+        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_annual_price_id');
+    }
+
+    public function getStripeMonthlyPriceID() {
+        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_monthly_price_id');
     }
 }
