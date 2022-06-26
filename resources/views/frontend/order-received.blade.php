@@ -19,7 +19,7 @@
 @section('content')
 
 <section class="bg-white">
-  
+
     <div class="max-w-3xl mx-auto px-4 py-8 sm:px-6 sm:py-16 lg:px-8">
       <div class="w-full mb-3">
         @if($order->isAbandoned())
@@ -60,6 +60,7 @@
 
           <div class="badge-info py-2 mb-2 text-18">{{ translate('processing') }}</div>
 
+          {{-- TODO: Make this dynamic --}}
           <p class="text-base text-gray-500">{{ translate('Orders usually ship withing 2 days and you will receive tracking number and order tracking details.') }}</p>
 
         @elseif($first_item->type === \App\Enums\ProductTypeEnum::course()->value)
@@ -68,7 +69,7 @@
 
           <div class="w-full mb-4">
             <a href="{{ route(\App\Models\CourseItem::getRouteName(), [
-                'product_slug' => $first_item->slug, 
+                'product_slug' => $first_item->slug,
                 'slug' => $first_item->course_items->first()?->slug ?? ' ',
             ]) }}" class="btn-success">
                 {{ translate('View course') }}
@@ -76,15 +77,15 @@
           </div>
         @endif
 
-        
+
         {{-- <dl class="mt-12 text-sm font-medium">
           <dt class="text-gray-900">Tracking number</dt>
           <dd class="text-indigo-600 mt-2">51547878755545848512</dd>
         </dl> --}}
       </div>
-  
-      <div class="border-t border-gray-200">  
-  
+
+      <div class="border-t border-gray-200">
+
         @if($order->order_items->isNotEmpty())
             @foreach($order->order_items as $item)
               {{-- @dd($item->subject) --}}
@@ -115,7 +116,7 @@
               </div>
             @endforeach
         @endif
-        
+
         @do_action('view.order-received.items.end', $order)
 
         <div class="grid grid-cols-3">
@@ -200,8 +201,8 @@
             </div>
           </dl>
         </div>
-        
+
       </div>
     </div>
-</section>  
+</section>
 @endsection

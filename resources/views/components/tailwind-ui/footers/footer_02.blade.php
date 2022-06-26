@@ -9,7 +9,7 @@ $header_menu_items = $header_menu['menuItems'] ?? null;
 <!-- This example requires Tailwind CSS v2.0+ -->
 <footer class="bg-white">
     <div class="max-w-6xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
-        <div class="grid grid-cols-3">
+        <div class="grid sm:grid-cols-3">
             <div>
                 <p class="text-left text-base text-gray-400">&copy; Emarius © 2022</p>
 
