@@ -48,7 +48,13 @@ return [
         'header' => [
             'name' => 'Header',
             'unique' => true,
-            'max_depth' => 10,
+            'max_depth' => 3,
+            'menu_item_types' => []
+        ],
+        'footer' => [
+            'name' => 'Footer',
+            'unique' => true,
+            'max_depth' => 3,
             'menu_item_types' => []
         ]
     ],
