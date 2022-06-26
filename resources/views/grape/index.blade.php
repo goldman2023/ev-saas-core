@@ -16,6 +16,7 @@
 
 <script src="//unpkg.com/grapesjs"></script>
 <script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage@0.1.11/dist/grapesjs-preset-webpage.min.js"></script>
+<script src="/js/grapesjs-custom-code.min.js"></script>
 
 @endpush
 
@@ -60,7 +61,12 @@
                 fromElement: 1,
                 height: '100%',
                 storageManager: { type: 0 },
-                plugins: ['gjs-blocks-basic']
+                plugins: ['gjs-blocks-basic', 'grapesjs-custom-code'],
+                pluginsOpts: {
+                    'grapesjs-custom-code': {
+                    // options
+                    }
+                }
               });
 
 

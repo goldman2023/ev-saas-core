@@ -58,8 +58,7 @@
         </x-tailwind-ui.footers.footer>
     </div>
 
-    <x-default.footers.app-bar>
-    </x-default.footers.app-bar>
+
 
 
     <!-- Carts -->
