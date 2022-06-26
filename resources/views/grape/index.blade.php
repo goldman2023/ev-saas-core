@@ -16,7 +16,8 @@
 
 <script src="//unpkg.com/grapesjs"></script>
 <script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage@0.1.11/dist/grapesjs-preset-webpage.min.js"></script>
-<script src="/js/grapesjs-custom-code.min.js"></script>
+<script src="/bp-assets/grapesjs-custom-code.min.js">
+</script>
 
 @endpush
 
@@ -64,7 +65,7 @@
                 plugins: ['gjs-blocks-basic', 'grapesjs-custom-code'],
                 pluginsOpts: {
                     'grapesjs-custom-code': {
-                    // options
+
                     }
                 }
               });

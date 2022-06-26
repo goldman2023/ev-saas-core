@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class PopulatePermissions extends Command
 {
+    //test
     /**
      * The name and signature of the console command.
      *
