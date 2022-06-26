@@ -11,19 +11,15 @@
         <div class="grid sm:grid-cols-12 gap-8 mb-12">
 
             @if(auth()->user()?->isSubscribed() ?? false)
-            <div class="col-span-12">
-                <x-dashboard.widgets.customer.dynamic-stats>
-                    </x-dashboard.widgets.business.dynamic-stats>
-            </div>
+                <div class="col-span-12">
+                    <x-dashboard.widgets.customer.dynamic-stats></x-dashboard.widgets.business.dynamic-stats>
+                </div>
             @endif
 
             @if(auth()->user()?->isSubscribed() ?? false)
             <div class="col-span-12">
-
-
                 <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
                     :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
-
             </div>
 
             @else
