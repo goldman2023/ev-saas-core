@@ -84,10 +84,17 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a> --}}
 
-        <a class="btn btn-primary flex items-center mr-2" x-bind:href="$getStripeCheckoutPermalink()" target="_blank">
-            {{-- @svg('heroicon-o-x', ['class' => 'w-[18px] h-[18px] mr-2'])  --}}
-            {{ translate('Upgrade') }}
-        </a>
+        @if(auth()->user()?->plan_subscriptions->first()?->isTrial())
+            <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="$dispatch('display-modal', {'id': 'change-trial-plan-modal'})" target="_blank">
+                {{ translate('Change') }}
+            </button>
+        @else
+            <a type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" x-bind:href="$getStripeCheckoutPermalink()" target="_blank">
+                {{ translate('Change') }}
+            </a>
+        @endif
+
+        
 
         {{-- @if(!get_tenant_setting('multiplan_purchase'))
             <button 
