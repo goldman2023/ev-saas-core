@@ -46,7 +46,7 @@
           </p>
           @if(($order?->type ?? null) === 'subscription' && !empty($invoices?->first()?->end_date ?? null))
             <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-              {{ translate('Next invoice in').' '.(\Carbon::createFromTimestamp($invoices?->first()?->end_date)?->diffInDays() ?? '?').' '.translate('days') }}
+              {{ translate('Invoice in').' '.(\Carbon::createFromTimestamp($invoices?->first()?->end_date)?->diffInDays() ?? '?').' '.translate('days') }}
             </p>
           @endif
           <div class="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6">
