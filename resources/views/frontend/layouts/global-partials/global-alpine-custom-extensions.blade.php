@@ -20,7 +20,6 @@
                         'preview': data_params.preview,
                         'interval': data_params.interval,
                     };
-                    console.log(data);
 
                     url_params.set('data', btoa(JSON.stringify(data)));
                     return base_route.toString()+'?'+url_params.toString();

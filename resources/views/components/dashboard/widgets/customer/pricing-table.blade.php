@@ -2,7 +2,7 @@
     pricing_mode: 'month',
     current_plan_mode: '{{ auth()->user()->plan_subscriptions?->first()?->order?->invoicing_period ?? '' }}',
     current_plan_id: {{ auth()->user()->plan_subscriptions?->first()?->subject->id ?? 'null' }},
-    current_is_trial: {{  auth()->user()->plan_subscriptions?->first()?->isTrial() }},
+    current_is_trial: {{  auth()->user()->plan_subscriptions?->first()?->isTrial() ? 'true' : 'false' }},
 }">
     @if((auth()->user()?->isSubscribed() ?? false) && !$hideTitle)
     <h2 class="text-32 text-gray-700 font-semibold mb-5">{{ translate('Explore other plans')}}</h2>
