@@ -5,8 +5,6 @@
     <div class="row">
         <div class="grid w-full">
             <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
-
-
         </div>
         <div class="grid sm:grid-cols-12 gap-8 mb-12">
 
@@ -18,6 +16,8 @@
 
             @if(auth()->user()?->isSubscribed() ?? false)
                 <div class="col-span-12">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('My Subscriptions') }}</h3>
+
                     <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
                         :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
                 </div>
