@@ -17,11 +17,10 @@
             @endif
 
             @if(auth()->user()?->isSubscribed() ?? false)
-            <div class="col-span-12">
-                <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
-                    :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
-            </div>
-
+                <div class="col-span-12">
+                    <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
+                        :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
+                </div>
             @else
                 <div class="col-span-12">
                     <div
@@ -41,7 +40,7 @@
                 <x-dashboard.elements.plan-subscriptions-list class="h-full">
                 </x-dashboard.elements.plan-subscriptions-list>
             </div>
-            
+
             <div class="col-span-12 md:col-span-4 flex flex-col">
                 <div class="w-full bg-white border border-gray-200 rounded-lg cursor-pointer"
                     @click="window.location.href = '{{ get_tenant_setting('pix_pro_software_download_url', '#') }}'">

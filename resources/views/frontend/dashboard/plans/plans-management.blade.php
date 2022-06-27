@@ -20,16 +20,16 @@
     </x-dashboard.section-headers.section-header>
 
     @if(auth()->user()?->isSubscribed() ?? false)
-    <div class="w-full pb-5 mb-5 border-b border-gray-200">
-        <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
-            <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Subscriptions') }}</h4>
+        <div class="w-full pb-5 mb-5 border-b border-gray-200">
+            <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
+                <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Subscriptions') }}</h4>
+            </div>
+
+            <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
+                :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
         </div>
 
-        <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
-            :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
-    </div>
-    {{-- Second parameter is a variable sent to do action --}}
-    @do_action('view.dashboard.plans-management.plans-table.end', auth()->user())
+        @do_action('view.dashboard.plans-management.plans-table.end', auth()->user())
     @endif
 
     <x-dashboard.widgets.customer.pricing-table :plans="$plans">
@@ -38,6 +38,18 @@
     </div>
 </section>
 @endsection
+
+@push('modal')
+    @if((auth()->user()?->isSubscribed() ?? false) && auth()->user()?->plan_subscriptions->first()->isTrial())
+        <x-system.form-modal id="change-trial-plan-modal" title="Change trial plan" class="!max-w-7xl" title-class="text-20 font-semibold">
+            <div class="w-full py-3">
+                <x-dashboard.widgets.customer.pricing-table :plans="$plans" :hide-title="true">
+                </x-dashboard.widgets.customer.pricing-table>
+            </div>
+        </x-system.form-modal>
+    @endif
+
+@endpush
 
 @push('footer_scripts')
 {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>

@@ -8,12 +8,14 @@ use Illuminate\View\Component;
 class PricingTable extends Component
 {
     public $plans;
+    public $hideTitle;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($plans = null)
+    public function __construct($plans = null, $hideTitle = null)
     {
         if($plans) {
             $this->plans = $plans;
@@ -22,7 +24,7 @@ class PricingTable extends Component
             $this->plans = Plan::published()->withoutGlobalScopes()->get();
         }
 
-
+        $this->hideTitle = $hideTitle;
     }
 
     /**

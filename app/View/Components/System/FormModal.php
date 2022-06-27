@@ -10,18 +10,20 @@ class FormModal extends Component
     public $title;
     public $id;
     public $preventClose;
+    public $titleClass;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($id= '', $class = '', $title = '', $preventClose = false)
+    public function __construct($id= '', $class = '', $title = '', $preventClose = false, $titleClass = '')
     {
         $this->class = $class;
         $this->title = $title;
         $this->id = $id;
         $this->preventClose = $preventClose;
+        $this->titleClass = $titleClass;
     }
 
     /**
