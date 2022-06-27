@@ -6,6 +6,10 @@ use Illuminate\View\Component;
 
 class DynamicStats extends Component
 {
+    public $user_subscription = null;
+    public $order = null;
+    public $invoices = null;
+
     /**
      * Create a new component instance.
      *
@@ -13,7 +17,11 @@ class DynamicStats extends Component
      */
     public function __construct()
     {
-        //
+        $this->user_subscription = auth()->user()->plan_subscriptions->load(['order', 'order.invoices' => function($query) {
+            $query->withoutGlobalScopes();
+        }])->first(); // TODO: For now we are using just first subscrption, but what i there are more subs????
+        $this->order = $this->user_subscription->order;
+        $this->invoices = $this->order->invoices;
     }
 
     /**

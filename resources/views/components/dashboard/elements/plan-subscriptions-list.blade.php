@@ -10,9 +10,25 @@
         @if($plan_subscriptions->isNotEmpty())
             <div class="w-full space-x-3">
                 @foreach($plan_subscriptions as $subscription)
-                    <div class="w-full flex justify-between">
-                        <strong class="text-16 font-semibold">{{ $subscription->plan->name }}</strong>
-                        <span class="text-16 font-normal">{{ $subscription->order->invoicing_period === 'month' ?  $subscription->plan->getTotalPrice(true) :  $subscription->plan->getTotalAnnualPrice(true) }} / {{ $subscription->order->invoicing_period }}</span>
+                    <div class="w-full flex flex-col">
+                        <div class="w-full flex justify-between mb-2">
+                            <strong class="text-16 font-semibold">{{ $subscription->plan->name }}</strong>
+                        </div>
+                        @foreach($subscription->order->order_items as $order_item)
+                            <div class="w-full flex justify-between mb-1">
+                                <span class="text-14 text-gray-600 font-normal">
+                                    {{ $order_item->quantity.' '.translate('user') }} x {{ \FX::formatPrice($order_item->total_price / $order_item->quantity) }} / {{ translate('user') }} / {{ $subscription->order->invoicing_period }}
+                                </span>
+
+                                <span class="text-14 text-gray-600 font-normal">{{ \FX::formatPrice($subscription->order->total_price) }} / {{ $subscription->order->invoicing_period }}</span>
+                            </div>
+                        @endforeach
+
+                        <div class="w-full flex justify-between">
+                            <span class="text-14 text-gray-600 font-normal">
+                                {{ translate('Next payment due on') }} <strong>{{ \Carbon::createFromTimestamp($subscription->order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices->first()?->end_date)->format('d M, Y') }}</strong>
+                            </span>
+                        </div>
                     </div>
                 @endforeach
             </div>

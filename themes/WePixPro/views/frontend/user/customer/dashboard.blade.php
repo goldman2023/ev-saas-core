@@ -11,44 +11,38 @@
         <div class="grid sm:grid-cols-12 gap-8 mb-12">
 
             @if(auth()->user()?->isSubscribed() ?? false)
-            <div class="col-span-12">
-                <x-dashboard.widgets.customer.dynamic-stats>
-                    </x-dashboard.widgets.business.dynamic-stats>
-            </div>
+                <div class="col-span-12">
+                    <x-dashboard.widgets.customer.dynamic-stats></x-dashboard.widgets.business.dynamic-stats>
+                </div>
             @endif
 
             @if(auth()->user()?->isSubscribed() ?? false)
             <div class="col-span-12">
-
-
                 <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
                     :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
-
             </div>
 
             @else
-            <div class="col-span-12">
+                <div class="col-span-12">
+                    <div
+                        class="p-5 mb-5 border bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
+                        <div class="">
+                            <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('Welcome to') }} {{ get_site_name() }}</h3>
+                            <p class="mt-2 max-w-2xl text-sm text-gray-500">{{ translate('Select your plan and start your free trial') }}</p>
+                        </div>
 
-
-                <div
-                    class="p-5 mb-5 border bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
-                    <div class="">
-                        <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('Welcome to') }} {{ get_site_name() }}</h3>
-                        <p class="mt-2 max-w-2xl text-sm text-gray-500">{{ translate('Select your plan and start your free trial') }}</p>
                     </div>
-
+                    <x-dashboard.widgets.customer.pricing-table>
+                    </x-dashboard.widgets.customer.pricing-table>
                 </div>
-                <x-dashboard.widgets.customer.pricing-table>
-                </x-dashboard.widgets.customer.pricing-table>
-            </div>
             @endif
 
-            <div class="col-span-6 sm:col-span-6">
+            <div class="col-span-12 md:col-span-4">
                 <x-dashboard.elements.plan-subscriptions-list class="h-full">
                 </x-dashboard.elements.plan-subscriptions-list>
             </div>
-
-            <div class="col-span-6 sm:col-span-6 flex flex-col">
+            
+            <div class="col-span-12 md:col-span-4 flex flex-col">
                 <div class="w-full bg-white border border-gray-200 rounded-lg cursor-pointer"
                     @click="window.location.href = '{{ get_tenant_setting('pix_pro_software_download_url', '#') }}'">
                     <div class="border-b border-gray-200 px-4 sm:px-7 py-5">

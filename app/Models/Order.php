@@ -82,7 +82,7 @@ class Order extends WeBaseModel
 
     public function invoices()
     {
-        return $this->hasMany(Invoice::class, 'order_id', 'id');
+        return $this->hasMany(Invoice::class, 'order_id', 'id')->orderBy('created_at', 'desc');
     }
 
     public static function count()
