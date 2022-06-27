@@ -60,7 +60,7 @@
         }
 
         .numbers-grid .number-col .stat:nth-child(1) {
-            margin-bottom: 65px;
+            margin-bottom: 15px;
         }
     </style>
 
