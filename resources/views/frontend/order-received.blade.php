@@ -43,15 +43,23 @@
         @elseif($first_item instanceof \App\Models\Plan)
           <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Successfully bought a plan!') }}</p>
           <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. You have successfully subscribed to plan listed below.') }}</p>
+
+          @if(!empty($ghost_user))
+              <x-system.alert type="warning" text="{!! translate('Please finalize your registration.').'<br>'.translate('Email').': '.$ghost_user->email !!}" :only-text="true" />
+          @endif
         @elseif($first_item->type === \App\Enums\ProductTypeEnum::bookable_service()->value)
           <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Please review your order') }}</p>
           <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. Please select the available booking time.') }}</p>
 
           <div class="w-full mb-4">
-            @if($is_bookable_product)
-              <button type="button" class="btn-primary" @click="Calendly.showPopupWidget('{{ $first_item->getBookingLink() }}');">
-                {{ translate('Schedule a meeting') }}
-              </button>
+            @if(!empty($ghost_user))
+              <x-system.alert type="warning" text="{!! translate('Please finalize your registration before scheduling a meeting.').'<br>'.translate('Email').': '.$ghost_user->email !!}" :only-text="true" />
+            @else
+              @if($is_bookable_product)
+                <button type="button" class="btn-primary" @click="Calendly.showPopupWidget('{{ $first_item->getBookingLink() }}');">
+                  {{ translate('Schedule a meeting') }}
+                </button>
+              @endif
             @endif
           </div>
         @elseif($first_item->type === \App\Enums\ProductTypeEnum::standard()->value)
@@ -68,12 +76,16 @@
           <p class="mb-2 text-base text-gray-500">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. You successfully bought a course.') }}</p>
 
           <div class="w-full mb-4">
-            <a href="{{ route(\App\Models\CourseItem::getRouteName(), [
-                'product_slug' => $first_item->slug,
-                'slug' => $first_item->course_items->first()?->slug ?? ' ',
-            ]) }}" class="btn-success">
-                {{ translate('View course') }}
-            </a>
+            @if(!empty($ghost_user))
+              <x-system.alert type="warning" text="{!! translate('Before accessing the course, please go to your email and finalize your registration.').' <br /> '.translate('Email').': '.$ghost_user->email !!}" :only-text="true" />
+            @else
+              <a href="{{ route(\App\Models\CourseItem::getRouteName(), [
+                  'product_slug' => $first_item->slug,
+                  'slug' => $first_item->course_items->first()?->slug ?? ' ',
+              ]) }}" class="btn-success">
+                  {{ translate('View course') }}
+              </a>
+            @endif
           </div>
         @endif
 
@@ -191,10 +203,14 @@
                 <dd class="text-gray-700">-{{ \FX::formatPrice($order->discount_amount) }}</dd>
               </div>
             @endif
-            <div class="flex justify-between">
-              <dt class="font-medium text-gray-900">{{ translate('Shipping') }}</dt>
-              <dd class="text-gray-700">{{  \FX::formatPrice(0) }}</dd>
-            </div>
+
+            @if($first_item->isShippable())
+              <div class="flex justify-between">
+                <dt class="font-medium text-gray-900">{{ translate('Shipping') }}</dt>
+                <dd class="text-gray-700">{{  \FX::formatPrice(0) }}</dd>
+              </div>
+            @endif
+            
             <div class="flex justify-between pt-3 mb-1 border-t border-gray-200">
               <dt class="font-semibold text-gray-900">{{ translate('Total') }}</dt>
               <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>

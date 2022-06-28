@@ -18,7 +18,7 @@
 
   displayed_items = newItems;
 })" x-effect="items = @js($items)" wire:ignore.self>
-    <div class="relative" wire:ignore>
+    <div class="relative" wire:ignore.self>
       <button type="button" @click="open_dropdown = !open_dropdown" 
               class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm {{ $selectorClass ?? '' }} @error($field) is-invalid @enderror">
         <span class="block truncate" :class="{'text-gray-600':!items.hasOwnProperty({{ $selected }})}" x-text="items.hasOwnProperty({{ $selected }}) ? items[{{ $selected }}] : placeholder"></span>
@@ -27,7 +27,7 @@
         </span>
       </button>
   
-      <ul class="absolute z-10 mt-1 w-full max-w-lg bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+      <ul wire:ignore class="absolute z-10 mt-1 w-full max-w-lg bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
             x-show="open_dropdown"
             x-transition:enter=""
             x-transition:enter-start=""
@@ -60,7 +60,6 @@
       </ul>
     </div>
 
-    {{-- TODO: this does not work cuz of wire:ignore!, move it one step above --}}
     @if(!empty($field) && !$hideError)
         <x-system.invalid-msg field="{{ $field }}"></x-system.invalid-msg>
     @endif

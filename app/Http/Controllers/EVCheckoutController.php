@@ -458,15 +458,16 @@ class EVCheckoutController extends Controller
          * 1. They will be identified by session ID
          * 2. Email will be sent to them to finalize registration (when ghost/guest user is created in our DB after purchase)
         */
+        $ghost_user = User::where('session_id', Session::getId())->first();
 
-        if(!Auth::check() && $order->user_id !== (User::where('session_id', Session::getId())->first()?->id ?? null)) {
+        if(!Auth::check() && $order->user_id !== ($ghost_user?->id ?? null)) {
             // Guest users - identify them by session_id and check if any user has that session_id, if not redirect!
             return redirect()->route('user.registration');
         } else if(Auth::check() && $order->user_id !== (auth()->user()?->id ?? null) && !auth()->user()->isAdmin()) {
             return redirect()->route('home');
         }
 
-        return view('frontend.order-received', compact('order'));
+        return view('frontend.order-received', compact('order', 'ghost_user'));
     }
 
     public function orderCanceled(Request $request, $order_id)
