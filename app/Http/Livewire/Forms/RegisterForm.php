@@ -84,7 +84,7 @@ class RegisterForm extends Component
 
     protected function messages()
     {
-        return [
+        $msgs = [
             'name.required' => translate('First name is required'),
             'name.min' => translate('Minimum 2 characters required'),
             'surname.required' => translate('Last name is required'),
@@ -101,6 +101,16 @@ class RegisterForm extends Component
             'terms_consent.boolean' => translate('Terms and conditions consent is required.'),
             'terms_consent.is_true' => translate('Terms and conditions consent is required bool.'),
         ];
+
+        if($this->available_meta->count() > 0) {
+            foreach($this->available_meta as $key => $options) {
+                if($options['required'] ?? false) {
+                    $msgs['user_meta.'.$key.'.required'] = translate('Required');
+                }
+            }
+        }
+
+        return $msgs;
     }
 
     /**
@@ -138,6 +148,11 @@ class RegisterForm extends Component
     public function render()
     {
         return view('livewire.forms.register-form');
+    }
+
+    public function dehydrate()
+    {
+        $this->dispatchBrowserEvent('init-form');
     }
 
     public function register()
@@ -197,7 +212,7 @@ class RegisterForm extends Component
                 }
                 
                 $this->user->save();
-                flash(translate('Registration successfull. Please verify your email.'))->success();
+                // flash(translate('Registration successfull. Please verify your email.'))->success();
 
                 return $this->registered() ?: redirect('/');
             } else {

@@ -37,7 +37,7 @@
                 <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                     <div>
                         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Subscription plan') }}</h3>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500">THere you can edit all plan basic information</p>
+                        <p class="mt-1 max-w-2xl text-sm text-gray-500">Here you can edit all plan basic information</p>
                     </div>
             
                     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">

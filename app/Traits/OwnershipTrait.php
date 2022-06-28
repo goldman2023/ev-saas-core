@@ -13,7 +13,11 @@ trait OwnershipTrait
     }
 
     public function bought($model) {
-        if(auth()->user()?->isAdmin() ?? null) {
+        if($this?->isAdmin() ?? null) {
+            return true;
+        }
+
+        if($this?->manages($model) ?? null) {
             return true;
         }
 
@@ -24,13 +28,13 @@ trait OwnershipTrait
     }
 
     public function manages($model) {
-        if(auth()->user()?->isAdmin() ?? null) {
+        if($this?->isAdmin() ?? null) {
             return true;
         }
-        
-        if(\Auth::check() && auth()->user()->hasShop()) {
+
+        if(\Auth::check() && $this->hasShop()) {
             if($model instanceof Product) {
-                return $model->user_id === auth()->user()->id || $model->shop_id === \MyShop::getShopID();
+                return $model->user_id === $this->id || $model->shop_id === \MyShop::getShopID();
             } else if($model instanceof Plan) {
                 return $model->shop_id === \MyShop::getShopID();
             }

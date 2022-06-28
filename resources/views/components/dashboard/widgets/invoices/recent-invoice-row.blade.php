@@ -47,7 +47,7 @@
 
 
 <x-livewire-tables::table.cell class="align-middle text-left">
-    <span class="d-block text-14 mb-0">{{ !empty($row->end_date) ? date('d M, Y', $row->end_date) : '/' }}</span>
+    <span class="d-block text-14 mb-0">{{ !empty($row->end_date) ? date('d M, Y', $row->end_date) : '-' }}</span>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
