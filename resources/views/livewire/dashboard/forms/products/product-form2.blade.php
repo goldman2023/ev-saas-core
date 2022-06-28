@@ -33,7 +33,7 @@
         core_meta: @js($core_meta),
         model_core_meta: @js($model_core_meta),
 
-        track_inventory: @js($product->track_inventory),
+        track_inventory: @js($product->track_inventory === true ? 'true' : 'false'),
 
         onSave() {
             $wire.set('product.description', this.description, true);

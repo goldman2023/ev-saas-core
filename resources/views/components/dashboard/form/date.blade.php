@@ -9,7 +9,8 @@
             };
         },
         initDateForm() {
-            $nextTick(() => { 
+            $nextTick(() => {
+                console.log('waa');
                 flatpickr('#{{ !empty($id) ? $id : str_replace('.', '_', $field) }}', this.getDateOptions()); 
             });
         }
@@ -21,6 +22,8 @@
             id="{{ !empty($id) ? $id : str_replace('.', '_', $field) }}"
             class="js-flatpickr flatpickr-custom form-standard @error($field) is-invalid @enderror"
             placeholder="{{ translate('Pick a date(s)') }}"
+            {{-- TODO: Flatpickr doesn't assign autocomplete="off" attribute to newly created input: https://github.com/flatpickr/flatpickr/issues/2577 --}}
+            autocomplete="off" 
             data-input />
 
     @if(!empty($field))

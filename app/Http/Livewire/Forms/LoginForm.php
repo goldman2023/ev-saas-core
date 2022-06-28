@@ -67,6 +67,11 @@ class LoginForm extends Component
         return view('livewire.forms.login-form');
     }
 
+    public function dehydrate()
+    {
+        $this->dispatchBrowserEvent('init-form');
+    }
+
     public function login()
     {
         try {

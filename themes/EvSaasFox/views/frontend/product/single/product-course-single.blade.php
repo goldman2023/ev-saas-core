@@ -133,7 +133,6 @@
             {{-- Course Right Card --}}
             <div class="w-full flex flex-col bg-white rounded-xl shadow p-5 mb-5">
 
-                
                 @if(!auth()->user()?->bought($product) ?? false)
                     <div class="w-full flex items-center mb-3">
                         <strong class="text-28 font-semibold text-gray-900 mb-0" x-text="total_price_display"> </strong>
