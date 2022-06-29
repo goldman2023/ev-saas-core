@@ -100,4 +100,21 @@ class WeQuizController extends Controller
     
         throw new WeAPIException(message: translate('Could not save quiz results'), type: 'WeApiException', code: 400);
     }
+
+    public function toggle_passed(Request $request, $id) {
+        $quiz_result = WeQuizResult::findOrFail($id);
+
+        // TODO: 'Manages' should include \Permissions::canAccess() and should maybe be added as a middleware to routes....
+        if(auth()?->user()?->manages($quiz_result->quiz)) {
+             // Available only if user manages this quiz
+
+             $quiz_result->quiz_passed = !$quiz_result->quiz_passed;
+             $quiz_result->save();
+
+             return response()->json($quiz_result);
+        }
+
+        throw new WeAPIException(message: translate('You cannot change quiz result status.'), type: 'WeApiException', code: 400);
+
+    }
 }
