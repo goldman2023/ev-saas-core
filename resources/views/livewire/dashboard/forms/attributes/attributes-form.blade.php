@@ -1,9 +1,9 @@
 <div class="w-full" x-data="{
     predefined_types: @js(App\Enums\AttributeTypeEnum::getPredefined()),
     type: @js($attribute->type ?? App\Enums\AttributeTypeEnum::dropdown()->value),
-    filterable: @js($attribute->filterable === true ? 'true' : 'false'),
-    is_schema: @js($attribute->is_schema === true ? 'true' : 'false'),
-    is_admin: @js($attribute->is_admin === true ? 'true' : 'false'),
+    filterable: @js($attribute->filterable),
+    is_schema: @js($attribute->is_schema),
+    is_admin: @js($attribute->is_admin),
     custom_properties: {...{
         'multiple': false,
         'min_value': 0,

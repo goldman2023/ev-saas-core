@@ -1772,7 +1772,9 @@ class StripeService
                             // This means that subscription is cycled - just create a new invoice
                             $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
 
-                        } else if($stripe_billing_reason === 'subscription_update' && !empty($previous_attributes?->plan?->id ?? null)) {
+                        } else if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($previous_attributes?->plan?->id ?? null)) {
+                            // MAY HAPPEN THAT billing_reason is subscription_create!!!
+                            
                             // With condition `!empty($previous_attributes?->plan?->id ?? null)` we are preventing processing any subscription change which is NOT related to it's products/items changes, like metadata change and similar!
 
                             // Check if Order with latest_invoice_id already exists BUT ALSO CHECK IF previous plan price (if exists) is different than current plan price!
@@ -1792,7 +1794,7 @@ class StripeService
                             if(get_tenant_setting('multiplan_purchase')) {
                                 $should_proceed = false; // TODO: This must work according to multi-plan purchase
                             } else {
-                                $should_proceed = (empty($existing_order) && empty($existing_invoice) || (($stripe_subscription?->plan?->id ?? 1) !== ($previous_attributes->plan->id ?? 1)));
+                                $should_proceed = (empty($existing_order) && empty($existing_invoice)) || (($stripe_subscription?->plan?->id ?? 1) !== ($previous_attributes->plan->id ?? 1));
                             }
                             
                             if($should_proceed) {

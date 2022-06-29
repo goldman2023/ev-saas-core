@@ -109,7 +109,7 @@ trait AttributeTrait
             return $att->pivot->for_variations === 1;
         })->values();
 
-        if (! empty($key_by)) {
+        if (!empty($key_by)) {
             return $attributes->keyBy($key_by);
         }
 
