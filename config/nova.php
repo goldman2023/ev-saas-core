@@ -166,7 +166,7 @@ return [
     */
 
     'brand' => [
-        'logo' => realpath(__DIR__.'/../public/images/we.svg'),
+        'logo' => realpath(__DIR__.'/../public/images/BP_logo.svg'),
 
         'colors' => [
             "400" => "9, 71, 233, 0.5",

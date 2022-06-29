@@ -243,5 +243,6 @@ Route::middleware([
 ])->prefix('api')->name('api.dashboard.')->group(function () {
     Route::post('/quiz/save', [WeQuizController::class, 'save_quiz'])->name('we-quiz.create');
     Route::post('/quiz/save/{id}', [WeQuizController::class, 'save_quiz'])->name('we-quiz.update');
+    Route::post('/quiz/result/{id}/passed-toggle', [WeQuizController::class, 'toggle_passed'])->name('we-quiz.toggle-passed');
     
 });

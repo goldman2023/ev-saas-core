@@ -117,48 +117,144 @@
                         @if($course_item->type === \App\Enums\CourseItemTypes::video()->value)
 
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::quizz()->value)
-                            <div class="w-full" id="we-quiz-container"></div>
+                            
+                            @if(!empty($quiz_result))
+                                <h2 class="pb-4 text-20 font-semibold">{{ translate('My quiz results:') }}</h2>
 
-                            <script>
-                                $(function() {
-                                    Survey.StylesManager.applyTheme('modern');
+                                <div class="w-full" id="we-quiz-result-container"></div>
 
-                                    var surveyJSON = @js($course_item->subject->quiz_json ?? []);
+                                <script>
+                                    $(function() {
+                                        Survey.StylesManager.applyTheme('modern');
 
-                                    var survey = new Survey.Model(surveyJSON);
-                                    
-                                    function sendDataToServer(survey) {
-                                        // Send Ajax request to your web server
-                                        fetch('{{ route('api.we-quiz.result.save', $course_item->subject?->id ?? -1) }}', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json'
-                                            },
-                                            body: JSON.stringify({
-                                                'user_id': {{ auth()->user()->id }},
-                                                'answers': survey.data,
-                                            }),
-                                        })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            if(data.error !== undefined) {
-                                                alert(data.error.message);
+                                        window.survey = new Survey.Model(@js($course_item->subject->quiz_json));
+
+                                        survey.onComplete.add(function (sender) {
+                                            document.querySelector('#we-quiz-result-container').textContent = "Result JSON:\n" + JSON.stringify(sender.data, null, 3);
+                                        });
+                                        survey.data = @js($quiz_result->quiz_answers);
+                                        survey.mode = "display";
+                                        survey.questionsOnPageMode = "singlePage";
+                                        survey.showNavigationButtons = "none";
+                                        survey.showProgressBar = "off";
+                                        survey.showTimerPanel = "none";
+                                        survey.maxTimeToFinishPage = 0;
+                                        survey.maxTimeToFinish = 0;
+
+                                        const correctStr = "{{ translate('Correct') }}";
+                                        const inCorrectStr = "{{ translate('Incorrect') }}";
+                                        function getTextHtml(text, str, isCorrect) {
+                                        if (text.indexOf(str) < 0) 
+                                            return undefined;
+                                        
+                                        return text.substring(0, text.indexOf(str)) + "<span style='color:" + (
+                                            isCorrect
+                                            ? "green"
+                                            : "red"
+                                        ) + "'>" + str + "</span>";
+                                        }
+                                        function isAnswerCorrect(q) {
+                                            const right = q.correctAnswer;
+
+                                            if (! right || q.isEmpty()) 
+                                                return undefined;
+                                            
+                                            var left = q.value;
+
+                                            if (!Array.isArray(right)) 
+                                                return right == left;
+                                            
+                                            if (!Array.isArray(left)) 
+                                                left = [left];
+                                            
+                                            for (var i = 0; i < left.length; i++) {
+                                                if (right.indexOf(left[i]) < 0) 
+                                                    return false;
+                                            }
+
+                                            return true;
+                                        }
+                                        function renderCorrectAnswer(q) {
+                                            if (! q) 
+                                                return;
+                                            
+                                            const isCorrect = isAnswerCorrect(q);
+                                            if (! q.prevTitle) {
+                                                q.prevTitle = q.title;
+                                            }
+                                            if (isCorrect === undefined) {
+                                                q.title = q.prevTitle;
+                                            }
+                                            q.title = q.prevTitle + ' ' + (
+                                                isCorrect
+                                                ? correctStr
+                                                : inCorrectStr
+                                            );
+                                        }
+                                        survey.onValueChanged.add((sender, options) => {
+                                            renderCorrectAnswer(options.question);
+                                        });
+                                        survey.onTextMarkdown.add((sender, options) => {
+                                            var text = options.text;
+                                            var html = getTextHtml(text, correctStr, true);
+                                            if (! html) {
+                                                html = getTextHtml(text, inCorrectStr, false);
+                                            }
+                                            if (!! html) {
+                                                options.html = html;
                                             }
                                         });
-                                        // alert('The results are: ' + JSON.stringify(survey.data));
-                                    }
 
-                                    $('#we-quiz-container').Survey({
-                                        model: survey,
-                                        onComplete: sendDataToServer
+                                        survey.getAllQuestions().forEach(q => renderCorrectAnswer(q));
+                                        $("#we-quiz-result-container").Survey({model: survey});
                                     });
+                                </script>
+                            @else
+                                <div class="w-full" id="we-quiz-container"></div>
 
-                                    survey.completedHtml =  '{{ translate('You completed the quiz!') }}';
-                                    survey.showPreviewBeforeComplete = 'showAllQuestions';
+                                <script>
+                                    $(function() {
+                                        Survey.StylesManager.applyTheme('modern');
 
-                                    ;
-                                });
-                            </script>
+                                        var surveyJSON = @js($course_item->subject->quiz_json ?? []);
+
+                                        var survey = new Survey.Model(surveyJSON);
+                                        
+                                        function sendDataToServer(survey) {
+                                            // Send Ajax request to your web server
+                                            fetch('{{ route('api.we-quiz.result.save', $course_item->subject?->id ?? -1) }}', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    'user_id': {{ auth()->user()->id }},
+                                                    'answers': survey.data,
+                                                }),
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if(data.error !== undefined) {
+                                                    alert(data.error.message);
+                                                }
+                                            });
+                                            // alert('The results are: ' + JSON.stringify(survey.data));
+                                        }
+
+                                        $('#we-quiz-container').Survey({
+                                            model: survey,
+                                            onComplete: sendDataToServer
+                                        });
+
+                                        survey.completedHtml =  '{{ translate('You completed the quiz!') }}';
+                                        survey.showPreviewBeforeComplete = 'showAllQuestions';
+
+                                        ;
+                                    });
+                                </script>
+                            @endif
+                            
+                            
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::wysiwyg()->value)
                             {!! $course_item->content !!}
                         @endif
