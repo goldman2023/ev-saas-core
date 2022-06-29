@@ -4,7 +4,7 @@
     meta_img: @js(['id' => $category->meta_img->id ?? null, 'file_name' => $category->meta_img->file_name ?? '']),
     icon: @js(['id' => $category->icon->id ?? null, 'file_name' => $category->icon->file_name ?? '']),
     parent_id: @js($category->parent_id),
-    featured: @js($category->featured === true ? 'true' : 'false'),
+    featured: @js($category->featured),
 }" x-cloak>
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden"

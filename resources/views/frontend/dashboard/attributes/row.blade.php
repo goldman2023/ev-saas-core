@@ -9,11 +9,11 @@
     {{ $row->getTranslation('name') }}
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle">
+<x-livewire-tables::table.cell class="align-middle text-center">
     <span>{{ $row->type }}</span>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle">
+<x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->filterable)
         <span class="badge-success">
             {{ translate('Filterable') }}
@@ -25,7 +25,7 @@
     @endif
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle">
+<x-livewire-tables::table.cell class="align-middle  text-center">
     <span class="d-block text-14 mb-0">{{ $row->created_at?->format('d.m.Y') ?? '' }}</span>
 </x-livewire-tables::table.cell>
 
