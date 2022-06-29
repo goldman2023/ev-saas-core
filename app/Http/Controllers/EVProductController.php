@@ -180,6 +180,7 @@ class EVProductController extends Controller
         /* TODO: Make this optional (style1/style2/etc) per tenant/vendor */
 
         if($product->type === ProductTypeEnum::course()->value) {
+
             $template = 'product-course-single';
             $data = [
                 'product' => $product,
@@ -211,11 +212,15 @@ class EVProductController extends Controller
 
         // Check if Course item is free or product owned by user
         if($course_item->free || (Auth::check() && ((auth()->user()?->bought($product) ?? false) || (auth()->user()?->manages($product) ?? false)))) {
+            $quiz_result = $course_item->subject->results()->where('user_id', auth()?->user()?->id)->first();
+
             $data = [
                 'product' => $product,
                 'course_items' => $product->course_items->toTree()->filter(fn($item) => $item->parent_id === null),
-                'course_item' => $course_item
+                'course_item' => $course_item,
+                'quiz_result' => $quiz_result
             ];
+            
 
             if(auth()->user()) {
                 activity()
