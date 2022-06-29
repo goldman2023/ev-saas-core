@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\Ownership;
 use App\Models\Plan;
 use App\Models\Product;
+use App\Models\WeQuiz;
 
 trait OwnershipTrait
 {
@@ -34,9 +35,11 @@ trait OwnershipTrait
 
         if(\Auth::check() && $this->hasShop()) {
             if($model instanceof Product) {
-                return $model->user_id === $this->id || $model->shop_id === \MyShop::getShopID();
+                return $model?->user_id === $this->id || $model?->shop_id === \MyShop::getShopID();
             } else if($model instanceof Plan) {
-                return $model->shop_id === \MyShop::getShopID();
+                return $model?->shop_id === \MyShop::getShopID();
+            } else if($model instanceof WeQuiz) {
+                return $model?->user_id === $this->id;
             }
         }
 
