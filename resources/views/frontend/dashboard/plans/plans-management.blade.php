@@ -32,9 +32,8 @@
         @do_action('view.dashboard.plans-management.plans-table.end', auth()->user())
     @endif
 
-    <x-dashboard.widgets.customer.pricing-table :plans="$plans">
-    </x-dashboard.widgets.customer.pricing-table>
-
+        <x-dashboard.widgets.customer.pricing-table :plans="$plans">
+        </x-dashboard.widgets.customer.pricing-table>
     </div>
 </section>
 @endsection

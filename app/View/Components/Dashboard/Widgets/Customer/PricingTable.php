@@ -9,14 +9,29 @@ class PricingTable extends Component
 {
     public $plans;
     public $hideTitle;
+    public $isTrial;
+    public $subscribed;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($plans = null, $hideTitle = null)
+    public function __construct($plans = null, $hideTitle = null, $isTrial = null, $subscribed = null)
     {
+
+        if($isTrial) {
+            $this->isTrial = $isTrial;
+        } else {
+            $this->isTrial = auth()->user()->plan_subscriptions?->first()?->isTrial();
+        }
+
+        if($subscribed) {
+            $this->subscribed = $subscribed;
+        } else {
+            $this->subscribed = auth()->user()->isSubscribed();
+        }
+
         if($plans) {
             $this->plans = $plans;
         } else {
