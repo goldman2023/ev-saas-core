@@ -63,6 +63,7 @@ class AppSettingsForm extends Component
                 'settings.login_redirect_url' => ['nullable'],
 
                 'settings.chat_feature' => ['boolean'],
+                'settings.addresses_feature' => ['boolean'],
                 'settings.weedit_feature' => ['boolean'],
                 'settings.wishlist_feature' => ['boolean'],
                 'settings.vendor_mode_feature' => ['boolean'],
