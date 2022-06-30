@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof WeAPIException) {
-            return response()->json(['error' => [
+            return response()->json(['status' => 'failed', 'error' => [
                 'message' => empty($exception->message) ? $exception->getMessage() : $exception->message,
                 'type' => $exception->type,
                 'code' => $exception->code,

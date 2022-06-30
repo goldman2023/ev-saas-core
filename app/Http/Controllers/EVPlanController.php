@@ -41,6 +41,14 @@ class EVPlanController extends Controller
         return view('frontend.dashboard.plans.plans-management', compact('plans'));
     }
 
+    public function add_seats(Request $request) {
+        $plans = Plan::published()->get();
+
+
+        return view('frontend.dashboard.plans.add-seats', compact('plans'));
+    }
+
+
     public function show(Request $request, $slug)
     {
         if (! empty(Plan::where('slug', $slug)->published()->first())) {

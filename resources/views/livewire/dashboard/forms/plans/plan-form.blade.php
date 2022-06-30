@@ -33,21 +33,21 @@
 
         <div class="grid grid-cols-12 gap-8 mb-10">
             {{-- Left side --}}
-            <div class="col-span-12 xl:col-span-8">
+            <div class="col-span-12 sm:col-span-8">
                 <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                     <div>
                         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Subscription plan') }}</h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Here you can edit all plan basic information') }}</p>
                     </div>
-            
+
                     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
                         <!-- Title -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-            
+
                             <label for="plan-title" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Title') }}
                             </label>
-            
+
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <input type="text" class="form-standard @error('plan.name') is-invalid @enderror"
                                         name="plan.name"
@@ -55,7 +55,7 @@
                                         placeholder="{{ translate('New post title') }}"
                                         {{-- @input="generateURL($($el).val())" --}}
                                         wire:model.defer="plan.name" />
-                            
+
                                 <x-system.invalid-msg field="plan.name"></x-system.invalid-msg>
                             </div>
                         </div>
@@ -81,11 +81,11 @@
 
                         <!-- Redirect URL Meta -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="non_standard">
-        
+
                             <label for="plan-title" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('CTA Redirect URL') }}
                             </label>
-            
+
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <x-dashboard.form.input field="model_core_meta.custom_redirect_url" />
                             </div>
@@ -97,7 +97,7 @@
                             <label for="plan-title" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('CTA Label') }}
                             </label>
-            
+
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <x-dashboard.form.input field="model_core_meta.custom_cta_label" />
                             </div>
@@ -110,13 +110,13 @@
                                 <span class="text-sm font-medium text-gray-900">{{ translate('Custom Pricing Label') }}</span>
                                 <p class="text-gray-500 text-12">{{ translate('This text will be used instead of price. Default is `Contact Us`') }}</p>
                             </div>
-            
+
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <x-dashboard.form.input field="model_core_meta.custom_pricing_label" />
                             </div>
                         </div>
                         <!-- END Custom CTA Label Meta -->
-                
+
                         <!-- Price -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="!non_standard">
                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
@@ -126,14 +126,14 @@
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <div class="grid grid-cols-10 gap-3">
                                     <div class="col-span-6">
-                                        <input type="number" 
-                                                step="0.01" 
+                                        <input type="number"
+                                                step="0.01"
                                                 class="form-standard @error('plan.price') is-invalid @enderror"
                                                 placeholder="{{ translate('Subscription plan price') }}"
                                                 wire:model.defer="plan.price" />
                                     </div>
 
-                                    <div class="col-span-4" x-data="{}"> 
+                                    <div class="col-span-4" x-data="{}">
                                         <x-dashboard.form.select :items="\FX::getAllCurrencies(formatted: true)" selected="base_currency"></x-dashboard.form.select>
                                     </div>
 
@@ -153,14 +153,14 @@
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <div class="grid grid-cols-10 gap-3">
                                     <div class="col-span-6">
-                                        <input type="number" 
-                                                step="0.01" 
+                                        <input type="number"
+                                                step="0.01"
                                                 class="form-standard @error('plan.discount') is-invalid @enderror"
                                                 placeholder="{{ translate('Subscription plan discount (fixed or percentage) - for monthly payment') }}"
                                                 wire:model.defer="plan.discount" />
                                     </div>
 
-                                    <div class="col-span-4" x-data="{}"> 
+                                    <div class="col-span-4" x-data="{}">
                                         <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="discount_type"></x-dashboard.form.select>
                                     </div>
 
@@ -179,17 +179,17 @@
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <div class="grid grid-cols-10 gap-3">
                                     <div class="col-span-6">
-                                        <input type="number" 
-                                                step="0.01" 
+                                        <input type="number"
+                                                step="0.01"
                                                 class="form-standard @error('plan.yearly_discount') is-invalid @enderror"
                                                 placeholder="{{ translate('Subscription plan annual discount (fixed or percentage) - for annual payment') }}"
                                                 wire:model.defer="plan.yearly_discount" />
                                     </div>
 
-                                    <div class="col-span-4" x-data="{}"> 
+                                    <div class="col-span-4" x-data="{}">
                                         <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="yearly_discount_type"></x-dashboard.form.select>
                                     </div>
-                                    
+
                                     <div class="col-span-10">
                                         <small class="text-warning">
                                             {{ translate('*Note: If yearly discount is set, standard discount won\'t be applied to each month.') }}
@@ -212,17 +212,17 @@
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <div class="grid grid-cols-10 gap-3">
                                     <div class="col-span-6">
-                                        <input type="number" 
-                                                step="0.01" 
+                                        <input type="number"
+                                                step="0.01"
                                                 class="form-standard @error('plan.tax') is-invalid @enderror"
                                                 placeholder="{{ translate('Subscription specific tax (fixed or percentage)') }}"
                                                 wire:model.defer="plan.tax" />
                                     </div>
 
-                                    <div class="col-span-4" x-data="{}"> 
+                                    <div class="col-span-4" x-data="{}">
                                         <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="tax_type"></x-dashboard.form.select>
                                     </div>
-                                    
+
                                     <div class="col-span-10">
                                         <small class="text-info">
                                             {{ translate('*Note: This is a subscription plan specific tax/fee/commission, not a VAT') }}
@@ -237,11 +237,11 @@
 
                         <!-- Features -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-            
+
                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Features') }}
                             </label>
-            
+
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <x-dashboard.form.text-repeater field="features" placeholder="{{ translate('Feature') }}"></x-dashboard.form.text-repeater>
                             </div>
@@ -250,17 +250,17 @@
 
                         <!-- Excerpt -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-            
+
                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Excerpt') }}
                             </label>
-            
+
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <textarea type="text" class="form-standard h-[80px] @error('plan.excerpt') is-invalid @enderror"
                                             placeholder="{{ translate('Write a short promo description for this subscription plan') }}"
                                             wire:model.defer="plan.excerpt">
                                 </textarea>
-                            
+
                                 <x-system.invalid-msg class="w-full" field="plan.excerpt"></x-system.invalid-msg>
                             </div>
                         </div>
@@ -268,14 +268,14 @@
 
                         <!-- Content -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
-            
+
                             <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Content') }}
                             </label>
-            
+
                             <div class="mt-1 sm:mt-0 sm:col-span-3">
                                 <x-dashboard.form.froala field="content" id="plan-content-wysiwyg"></x-dashboard.form.froala>
-                            
+
                                 <x-system.invalid-msg class="w-full" field="plan.content"></x-system.invalid-msg>
                             </div>
                         </div>
@@ -288,7 +288,7 @@
 
 
             {{-- Right side --}}
-            <div class="col-span-12 xl:col-span-4">
+            <div class="col-span-12 sm:col-span-4">
 
                 {{-- Actions --}}
                 <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
@@ -339,7 +339,7 @@
                     <!-- END Featured -->
 
                     <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
-                    
+
                         <button type="button" class="btn btn-primary ml-auto btn-sm"
                             @click="
                                 $wire.set('core_meta', core_meta, true);
@@ -378,25 +378,25 @@
                         {{-- Thumbnail --}}
                         <div class="sm:items-start">
                             <div class="flex flex-col " x-data="{}">
-                                        
+
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     {{ translate('Thumbnail image') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0">
                                     <x-dashboard.form.image-selector field="thumbnail" id="plan-thumbnail-image" :selected-image="$plan->thumbnail"></x-dashboard.form.image-selector>
-                                    
+
                                     <x-system.invalid-msg field="plan.thumbnail"></x-system.invalid-msg>
                                 </div>
                             </div>
                         </div>
                         {{-- END Thumbnail --}}
-                        
+
 
                         {{-- Cover --}}
                         <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                             <div class="flex flex-col " x-data="{}">
-                                        
+
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     {{ translate('Cover image') }}
                                 </label>
@@ -410,10 +410,10 @@
                         </div>
                         {{-- END Cover --}}
                     </div>
-                    
+
                 </div>
                 {{-- END Media --}}
-                
+
 
                 {{-- Category Selector --}}
                 <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
@@ -423,7 +423,7 @@
                         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Categories') }}</h3>
                         @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
                     </div>
-            
+
                     <div class="w-full" x-show="open">
                         <x-dashboard.form.category-selector> </x-dashboard.form.category-selector>
                     </div>
@@ -442,21 +442,21 @@
                         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('SEO') }}</h3>
                         @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
                     </div>
-            
+
                     <div class="w-full" x-show="open">
                         <!-- Meta Title -->
                         <div class="flex flex-col " x-data="{}">
-                                    
+
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 {{ translate('Meta title') }}
                             </label>
 
                             <div class="mt-1 sm:mt-0">
-                                <input type="text" 
+                                <input type="text"
                                         class="form-standard @error('plan.meta_title') is-invalid @enderror"
                                         {{-- placeholder="{{ translate('Write meta title...') }}" --}}
                                         wire:model.defer="plan.meta_title" />
-                            
+
                                 <x-system.invalid-msg field="plan.meta_title"></x-system.invalid-msg>
                             </div>
                         </div>
@@ -464,17 +464,17 @@
 
                         <!-- Meta Description -->
                         <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5" x-data="{}">
-            
+
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 {{ translate('Meta Description') }}
                             </label>
-            
+
                             <div class="mt-1 sm:mt-0">
                                 <textarea type="text" class="form-standard h-[80px] @error('plan.meta_description') is-invalid @enderror"
                                             {{-- placeholder="{{ translate('Meta description which will be shown when link is shared on social network and') }}" --}}
                                             wire:model.defer="plan.meta_description">
                                 </textarea>
-                            
+
                                 <x-system.invalid-msg class="w-full" field="plan.meta_description"></x-system.invalid-msg>
                             </div>
                         </div>
@@ -482,17 +482,17 @@
 
                         <!-- Meta Keywords -->
                         <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5" x-data="{}">
-            
+
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 {{ translate('Meta Keywords') }}
                             </label>
-            
+
                             <div class="mt-1 sm:mt-0 ">
                                 <textarea type="text" class="form-standard h-[80px] @error('plan.meta_keywords') is-invalid @enderror"
                                             {{-- placeholder="{{ translate('Write a short promo description for this subscription plan') }}" --}}
                                             wire:model.defer="plan.meta_keywords">
                                 </textarea>
-                            
+
                                 <x-system.invalid-msg class="w-full" field="plan.meta_keywords"></x-system.invalid-msg>
                             </div>
                         </div>
@@ -501,30 +501,30 @@
                         {{-- Meta Image --}}
                         <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
                             <div class=s"flex flex-col " x-data="{}">
-                                        
+
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     {{ translate('Meta image') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0">
                                     <x-dashboard.form.image-selector field="meta_img" id="plan-meta-image" :selected-image="$plan->meta_img"></x-dashboard.form.image-selector>
-                                    
+
                                     <x-system.invalid-msg field="plan.meta_img"></x-system.invalid-msg>
                                 </div>
                             </div>
                         </div>
                         {{-- END Meta Image --}}
-                        
+
                     </div>
                 </div>
                 {{-- END SEO --}}
 
-                
+
             </div>
-        
+
         </div>
 
-            
+
                 {{-- <!-- Title -->
                 <div class="row form-group mt-5" x-data="{
                    url_template: '{{ route('shop.blog.post.index', ['%shop_slug%', '%slug%'], false) }}',
@@ -535,9 +535,9 @@
                 }"
                @initSlugGeneration.window="this.generateURL($('#plan-title').val())">
                     >
-    
+
                     <label for="plan-title" class="col-sm-3 col-form-label input-label">{{ translate('Title') }}</label>
-    
+
                     <div class="col-sm-9">
                         <div class="input-group input-group-sm-down-break">
                             <input type="text" class="form-control @error('plan.title') is-invalid @enderror"
@@ -547,12 +547,12 @@
                                   @input="generateURL($($el).val())"
                                    wire:model.defer="plan.title" />
                         </div>
-    
+
                        <div class="w-100 d-flex align-items-center mt-2">
                            <strong class="mr-2">{{ translate('URL') }}:</strong>
                            <span x-html="(url !== undefined) ? url : ''"></span>
                        </div>
-    
+
                         <x-system.invalid-msg field="plan.title"></x-system.invalid-msg>
                     </div>
                 </div>

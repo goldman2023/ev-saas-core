@@ -90,8 +90,7 @@ class AttributesTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Filterable', 'filterable')
                 ->excludeFromSelectable(),
-            Column::make('Created', 'created_at')
-                ->sortable(),
+            Column::make('Created', 'created_at'),
             Column::make('Actions')
                 ->excludeFromSelectable(),
         ];

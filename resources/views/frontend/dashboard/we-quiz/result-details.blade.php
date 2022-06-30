@@ -19,7 +19,7 @@
 <div class="min-h-full">
 
     <main class="pb-8" x-data="{ 
-        quiz_passed: {{ $quiz_result->quiz_passed === true ? 'true' : 'false' }},
+        quiz_passed: @js($quiz_result->quiz_passed),
         togglePassed() {
             wetch.post('{{ route('api.dashboard.we-quiz.toggle-passed', $quiz_result->id) }}')
             .then(data => this.quiz_passed = data.quiz_passed)

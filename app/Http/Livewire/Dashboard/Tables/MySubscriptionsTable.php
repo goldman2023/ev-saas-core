@@ -27,6 +27,7 @@ class MySubscriptionsTable extends DataTableComponent
     public int $perPage = 10;
     public $user = null;
     public array $perPageAccepted = [10, 25];
+    public $hideActions = false;
 
     public array $filterNames = [
         'status' => 'Status'
@@ -55,7 +56,7 @@ class MySubscriptionsTable extends DataTableComponent
 
     public function columns(): array
     {
-        return [
+        $columns = [
             Column::make('ID')
                 ->excludeFromSelectable(),
             Column::make('Title')
@@ -73,9 +74,14 @@ class MySubscriptionsTable extends DataTableComponent
             //     ->excludeFromSelectable(),
             Column::make('Ending', 'end_date')
                 ->excludeFromSelectable(),
-            Column::make('Actions')
-                ->excludeFromSelectable(),
         ];
+
+        if(!$this->hideActions) {
+            $columns[] = Column::make('Actions')
+                ->excludeFromSelectable();
+        }
+
+        return $columns;
     }
 
     public function query(): Builder

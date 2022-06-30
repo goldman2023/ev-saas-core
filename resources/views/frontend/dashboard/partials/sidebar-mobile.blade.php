@@ -2,7 +2,7 @@
 <x-panels.flyout-panel id="dashboard-sidebar-panel">
     <div class="flex flex-col mb-1 grow">
         <div class="mt-3 flex flex-col">
-            <div class="w-full flex items-center flex-shrink-0 px-6">
+            <div class="w-full flex items-center flex-shrink-0 px-6 mb-6">
                 <a href="{{ route('home') }} ">
                     <x-tenant.system.image alt="{{ get_site_name() }} logo" class="lazyload min-h-8 w-[60%] lg:w-full mx-auto sm:min-h-10"
                         :image="get_site_logo()">
