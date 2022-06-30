@@ -54,8 +54,8 @@ trait PriceTrait
      */
     public function initializePriceTrait(): void
     {
-        $this->appendCoreProperties(['total_price', 'discounted_price', 'base_price']);
-        $this->append(['total_price', 'discounted_price', 'base_price']);
+        $this->appendCoreProperties(['total_annual_price', 'total_price', 'discounted_price', 'base_price']);
+        $this->append(['total_annual_price', 'total_price', 'discounted_price', 'base_price']);
 
         // These calculated prices ARE NOT FILLABLE! They are calculated based on other properties!
         // $this->fillable(array_unique(array_merge($this->fillable, ['total_price', 'discounted_price', 'base_price'])));
@@ -316,13 +316,12 @@ trait PriceTrait
 
         return $display ? FX::formatPrice($this->attributes[$price_column] ?? 0) : $this->attributes[$price_column] ?? 0;
     }
-    // END PRICES
 
     public function getTotalAnnualPrice(bool $display = false, bool $both_formats = false)
     {
         $total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
 
-        if ($this instanceof Plan) {
+        if ($this->isSubscribable()) {
             // First apply yearly discount, if any!
             if ($this->yearly_discount_type === AmountPercentTypeEnum::percent()->value) {
                 $total_annual_price -= ($total_annual_price * $this->attributes['yearly_discount']) / 100;
@@ -338,6 +337,9 @@ trait PriceTrait
             }
 
             // TODO: Then add global Tax (like VAT)
+        } else {
+            // If item is not subscribable, annual price doesn't make sense, so it falls back to one-time total price
+            $total_annual_price = $this->attributes[$this->getPriceColumn()];
         }
 
         if ($both_formats) {
@@ -349,4 +351,11 @@ trait PriceTrait
 
         return $display ? FX::formatPrice($total_annual_price) : $total_annual_price;
     }
+
+    public function getTotalAnnualPriceAttribute()
+    {
+        return $this->getTotalAnnualPrice();
+    }
+    // END PRICES
+
 }

@@ -78,6 +78,7 @@
     @endif
 </x-livewire-tables::table.cell>
 
+@if(!$hideActions ?? true)
 <x-livewire-tables::table.cell class="align-middle static ">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
         {{-- <a class="btn btn-white flex items-center mr-2" href="#">
@@ -145,3 +146,4 @@
         
     </div>
 </x-livewire-tables::table.cell>
+@endif
