@@ -19,7 +19,7 @@
                     <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('My Subscriptions') }}</h3>
 
                     <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
-                        :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
+                        :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" :hide-actions="true" />
                 </div>
             @else
                 <div class="col-span-12">
@@ -36,12 +36,12 @@
                 </div>
             @endif
 
-            <div class="col-span-12 md:col-span-4">
+            <div class="col-span-12 md:col-span-6">
                 <x-dashboard.elements.plan-subscriptions-list class="h-full">
                 </x-dashboard.elements.plan-subscriptions-list>
             </div>
 
-            <div class="col-span-12 md:col-span-4 flex flex-col">
+            <div class="col-span-12 md:col-span-6 flex flex-col">
                 <div class="w-full bg-white border border-gray-200 rounded-lg cursor-pointer"
                     @click="window.location.href = '{{ get_tenant_setting('pix_pro_software_download_url', '#') }}'">
                     <div class="border-b border-gray-200 px-4 sm:px-7 py-5">

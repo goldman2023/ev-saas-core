@@ -28,7 +28,7 @@ class WeSubscriptionsController extends Controller
                 } else if($interval === 'annual' || $interval === 'year') {
                     $stripe_new_plan_price = $new_plan->getStripeAnnualPriceID();
                 } else {
-                    return redirect()->route('my.plans.management');
+                    throw new WeAPIException(message: translate('Interval parameter missing'), type: 'WeApiException', code: 400);
                 }
 
                 // Check if current plan is the same as the new plan (also take payment_interval into consideration)
@@ -57,13 +57,12 @@ class WeSubscriptionsController extends Controller
                     );
 
                     if(!empty($updated_stripe_subscription->id)) {
-                        // TODO: Improve...
-                        return redirect()->route('my.plans.management');
+                        return response()->json(['status' => 'success', 'data' => $updated_stripe_subscription]);
                     }
                 }
             }
         }
 
-        return redirect()->route('my.plans.management');
+        throw new WeAPIException(message: translate('Your previous subscription is not under trial'), type: 'WeApiException', code: 400);
     }
 }

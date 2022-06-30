@@ -34,6 +34,11 @@ class OrdersObserver
             // }
         }
 
+        /**
+         * Product Ownership logic (status must be complete and payment_status must be paid)
+         * 1. $order->type === 'standard'
+         * 2. $order->payment_status === 'paid'
+         **/
         if($order->payment_status === 'paid' && $order->type === 'standard') {
             foreach($order->order_items as $item) {
                 Ownership::updateOrCreate(

@@ -1771,7 +1771,6 @@ class StripeService
                         if($stripe_billing_reason === 'subscription_cycle') {
                             // This means that subscription is cycled - just create a new invoice
                             $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
-
                         } else if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($previous_attributes?->plan?->id ?? null)) {
                             // MAY HAPPEN THAT billing_reason is subscription_create!!!
                             
@@ -1785,7 +1784,6 @@ class StripeService
                             $existing_order = Order::query()->withoutGlobalScopes()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_latest_invoice_id', $stripe_subscription->latest_invoice)->first();
                             $existing_invoice = Invoice::query()->withoutGlobalScopes()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_invoice_id', $stripe_subscription->latest_invoice)->first();
 
-                            
                             // Code `should-procceed` ONLY if:
                             // 1. Both Order and Invoice with `latest_invoice_id` cannot be found in our DB
                             // OR
