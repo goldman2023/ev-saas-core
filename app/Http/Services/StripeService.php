@@ -625,11 +625,16 @@ class StripeService
     public function createPortalSession()
     {
         if (auth()->user()) {
+            $features = [];
+            if(auth()->user()->plan_subscriptions?->first()?->isTrial()) {
+               $features[] = ['subscription_update' => ['enabled' => false]];
+            }
             // Create Stripe customer if it doesn't exist
             $stripe_customer = $this->createStripeCustomer();
             $stripe_args['customer'] = $stripe_customer->id;
             $billing_session = $this->stripe->billingPortal->sessions->create([
                 'customer' => $stripe_customer->id,
+                'features' => $features,
                 'return_url' => url()->previous(),
             ]);
 
@@ -1773,7 +1778,7 @@ class StripeService
                             $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
                         } else if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($previous_attributes?->plan?->id ?? null)) {
                             // MAY HAPPEN THAT billing_reason is subscription_create!!!
-                            
+
                             // With condition `!empty($previous_attributes?->plan?->id ?? null)` we are preventing processing any subscription change which is NOT related to it's products/items changes, like metadata change and similar!
 
                             // Check if Order with latest_invoice_id already exists BUT ALSO CHECK IF previous plan price (if exists) is different than current plan price!
@@ -1794,7 +1799,7 @@ class StripeService
                             } else {
                                 $should_proceed = (empty($existing_order) && empty($existing_invoice)) || (($stripe_subscription?->plan?->id ?? 1) !== ($previous_attributes->plan->id ?? 1));
                             }
-                            
+
                             if($should_proceed) {
                                 // Subscription is updated (downgraded, upgraded, interval changed etc.):
                                 // 1. Create a new Order
@@ -1828,7 +1833,7 @@ class StripeService
                                             ['metadata' => $new_metadata->toArray()]
                                         );
                                     }
-                                    
+
 
                                     // Check if subscription was upgraded/downgraded
                                     if(count($previous_attributes?->items?->data ?? []) > 0) {
