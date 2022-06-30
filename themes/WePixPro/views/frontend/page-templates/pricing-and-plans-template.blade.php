@@ -10,7 +10,7 @@ $models = \App\Models\Plan::published()->get();
 @guest
 <section class="relative  lg:pt-[80px]  lg:pb-[80px]  sm:pt-[60px]  sm:pb-[60px]  pt-[40px]  pb-[40px]   bg-[#fff]   "
     x-data="{
-        pricing_mode: 'month',
+        pricing_mode: 'year',
     }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="sm:flex sm:flex-col sm:align-center mb-[40px]">

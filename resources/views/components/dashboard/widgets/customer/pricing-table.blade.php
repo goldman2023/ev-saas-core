@@ -1,5 +1,5 @@
 <section class="w-full" x-data="{
-    pricing_mode: 'month',
+    pricing_mode: 'year',
     current_plan_mode: '{{ auth()->user()->plan_subscriptions?->first()?->order?->invoicing_period ?? '' }}',
     current_plan_id: {{ auth()->user()->plan_subscriptions?->first()?->subject->id ?? 'null' }},
     current_is_trial: {{ $isTrial ? 'true' : 'false' }},
