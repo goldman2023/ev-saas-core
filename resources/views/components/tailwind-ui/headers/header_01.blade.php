@@ -1,3 +1,7 @@
+@php
+    $header_menu = nova_get_menu_by_slug('header');
+    $header_menu_items = $header_menu['menuItems'] ?? null;
+@endphp
 <header class="" x-data="{
     show_mobile_menu: false,
 }">
@@ -22,16 +26,7 @@
                 </div>
 
                 <nav class="hidden md:flex space-x-[32px]">
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Features')
-                        }}</a>
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Pricing')
-                        }}</a>
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Blog')
-                        }}</a>
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Contact')
-                        }}</a>
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Support')
-                        }}</a>
+                    <x-system.menus.default-menu menu="header"></x-system.menus.default-menu>
                 </nav>
 
                 {{-- TODO: Create Dashboard button (similar to 'Try for free') if user is authenticated, otherwise
