@@ -454,18 +454,21 @@ class StripeService
                 ],
             ];
 
-            $invoice = $this->stripe->invoices->upcoming([
+            $params = [ 
                 'customer' => $user_subscription->user->getStripeCustomerID(),
                 'subscription' => $user_subscription->getStripeSubscriptionID(),
                 'subscription_items' => $items,
                 'subscription_proration_date' => $proration_date,
                 'subscription_billing_cycle_anchor' => $cycle_anchor,
                 'subscription_trial_end' => $cycle_anchor,
-            ]);
+            ];
+
+            $invoice = $this->stripe->invoices->upcoming($params);
 
             return $invoice;
         } catch(\Exception $e) {
-            return $e;
+            Log::error(array_merge(['error' => $e->getMessage()], $params));
+            return $user_subscription->order; // return our Order just in case...
         }
     }
 

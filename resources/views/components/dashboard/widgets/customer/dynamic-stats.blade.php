@@ -67,7 +67,8 @@
           <p class="ml-16 text-sm font-medium text-gray-500 truncate">{{ translate('Cost') }}</p>
         </dt>
         <dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
-          <p class="text-2xl font-semibold text-gray-900">{{ \FX::formatPrice($order?->total_price ?? 0) }} / 
+          <p class="text-2xl font-semibold text-gray-900">
+            {{ $user_subscription->getTotalPrice() }} / 
             <span class="text-16">
             @if(($order?->invoicing_period ?? null) === 'year')
               {{ translate('Yearly') }}
