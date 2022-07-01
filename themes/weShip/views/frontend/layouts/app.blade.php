@@ -19,13 +19,50 @@
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
-    <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
 
     {{-- TailwindCSS --}}
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1 {
+            color: #383D43;
+        }
+
+        .main-bg-wrapper {
+            background-color: #b8c6db;
+            background-image: linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%);
+        }
+
+        .numbers-grid {
+        }
+
+        .numbers-grid .number-col {
+            font-size: 24px;
+            text-align: center;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .numbers-grid .number-col span {
+            display: block;
+            font-size: 14px;
+        }
+
+        .numbers-grid .number-col .stat:nth-child(1) {
+            margin-bottom: 15px;
+        }
+    </style>
 
 
     @include('frontend.layouts.global-partials.all')

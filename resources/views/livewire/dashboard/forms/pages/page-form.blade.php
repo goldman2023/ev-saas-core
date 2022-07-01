@@ -14,7 +14,7 @@
         <div class="w-full" wire:loading.class="opacity-30 pointer-events-none" wire:target="savePage">
 
             <div class="grid grid-cols-12 gap-8 mb-10">
-                <div class="col-span-12 xl:col-span-12">
+                <div class="col-span-12 sm:col-span-12">
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                         <div>
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Page details') }}</h3>
@@ -80,7 +80,7 @@
 
 
                 {{-- Right side --}}
-                <div class="col-span-12 xl:col-span-12">
+                <div class="col-span-12 sm:col-span-12">
 
                     {{-- Actions --}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">

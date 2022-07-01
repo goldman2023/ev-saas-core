@@ -8,7 +8,7 @@
 
 @section('panel_content')
     <section>
-        <x-dashboard.section-headers.section-header title="{{ translate('All Categories') }}" text="Workcation is a property rental website. Etiam ullamcorper massa viverra consequat, consectetur id nulla tempus. Fringilla egestas justo massa purus sagittis malesuada.">
+        <x-dashboard.section-headers.section-header title="{{ translate('All Categories') }}" text="{{ translate('Manage and create new categories') }}">
             <x-slot name="content">
                 <a href="{{ route('category.create') }}" class="btn-primary">
                     @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
@@ -16,21 +16,21 @@
                 </a>
             </x-slot>
         </x-dashboard.section-headers.section-header>
-  
+
         <div class="w-full">
             @if($all_categories->isNotEmpty())
                 <livewire:dashboard.tables.categories-table></livewire:dashboard.tables.categories-table>
             @else
-                <x-dashboard.empty-states.no-items-in-collection 
-                    icon="heroicon-o-document" 
-                    title="{{ translate('No categories yet') }}" 
+                <x-dashboard.empty-states.no-items-in-collection
+                    icon="heroicon-o-document"
+                    title="{{ translate('No categories yet') }}"
                     text="{{ translate('Get your business going by creating categories!') }}"
                     link-href-route="category.create"
                     link-text="{{ translate('Add new category') }}">
 
                 </x-dashboard.empty-states.no-items-in-collection>
             @endif
-            
+
         </div>
     </section>
 

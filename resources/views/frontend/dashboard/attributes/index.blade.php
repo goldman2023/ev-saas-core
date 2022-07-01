@@ -17,21 +17,21 @@
                 </a>
             </x-slot>
         </x-dashboard.section-headers.section-header>
-  
+
         <div class="w-full">
             @if($attributes->isNotEmpty())
                 <livewire:dashboard.tables.attributes-table></livewire:dashboard.tables.attributes-table>
             @else
-                <x-dashboard.empty-states.no-items-in-collection 
-                    icon="heroicon-o-document" 
-                    title="{{ translate('No attributes yet') }}" 
+                <x-dashboard.empty-states.no-items-in-collection
+                    icon="heroicon-o-document"
+                    title="{{ translate('No attributes yet') }}"
                     text="{{ translate('Enrich your content with various attributes!') }}"
                     link-href-route="{{ route('attributes.create', base64_encode($content_type)) }}"
                     link-text="{{ translate('Add new attribute') }}">
 
                 </x-dashboard.empty-states.no-items-in-collection>
             @endif
-            
+
         </div>
     </section>
 @endsection

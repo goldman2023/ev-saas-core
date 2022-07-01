@@ -48,13 +48,19 @@ return [
         'header' => [
             'name' => 'Header',
             'unique' => true,
-            'max_depth' => 3,
+            'max_depth' => 2,
             'menu_item_types' => []
         ],
         'footer' => [
             'name' => 'Footer',
             'unique' => true,
-            'max_depth' => 3,
+            'max_depth' => 2,
+            'menu_item_types' => []
+        ],
+        'custom_dashboard_elements' => [
+            'name' => 'Custom Dashboard Menu Items',
+            'unique' => true,
+            'max_depth' => 2,
             'menu_item_types' => []
         ]
     ],

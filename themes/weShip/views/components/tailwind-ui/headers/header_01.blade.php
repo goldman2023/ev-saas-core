@@ -39,7 +39,7 @@
 
                 {{-- TODO: Create Dashboard button (similar to 'Try for free') if user is authenticated, otherwise
                 display Login and Try for free --}}
-                <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-[32px]">
+                <div class="hidden items-center justify-end md:flex-1 lg:w-0 space-x-[32px]">
                     @guest
                         <div class="cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
                             @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
@@ -144,3 +144,5 @@
         </div>
     </div>
 </header>
+
+
