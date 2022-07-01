@@ -26,7 +26,7 @@
                         <div class="flex flex-row flex-wrap items-center justify-start divide-x">
                             {{-- Shop --}}
                             <a href="{{ $product->shop?->getPermalink() ?? '#' }}" class="pr-3 inline-flex items-center text-14 font-semibold text-typ-2">
-                                <img src="{{ $product->shop->getThumbnail(['w' => 600]) }}" 
+                                <img src="{{ $product->shop->getThumbnail(['w' => 600]) }}"
                                     class="w-[30px] h-[30px] object-cover rounded-full border border-gray-200 mr-2"/>
 
                                 <span>{{ $product->shop?->name }}</span>
@@ -34,7 +34,7 @@
 
                             {{-- Categories --}}
                             @if($product->categories->isNotEmpty())
-                                <ul class="flex items-center px-2">
+                                <ul class="flex items-center px-2 gap-2">
                                     @foreach($product->categories as $category)
                                         <li class="text-14 text-typ-3">{{ $category->name }}</li>
                                     @endforeach
@@ -162,14 +162,14 @@
                     </div>
                 @else
                     <a href="{{ route(\App\Models\CourseItem::getRouteName(), [
-                        'product_slug' => $product->slug, 
+                        'product_slug' => $product->slug,
                         'slug' => $course_items->first()?->slug ?? ' ',
                     ]) }}" class="w-full btn-success">
                         {{ translate('View course') }}
                     </a>
                 @endif
-                
-                
+
+
 
                 {{-- Course Includes --}}
                 @if(!empty($product->getCoreMeta('course_includes')))
@@ -209,7 +209,7 @@
             <div class="w-full flex flex-col">
                 {{-- <h3 class="w-full text-22 mb-2"></h3> --}}
                 <p class="text-16 mb-4">{{ translate('Join now and buy this course to have an access to content') }}</p>
-    
+
                 <div class="w-full flex gap-4">
                     @auth
                         @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
@@ -222,7 +222,7 @@
                             </x-system.add-to-cart-button>
                         @endif
                     @endauth
-    
+
                     @guest
                         <a href="{{ route('user.login') }}" class="btn-primary">
                             {{ translate('Log in') }}
