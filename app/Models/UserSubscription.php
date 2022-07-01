@@ -85,4 +85,8 @@ class UserSubscription extends WeBaseModel
     public function getStripeSubscriptionID() {
         return $this->data[StripeService::getStripeMode().'stripe_subscription_id'];
     }
+
+    public function getStripeUpcomingInvoice() {
+        return \StripeService::getUpcomingInvoice($this, $this->plan, $this->order->invoicing_period);
+    }
 }

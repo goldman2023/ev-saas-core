@@ -24,7 +24,7 @@ class License extends WeBaseModel
 
     protected $table = 'licenses';
 
-    protected $fillable = ['license_name', 'serial_number', 'license_type', 'data', 'created_at', 'updated_at'];
+    protected $fillable = ['license_name', 'user_id', 'serial_number', 'license_type', 'data', 'created_at', 'updated_at'];
 
     protected $casts = [
         'data' => 'array'
@@ -32,6 +32,10 @@ class License extends WeBaseModel
 
     public function user_subscription() {
         return $this->morphToMany(UserSubscription::class, 'subject', 'user_subscription_relationships');
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /*
