@@ -67,6 +67,9 @@
                             .replace('%new_plan_id%', this.new_plan.id)
                             .replace('%interval%', this.interval);
 
+                    this.total_projected_price = '({{ translate('calculating') }}...)';
+                    this.total_annual_projected_price = '({{ translate('calculating') }}...)';
+
                     wetch.get(invoiceProjectionUrl)
                     .then(data => {
                         if(data.status === 'success') {
