@@ -524,7 +524,7 @@ class StripeService
             // Determine price by given interval
             if(empty($interval) || $interval === 'month') {
                 $stripe_price = $stripe_monthly_price;
-            } else if($interval === 'annual') {
+            } else if($interval === 'annual' || $interval === 'year') {
                 $stripe_price = $stripe_annual_price;
             }
         } else {
