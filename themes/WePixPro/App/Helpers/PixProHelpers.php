@@ -227,6 +227,7 @@ if (!function_exists('pix_pro_create_license')) {
 
                             try {
                                 $license = new License();
+                                $license->user_id = $subscription->user->id;
                                 $license->license_name = $pix_license['license_name'] ?? '';
                                 $license->serial_number = $pix_license['serial_number'] ?? '';
                                 $license->license_type = $pix_license['license_type'] ?? '';
@@ -321,6 +322,7 @@ if (!function_exists('pix_pro_update_license')) {
 
                             try {
                                 $license = $subscription->license->first();
+                                $license->user_id = $subscription->user->id;
                                 $license->license_name = $pix_license['license_name'] ?? '';
                                 // $license->serial_number = $pix_license['serial_number'] ?? '';
                                 $license->license_type = $pix_license['license_type'] ?? '';
@@ -482,7 +484,8 @@ if (!function_exists('pix_pro_update_license_status')) {
                             DB::beginTransaction();
 
                             try {
-                                $license = $subscription->license->first();
+                                $license = $subscription->license->first(); // TODO: Fix this for multi-license subscriptions   
+                                $license->user_id = $subscription->user->id;
 
                                 $data = empty($license->data) ? [] : $license->data;
                                 $license->data = array_merge($data, $pix_license); // Keep in mind that expiration date is NOT YET CHANGED ON PixPro end, because this endpoint doesn't set it. We'll update each subscription expiration_date in following function: `$this->pix_pro_update_license_status($user_subscriptions);`
@@ -523,7 +526,7 @@ if (!function_exists('pix_pro_extend_license')) {
                     []
                   );
 
-                $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
+                $is_trial = $stripe_subscription->status === 'trialing';
 
                 $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
@@ -554,7 +557,11 @@ if (!function_exists('pix_pro_extend_license')) {
 
                         if(!empty($pix_license)) {
                             // Update data column
+                            $license = $subscription->license->first(); // TODO: Fix this for multi-license subscriptions
+                            $license->user_id = $subscription->user->id;
+
                             $data = empty($license->data) ? [] : $license->data;
+                            
                             $license->data = array_merge($data, $pix_license); // Keep in mind that expiration date is NOT YET CHANGED ON PixPro end, because this endpoint doesn't set it. We'll update each subscription expiration_date in following function: `$this->pix_pro_update_license_status($user_subscriptions);`
                             $license->save();
                         }

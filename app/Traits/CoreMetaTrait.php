@@ -95,6 +95,10 @@ trait CoreMetaTrait
     }
 
     // Specific CoreMeta
+    public function getStripeCustomerID() {
+        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_customer_id');
+    }
+
     public function getStripeProductID() {
         return $this->getCoreMeta(StripeService::getStripeMode().'stripe_product_id');
     }

@@ -124,7 +124,7 @@
                         <template x-if="!is_active()">
                             <a
                                 @if(auth()->user()?->plan_subscriptions->first()?->isTrial())
-                                    x-bind:href="is_active() ? $getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode}) : '#'"
+                                    x-bind:href="is_active() ? $getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode}) : 'javascript:void(0)'"
                                     x-on:click="is_active() ? '' : $dispatch('display-modal', {id: 'change-trial-plan-confirmation-modal', subscription_id: {{ auth()->user()?->plan_subscriptions->first()?->id ?? 'null' }}, new_plan: @js($plan->toArray()), interval: pricing_mode })"
                                     target="_parent"
                                 @else
@@ -139,14 +139,15 @@
                                 3. *If trial mode is disabled and plan is purchased: Upgrade plan
                                 4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you
                                 pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
-                                @if(!get_tenant_setting('plans_trial_mode') && !$subscribed)
-                                <span>{{ translate('Buy now') }}</span>
-                                @elseif(get_tenant_setting('plans_trial_mode') && !$subscribed)
-                                <span>{{ translate('Try for free') }}</span>
-                                @elseif(!get_tenant_setting('plans_trial_mode') && $subscribed)
-                                <span>{{ translate('Change plan') }}</span>
-                                @elseif(get_tenant_setting('plans_trial_mode') && $subscribed)
-                                <span>{{ translate('Change plan') }}</span>
+                                
+                                @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                    <span>{{ translate('Buy now') }}</span>
+                                @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                    <span>{{ translate('Try for free') }}</span>
+                                @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                    <span>{{ translate('Change plan') }}</span>
+                                @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                    <span>{{ translate('Change plan') }}</span>
                                 @endif
                             </a>
                         </template>

@@ -10,7 +10,6 @@
      @endphp
     <livewire:dashboard.tables.licenses-table :user="$data" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
 
-
 </div>
 
 @push('modal')

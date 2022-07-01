@@ -420,6 +420,55 @@ class StripeService
         return $stripe_customer;
     }
 
+    public function getUpcomingInvoice($user_subscription, $new_plan, $interval) {
+        try {
+            // Set proration date to this moment:
+            $proration_date = time();
+
+            $stripe_subscription = $this->stripe->subscriptions->retrieve($user_subscription->getStripeSubscriptionID());
+            $stripe_price_id = null;
+
+            if($interval == 'month') {
+                $stripe_price_id = $new_plan->getStripeMonthlyPriceID();
+            } else if($interval == 'year' || $interval == 'annual') {
+                $stripe_price_id = $new_plan->getStripeAnnualPriceID();
+            }
+
+            if($stripe_subscription->status === 'trialing') {
+                $cycle_anchor = 'now';
+            } else {
+                if($user_subscription->order->invoicing_period === $interval) {
+                    $cycle_anchor = 'unchanged';
+                } else {
+                    // TODO: This may not be correct...check other options just in case
+                    $cycle_anchor = 'now';
+                }
+            }
+
+            // See what the next invoice would look like with a price switch
+            // and proration set:
+            $items = [
+                [
+                    'id' => $stripe_subscription->items->data[0]->id,
+                    'price' => $stripe_price_id, # Switch to new price
+                ],
+            ];
+
+            $invoice = $this->stripe->invoices->upcoming([
+                'customer' => $user_subscription->user->getStripeCustomerID(),
+                'subscription' => $user_subscription->getStripeSubscriptionID(),
+                'subscription_items' => $items,
+                'subscription_proration_date' => $proration_date,
+                'subscription_billing_cycle_anchor' => $cycle_anchor,
+                'subscription_trial_end' => $cycle_anchor,
+            ]);
+
+            return $invoice;
+        } catch(\Exception $e) {
+            return $e;
+        }
+    }
+
     public function createCheckoutLink($model, $qty = 1, $interval = null, $preview = false, $abandoned_order_id = null)
     {
         // Check if Stripe Product actually exists
@@ -475,7 +524,7 @@ class StripeService
             // Determine price by given interval
             if(empty($interval) || $interval === 'month') {
                 $stripe_price = $stripe_monthly_price;
-            } else if($interval === 'annual') {
+            } else if($interval === 'annual' || $interval === 'year') {
                 $stripe_price = $stripe_annual_price;
             }
         } else {

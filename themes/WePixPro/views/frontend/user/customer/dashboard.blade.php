@@ -16,11 +16,14 @@
 
             @if(auth()->user()?->isSubscribed() ?? false)
                 <div class="col-span-12">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('My Subscriptions') }}</h3>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('My Licenses') }}</h3>
 
+                    <livewire:dashboard.tables.licenses-table :user="auth()->user()" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
+{{-- 
                     <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
-                        :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" :hide-actions="true" />
+                        :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" :hide-actions="true" /> --}}
                 </div>
+
             @else
                 <div class="col-span-12">
                     <div
@@ -78,3 +81,9 @@
 </section>
 
 @endsection
+
+@push('modal')
+    <x-system.form-modal id="pix-pro-generate-license" title="Online License Activation" class="!max-w-3xl">
+        <livewire:forms.generate-license-form />
+    </x-system.form-modal>
+@endpush
