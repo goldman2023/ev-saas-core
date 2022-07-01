@@ -5,9 +5,12 @@ namespace App\Http\Services;
 use App\Facades\MyShop;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
+use App\Models\BlogPost;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Currency;
+use App\Models\Lead;
+use App\Models\Page;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use App\Models\User;
@@ -104,6 +107,13 @@ class EVService
                         'is_active' => areActiveRoutes(['stripe.portal_session']),
                         'user_types' => User::$user_types,
                         'permissions' => [], // always show, independent of permissions
+                        'badge' => [
+                            'class' => 'badge-info',
+                            'content' => function () {
+
+                                return 'New';
+                            },
+                        ],
                     ],
                     [
                         'label' => translate('Chat'),
@@ -219,7 +229,13 @@ class EVService
                         'route_name' => 'leads.index',
                         'is_active' => areActiveRoutes(['leads']),
                         'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['all_leads', 'browse_leads']
+                        'permissions' => ['all_leads', 'browse_leads'],
+                         'badge' => [
+                            'class' => 'badge-danger',
+                            'content' => function () {
+                                return Lead::count();
+                            },
+                        ],
                     ],
 
 
@@ -236,6 +252,13 @@ class EVService
                         'is_active' => areActiveRoutes(['blog.posts.index']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_posts', 'browse_posts'],
+                        'badge' => [
+                            'class' => 'badge-info',
+                            'content' => function () {
+
+                                return BlogPost::count();
+                            },
+                        ],
                     ],
                     [
                         'label' => translate('Pages'),
@@ -247,6 +270,13 @@ class EVService
                         'user_types' => User::$tenant_user_types,
                         'permissions' => [], // TODO: Add App Pages Permissions
                         'enabled' => true,
+                        'badge' => [
+                            'class' => 'badge-info',
+                            'content' => function () {
+
+                                return Page::count();
+                            },
+                        ],
                     ],
                     [
                         'label' => translate('Quizzes'),
@@ -272,6 +302,13 @@ class EVService
                         'is_active' => areActiveRoutes(['crm.all_customers']),
                         'user_types' => User::$tenant_user_types,
                         'permissions' => ['browse_customers'],
+                        'badge' => [
+                            'class' => 'badge-info',
+                            'content' => function () {
+
+                                return User::byDays(10)->count() . ' Today';
+                            },
+                        ],
                     ],
 
                     /* TODO: Uncomment this once we have customers page */
@@ -299,15 +336,7 @@ class EVService
             [
                 'label' => translate('Customer zone'),
                 'items' => apply_filters('dashboard.sidebar.customer-zone.items', [
-                    [
-                        'label' => translate('My Account'),
-                        'icon' => 'heroicon-o-user',
-                        'route' => route('my.account.settings'),
-                        'route_name' => 'my.account.settings',
-                        'is_active' => areActiveRoutes(['my.account.settings']),
-                        'user_types' => User::$user_types,
-                        'permissions' => [],
-                    ],
+
                     [
                         'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-shopping-cart',
@@ -332,6 +361,16 @@ class EVService
                         'route' => route('my.orders.all'),
                         'route_name' => 'my.orders.all',
                         'is_active' => areActiveRoutes(['my.orders.all']),
+                        'user_types' => User::$user_types,
+                        'permissions' => [],
+                    ],
+
+                    [
+                        'label' => translate('My Account'),
+                        'icon' => 'heroicon-o-user',
+                        'route' => route('my.account.settings'),
+                        'route_name' => 'my.account.settings',
+                        'is_active' => areActiveRoutes(['my.account.settings']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
                     ],
