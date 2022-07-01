@@ -634,7 +634,7 @@ class StripeService
             $stripe_args['customer'] = $stripe_customer->id;
             $billing_session = $this->stripe->billingPortal->sessions->create([
                 'customer' => $stripe_customer->id,
-                'features' => $features,
+                // 'features' => $features,
                 'return_url' => url()->previous(),
             ]);
 
