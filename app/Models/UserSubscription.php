@@ -3,20 +3,22 @@
 namespace App\Models;
 
 use StripeService;
-use App\Traits\GalleryTrait;
 use App\Traits\UploadTrait;
-use App\Traits\SocialAccounts;
+use App\Traits\GalleryTrait;
 use App\Traits\CoreMetaTrait;
-use App\Enums\UserSubscriptionStatusEnum;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
-use Laravel\Passport\HasApiTokens;
-use App\Notifications\EmailVerificationNotification;
 use App\Traits\PermalinkTrait;
+use App\Traits\SocialAccounts;
+use Laravel\Passport\HasApiTokens;
+use App\Enums\AmountPercentTypeEnum;
+use Stripe\Invoice as StripeInvoice;
+use Spatie\Permission\Traits\HasRoles;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Notifications\Notifiable;
+use App\Enums\UserSubscriptionStatusEnum;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\EmailVerificationNotification;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 
 class UserSubscription extends WeBaseModel
@@ -87,6 +89,58 @@ class UserSubscription extends WeBaseModel
     }
 
     public function getStripeUpcomingInvoice() {
-        return \StripeService::getUpcomingInvoice($this, $this->plan, $this->order->invoicing_period);
+        $upcoming_invoice = \StripeService::getUpcomingInvoice($this, $this->plan, $this->order->invoicing_period);
+
+        if($upcoming_invoice instanceof Order) {
+            return array_merge(['invoice_source' => 'we'], $upcoming_invoice->toArray());
+        } else if($upcoming_invoice instanceof StripeInvoice) {
+            return array_merge(['invoice_source' => 'stripe'], $upcoming_invoice->toArray());
+        }
+
+        return null;
+    }
+
+    public function getUpcomingInvoiceStats() {
+        return \Cache::remember('user_subscription_'.$this->id.'_upcoming_invoice_stats', 60*60, function () {
+            $invoice = $this->getStripeUpcomingInvoice();
+            return $invoice;
+        });
+    }
+
+    public function getTotalPrice() {
+        $invoice = $this->getUpcomingInvoiceStats();
+
+        if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
+            if($invoice['invoice_source'] === 'stripe') {
+                return \FX::formatPrice($invoice['total'] / 100);
+            } else if($invoice['invoice_source'] === 'we') {
+                return \FX::formatPrice($invoice['total_price'] ?? 0);
+            }
+        }
+
+        return 0;
+    }
+
+    public function getTaxAmount($format = true) {
+        $invoice = $this->getUpcomingInvoiceStats();
+
+        if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
+            if($invoice['invoice_source'] === 'stripe') {
+                return $format ?  \FX::formatPrice($invoice['tax'] / 100) : $invoice['tax'];
+            } else if($invoice['invoice_source'] === 'we') {
+                $interval = $this->order->invoicing_period;
+                $subtotal_price = $this->order->subtotal_price;
+                
+                if ($invoice['tax_type'] === AmountPercentTypeEnum::percent()->value) {
+                    $tax = ($this->order->subtotal_price * $this->order->tax) / 100;
+                } elseif ($this->tax_type === AmountPercentTypeEnum::amount()->value) {
+                    $tax = $this->order->tax;
+                }
+
+                return $format ? \FX::formatPrice($tax) : $tax;
+            }
+        }
+
+        return 0;
     }
 }

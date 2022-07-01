@@ -12,12 +12,16 @@
         text="{{ translate('Manage your subscriptions, licenses and billing') }}">
         <x-slot name="content">
             @if(auth()->user()?->isSubscribed() ?? false)
-            <a href="{{ route('stripe.portal_session') }}" class="btn-primary" target="_blank">
+            <a href="{{ route('stripe.portal_session') }}" class="btn-primary">
                 {{ translate('Biling Portal') }}
             </a>
             @endif
         </x-slot>
     </x-dashboard.section-headers.section-header>
+
+
+    <x-dashboard.widgets.customer.pricing-table :plans="$plans">
+    </x-dashboard.widgets.customer.pricing-table>
 
     @if(auth()->user()?->isSubscribed() ?? false)
         <div class="w-full pb-5 mb-5 border-b border-gray-200">
@@ -32,8 +36,7 @@
         @do_action('view.dashboard.plans-management.plans-table.end', auth()->user())
     @endif
 
-        <x-dashboard.widgets.customer.pricing-table :plans="$plans">
-        </x-dashboard.widgets.customer.pricing-table>
+
     </div>
 </section>
 @endsection
@@ -75,7 +78,7 @@
                             this.total_projected_price = data.data.total / 100;
                             this.total_annual_projected_price = data.data.total / 100;
                         } else {
-                            
+
                         }
                     })
                     .catch(error => alert(error.error.msg));

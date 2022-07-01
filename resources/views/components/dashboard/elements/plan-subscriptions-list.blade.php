@@ -24,9 +24,25 @@
                             </div>
                         @endforeach
 
-                        <div class="w-full flex justify-between">
+                        @if($subscription->getTaxAmount(false) > 0)
+                            <div class="w-full flex justify-between">
+                                <span class="text-14 text-gray-500 font-normal">
+                                    {{ translate('VAT amount') }}: <strong></strong>
+                                </span>
+                                <span class="text-14 text-gray-500 font-normal">
+                                    {{ $subscription->getTaxAmount() }}
+                                </span>
+                            </div>
+                        @endif
+                        
+
+                        <div class="w-full flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
                             <span class="text-14 text-gray-600 font-normal">
                                 {{ translate('Next payment due on') }} <strong>{{ \Carbon::createFromTimestamp($subscription->order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices->first()?->end_date)->format('d M, Y') }}</strong>
+                            </span>
+
+                            <span class="text-14 text-gray-600 font-normal">
+                                {{ translate('Total') }}: <strong>{{ $subscription->getTotalPrice() }} / {{ $subscription->order->invoicing_period }}</strong>
                             </span>
                         </div>
                     </div>
