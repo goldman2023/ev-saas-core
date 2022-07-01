@@ -319,7 +319,12 @@ trait PriceTrait
 
     public function getTotalAnnualPrice(bool $display = false, bool $both_formats = false)
     {
-        $total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
+        /* This if is required for create to work */
+        if(isset($this->attributes[$this->getPriceColumn()])) {
+            $total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
+        } else {
+            return 0;
+        }
 
         if ($this->isSubscribable()) {
             // First apply yearly discount, if any!
