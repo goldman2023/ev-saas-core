@@ -191,6 +191,7 @@ class TenantSettingsService
             'multiplan_purchase' => 'boolean', // Buying multiple plans and distributing them among other users
             'onboarding_flow' => 'boolean',
             'chat_feature' => 'boolean',
+            'addresses_feature' => 'boolean',
             'weedit_feature' => 'boolean',
             'wishlist_feature' => 'boolean',
             'vendor_mode_feature' => 'boolean',

@@ -178,7 +178,8 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.input field="settings.site_contact_email" type="email" placeholder="{{ translate('Contact email') }}" />
+                                        <x-dashboard.form.input field="settings.site_contact_email" type="email"
+                                            placeholder="{{ translate('Contact email') }}" />
                                     </div>
                                 </div>
                                 <!-- END Site Contact Email -->
@@ -338,12 +339,12 @@
                                     <div class="col-span-6 font-medium text-md">
                                         {{ translate('For generating color variants we recommend using this tool: ') }}
                                         <a href="https://tailwind.simeongriggs.dev/" class="text-indigo-600"
-                                            target="_blank">Palette Generator </a>
+                                            target="_blank">Palette Generator</a>
                                     </div>
                                 </div>
                                 {{-- Colors --}}
                                 @php $i = 0; @endphp
-                                @foreach(TenantSettings::settingsDataTypes()['colors'] as $color_key => $data_type)
+                                @foreach($colors as $color_key => $data_type)
                                 @if($loop->first)
                                 <div class="bg-indigo-400 p-6 rounded">
                                     @endif
@@ -353,8 +354,21 @@
                                             {{ $color_key }}
                                         </label>
 
-                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.colors.{{ $color_key }}" />
+                                        <div class="mt-1 sm:mt-0 sm:col-span-1">
+                                            <x-dashboard.form.input
+                                            wire:model.defer="settings.colors.{{ $color_key }}"
+                                            field="settings.colors.{{ $color_key }}" />
+
+                                        </div>
+                                        <div>
+                                            @if($loop->first)
+                                                <button class="btn-primary bg-indigo-700" type="button"
+
+                                                @click="" wire:click="generateColorPalette(333)">
+                                                    Generate Collor palette
+                                                </button>
+                                            @endif
+
                                         </div>
                                     </div>
                                     @php $i++; @endphp
@@ -411,6 +425,24 @@
                                     </div>
                                 </div>
                                 {{-- END Chat Feature --}}
+
+                                {{-- Addresses Feature --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
+                                    x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Custmer
+                                            Addresses')
+                                            }}</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('If you want to enable addresses for customers') }}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <x-dashboard.form.toggle field="settings.addresses_feature" />
+                                    </div>
+                                </div>
+                                {{-- END Addresses Feature --}}
 
                                 {{-- WeEdit Feature --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
@@ -605,6 +637,7 @@
                                         $wire.set('settings.onboarding_flow', settings.onboarding_flow, true);
                                         $wire.set('settings.force_email_verification', settings.force_email_verification, true);
                                         $wire.set('settings.chat_feature', settings.chat_feature, true);
+                                        $wire.set('settings.addresses_feature', settings.addresses_feature, true);
                                         $wire.set('settings.weedit_feature', settings.weedit_feature, true);
                                         $wire.set('settings.wishlist_feature', settings.wishlist_feature, true);
                                         $wire.set('settings.vendor_mode_feature', settings.vendor_mode_feature, true);
@@ -1129,7 +1162,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <x-system.form-modal id="app-settings-smtp-mail" title="SMTP Mail" >
+                                    <x-system.form-modal id="app-settings-smtp-mail" title="SMTP Mail">
                                         <div class="w-full">
                                             <!-- SMTP Enabled-->
                                             <div class="flex flex-col mb-3" x-data="{}">
@@ -1186,7 +1219,8 @@
                                                 </label>
 
                                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                    <x-dashboard.form.input type="password" field="settings.smtp_mail_password" />
+                                                    <x-dashboard.form.input type="password"
+                                                        field="settings.smtp_mail_password" />
                                                 </div>
                                             </div>
                                             <!-- END SMTP Password -->
@@ -1223,8 +1257,7 @@
                                                 </label>
 
                                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                    <x-dashboard.form.input
-                                                        field="settings.mail_reply_to_address" />
+                                                    <x-dashboard.form.input field="settings.mail_reply_to_address" />
                                                 </div>
                                             </div>
                                             <!-- END Mail ReplyTo Address -->
@@ -1533,7 +1566,9 @@
                                             <img class="mx-auto h-[32px]" alt="Google Analytics"
                                                 src="https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/WordPress_logo.svg/1280px-WordPress_logo.svg.png@webp"
                                                 loading="lazy">
-                                            <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ translate('WordPress API') }}</h3>
+                                            <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ translate('WordPress
+                                                API')
+                                                }}</h3>
                                         </div>
                                         <div>
                                             <div class="-mt-px flex divide-x divide-gray-200">
@@ -1721,7 +1756,7 @@
                                         </div>
                                     </x-system.form-modal>
                                     {{-- END Woo Export --}}
-                                    
+
 
                                     {{-- Facebook Pixel --}}
                                     <li

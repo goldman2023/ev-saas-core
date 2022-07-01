@@ -1,5 +1,5 @@
 <section class="w-full" x-data="{
-    pricing_mode: 'month',
+    pricing_mode: 'year',
     current_plan_mode: '{{ auth()->user()->plan_subscriptions?->first()?->order?->invoicing_period ?? '' }}',
     current_plan_id: {{ auth()->user()->plan_subscriptions?->first()?->subject->id ?? 'null' }},
     current_is_trial: {{ $isTrial ? 'true' : 'false' }},
@@ -23,10 +23,10 @@
                 translate('Yearly billing') }}</button>
         </div>
     </div>
-    <div class="grid gap-10 grid-cols-12">
+    <div class="grid sm:gap-6 xl:gap-10 grid-cols-12">
         @if($plans->isNotEmpty())
         @foreach($plans as $plan)
-        <div class="bg-white border border-gray-200 hover:border-primary rounded-lg col-span-12 sm:col-span-6 lg:col-span-3 "
+        <div class="bg-white border border-gray-200 hover:border-primary rounded-lg col-span-12 sm:col-span-6 lg:col-span-3 mb-6"
             x-data="{
                     qty: 1,
                     plan_id: {{ $plan->id }},
@@ -38,7 +38,7 @@
                 }"
                 :class="{'border-2 border-primary':  is_active() }">
             <div
-                class="relative  flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green h-full"
+                class="relative flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green h-full"
                 :class="{'pt-[41px]': is_active() }">
 
                 <template x-if="is_active()">

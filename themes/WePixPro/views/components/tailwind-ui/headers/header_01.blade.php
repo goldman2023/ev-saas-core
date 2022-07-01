@@ -1,7 +1,4 @@
-@php
-    $header_menu = nova_get_menu_by_slug('header');
-    $header_menu_items = $header_menu['menuItems'] ?? null;
-@endphp
+
 <header class="" x-data="{
     show_mobile_menu: false,
 }">
@@ -26,15 +23,7 @@
                 </div>
 
                 <nav class="hidden md:flex space-x-[32px]">
-                    @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
-                        @foreach($header_menu_items as $menu_item)
-                            @if($menu_item['enabled']) 
-                                <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="text-base font-medium text-gray-500 hover:text-gray-900">
-                                    {{ $menu_item['name'] ?? '' }}
-                                </a>
-                            @endif
-                        @endforeach
-                    @endif
+                  <x-system.menus.default-menu menu="header"></x-system.menus.default-menu>
                 </nav>
 
                 {{-- TODO: Create Dashboard button (similar to 'Try for free') if user is authenticated, otherwise
@@ -101,7 +90,7 @@
                         <nav class="grid gap-y-8">
                             @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
                                 @foreach($header_menu_items as $menu_item)
-                                    @if($menu_item['enabled']) 
+                                    @if($menu_item['enabled'])
                                         <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
                                             {{ $menu_item['name'] ?? '' }}
                                         </a>
@@ -144,7 +133,7 @@
                                 {{ translate('Dashboard') }}
                             </a>
                         @endguest
-                        
+
                     </div>
                 </div>
 
