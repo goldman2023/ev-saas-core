@@ -140,13 +140,13 @@
                                 4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you
                                 pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
                                 @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                <span>{{ translate('Buy now') }}</span>
+                                    <span>{{ translate('Buy now') }}</span>
                                 @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                <span>{{ translate('Try for free') }}</span>
+                                    <span>{{ translate('Try for free') }}</span>
                                 @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                <span>{{ translate('Change plan') }}</span>
+                                    <span>{{ translate('Change plan') }}</span>
                                 @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                <span>{{ translate('Change plan') }}</span>
+                                    <span>{{ translate('Change plan') }}</span>
                                 @endif
                             </a>
                         </template>

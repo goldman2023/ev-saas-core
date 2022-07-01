@@ -58,7 +58,8 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    <strong class="text-14">{{ \FX::formatPrice($row->order->total_price) }}</strong><span class="text-14">{{ '/'.$row->order->invoicing_period }}</span>
+    {{-- TODO: Store upcoming invoice somewhere! --}}
+    <strong class="text-14">{{ \FX::formatPrice(($row->getStripeUpcomingInvoice()['total'] ?? 0) / 100) }}</strong><span class="text-14">{{ '/'.$row->order->invoicing_period }}</span>
 </x-livewire-tables::table.cell>
 
 {{-- <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
