@@ -40,7 +40,8 @@ class UserSubscriptionsObserver
      */
     public function updated(UserSubscription $user_subscription)
     {
-       
+        // Remove upcoming invoice for subscription total price
+       \Cache::forget('user_subscription_'.$user_subscription.'_upcoming_invoice_stats');
     }
 
     /**
