@@ -28,6 +28,7 @@ class Language
             } else if (Session::has('locale')) {
                 $locale = Session::get('locale');
             } else {
+
                 /* TODO: Add locale by domain here */
                 if($domain) {
                     $locale = $domain->domain_locale;
@@ -35,9 +36,14 @@ class Language
                     $locale = config('app.locale');
                 }
             }
-        }else {
-            $locale = config('app.locale');
+        } else {
+            if($domain) {
+                $locale = $domain->domain_locale;
+            } else {
+                $locale = config('app.locale');
+            }
         }
+
 
 
 
