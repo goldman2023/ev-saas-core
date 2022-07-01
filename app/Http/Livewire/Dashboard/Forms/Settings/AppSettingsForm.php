@@ -20,6 +20,7 @@ use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
+use Illuminate\Support\Facades\Http;
 use TenantSettings;
 use Payments;
 
@@ -33,6 +34,7 @@ class AppSettingsForm extends Component
     public $addresses;
     public $domains;
     public $universal_payment_methods;
+    public $colors;
 
     protected function getRuleSet($set = null, $with_wildcard = true) {
         $rulesSets = collect([
@@ -53,6 +55,11 @@ class AppSettingsForm extends Component
                 'settings.returns_and_refunds_url' => [''],
                 'settings.documentation_url' => [''],
             ]),
+            /* TODO: Enable disable specific product types in app settings */
+            /* WARNING THIS OPTION IS WORK IN PROGRESS */
+            'products' =>  apply_filters('app-settings-product-rules', [
+                'settings.enabled_product_types' => ['']
+            ]),
             'features' => apply_filters('app-settings-features-rules', [
                 /* Example field for creating new TenantSetting */
                 'settings.feed_enabled' => ['boolean'],
@@ -63,6 +70,7 @@ class AppSettingsForm extends Component
                 'settings.login_redirect_url' => ['nullable'],
 
                 'settings.chat_feature' => ['boolean'],
+                'settings.addresses_feature' => ['boolean'],
                 'settings.weedit_feature' => ['boolean'],
                 'settings.wishlist_feature' => ['boolean'],
                 'settings.vendor_mode_feature' => ['boolean'],
@@ -181,6 +189,7 @@ class AppSettingsForm extends Component
     public function mount()
     {
         $this->settings = TenantSettings::getAll();
+        $this->colors = TenantSettings::settingsDataTypes()['colors'];
         $this->universal_payment_methods = Payments::getPaymentMethodsAll();
     }
 
@@ -536,5 +545,18 @@ class AppSettingsForm extends Component
                     ->update(['value' => castValueForSave($setting_key, $this->settings[$setting_key], TenantSettings::settingsDataTypes())]);
             }
         }
+    }
+
+    public function generateColorPalette() {
+        $response = Http::get('https://tailwind.simeongriggs.dev/api/indigo/' . $this->settings['colors']['primary']);
+
+        $this->settings['colors']['indigo'] = $response->body();
+        dd($this->colors);
+        $this->colors;
+
+
+
+        return $response;
+
     }
 }

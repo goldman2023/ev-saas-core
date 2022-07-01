@@ -41,7 +41,7 @@
         }
     }" x-init="init(); currentIndex = 0; currentContact = settings.contact_details[0]; ">
 
-    
+    @if(get_tenant_setting('addresses_feature', false))
     <div class="w-full flex justify-between items-center border-b border-gray-200 mb-3 pb-3">
         <div class="shrink-0">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Contact details') }}</h3>
@@ -54,6 +54,7 @@
             </button>
         </div>
     </div>
+    @endif
 
     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
         @if(!empty($settings['contact_details'] ?? null))
@@ -103,9 +104,9 @@
                 @endforeach
             </ul>
         @else
-            <x-dashboard.empty-states.no-items-in-collection 
-                icon="heroicon-o-phone" 
-                title="{{ translate('No contacts yet') }}" 
+            <x-dashboard.empty-states.no-items-in-collection
+                icon="heroicon-o-phone"
+                title="{{ translate('No contacts yet') }}"
                 text="{{ translate('Add shop contact details so customers can contact you!') }}"
                 {{-- link-href-route="blog.post.create" --}}
                 link-text="{{ translate('Add new Contact') }}"
@@ -152,8 +153,8 @@
 
             {{-- Is primary? --}}
             <div class="flex items-center mt-5">
-                <button type="button" @click="currentContact.is_primary = !currentContact.is_primary" 
-                            :class="{'bg-primary':currentContact.is_primary, 'bg-gray-200':!currentContact.is_primary}" 
+                <button type="button" @click="currentContact.is_primary = !currentContact.is_primary"
+                            :class="{'bg-primary':currentContact.is_primary, 'bg-gray-200':!currentContact.is_primary}"
                             class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                     <span :class="{'translate-x-5':currentContact.is_primary, 'translate-x-0':!currentContact.is_primary}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                 </button>
