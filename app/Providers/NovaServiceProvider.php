@@ -6,8 +6,8 @@ use App\Nova\Central\Domain;
 use App\Nova\Central\Tenant as TenantResource;
 use App\Nova\Tenant\User;
 use App\Models\Tenant;
-use App\Nova\Central\Section;
 use App\Nova\Dashboards\Main;
+use App\Nova\Tenant\Section;
 use App\Nova\Tenant\Order;
 use App\Nova\Tenant\Blog;
 use App\Nova\Tenant\Shop;
@@ -131,6 +131,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
                     MenuItem::link('Roles', '/resources/roles/'),
                     MenuItem::link('Permissions', '/resources/permissions/'),
+                    MenuItem::resource(Section::class),
                     MenuItem::resource(WooImport::class),
                     MenuItem::resource(WeWorkflow::class),
                     MenuItem::resource(Translation::class),
@@ -263,6 +264,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 Invoice::class,
                 UserSubscription::class,
                 License::class,
+                Section::class,
                 MenuBuilder::getMenuResource()
             ]);
         } else {
@@ -270,7 +272,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 // Admin::class,
                 TenantResource::class,
                 Domain::class,
-                Section::class,
                 // SubscriptionCancelation::class,
             ]);
         }

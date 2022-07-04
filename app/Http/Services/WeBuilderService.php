@@ -139,6 +139,14 @@ class WeBuilderService
                                     'data' => [],
                                     'settings' => []
                                 ],
+                                'tailwind-ui.sections.marketing.content-sections.custom-section' => [
+                                    'id' => 'tailwind-ui.sections.marketing.content-sections.custom-section',
+                                    'title' => 'Custom Section',
+                                    'thumbnail' => 'https://i.ytimg.com/vi/uA0sGXetNPs/maxresdefault.jpg',
+                                    'order' => -1,
+                                    'data' => [],
+                                    'settings' => []
+                                ],
                             ]
                         ],
                         'cta-sections' => [

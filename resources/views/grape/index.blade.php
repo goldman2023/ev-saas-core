@@ -37,8 +37,7 @@
     </div>
 </div>
 
-
-<form action={{ route('grape.save', [$pageID]) }} method="POST" id="grape-form">
+<form action={{ route('grape.save', [$pageID, $type]) }} method="POST" id="grape-form">
     <input type="hidden" name="custom_html" id="custom_html" value="">
     {{-- <button type="submit">{{ translate('Save') }}</button> --}}
 </form>
@@ -69,6 +68,53 @@
                     }
                 }
               });
+
+
+              /* Custom Blocks refference: https://jsfiddle.net/fcsa6z75/7/  */
+              // Add blocks
+this.editor.BlockManager.add('collection-1', {
+	label: 'Collection 1',
+  content: { type: 'collection', category: 'SET-1' },
+});
+this.editor.BlockManager.add('collection-2', {
+	label: 'Collection 2',
+  content: { type: 'collection', category: 'SET-2' },
+});
+              // Add the custom component
+this.editor.DomComponents.addType('collection', {
+	model: {
+  	defaults: {
+    	category: 'basic',
+    },
+    // Customize the export HTML
+    toHTML() {
+    	const category = this.get('category');
+    	return `<x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>`
+    },
+  },
+  view: {
+  	onRender() {
+     	const { $el, model } = this;
+        const category = model.get('category');
+			$el.empty();
+    	// eg. you can make some ajax request and then...
+      const products = [
+      	'recently viewed',
+       ];
+       products.forEach(product => {
+       	// If you append to the element, products will be static
+        // and you won't be able to select/edit them.
+        // So this approach is to use when you want kind
+        // of placeholders elements.
+       	$el.append(product);
+
+        // If actually need to select/edit them, append the HTML
+        // to the model
+        // model.append(product);
+       });
+    }
+  }
+});
 
 
 
@@ -102,15 +148,14 @@
                /* Colapse all block groups
             Refference: https://github.com/artf/grapesjs/issues/446
             */
-            const categories = this.editor.BlockManager.getCategories();
+            /* const categories = this.editor.BlockManager.getCategories();
             categories.each(category => {
-                console.log(category);
                 category.set('open', false).on('change:open', opened => {
                     opened.get('open') && categories.each(category => {
                         category !== opened && category.set('open', false)
                     })
                 })
-            });
+            }); */
             });
 
 

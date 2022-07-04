@@ -16,7 +16,12 @@ class Footer extends WeComponent
      */
     public function __construct($template = 'footer_01')
     {
-        $this->template = $template;
+        if(get_tenant_setting('footer_style')) {
+            $this->template = get_tenant_setting('footer_style')->value;
+        } else {
+            $this->template = $template;
+
+        }
     }
 
     /**

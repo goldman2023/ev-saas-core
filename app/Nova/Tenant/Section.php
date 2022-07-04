@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Nova\Central;
+namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\HasMany;
@@ -22,7 +23,7 @@ class Section extends Resource
      *
      * @var string
      */
-    public static $model = \App\Models\Central\Section::class;
+    public static $model = \App\Models\Section::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -60,6 +61,7 @@ class Section extends Resource
                 ->rules('required', 'max:255'),
 
             File::make('Thumbnail'),
+            Code::make('Custom Code', 'html_blade'),
         ];
     }
 
@@ -105,7 +107,6 @@ class Section extends Resource
     public function actions(Request $request)
     {
         return [
-            new Actions\ImpersonateTenant,
         ];
     }
 }
