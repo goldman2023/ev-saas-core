@@ -16,6 +16,7 @@ class Header extends WeComponent
      */
     public function __construct($template = 'header_01')
     {
+
         $this->template = $template;
     }
 

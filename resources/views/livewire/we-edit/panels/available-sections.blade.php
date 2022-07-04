@@ -17,6 +17,13 @@
         </div>
 
         <div class="w-full pt-4">
+            {{-- TODO: Make this dynamic --}}
+            <a href="{{ config('nova.path') }}/resources/sections/new" target="_blank" class="btn-primary w-full justify-center">
+                {{ translate('New Business Section') }}
+            </a>
+        </div>
+
+        <div class="w-full pt-4">
             <button type="button" class="btn-primary w-full justify-center" @click="$wire.addHtmlSectionToPreview()">
                 {{ translate('Add Custom HTML Section') }}
             </button>

@@ -335,6 +335,49 @@
                                     </div>
                                 </div>
 
+                                <div>
+                                    <!-- Product Page Style -->
+                                    <!-- Number of decimals -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                        x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Product Page Style') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text"
+                                                class="form-standard @error('settings.product_page_style') is-invalid @enderror"
+                                                placeholder="{{ translate('product-single-1') }}"
+                                                wire:model.defer="settings.product_page_style" />
+
+                                            <x-system.invalid-msg field="settings.product_page_style">
+                                            </x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- Product Page Style -->
+                                </div>
+
+                                <div>
+                                    <!-- Footer  Style -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                        x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Footer Style') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text"
+                                                class="form-standard @error('settings.footer_style') is-invalid @enderror"
+                                                placeholder="{{ translate('footer_01') }}"
+                                                wire:model.defer="settings.footer_style" />
+
+                                            <x-system.invalid-msg field="settings.footer_style">
+                                            </x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- Footer Style -->
+                                </div>
+
                                 <div class="grid grid-cols-12 mb-6  sm:border-t sm:border-gray-200 sm:pt-5 mt-4">
                                     <div class="col-span-6 font-medium text-md">
                                         {{ translate('For generating color variants we recommend using this tool: ') }}
@@ -355,18 +398,16 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-1">
-                                            <x-dashboard.form.input
-                                            wire:model.defer="settings.colors.{{ $color_key }}"
-                                            field="settings.colors.{{ $color_key }}" />
+                                            <x-dashboard.form.input wire:model.defer="settings.colors.{{ $color_key }}"
+                                                field="settings.colors.{{ $color_key }}" />
 
                                         </div>
                                         <div>
                                             @if($loop->first)
-                                                <button class="btn-primary bg-indigo-700" type="button"
-
-                                                @click="" wire:click="generateColorPalette(333)">
-                                                    Generate Collor palette
-                                                </button>
+                                            <button class="btn-primary bg-indigo-700" type="button" @click=""
+                                                wire:click="generateColorPalette(333)">
+                                                Generate Collor palette
+                                            </button>
                                             @endif
 
                                         </div>
@@ -2039,7 +2080,7 @@
                                 </div>
                                 {{-- END User meta in use --}}
 
-                                
+
                             </div>
                             {{-- END Advanced --}}
                         </div>

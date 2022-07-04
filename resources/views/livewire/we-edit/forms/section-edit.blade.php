@@ -36,11 +36,21 @@
         <div class="flex flex-1 flex-col justify-between">
           <div class="divide-y divide-gray-200 px-4 sm:px-6">
             <div class="space-y-6 pt-6 pb-5">
+                @if($section)
+                @php
+                   /* TODO Change this to propper key management */
+                   $sectionID = $section['data']['hero_info_slot']['components']['hero_info_label']['data']['label'];
+                @endphp
+                <a href="{{ route('grape.section-editor', [$sectionID]) }}" target="_blank">
+                    Section Editor
+                </a>
+                @endif
 
                 <div id="section-custom-fields-html" x-html="custom_fields_html">
                     {{-- {!! $this->custom_fields_html !!} --}}
                 </div>
-                
+
+
             </div>
           </div>
         </div>
@@ -67,6 +77,6 @@
         {{-- wire:click="saveSectionData" --}}
     </div>
 
-    
+
 </x-we-edit.flyout.flyout-panel>
 

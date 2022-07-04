@@ -15,6 +15,8 @@ use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Status;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\Image;
+
 
 class Section extends Resource
 {
@@ -60,7 +62,7 @@ class Section extends Resource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            File::make('Thumbnail'),
+            File::make('Thumbnail')->disk('s3'),
             Code::make('Custom Code', 'html_blade'),
         ];
     }

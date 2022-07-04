@@ -266,7 +266,7 @@ class EVService
                         'route' => route('pages.index'),
                         'route_name' => 'pages.index',
 
-                        'is_active' => areActiveRoutes(['pages.index']),
+                        'is_active' => areActiveRoutes(['pages.index', 'page.create']),
                         'user_types' => User::$tenant_user_types,
                         'permissions' => [], // TODO: Add App Pages Permissions
                         'enabled' => true,
