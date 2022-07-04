@@ -3,9 +3,9 @@
     <div class="z-[-1] absolute top-0 bottom-0 left-0 right-0 justify-end hidden md:flex">
         @include('svg.bkgs.home-shapes')
     </div>
-    
+
     <div class="max-w-6xl mx-auto px-4 sm:px-5">
-        <main class="mx-auto max-w-7xl px-4 sm:px-6">
+        <main class="mx-auto max-w-7xl">
             <div class="lg:grid lg:grid-cols-12 lg:gap-8">
                 <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
                     <div we-slot="" name="title_slot" we-title="Hero Title" class="w-full">

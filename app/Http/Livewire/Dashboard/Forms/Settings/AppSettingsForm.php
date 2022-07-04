@@ -150,7 +150,13 @@ class AppSettingsForm extends Component
                 'settings.stripe_sk_live_key' => [],
             ],
             'design' => [
-                'settings.colors' => ['']
+                'settings.colors' => [''],
+                'settings.product_page_style' => [''],
+                // 'settings.header-style' => [''],
+                'settings.footer_style' => [''],
+            ],
+            'templates' => [
+                // TODO: move all -style settings to separate group
             ],
             'user_meta_fields' => [
                 'settings.user_meta_fields_in_use' => ['']

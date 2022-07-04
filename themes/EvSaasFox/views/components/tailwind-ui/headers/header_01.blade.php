@@ -1,4 +1,4 @@
-<header class="" x-data="{
+<header class="relative z-50" x-data="{
     show_mobile_menu: false,
 }">
     {{-- Header settings should include Background among other things + Sticky behavior (yes/no) --}}
@@ -108,14 +108,19 @@
                                 {{ translate('Dashboard') }}
                             </a>
 
+                            <a href="{{ route('my.purchases.index') }}" class="block px-4 py-2 text-sm text-gray-700"
+                            role="menuitem" tabindex="-1" id="user-menu-item-1">
+                                {{ translate('My Purchases') }}
+                            </a>
+
                             <a href="{{ route('my.account.settings') }}" class="block px-4 py-2 text-sm text-gray-700"
-                                role="menuitem" tabindex="-1" id="user-menu-item-1">
+                                role="menuitem" tabindex="-1" id="user-menu-item-2">
                                 {{ translate('Settings') }}
 
                             </a>
 
                             <a href="{{ route('user.logout') }}" class="block px-4 py-2 text-sm text-gray-700"
-                                role="menuitem" tabindex="-1" id="user-menu-item-2">
+                                role="menuitem" tabindex="-1" id="user-menu-item-3">
                                 {{ translate('Sign Out') }}
                             </a>
                         </nav>

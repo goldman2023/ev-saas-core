@@ -1,5 +1,5 @@
 
-<header class="" x-data="{
+<header class="relative z-50" x-data="{
     show_mobile_menu: false,
 }">
     {{-- Header settings should include Background among other things + Sticky behavior (yes/no) --}}

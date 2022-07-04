@@ -1,6 +1,6 @@
 <section class="relative {!! $getSectionSettingsClasses !!}">
   <div class="max-w-6xl mx-auto px-4 sm:px-5">
-    <main class=" mx-auto max-w-7xl px-4 sm:px-6 ">
+    <main class=" mx-auto max-w-7xl">
       <div class="lg:grid lg:grid-cols-12 lg:gap-8">
         <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-7 lg:text-left">
           {{-- Hero Title --}}
@@ -25,14 +25,14 @@
             </x-ev.label>
           </div>
 
-  
+
           {{-- Hero Buttons --}}
           <div we-slot name="button_group_slot" we-title="Buttons" class="w-full">
             <x-ev.link-button-group
                 we-name="hero_buttons"
                 we-title="Buttons"
                 {{-- class="{{ $data['button_group_slot']['components']['buttons']['data']['class'] ?? '' }}"" --}}
-                class="mt-5 flex justify-center lg:justify-start lg:mt-8" 
+                class="mt-5 flex justify-center lg:justify-start lg:mt-8"
                 :button-group="$weData['button_group_slot']['components']['hero_buttons']['data']['button_group'] ?? []">
             </x-ev.link-button-group>
           </div>
