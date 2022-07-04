@@ -21,7 +21,7 @@ class CheckForMaintenanceMode
      * @var array
      */
     protected $except = [
-        '/admin*', '/login', '/logout', '/subcategories*', '/subsubcategories*', '/home_categories*', '/aiz-uploader*',
+        '/we/admin/*', '/login', '/logout', '/users/login', '/livewire*'
     ];
 
     /**
@@ -50,6 +50,13 @@ class CheckForMaintenanceMode
             if ((Auth::check() && auth()->user()->isAdmin()) || $this->inExceptArray($request)) {
                 return $next($request);
             } else {
+                return abort(503);
+            }
+        } else {
+            if(get_tenant_setting('maintenance_mode') && !Auth::check() ) {
+                if($this->inExceptArray($request)) {
+                    return $next($request);
+                }
                 return abort(503);
             }
         }
