@@ -135,7 +135,7 @@ class EVService
                         'icon' => 'heroicon-o-shopping-cart',
                         'route' => route('products.index'),
                         'route_name' => 'products.index',
-                        'is_active' => areActiveRoutes(['products.index']),
+                        'is_active' => areActiveRoutes(['products.index', 'attributes.index', 'product.details']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_products', 'browse_products'],
                         'children' => [
@@ -144,7 +144,7 @@ class EVService
                                 'icon' => 'heroicon-o-archive',
                                 'route' => route('products.index'),
                                 'route_name' => 'products.index',
-                                'is_active' => areActiveRoutes(['products.index']),
+                                'is_active' => areActiveRoutes(['products.index',  'product.details']),
                                 'user_types' => User::$non_customer_user_types,
                                 'permissions' => ['browse_products'],
                             ],

@@ -14,12 +14,12 @@
 
                         @foreach($section['items'] as $key => $item)
                             @if(!empty($item['children'] ?? false))
-                                <div class="space-y-1" x-data="{
-                                        expanded: false,
+                                <div class="space-y-1 {{ $item['is_active'] }}" x-data="{
+                                        expanded:  @if($item['is_active']) true @else false @endif,
                                     }">
                                     <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
                                     <button type="button"
-                                        class="text-gray-700 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                        class="@if($item['is_active']) bg-gray-200 rounded @endif text-gray-700 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                                         @click="expanded = !expanded">
                                             @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6'])
 
@@ -35,7 +35,7 @@
                                     <div class="space-y-1" x-cloak x-show="expanded">
                                         @foreach($item['children'] as $child)
                                             <a href="{{ $child['route'] }}"
-                                                class="text-gray-700 group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium rounded-md hover:text-gray-900">
+                                                class="@if($child['is_active']) bg-gray-200 rounded @endif text-gray-700 group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium rounded-md hover:text-gray-900">
                                                 @svg($child['icon'], ['class' => 'mr-2 flex-shrink-0 h-6 w-6 '])
                                                 <span class="flex-1">{{ $child['label'] }}</span>
 
