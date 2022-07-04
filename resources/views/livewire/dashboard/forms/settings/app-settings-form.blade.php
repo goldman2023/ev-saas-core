@@ -1882,43 +1882,43 @@
                             <div class="w-full px-5" x-show="current_tab === 'advanced'">
                                 {{-- User meta in use --}}
                                 <div class="flex flex-col" x-data="{
-                                all_user_meta: @js(\App\Models\UserMeta::metaDataTypes()),
-                                toggleField(key) {
-                                    if(settings.user_meta_fields_in_use == null || settings.user_meta_fields_in_use == undefined) {
-                                        settings.user_meta_fields_in_use = {};
-                                    }
+                                    all_user_meta: @js(\App\Models\UserMeta::metaDataTypes()),
+                                    toggleField(key) {
+                                        if(settings.user_meta_fields_in_use == null || settings.user_meta_fields_in_use == undefined) {
+                                            settings.user_meta_fields_in_use = {};
+                                        }
 
-                                    if(settings.user_meta_fields_in_use.hasOwnProperty(key)) {
-                                        delete settings.user_meta_fields_in_use[key];
-                                    } else {
-                                        settings.user_meta_fields_in_use[key] = {
-                                            'required': false,
-                                            'onboarding': false,
-                                            'registration': false,
-                                            'type': this.all_user_meta[key],
-                                            'entity': 'individual'
-                                        };
-                                    }
-                                },
-                                toggleProperty(key, property) {
-                                    if(_.get(settings.user_meta_fields_in_use, key+'.'+property, null) === null) {
-                                        _.set(settings.user_meta_fields_in_use, key+'.'+property, false); // if it doesn't exist, set it!
-                                    }
+                                        if(settings.user_meta_fields_in_use.hasOwnProperty(key)) {
+                                            delete settings.user_meta_fields_in_use[key];
+                                        } else {
+                                            settings.user_meta_fields_in_use[key] = {
+                                                'required': false,
+                                                'onboarding': false,
+                                                'registration': false,
+                                                'type': this.all_user_meta[key],
+                                                'entity': 'individual'
+                                            };
+                                        }
+                                    },
+                                    toggleProperty(key, property) {
+                                        if(_.get(settings.user_meta_fields_in_use, key+'.'+property, null) === null) {
+                                            _.set(settings.user_meta_fields_in_use, key+'.'+property, false); // if it doesn't exist, set it!
+                                        }
 
-                                    if(_.get(settings.user_meta_fields_in_use, key+'.'+property, null) === false) {
-                                        _.set(settings.user_meta_fields_in_use, key+'.'+property, true);
-                                    } else {
-                                        _.set(settings.user_meta_fields_in_use, key+'.'+property, false);
-                                    }
-                                },
-                                initFields() {
-                                    if(settings.user_meta_fields_in_use != null && typeof settings.user_meta_fields_in_use === 'object') {
-                                        for (const key in settings.user_meta_fields_in_use) {
-                                            settings.user_meta_fields_in_use[key]['type'] = this.all_user_meta[key];
+                                        if(_.get(settings.user_meta_fields_in_use, key+'.'+property, null) === false) {
+                                            _.set(settings.user_meta_fields_in_use, key+'.'+property, true);
+                                        } else {
+                                            _.set(settings.user_meta_fields_in_use, key+'.'+property, false);
+                                        }
+                                    },
+                                    initFields() {
+                                        if(settings.user_meta_fields_in_use != null && typeof settings.user_meta_fields_in_use === 'object') {
+                                            for (const key in settings.user_meta_fields_in_use) {
+                                                settings.user_meta_fields_in_use[key]['type'] = this.all_user_meta[key];
+                                            }
                                         }
                                     }
-                                }
-                            }" x-init="initFields()">
+                                }" x-init="initFields()">
                                     <div class="flex flex-col mb-3">
                                         <span class="text-sm font-medium text-gray-900">{{ translate('User meta fields
                                             in use') }}</span>
@@ -2038,6 +2038,8 @@
                                     </x-system.form-modal>
                                 </div>
                                 {{-- END User meta in use --}}
+
+                                
                             </div>
                             {{-- END Advanced --}}
                         </div>
