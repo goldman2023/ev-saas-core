@@ -51,7 +51,7 @@ trait StockManagementTrait
             // If, for some reason, stock is missing for model which has this trait, create the stocks in DB
         //    if(empty($model->stock)) {
         //        $product_stock = ProductStock::firstOrNew(['subject_id' => $model->id, 'subject_type' => $model::class]);
-        //        $product_stock->sku = ($model?->is_variant ?? false) ? $model->main->slug.'-001' : $model->slug.'-'.\UUID::generate(4)->string;
+        //        $product_stock->sku = ($model?->is_variation ?? false) ? $model->main->slug.'-001' : $model->slug.'-'.\UUID::generate(4)->string;
         //        $product_stock->qty = 0;
         //        $product_stock->low_stock_qty = 0;
         //        $product_stock->save();

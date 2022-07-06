@@ -35,9 +35,9 @@
                 @if($items->isNotEmpty())
                     @foreach($items as $item)
                         @php
-                            $hasVariations = ($item?->is_variant ?? false) ? $item->main->hasVariations() : $item->hasVariations();
-                            $name = ($item?->is_variant ?? false) ? $item->main->getTranslation('name') : $item->getTranslation('name');
-                            $excerpt = ($item?->is_variant ?? false) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
+                            $hasVariations = ($item?->is_variation ?? false) ? $item->main->hasVariations() : $item->hasVariations();
+                            $name = ($item?->is_variation ?? false) ? $item->main->getTranslation('name') : $item->getTranslation('name');
+                            $excerpt = ($item?->is_variation ?? false) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
                         @endphp
 
                         <div id="cart-item-{{ $item->id }}-{{ str_replace('\\','-',$item::class) }}"

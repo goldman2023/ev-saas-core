@@ -414,9 +414,9 @@ class CheckoutSingleForm extends Component
                 $order_item->order_id = $this->order->id;
                 $order_item->subject_type = $item::class;
                 $order_item->subject_id = $item->id;
-                $order_item->name = ($item?->is_variant ?? false) ? $item->main->name : $item->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
-                $order_item->excerpt = ($item?->is_variant ?? false) ? $item->main->excerpt : $item->excerpt;
-                $order_item->variant = ($item?->is_variant ?? false) ? $item->getVariantName(key_by: 'name') : null;
+                $order_item->name = ($item?->is_variation ?? false) ? $item->main->name : $item->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
+                $order_item->excerpt = ($item?->is_variation ?? false) ? $item->main->excerpt : $item->excerpt;
+                $order_item->variant = ($item?->is_variation ?? false) ? $item->getVariantName(key_by: 'name') : null;
                 $order_item->quantity = ! empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
 
                 // Check if $item has stock and reduce it if it does
