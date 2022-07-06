@@ -36,6 +36,7 @@ class Attribute extends WeBaseModel
 
         // TODO: Move this to AttributeObserver
         static::deleting(function ($attribute) {
+            
         });
     }
 
@@ -98,13 +99,17 @@ class Attribute extends WeBaseModel
 
     public function attribute_values()
     {
+        return $this->hasManyThrough(AttributeValue::class, AttributeRelationship::class, 'attribute_id', 'id', 'id', 'attribute_value_id');
+    }
+
+    public function attribute_predefined_values() {
         if ($this->is_predefined) {
             // If attribute is predefined, there is only strict amount of values that it should return from DB,
             // it should not use hasManyThrough relationship, but hasMany, because it does not depend on any AttributeRelationship
             return $this->hasMany(AttributeValue::class, 'attribute_id', 'id');
         }
 
-        return $this->hasManyThrough(AttributeValue::class, AttributeRelationship::class, 'attribute_id', 'id', 'id', 'attribute_value_id');
+        return $this->attribute_values();
     }
 
     public function group()

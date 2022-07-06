@@ -63,7 +63,7 @@ class ProductVariationsTable extends \Livewire\Component
             'product.*' => [],
             'attributes.*' => [],
             'variations.*.id' => [],
-            'variations.*.thumbnail' => ['numeric'],
+            'variations.*.thumbnail' => ['nullable'],
             'variations.*.variant' => [],
             'variations.*.product_id' => [],
             'variations.*.price' => 'required|numeric|min:1',
@@ -83,7 +83,7 @@ class ProductVariationsTable extends \Livewire\Component
     {
         $this->all_combinations = $this->all_combinations->setConnection();
         $this->variations = $this->variations->setConnection();
-        $this->dispatchBrowserEvent('EVProductVariationsTableFormInit');
+        $this->dispatchBrowserEvent('init-form');
     }
 
     public function hydrate()
@@ -109,13 +109,15 @@ class ProductVariationsTable extends \Livewire\Component
 
         $this->product = $product;
         $this->attributes = $this->product->variant_attributes(); // these attributes are only attributes used for_variations*/
-
+        
         $this->variations = $this->product->getMappedVariations();
 
         $this->class = $class;
 
         // Create or Fetch all combinations.
         $this->createAllCombinations();
+
+        // dd($this->variations->first()->getVariantName(slugified: true));
     }
 
     public function createAllCombinations()
@@ -131,7 +133,7 @@ class ProductVariationsTable extends \Livewire\Component
         // error if any item in eloquent collection doesn't have the same 'connection' property as other items.
         // When we create new Model manually, connection property is null, which later rises this error when variations and all_combinations collection are being entangled
         $this->all_combinations = $this->all_combinations->setConnection()->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']))->sortKeys();
-
+        
         // If $this->variations are empty (product doesn't have variations for now), make $this->variations to have $this->all_combinations
         if ($this->variations->isEmpty()) {
             $this->variations = $this->all_combinations;
@@ -141,21 +143,21 @@ class ProductVariationsTable extends \Livewire\Component
     }
 
     /*
-     * Generates all possible variations combinations
+     * Generates all possible variations combinations (but leave existing $this->variations intact)
      */
     public function generateAllVariations()
     {
+        
         $this->variations = $this->variations->intersectByKeys($this->all_combinations->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name'])))
             ->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']))
             ->union($this->all_combinations)
-            ->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']))->sortKeys();
+            ->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']))
+            ->sortKeys();
     }
 
     public function saveVariation($index)
     {
         $variation = $this->variations->get($index);
-
-        $this->dispatchBrowserEvent('display-current-variation', ['current' => $index]);
 
         $this->validate($this->getIndexedRuleSet('variations', $index));
 
@@ -185,7 +187,7 @@ class ProductVariationsTable extends \Livewire\Component
             return $item->id === (int) $variation_id;
         });
         $variation_in_all_combinations_index = $this->all_combinations->search(function ($item, $key) use ($variation) {
-            return $item->name === $variation->name;
+            return $item->getVariantName(slugified: true) === $variation->getVariantName(slugified: true);
         });
 
         if (! empty($variation)) {
@@ -193,7 +195,6 @@ class ProductVariationsTable extends \Livewire\Component
 
             $this->variations->put($variation_index, $this->all_combinations[$variation_in_all_combinations_index]);
 
-            $this->dispatchBrowserEvent('removal-modal-hide');
         }
     }
 

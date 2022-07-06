@@ -826,11 +826,11 @@
                                 @if($cart_items->isNotEmpty())
                                     @foreach($cart_items as $item)
                                         @php
-                                            $has_variations = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->hasVariations();
-                                            $name = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->getTranslation('name');
-                                            $excerpt = ($item->hasMain()) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
-                                            $permalink = ($item->hasMain()) ? $item->main->getPermalink() : $item->getPermalink();
-                                            $variant_name = ($item->hasMain()) ? $item->getVariantName(key_by: 'name') : null;
+                                            $has_variations = ($item?->is_variant ?? false) ? $item->main->getTranslation('name') : $item->hasVariations();
+                                            $name = ($item?->is_variant ?? false) ? $item->main->getTranslation('name') : $item->getTranslation('name');
+                                            $excerpt = ($item?->is_variant ?? false) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
+                                            $permalink = ($item?->is_variant ?? false) ? $item->main->getPermalink() : $item->getPermalink();
+                                            $variant_name = ($item?->is_variant ?? false) ? $item->getVariantName(key_by: 'name') : null;
                                         @endphp
 
                                         <!-- Cart Item -->

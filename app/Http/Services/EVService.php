@@ -273,7 +273,6 @@ class EVService
                         'badge' => [
                             'class' => 'badge-info',
                             'content' => function () {
-
                                 return Page::count();
                             },
                         ],

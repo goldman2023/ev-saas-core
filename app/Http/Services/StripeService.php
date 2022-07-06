@@ -774,9 +774,9 @@ class StripeService
             $order_item->order_id = $order->id;
             $order_item->subject_type = $model::class;
             $order_item->subject_id = $model->id;
-            $order_item->name = method_exists($model, 'hasMain') && $model->hasMain() ? $model->main->name : $model->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
-            $order_item->excerpt = method_exists($model, 'hasMain') && $model->hasMain() ? $model->main->excerpt : $model->excerpt;
-            $order_item->variant = method_exists($model, 'hasMain') && $model->hasMain() ? $model->getVariantName(key_by: 'name') : null;
+            $order_item->name = ($model?->is_variant ?? false)  ? $model->main->name : $model->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
+            $order_item->excerpt = ($model?->is_variant ?? false) ? $model->main->excerpt : $model->excerpt;
+            $order_item->variant = ($model?->is_variant ?? false) ? $model->getVariantName(key_by: 'name') : null;
             $order_item->quantity = !empty($qty) ? $qty : 1;
             $order_item->base_price = $model->base_price;
             $order_item->discount_amount = ($model->base_price - $model->total_price);

@@ -32,7 +32,6 @@ trait PriceTrait
         static::addGlobalScope('withPricesAndTaxAndFlashDeals', function (mixed $builder) {
             // Eager Load Flash Deals
             $builder->with(['flash_deals']);
-            // dd($builder);
         });
 
         // When model relations data is retrieved, populate model prices data!
@@ -319,42 +318,47 @@ trait PriceTrait
 
     public function getTotalAnnualPrice(bool $display = false, bool $both_formats = false)
     {
-        /* This if is required for create to work */
-        if(isset($this->attributes[$this->getPriceColumn()])) {
-            $total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
-        } else {
+        try {
+            /* This if is required for create to work */
+            if(isset($this->attributes[$this->getPriceColumn()])) {
+                $total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
+            } else {
+                return 0;
+            }
+
+            if ($this->isSubscribable()) {
+                // First apply yearly discount, if any!
+                if ($this->yearly_discount_type === AmountPercentTypeEnum::percent()->value) {
+                    $total_annual_price -= ($total_annual_price * $this->attributes['yearly_discount']) / 100;
+                } elseif ($this->yearly_discount_type === AmountPercentTypeEnum::amount()->value) {
+                    $total_annual_price -= $this->attributes['yearly_discount'];
+                }
+
+                // Then, add Plan specific Tax, if any
+                if ($this->tax_type === AmountPercentTypeEnum::percent()->value) {
+                    $total_annual_price += ($total_annual_price * $this->attributes['tax']) / 100;
+                } elseif ($this->tax_type === AmountPercentTypeEnum::amount()->value) {
+                    $total_annual_price += $this->attributes['tax'];
+                }
+
+                // TODO: Then add global Tax (like VAT)
+            } else {
+                // If item is not subscribable, annual price doesn't make sense, so it falls back to one-time total price
+                $total_annual_price = $this->attributes[$this->getPriceColumn()];
+            }
+
+            if ($both_formats) {
+                return [
+                    'raw' => $total_annual_price,
+                    'display' => FX::formatPrice($total_annual_price),
+                ];
+            }
+
+            return $display ? FX::formatPrice($total_annual_price) : $total_annual_price;
+        } catch(\Throwable $e) {
             return 0;
         }
-
-        if ($this->isSubscribable()) {
-            // First apply yearly discount, if any!
-            if ($this->yearly_discount_type === AmountPercentTypeEnum::percent()->value) {
-                $total_annual_price -= ($total_annual_price * $this->attributes['yearly_discount']) / 100;
-            } elseif ($this->yearly_discount_type === AmountPercentTypeEnum::amount()->value) {
-                $total_annual_price -= $this->attributes['yearly_discount'];
-            }
-
-            // Then, add Plan specific Tax, if any
-            if ($this->tax_type === AmountPercentTypeEnum::percent()->value) {
-                $total_annual_price += ($total_annual_price * $this->attributes['tax']) / 100;
-            } elseif ($this->tax_type === AmountPercentTypeEnum::amount()->value) {
-                $total_annual_price += $this->attributes['tax'];
-            }
-
-            // TODO: Then add global Tax (like VAT)
-        } else {
-            // If item is not subscribable, annual price doesn't make sense, so it falls back to one-time total price
-            $total_annual_price = $this->attributes[$this->getPriceColumn()];
-        }
-
-        if ($both_formats) {
-            return [
-                'raw' => $total_annual_price,
-                'display' => FX::formatPrice($total_annual_price),
-            ];
-        }
-
-        return $display ? FX::formatPrice($total_annual_price) : $total_annual_price;
+        
     }
 
     public function getTotalAnnualPriceAttribute()

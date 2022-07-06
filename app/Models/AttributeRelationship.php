@@ -26,7 +26,7 @@ class AttributeRelationship extends WeBaseModel //implements \OwenIt\Auditing\Co
         return $this->belongsTo(AttributeValue::class, 'attribute_value_id', 'id');
     }
 
-    public function attributes()
+    public function attribute()
     {
         return $this->belongsTo(Attribute::class, 'attribute_id', 'id');
     }

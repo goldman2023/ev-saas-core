@@ -17,9 +17,10 @@ trait RetrievedRelationsEvent
     {
         if (tenant()) {
             $models = parent::eagerLoadRelations($models);
-
+        
             // Fire a custom event when all relations are retrieved
             foreach ($models as $model) {
+                
                 if ($model instanceof Model) {
                     $model->fireModelEvent('relationsRetrieved');
                 }
@@ -27,9 +28,7 @@ trait RetrievedRelationsEvent
         } else {
             $models = [];
         }
-
-//        ItemsQueried::dispatch(new Collection($models));
-
+        
         return $models;
     }
 }

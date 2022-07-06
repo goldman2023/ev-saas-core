@@ -13,6 +13,16 @@ use Illuminate\Database\Eloquent\Collection;
 trait AttributeTrait
 {
     /**
+     * Initialize the trait
+     *
+     * @return void
+     */
+    public function initializeAttributeTrait(): void
+    {
+        
+    }
+
+    /**
      * Boot the trait
      *
      * @return void
@@ -20,16 +30,64 @@ trait AttributeTrait
     protected static function bootAttributeTrait()
     {
         static::addGlobalScope('withCustomAttributes', function (mixed $builder) {
-            // Load all custom attributes along with theirs relations and values! Attribute -> Relations -> Values
-//             $builder->with(['custom_attributes']);
+            // Load all custom attributes along with theirs relations and values!
+            $builder->with(['custom_attributes']);
         });
 
-        // When model data is retrieved, populate model prices data!
+        // When model data is retrieved, populate custom_attributes!
         static::relationsRetrieved(function ($model) {
-            // TODO: FIX EAGER LOAD OF CUSTOM ATTRIBUTES. It still does not eager load...
-            if (! $model->relationLoaded('custom_attributes')) {
-//                $model->load('custom_attributes');
-            }
+            /**
+             * This part of the code is run before relationsRetreived event callback in VariationTrait (because AttributeTrait must be used/declared before VariationTrait)
+             * Reason for this is: Since we are eager-loading custom_attributes using hasMany relation, we need to change it's retreived data to follow this structure:
+             * 1. From: AttributeRelationship -> 1) AttributeValue, 2) Attribute
+             * 2. To: Attribute -> 1) AttributeRelationships, 2) AttributeValues
+             */
+
+             $attributes = new \Illuminate\Database\Eloquent\Collection();
+
+             if($model->custom_attributes?->isNotEmpty() ?? false) {
+                $add_pivot = true;
+                foreach($model->custom_attributes as $key => $att_rel) {
+                    // Insert attribute from $att_rel to $attributes if attribute being inserted is not in it
+                    if(! $attributes->contains(fn($item) => ($item?->id ?? null) === $att_rel->attribute->id)) {
+                        $attributes->push($att_rel->attribute);
+                        $add_pivot = true;
+                    }
+
+                    // Find attribute by key in $attributes collection
+                    $att_key = $attributes->search(fn($item) => ($item?->id ?? null) === $att_rel->attribute->id);
+                    $att = $attributes->get($att_key);
+
+                    // Unset relation between att_rel and att (this relation is unnecessary)
+                    $att_rel->unsetRelation('attribute');
+
+                    // Push $att_rel to attribute's attribute_relationships relationship
+                    if($att->relationLoaded('attribute_relationships')) {
+                        $att->setRelation('attribute_relationships', $att->attribute_relationships->push($att_rel));
+                    } else {
+                        $att->setRelation('attribute_relationships', new \Illuminate\Database\Eloquent\Collection([$att_rel]));
+                    }
+
+                    // Push attribute_value to attribute's attribute_values relationship
+                    if($att->relationLoaded('attribute_values')) {
+                        $att->setRelation('attribute_values', $att->attribute_values->push($att_rel->attribute_value));
+                    } else {
+                        $att->setRelation('attribute_values', new \Illuminate\Database\Eloquent\Collection([$att_rel->attribute_value]));
+                    }
+
+                    // First $att_rel of each attribute is a pivot relation
+                    if($add_pivot) {
+                        // Unset all $att_rel relations 
+                        $att_rel->unsetRelation('attribute_value');
+                        $att->setRelation('pivot', $att_rel);
+                    }
+                    
+                    $add_pivot = false;
+                }
+
+                // Set custom_attributes relation with changed data structure
+                $model->setRelation('custom_attributes', $attributes);
+             }
         });
     }
 
@@ -53,47 +111,28 @@ trait AttributeTrait
 
     public function custom_attributes()
     {
-//        if($this instanceof Product) {
-//            dd($this);
-//        }
-
-        return $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
-            ->distinct()
-            ->withOnly([
-                'attribute_values' => function ($query) {
-                    $query->where([
-                        ['subject_id', '=', $this->id],
-                        ['subject_type', '=', $this::class],
-                    ]);
-                },
-                'attribute_relationships' => function ($query) {
-                    $query->where([
-                        ['subject_id', '=', $this->id],
-                        ['subject_type', '=', $this::class],
-                    ]);
-                },
-            ])
-            ->withPivot('for_variations');
+        return $this->hasMany(AttributeRelationship::class, 'subject_id')->where('subject_type', $this::class)
+                ->withOnly(['attribute_value', 'attribute']);
     }
 
     public function seo_attributes()
     {
         return $this->custom_attributes->filter(function ($att, $index) {
-            return $att->is_schema === 1;
+            return $att->is_schema === true;
         })->values();
     }
 
     public function admin_attributes()
     {
         return $this->custom_attributes->filter(function ($att, $index) {
-            return $att->is_admin === 1;
+            return $att->is_admin === true;
         })->values();
     }
 
     public function filterable_attributes($key_by = null)
     {
         $attributes = $this->custom_attributes->filter(function ($att, $index) {
-            return $att->filterable === 1;
+            return $att->filterable === true;
         })->values();
 
         if (! empty($key_by)) {
@@ -106,7 +145,7 @@ trait AttributeTrait
     public function variant_attributes($key_by = null)
     {
         $attributes = $this->custom_attributes->filter(function ($att, $index) {
-            return $att->pivot->for_variations === 1;
+            return $att->pivot->for_variations === true;
         })->values();
 
         if (!empty($key_by)) {

@@ -27,10 +27,13 @@ trait GalleryTrait
     {
         // When model relations data is retrieved, do:
         static::relationsRetrieved(function ($model) {
-            $model->getThumbnailAttribute();
-            $model->getCoverAttribute();
-            $model->getGalleryAttribute();
-            $model->getMetaImgAttribute();
+            if ($model->relationLoaded('uploads')) {
+                // Append predefined images properties only if uploads relationship is loaded.
+                $model->getThumbnailAttribute();
+                $model->getCoverAttribute();
+                $model->getGalleryAttribute();
+                $model->getMetaImgAttribute();
+            }
         });
     }
 

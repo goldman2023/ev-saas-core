@@ -25,7 +25,7 @@ class UserSubscription extends WeBaseModel
 {
     use LogsActivity;
     use UploadTrait;
-    use GalleryTrait;
+    // use GalleryTrait;
     use CoreMetaTrait;
 
     protected $table = 'user_subscriptions';
