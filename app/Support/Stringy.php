@@ -373,8 +373,8 @@ final class Stringy implements \Countable
      *
      * The empty string is not considered to be a part of any other string
      *
-     * @param string $substring the substring whose occurrences to count
-     * @return int the number of occurrences
+     * @param string|null $substring the substring whose occurrences to count
+     * @return mixed the number of occurrences
      */
     public function count($substring = null)
     {

@@ -72,7 +72,9 @@ if (!function_exists('castValuesForGet')) {
                     if(is_array($data_type)) {
                         // If data type is ARRAY, it means that JSON is stored in setting value!
                         // In order to recursively go through it's properties and cast data types, we need to decode it with json_decode first!
-                        
+                        if(empty($setting))
+                            continue;
+
                         $setting = json_decode($setting, true);
 
                         // Check if there are missing sub fields and create them

@@ -60,7 +60,7 @@ class EVProductController extends Controller
     public function edit(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
+        
         return view('frontend.dashboard.products.edit')->with('product', $product);
     }
 

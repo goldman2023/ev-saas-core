@@ -8,6 +8,7 @@ use App\Models\ProductStock;
 use App\Models\ProductVariation;
 use App\Rules\UniqueSKU;
 use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\DispatchSupport;
 use Arr;
 use DB;
 use EVS;
@@ -17,6 +18,7 @@ use Str;
 class ProductVariationsTable extends \Livewire\Component
 {
     use RulesSets;
+    use DispatchSupport;
 
     public $product;
 
@@ -27,6 +29,8 @@ class ProductVariationsTable extends \Livewire\Component
     public $all_combinations;
 
     public $class;
+
+    public $last_edited_index = null;
 
     protected $listeners = [
         'refreshDatatable' => '$refresh',
@@ -83,7 +87,12 @@ class ProductVariationsTable extends \Livewire\Component
     {
         $this->all_combinations = $this->all_combinations->setConnection();
         $this->variations = $this->variations->setConnection();
+
+        // $this->variations = $this->product->getMappedVariations();
+        // $this->createAllCombinations();
+
         $this->dispatchBrowserEvent('init-form');
+        // dd($this->variations);
     }
 
     public function hydrate()
@@ -111,13 +120,11 @@ class ProductVariationsTable extends \Livewire\Component
         $this->attributes = $this->product->variant_attributes(); // these attributes are only attributes used for_variations*/
         
         $this->variations = $this->product->getMappedVariations();
-
+        
         $this->class = $class;
 
         // Create or Fetch all combinations.
         $this->createAllCombinations();
-
-        // dd($this->variations->first()->getVariantName(slugified: true));
     }
 
     public function createAllCombinations()
@@ -162,7 +169,7 @@ class ProductVariationsTable extends \Livewire\Component
         $this->validate($this->getIndexedRuleSet('variations', $index));
 
         DB::beginTransaction();
-
+        
         try {
             // TODO: Check why created_at and updated_at are not filled on ->save()...
             $variation->save();
@@ -173,11 +180,20 @@ class ProductVariationsTable extends \Livewire\Component
 
             $this->variations->put($index, $variation);
 
+            $this->last_edited_index = $index;
+
             DB::commit();
+
+            $this->inform(translate('Product variation successfully saved!'), '', 'success');
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            \Log::error($e->getMessage);
+            $this->inform(translate('Error: Could not save product variation!'), $e->getMessage, 'fail');
         }
+
+        $this->variations->get($index)->convertGalleryToUploads();
+
+        
     }
 
     public function removeVariation($variation_id)
@@ -194,7 +210,6 @@ class ProductVariationsTable extends \Livewire\Component
             $variation->forceDelete();
 
             $this->variations->put($variation_index, $this->all_combinations[$variation_in_all_combinations_index]);
-
         }
     }
 

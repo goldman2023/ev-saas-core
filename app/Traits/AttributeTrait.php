@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 trait AttributeTrait
 {
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
     /**
      * Initialize the trait
      *
@@ -36,6 +38,11 @@ trait AttributeTrait
 
         // When model data is retrieved, populate custom_attributes!
         static::relationsRetrieved(function ($model) {
+
+            if (!$model->relationLoaded('custom_attributes')) {
+                $model->load('custom_attributes');
+            }
+            
             /**
              * This part of the code is run before relationsRetreived event callback in VariationTrait (because AttributeTrait must be used/declared before VariationTrait)
              * Reason for this is: Since we are eager-loading custom_attributes using hasMany relation, we need to change it's retreived data to follow this structure:
@@ -43,51 +50,44 @@ trait AttributeTrait
              * 2. To: Attribute -> 1) AttributeRelationships, 2) AttributeValues
              */
 
-             $attributes = new \Illuminate\Database\Eloquent\Collection();
+            $attributes = new \Illuminate\Database\Eloquent\Collection();
 
-             if($model->custom_attributes?->isNotEmpty() ?? false) {
-                $add_pivot = true;
-                foreach($model->custom_attributes as $key => $att_rel) {
+            if(($model->custom_attributes?->isNotEmpty() ?? false)) {
+                                
+                foreach($model->custom_attributes as $key => $att) {
+                    $att_rel = $att->pivot;
+                    
                     // Insert attribute from $att_rel to $attributes if attribute being inserted is not in it
-                    if(! $attributes->contains(fn($item) => ($item?->id ?? null) === $att_rel->attribute->id)) {
-                        $attributes->push($att_rel->attribute);
-                        $add_pivot = true;
+                    if(! $attributes->contains(fn($item) => ($item?->id ?? null) === $att->id)) {
+                        $attributes->push($att);
                     }
 
                     // Find attribute by key in $attributes collection
-                    $att_key = $attributes->search(fn($item) => ($item?->id ?? null) === $att_rel->attribute->id);
-                    $att = $attributes->get($att_key);
-
-                    // Unset relation between att_rel and att (this relation is unnecessary)
-                    $att_rel->unsetRelation('attribute');
+                    // try {
+                        $att_key = $attributes->search(fn($item) => ($item?->id ?? null) === $att->id);
+                        $main_att = $attributes->get($att_key);
+                    // } catch(\Throwable $e) {
+                    //     dd($model->custom_attributes);
+                    // }
 
                     // Push $att_rel to attribute's attribute_relationships relationship
-                    if($att->relationLoaded('attribute_relationships')) {
-                        $att->setRelation('attribute_relationships', $att->attribute_relationships->push($att_rel));
+                    if($main_att->relationLoaded('attribute_relationships')) {
+                        $main_att->setRelation('attribute_relationships', $main_att->attribute_relationships->push($att->pivot));
                     } else {
-                        $att->setRelation('attribute_relationships', new \Illuminate\Database\Eloquent\Collection([$att_rel]));
+                        $main_att->setRelation('attribute_relationships', new \Illuminate\Database\Eloquent\Collection([$att->pivot]));
                     }
 
                     // Push attribute_value to attribute's attribute_values relationship
-                    if($att->relationLoaded('attribute_values')) {
-                        $att->setRelation('attribute_values', $att->attribute_values->push($att_rel->attribute_value));
+                    if($main_att->relationLoaded('attribute_values')) {
+                        $main_att->setRelation('attribute_values', $main_att->attribute_values->push($att->pivot->attribute_value));
                     } else {
-                        $att->setRelation('attribute_values', new \Illuminate\Database\Eloquent\Collection([$att_rel->attribute_value]));
+                        $main_att->setRelation('attribute_values', new \Illuminate\Database\Eloquent\Collection([$att->pivot->attribute_value]));
                     }
-
-                    // First $att_rel of each attribute is a pivot relation
-                    if($add_pivot) {
-                        // Unset all $att_rel relations 
-                        $att_rel->unsetRelation('attribute_value');
-                        $att->setRelation('pivot', $att_rel);
-                    }
-                    
-                    $add_pivot = false;
                 }
-
+                
                 // Set custom_attributes relation with changed data structure
                 $model->setRelation('custom_attributes', $attributes);
-             }
+            }
         });
     }
 
@@ -111,8 +111,14 @@ trait AttributeTrait
 
     public function custom_attributes()
     {
-        return $this->hasMany(AttributeRelationship::class, 'subject_id')->where('subject_type', $this::class)
-                ->withOnly(['attribute_value', 'attribute']);
+        return $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+            ->distinct()
+            ->with('pivot.attribute_value')
+            ->withPivot('for_variations', 'attribute_value_id', 'order')
+            ->using('App\Models\AttributeRelationship');
+
+        // return $this->hasMany(AttributeRelationship::class, 'subject_id')->where('subject_type', $this::class)
+        //         ->withOnly(['attribute_value', 'attribute']);
     }
 
     public function seo_attributes()

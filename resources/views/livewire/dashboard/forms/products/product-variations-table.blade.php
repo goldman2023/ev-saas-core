@@ -2,16 +2,6 @@
     {{-- use_serial: {{ $product->use_serial === true ? 'true' : 'false' }},
     allow_out_of_stock_purchases: {{ $product->allow_out_of_stock_purchases === true ? 'true' : 'false' }},
     stock_visibility_state: @js($product->stock_visibility_state ?? 'quantity'), --}}
-    @php
-        $product_variations = [];
-        foreach($variations as $key => $item) {
-            $product_variations[$key] = clone $item;
-            $product_variations[$key]->thumbnail = ['id' => $item->thumbnail->id ?? null, 'file_name' => $item->thumbnail->file_name ?? ''];
-            $product_variations[$key]->cover = ['id' => $item->cover->id ?? null, 'file_name' => $item->cover->file_name ?? ''];
-        }
-    @endphp
-    variations: @js($product_variations),
-    
 }">
 
     <div class="w-full relative">
@@ -29,14 +19,13 @@
                 {{-- Left panel --}}
                 <div class="col-span-12 xl:col-span-8" x-cloak>
                     @foreach($variations as $index => $row)
-                        @php $index = Str::slug($index); @endphp
-
                         <div class="bg-white shadow rounded-lg divide-y divide-gray-200 mb-4" x-data="{
-                            show: false,
-                        }" wire:ignore.self>
+                            show: @js($index === $last_edited_index ? true : false),
+                            variation: @js($row),
+                        }" :key="{{ 'product-variation-'.$row->name.'-'.$index }}" wire:key="{{ 'product-variation-'.$row->name.'-'.$index }}">
                             {{-- Variation Header --}}
                             <div class="flex items-center px-4 py-5 sm:px-6 cursor-pointer" @click="show = !show">
-                                <img class="inline-block h-12 w-12 rounded-full mr-3" src="{{ $row->getThumbnail(['w'=>70]) }}" alt="">
+                                <img class="inline-block h-12 w-12 object-cover rounded-full mr-3" src="{{ $row->getThumbnail(['w' => 150]) }}" alt="">
 
                                 @if($this->attributes->isNotEmpty())
                                     @php $display_variation_atts = []; @endphp
@@ -58,11 +47,25 @@
 
                                 @if($row->id) 
                                     <div class="badge-success">
-                                        {{ translate('active') }}
+                                        {{ translate('Active') }}
                                     </div>
                                 @else
                                     <div class="badge-danger">
-                                        {{ translate('inactive') }}
+                                        {{ translate('Inactive') }}
+                                    </div>
+                                @endif
+
+                                @if($row->current_stock > $row->low_stock_qty && $row->current_stock > 0) 
+                                    <div class="badge-success ml-2">
+                                        {{ translate('In stock') }}
+                                    </div>
+                                @elseif($row->current_stock <= $row->low_stock_qty && $row->current_stock > 0)
+                                    <div class="badge-warning ml-2">
+                                        {{ translate('Soon out of stock...') }}
+                                    </div>
+                                @else
+                                    <div class="badge-danger ml-2">
+                                        {{ translate('Not in stock') }}
                                     </div>
                                 @endif
                             </div>
@@ -71,7 +74,7 @@
                             <div class="px-4 py-5 sm:p-6" x-show="show" wire:ignore.self>
                                 <div class="grid grid-cols-12 gap-5 w-full">
                                     <div class="col-span-2">     
-                                        <x-dashboard.form.image-selector field="variations[{{ $index }}].thumbnail" 
+                                        <x-dashboard.form.image-selector field="variation.thumbnail" 
                                             id="variation-{{ $index }}-thumbnail" template="avatar" />
                                     </div>
                                     <div class="col-span-4 flex flex-col gap-y-2">
@@ -79,7 +82,7 @@
                                             {{ translate('Price') }}*
                                         </label>
 
-                                        <x-dashboard.form.input type="number" min="0" field="variations[{{ $index }}].price" :x="true" error-field="variations.{{ $index }}.price"
+                                        <x-dashboard.form.input type="number" min="0" field="variation.price" :x="true" error-field="variations.{{ $index }}.price"
                                             placeholder="{{ translate('Price') }}" />
                                     </div>
                                     <div class="col-span-3 flex flex-col gap-y-2">
@@ -87,7 +90,7 @@
                                             {{ translate('Discount') }}
                                         </label>
 
-                                        <x-dashboard.form.input type="number" min="0" field="variations[{{ $index }}].discount" :x="true" error-field="variations.{{ $index }}.discount"
+                                        <x-dashboard.form.input type="number" min="0" field="variation.discount" :x="true" error-field="variations.{{ $index }}.discount"
                                             placeholder="{{ translate('Discount') }}" />
                                     </div>
                                     <div class="col-span-3 flex flex-col gap-y-2">
@@ -95,7 +98,7 @@
                                             {{ translate('Discount Type') }}
                                         </label>
 
-                                        <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="variations[{{ $index }}].discount_type"></x-dashboard.form.select>
+                                        <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="variation.discount_type"></x-dashboard.form.select>
                                     </div>
 
                                     <div class="col-span-6 md:col-span-3 flex flex-col gap-y-2">
@@ -103,7 +106,7 @@
                                             {{ translate('Current quantity') }}*
                                         </label>
 
-                                        <x-dashboard.form.input type="number" min="0" step="1" field="variations[{{ $index }}].current_stock" :x="true" error-field="variations.{{ $index }}.current_stock"
+                                        <x-dashboard.form.input type="number" min="0" step="1" field="variation.current_stock" :x="true" error-field="variations.{{ $index }}.current_stock"
                                             placeholder="" />
                                     </div>
                                     <div class="col-span-6 md:col-span-3 flex flex-col gap-y-2">
@@ -111,7 +114,7 @@
                                             {{ translate('Low stock Quantity') }}
                                         </label>
 
-                                        <x-dashboard.form.input type="number" min="0" step="1" field="variations[{{ $index }}].low_stock_qty" :x="true" error-field="variations.{{ $index }}.low_stock_qty"
+                                        <x-dashboard.form.input type="number" min="0" step="1" field="variation.low_stock_qty" :x="true" error-field="variations.{{ $index }}.low_stock_qty"
                                             placeholder="0" />
                                     </div>
                                     <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
@@ -119,7 +122,7 @@
                                             {{ translate('SKU') }}*
                                         </label>
 
-                                        <x-dashboard.form.input type="text" field="variations[{{ $index }}].sku" :x="true" error-field="variations.{{ $index }}.sku"
+                                        <x-dashboard.form.input type="text" field="variation.sku" :x="true" error-field="variations.{{ $index }}.sku"
                                             placeholder="{{ translate('SKU') }}" />
                                     </div>
                                 </div>
@@ -130,16 +133,16 @@
                             {{-- Variation Footer --}}
                             <div class="flex px-4 py-4 sm:px-6" x-show="show" wire:ignore.self>
                                 <button type="button" class="btn btn-success ml-auto" @click="
-                                    $wire.set('variations.{{ $index }}.thumbnail', variations[{{ $index }}].thumbnail.id, true);
-                                    $wire.set('variations.{{ $index }}.price', variations[{{ $index }}].price, true);
-                                    $wire.set('variations.{{ $index }}.discount', variations[{{ $index }}].discount, true);
-                                    $wire.set('variations.{{ $index }}.discount_type', variations[{{ $index }}].discount_type, true)
-                                    $wire.set('variations.{{ $index }}.current_stock', variations[{{ $index }}].current_stock, true)
-                                    $wire.set('variations.{{ $index }}.low_stock_qty', variations[{{ $index }}].low_stock_qty, true)
-                                    $wire.set('variations.{{ $index }}.sku', variations[{{ $index }}].sku, true);
+                                    $wire.set('variations.{{ $index }}.thumbnail', _.get(variation.thumbnail, 'id', null), true);
+                                    $wire.set('variations.{{ $index }}.price', variation.price, true);
+                                    $wire.set('variations.{{ $index }}.discount', variation.discount, true);
+                                    $wire.set('variations.{{ $index }}.discount_type', variation.discount_type, true)
+                                    $wire.set('variations.{{ $index }}.current_stock', variation.current_stock, true)
+                                    $wire.set('variations.{{ $index }}.low_stock_qty', variation.low_stock_qty, true)
+                                    $wire.set('variations.{{ $index }}.sku', variation.sku, true);
 
-                                " wire:click.defer="saveVariation({{ $index }})"
-                                >
+                                    $wire.saveVariation({{ $index }});
+                                ">
                                     {{ translate('Save') }}
                                 </button>
                             </div>

@@ -1,15 +1,29 @@
 <div class="w-full" x-data="{
     id: '{{ $id }}',
+    hasImage() {
+        return {{ $field }} !== undefined && {{ $field }} !== null && {{ $field }}.id !== undefined && {{ $field }}.id !== null && {{ $field }}.id > 0
+    },
+    removeImage() {
+        {{ $field }}.id = '';
+        {{ $field }}.file_name = '';
+    }
 }"
 @we-media-selected-event.window="
     if($event.detail.for_id === id) {
+        if(!hasImage()) {
+            {{ $field }} = {
+                id: null,
+                file_name: null,
+            };
+        }
+
         {{ $field }}.id = $event.detail.selected[0]['id'] || '';
         {{ $field }}.file_name = $event.detail.selected[0]['file_name'] || '';
     }
 ">
     <div class="w-full flex justify-center rounded-lg cursor-pointer @error($errorField) border !border-danger @enderror "
             {{-- :class="{'px-6 pt-5 pb-6': {{ $field }} !== null && {{ $field }}.id !== undefined && {{ $field }}.id !== null && {{ $field }}.id > 0 }" --}}
-            @click="$wire.emit('showMediaLibrary', id, 'image', [{id:{{ $field }}.id, file_name:{{ $field }}.file_name}])">
+            @click="$wire.emit('showMediaLibrary', id, 'image', [{id:{{ $field }}?.id || '', file_name:{{ $field }}?.file_name || ''}])">
 
         <div class="relative">
             <template x-if="{{ $field }} !== null && {{ $field }}.id !== undefined && {{ $field }}.id !== null && {{ $field }}.id > 0">
