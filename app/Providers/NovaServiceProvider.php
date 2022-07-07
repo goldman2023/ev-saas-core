@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Nova\Central\Domain;
 use App\Nova\Central\Tenant as TenantResource;
 use App\Nova\Tenant\User;
@@ -155,10 +156,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function routes()
     {
-        Nova::routes(['tenant', 'universal'])
-                ->withAuthenticationRoutes(['tenant', 'universal'])
-                ->withPasswordResetRoutes(['tenant', 'universal'])
-                ->register();
+        Nova::routes(['tenant'])
+                ->withAuthenticationRoutes(['tenant']);
     }
 
     /**
@@ -172,13 +171,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Gate::define('viewNova', function ($user) {
 
-            if ($user instanceof \App\Models\User) {
-                // return $user->isOwner();
+            if (auth()->user() instanceof \App\Models\User) {
+                return auth()->user()->isAdmin();
+            } else {
+                return false;
             }
 
             /** @var \App\Models\Admin $user */
 
-            return true;
         });
     }
 

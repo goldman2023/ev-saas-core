@@ -98,43 +98,47 @@
                             </div>
                         </div>
                     </section>
-
+                    <section class="we-quick-actions">
+                        <x-dashboard.widgets.business.quick-actions>
+                        </x-dashboard.widgets.business.quick-actions>
+                    </section>
                     <!-- Actions panel -->
                     <section aria-labelledby="quick-links-title">
                         <div
                             class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-2 sm:gap-px">
-                            <h2 class="sr-only" id="quick-links-title">Quick links</h2>
 
                             <div
                                 class="relative min-h-[200px] rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
-                                <div>
+                                <div class="grid grid-cols-6">
+                                    <div>
                                     <span class="rounded-lg inline-flex p-3 bg-teal-50 text-teal-700 ring-4 ring-white">
                                         <!-- Heroicon name: outline/clock -->
 
                                         @svg('heroicon-o-eye', ['class' => 'h-6 w-6'])
                                     </span>
+                                    </div>
+
+                                    <div class="col-span-4">
+                                        <h3 class="text-lg font-medium">
+
+                                            <a href="{{ route('product.single', $product->slug) }}" target="_blank"
+                                                class="focus:outline-none">
+                                                <!-- Extend touch target to entire panel -->
+                                                <span class="absolute inset-0" aria-hidden="true"></span>
+                                                {{ translate('Product Preview') }}
+                                            </a>
+                                        </h3>
+                                        <p class="text-sm text-gray-500">
+                                            {{ translate('View your product as a customer and share it with the world!') }}
+                                        </p>
+                                    </div>
+
+
                                 </div>
-                                <div class="mt-8 ">
-                                    <h3 class="text-lg font-medium">
+                                <div class="pt-3 mt-3">
+                                    <livewire:feed.elements.product-card :product="$product">
+                                    </livewire:feed.elements.product-card>
 
-                                        <a href="{{ route('product.single', $product->slug) }}" target="_blank" class="focus:outline-none">
-                                            <!-- Extend touch target to entire panel -->
-                                            <span class="absolute inset-0" aria-hidden="true"></span>
-                                            {{ translate('Product Preview') }}
-                                        </a>
-                                    </h3>
-                                      {{-- TODO: Create product preview for tailwind --}}
-                                      {{-- <div class="absolute top-0 left-0 w-full h-full">
-                                        <div class="p-6 px-20">
-                                            <x-default.products.cards.product-card :product="$product">
-                                            </x-default.products.cards.product-card>
-                                        </div>
-
-                                      </div> --}}
-
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        {{ translate('View your product as a customer and share it with the world!') }}
-                                    </p>
                                 </div>
                                 <span
                                     class="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400"
@@ -161,20 +165,20 @@
                                 </a>
 
                                 @if($product->type === \App\Enums\ProductTypeEnum::course()->value)
-                                    <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                                        href="{{ route('product.edit.course', $product->id) }}">
-                                        @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
-                                        {{ translate('Course Material') }}
-                                    </a>
+                                <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+                                    href="{{ route('product.edit.course', $product->id) }}">
+                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    {{ translate('Course Material') }}
+                                </a>
                                 @endif
-                                
+
 
                                 @if($product->useVariations())
-                                    <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                                        href="{{ route('product.edit.variations', $product->id) }}">
-                                        @svg('heroicon-o-variable', ['style' => 'height: 16px;', 'class' => 'mr-2'])
-                                        {{ translate('Variations') }}
-                                    </a>
+                                <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+                                    href="{{ route('product.edit.variations', $product->id) }}">
+                                    @svg('heroicon-o-variable', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    {{ translate('Variations') }}
+                                </a>
                                 @endif
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
@@ -200,29 +204,7 @@
 
                         </div>
                         <div class="mt-6">
-                            <div class="rounded-lg bg-white overflow-hidden shadow">
-                                <div class="p-6 relative">
-                                    <h3 class="text-base font-medium text-gray-900 relative">
-                                        {{ translate('Product Activity') }}
 
-
-                                    </h3>
-                                    {{-- Live data badge --}}
-                                    <div class="absolute right-6 top-6">
-
-                                        <span
-                                            class="relative inline-flex font-bold items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-500">
-                                            <span
-                                                class="animate-ping inline-flex h-1.5 w-1.5 mr-3 rounded-full bg-red-900 opacity-100"></span>
-
-                                            {{ translate('Live') }}
-                                        </span>
-                                    </div>
-                                    {{-- Live data badge end --}}
-
-                                    <livewire:product-activity :product="$product" />
-                                </div>
-                            </div>
                         </div>
 
                     </section>
@@ -230,6 +212,32 @@
 
                 <!-- Right column -->
                 <div class="grid grid-cols-1 gap-4">
+                     <!-- Recent Hires -->
+                     <section aria-labelledby="recent-hires-title">
+
+                        <div class="rounded-lg bg-white overflow-hidden shadow">
+                            <div class="p-6 relative">
+                                <h3 class="text-base font-medium text-gray-900 relative">
+                                    {{ translate('Product Activity') }}
+
+
+                                </h3>
+                                {{-- Live data badge --}}
+                                <div class="absolute right-6 top-6">
+
+                                    <span
+                                        class="relative inline-flex font-bold items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-500">
+                                        <span
+                                            class="animate-ping inline-flex h-1.5 w-1.5 mr-3 rounded-full bg-red-900 opacity-100"></span>
+                                        {{ translate('Live') }}
+                                    </span>
+                                </div>
+                                {{-- Live data badge end --}}
+                                <livewire:product-activity type="product" :product="$product" />
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- Announcements -->
                     <section aria-labelledby="announcements-title">
                         <div class="rounded-lg bg-white overflow-hidden shadow">
@@ -263,28 +271,32 @@
                                                             </g>
                                                         </svg>
                                                         @if($product->isStripeProduct())
-                                                            <span
-                                                                class="mt-3 mr-auto mb-3 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                                                <svg class="-ml-1 mr-1.5 h-2 w-2 text-green-400"
-                                                                    fill="currentColor" viewBox="0 0 8 8">
-                                                                    <circle cx="4" cy="4" r="3" />
-                                                                </svg>
-                                                                {{ translate('Status live') }}
-                                                            </span>
+                                                        <span
+                                                            class="mt-3 mr-auto mb-3 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                            <svg class="-ml-1 mr-1.5 h-2 w-2 text-green-400"
+                                                                fill="currentColor" viewBox="0 0 8 8">
+                                                                <circle cx="4" cy="4" r="3" />
+                                                            </svg>
+                                                            {{ translate('Status live') }}
+                                                        </span>
 
-                                                            @if(!empty($stripe_product_id = $product->getStripeProductID()))
-                                                                <div class="flex mb-1">
-                                                                    <span class="font-medium mr-1">{{ translate('Product ID') }}:</span>
-                                                                    <a href="{{ '#' }}" target="_blank" class="text-info">{{ $stripe_product_id }}</a>
-                                                                </div>
-                                                            @endif
+                                                        @if(!empty($stripe_product_id = $product->getStripeProductID()))
+                                                        <div class="flex mb-1">
+                                                            <span class="font-medium mr-1">{{ translate('Product ID')
+                                                                }}:</span>
+                                                            <a href="{{ '#' }}" target="_blank" class="text-info">{{
+                                                                $stripe_product_id }}</a>
+                                                        </div>
+                                                        @endif
 
-                                                            @if(!empty($stripe_price_id = $product->getStripePriceID()))
-                                                                <div class="flex">
-                                                                    <span class="font-medium mr-1">{{ translate('Price ID') }}:</span>
-                                                                    <a href="{{ '#' }}" target="_blank" class="text-info">{{ $stripe_price_id }}</a>
-                                                                </div>
-                                                            @endif
+                                                        @if(!empty($stripe_price_id = $product->getStripePriceID()))
+                                                        <div class="flex">
+                                                            <span class="font-medium mr-1">{{ translate('Price ID')
+                                                                }}:</span>
+                                                            <a href="{{ '#' }}" target="_blank" class="text-info">{{
+                                                                $stripe_price_id }}</a>
+                                                        </div>
+                                                        @endif
                                                         @endif
                                                     </div>
                                                 </h3>
@@ -336,7 +348,8 @@
                                                     WooCommerce via REST API')}}
                                                 </p>
 
-                                                <a type="button" target="_blank" href="{{ route('settings.app_settings') }}"
+                                                <a type="button" target="_blank"
+                                                    href="{{ route('settings.app_settings') }}"
                                                     class="inline-flex items-center px-2 py-1 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     {{ translate('Setup API keys') }}
                                                     <!-- Heroicon name: solid/mail -->
@@ -387,44 +400,7 @@
                         </div>
                     </section>
 
-                    <!-- Recent Hires -->
-                    <section aria-labelledby="recent-hires-title">
-                        <div class="rounded-lg bg-white overflow-hidden shadow">
-                            <div class="p-6">
-                                <h2 class="text-base font-medium text-gray-900" id="recent-hires-title">
-                                    {{ translate('Recent orders') }}
-                                </h2>
-                                <div class="flow-root mt-6">
-                                    <ul role="list" class="-my-5 divide-y divide-gray-200">
-                                        <li class="py-4">
-                                            <div class="flex items-center space-x-4">
-                                                <div class="flex-shrink-0">
-                                                    <img class="h-8 w-8 rounded-full"
-                                                        src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                        alt="">
-                                                </div>
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="text-sm font-medium text-gray-900 truncate">Leonard
-                                                        Krasner</p>
-                                                    <p class="text-sm text-gray-500 truncate">via Stripe</p>
-                                                </div>
-                                                <div>
-                                                    <a href="#"
-                                                        class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
-                                                        View </a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="mt-6">
-                                    <a href="#"
-                                        class="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                        View all </a>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+
                 </div>
             </div>
         </div>

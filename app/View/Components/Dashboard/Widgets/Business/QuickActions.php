@@ -6,14 +6,16 @@ use Illuminate\View\Component;
 
 class QuickActions extends Component
 {
+    public $type;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($type = 'default')
     {
         //
+        $this->type = $type;
     }
 
     /**

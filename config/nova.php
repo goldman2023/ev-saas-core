@@ -101,11 +101,11 @@ return [
 
     'middleware' => [
         'web',
-        InitializeTenancyByDomainAndVendorDomains::class,
+        'tenant',
+        'universal',
         HandleInertiaRequests::class,
         DispatchServingNovaEvent::class,
         BootTools::class,
-
     ],
 
     'api_middleware' => [
@@ -125,7 +125,7 @@ return [
     |
     */
 
-    'pagination' => 'load-more',
+    'pagination' => 'links',
 
     /*
     |--------------------------------------------------------------------------
