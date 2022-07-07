@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bfe2c889a92872f00bb7cc0c7480e4fe",
+    "content-hash": "da7ffbf455376c9c1927c61b22185e86",
     "packages": [
         {
             "name": "ammardev/laravel-wp-hash-driver",
@@ -996,6 +996,58 @@
                 "source": "https://github.com/brunocfalcao/blade-feather-icons/tree/v2.1.0"
             },
             "time": "2022-02-19T20:24:59+00:00"
+        },
+        {
+            "name": "christophrumpel/nova-notifications",
+            "version": "1.0.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/christophrumpel/nova-notifications.git",
+                "reference": "cdf56cc39e1b9d0c0290c630a799f9ac60ae0418"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/christophrumpel/nova-notifications/zipball/cdf56cc39e1b9d0c0290c630a799f9ac60ae0418",
+                "reference": "cdf56cc39e1b9d0c0290c630a799f9ac60ae0418",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "*",
+                "php": ">=7.2.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "~3.0",
+                "phpunit/phpunit": "8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Christophrumpel\\NovaNotifications\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Christophrumpel\\NovaNotifications\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova tool for handling Laravel Notifications.",
+            "keywords": [
+                "laravel",
+                "notifications",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/christophrumpel/nova-notifications/issues",
+                "source": "https://github.com/christophrumpel/nova-notifications/tree/master"
+            },
+            "time": "2019-10-28T07:47:39+00:00"
         },
         {
             "name": "clue/stream-filter",

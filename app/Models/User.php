@@ -34,7 +34,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SoftDeletes;
     use HasRoles;
     use HasApiTokens;
-    use Notifiable;
     use LogsActivity;
     use UploadTrait;
     use GalleryTrait;

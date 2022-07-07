@@ -19,12 +19,18 @@ class UserWelcomeNotification extends Notification
 
     public function __construct()
     {
-
     }
 
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
+    }
+
+    public function toDatabase($notifiable) {
+        return [
+            'type' => 'User Welcome Notification',
+            'data' => json_encode($notifiable)
+        ];
     }
 
     public function toMail($notifiable)
@@ -33,14 +39,13 @@ class UserWelcomeNotification extends Notification
             return (new WeMailMessage)
                 ->markdown('vendor.notifications.email')
                 // ->text('mail.text.message')
-                ->subject(translate('Welcome to '.get_tenant_setting('site_name')))
-                ->greeting(translate('Hello, ').$notifiable->name)
+                ->subject(translate('Welcome to ' . get_tenant_setting('site_name')))
+                ->greeting(translate('Hello, ') . $notifiable->name)
                 ->line(translate('Welcome to our site.'))
                 ->line(translate('Thank you for using our application!'))
                 ->action(translate('Explore Plans'), route('dashboard'));
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
     }
-
 }

@@ -17,6 +17,7 @@
         "blade-ui-kit/blade-heroicons": "^1.3",
         "blade-ui-kit/blade-icons": "^1.2",
         "brunocfalcao/blade-feather-icons": "^2.1",
+        "christophrumpel/nova-notifications": "^1.0",
         "codeat3/blade-grommet-icons": "^1.3",
         "codeat3/blade-line-awesome-icons": "^1.2",
         "codexshaper/laravel-woocommerce": "^3.0",

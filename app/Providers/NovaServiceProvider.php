@@ -156,8 +156,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function routes()
     {
-        Nova::routes(['tenant'])
-                ->withAuthenticationRoutes(['tenant']);
+        Nova::routes(['web','tenant', 'universal'])
+                ->withAuthenticationRoutes(['tenant', 'universal'])
+                ->register();
     }
 
     /**
@@ -217,9 +218,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             return [
                 MenuBuilder::make(),
                 \Laravel\Nova\LogViewer\LogViewer::make(),
-                Novaspatiepermissions::make(),
-
-                // new \Bolechen\NovaActivitylog\NovaActivitylog(),
+                Novaspatiepermissions::make()
             ];
         } else {
             return [
@@ -265,7 +264,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 UserSubscription::class,
                 License::class,
                 Section::class,
-                MenuBuilder::getMenuResource()
+                MenuBuilder::getMenuResource(),
             ]);
         } else {
             Nova::resources([

@@ -103,6 +103,7 @@ return [
         'web',
         'tenant',
         'universal',
+        InitializeTenancyByDomainAndVendorDomains::class,
         HandleInertiaRequests::class,
         DispatchServingNovaEvent::class,
         BootTools::class,
