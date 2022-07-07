@@ -42,7 +42,7 @@
                 } else if(this.course_item.video.includes('vimeo')) {
                     fetch('https://vimeo.com/api/oembed.json?url='+encodeURIComponent(this.course_item.video)+'&width=640&height=360', {
                         method: 'GET',
-                        cache: 'no-cache', 
+                        cache: 'no-cache',
                         mode: 'cors',
                     })
                     .then(response => response.json())
@@ -88,7 +88,7 @@
 
                             {{-- Shop --}}
                             <a href="{{ $product->shop?->getPermalink() ?? '#' }}" class="px-3 inline-flex items-center text-14 font-semibold text-typ-2">
-                                <img src="{{ $product->shop->getThumbnail(['w' => 600]) }}" 
+                                <img src="{{ $product->shop->getThumbnail(['w' => 600]) }}"
                                     class="w-[30px] h-[30px] object-cover rounded-full border border-gray-200 mr-2"/>
 
                                 <span>{{ $product->shop?->name }}</span>
@@ -117,7 +117,7 @@
                         @if($course_item->type === \App\Enums\CourseItemTypes::video()->value)
 
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::quizz()->value)
-                            
+
                             @if(!empty($quiz_result))
                                 <h2 class="pb-4 text-20 font-semibold">{{ translate('My quiz results:') }}</h2>
 
@@ -144,9 +144,9 @@
                                         const correctStr = "{{ translate('Correct') }}";
                                         const inCorrectStr = "{{ translate('Incorrect') }}";
                                         function getTextHtml(text, str, isCorrect) {
-                                        if (text.indexOf(str) < 0) 
+                                        if (text.indexOf(str) < 0)
                                             return undefined;
-                                        
+
                                         return text.substring(0, text.indexOf(str)) + "<span style='color:" + (
                                             isCorrect
                                             ? "green"
@@ -156,28 +156,28 @@
                                         function isAnswerCorrect(q) {
                                             const right = q.correctAnswer;
 
-                                            if (! right || q.isEmpty()) 
+                                            if (! right || q.isEmpty())
                                                 return undefined;
-                                            
+
                                             var left = q.value;
 
-                                            if (!Array.isArray(right)) 
+                                            if (!Array.isArray(right))
                                                 return right == left;
-                                            
-                                            if (!Array.isArray(left)) 
+
+                                            if (!Array.isArray(left))
                                                 left = [left];
-                                            
+
                                             for (var i = 0; i < left.length; i++) {
-                                                if (right.indexOf(left[i]) < 0) 
+                                                if (right.indexOf(left[i]) < 0)
                                                     return false;
                                             }
 
                                             return true;
                                         }
                                         function renderCorrectAnswer(q) {
-                                            if (! q) 
+                                            if (! q)
                                                 return;
-                                            
+
                                             const isCorrect = isAnswerCorrect(q);
                                             if (! q.prevTitle) {
                                                 q.prevTitle = q.title;
@@ -219,7 +219,7 @@
                                         var surveyJSON = @js($course_item->subject->quiz_json ?? []);
 
                                         var survey = new Survey.Model(surveyJSON);
-                                        
+
                                         function sendDataToServer(survey) {
                                             // Send Ajax request to your web server
                                             fetch('{{ route('api.we-quiz.result.save', $course_item->subject?->id ?? -1) }}', {
@@ -253,8 +253,8 @@
                                     });
                                 </script>
                             @endif
-                            
-                            
+
+
                         @elseif($course_item->type === \App\Enums\CourseItemTypes::wysiwyg()->value)
                             {!! $course_item->content !!}
                         @endif
@@ -273,12 +273,12 @@
                 </div>
             </div>
 
-            
+
         </div>
 
         <div class="col-span-12 md:col-span-4">
             {{-- Chapters --}}
-            <div class="w-full bg-white rounded-xl shadow p-5 max-h-[500px] overflow-y-auto">
+            <div class="w-full bg-white rounded-xl shadow p-5 max-h-[500px] overflow-y-auto mb-6">
                 <div class="w-full pb-2 mb-2 flex justify-between items-center border-b border-gray-200">
                     <h5 class="text-14 font-semibold">{{ translate('Chapters') }}</h5>
                 </div>
@@ -293,6 +293,29 @@
                     </ul>
                 </div>
             </div>
+
+             {{-- Course Stats --}}
+             <div class="w-full bg-white rounded-xl shadow p-5 max-h-[500px] overflow-y-auto">
+                <div class="w-full pb-2 mb-2 flex justify-between items-center border-b border-gray-200">
+                    <h5 class="text-14 font-semibold">{{ translate('Manage Course') }}</h5>
+                </div>
+
+                <div class="pb-3 w-full">
+                    <ul class="w-full flex-flex-col space-y-3">
+                        <li>
+                            <a href="{{ route('product.edit.course', [$product->id]) }}">
+                                {{ translate('Manage course material') }}
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('product.details', [$product->id]) }}">
+                                {{ translate('Course stats') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
 
@@ -300,7 +323,7 @@
             <div class="w-full flex flex-col">
                 {{-- <h3 class="w-full text-22 mb-2"></h3> --}}
                 <p class="text-16 mb-4">{{ translate('Join now and buy this course to have an access to content') }}</p>
-    
+
                 <div class="w-full flex gap-4 justify-start">
                     @auth
                         @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
@@ -313,7 +336,7 @@
                             </x-system.add-to-cart-button>
                         @endif
                     @endauth
-    
+
                     @guest
                         <a href="{{ route('user.login') }}" class="btn-primary">
                             {{ translate('Log in') }}
@@ -322,9 +345,9 @@
                             {{ translate('Join now') }}
                         </a>
                     @endguest
-                    
+
                 </div>
             </div>
         </x-system.form-modal>
-    </div> 
+    </div>
 @endsection
