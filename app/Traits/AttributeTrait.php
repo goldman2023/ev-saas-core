@@ -112,7 +112,6 @@ trait AttributeTrait
     public function custom_attributes()
     {
         return $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
-            ->distinct()
             ->with('pivot.attribute_value')
             ->withPivot('for_variations', 'attribute_value_id', 'order')
             ->using('App\Models\AttributeRelationship');
