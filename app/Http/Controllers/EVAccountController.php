@@ -25,6 +25,19 @@ class EVAccountController extends Controller
                 ->where('causer_id', $id)
                 ->get();
 
+                if(auth()->user()) {
+                    activity()
+                    ->performedOn($user)
+                    ->causedBy(auth()->user())
+                    ->withProperties([
+                        'action' => 'viewed',
+                        'action_title' => 'viewed a profile',
+                    ])
+                    ->log('viewed');
+                } else {
+                    $user = null;
+                }
+
             return view('frontend.user.profile', compact(['user', 'data']));
         } catch (\Exception $e) {
             // Create error handling for not found exception to go to 404 page...
