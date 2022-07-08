@@ -201,6 +201,8 @@ class TenantSettingsService
             'force_email_verification' => 'boolean',
             'register_redirect_url' => 'string',
             'login_redirect_url' => 'string', //
+            'login_dynamic_redirect' => 'string', //
+            'register_dynamic_redirect' => 'string', //
 
             // Integrations
             'mailerlite_api_token' => 'string',
@@ -286,7 +288,7 @@ class TenantSettingsService
                 'via' => 'array',
             ];
         }
-        
+
         return apply_filters( 'app-settings-definition', $app_settings );
     }
 }

@@ -70,6 +70,8 @@ class AppSettingsForm extends Component
                 'settings.force_email_verification' => ['boolean'],
                 'settings.register_redirect_url' => ['nullable'],
                 'settings.login_redirect_url' => ['nullable'],
+                'settings.login_dynamic_redirect' => ['boolean'],
+                'settings.register_dynamic_redirect' => ['boolean'],
 
                 'settings.chat_feature' => ['boolean'],
                 'settings.addresses_feature' => ['boolean'],
@@ -221,7 +223,7 @@ class AppSettingsForm extends Component
 
     public function saveAdvanced($rule_set) {
         $rules = $this->getRuleSet($rule_set);
-        
+
         try {
             $this->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
