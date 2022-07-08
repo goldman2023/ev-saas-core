@@ -184,6 +184,9 @@ class Category extends WeBaseModel
     }
 
     public function getTitlePathAttribute($value) {
+        if(empty($this->slug_path))
+            return '';
+            
         $title_path = explode(self::PATH_SEPARATOR, $this->slug_path);
 
         if(count($title_path) > 1) {

@@ -69,8 +69,12 @@ class FXService
         $this->currency_symbol = $this->currency->symbol ?? '';
     }
 
-    public function getCurrency()
+    public function getCurrency($symbol = null)
     {
+        if(!empty($symbol)) {
+            dd('asdasd');
+        }
+
         return $this->currency;
     }
 

@@ -48,14 +48,15 @@ trait StockManagementTrait
                 $model->load('serial_numbers');
             }
 
-//            if(empty($model->stock)) {
-//                $product_stock = ProductStock::firstOrNew(['subject_id' => $model->id, 'subject_type' => $model::class]);
-//                $product_stock->sku = $model->hasMain() ? $model->main->slug.'-001' : $model->slug.'-001';
-//                $product_stock->qty = 1;
-//                $product_stock->low_stock_qty = 1;
-//                $product_stock->save();
-//                $model->load('stock');
-//            }
+            // If, for some reason, stock is missing for model which has this trait, create the stocks in DB
+        //    if(empty($model->stock)) {
+        //        $product_stock = ProductStock::firstOrNew(['subject_id' => $model->id, 'subject_type' => $model::class]);
+        //        $product_stock->sku = ($model?->is_variation ?? false) ? $model->main->slug.'-001' : $model->slug.'-'.\UUID::generate(4)->string;
+        //        $product_stock->qty = 0;
+        //        $product_stock->low_stock_qty = 0;
+        //        $product_stock->save();
+        //        $model->load('stock');
+        //    }
 
             $model->getUseSerialAttribute();
             $model->getSkuAttribute();

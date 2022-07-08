@@ -266,8 +266,27 @@ class TenantSettingsService
             // Advanced
             'user_meta_fields_in_use' => 'array',
 
+            // Notifications
+            'system_notifications_list' => []
         ];
 
+        // System Notifications
+        $system_notifications_list_array = [
+            'user_welcome', 'user_forgot_your_password', 'user_verification', 'user_password_changed', 'user_invite', 'user_finalize_verification',
+            'subscription_updated', 'subscription_canceled',
+            'order_received',
+            'invoice_created', 'invoice_paid', 'invoice_payment_failed',
+            'new_follower', 'new_message',
+        ];
+        foreach($system_notifications_list_array as $key => $value) {
+            $app_settings['system_notifications_list'][$value] = [
+                'enabled' => 'boolean',
+                'to_causer' => 'boolean',
+                'to_admin' => 'boolean',
+                'via' => 'array',
+            ];
+        }
+        
         return apply_filters( 'app-settings-definition', $app_settings );
     }
 }

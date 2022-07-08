@@ -14,6 +14,7 @@ use App\Traits\Purchasable;
 use App\Traits\StockManagementTrait;
 use App\Traits\UploadTrait;
 use App\Traits\VariationTrait;
+use App\Traits\IsVariationTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ReviewTrait;
 use App;
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Sluggable\HasSlug;
 use Str;
+use Illuminate\Database\Eloquent\Casts\Attribute as AttributeCast;
 
 /**
  * App\Models\Product
@@ -41,7 +43,6 @@ class ProductVariation extends WeBaseModel
     use Notifiable;
     use SoftDeletes;
 
-    use AttributeTrait;
 
     use UploadTrait;
     use GalleryTrait;
@@ -52,7 +53,8 @@ class ProductVariation extends WeBaseModel
 
     use ReviewTrait;
 
-    use VariationTrait;
+    use IsVariationTrait;
+
 
     // Default atts
     protected $attributes = [
@@ -75,109 +77,15 @@ class ProductVariation extends WeBaseModel
         'variant' => 'array',
     ];
 
-    public static function booted()
-    {
-        static::relationsRetrieved(function ($model) {
-//            $model->appendCoreProperties(['name']);
-//            $model->append(['name']);
-//            $model->initCoreProperties(only: ['name']);
-        });
-    }
+    // IMPORTANT: main is now a core property and is injected when model eager-loads it's variations.
+    // Reason for this is that main() relationship ends up in recursive loop for some reason even though all scopes and eager-loads are disabled...so we cannot use it.
+    // We must rely on injecting the parent model manually to each variation (which also reduces the number of queries)
 
-    public function main()
-    {
-        //dd($this->belongsTo(Product::class, 'product_id', 'id')->without(Product::$defaultEagerLoads)->first());
-        return $this->belongsTo(Product::class, 'product_id', 'id');
-    }
-
-    public function getNameAttribute() {
-        $att_values_idx = [];
-        $name = '';
-//        dd($this->main);
-//        return json_encode($this->variant);
-
-        if(!empty($this->variant)) {
-            foreach($this->variant as $item) {
-                if(!empty($item['attribute_value_id'])) {
-                    $att_values_idx[] = $item['attribute_value_id'];
-                }
-            }
-
-            // TODO: Fix this to use parent product attribute values, so we don't have to query this part!
-            $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
-            foreach($att_values as $key => $value) {
-                $name .= Str::slug($value->name.($key+1 !== $att_values->count() ? '-' : ''));
-            }
-        }
-
-        return $name;
-    }
-
-    /*
-     * TODO: Think about moving this to a Trait because different ContentType Variations can use it!
-     */
-    public function getVariantName($attributes = [], $slugified = false, $value_separator = '-', $as_collection = false, $key_by = null) {
-        $att_values_idx = [];
-        $name = '';
-
-        if(!empty($this->variant)) {
-            foreach($this->variant as $item) {
-                if(!empty($item['attribute_value_id'])) {
-                    $att_values_idx[] = $item['attribute_value_id'];
-                }
-            }
-
-            if(!empty($attributes)) {
-                $att_values = $attributes->map(function($item) use($att_values_idx) {
-                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx))->first();
-                });
-            } else {
-                // If attributes are not provided as parameter, get variant_attributes from main
-//                $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
-                $att_values = $this->main->variant_attributes(key_by: ($key_by ?:null))->map(function($item) use($att_values_idx) {
-                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx))->first();
-                });
-            }
-
-            if(!empty($key_by)) {
-                return $att_values->map(fn($item) => $item->values);
-            }
-
-            if($as_collection) {
-                return $att_values->unique()->values()->pluck('values');
-            }
-
-            foreach($att_values as $key => $value) {
-                if($slugified) {
-                    $name .= Str::slug($value->values.($key+1 !== $att_values->count() ? '-' : ''));
-                } else {
-                    $name .= $value->values.($key+1 !== $att_values->count() ? $value_separator : '');
-                }
-            }
-
-        }
-
-        return $name;
-    }
-
-    protected function asJson($value)
-    {
-        return json_encode($value, JSON_UNESCAPED_UNICODE);
-    }
-
-    // START: Casts section
-    // If $value is null or empty, value should always be empty array!
-    // Reason: Ease of use in frontend and backend views
-    public function getVariantAttribute($value) {
-        $atts = $this->castAttribute('variant', $value);
-        return empty($atts) ? [] : $atts;
-    }
-    // END: Casts section
-
-    // MISC
-    public static function composeVariantKey($key) {
-        return Str::slug(Str::replace('.', ',', $key));
-    }
+    // public function main()
+    // {
+    //     //dd($this->belongsTo(Product::class, 'product_id', 'id')->without(Product::$defaultEagerLoads)->first());
+    //     return $this->belongsTo(Product::class, 'product_id', 'id')->withoutGlobalScopes()->setEagerLoads([]);
+    // }
 
     /**
      * Returns column name of the price
@@ -189,19 +97,8 @@ class ProductVariation extends WeBaseModel
         return 'price';
     }
 
-
-    public function useVariations(): ?bool
-    {
-        return false;
-    }
-
     public function getDynamicModelUploadProperties(): array
     {
         return [];
-    }
-
-    public function getVariationModelClass()
-    {
-        return null;
     }
 }

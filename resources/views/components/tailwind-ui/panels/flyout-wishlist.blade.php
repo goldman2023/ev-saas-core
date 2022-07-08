@@ -1,4 +1,4 @@
-<x-panels.flyout-panel id="wishlist-panel" title="{{ translate('Wishlist') }}" framework="tailwind">
+<x-panels.flyout-panel id="wishlist-panel" title="{{ translate('Wishlist') }}">
 
     <h3 class="text-20 mb-3 pb-2 border-b flex items-center" x-data="{
         count: {{ $count ?? 0 }},
@@ -14,24 +14,7 @@
     </h3>
 
     <div class="c-flyout-panel__items flex flex-col mb-1 grow w-full overflow-x-hidden pr-2">
-        @if($wishlist?->isEmpty())
-            <!-- Empty Wishlist Section -->
-            <div class="w-full mx-2 mt-5">
-                <div class="text-center mx-md-auto">
-                    <div class="mb-5">
-                        <h3 class="text-22">{{ translate('Wishlist is empty') }}</h3>
-                        <p>{{ translate('Add some products/services to the wishlist in order to see them here.') }}</p>
-                    </div>
-                    <a class="btn btn-info inline-flex items-center transition-3d-hover px-5" href="{{ route('feed.products') }}">
-                        @svg('heroicon-o-shopping-cart', ['class' => 'mr-2 w-4 h-4'])
-                        {{ translate('Go to catalog') }}
-                    </a>
-                </div>
-            </div>
-            <!-- End Empty Wishlist Section -->
-        @else
-            <livewire:panels.wishlist-flyout></livewire:panels.wishlist-flyout>
-        @endif
+        <livewire:panels.wishlist-flyout></livewire:panels.wishlist-flyout>
     </div>
 
     <div class="flyout-wishlist__bottom-cta  pt-3 mt-2 pb-0 bottom-0  bg-white border-t">

@@ -60,7 +60,7 @@ class EVProductController extends Controller
     public function edit(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
+        
         return view('frontend.dashboard.products.edit')->with('product', $product);
     }
 
@@ -80,11 +80,7 @@ class EVProductController extends Controller
     public function edit_variations(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
-        if ($product) {
-            $product->convertUploadModelsToIDs();
-        }
-
+        
         return view('frontend.dashboard.products.variations')
             ->with('product', $product)
             ->with('variations_attributes', $product->variant_attributes());

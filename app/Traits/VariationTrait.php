@@ -7,6 +7,7 @@ use App\Models\AttributeValue;
 use App\Models\ProductVariation;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
+use Str;
 
 trait VariationTrait
 {
@@ -15,8 +16,6 @@ trait VariationTrait
      */
     abstract public function getVariationModelClass();
 
-    abstract public function main();
-
     /**
      * Boot the trait
      *
@@ -24,19 +23,33 @@ trait VariationTrait
      */
     protected static function bootVariationTrait()
     {
-        // When model data is retrieved, populate model stock data!
+        static::addGlobalScope('withVariations', function (mixed $builder) {
+            $builder->with(['variations']);
+        });
+
+        // When model data is retrieved, check if model uses variations and variations are not retrieved
         static::relationsRetrieved(function ($model) {
-            if ($model->useVariations() && ! $model->relationLoaded('variations')) {
+            $cloned_model = clone $model;
+
+            if (!$model->relationLoaded('variations') && $model->useVariations()) {
                 $model->load('variations');
             }
-
-//            if($model->isMain()) {
-//                // If it's a main model, set all variations main relation to main model! Reason is less DB queries.
-//                $model->variations->map(function($variation) use ($model) {
-//                    $variation->setMain($model);
-//                    return $variation;
-//                });
-//            }
+            
+            /** 
+             * In order to reduce number of queries when variation calls for main (->main) and loading all main relations again,
+             * We'll SET main PROPERTY of each variant to current $model.
+             * Reason is that it has all needed relations that variant may use (as attributes/att_values/att_relations, since they are needed for variant name construction and other important things) 
+             * Also, we'll remove all unnecessary relations from $cloned_model and leave only those variations will use (like custom_attributes)
+             */
+            $only_custom_attributes_rel = array_intersect_key($cloned_model->getRelations(), array_flip(['custom_attributes']) );
+            $cloned_model->setRelations($only_custom_attributes_rel);
+            
+            // Inject main model to `main` core property and generate variation name
+            $model->variations->map(function($variation) use($cloned_model) {
+                $variation->main = $cloned_model;
+                $variation->name = $variation->getVariantName(slugified: true);
+            });
+            
         });
     }
 
@@ -68,17 +81,17 @@ trait VariationTrait
         return $this->hasMany($this->getVariationModelClass()['class'] ?? null);
     }
 
-    public function getMappedVariations($convert_uploads = true, $refresh = false)
+    public function getMappedVariations($refresh = false)
     {
         if (empty($this->getVariationModelClass())) {
             return null;
         }
-
+        
         if ($refresh) {
-            return $this->variations->get()->map(fn ($item) => $convert_uploads ? $item->convertUploadModelsToIDs() : $item)->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']));
+            return $this->variations->get()->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']));
         }
-
-        return $this->variations->map(fn ($item) => $convert_uploads ? $item->convertUploadModelsToIDs() : $item)->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']));
+        
+        return $this->variations->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']));
     }
 
 //    public function getFirstVariation() {
@@ -177,6 +190,9 @@ trait VariationTrait
         $matrix = $this->generateVariantAttributeValuesMatrix();
 
         if ($matrix instanceof Collection && $matrix->isNotEmpty()) {
+            $cloned_model = clone $this;
+            $cloned_model->setRelations(array_intersect_key($cloned_model->getRelations(), array_flip(['custom_attributes']) ));
+
             foreach ($matrix as $index => $combo) {
                 if (empty($combo)) {
                     continue;
@@ -210,6 +226,10 @@ trait VariationTrait
                     $variation->current_stock = 0;
                     $variation->sku = '';
 
+                    // Append Main and name
+                    $variation->main = $cloned_model;
+                    $variation->name = $variation->getVariantName(slugified: true);
+
                     $all_combinations->push($variation);
                 } else {
                     $all_combinations->push($variant_data);
@@ -220,26 +240,4 @@ trait VariationTrait
         return $all_combinations;
     }
 
-    /*
-     * Methods related to Main <--> Variation
-     */
-    public function getMain()
-    {
-        return ($this->main() instanceof Relation) ? $this->main : null;
-    }
-
-    public function setMain($model): void
-    {
-        $this->setRelation('main', $model);
-    }
-
-    public function hasMain()
-    {
-        return $this->main() instanceof Relation;
-    }
-
-    public function isMain()
-    {
-        return empty($this->main());
-    }
 }

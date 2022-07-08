@@ -138,7 +138,11 @@ class IMGProxyService
                 }
             }
             // dd(Storage::disk($this->filesystem)->url($data->file_name));
-            $url = Storage::disk($this->filesystem)->url($data instanceof Upload ? ($data->file_name ?? null) : $data);
+            if($data instanceof Upload) {
+                $url = Storage::disk($this->filesystem)->url($data instanceof Upload ? ($data->file_name ?? null) : $data);
+            } else if(is_array($data) && !empty($data['file_name'] ?? null)) {
+                $url = Storage::disk($this->filesystem)->url($data['file_name']);
+            }
         } else {
             $url = app('url')->asset($data, $this->secure);
         }

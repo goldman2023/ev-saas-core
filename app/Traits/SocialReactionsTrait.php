@@ -14,4 +14,9 @@ trait SocialReactionsTrait
     {
         return $this->morphToMany(User::class, 'subject', 'social_reactions')->where('type', SocialReactionsEnum::like()->value);
     }
+
+    public function getLikesCount()
+    {
+        return $this->likes()->count();
+    }
 }

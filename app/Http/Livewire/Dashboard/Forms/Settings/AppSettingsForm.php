@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
+use App\Enums\AppSettingsGroupEnum;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
@@ -29,6 +30,7 @@ class AppSettingsForm extends Component
     use RulesSets;
     use DispatchSupport;
 
+    public $settingsGroup;
     public $shop;
     public $settings;
     public $addresses;
@@ -161,6 +163,9 @@ class AppSettingsForm extends Component
             'user_meta_fields' => [
                 'settings.user_meta_fields_in_use' => ['']
             ],
+            'system_notifications_list' => [
+                'settings.system_notifications_list' => ['']
+            ],
         ]);
 
         $rulesSets = apply_filters('app-settings-rules', $rulesSets);
@@ -192,18 +197,13 @@ class AppSettingsForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount($settingsGroup)
     {
+        $this->settingsGroup = $settingsGroup;
         $this->settings = TenantSettings::getAll();
         $this->colors = TenantSettings::settingsDataTypes()['colors'];
         $this->universal_payment_methods = Payments::getPaymentMethodsAll();
     }
-
-    // public function updatingShop(&$shop, $key) {
-    //     if(!$shop instanceof Shop) {
-    //         $shop = Shop::find($shop['id'])->fill($shop); // alpinejs passes arrays as data instead of Model type. This is the reason why we have to convert it to Address model.
-    //     }
-    // }
 
     public function dehydrate()
     {
@@ -212,12 +212,16 @@ class AppSettingsForm extends Component
 
     public function render()
     {
+        if($this->settingsGroup === AppSettingsGroupEnum::notifications()->value) {
+            return view('livewire.dashboard.forms.settings.app-settings-notifications-form');
+        }
+
         return view('livewire.dashboard.forms.settings.app-settings-form');
     }
 
     public function saveAdvanced($rule_set) {
         $rules = $this->getRuleSet($rule_set);
-
+        
         try {
             $this->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -557,7 +561,6 @@ class AppSettingsForm extends Component
         $response = Http::get('https://tailwind.simeongriggs.dev/api/indigo/' . $this->settings['colors']['primary']);
 
         $this->settings['colors']['indigo'] = $response->body();
-        dd($this->colors);
         $this->colors;
 
 
