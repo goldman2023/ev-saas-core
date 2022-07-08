@@ -98,7 +98,7 @@
                             </div>
                         </div>
                     </section>
-                    <section class="we-quick-actions">
+                    <section class="we-quick-actions hidden">
                         <x-dashboard.widgets.business.quick-actions>
                         </x-dashboard.widgets.business.quick-actions>
                     </section>
@@ -151,17 +151,11 @@
                                 </span>
                             </div>
                             <div
-                                class="rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
+                                class="grid grid-cols-2 gap-6 rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.single', $product->slug) }}" target="_blank">
                                     @svg('heroicon-o-eye', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Preview') }}
-                                </a>
-
-                                <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                                    href="{{ route('product.edit.stocks', $product->id) }}">
-                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
-                                    {{ translate('Stock Management') }}
                                 </a>
 
                                 @if($product->type === \App\Enums\ProductTypeEnum::course()->value)
@@ -171,6 +165,14 @@
                                     {{ translate('Course Material') }}
                                 </a>
                                 @endif
+
+                                <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+                                    href="{{ route('product.edit.stocks', $product->id) }}">
+                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    {{ translate('Stock Management') }}
+                                </a>
+
+
 
 
                                 @if($product->useVariations())
