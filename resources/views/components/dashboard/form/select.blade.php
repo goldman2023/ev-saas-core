@@ -7,6 +7,12 @@
     nullable: @js($nullable),
     search: @js($search),
     search_query: '',
+    countSelected() {
+      if(Array.isArray({{ $selected }})) {
+        return {{ $selected }}.length;
+      } 
+      return 0;
+    }
 }" x-init="$watch('search_query', (value) => {
   let newItems = {};
   Object.entries(items).filter(entry => {
@@ -26,6 +32,32 @@
           @svg('heroicon-s-selector', ['class' => 'h-5 w-5 text-gray-400', 'wire:ignore'])
         </span>
       </button>
+
+      {{-- <template x-if="multiple">
+        <div class="w-full flex flex-wrap">
+            <template x-if="countSelected() > 0">
+                <template x-for="item in items.filter(x => {
+                    return selected_items.indexOf(x.id) !== -1;
+                })">
+                    <div
+                        class="we-select__selector-selected-item rounded mr-2 mb-1 relative">
+                        <span
+                            class="we-select__selector-selected-item-label pl-1 mr-1"
+                            x-text="item.values"></span>
+                        <button type="button"
+                            class="we-select__selector-selected-item-remove px-2"
+                            @click="event.stopPropagation(); select(item.id, item.values)">
+                            <span>×</span>
+                        </button>
+                    </div>
+                </template>
+            </template>
+            <template x-if="countSelected() <= 0">
+                <span class="block pb-1"
+                    x-text="getPlaceholder()"></span>
+            </template>
+        </div>
+      </template> --}}
   
       <ul wire:ignore class="absolute z-10 mt-1 w-full max-w-lg bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
             x-show="open_dropdown"

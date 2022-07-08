@@ -45,7 +45,7 @@ if (!function_exists('castValueForSave')) {
             $setting = ctype_digit($setting) || is_numeric($setting) ? ((int) $setting) : $setting;
         } else if($data_type === 'boolean') {
             $setting = $setting ? 1 : 0;
-        } else if($data_type === 'array' && $data_type === 'uploads' && is_array($data_type)) {
+        } else if($data_type === 'object' || $data_type === 'array' || $data_type === 'uploads' || is_array($data_type) || is_object($data_type)) {
             $setting = json_encode($setting);
         }
 
@@ -58,7 +58,7 @@ if (!function_exists('castValuesForGet')) {
         if(!empty($settings) && is_array($settings)) {
             
             foreach($settings as $key => &$setting) {
-                
+        
                 $data_type = $data_types[$key] ?? null;
                 $value = $settings[$key]['value'] ?? null;
 
@@ -67,16 +67,23 @@ if (!function_exists('castValuesForGet')) {
                 } 
                 
                 try {
-
+                    
                     // This means that there are more sub items inside
                     if(is_array($data_type)) {
+                        
                         // If data type is ARRAY, it means that JSON is stored in setting value!
                         // In order to recursively go through it's properties and cast data types, we need to decode it with json_decode first!
-                        if(empty($setting))
+                        if(empty($setting)) {
+                            // $setting = [];
+                            // ^^^ This actually must stay null, and we need to initialize object in JS if empty setting is null. Reason is checksum error if we put fallback to be [] or {}! ^^^
                             continue;
-
-                        $setting = json_decode($setting, true);
-
+                        }
+                        
+                        // Check if $setting is NOT already an array (it means that json_decode was already done in previous recursion cycle - we pass $settings as reference (&))
+                        if(! is_array($setting)) {
+                            $setting = json_decode($setting, true);
+                        }
+                        
                         // Check if there are missing sub fields and create them
                         $missing_sub_fields = array_diff_key($data_type, !empty($setting) ? $setting : []);
                         
@@ -88,8 +95,9 @@ if (!function_exists('castValuesForGet')) {
 
                         // Merge missing sub fields and existing sub fields (this is imporatant if we add any new tenant setting field!)
                         $setting = array_merge(!empty($setting) ? $setting : [], $missing_sub_fields);
- 
+
                         // Convert Sub Fields values to proper data type
+                        
                         castValuesForGet($setting, $data_type);
                         continue;
                     }

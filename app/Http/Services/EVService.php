@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Enums\AppSettingsGroupEnum;
 use App\Facades\MyShop;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
@@ -424,7 +425,27 @@ class EVService
                         'route_name' => 'settings.app_settings',
                         'is_active' => areActiveRoutes(['settings.app_settings']),
                         'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_designs'],
+                        'permissions' => [],
+                        'children' => [
+                            [
+                                'label' => translate('All Settings'),
+                                'icon' => 'heroicon-o-cog',
+                                'route' => route('settings.app_settings'),
+                                'route_name' => 'settings.app_settings',
+                                'is_active' => areActiveRoutes(['settings.app_settings',  'product.details']),
+                                'user_types' => User::$tenant_user_types,
+                                'permissions' => [],
+                            ],
+                            [
+                                'label' => translate('Notifications'),
+                                'icon' => 'heroicon-o-view-list',
+                                'route' => route('settings.app.group', AppSettingsGroupEnum::notifications()->value),
+                                'route_name' => 'settings.app.group',
+                                'is_active' => areActiveRoutes(['settings.app.group']),
+                                'user_types' => User::$tenant_user_types,
+                                'permissions' => [],
+                            ],
+                        ],
                     ],
                     [
                         'label' => translate('Page builder - We Edit'),
