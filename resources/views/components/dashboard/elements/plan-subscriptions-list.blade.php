@@ -20,7 +20,7 @@
                                     {{ $order_item->quantity.' '.translate('user') }} x {{ \FX::formatPrice($order_item->total_price / $order_item->quantity) }} / {{ translate('user') }} / {{ $subscription->order->invoicing_period }}
                                 </span>
 
-                                <span class="text-14 text-gray-600 font-normal">{{ \FX::formatPrice($subscription->order->total_price) }} / {{ $subscription->order->invoicing_period }}</span>
+                                <span class="text-14 text-gray-600 font-normal">{{ \FX::formatPrice($order_item->total_price * $order_item->quantity) }} / {{ $subscription->order->invoicing_period }}</span>
                             </div>
                         @endforeach
 
