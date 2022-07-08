@@ -60,7 +60,7 @@
                     <x-dashboard.widgets.business.quick-access></x-dashboard.widgets.business.quick-accesss>
                 </div> --}}
 
-                @livewire('dashboard.elements.activity-log', ['causer' => auth()->user()])
+                @livewire('dashboard.elements.activity-log')
 
             </div>
         </div>
