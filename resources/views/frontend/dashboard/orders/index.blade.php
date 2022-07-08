@@ -20,26 +20,25 @@
         @if($orders_count > 0)
             <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
         @else
-            <x-dashboard.empty-states.no-items-in-collection 
-                icon="heroicon-o-document" 
+            <x-dashboard.empty-states.no-items-in-collection
+                icon="heroicon-o-document"
                 title="{{ translate('No orders yet') }}"
                 text="{{ translate('Engage your customers so you can get a new order!') }}"
-                link-href-route="order.create"
-                link-text="{{ translate('Add new Order') }}">
+              >
 
             </x-dashboard.empty-states.no-items-in-collection>
         @endif
-        
+
         {{-- <div class="col-6">
             <x-default.dashboard.widgets.create-card></x-default.dashboard.widgets.create-card>
         </div>
-    
+
         <div class="col-6">
             <x-default.dashboard.widgets.create-card title="Create a subscription product" description="Create a recurring digital product"></x-default.dashboard.widgets.create-card>
         </div> --}}
     </div>
 
-    <div class="w-full grid grid-cols-12 gap-4 mt-5">
+    <div class="hidden w-full grid grid-cols-12 gap-4 mt-5">
         <div class="col-span-12 md:col-span-6 lg:col-span-4 flex">
             <div class="shadow rounded border border-gray-200 bg-white p-4 w-full mb-3">
                 <a href="{{ route('order.create') }}" class="flex flex-col">

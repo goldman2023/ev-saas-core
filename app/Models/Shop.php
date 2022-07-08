@@ -216,4 +216,25 @@ class Shop extends WeBaseModel
 
         ];
     }
+
+
+    function public_view_count($period = 'all')
+    {
+
+        $ttl = 600;
+        $shop = $this;
+        if ($period == 'all') {
+            $view_count = Cache::remember('shop_view_count_' . $this->id . '_' . $period, $ttl, function () use ($shop) {
+                return \Spatie\Activitylog\Models\Activity::where('subject_id', $shop->id)
+                ->where('subject_type', $this::class)
+                    ->whereJsonContains('properties->action', 'viewed')
+                    ->orderBy(
+                        'created_at',
+                        'desc'
+                    )->count();
+            });
+        }
+
+        return $view_count;
+    }
 }
