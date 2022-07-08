@@ -15,7 +15,6 @@ use App\Traits\PriceTrait;
 use App\Traits\Purchasable;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
-use App\Traits\VariationTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MyShop;
 use Spatie\Sluggable\HasSlug;
@@ -34,7 +33,6 @@ class Plan extends WeBaseModel
     use UploadTrait;
     use GalleryTrait;
     use TranslationTrait;
-    // use VariationTrait;
     use CoreMetaTrait;
     use HasStatus;
 
