@@ -2,26 +2,16 @@
 
 namespace App\Models;
 
-use App\Builders\BaseBuilder;
 use App\Builders\CteBuilder;
-use App\Facades\Categories;
 use App\Traits\GalleryTrait;
-use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
 use App\Traits\PermalinkTrait;
-use App\Traits\SocialFollowingTrait;
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use App;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 use Str;
-use Vendor;
 
 /**
  * App\Models\CourseItem
@@ -36,6 +26,7 @@ class CourseItem extends WeBaseModel
     use UploadTrait;
     use GalleryTrait;
     use PermalinkTrait;
+    use LogsActivity;
 
     public $selected;
     public $title_path;
@@ -152,7 +143,7 @@ class CourseItem extends WeBaseModel
         //     // reason for this try/catch is actually EventServiceProvider which registers Observers before EVServiceProvider boot() method is loaded
         //     // Observers are loaded for Category class with method Category::observe() which has to run booted method of Category (current function), and this happens before Vendor facade is properly initated, hence the error!
         // }
-        
+
     }
 
     /*
@@ -214,7 +205,7 @@ class CourseItem extends WeBaseModel
     public function getDynamicModelUploadProperties(): array
     {
         return [
-           
+
         ];
     }
 }

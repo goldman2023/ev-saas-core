@@ -102,6 +102,39 @@
                         <x-dashboard.widgets.business.quick-actions>
                         </x-dashboard.widgets.business.quick-actions>
                     </section>
+
+                    <section>
+                        {{-- TODO: Add all owners of this product --}}
+                    </section>
+                    <section>
+                        @php
+                        $course_items = $product->course_items->toTree()->filter(fn($item) => $item->parent_id ===
+                        null);
+                        @endphp
+                        {{-- Chapters --}}
+                        <div class="w-full bg-white rounded-xl shadow p-5 max-h-[500px] overflow-y-auto">
+                            <div class="w-full pb-3 mb-3 flex justify-between items-center border-b border-gray-200">
+                                <h5 class="capitalize text-14 font-semibold">{{ translate('Course Chapters') }}</h5>
+
+                                <a href="{{ route('product.edit.course', $product->id) }}" class="text-xs gray-400">
+                                    {{ translate('Edit course material') }}
+                                </a>
+                            </div>
+
+                            <div class="pb-3 w-full">
+                                <ul class="w-full flex-flex-col space-y-3">
+                                    @if($course_items->isNotEmpty())
+                                    @foreach($course_items as $course_item)
+                                        @include('frontend.product.single.partials.course-item-list-template', ['product' =>
+                                        $product, 'course_item' => $course_item])
+                                    @endforeach
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                        {{-- END chapters --}}
+                    </section>
+
                     <!-- Actions panel -->
                     <section aria-labelledby="quick-links-title">
                         <div
@@ -109,10 +142,10 @@
 
                             <div
                                 class="relative min-h-[200px] rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
-                                <div class="grid grid-cols-6">
-                                    <div>
+                                <div class="grid grid-cols-6 gap-2">
+                                    <div class="mr-3">
                                         <span
-                                            class="rounded-lg inline-flex p-3 bg-teal-50 text-teal-700 ring-4 ring-white">
+                                            class="rounded-lg inline-flex p-3 bg-teal-50 text-teal-700 ring-4 ring-white ">
                                             <!-- Heroicon name: outline/clock -->
 
                                             @svg('heroicon-o-eye', ['class' => 'h-6 w-6'])
@@ -153,7 +186,7 @@
                                 </span>
                             </div>
                             <div
-                                class="grid grid-cols-2 gap-6  rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6">
+                                class="grid grid-cols-1 gap-6  rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6">
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.single', $product->slug) }}" target="_blank">
                                     @svg('heroicon-o-eye', ['style' => 'height: 16px;', 'class' => 'mr-2'])
@@ -225,6 +258,8 @@
                         </div>
 
                     </section>
+
+
                 </div>
 
                 <!-- Right column -->
