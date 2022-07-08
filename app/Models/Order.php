@@ -112,12 +112,22 @@ class Order extends WeBaseModel
 
             if($order->user_subscriptions->isNotEmpty()) {
                 foreach ($sums_properties as $property) {
-                    // TODO: Fix this to populate each price with correct data. For now, all 4 properties are `total_price` -_-
                     $order->{$property} = 0;
 
-                    foreach ($order->user_subscriptions as $user_subscription) {
-                        $order->{$property} += $user_subscription->getTotalPrice(format: false);
+                    foreach ($order->order_items as $item) {
+                        // if($item->subject->isSubscribable() && $order->invoicing_period === 'year') {
+                        //     $order->{$property} += $item->{$property} * $item->quantity;
+                        // } else {
+                            $order->{$property} += $item->{$property} * $item->quantity;
+                        // }
                     }
+
+                    // TODO: Fix this to populate each price with correct data. For now, all 4 properties are `total_price` -_-
+                    
+
+                    // foreach ($order->user_subscriptions as $user_subscription) {
+                    //     $order->{$property} += 0; //$user_subscription->getTotalPrice(format: false);
+                    // }
                 }
             } else {
                 foreach ($sums_properties as $property) {

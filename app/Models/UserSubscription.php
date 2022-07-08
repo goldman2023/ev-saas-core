@@ -101,10 +101,11 @@ class UserSubscription extends WeBaseModel
     }
 
     public function getUpcomingInvoiceStats() {
-        return \Cache::remember('user_subscription_'.$this->id.'_upcoming_invoice_stats', 60*60, function () {
-            $invoice = $this->getStripeUpcomingInvoice();
-            return $invoice;
-        });
+        return $invoice = $this->getStripeUpcomingInvoice();
+        // return \Cache::remember('user_subscription_'.$this->id.'_upcoming_invoice_stats', 60*60, function () {
+        //     $invoice = $this->getStripeUpcomingInvoice();
+        //     return $invoice;
+        // });
     }
 
     public function getTotalPrice($format = true) {
