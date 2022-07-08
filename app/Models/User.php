@@ -26,7 +26,7 @@ use Laravel\Cashier\Billable;
 use Laravel\Nova\Auth\Impersonatable;
 use DB;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
+
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
 {
@@ -34,6 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SoftDeletes;
     use HasRoles;
     use HasApiTokens;
+    use Notifiable;
     use LogsActivity;
     use UploadTrait;
     use GalleryTrait;
@@ -250,7 +251,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function plan_subscriptions()
     {
-        return $this->hasMany(UserSubscription::class)->where('subject_type', Plan::class)->withoutGlobalScopes(['withUploads']);
+        return $this->hasMany(UserSubscription::class)->where('subject_type', Plan::class);
     }
 
     // TODO: Shoud be appended to User model based on if Quiz Feature is added to the tenant or not!
@@ -380,26 +381,5 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         $date = Carbon::now()->subDays($days);
 
         return $query->where('created_at', '>' , $date);
-    }
-
-
-    function public_view_count($period = 'all')
-    {
-
-        $ttl = 600;
-        $shop = $this;
-        if ($period == 'all') {
-            $view_count = Cache::remember('user_view_count_' . $this->id . '_' . $period, $ttl, function () use ($shop) {
-                return \Spatie\Activitylog\Models\Activity::where('subject_id', $shop->id)
-                ->where('subject_type', $this::class)
-                    ->whereJsonContains('properties->action', 'viewed')
-                    ->orderBy(
-                        'created_at',
-                        'desc'
-                    )->count();
-            });
-        }
-
-        return $view_count;
     }
 }
