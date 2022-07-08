@@ -34,13 +34,13 @@
                 </div>
                 <div class="div grid grid-cols-2 gap-6">
                     <div>
-                    <x-dashboard.widgets.charts.column-chart>
-                    </x-dashboard.widgets.charts.column-chart>
+                    {{-- <x-dashboard.widgets.charts.column-chart>
+                    </x-dashboard.widgets.charts.column-chart> --}}
                     </div>
 
                     <div>
-                    <x-dashboard.widgets.charts.pie-chart>
-                    </x-dashboard.widgets.charts.pie-chart>
+                    {{-- <x-dashboard.widgets.charts.pie-chart>
+                    </x-dashboard.widgets.charts.pie-chart> --}}
                     </div>
                 </div>
 
@@ -52,13 +52,13 @@
             </div>
 
             <div class="col-span-1">
-                <div class=" mb-6 bg-white p-6 rounded-xl shadow">
+                {{-- <div class=" mb-6 bg-white p-6 rounded-xl shadow">
                     <x-dashboard.widgets.business.calendar-summary></x-dashboard.widgets.business.calendar-summary>
-                </div>
+                </div> --}}
 
-                <div class=" mb-6 bg-white p-6 rounded-xl shadow">
+                {{-- <div class=" mb-6 bg-white p-6 rounded-xl shadow">
                     <x-dashboard.widgets.business.quick-access></x-dashboard.widgets.business.quick-accesss>
-                </div>
+                </div> --}}
 
                 @livewire('dashboard.elements.activity-log', ['causer' => auth()->user()])
 
