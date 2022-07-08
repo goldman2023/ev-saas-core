@@ -419,6 +419,15 @@ class EVService
                         'permissions' => ['view_shop_data', 'view_shop_settings'],
                     ],
                     [
+                        'label' => translate('Business Profile'),
+                        'icon' => 'heroicon-o-briefcase',
+                        'route' => route('settings.business_profile'),
+                        'route_name' => 'settings.business_profile',
+                        'is_active' => areActiveRoutes(['settings.business_profile']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => ['browse_designs'],
+                    ],
+                    [
                         'label' => translate('App settings'),
                         'icon' => 'heroicon-o-cog',
                         'route' => route('settings.app_settings'),
