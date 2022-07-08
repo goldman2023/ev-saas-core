@@ -272,7 +272,7 @@ class TenantSettingsService
 
         // System Notifications
         $system_notifications_list_array = [
-            'user_welcome', 'user_forgot_your_password', 'user_verification',
+            'user_welcome', 'user_forgot_your_password', 'user_verification', 'user_password_changed', 'user_invite', 'user_finalize_verification',
             'subscription_updated', 'subscription_canceled',
             'order_received',
             'invoice_created', 'invoice_paid', 'invoice_payment_failed',
