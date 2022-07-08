@@ -45,7 +45,13 @@
           <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. You have successfully subscribed to plan listed below.') }}</p>
 
           @if(!empty($ghost_user))
+              {{-- User is a guest/ghost user --}}
               <x-system.alert type="warning" text="{!! translate('Please finalize your registration.').'<br>'.translate('Email').': '.$ghost_user->email !!}" :only-text="true" />
+          @else
+              {{-- User is already registered --}}
+              <a href="{{ route('my.plans.management') }}" class="btn-primary">
+                {{ translate('Manage subscriptions') }}
+              </a>
           @endif
         @elseif($first_item->type === \App\Enums\ProductTypeEnum::bookable_service()->value)
           <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Please review your order') }}</p>
@@ -184,37 +190,93 @@
                   </address>
                 </dd>
               </div>
-
-
             </dl>
           @endif
 
           <dl class="space-y-6 border-t border-gray-200 text-sm pt-6 col-start-1 md:col-start-2 col-end-4">
-            <div class="flex justify-between">
-              <dt class="font-medium text-gray-900">{{ translate('Subtotal') }}</dt>
-              <dd class="text-gray-700">{{ \FX::formatPrice($order->base_price) }}</dd>
-            </div>
-            @if($order->discount_amount > 0)
-              <div class="flex justify-between">
-                <dt class="flex font-medium text-gray-900">
-                  {{ translate('Discount') }}
-                  {{-- <span class="rounded-full bg-gray-200 text-xs text-gray-600 py-0.5 px-2 ml-2">STUDENT50</span> --}}
-                </dt>
-                <dd class="text-gray-700">-{{ \FX::formatPrice($order->discount_amount) }}</dd>
-              </div>
-            @endif
+            @if($order->user_subscriptions->isNotEmpty())
+              {{-- Subscription Orders --}}
 
-            @if($first_item->isShippable())
+              @foreach($order->user_subscriptions as $subscription)
+                @php
+                  $tax_sum = 0;
+                @endphp
+                <div class="w-full flex flex-col">
+                    <div class="w-full flex justify-between mb-2">
+                        <strong class="text-16 font-semibold">{{ $subscription->plan->name }}</strong>
+                    </div>
+                    @foreach($subscription->order->order_items as $order_item)
+                        <div class="w-full flex justify-between mb-1">
+                            <span class="text-14 text-gray-600 font-normal">
+                                {{ $order_item->quantity.' '.translate('user') }} x {{ \FX::formatPrice($order_item->total_price / $order_item->quantity) }} / {{ translate('user') }} / {{ $order->invoicing_period }}
+                            </span>
+
+                            <span class="text-14 text-gray-600 font-normal">{{ \FX::formatPrice($order_item->total_price * $order_item->quantity) }} / {{ $order->invoicing_period }}</span>
+                        </div>
+
+                        @php
+                          if($subscription->getTaxAmount(false) > 0) {
+                            $tax_sum += $subscription->getTaxAmount(format: false);
+                          }
+                        @endphp
+                    @endforeach
+
+                    
+                </div>
+              @endforeach
+
+
+              <div class="w-full flex flex-col mt-3 pt-3 border-t border-gray-200">
+                  @if($tax_sum > 0)
+                      <div class="w-full flex justify-between">
+                          <span class="text-14 text-gray-500 font-normal">
+                              {{ translate('VAT amount') }}:
+                          </span>
+                          <span class="text-14 text-gray-500 font-normal">
+                              {{ \FX::formatPrice($tax_sum) }} / {{ $order->invoicing_period }}
+                          </span>
+                      </div>
+                  @endif
+
+                  <div class="w-full flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
+                    <span class="text-14 text-gray-600 font-normal">
+                        {{ translate('Next payment due on') }} <strong>{{ \Carbon::createFromTimestamp($order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices->first()?->end_date)->format('d M, Y') }}</strong>
+                    </span>
+
+                    <span class="text-14 text-gray-600 font-normal">
+                        {{ translate('Total') }}: <strong>{{ \FX::formatPrice($order->total_price) }} / {{ $order->invoicing_period }}</strong>
+                    </span>
+                  </div>
+              </div>
+            @else
+              {{-- Non-subscription Orders --}}
               <div class="flex justify-between">
-                <dt class="font-medium text-gray-900">{{ translate('Shipping') }}</dt>
-                <dd class="text-gray-700">{{  \FX::formatPrice(0) }}</dd>
+                <dt class="font-medium text-gray-900">{{ translate('Subtotal') }}</dt>
+                <dd class="text-gray-700">{{ \FX::formatPrice($order->base_price) }}</dd>
+              </div>
+              @if($order->discount_amount > 0)
+                <div class="flex justify-between">
+                  <dt class="flex font-medium text-gray-900">
+                    {{ translate('Discount') }}
+                    {{-- <span class="rounded-full bg-gray-200 text-xs text-gray-600 py-0.5 px-2 ml-2">STUDENT50</span> --}}
+                  </dt>
+                  <dd class="text-gray-700">-{{ \FX::formatPrice($order->discount_amount) }}</dd>
+                </div>
+              @endif
+
+              @if($first_item->isShippable())
+                <div class="flex justify-between">
+                  <dt class="font-medium text-gray-900">{{ translate('Shipping') }}</dt>
+                  <dd class="text-gray-700">{{  \FX::formatPrice(0) }}</dd>
+                </div>
+              @endif
+              
+              <div class="flex justify-between pt-3 mb-1 border-t border-gray-200">
+                <dt class="font-semibold text-gray-900">{{ translate('Total') }}</dt>
+                <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
               </div>
             @endif
             
-            <div class="flex justify-between pt-3 mb-1 border-t border-gray-200">
-              <dt class="font-semibold text-gray-900">{{ translate('Total') }}</dt>
-              <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
-            </div>
           </dl>
         </div>
 
