@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AppSettingsGroupEnum;
 use App\Models\PaymentMethod;
 use App\Models\PaymentMethodUniversal;
 use App\Models\User;
@@ -23,6 +24,19 @@ class EVAccountController extends Controller
                 ->whereHas('subject')
                 ->where('causer_id', $id)
                 ->get();
+
+                if(auth()->user()) {
+                    activity()
+                    ->performedOn($user)
+                    ->causedBy(auth()->user())
+                    ->withProperties([
+                        'action' => 'viewed',
+                        'action_title' => 'viewed a profile',
+                    ])
+                    ->log('viewed');
+                } else {
+                    $user = null;
+                }
 
             return view('frontend.user.profile', compact(['user', 'data']));
         } catch (\Exception $e) {
@@ -59,9 +73,15 @@ class EVAccountController extends Controller
         return view('frontend.dashboard.settings.account-settings', compact('me'));
     }
 
-    public function app_settings()
+    public function app_settings($settings_group = null)
     {
-        return view('frontend.dashboard.settings.app-settings');
+        $title = translate('Application settings');
+
+        if($settings_group === AppSettingsGroupEnum::notifications()->value) {
+            $title = translate('Notifications settings');
+        }
+
+        return view('frontend.dashboard.settings.app-settings', compact('settings_group', 'title'));
     }
 
     public function design_settings_store(Request $request)

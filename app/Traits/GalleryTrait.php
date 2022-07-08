@@ -27,10 +27,13 @@ trait GalleryTrait
     {
         // When model relations data is retrieved, do:
         static::relationsRetrieved(function ($model) {
-            $model->getThumbnailAttribute();
-            $model->getCoverAttribute();
-            $model->getGalleryAttribute();
-            $model->getMetaImgAttribute();
+            if ($model->relationLoaded('uploads')) {
+                // Append predefined images properties only if uploads relationship is loaded.
+                $model->getThumbnailAttribute();
+                $model->getCoverAttribute();
+                $model->getGalleryAttribute();
+                $model->getMetaImgAttribute();
+            }
         });
     }
 
@@ -45,46 +48,6 @@ trait GalleryTrait
         $this->append(['thumbnail', 'cover', 'gallery', 'meta_img']);
         $this->fillable(array_unique(array_merge($this->fillable, ['thumbnail', 'cover', 'gallery', 'meta_img'])));
     }
-
-    /**
-     * Converts gallery properties from Upload model(s) to Upload ID(s)
-     *
-     * @return void
-     */
-    public function convertGalleryModelsToIDs()
-    {
-        $this->thumbnail = ($this->thumbnail instanceof Upload) ? ($this->thumbnail->id ?? null) : $this->thumbnail;
-        $this->cover = ($this->cover instanceof Upload) ? ($this->cover->id ?? null) : $this->cover;
-        $this->meta_img = ($this->meta_img instanceof Upload) ? ($this->meta_img->id ?? null) : $this->meta_img;
-
-        $gallery_ids = [];
-        if (($this->gallery instanceof Collection && $this->gallery->isNotEmpty()) || (is_array($this->gallery) && ! empty($this->gallery))) {
-            foreach ($this->gallery as $img) {
-                $gallery_ids[] = ($img instanceof Upload) ? ($img->id ?? null) : $img;
-            }
-        }
-        $this->gallery = implode(',', array_unique($gallery_ids));
-    }
-
-    /**
-     * Converts gallery properties from Upload ID(s) to Upload model(s)
-     *
-     * @return void
-     */
-//    public function convertGalleryIDsToModels() {
-//        $this->thumbnail = (is_int($this->thumbnail)) ? ($this->thumbnail->id ?? null) : $this->thumbnail;
-//        $this->cover = (is_int($this->cover)) ? ($this->cover->id ?? null) : $this->cover;
-//        $this->meta_img = (is_int($this->meta_img)) ? ($this->meta_img->id ?? null) : $this->meta_img;
-//
-//        $gallery_ids = [];
-//        if(($this->gallery instanceof Collection && $this->gallery->isNotEmpty()) || (is_array($this->gallery) && !empty($this->gallery))) {
-//            foreach($this->gallery as $img) {
-//                $gallery_ids[] = ($img instanceof Upload) ? ($img->id ?? null) : $img;
-//            }
-//        }
-//
-//        $this->gallery = implode(',', array_unique($gallery_ids));
-//    }
 
     /******* START THUMBNAIL *******/
     public function getThumbnailAttribute()
@@ -264,10 +227,53 @@ trait GalleryTrait
                 } catch (\Exception $e) {
                     continue;
                 }
-
+                
                 $this->uploads()->wherePivot('relation_type', $property)->sync($sync_array);
             }
         }
+
+        // $this->convertGalleryToUploads();
+    }
+
+    /**
+     * Converts gallery properties from Upload model(s) to Upload ID(s)
+     *
+     * @return void
+     */
+    public function convertGalleryModelsToIDs()
+    {
+        $this->thumbnail = ($this->thumbnail instanceof Upload) ? ($this->thumbnail->id ?? null) : $this->thumbnail;
+        $this->cover = ($this->cover instanceof Upload) ? ($this->cover->id ?? null) : $this->cover;
+        $this->meta_img = ($this->meta_img instanceof Upload) ? ($this->meta_img->id ?? null) : $this->meta_img;
+
+        $gallery_ids = [];
+        if (($this->gallery instanceof Collection && $this->gallery->isNotEmpty()) || (is_array($this->gallery) && ! empty($this->gallery))) {
+            foreach ($this->gallery as $img) {
+                $gallery_ids[] = ($img instanceof Upload) ? ($img->id ?? null) : $img;
+            }
+        }
+        $this->gallery = implode(',', array_unique($gallery_ids));
+    }
+
+    /**
+     * Converts gallery properties from ID(s) to Uploads
+     *
+     * @return void
+     */
+    public function convertGalleryToUploads()
+    {
+        // TODO: Improve this function to use just one query
+        $this->thumbnail = ($this->thumbnail instanceof Upload) ? $this->thumbnail : Upload::find($this->thumbnail ?? null);
+        $this->cover = ($this->cover instanceof Upload) ? $this->cover : Upload::find($this->cover ?? null);
+        $this->meta_img = ($this->meta_img instanceof Upload) ? $this->meta_img : Upload::find($this->meta_img ?? null);
+
+        $gallery_uploads = new \Illuminate\Database\Eloquent\Collection();
+        if (($this->gallery instanceof Collection && $this->gallery->isNotEmpty()) || (is_array($this->gallery) && ! empty($this->gallery))) {
+            foreach ($this->gallery as $img) {
+                $gallery_ids->push($img instanceof Upload ? $img : Upload::find($img ?? null));
+            }
+        }
+        $this->gallery = $gallery_uploads;
     }
 
     // Upload Groups Relations functions

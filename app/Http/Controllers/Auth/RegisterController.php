@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Facades\StripeService;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\OTPVerificationController;
 use App\Models\Customer;
 use App\Models\OtpConfiguration;
+use App\Models\Plan;
 use App\Models\TenantSetting;
 use App\Models\User;
 use Cookie;
@@ -35,6 +37,13 @@ class RegisterController extends Controller
      */
     public function user_registration(Request $request, $token = null)
     {
+        if($request->get('plan')) {
+            $request->session()->put('selected_plan', $request->get('plan'));
+            $selectedPlan = Plan::findOrFail($request->get('plan'));
+            $dynamicRedirectUrl = StripeService::createCheckoutLink($selectedPlan);
+            $request->session()->put('registration_redirect', $dynamicRedirectUrl);
+        }
+
         if (Auth::check()) {
             return redirect()->route('home');
         }
@@ -52,7 +61,7 @@ class RegisterController extends Controller
         }
 
         $ghost_user = User::find($id);
-        
+
         if(!empty($ghost_user) && !empty($hash) && $hash === sha1($ghost_user->id.'_'.$ghost_user->email)) {
             return view('auth.register', compact('ghost_user'));
         }

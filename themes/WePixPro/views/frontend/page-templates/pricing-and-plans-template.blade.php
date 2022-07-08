@@ -92,10 +92,20 @@ $models = \App\Models\Plan::published()->get();
                         @endauth
 
                         @guest
-                        <a href="{{ route('user.registration') }}"
-                            class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
-                            {{ translate('Try it free') }}
-                        </a>
+                        <div x-cloack x-show="pricing_mode === 'annual'">
+                            <a href="{{ route('user.registration', ['plan' => $model->id, 'interval' => 'annual']) }}"
+                                class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                                {{ translate('Try it free') }}
+                            </a>
+                        </div>
+
+                        <div x-cloak x-show="pricing_mode === 'month'">
+                            <a href="{{ route('user.registration', ['plan' => $model->id, 'interval' => 'month']) }}"
+                                class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                                {{ translate('Try it free') }}
+                            </a>
+                        </div>
+
                         @endguest
 
                         @else

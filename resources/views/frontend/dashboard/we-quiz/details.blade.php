@@ -61,7 +61,7 @@
                             </div>
                             <div
                                 class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
-                                <div class="px-6 py-5 text-sm font-medium text-center">
+                                <div class="hidden px-6 py-5 text-sm font-medium text-center">
                                     <span class="text-gray-900">
                                         {{-- {{ $quiz->public_view_count() }} --}}
                                         0
@@ -121,10 +121,17 @@
                                 <div class="p-6 relative">
                                     <h3 class="text-base font-medium text-gray-900 relative">
                                         {{ translate('Quiz Activity') }}
-                                    </h3>
-                                
 
-                                    {{-- <livewire:product-activity :product="$product" /> --}}
+                                        <span class="pull-right ml-6    inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                            <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
+                                              <circle cx="4" cy="4" r="3" />
+                                            </svg>
+                                            {{ translate('Coming Soon') }}
+                                          </span>
+                                    </h3>
+
+
+                                    {{-- <livewire:product-activity :product="$quiz->product" /> --}}
                                 </div>
                             </div>
                         </div>
@@ -139,7 +146,7 @@
                         <div class="rounded-lg bg-white overflow-hidden shadow">
                             <div class="flex flex-col p-6">
                                 <h2 class="text-base font-medium text-gray-900 pb-3 mb-5 border-b border-gray-200">
-                                    {{ translate('Recent results') }}
+                                    {{ translate('Quiz results') }}
                                 </h2>
                                 <div class="w-full">
                                     <ul role="list" class="divide-y divide-gray-200">
@@ -154,12 +161,12 @@
                                                         </div>
                                                         <div class="flex-1 min-w-0">
                                                             <p class="text-sm font-medium text-gray-900 truncate">{{ $result->user?->name.' '.$result->user?->surname }}</p>
-                                                            <p class="text-sm text-gray-500 truncate">{{ translate('submit the quiz results') }}</p>
+                                                            <p class="text-sm text-gray-500 truncate">{{ translate('Submited the quiz results') }}</p>
                                                         </div>
                                                         <div>
-                                                            <a href="#"
+                                                            <a href="{{ route('dashboard.we-quiz.result.details', ['id' => $result->id]) }}"
                                                                 class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
-                                                                {{ translate('View') }} 
+                                                                {{ translate('View') }}
                                                             </a>
                                                         </div>
                                                     </div>
@@ -176,7 +183,7 @@
                                     <div class="mt-6">
                                         <a href="{{ route('dashboard.we-quiz.results', $quiz->id) }}"
                                             class="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                            {{ translate('View all') }} 
+                                            {{ translate('View all') }}
                                         </a>
                                     </div>
                                 @endif

@@ -25,11 +25,11 @@ trait CategoryTrait
 
         // When model data is retrieved, populate model stock data!
         static::relationsRetrieved(function ($model):void {
-            if (! $model->relationLoaded('categories')) {
-                $model->load('categories');
-            }
+            if ($model->relationLoaded('categories')) {
+                // $model->load('categories');
 
-            $model->getPrimaryCategoryAttribute();
+                $model->getPrimaryCategoryAttribute();
+            }
         });
     }
 

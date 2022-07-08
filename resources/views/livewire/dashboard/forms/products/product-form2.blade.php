@@ -1358,6 +1358,12 @@
                     </div>
                     {{-- Bookable Service Meta --}}
 
+                    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
+                        open: false,
+                    }" :class="{'p-4': open}">
+                        <livewire:feed.elements.product-card :product="$product"></livewire:feed.elements.product-card>
+                    </div>
+
                     {{-- After purchase CTA Meta --}}
                     <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
                         open: false,
@@ -1749,7 +1755,7 @@
 
                             {{-- Meta Image --}}
                             <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
-                                <div class=s"flex flex-col " x-data=" {}">
+                                <div class="flex flex-col " x-data=" {}">
 
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         {{ translate('Meta image') }}

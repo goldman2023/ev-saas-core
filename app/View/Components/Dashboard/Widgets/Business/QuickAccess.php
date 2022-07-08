@@ -4,18 +4,16 @@ namespace App\View\Components\Dashboard\Widgets\Business;
 
 use Illuminate\View\Component;
 
-class QuickActions extends Component
+class QuickAccess extends Component
 {
-    public $type;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($type = 'default')
+    public function __construct()
     {
         //
-        $this->type = $type;
     }
 
     /**
@@ -25,6 +23,6 @@ class QuickActions extends Component
      */
     public function render()
     {
-        return view('components.dashboard.widgets.business.quick-actions');
+        return view('components.dashboard.widgets.business.quick-access');
     }
 }

@@ -203,7 +203,9 @@
                     </ul>
                 </div>
             </div>
+
         </div>
+
 
         <x-system.form-modal id="gated-content-cta-modal" title="{{ translate('Want to access the full course?') }}" class="sm:max-w-2xl">
             <div class="w-full flex flex-col">

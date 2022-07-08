@@ -3,11 +3,11 @@
   required: @js($required),
 }" class="w-full {{ $class }}">
   <input type="{{ $type }}" 
-          class="form-standard {{ $inputClass }} @error($field) is-invalid @enderror"
+          class="form-standard {{ $inputClass }} @error($x && !empty($errorField) ? $errorField : $field) is-invalid @enderror"
           placeholder="{{ $placeholder }}"
           @if($type === 'number')
-            @if(!empty($min) || $min === 0) min="{{ $min }}" @endif
-            @if(!empty($max) || $max === 0) max="{{ $max }}" @endif
+            @if(!empty($min) || $min == 0) min="{{ $min }}" @endif
+            @if(!empty($max) || $max == 0) max="{{ $max }}" @endif
             @if($step) step="{{ $step }}" @endif
           @endif
 
@@ -22,7 +22,7 @@
           @endif
   />
   {{ $slot }}
-  @if(!empty($field))
-    <x-system.invalid-msg field="{{ $field }}"></x-system.invalid-msg>
+  @if(!empty($field) || ($x && !empty($errorField)))
+    <x-system.invalid-msg field="{{ $x && !empty($errorField) ? $errorField : $field }}"></x-system.invalid-msg>
   @endif
 </div>

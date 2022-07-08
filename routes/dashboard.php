@@ -141,6 +141,8 @@ Route::middleware([
         Route::get('/staff-settings', [EVAccountController::class, 'staff_settings'])->name('settings.staff_settings');
         Route::get('/shop-settings', [EVAccountController::class, 'shop_settings'])->name('settings.shop_settings');
         Route::get('/app-settings', [EVAccountController::class, 'app_settings'])->name('settings.app_settings');
+        Route::get('/app-settings/{settings_group}', [EVAccountController::class, 'app_settings'])->name('settings.app.group');
+
         Route::get('/plans-management', [EVPlanController::class, 'my_plans_management'])->name('my.plans.management');
         Route::get('/plans-management/add-seats', [EVPlanController::class, 'add_seats'])->name('subscriptions.create');
 

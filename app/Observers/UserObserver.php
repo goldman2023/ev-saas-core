@@ -54,7 +54,7 @@ class UserObserver
         if(!$user->is_temp && get_tenant_setting('force_email_verification')) {
             $data= [];
 
-            $data['view'] = 'emails.users.email-verification'; 
+            $data['view'] = 'emails.users.email-verification';
             $data['subject'] = translate('Email Verification').' | '.get_tenant_setting('site_name');
             $data['preheader'] = translate('Please verify your email address');
             $data['content'] = translate('Please click the button below to verify your email address.');
@@ -95,7 +95,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
-       
+
     }
 
     /**
