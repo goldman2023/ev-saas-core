@@ -39,7 +39,7 @@
             left: 0,
             top: document.getElementById(value).offsetTop
         });
-    })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
+    })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
         @submit-form.window="
             onSave();
             $wire.saveBasicInformation();
@@ -78,7 +78,7 @@
                                 <span class="truncate">{{ translate('Language') }}</span>
                             </a>
                         @endif
-                        
+
 
                         <a href="#"
                             :class="{'text-primary': current === 'passwordSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'passwordSection'}"
@@ -88,7 +88,7 @@
                             @svg('heroicon-o-lock-closed', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
                             <span class="truncate">{{ translate('Password') }}</span>
                         </a>
-
+                        @if(get_tenant_setting('addresses_feature'))
                         <a href="#"
                             :class="{'text-primary': current === 'addressesSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'addressesSection'}"
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
@@ -97,6 +97,7 @@
                             @svg('heroicon-o-location-marker', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
                             <span class="truncate">{{ translate('Addresses') }}</span>
                         </a>
+                        @endif
 
                         {{-- <a href="#"
                             :class="{'text-primary': current === 'socialAccountsSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'socialAccountsSection'}"
@@ -170,7 +171,7 @@
                                       <input id="entity_individual" name="entity_field" type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
                                       <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Individual') }} </label>
                                     </div>
-                              
+
                                     <div class="flex items-center">
                                       <input id="entity_company" name="entity_field" type="radio" x-model="entity"  value="company" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
                                       <label for="entity_company" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Company') }} </label>
@@ -263,7 +264,7 @@
                             </div>
                             <!-- END Phone -->
 
-                            @php 
+                            @php
                                 if($onboarding) {
                                     $user_meta_fields_in_use = collect(get_tenant_setting('user_meta_fields_in_use'))->where('onboarding', true);
                                 } else {
@@ -276,8 +277,8 @@
                                         @continue
                                     @endif
 
-                                    @if($key === 'work_experience' && $onboarding) 
-                                        @continue 
+                                    @if($key === 'work_experience' && $onboarding)
+                                        @continue
                                     @elseif($key === 'education' && $onboarding)
                                         @continue
                                     @elseif($key === 'social_profiles')
@@ -322,7 +323,7 @@
                                     {{ translate('Bio') }}
                                     <span class="text-danger relative top-[-2px]">*</span>
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <x-dashboard.form.froala field="meta.bio" id="user-bio-wysiwyg"></x-dashboard.form.froala>
                                     <x-system.invalid-msg class="w-full" field="meta.bio"></x-system.invalid-msg>
@@ -428,7 +429,7 @@
                             this.newPassword = '';
                             this.newPassword_confirmation = '';
                         }
-                    }" @init-form.window="reset()" 
+                    }" @init-form.window="reset()"
                         @user-logout-after-password-change.window="setTimeout(() => window.location.href = '{{ route('user.logout') }}', 2000)">
                         <div>
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Change password') }}
@@ -526,7 +527,7 @@
                     </livewire:dashboard.forms.addresses.addresses-form>
                     {{-- @endif --}}
                     <!-- END Addresses -->
-                    
+
 
                     @if(!$onboarding)
                     <!-- Social accounts -->
