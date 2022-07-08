@@ -272,7 +272,7 @@ class RegisterForm extends Component
             return redirect()->route('onboarding.step1');
         }
 
-        if(get_tenant_setting('register_dynamic_redirect')) {
+        if (get_tenant_setting('register_dynamic_redirect')) {
             if (session()->get('registration_redirect')) {
                 return redirect(session()->get('registration_redirect'));
             }
