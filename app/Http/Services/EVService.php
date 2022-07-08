@@ -223,7 +223,7 @@ class EVService
                             },
                         ],
                     ],
-                    [
+                   /*  [
                         'label' => translate('Leads'),
                         'icon' => 'heroicon-o-calendar',
                         'route' => route('leads.index'),
@@ -237,7 +237,7 @@ class EVService
                                 return Lead::count();
                             },
                         ],
-                    ],
+                    ], */
 
 
                 ],

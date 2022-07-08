@@ -96,16 +96,24 @@ class FXService
         return (float) $price * (float) $this->currency->exchange_rate;
     }
 
-    public function formatPrice($price, $base_currency = null, $convert = true)
+    public function formatPrice($price, $decimals = null, $base_currency = null, $convert = true)
     {
         if ($convert) {
             $price = $this->convertPrice($price, $base_currency);
         }
 
+        /* Get Default Decimals number */
+        $displayedDecimals = get_setting('no_of_decimals');
+
+        /* Check if decimals are overided in a function call */
+        if($decimals) {
+            $displayedDecimals = $decimals;
+        }
+
         if (get_setting('decimal_separator') === 1) {
-            $formatted_price = number_format($price, get_setting('no_of_decimals'));
+            $formatted_price = number_format($price, $displayedDecimals);
         } else {
-            $formatted_price = number_format($price, get_setting('no_of_decimals'), ',', ' ');
+            $formatted_price = number_format($price, $displayedDecimals, ',', ' ');
         }
 
         if (get_setting('symbol_format') === 1) {
