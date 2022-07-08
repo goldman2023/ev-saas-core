@@ -1874,7 +1874,7 @@ class StripeService
                                         ['metadata' => $new_metadata->toArray()]
                                     );
 
-                                    if($stripe_subscription->status != 'trialing') {
+                                    // if($stripe_subscription->status != 'trialing') {
                                         $new_invoice = $this->createInvoice(order: $new_order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription, payment_failed: $stripe_invoice->paid);
 
                                         // Add latest Invoice ID on our end to Stripe subscription metadata
@@ -1884,7 +1884,7 @@ class StripeService
                                             $stripe_subscription->id,
                                             ['metadata' => $new_metadata->toArray()]
                                         );
-                                    }
+                                    // }
 
 
                                     // Check if subscription was upgraded/downgraded
@@ -1932,7 +1932,9 @@ class StripeService
 
                     }
 
+                    
                     $subscription->save();
+                    
                 }
             }
 

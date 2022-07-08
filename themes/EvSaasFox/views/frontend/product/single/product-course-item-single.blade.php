@@ -310,14 +310,14 @@
                 <div class="pb-3 w-full">
                     <ul class="w-full flex-flex-col space-y-3">
                         <li>
-                            <a target="_blank" href="{{ route('product.edit.course', [$product->id]) }}">
-                                {{ translate('Manage course material') }}
+                            <a target="_blank" href="{{ route('product.details', [$product->id]) }}">
+                                {{ translate('Manage Course') }}
                             </a>
                         </li>
 
                         <li>
-                            <a target="_blank" href="{{ route('product.details', [$product->id]) }}">
-                                {{ translate('Manage students') }}
+                            <a target="_blank" href="{{ route('product.edit.course', [$product->id]) }}">
+                                {{ translate('Manage course material') }}
                             </a>
                         </li>
 

@@ -200,6 +200,7 @@
               @foreach($order->user_subscriptions as $subscription)
                 @php
                   $tax_sum = 0;
+                  $items_sum = 0;
                 @endphp
                 <div class="w-full flex flex-col">
                     <div class="w-full flex justify-between mb-2">
@@ -215,6 +216,7 @@
                         </div>
 
                         @php
+                          $items_sum += $order_item->total_price * $order_item->quantity;
                           if($subscription->getTaxAmount(false) > 0) {
                             $tax_sum += $subscription->getTaxAmount(format: false);
                           }
@@ -240,11 +242,15 @@
 
                   <div class="w-full flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
                     <span class="text-14 text-gray-600 font-normal">
-                        {{ translate('Next payment due on') }} <strong>{{ \Carbon::createFromTimestamp($order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices->first()?->end_date)->format('d M, Y') }}</strong>
+                        {{ translate('Next payment due on') }} 
+                        <strong>
+                          {{-- @dd($order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices) --}}
+                          {{ \Carbon::createFromTimestamp($order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices->first()?->end_date)->format('d M, Y') }}
+                        </strong>
                     </span>
 
                     <span class="text-14 text-gray-600 font-normal">
-                        {{ translate('Total') }}: <strong>{{ \FX::formatPrice($order->total_price) }} / {{ $order->invoicing_period }}</strong>
+                        {{ translate('Total') }}: <strong>{{ \FX::formatPrice($tax_sum + $items_sum) }} / {{ $order->invoicing_period }}</strong>
                     </span>
                   </div>
               </div>
