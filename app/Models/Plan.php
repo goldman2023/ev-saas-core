@@ -34,7 +34,6 @@ class Plan extends WeBaseModel
     use UploadTrait;
     use GalleryTrait;
     use TranslationTrait;
-    use VariationTrait;
     use CoreMetaTrait;
     use HasStatus;
 
