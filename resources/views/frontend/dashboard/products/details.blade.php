@@ -111,11 +111,12 @@
                                 class="relative min-h-[200px] rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
                                 <div class="grid grid-cols-6">
                                     <div>
-                                    <span class="rounded-lg inline-flex p-3 bg-teal-50 text-teal-700 ring-4 ring-white">
-                                        <!-- Heroicon name: outline/clock -->
+                                        <span
+                                            class="rounded-lg inline-flex p-3 bg-teal-50 text-teal-700 ring-4 ring-white">
+                                            <!-- Heroicon name: outline/clock -->
 
-                                        @svg('heroicon-o-eye', ['class' => 'h-6 w-6'])
-                                    </span>
+                                            @svg('heroicon-o-eye', ['class' => 'h-6 w-6'])
+                                        </span>
                                     </div>
 
                                     <div class="col-span-4">
@@ -129,7 +130,8 @@
                                             </a>
                                         </h3>
                                         <p class="text-sm text-gray-500">
-                                            {{ translate('View your product as a customer and share it with the world!') }}
+                                            {{ translate('View your product as a customer and share it with the world!')
+                                            }}
                                         </p>
                                     </div>
 
@@ -151,7 +153,7 @@
                                 </span>
                             </div>
                             <div
-                                class="grid grid-cols-2 gap-6 rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
+                                class="grid grid-cols-2 gap-6  rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6">
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.single', $product->slug) }}" target="_blank">
                                     @svg('heroicon-o-eye', ['style' => 'height: 16px;', 'class' => 'mr-2'])
@@ -162,9 +164,26 @@
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.course', $product->id) }}">
                                     @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    {{ translate('Course Details') }}
+                                </a>
+                                @endif
+
+                                @if($product->type === \App\Enums\ProductTypeEnum::course()->value)
+                                <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+                                    href="{{ route('product.edit.course', $product->id) }}">
+                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Course Material') }}
                                 </a>
                                 @endif
+
+
+
+
+                                <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+                                    href="{{ route('product.edit', $product->id) }}">
+                                    {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;',
+                                    'class' => 'ml-2'])
+                                </a>
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.stocks', $product->id) }}">
@@ -183,11 +202,7 @@
                                 </a>
                                 @endif
 
-                                <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                                    href="{{ route('product.edit', $product->id) }}">
-                                    {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;',
-                                    'class' => 'ml-2'])
-                                </a>
+
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.activity', $product->id) }}">
@@ -214,8 +229,8 @@
 
                 <!-- Right column -->
                 <div class="grid grid-cols-1 gap-4">
-                     <!-- Recent Hires -->
-                     <section aria-labelledby="recent-hires-title">
+                    <!-- Recent Hires -->
+                    <section aria-labelledby="recent-hires-title">
 
                         <div class="rounded-lg bg-white overflow-hidden shadow">
                             <div class="p-6 relative">
