@@ -4,6 +4,7 @@
 
 <x-livewire-tables::table.cell class="align-middle text-center">
     {{ !empty($license?->data['license_image_limit'] ?? null) ? $license?->data['license_image_limit'] : '-' }}
+    {{ translate(' images') }}
 </x-livewire-tables::table.cell>
 
 @if(auth()->user()->isAdmin())
