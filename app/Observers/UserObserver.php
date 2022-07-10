@@ -20,6 +20,8 @@ use App\Notifications\Admin\GeneralTransactionalNotification;
 
 class UserObserver
 {
+    public $afterCommit = true;
+
     /**
      * Handle the User "created" event.
      *
@@ -45,8 +47,6 @@ class UserObserver
 
         try {
             $user->notify(new UserWelcomeNotification());
-            // Mail::to($user->email)
-            //     ->send(new WelcomeEmail($user));
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
