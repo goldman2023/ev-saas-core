@@ -58,7 +58,11 @@ class WeEdit extends Component
 
     public function render()
     {
-        $this->selected_page_slug = $_GET['selected_page_slug'];
+        if(isset($_GET['selected_page_slug'])) {
+            $this->selected_page_slug = $_GET['selected_page_slug'];
+        } else {
+            $this->selected_page_slug = 'home';
+        }
 
         return view('livewire.we-edit.we-edit');
     }
