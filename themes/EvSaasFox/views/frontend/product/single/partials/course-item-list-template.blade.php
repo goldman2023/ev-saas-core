@@ -1,11 +1,15 @@
-<li class="w-full flex flex-col">
+<li class="w-full flex p-3 flex-col @if($course_item->id == $current_course_item->id)
+    active bg-gray-200 rounded p-3
+    @endif">
     <div class="flex items-center justify-between">
         {{-- TODO: Link to chapter if it's free, link to chapter if it's bought, display gated content modal or redirect
         to checkout link in order to buy course --}}
         @if($course_item->children?->isNotEmpty() ?? null)
         <div class="inline-flex items-center text-14">
             {{ $course_item->name }}
+
         </div>
+
         @else
         @if($course_item->free || (\Auth::check() && (auth()->user()?->bought($product) ||
         auth()->user()?->manages($product))))
@@ -32,14 +36,14 @@
                             {{ translate('View Results') }} ({{ $course_item->subject->results()->count() }})
                         </a>
                     @else
-                        <a class="text-gray-400 text-xs" target="_blank"
+                        {{-- <a class="text-gray-400 text-xs" target="_blank"
                             href="{{ route('course.item.single', [$product->slug, $course_item->slug]) }}">
                             {{ translate('Preview') }}
-                        </a>
+                        </a> --}}
                     @endif
                 @endif
-
             @endauth
+
 
             @if($course_item->free)
             <span class="badge-success ml-2">{{ translate('Free') }}</span>

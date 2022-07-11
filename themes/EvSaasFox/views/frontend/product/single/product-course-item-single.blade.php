@@ -1,4 +1,4 @@
-@extends('frontend.layouts.feed')
+@extends('frontend.layouts.no-sidebar')
 
 @section('meta')
 <x-default.products.single.head-meta-tags :product="$product"></x-default.products.single.head-meta-tags>
@@ -103,7 +103,7 @@
             </div>
 
             {{-- Product Info --}}
-            <div class="w-full flex flex-col items-center px-7 pb-8">
+            <div class="w-full flex flex-col items-center px-6 pb-8">
 
                 @include('frontend.product.single.partials.course-purchase-cta', [
                 'product' => $product,
@@ -281,6 +281,8 @@
 
     </div>
 
+
+
     <div class="col-span-12 md:col-span-4">
         {{-- Chapters --}}
         <div class="w-full bg-white rounded-xl shadow p-5 max-h-[500px] overflow-y-auto mb-6">
@@ -292,12 +294,24 @@
                 <ul class="w-full flex-flex-col space-y-3">
                     @if($course_items->isNotEmpty())
                     @foreach($course_items as $course_item)
-                    @include('frontend.product.single.partials.course-item-list-template', ['product' => $product,
-                    'course_item' => $course_item])
+                    @include('frontend.product.single.partials.course-item-list-template',
+                    [
+                        'product' => $product,
+                        'course_item' => $course_item,
+                        'current_course_item' => $active_course_item,
+                    ])
                     @endforeach
                     @endif
                 </ul>
             </div>
+        </div>
+        <div class="col-span-12 md:col-span-4 mb-6">
+            <a href="{{ route(\App\Models\CourseItem::getRouteName(), [
+                'product_slug' => $product->slug,
+                'slug' => $course_items->first()?->slug ?? ' ',
+            ]) }}" class="w-full btn-success">
+                {{ translate('Next') }}
+            </a>
         </div>
         @auth
             @if(auth()->user()->manages($product) ?? false)

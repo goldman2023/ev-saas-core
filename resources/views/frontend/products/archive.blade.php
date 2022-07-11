@@ -1,92 +1,54 @@
-@extends('frontend.layouts.' . $globalLayout)
-
-@if (!empty($selected_category))
-@php
-$meta_title = $selected_category->meta_title;
-$meta_description = $selected_category->meta_description;
-@endphp
-@else
-@php
-$meta_title = get_setting('website_name') . translate(' Products');
-$meta_description = get_setting('site_motto');
-@endphp
-@endif
-
-@section('meta_description'){{ $meta_description }}@stop
-
-@section('meta')
-<meta name="robots" content="index, follow" />
-<!-- Schema.org markup for Google+ -->
-<meta itemprop="name" content="{{ $meta_title }}">
-<meta itemprop="description" content="{{ $meta_description }}">
-
-<!-- Twitter Card data -->
-<meta name="twitter:title" content="{{ $meta_title }}">
-<meta name="twitter:description" content="{{ $meta_description }}">
-
-<!-- Open Graph data -->
-<meta property="og:title" content="{{ $meta_title }}" />
-<meta property="og:description" content="{{ $meta_description }}" />
-@endsection
+@extends('frontend.layouts.app')
 
 @section('content')
-<div class="bg-dark mb-3" style="">
-    <div class="container">
-        <div class="row py-3">
-            <div class="col-sm-8">
-                {{ Breadcrumbs::render('category', $selected_category) }}
-            </div>
-            <div class="col-sm-4">
+<div class="min-h-full bg-gray-200">
 
+    <!--
+      When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars
+
+      Menu open: "fixed inset-0 z-40 overflow-y-auto", Menu closed: ""
+    -->
+    @isset($selected_category)
+        <div>
+            {{ Breadcrumbs::render('category', $selected_category) }}
+        </div>
+    @endisset
+    <div class="py-10">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8">
+            <div class="hidden lg:block lg:col-span-2 xl:col-span-2">
+                @foreach(Categories::getAll() as $category)
+                <div class="-m-1 flex flex-wrap items-center">
+                    <a
+                    href="{{ route('category.index', [$category->slug]) }}"
+                        class="cursor-pointer whitespace-nowrap min-w-[50px] nowrap m-1 inline-flex rounded-full border border-gray-200 items-center py-1.5 pl-3 pr-2 text-sm font-medium "
+                        :class="{'bg-info text-white':selected_categories.indexOf({{ $category->id }}) !== -1, 'bg-white text-gray-900':selected_categories.indexOf({{ $category->id }}) === -1}">
+                        <span>{{ $category->name }}</span>
+                        <button type="button"
+                            class="flex-shrink-0 ml-1 h-4 w-4 p-1 rounded-full inline-flex text-gray-400 hover:bg-gray-200 hover:text-gray-500">
+                            <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                                <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+                            </svg>
+                        </button>
+                    </a>
+
+                </div>
+
+                @endforeach
             </div>
+            <main class="lg:col-span-9 xl:col-span-10">
+                <div class="mt-4">
+                    <div class="mb-5">
+                        <livewire:feed.elements.shop.shop-archive-filters></livewire:feed.elements.shop.shop-archive-filters>
+                    </div>
+
+                    <livewire:feed.archive :model_class="\App\Models\Product::class" :show-filters="true"></livewire:feed.archive>
+                </div>
+            </main>
+            <aside class="xl:block col-span-4 xl:col-span-3">
+
+            </aside>
         </div>
     </div>
 </div>
 
-<section class="mb-4 pt-3">
-    <div class="container sm-px-0">
-
-        <form class="" id="search-form" action="" method="GET">
-            {{-- <input type="hidden" name="content" value="{{$content}}" />--}}
-            <div class="row">
-                <div class="col-xl-3">
-                    <div class="aiz-filter-sidebar collapse-sidebar-wrap sidebar-xl sidebar-right z-1035">
-                        <div class="overlay overlay-fixed dark c-pointer" data-toggle="class-toggle"
-                            data-target=".aiz-filter-sidebar" data-same=".filter-sidebar-thumb"></div>
-                        <div class="collapse-sidebar c-scrollbar-light text-left">
-                            <div class="d-flex d-xl-none justify-content-between align-items-center pl-3 border-bottom">
-                                <h3 class="h6 mb-0 fw-600">{{ translate('Filters') }}</h3>
-                                <button type="button" class="btn btn-sm p-2 filter-sidebar-thumb"
-                                    data-toggle="class-toggle" data-target=".aiz-filter-sidebar">
-                                    <i class="las la-times la-2x"></i>
-                                </button>
-                            </div>
-                            <div class="d-none d-sm-block">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-9">
-
-                    @if($products->isNotEmpty())
-                    <div class="row gutters-5 mt-2">
-                        @foreach ($products as $key => $product)
-                        <div class="col-sm-4 col-12 mb-3">
-                            <x-default.products.cards.product-card :product="$product" class="product-card">
-                            </x-default.products.cards.product-card>
-                        </div>
-                        @endforeach
-                    </div>
-                    @endif
-
-                </div>
-
-
-                <div class="col-xl-3">
-                </div>
-            </div>
-        </form>
-    </div>
-</section>
 @endsection

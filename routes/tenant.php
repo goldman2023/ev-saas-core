@@ -181,6 +181,7 @@ Route::middleware([
     // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
     Route::get('/products/category/{slug}', [EVProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
+    Route::get('/products', [EVProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
     Route::get('/products/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
 
     // Users/Shops single page
