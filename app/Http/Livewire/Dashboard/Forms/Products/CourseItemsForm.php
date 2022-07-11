@@ -158,7 +158,7 @@ class CourseItemsForm extends Component
     public function resetCurrentCourseItem() {
         $this->current_item = new CourseItem();
         $this->current_item->product_id = $this->product->id;
-        $this->current_item->type = 'wysiwyg';
+        $this->current_item->type = 'video';
         $this->current_item->free = false;
         $this->current_item->order = 0;
 
