@@ -13,14 +13,12 @@ use Session;
 
 class EVPreviewController extends Controller
 {
-    public function show(Request $request)
+    public function show(Request $request, $slug)
     {
-        $preview = session('page_preview');
+            $preview = Page::where('slug', $slug)->first()?->page_previews()->first()->toArray();
+        $sections = $preview['content'];
 
-        if (empty($preview)) {
-            $preview = Page::where('slug', 'home')->first()?->page_previews()->first()->toArray();
-        }
 
-        return view('we-edit.preview-show', compact('preview'));
+        return view('we-edit.preview-show', compact('preview', 'sections'));
     }
 }
