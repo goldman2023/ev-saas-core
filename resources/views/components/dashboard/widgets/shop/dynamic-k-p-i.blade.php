@@ -44,17 +44,10 @@
                 </p>
             </dt>
             <dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
-                <p class="text-2xl font-semibold text-gray-900">{{ auth()->user()->public_view_count() }}</p>
+                {{-- TODO: Make this dynamic --}}
+                <p class="text-2xl font-semibold text-gray-900">25</p>
                 <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                    <!-- Heroicon name: solid/arrow-sm-up -->
-                    <svg class="self-center flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                            d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    <span class="sr-only"> Increased by </span>
-                    {{ App\Models\Order::ByDays(1)->count() }} {{ translate('New') }}
+
                 </p>
                 <div class="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6">
                     <div class="text-sm">

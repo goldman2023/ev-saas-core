@@ -263,10 +263,6 @@ class Product extends WeBaseModel
         return $show;
     }
 
-    function owners() {
-        return $this->hasMany(Ownership::class, 'owner_id')->where('subject_type', $this::class)->with(['subject', 'owner']);
-    }
-
     function public_view_count($period = 'all')
     {
 

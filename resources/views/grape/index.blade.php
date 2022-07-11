@@ -15,7 +15,8 @@
 <link href="path/to/grapesjs-preset-webpage.min.css" rel="stylesheet" /> --}}
 
 <script src="//unpkg.com/grapesjs"></script>
-<script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage@0.1.11/dist/grapesjs-preset-webpage.min.js"></script>
+<script src="https://unpkg.com/grapesjs-component-code-editor"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage@0.1.11/dist/grapesjs-preset-webpage.min.js"></script> --}}
 <script src="/bp-assets/grapesjs-custom-code.min.js">
 </script>
 
@@ -43,6 +44,8 @@
 </form>
 
 <script>
+    const escapeName = (name) => `${name}`.trim().replace(/([^a-z0-9\w-:/]+)/gi, '-');
+
     document.addEventListener('alpine:init', () => {
       Alpine.data('grapeEditor', () => ({
           editor: null,
@@ -52,16 +55,17 @@
           initGrapeEditor() {
             this.$nextTick(() => {
               this.editor = grapesjs.init({
-                  canvas: {
+                fromElement: true,
+                storageManager: false,
+                canvas: {
                   scripts: [
                   'https://cdn.tailwindcss.com/3.0.24?plugins=forms@0.5.0,typography@0.5.2,aspect-ratio@0.4.0,line-clamp@0.3.1'
                   ],
                 },
                 container: '#gjs',
-                fromElement: 1,
-                height: '100%',
-                storageManager: { type: 0 },
-                plugins: ['gjs-blocks-basic', 'grapesjs-custom-code'],
+                height: '90%',
+                selectorManager: { escapeName },
+                plugins: ['gjs-blocks-basic', 'grapesjs-custom-code', 'grapesjs-component-code-editor', 'grapesjs-parser-postcss'],
                 pluginsOpts: {
                     'grapesjs-custom-code': {
 
@@ -69,6 +73,21 @@
                 }
               });
 
+              const pn = this.editor.Panels;
+const panelViews = pn.addPanel({
+  id: "views"
+});
+panelViews.get("buttons").add([
+  {
+    attributes: {
+      title: "Open Code"
+    },
+    className: "fa fa-file-code-o",
+    command: "open-code",
+    togglable: false, //do not close when button is clicked again
+    id: "open-code"
+  }
+]);
 
               /* Custom Blocks refference: https://jsfiddle.net/fcsa6z75/7/  */
               // Add blocks
@@ -82,6 +101,8 @@ this.editor.BlockManager.add('collection-2', {
 });
               // Add the custom component
 this.editor.DomComponents.addType('collection', {
+  content: { type: 'collection', category: 'SET-1' },
+    label: 'Recently viewed',
 	model: {
   	defaults: {
     	category: 'basic',
@@ -141,6 +162,7 @@ this.editor.DomComponents.addType('collection', {
 
               for (i=0;i<components.length;i++) {
                 if(components[i].id && components[i].data){
+                    console.log(components[i].data);
                   this.editor.BlockManager.add(components[i].id, components[i].data)
                 }
               }

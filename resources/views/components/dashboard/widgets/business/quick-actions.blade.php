@@ -30,7 +30,7 @@
         @endif
 
         <x-dashboard.widgets.business.quick-action
-        route="orders.index"
+        route="products.index"
         title="{{ translate('Manage products') }}"
         icon="shopping-cart"
         description="{{ translate('Create, analyse and update your products') }}"
