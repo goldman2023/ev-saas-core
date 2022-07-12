@@ -1,6 +1,12 @@
-<li class="w-full flex p-3 flex-col @if($course_item->id == $current_course_item->id)
+
+{{-- TODO: Add active state.  --}}
+
+{{-- WIP: Need to check if current_course item is set
+    @if($course_item->id == $current_course_item->id)
     active bg-gray-200 rounded p-3
-    @endif">
+    @endif
+--}}
+<li class="w-full flex flex-col ">
     <div class="flex items-center justify-between">
         {{-- TODO: Link to chapter if it's free, link to chapter if it's bought, display gated content modal or redirect
         to checkout link in order to buy course --}}

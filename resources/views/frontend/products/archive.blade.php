@@ -10,7 +10,7 @@
     -->
     @isset($selected_category)
         <div>
-            {{ Breadcrumbs::render('category', $selected_category) }}
+            {{-- {{ Breadcrumbs::render('category', $selected_category) }} --}}
         </div>
     @endisset
     <div class="py-10">
