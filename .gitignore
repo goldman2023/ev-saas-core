@@ -2,6 +2,8 @@
 .env.*.php
 .env.dbdump
 .env.php
+synco
+*.swp
 /node_modules
 /public/hot
 /public/storage
