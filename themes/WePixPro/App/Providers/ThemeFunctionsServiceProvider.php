@@ -193,6 +193,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 pix_pro_create_license($user_subscriptions, $stripe_invoice);
             }, 20, 2);
 
+            // Create PixPro License(s) when subscription is created through Stripe
+            add_action('stripe.webhook.subscriptions.created_from_stripe', function($user_subscriptions, $stripe_invoice) {
+                pix_pro_create_license($user_subscriptions, $stripe_invoice);
+            }, 20, 2);
+
             // Update PixPro License
             add_action('stripe.webhook.subscriptions.updated', function ($user_subscriptions) {
                 pix_pro_update_license($user_subscriptions);

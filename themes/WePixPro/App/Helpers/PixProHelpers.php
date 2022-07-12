@@ -172,7 +172,7 @@ if (!function_exists('pix_pro_create_license')) {
                     []
                   );
 
-                $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
+                $is_trial = $stripe_subscription->status === 'trialing';
 
                 $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
