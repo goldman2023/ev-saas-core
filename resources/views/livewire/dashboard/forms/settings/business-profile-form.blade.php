@@ -9,7 +9,10 @@
 
 <div class="w-full" x-data="{
         current: 'basicInformation',
-        content: @entangle('settings.content').defer,
+        thumbnail: @js(['id' => $business->thumbnail->id ?? null, 'file_name' => $business->thumbnail->file_name ?? '']),
+        cover: @js(['id' => $business->cover->id ?? null, 'file_name' => $business->cover->file_name ?? '']),
+        meta_img: @js(['id' => $business->meta_img->id ?? null, 'file_name' => $business->meta_img->file_name ?? '']),
+        content: @entangle('business.content').defer,
         settings: @js($settings),
     }" x-init="$watch('current', function(value) {
         window.scroll({
@@ -77,3 +80,257 @@
                     </nav>
 
                 </div>
+
+                <div class="col-span-12 lg:col-span-9">
+                    {{-- Business Media --}}
+                    <div class="p-0 border bg-white border-gray-200 rounded-lg shadow">
+                        <div class="w-full border-b border-gray-200">
+                            <x-dashboard.form.image-selector field="cover" template="cover" id="my-business-cover-image"
+                                error-field="business.cover" :selected-image="$business->cover">
+                            </x-dashboard.form.image-selector>
+                        </div>
+
+                        <div class="w-full pt-3 pb-5 pr-4 pl-[140px] relative">
+                            <div class="bg-white rounded-lg absolute left-6 bottom-6 border border-gray-200">
+                                <x-dashboard.form.image-selector field="thumbnail" template="avatar"
+                                    id="my-business-thumbnail-image" error-field="business.thumbnail"
+                                    :selected-image="$business->thumbnail"></x-dashboard.form.image-selector>
+                            </div>
+
+                            <div class="w-full flex flex-col">
+                                <strong class="block text-gray-700">{{ $business->name }}</strong>
+                                <span class="text-gray-500 truncate max-w-lg">{{ $business->excerpt }}</span>
+                            </div>
+                        </div>
+
+                        {{-- TODO: Save media change! --}}
+                    </div>
+                    {{-- END Business Media --}}
+
+                    {{-- Basic Information --}}
+                    <div id="basicInformation" class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Basic Information') }}
+                            </h3>
+                            {{-- <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed
+                                publicly so be careful what you share.</p> --}}
+                        </div>
+
+                        <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                            <!-- Title -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Title') }}
+                                    <span class="text-danger relative top-[-2px]">*</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('business.name') is-invalid @enderror"
+                                        placeholder="{{ translate('Business name') }}" wire:model.defer="business.name" />
+
+                                    <x-system.invalid-msg field="business.name"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Title -->
+
+                            <!-- Tagline -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Tagline') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text"
+                                        class="form-standard @error('settings.tagline') is-invalid @enderror"
+                                        placeholder="{{ translate('Business tagline/motto/catchphrase') }}"
+                                        wire:model.defer="settings.tagline" />
+
+                                    <x-system.invalid-msg field="settings.tagline"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Tagline -->
+
+                            <!-- Email -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Email') }}
+                                    <span class="text-danger relative top-[-2px]">*</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="email"
+                                        class="form-standard @error('settings.email') is-invalid @enderror"
+                                        placeholder="{{ translate('Business email') }}"
+                                        wire:model.defer="settings.email" />
+
+                                    <x-system.invalid-msg field="settings.email"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Email -->
+
+                            {{-- Phones --}}
+                            <div
+                                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Phones') }}
+                                    <span class="text-danger relative top-[-2px]">*</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.text-repeater field="settings.phones" limit="3"
+                                        placeholder="{{ translate('Phone') }}"></x-dashboard.form.text-repeater>
+                                    {{-- <x-system.invalid-msg field="settings.phones"></x-system.invalid-msg> --}}
+                                </div>
+                            </div>
+                            {{-- END Phones --}}
+
+                            {{-- Websites --}}
+                            <div
+                                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Websites') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.text-repeater field="settings.websites" limit="3"
+                                        placeholder="{{ translate('Website') }}"></x-dashboard.form.text-repeater>
+                                    {{-- <x-system.invalid-msg field="settings.websites"></x-system.invalid-msg> --}}
+                                </div>
+                            </div>
+                            {{-- END Websites --}}
+
+                            <!-- Excerpt -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Excerpt') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <textarea type="text"
+                                        class="form-standard h-[80px] @error('business.excerpt') is-invalid @enderror"
+                                        placeholder="{{ translate('Write a short promo description for your business') }}"
+                                        wire:model.defer="business.excerpt">
+                                </textarea>
+
+                                    <x-system.invalid-msg class="w-full" field="business.excerpt"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Excerpt -->
+
+                            <!-- Content -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}" wire:ignore>
+
+                                <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Content') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                    <x-dashboard.form.froala field="content" id="business-content-wysiwyg">
+                                    </x-dashboard.form.froala>
+
+                                    <x-system.invalid-msg class="w-full" field="business.content"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Content -->
+
+                            {{-- Save basic information --}}
+                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                    $wire.set('business.thumbnail', thumbnail.id, true);
+                                    $wire.set('business.cover', cover.id, true);
+                                    $wire.set('settings.websites', settings.websites, true);
+                                    $wire.set('settings.phones', settings.phones, true);
+                                    $wire.set('business.content', content, true);
+                                " wire:click="saveBasicInformation()">
+                                    {{ translate('Save') }}
+                                </button>
+                            </div>
+                            {{-- END Save basic information --}}
+
+                        </div>
+                    </div>
+                    {{-- END Basic Information --}}
+
+                    {{-- Company Info Card --}}
+                    <div id="companyInfoSection" class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Company information')
+                                }}</h3>
+                            {{-- <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed
+                                publicly so be careful what you share.</p> --}}
+                        </div>
+
+                        <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                            <!-- Tax Number -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Company TAX number') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text"
+                                        class="form-standard @error('settings.tax_number') is-invalid @enderror"
+                                        placeholder="{{ translate('Company tax number') }}"
+                                        wire:model.defer="settings.tax_number" />
+
+                                    <x-system.invalid-msg field="settings.tax_number"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Tax Number -->
+
+                            <!-- Registration Number -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Company registration number') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text"
+                                        class="form-standard @error('settings.registration_number') is-invalid @enderror"
+                                        placeholder="{{ translate('Company registration number') }}"
+                                        wire:model.defer="settings.registration_number" />
+
+                                    <x-system.invalid-msg field="settings.registration_number"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Registration Number -->
+
+
+                            {{-- Save basic information --}}
+                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click=""
+                                    wire:click="saveCompanyInfo()">
+                                    {{ translate('Save') }}
+                                </button>
+                            </div>
+                            {{-- END Save basic information --}}
+
+                        </div>
+                    </div>
+                    {{-- END Company Info Card --}}
+
+                    {{-- Contact Details --}}
+                    @include('frontend.dashboard.settings.partials.shop-settings.contact-details')
+                    {{-- END Contact Details --}}
+                    <!-- Addresses -->
+                    {{-- <livewire:dashboard.forms.addresses.addresses-form component-id="addressesSection"
+                        :addresses="$business->addresses" type="business_address">
+                    </livewire:dashboard.forms.addresses.addresses-form> --}}
+                    <!-- END Addresses -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
