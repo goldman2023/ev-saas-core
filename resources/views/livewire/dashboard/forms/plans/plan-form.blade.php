@@ -361,7 +361,8 @@
                                 $wire.set('custom_attributes', this.attributes, true);
                                 @do_action('view.plan-form.wire_set')
                             "
-                            wire:click="savePlan()">
+                            wire:click="savePlan()"
+                            >
                         {{ translate('Save') }}
                         </button>
                     </div>

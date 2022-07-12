@@ -10,6 +10,7 @@
         description="{{ translate('Stay on top of all new orders') }}"
         > </x-dashboard.widgets.business.quick-action>
 
+        @if(auth()->user()->isAdmin())
 
         <x-dashboard.widgets.business.quick-action
         route="orders.index"
@@ -17,16 +18,19 @@
         icon="arrow-circle-right"
         description="{{ translate('Create and send invoice in 1 minute.') }}"
         > </x-dashboard.widgets.business.quick-action>
+        @endif
 
+        @if(auth()->user()->isAdmin())
         <x-dashboard.widgets.business.quick-action
         route="crm.all_customers"
         title="{{ translate('Manage customers') }}"
         icon="user-group"
         description="{{ translate('View and interact with your customers') }}"
         > </x-dashboard.widgets.business.quick-action>
+        @endif
 
         <x-dashboard.widgets.business.quick-action
-        route="orders.index"
+        route="products.index"
         title="{{ translate('Manage products') }}"
         icon="shopping-cart"
         description="{{ translate('Create, analyse and update your products') }}"

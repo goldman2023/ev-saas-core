@@ -25,7 +25,7 @@ class UserSubscription extends WeBaseModel
 {
     use LogsActivity;
     use UploadTrait;
-    use GalleryTrait;
+    // use GalleryTrait;
     use CoreMetaTrait;
 
     protected $table = 'user_subscriptions';
@@ -101,20 +101,21 @@ class UserSubscription extends WeBaseModel
     }
 
     public function getUpcomingInvoiceStats() {
-        return \Cache::remember('user_subscription_'.$this->id.'_upcoming_invoice_stats', 60*60, function () {
-            $invoice = $this->getStripeUpcomingInvoice();
-            return $invoice;
-        });
+        return $invoice = $this->getStripeUpcomingInvoice();
+        // return \Cache::remember('user_subscription_'.$this->id.'_upcoming_invoice_stats', 60*60, function () {
+        //     $invoice = $this->getStripeUpcomingInvoice();
+        //     return $invoice;
+        // });
     }
 
-    public function getTotalPrice() {
+    public function getTotalPrice($format = true) {
         $invoice = $this->getUpcomingInvoiceStats();
 
         if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
             if($invoice['invoice_source'] === 'stripe') {
-                return \FX::formatPrice($invoice['total'] / 100);
+                return $format ? \FX::formatPrice($invoice['total'] / 100) : $invoice['total'] / 100;
             } else if($invoice['invoice_source'] === 'we') {
-                return \FX::formatPrice($invoice['total_price'] ?? 0);
+                return $format ? \FX::formatPrice($invoice['total_price'] ?? 0) : ($invoice['total_price'] ?? 0);
             }
         }
 
@@ -126,8 +127,8 @@ class UserSubscription extends WeBaseModel
 
         if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
             if($invoice['invoice_source'] === 'stripe') {
-                return $format ?  \FX::formatPrice($invoice['tax'] / 100) : $invoice['tax'];
-            } else if($invoice['invoice_source'] === 'we') {
+                return $format ?  \FX::formatPrice($invoice['tax'] / 100) : ($invoice['tax'] / 100);
+            } else if($invoice['invoice_source'] === 'we' && !empty($invoice['tax_type'] ?? null)) {
                 $interval = $this->order->invoicing_period;
                 $subtotal_price = $this->order->subtotal_price;
                 

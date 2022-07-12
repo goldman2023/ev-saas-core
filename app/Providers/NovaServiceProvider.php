@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Nova\Central\Domain;
 use App\Nova\Central\Tenant as TenantResource;
 use App\Nova\Tenant\User;
@@ -155,9 +156,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function routes()
     {
-        Nova::routes(['tenant', 'universal'])
+        Nova::routes(['web','tenant', 'universal'])
                 ->withAuthenticationRoutes(['tenant', 'universal'])
-                ->withPasswordResetRoutes(['tenant', 'universal'])
                 ->register();
     }
 
@@ -172,13 +172,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Gate::define('viewNova', function ($user) {
 
-            if ($user instanceof \App\Models\User) {
-                // return $user->isOwner();
+            if (auth()->user() instanceof \App\Models\User) {
+                return auth()->user()->isAdmin();
+            } else {
+                return false;
             }
 
             /** @var \App\Models\Admin $user */
 
-            return true;
         });
     }
 
@@ -217,9 +218,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             return [
                 MenuBuilder::make(),
                 \Laravel\Nova\LogViewer\LogViewer::make(),
-                Novaspatiepermissions::make(),
-
-                // new \Bolechen\NovaActivitylog\NovaActivitylog(),
+                Novaspatiepermissions::make()
             ];
         } else {
             return [
@@ -265,7 +264,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 UserSubscription::class,
                 License::class,
                 Section::class,
-                MenuBuilder::getMenuResource()
+                MenuBuilder::getMenuResource(),
             ]);
         } else {
             Nova::resources([

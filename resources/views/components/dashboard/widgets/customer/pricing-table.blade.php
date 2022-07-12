@@ -116,7 +116,7 @@
                     <div class="flex flex-row gap-4">
                         <template x-if="is_active()">
                             <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})"
-                                target="_blank"
+
                                 class="btn-danger-outline btn-sm inline-block pt-2 text-danger text-14 justify-center w-full text-center">
                                 {{ translate('Cancel plan') }}
                             </a>
@@ -129,7 +129,6 @@
                                     target="_parent"
                                 @else
                                     x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})"
-                                    target="_blank"
                                 @endif
                                 class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
 
@@ -139,7 +138,7 @@
                                 3. *If trial mode is disabled and plan is purchased: Upgrade plan
                                 4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you
                                 pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
-                                
+
                                 @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
                                     <span>{{ translate('Buy now') }}</span>
                                 @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())

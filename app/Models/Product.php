@@ -49,27 +49,25 @@ class Product extends WeBaseModel
     use HasSlug;
     use SoftDeletes;
     use RegeneratesCache;
-
-    use TranslationTrait;
     use PermalinkTrait;
-    use AttributeTrait;
-    use CategoryTrait;
     use HasStatus;
-
-    use UploadTrait;
-    use GalleryTrait;
-    use BrandTrait;
-    use StockManagementTrait;
-    use PriceTrait;
     use Purchasable;
-    use CoreMetaTrait;
-
     use ReviewTrait;
-
-    use VariationTrait;
-
     use LogsActivity;
     use SocialReactionsTrait;
+    use CoreMetaTrait;
+
+    use TranslationTrait;
+
+    use AttributeTrait; // <-- This trait must be declared before VariationTrait!
+    use CategoryTrait;
+    use UploadTrait;
+    use GalleryTrait;
+    use PriceTrait;
+    use StockManagementTrait;
+    use VariationTrait; // <-- Should be after PriceTrait and StockManagementTrait
+
+    use BrandTrait;
 
     protected $table = 'products';
 
@@ -79,7 +77,6 @@ class Product extends WeBaseModel
      *
      * @var array
      */
-    protected $with = ['variations'];
     protected $cloneable_relations = ['translations', 'variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals']; // TODO: Which core_met to clone???
     //public static $defaultEagerLoads = ['variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
@@ -244,11 +241,6 @@ class Product extends WeBaseModel
         return 'unit_price';
     }
 
-    public function getLikesCount()
-    {
-        return $this->likes()->count();
-    }
-
 
     public function getTranslationModel(): ?string
     {
@@ -297,11 +289,6 @@ class Product extends WeBaseModel
             'class' => ProductVariation::class,
             'foreign_key' => 'product_id'
         ];
-    }
-
-    public function main()
-    {
-        return null;
     }
 
     public function isBookableService() {

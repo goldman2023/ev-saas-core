@@ -90,12 +90,23 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Add Columns to Licenses table (livewire)
             add_filter('dashboard.table.licenses.columns', function ($columns) {
-                return array_merge($columns, [
+                $data = array_merge($columns, [
                     \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
                         ->excludeFromSelectable(),
-                    \Rappasoft\LaravelLivewireTables\Views\Column::make('Type', 'license_subscription_type')
+                    \Rappasoft\LaravelLivewireTables\Views\Column::make('Image Limit', 'license_image_limit')
                         ->excludeFromSelectable(),
                 ]);
+
+                if(auth()->user()->isAdmin()) {
+                    $data = array_merge($columns, [
+                        \Rappasoft\LaravelLivewireTables\Views\Column::make('Type', 'license_subscription_type')
+                        ->excludeFromSelectable(),
+                    ]);
+
+
+                }
+
+                return $data;
             }, 10, 1);
 
             // Download License Response

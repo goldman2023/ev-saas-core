@@ -52,12 +52,15 @@
             </div>
 
             <div class="col-span-1">
-                <div class="hidden mb-6 bg-white p-6 rounded-xl shadow">
+                {{-- <div class=" mb-6 bg-white p-6 rounded-xl shadow">
                     <x-dashboard.widgets.business.calendar-summary></x-dashboard.widgets.business.calendar-summary>
+                </div> --}}
 
-                </div>
+                {{-- <div class=" mb-6 bg-white p-6 rounded-xl shadow">
+                    <x-dashboard.widgets.business.quick-access></x-dashboard.widgets.business.quick-accesss>
+                </div> --}}
 
-                @livewire('dashboard.elements.activity-log', ['causer' => auth()->user()])
+                @livewire('dashboard.elements.activity-log')
 
             </div>
         </div>

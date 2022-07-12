@@ -280,9 +280,9 @@ class EVCheckoutController extends Controller
                     $order_item->order_id = $order->id;
                     $order_item->subject_type = $item::class;
                     $order_item->subject_id = $item->id;
-                    $order_item->title = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->name : $item->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
-                    $order_item->excerpt = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->excerpt : $item->excerpt;
-                    $order_item->variant = method_exists($item, 'hasMain') && $item->hasMain() ? $item->getVariantName(key_by: 'name') : null;
+                    $order_item->title = ($item?->is_variation ?? false) ? $item->main->name : $item->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
+                    $order_item->excerpt = ($item?->is_variation ?? false) ? $item->main->excerpt : $item->excerpt;
+                    $order_item->variant = ($item?->is_variation ?? false) ? $item->getVariantName(key_by: 'name') : null;
                     $order_item->quantity = $item->purchase_quantity;
 
                     // Reduce the stock quantity of an $item

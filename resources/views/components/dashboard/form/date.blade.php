@@ -10,7 +10,6 @@
         },
         initDateForm() {
             $nextTick(() => {
-                console.log('waa');
                 flatpickr('#{{ !empty($id) ? $id : str_replace('.', '_', $field) }}', this.getDateOptions()); 
             });
         }

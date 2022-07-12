@@ -553,6 +553,44 @@
                                     </div>
                                     {{-- END Force email verification --}}
 
+                                    <div class="col-span-3">
+                                    {{-- Login Dynamic Redirect --}}
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">
+                                                {{ translate('Login Dynamic Redirect') }}:</span>
+                                            <p class="text-gray-500 text-sm">
+                                                {{ translate('If this is enabled user will go to previous page visited.') }}
+                                            </p>
+                                        </div>
+
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.toggle field="settings.login_dynamic_redirect" />
+
+                                        </div>
+                                    </div>
+                                    </div>
+                                    {{-- END Login Redirect --}}
+                                    <div class="col-span-3">
+                                     {{-- Register Dynamic Redirect --}}
+                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">
+                                                {{ translate('Registration Dynamic Redirect') }}:</span>
+                                            <p class="text-gray-500 text-sm">
+                                                {{ translate('If this is enabled user will go to previous page visited after registration') }}
+                                            </p>
+                                        </div>
+
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.toggle field="settings.register_dynamic_redirect" />
+
+                                        </div>
+                                    </div>
+                                    </div>
+                                    {{-- END Register Redirect URL --}}
+
+
                                     <div class="col-span-3" x-show="!settings.onboarding_flow">
                                         {{-- Register Redirect URL --}}
                                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  mb-3" x-data="{}">
@@ -589,6 +627,8 @@
                                             </div>
                                         </div>
                                         {{-- END Login Redirect URL --}}
+
+
                                     </div>
 
                                 </div>

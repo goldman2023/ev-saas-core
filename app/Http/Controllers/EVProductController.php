@@ -60,7 +60,7 @@ class EVProductController extends Controller
     public function edit(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
+        
         return view('frontend.dashboard.products.edit')->with('product', $product);
     }
 
@@ -80,11 +80,7 @@ class EVProductController extends Controller
     public function edit_variations(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
-        if ($product) {
-            $product->convertUploadModelsToIDs();
-        }
-
+        
         return view('frontend.dashboard.products.variations')
             ->with('product', $product)
             ->with('variations_attributes', $product->variant_attributes());
@@ -168,13 +164,13 @@ class EVProductController extends Controller
                 ])
                 ->log('viewed');
 
-                $request->user()->notify(
+              /*   $request->user()->notify(
                     NovaNotification::make()
                         ->message('Product was viewed.')
                         ->action('Product', $product->getPermalink())
                         ->icon('View')
                         ->type('info')
-                );
+                ); */
             }
 
         }
@@ -218,7 +214,7 @@ class EVProductController extends Controller
                 'course_items' => $product->course_items->toTree()->filter(fn($item) => $item->parent_id === null),
                 'course_item' => $course_item,
             ];
-            
+
             if($course_item->type === CourseItemTypes::quizz()->value) {
                 $quiz_result = $course_item->subject->results()->where('user_id', auth()?->user()?->id)->first();
                 $data['quiz_result'] = $quiz_result;
@@ -234,7 +230,7 @@ class EVProductController extends Controller
                 ])
                 ->log('viewed');
             }
-    
+
             return view('frontend.product.single.product-course-item-single', $data);
         }
 

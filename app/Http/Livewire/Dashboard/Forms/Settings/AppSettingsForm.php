@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
+use App\Enums\AppSettingsGroupEnum;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
@@ -29,6 +30,7 @@ class AppSettingsForm extends Component
     use RulesSets;
     use DispatchSupport;
 
+    public $settingsGroup;
     public $shop;
     public $settings;
     public $addresses;
@@ -68,6 +70,8 @@ class AppSettingsForm extends Component
                 'settings.force_email_verification' => ['boolean'],
                 'settings.register_redirect_url' => ['nullable'],
                 'settings.login_redirect_url' => ['nullable'],
+                'settings.login_dynamic_redirect' => ['boolean'],
+                'settings.register_dynamic_redirect' => ['boolean'],
 
                 'settings.chat_feature' => ['boolean'],
                 'settings.addresses_feature' => ['boolean'],
@@ -161,6 +165,9 @@ class AppSettingsForm extends Component
             'user_meta_fields' => [
                 'settings.user_meta_fields_in_use' => ['']
             ],
+            'system_notifications_list' => [
+                'settings.system_notifications_list' => ['']
+            ],
         ]);
 
         $rulesSets = apply_filters('app-settings-rules', $rulesSets);
@@ -192,18 +199,13 @@ class AppSettingsForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount($settingsGroup)
     {
+        $this->settingsGroup = $settingsGroup;
         $this->settings = TenantSettings::getAll();
         $this->colors = TenantSettings::settingsDataTypes()['colors'];
         $this->universal_payment_methods = Payments::getPaymentMethodsAll();
     }
-
-    // public function updatingShop(&$shop, $key) {
-    //     if(!$shop instanceof Shop) {
-    //         $shop = Shop::find($shop['id'])->fill($shop); // alpinejs passes arrays as data instead of Model type. This is the reason why we have to convert it to Address model.
-    //     }
-    // }
 
     public function dehydrate()
     {
@@ -212,6 +214,10 @@ class AppSettingsForm extends Component
 
     public function render()
     {
+        if($this->settingsGroup === AppSettingsGroupEnum::notifications()->value) {
+            return view('livewire.dashboard.forms.settings.app-settings-notifications-form');
+        }
+
         return view('livewire.dashboard.forms.settings.app-settings-form');
     }
 
@@ -557,7 +563,6 @@ class AppSettingsForm extends Component
         $response = Http::get('https://tailwind.simeongriggs.dev/api/indigo/' . $this->settings['colors']['primary']);
 
         $this->settings['colors']['indigo'] = $response->body();
-        dd($this->colors);
         $this->colors;
 
 

@@ -19,6 +19,8 @@ class WeEdit extends Component
 
     public $selected_container;
 
+    public $selected_page_slug;
+
     public function mount()
     {
         $this->we_menu = [
@@ -56,6 +58,8 @@ class WeEdit extends Component
 
     public function render()
     {
+        $this->selected_page_slug = $_GET['selected_page_slug'];
+
         return view('livewire.we-edit.we-edit');
     }
 

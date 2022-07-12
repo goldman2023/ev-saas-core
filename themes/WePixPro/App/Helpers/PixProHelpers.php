@@ -210,7 +210,6 @@ if (!function_exists('pix_pro_create_license')) {
                     $body['Price'] = $stripe_subscription->items->data[0]->price->unit_amount / 100; // TODO: This is different when multiplan is enabled
 
                     $response = Http::post($route_paid, $body);
-                    // die(print_r($response->body()));
                     $response_json = $response->json();
 
                     if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
@@ -219,9 +218,9 @@ if (!function_exists('pix_pro_create_license')) {
                         Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
                     } else {
 
-                        if(!empty($response_json['data'] ?? null)) {
+                        if(!empty($response_json['license'] ?? null)) {
                             // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
-                            $pix_license = $response_json['data'];
+                            $pix_license = $response_json['license'];
 
                             DB::beginTransaction();
 
@@ -233,7 +232,7 @@ if (!function_exists('pix_pro_create_license')) {
                                 $license->license_type = $pix_license['license_type'] ?? '';
 
                                 $data = empty($license->data) ? [] : $license->data;
-                                $license->data = array_merge($data, $pix_license); // Will be populaetd when user activates the license
+                                $license->data = array_merge($data, $pix_license); // Will be populated when user activates the license
                                 $license->save();
 
                                 // Add a license <-> user_subscription relationship

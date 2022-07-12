@@ -30,7 +30,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
                 return array_merge($app_settings, $this->getTenantAppSettings());
             }, 20, 1);
         }
-
+        
         // Create Missing Tenant Settings
         TenantSettings::setAll(true);
     }

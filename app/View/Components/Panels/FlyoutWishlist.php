@@ -18,7 +18,6 @@ class FlyoutWishlist extends Component
     public function __construct()
     {
         $this->count = auth()->user()?->wishlists()->where('subject_type', \App\Models\Product::class)->whereHas('subject')?->count() ?? 0;
-        $this->wishlist = auth()->user()?->wishlists()->where('subject_type', \App\Models\Product::class)->whereHas('subject')->get() ?? collect();
     }
 
     /**

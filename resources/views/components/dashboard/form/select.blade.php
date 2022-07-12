@@ -7,6 +7,12 @@
     nullable: @js($nullable),
     search: @js($search),
     search_query: '',
+    countSelected() {
+      if(Array.isArray({{ $selected }})) {
+        return {{ $selected }}.length;
+      } 
+      return 0;
+    }
 }" x-init="$watch('search_query', (value) => {
   let newItems = {};
   Object.entries(items).filter(entry => {
@@ -23,9 +29,35 @@
               class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm {{ $selectorClass ?? '' }} @error($field) is-invalid @enderror">
         <span class="block truncate" :class="{'text-gray-600':!items.hasOwnProperty({{ $selected }})}" x-text="items.hasOwnProperty({{ $selected }}) ? items[{{ $selected }}] : placeholder"></span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-          @svg('heroicon-s-selector', ['class' => 'h-5 w-5 text-gray-400'])
+          @svg('heroicon-s-selector', ['class' => 'h-5 w-5 text-gray-400', 'wire:ignore'])
         </span>
       </button>
+
+      {{-- <template x-if="multiple">
+        <div class="w-full flex flex-wrap">
+            <template x-if="countSelected() > 0">
+                <template x-for="item in items.filter(x => {
+                    return selected_items.indexOf(x.id) !== -1;
+                })">
+                    <div
+                        class="we-select__selector-selected-item rounded mr-2 mb-1 relative">
+                        <span
+                            class="we-select__selector-selected-item-label pl-1 mr-1"
+                            x-text="item.values"></span>
+                        <button type="button"
+                            class="we-select__selector-selected-item-remove px-2"
+                            @click="event.stopPropagation(); select(item.id, item.values)">
+                            <span>×</span>
+                        </button>
+                    </div>
+                </template>
+            </template>
+            <template x-if="countSelected() <= 0">
+                <span class="block pb-1"
+                    x-text="getPlaceholder()"></span>
+            </template>
+        </div>
+      </template> --}}
   
       <ul wire:ignore class="absolute z-10 mt-1 w-full max-w-lg bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
             x-show="open_dropdown"

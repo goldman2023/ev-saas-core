@@ -17,7 +17,7 @@ use Cookie;
 use Auth;
 use Log;
 use App\Models\User;
-USE App\Models\UserMeta;
+use App\Models\UserMeta;
 use App\Models\UserInvite;
 use App\Enums\UserTypeEnum;
 use App\Traits\Livewire\RulesSets;
@@ -61,20 +61,20 @@ class RegisterForm extends Component
             'terms_consent' => ['required', 'boolean', 'is_true']
         ];
 
-        if($this->is_ghost) {
-            $rules['email'] = ['required', 'unique:App\Models\User,email,'.$this->ghostUser->id];
+        if ($this->is_ghost) {
+            $rules['email'] = ['required', 'unique:App\Models\User,email,' . $this->ghostUser->id];
         }
 
-        if($this->available_meta->count() > 0) {
-            foreach($this->available_meta as $key => $options) {
-                $rules['user_meta.'.$key] = [];
+        if ($this->available_meta->count() > 0) {
+            foreach ($this->available_meta as $key => $options) {
+                $rules['user_meta.' . $key] = [];
 
-                if(in_array($key, UserMeta::metaForCompanyEntity())) {
-                    $rules['user_meta.'.$key][] = 'exclude_if:entity,individual';
+                if (in_array($key, UserMeta::metaForCompanyEntity())) {
+                    $rules['user_meta.' . $key][] = 'exclude_if:entity,individual';
                 }
 
-                if($options['required'] ?? false) {
-                    $rules['user_meta.'.$key][] = 'required';
+                if ($options['required'] ?? false) {
+                    $rules['user_meta.' . $key][] = 'required';
                 }
             }
         }
@@ -102,10 +102,10 @@ class RegisterForm extends Component
             'terms_consent.is_true' => translate('Terms and conditions consent is required bool.'),
         ];
 
-        if($this->available_meta->count() > 0) {
-            foreach($this->available_meta as $key => $options) {
-                if($options['required'] ?? false) {
-                    $msgs['user_meta.'.$key.'.required'] = translate('Required');
+        if ($this->available_meta->count() > 0) {
+            foreach ($this->available_meta as $key => $options) {
+                if ($options['required'] ?? false) {
+                    $msgs['user_meta.' . $key . '.required'] = translate('Required');
                 }
             }
         }
@@ -121,21 +121,21 @@ class RegisterForm extends Component
     public function mount($ghostUser = null)
     {
         $this->token = request()->token ?? null;
-        if(!empty($this->token)) {
+        if (!empty($this->token)) {
             $this->invite = UserInvite::where('token', $this->token)->first();
             $this->email = $this->invite->email;
         }
 
         $this->available_meta = collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true);
 
-        if($this->available_meta->count() > 0) {
-            foreach($this->available_meta as $key => $options) {
+        if ($this->available_meta->count() > 0) {
+            foreach ($this->available_meta as $key => $options) {
                 $this->user_meta[$key] = '';
             }
         }
 
         // If ghost user is provided, finalize registration
-        if(!empty($ghostUser)) {
+        if (!empty($ghostUser)) {
             $this->is_ghost = true;
             $this->ghostUser = $ghostUser;
             $this->entity = $ghostUser->entity;
@@ -156,18 +156,18 @@ class RegisterForm extends Component
     }
 
     public function register()
-    {        
-        $this->validate(); 
-        
+    {
+        $this->validate();
+
         DB::beginTransaction();
-        
+
         try {
             // Register new User here!
             $this->createUser();
-            
+
             // Create UserMeta if any is allowed in registration process
-            if(!empty($this->user_meta)) {
-                foreach($this->user_meta as $key => $value) {
+            if (!empty($this->user_meta)) {
+                foreach ($this->user_meta as $key => $value) {
                     UserMeta::create([
                         'user_id' => $this->user->id,
                         'key' => $key,
@@ -177,21 +177,21 @@ class RegisterForm extends Component
             }
 
             // Invite processing (if any)
-            if(!empty($this->token)) {
+            if (!empty($this->token)) {
                 $this->invite = UserInvite::where('token', $this->token)->first();
 
-                if(!empty($this->invite) && $this->invite->email === $this->user->email && !$this->invite->accepted) {
+                if (!empty($this->invite) && $this->invite->email === $this->user->email && !$this->invite->accepted) {
                     $this->invite->accepted = true;
                     $this->invite->save();
 
                     // If invited user if for new staff member, change the user_type and relate it to specified Shop from invite.
-                    if($this->invite->new_user_type === UserTypeEnum::staff()->value) {
+                    if ($this->invite->new_user_type === UserTypeEnum::staff()->value) {
                         $this->user->user_type = UserTypeEnum::staff()->value;
                         $this->user->shop()->syncWithoutDetaching([$this->invite->shop_id]);
                         $this->user->save();
 
                         // Sync permissions and roles
-                        if(Permissions::getRoleNames()->contains($this->invite->new_user_role)) {
+                        if (Permissions::getRoleNames()->contains($this->invite->new_user_role)) {
                             $permissions = Permissions::getRolePermissions($this->invite->new_user_role);
                             $this->user->syncPermissions($permissions);
                             $this->user->syncRoles([$this->invite->new_user_role]);
@@ -207,10 +207,10 @@ class RegisterForm extends Component
                 request()->session()->regenerate();
 
                 // Automatically verify newly created user email if onboarding flow is disabled AND email verification is not forced!
-                if(!get_tenant_setting('onboarding_flow') && !get_tenant_setting('force_email_verification')) {
+                if (!get_tenant_setting('onboarding_flow') && !get_tenant_setting('force_email_verification')) {
                     $this->user->email_verified_at = date('Y-m-d H:m:s');
                 }
-                
+
                 $this->user->save();
                 // flash(translate('Registration successfull. Please verify your email.'))->success();
 
@@ -226,7 +226,7 @@ class RegisterForm extends Component
 
     protected function createUser()
     {
-        if($this->is_ghost) {
+        if ($this->is_ghost) {
             $this->user = User::updateOrCreate([
                 'email' => $this->email,
             ], [
@@ -249,7 +249,7 @@ class RegisterForm extends Component
                 'password' => Hash::make($this->password),
             ]);
         }
-        
+
 
         // Save WP md5 password in core_meta
         $this->user->saveCoreMeta('password_md5', Hash::driver('wp')->make($this->password));
@@ -268,16 +268,26 @@ class RegisterForm extends Component
     {
         do_action('user.registered', $this->user);
 
-        if(get_tenant_setting('onboarding_flow')) {
+        if (get_tenant_setting('onboarding_flow')) {
             return redirect()->route('onboarding.step1');
         }
 
-        if(!get_tenant_setting('onboarding_flow')) {
-            if(!empty(get_tenant_setting('register_redirect_url', null))) {
+        if (get_tenant_setting('register_dynamic_redirect')) {
+            if (session()->get('registration_redirect')) {
+                return redirect(session()->get('registration_redirect'));
+            }
+        }
+
+        if (!get_tenant_setting('onboarding_flow')) {
+            if (!empty(get_tenant_setting('register_redirect_url', null))) {
                 return redirect(get_tenant_setting('register_redirect_url'));
             } else {
+
+
                 return redirect()->route('dashboard');
-            } 
+            }
         }
+
+        return redirect()->route('home');
     }
 }

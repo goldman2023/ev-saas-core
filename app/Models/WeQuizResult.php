@@ -15,6 +15,7 @@ class WeQuizResult extends WeBaseModel
 
     protected $fillable = ['user_id', 'quiz_id', 'quiz_answers', 'quiz_meta', 'quiz_passed'];
 
+    /* TODO: add status pending for quiz results */
     protected $casts = [
         'quiz_answers' => 'array',
         'quiz_passed' => 'boolean',

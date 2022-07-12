@@ -1,5 +1,5 @@
 @extends('frontend.layouts.user_panel')
-@section('page_title', translate('App Settings'))
+@section('page_title', $title)
 
 @push('head_scripts')
   <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
@@ -8,7 +8,7 @@
 
 @section('panel_content')
   <section>
-    <x-dashboard.section-headers.section-header title="{{ translate('App settings') }}" text="">
+    <x-dashboard.section-headers.section-header title="{{ $title }}" text="">
         <x-slot name="content">
             <a href="/" target="_blank" class="btn-primary">
                 @svg('heroicon-o-eye', ['class' => 'h-4 h-4 mr-2'])
@@ -17,7 +17,7 @@
         </x-slot>
     </x-dashboard.section-headers.section-header>
 
-    <livewire:dashboard.forms.settings.app-settings-form></livewire:dashboard.forms.settings.app-settings-form>
+    <livewire:dashboard.forms.settings.app-settings-form :settings-group="$settings_group"></livewire:dashboard.forms.settings.app-settings-form>
   </section>
 
 <!-- Basic Info-->

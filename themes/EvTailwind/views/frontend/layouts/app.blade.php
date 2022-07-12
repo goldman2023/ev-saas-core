@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
-    
-    @yield('meta')
 
+    @yield('meta')
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{ seo()->render() }}
 
     {{--
     SITE NAME:
@@ -30,7 +30,7 @@
 
     @include('frontend.layouts.global-partials.all')
 
-    {{ seo()->render() }}
+
 
 
     @livewireStyles

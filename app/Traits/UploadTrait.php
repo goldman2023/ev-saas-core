@@ -29,24 +29,24 @@ trait UploadTrait
         });
 
         static::relationsRetrieved(function ($model): void {
-            if (! $model->relationLoaded('uploads')) {
-                $model->load('uploads');
-            }
+            if ($model->relationLoaded('uploads')) {
+                // $model->load('uploads');
 
-            // Initiate dynamic properties values
-            $model->dynamicUploadPropertiesWalker(function ($property) use (&$model) {
-                if ($property['multiple'] ?? false) {
-                    // Multiple Uploads
-                    $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
-                        return $upload->pivot->relation_type === $property['relation_type'];
-                    })->sortBy('order')->values();
-                } else {
-                    // Single Upload
-                    $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
-                        return $upload->pivot->relation_type === $property['relation_type'];
-                    })->first();
-                }
-            });
+                // Initiate dynamic properties values
+                $model->dynamicUploadPropertiesWalker(function ($property) use (&$model) {
+                    if ($property['multiple'] ?? false) {
+                        // Multiple Uploads
+                        $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
+                            return $upload->pivot->relation_type === $property['relation_type'];
+                        })->sortBy('order')->values();
+                    } else {
+                        // Single Upload
+                        $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
+                            return $upload->pivot->relation_type === $property['relation_type'];
+                        })->first();
+                    }
+                });
+            }
         });
     }
 
