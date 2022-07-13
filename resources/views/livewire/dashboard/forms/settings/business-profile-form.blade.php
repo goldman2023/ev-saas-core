@@ -182,9 +182,8 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.text-repeater field="settings.phones" limit="3"
-                                        placeholder="{{ translate('Phone') }}"></x-dashboard.form.text-repeater>
-                                    {{-- <x-system.invalid-msg field="settings.phones"></x-system.invalid-msg> --}}
+                                    <x-dashboard.form.input type="tel" field="settings.phones" 
+                                        placeholder="{{ translate('Phone') }}"></x-dashboard.form.input>
                                 </div>
                             </div>
                             {{-- END Phones --}}
