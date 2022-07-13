@@ -1,7 +1,9 @@
 <div class="bg-white">
     <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">{{ translate('Products, courses, consulting')
-            }}</h1>
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">
+            {{ get_site_name() }}
+                {{ translate('Products') }}
+            </h1>
         <p class="mt-4 max-w-xl text-sm text-gray-700">
             {{ translate('Browse all products, courses, and services from our members') }}
         </p>
@@ -26,7 +28,7 @@
             this.filterArchive();
         },
         clearAllFilters() {
-            this.selected_categories = []; 
+            this.selected_categories = [];
             this.active_filters_count = 0;
             this.sort_by = 'newest';
 
@@ -56,7 +58,7 @@
                         <button type="button" class="text-gray-500" @click="clearAllFilters()">{{ translate('Clear all') }}</button>
                     </div>
                 </div>
-                
+
                 {{-- Sort --}}
                 <div class="relative inline-block !ml-auto" @click.outside="open_sort = false">
                     <div class="flex">
@@ -278,7 +280,7 @@
 
         {{-- <div class="col-start-1 row-start-1 py-4">
             <div class="flex justify-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"  @click.outside="open_sort = false">
-                
+
             </div>
         </div> --}}
     </section>

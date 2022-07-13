@@ -12,7 +12,7 @@
     <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
-    
+
     <title>@yield('meta_title')</title>
 
     <meta charset="utf-8">
@@ -23,7 +23,7 @@
 
     @yield('meta')
 
-    
+
     <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
 
     @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
@@ -70,15 +70,14 @@
 
         <div class="lg:pl-64 flex flex-col">
             @include('frontend.dashboard.navigation.topbar')
-    
+
             <main class="flex-1">
                 <div class="w-full ">
                     @yield('content')
                 </div>
             </main>
-    
+
         </div>
-        
     </div>
 
     <x-default.system.cookies-agreement></x-default.system.cookies-agreement>

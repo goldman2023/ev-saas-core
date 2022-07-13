@@ -60,7 +60,7 @@ class EVProductController extends Controller
     public function edit(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        
+
         return view('frontend.dashboard.products.edit')->with('product', $product);
     }
 
@@ -80,7 +80,7 @@ class EVProductController extends Controller
     public function edit_variations(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        
+
         return view('frontend.dashboard.products.variations')
             ->with('product', $product)
             ->with('variations_attributes', $product->variant_attributes());
@@ -111,11 +111,18 @@ class EVProductController extends Controller
     }
 
     // Frontend
-    public function productsByCategory(Request $request, $slug)
+    public function productsByCategory(Request $request, $slug = null)
     {
-        $selected_category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
-        $products = $selected_category->products()->orderBy('created_at', 'DESC')->paginate(10);
-        $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
+        if($slug) {
+            $selected_category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
+            $products = $selected_category->products()->orderBy('created_at', 'DESC')->paginate(10);
+            $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
+        } else {
+            $products = Product::orderBy('created_at', 'DESC')->paginate(10);
+            $shops = [];
+            $selected_category = "";
+        }
+
 
         // TODO: Init Filters here
 
@@ -213,6 +220,7 @@ class EVProductController extends Controller
                 'product' => $product,
                 'course_items' => $product->course_items->toTree()->filter(fn($item) => $item->parent_id === null),
                 'course_item' => $course_item,
+                'active_course_item' => $course_item,
             ];
 
             if($course_item->type === CourseItemTypes::quizz()->value) {
