@@ -59,11 +59,6 @@ class BusinessProfileForm extends Component
                 'settings.contact_details' => ['required'],
             ],
             'domains' => [],
-            'seo' => [
-                'business.meta_title' => ['required', 'min:3'],
-                'business.meta_description' => ['required', 'min:3'],
-                'business.meta_image' => ['if_id_exists:App\Models\Upload,id'],
-            ],
         ]);
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);

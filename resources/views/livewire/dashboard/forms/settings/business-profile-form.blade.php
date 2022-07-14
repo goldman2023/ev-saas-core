@@ -23,11 +23,11 @@
     })" 
     @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
     @submit-form.window="
-        $wire.set('settings.thumbnail', thumbnail.id, true);
-        $wire.set('settings.cover', cover.id, true);
+        $wire.set('business.thumbnail', thumbnail.id, true);
+        $wire.set('business.cover', cover.id, true);
         $wire.set('settings.websites', settings.websites, true);
         $wire.set('settings.phones', settings.phones, true);
-        $wire.set('settings.content', content, true);
+        $wire.set('business.content', content, true);
         $wire.saveBasicInformation();
     "
     x-cloak>
