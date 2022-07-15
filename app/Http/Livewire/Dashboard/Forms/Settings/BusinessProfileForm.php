@@ -2,21 +2,26 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
-use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
-use Illuminate\Support\Facades\Http;
-use TenantSettings;
-use App\Models\TenantSetting;
 use App\Models\Shop;
 use App\Models\ShopSetting;
 use App\Traits\Livewire\DispatchSupport;
-use Illuminate\Validation\Rule;
+use App\Traits\Livewire\RulesSets;
 use DB;
+use EVS;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Livewire\Component;
 use MyShop;
+use Permissions;
+use Purifier;
+use Spatie\Permission\Models\Role;
+use Spatie\ValidationRules\Rules\ModelsExist;
 
 class BusinessProfileForm extends Component
 {
+    use RulesSets;
+    use DispatchSupport;
+
     public $business;
     public $settings;
 
