@@ -10,6 +10,7 @@ use App\Models\Tenant;
 use App\Nova\Dashboards\Main;
 use App\Nova\Tenant\Section;
 use App\Nova\Tenant\Order;
+use App\Nova\Tenant\Task;
 use App\Nova\Tenant\Blog;
 use App\Nova\Tenant\Shop;
 use App\Nova\Tenant\Wishlist;
@@ -91,6 +92,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 ])->icon('user')->collapsable(),
 
                 MenuSection::make('Business', [
+                    MenuItem::resource(Task::class),
                     MenuItem::resource(Plan::class),
                     MenuItem::resource(Product::class),
                     MenuItem::resource(License::class),
@@ -250,6 +252,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 PaymentMethodUniversal::class,
                 Category::class,
                 Plan::class,
+                Task::class,
                 Translation::class,
                 ProductVariation::class,
                 Product::class,
