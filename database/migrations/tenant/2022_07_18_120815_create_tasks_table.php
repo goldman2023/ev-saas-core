@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('subject_id');
             $table->string('subject_type',255); 
-            $table->unsignedBigInteger('user_id'); 
-            $table->unsignedBigInteger('assignee_id'); 
+            $table->unsignedInteger('user_id'); 
+            $table->unsignedInteger('assignee_id'); 
             $table->string('type',100); 
             $table->string('status',100); 
             $table->string('name',300); 
