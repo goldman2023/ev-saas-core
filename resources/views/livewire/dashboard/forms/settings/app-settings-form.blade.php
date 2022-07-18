@@ -501,23 +501,53 @@
                                 </div>
                                 {{-- END WeEdit Feature --}}
 
-                                {{-- Multiplan Purchase Feature --}}
+                                {{-- Multiple Subscriptions Feature --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
                                     x-data="{}">
                                     <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                        <span class="text-sm font-medium text-gray-900">{{ translate('Multiplan
-                                            purchase') }}</span>
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Enable multiple subscriptions') }}</span>
                                         <p class="text-gray-500 text-sm">
-                                            {{ translate('If you want enable that users can buy multiple plans and
-                                            distribute them among other accounts via invite') }}
+                                            {{ translate('Allowing users to have multiple subscriptions (needed for multi-vendor apps AND if you want to allow users to buy different interval subscriptions') }}
                                         </p>
                                     </div>
 
                                     <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                        <x-dashboard.form.toggle field="settings.multiplan_purchase" />
+                                        <x-dashboard.form.toggle field="settings.multiple_subscriptions_enabled" />
                                     </div>
                                 </div>
-                                {{-- END Multiplan Purchase Feature --}}
+                                {{-- END Multiple Subscriptions Feature  --}}
+
+                                {{-- Multi-item Subscription Feature --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
+                                    x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Enable multi-item subscriptions') }}</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('If you want to enable buying multiple items (licenses/seats/whatever) under ONE subscription ') }}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <x-dashboard.form.toggle field="settings.multi_item_subscription_enabled" />
+                                    </div>
+                                </div>
+                                {{-- END Multi-item Subscription Feature --}}
+
+                                {{-- Allow subscription items distribution enabled --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
+                                    x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Allow subscription items distribution') }}</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('If you want to enable distribution of subscription items to users/invitees by subscription owner') }}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <x-dashboard.form.toggle field="settings.subscription_items_distribution_enabled" />
+                                    </div>
+                                </div>
+                                {{-- END Allow subscription items distribution enabled --}}
 
                                 {{-- Onboarding flow --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
@@ -714,7 +744,9 @@
                                     x-data="{}">
                                     <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
                                         $wire.set('settings.feed_enabled', settings.feed_enabled, true);
-                                        $wire.set('settings.multiplan_purchase', settings.multiplan_purchase, true);
+                                        $wire.set('settings.multiple_subscriptions_enabled', settings.multiple_subscriptions_enabled, true);
+                                        $wire.set('settings.multi_item_subscription_enabled', settings.multi_item_subscription_enabled, true);
+                                        $wire.set('settings.subscription_items_distribution_enabled', settings.subscription_items_distribution_enabled, true);
                                         $wire.set('settings.onboarding_flow', settings.onboarding_flow, true);
                                         $wire.set('settings.force_email_verification', settings.force_email_verification, true);
                                         $wire.set('settings.chat_feature', settings.chat_feature, true);

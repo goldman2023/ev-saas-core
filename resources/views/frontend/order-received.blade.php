@@ -222,8 +222,7 @@
                           }
                         @endphp
                     @endforeach
-
-                    
+                  
                 </div>
               @endforeach
 

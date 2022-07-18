@@ -34,7 +34,7 @@ class ReviveStripePlanSubscription
         if(Payments::stripe()->enabled) {
             // Revive subscription in stripe
 
-            if(!get_tenant_setting('multiplan_purchase')) {
+            if(!get_tenant_setting('multi_item_subscription_enabled')) {
                 // Single plan revival
                 
                 /** 

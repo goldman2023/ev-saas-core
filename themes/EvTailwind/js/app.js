@@ -28,6 +28,7 @@ require('./IMG');
 require('./utils');
 // require('./leaflet');
 require('./sortable');
+require('./FX');
 
 // LUXON
 // let { DateTime } = require('luxon');

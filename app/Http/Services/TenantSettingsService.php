@@ -188,7 +188,10 @@ class TenantSettingsService
 
             // Features
             'feed_enabled' => 'boolean',
-            'multiplan_purchase' => 'boolean', // Buying multiple plans and distributing them among other users
+            'multiple_subscriptions_enabled' => 'boolean', // Allowing users to have multiple subscriptions (needed for multi-vendor apps AND if you want to allow users to buy different interval subscriptions)
+            'multi_item_subscription_enabled' => 'boolean', // Buying multiple plans/products (licenses/seats/whatever) under ONE subscription
+            'subscription_items_distribution_enabled' => 'boolean', // Allow owner of subscription(s) to distribute subscription items(licenses/seats/whatever) among other users
+            'teams_feature' => 'boolean', // (NOT IMPLEMENTED YET, but let it stay here for future) Allows grouping users inside teams and managing teams by team owner(s) and users who have permissions for it
             'onboarding_flow' => 'boolean',
             'chat_feature' => 'boolean',
             'addresses_feature' => 'boolean',

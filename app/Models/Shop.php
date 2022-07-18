@@ -98,6 +98,11 @@ class Shop extends WeBaseModel
         return $this->hasMany(Product::class);
     }
 
+    public function plans()
+    {
+        return $this->hasMany(Plan::class);
+    }
+
     public function blog_posts() {
         return $this->hasMany(BlogPost::class);
     }

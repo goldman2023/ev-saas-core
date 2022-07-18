@@ -495,8 +495,46 @@ class StripeService
 
             return $invoice;
         } catch(\Exception $e) {
-            Log::error(array_merge(['error' => $e->getMessage()], $params));
+            Log::error(array_merge(['error' => $e]));
             return $user_subscription->order; // return our Order just in case...
+        }
+    }
+
+    public function projectSubscriptionInvoice($cart, $interval) {
+        $cart_items = [];
+        
+        if(!empty($cart)) {
+
+            $params = [
+                'customer' => auth()->user()->getStripeCustomerID(), // TODO: Think about changing this to include other users if admin is doing projection for somebody else
+                'subscription_billing_cycle_anchor' => 'now',
+                'automatic_tax' => ['enabled' => true],
+            ];
+
+            foreach($cart as $cart_item) {
+                if(!empty($cart_item['plan_id'])) {
+                    $plan = Plan::find($cart_item['plan_id']);
+
+                    if(empty($plan)) continue;
+
+                    if($interval == 'month') {
+                        $stripe_price_id = $plan->getStripeMonthlyPriceID();
+                    } else if($interval == 'year' || $interval == 'annual') {
+                        $stripe_price_id = $plan->getStripeAnnualPriceID();
+                    }
+
+                    $cart_items[] = [
+                        'price' => $stripe_price_id,
+                        'quantity' => $cart_item['qty'],
+                    ];
+                }
+            }
+            
+            $params['subscription_items'] = $cart_items;
+
+            $invoice = $this->stripe->invoices->upcoming($params);
+
+            return $invoice;
         }
     }
 
@@ -604,9 +642,9 @@ class StripeService
                 [
                     # Provide the exact Price ID (e.g. pr_1234) of the model you want to sell
                     'price' => $stripe_price->id,
-                    'quantity' => get_tenant_setting('multiplan_purchase') === true ? $qty : 1,
+                    'quantity' => get_tenant_setting('multi_item_subscription_enabled') === true ? $qty : 1,
                     'adjustable_quantity' => [
-                        'enabled' => get_tenant_setting('multiplan_purchase') === true ? true : false,
+                        'enabled' => get_tenant_setting('multi_item_subscription_enabled') === true ? true : false,
                         // 'minimum' => 0,
                         // 'maximum' => 99
                     ]
@@ -1349,7 +1387,7 @@ class StripeService
 
             // Associate User with Plan (if plan is bought)
             if ($model->isSubscribable()) {
-                if (!get_tenant_setting('multiplan_purchase')) {
+                if (!get_tenant_setting('multi_item_subscription_enabled')) {
                     // Single Plan Subscription mode: THIS PART CREATES ONE UserSubscription AND delete all other Plan UserSubscriptions
                     // IMPORTANT: Attach stripe_subscription_id to our UserSubscription
                     // If multiplan purchase is not available, 1) synch user subscription and 2) update stripe data
@@ -1898,7 +1936,7 @@ class StripeService
                     $invoice = $this->createInvoice(order: $order, stripe_invoice: $latest_stripe_invoice, stripe_subscription: $stripe_subscription);
 
                     // 3. Create UserSubscription
-                    if (!get_tenant_setting('multiplan_purchase')) {
+                    if (!get_tenant_setting('multi_item_subscription_enabled')) {
                         // Single Plan Subscription mode: THIS PART CREATES ONE UserSubscription AND delete all other Plan UserSubscriptions
                         // IMPORTANT: Attach stripe_subscription_id to our UserSubscription
                         // If multiplan purchase is not available, 1) synch user subscription and 2) update stripe data
@@ -2092,7 +2130,7 @@ class StripeService
                             // OR
                             // 2. Previous attributes plan->id (actually previous subscription price ID) is different than current subscription price ID
 
-                            if(get_tenant_setting('multiplan_purchase')) {
+                            if(get_tenant_setting('multi_item_subscription_enabled')) {
                                 $should_proceed = false; // TODO: This must work according to multi-plan purchase
                             } else {
                                 $should_proceed = (empty($existing_order) && empty($existing_invoice)) || (($stripe_subscription?->plan?->id ?? 1) !== ($previous_attributes->plan->id ?? 1));
@@ -2122,7 +2160,7 @@ class StripeService
 
                                     // Check if subscription was upgraded/downgraded
                                     if(count($previous_attributes?->items?->data ?? []) > 0) {
-                                        if(get_tenant_setting('multiplan_purchase')) {
+                                        if(get_tenant_setting('multi_item_subscription_enabled')) {
                                             // Upgrade/Downgrade when multiple subsriptions feature is enabled
                                         } else {
                                             // Get New Plan/Model based on `Stripe Product ID` in CoreMeta
