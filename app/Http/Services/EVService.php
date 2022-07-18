@@ -223,6 +223,16 @@ class EVService
                             },
                         ],
                     ],
+                    [
+                        'label' => translate('Tasks'),
+                        'icon' => 'heroicon-o-clipboard-list',
+                        'route' => route('tasks.index'),
+                        'route_name' => 'tasks.index',
+                        'is_active' => areActiveRoutes(['tasks.index']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_orders'],
+                        'enabled'=>get_tenant_setting('tasks_enabled'),
+                    ],
                    /*  [
                         'label' => translate('Leads'),
                         'icon' => 'heroicon-o-calendar',
