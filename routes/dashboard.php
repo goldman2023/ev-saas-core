@@ -116,6 +116,13 @@ Route::middleware([
         Route::post('/orders/update_delivery_status', [EVOrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
         Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
 
+        /* Tasks */
+        Route::get('/tasks', [EVTaskController::class, 'index'])->name('tasks.index');
+        Route::get('/task/create', [EVTaskController::class, 'create'])->name('task.create');
+        Route::get('/task/edit', [EVTaskController::class, 'edit'])->name('task.edit');
+        Route::get('/task/details/{id}', [EVTaskController::class, 'details'])->name('task.details');
+        Route::get('/tasks/destroy/{id}', [EVTaskController::class, 'destroy'])->name('tasks.destroy');
+
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.index');
         Route::get('/my/wishlist/all', [EVOrderController::class, 'my_purchases'])->name('my.wishlist.index');
