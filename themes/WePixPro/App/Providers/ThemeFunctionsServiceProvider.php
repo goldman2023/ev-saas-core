@@ -189,23 +189,23 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 20, 1);
 
             // Create PixPro License
-            add_action('invoice.paid.subscription_create', function ($user_subscriptions, $stripe_invoice) {
-                pix_pro_create_license($user_subscriptions, $stripe_invoice);
+            add_action('invoice.paid.subscription_create', function ($user_subscription, $stripe_invoice) {
+                pix_pro_create_license($user_subscription, $stripe_invoice);
             }, 20, 2);
 
             // Create PixPro License(s) when subscription is created through Stripe
-            add_action('stripe.webhook.subscriptions.created_from_stripe', function($user_subscriptions, $stripe_invoice) {
-                pix_pro_create_license($user_subscriptions, $stripe_invoice);
+            add_action('stripe.webhook.subscriptions.created_from_stripe', function($user_subscription, $stripe_invoice) {
+                pix_pro_create_license($user_subscription, $stripe_invoice);
             }, 20, 2);
 
             // Update PixPro License
-            add_action('stripe.webhook.subscriptions.updated', function ($user_subscriptions) {
-                pix_pro_update_license($user_subscriptions);
+            add_action('stripe.webhook.subscriptions.updated', function ($user_subscription) {
+                pix_pro_update_license($user_subscription);
             }, 20, 1);
 
             // Extend PixPro License
-            add_action('invoice.paid.subscription_cycle', function ($user_subscriptions, $stripe_invoice) {
-                pix_pro_extend_license($user_subscriptions, $stripe_invoice);
+            add_action('invoice.paid.subscription_cycle', function ($user_subscription, $stripe_invoice) {
+                pix_pro_extend_licenses($user_subscription, $stripe_invoice);
             }, 20, 2);
 
             // PixPro License disconnect by removing hardware_id
@@ -300,7 +300,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Fetch all licenses for desired user and get the latest data about license from Pixpro DB. Update hardware_id if hardware_id is different!
             add_action('dashboard.table.licenses.mount.end', function ($user) {
-                $subscriptions = $user->plan_subscriptions()->with('license')->get();
+                $subscriptions = $user->subscriptions()->with('license')->get();
                 if (!empty($subscriptions)) {
                     foreach ($subscriptions as $subscription) {
                         $license = $subscription->license->first();

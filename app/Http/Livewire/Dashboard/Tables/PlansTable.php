@@ -112,7 +112,7 @@ class PlansTable extends DataTableComponent
     public function query(): Builder
     {
         if($this->for === 'me') {
-            return auth()->user()->plans()->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
+            return auth()->user()->subscriptions()->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
                     ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
                     ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
         }

@@ -1,5 +1,6 @@
 <x-livewire-tables::table.cell class="align-middle text-center ">
     #{{ $row->id }}
+    @dd($row)
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle ">

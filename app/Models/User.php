@@ -243,15 +243,9 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(Event::class);
     }
 
-    public function plans()
+    public function subscriptions()
     {
-        return $this->morphedByMany(Plan::class, 'subject', 'user_subscriptions')
-            ->withPivot('start_date', 'end_date', 'qty', 'data');
-    }
-
-    public function plan_subscriptions()
-    {
-        return $this->hasMany(UserSubscription::class)->where('subject_type', Plan::class);
+        return $this->hasMany(UserSubscription::class);
     }
 
     // TODO: Shoud be appended to User model based on if Quiz Feature is added to the tenant or not!

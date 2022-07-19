@@ -16,6 +16,7 @@ use App\Notifications\EmailVerificationNotification;
 use App\Traits\PermalinkTrait;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class License extends WeBaseModel
 {
@@ -31,7 +32,7 @@ class License extends WeBaseModel
     ];
 
     public function user_subscription() {
-        return $this->morphToMany(UserSubscription::class, 'subject', 'user_subscription_relationships');
+        return $this->morphOne(UserSubscription::class, 'subject', 'user_subscription_relationships');
     }
 
     public function user() {
@@ -46,6 +47,18 @@ class License extends WeBaseModel
         return $query->where(
             fn ($query) =>  $query->where('serial_number', 'like', '%'.$term.'%')
                 ->orWhere('license_name', 'like', '%'.$term.'%')
+        );
+    }
+
+    /**
+     * Get the License data
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function data(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => empty($value) ? [] : $value,
         );
     }
 
@@ -69,12 +82,8 @@ class License extends WeBaseModel
     }
 
     public function mergeData($new_data = []) {
-        $old_data = $this->data;
-
-        // if(is_array()) {
-
-        // }
-        // $this->data = 
+        $old_data = empty($this->data) ? [] : $this->data;
+        $this->data = array_merge($old_data, $new_data);
     }
 
 

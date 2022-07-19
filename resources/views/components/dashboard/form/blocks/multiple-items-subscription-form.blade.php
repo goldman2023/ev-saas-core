@@ -49,6 +49,33 @@
             clearCart() {
                 this.plans_cart = {};
                 this.projected_invoice = null;
+            },
+            checkout() {
+                {{-- TODO: Compare old subscriptions items with new subscription items AND check if there is less items of same type in new subscription. If there is, prompt a new modal where user must select which licenses/seats will be revoked/removed. --}}
+                let base_route = new URL('{{ route('stripe.checkout_redirect') }}');
+                var url_params = new URLSearchParams(base_route.search);
+
+                let data = {
+                    'interval': this.pricing_mode,
+                    'items': []
+                };
+
+                for (const item_key in this.plans_cart) {
+                    let item = this.plans_cart[item_key];
+
+                    data['items'].push({ 
+                        id: item.plan_id, 
+                        class: 'App\\Models\\Plan', // TODO: make this universal! 
+                        qty: item.qty, 
+                        preview: false,
+                        interval: this.pricing_mode
+                    });
+                }
+
+                url_params.set('data', btoa(JSON.stringify(data)));
+                console.log(data);
+
+                window.open(base_route.toString()+'?'+url_params.toString(), '_blank').focus();
             }
         }" x-init="
             $watch('plans_cart', (cart) => getProjectedInvoice(cart));
@@ -132,7 +159,7 @@
                             <p class="mt-2 text-sm text-gray-700">Subscription billing period: <strong x-text="pricing_mode"></strong></p>
                         </div>
                         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                            <div class="btn-primary" @click="clearCart()">{{ translate('Clear') }}</div>
+                            <div class="btn-danger-outline" @click="clearCart()">{{ translate('Clear') }}</div>
                         </div>
                     </div>
                     <div class="-mx-4 mt-8 flex flex-col sm:-mx-6 md:mx-0">
@@ -177,36 +204,11 @@
                             </tfoot>
                         </table>
                     </div>
-                </div>
 
-  
-                <div class="mt-4 flex flex-col gap-y-3">
-
-                    <div class="w-full flex flex-col gap-y-2">
-                        <template x-for="line in projected_invoice.lines.data">
-                            <div class="w-full flex justify-between mb-1">
-                                <div class="flex flex-row items-center">
-                                    <span class="text-16 text-gray-700 font-normal" x-text="line.description"></span>
-                                    +
-                                    <span class="text-16 text-gray-700 font-normal" x-text="_.reduce(line.tax_amounts, (sum,  tax) => sum + (tax.amount / 100), 0) + ' {{ translate('tax') }}'"></span>
-                                </div>
-                                
-                            </div>
-                        </template>
-                    </div>
-                    
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                          <div class="w-full border-t border-gray-300"></div>
-                        </div>
-                    </div>
-    
-                    <div class="flex flex-col gap-y-2">
-    
+                    <div class="w-full flex justify-center mt-4">
+                        <div class="btn-primary" @click="checkout()">{{ translate('Proceed to checkout') }}</div>
                     </div>
                 </div>
-
-                
             </template>
 
             <template x-if="_.get(projected_invoice, 'lines.data', []).length <= 0">

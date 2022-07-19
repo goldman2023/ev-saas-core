@@ -27,10 +27,13 @@ class UserSubscription extends WeBaseModel
     use UploadTrait;
     // use GalleryTrait;
     use CoreMetaTrait;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
     protected $table = 'user_subscriptions';
 
-    protected $fillable = ['user_id', 'order_id', 'subject_id', 'subject_type', 'start_date', 'end_date', 'status', 'payment_status', 'qty', 'data'];
+    protected $fillable = ['user_id', 'order_id', 'start_date', 'end_date', 'status', 'payment_status', 'qty', 'data'];
+
+    // protected $with = ['order.order_items.subject'];
 
     protected $casts = [
         'data' => 'array',
@@ -43,19 +46,15 @@ class UserSubscription extends WeBaseModel
         return $this->belongsTo(User::class);
     }
 
-    public function plan() {
-        return $this->morphTo('subject')->withoutGlobalScopes();
-    }
-
-    public function subject() {
-        return $this->morphTo('subject')->withoutGlobalScopes();
-    }
-
     public function order() {
         return $this->belongsTo(Order::class, 'order_id')->withoutGlobalScopes();
     }
 
-    public function license() {
+    public function items() {
+        return $this->morphedByMany(Plan::class, 'subject', 'user_subscription_relationships')->withPivot('qty');
+    }
+
+    public function licenses() {
         return $this->morphedByMany(License::class, 'subject', 'user_subscription_relationships');
     }
 
