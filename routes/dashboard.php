@@ -11,6 +11,7 @@ use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVPageController;
 use App\Http\Controllers\EVPlanController;
+use App\Http\Controllers\EVTaskController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
