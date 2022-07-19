@@ -120,7 +120,7 @@ Route::middleware([
         /* Tasks */
         Route::get('/tasks', [EVTaskController::class, 'index'])->name('tasks.index');
         Route::get('/task/create', [EVTaskController::class, 'create'])->name('task.create');
-        Route::get('/task/edit', [EVTaskController::class, 'edit'])->name('task.edit');
+        Route::get('/task/edit/{id}', [EVTaskController::class, 'edit'])->name('task.edit');
         Route::get('/task/details/{id}', [EVTaskController::class, 'details'])->name('task.details');
         Route::get('/tasks/destroy/{id}', [EVTaskController::class, 'destroy'])->name('tasks.destroy');
 
