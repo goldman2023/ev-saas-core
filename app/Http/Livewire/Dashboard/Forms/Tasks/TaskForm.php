@@ -56,7 +56,7 @@ class TaskForm extends Component
             'task.excerpt' => 'required',
             'task.content' => 'required',
             'task.status' => [Rule::in(TaskTypesEnum::toValues())],
-            'task.assignee_id' => [Rule::in($this->shop_staff->name)],
+            'task.assignee_id' => [Rule::in($this->shop_staff)],
         ];
     }
 

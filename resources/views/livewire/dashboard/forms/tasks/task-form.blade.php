@@ -153,7 +153,6 @@
                             </label>
 
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                @dd($shop_staff->attributes)
                                 <x-dashboard.form.select :items="$shop_staff" selected="assignee_id" :nullable="false">
                                 </x-dashboard.form.select>
                             </div>
