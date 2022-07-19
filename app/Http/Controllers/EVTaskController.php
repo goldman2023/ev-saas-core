@@ -3,31 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Task;
+use MyShop;
 
 class EVTaskController extends Controller
 {
-    public function index(){
 
-        return view('frontend.dashboard.tasks.index');
+    public function index(Request $request){
+        $tasks = Task::all()->count();
+        return view('frontend.dashboard.tasks.index',compact('tasks'));
     }
 
-    public function edit(){
-
-        return view('frontend.dashboard.tasks.edit');
+    public function edit(Request $request, $id){
+        $task = Task::findOrFail($id);
+        return view('frontend.dashboard.tasks.edit',compact('task'));
     }
 
-    public function create(){
+    public function create(Request $request){
 
         return view('frontend.dashboard.tasks.create');
     }
 
-    public function destroy($id){
+    public function destroy(Request $request, $id){
 
         return view('frontend.dashboard.tasks.destroy');
     }
     
-    public function details($id){
-
-        return view('frontend.dashboard.tasks.details');
+    public function details(Request $request, $id){
+        $task = Expense::findOrFail($id);
+        $creator = $task->creator;
+        return view('frontend.dashboard.tasks.details',compact('task','creator'));
     }
 }
