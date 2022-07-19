@@ -17,7 +17,7 @@
     </x-dashboard.section-headers.section-header>
 
     <div class="w-full">
-        @if($tasks > 0)
+        @if($tasks->isNotEmpty())
             <livewire:dashboard.tables.tasks-table></livewire:dashboard.tables.tasks-table>
         @else
             <x-dashboard.empty-states.no-items-in-collection

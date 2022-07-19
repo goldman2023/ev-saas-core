@@ -10,7 +10,7 @@ class EVTaskController extends Controller
 {
 
     public function index(Request $request){
-        $tasks = Task::all()->count();
+        $tasks = Task::all();
         return view('frontend.dashboard.tasks.index',compact('tasks'));
     }
 
