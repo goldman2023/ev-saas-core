@@ -30,7 +30,7 @@ class EVTaskController extends Controller
     }
     
     public function details(Request $request, $id){
-        $task = Expense::findOrFail($id);
+        $task = Task::findOrFail($id);
         $creator = $task->creator;
         return view('frontend.dashboard.tasks.details',compact('task','creator'));
     }
