@@ -12,7 +12,7 @@
                 @foreach($plan_subscriptions as $subscription)
                     <div class="w-full flex flex-col">
                         <div class="w-full flex justify-between mb-2">
-                            <strong class="text-16 font-semibold">{{ $subscription->plan->name }}</strong>
+                            <strong class="text-16 font-semibold">{{ translate('Subscription') }}</strong>
                         </div>
                         @foreach($subscription->order->order_items as $order_item)
                             <div class="w-full flex justify-between mb-1">

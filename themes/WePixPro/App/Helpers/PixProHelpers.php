@@ -181,7 +181,7 @@ if (!function_exists('pix_pro_create_license')) {
                         $stripe_item = collect($stripe_subscription->items->data)->firstWhere('price.product', $plan->getCoreMeta(StripeService::getStripeMode().'stripe_product_id'));
 
                         $number_of_images = $plan->getCoreMeta('number_of_images');
-                    
+
                         if(!empty($number_of_images) && (is_int($number_of_images || ctype_digit($number_of_images)))) {
                             $number_of_images = $plan->getCoreMeta('number_of_images') ?? 150;
                         } else {
@@ -265,10 +265,12 @@ if (!function_exists('pix_pro_create_license')) {
 
 // UPDATE LICENSE
 if (!function_exists('pix_pro_update_license')) {
-    function pix_pro_update_license($subscription) {
+    function pix_pro_update_license($subscription, $stripe_invoice, $stripe_previous_attributes) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
         
         if (!empty($subscription)) {
+            $stripe_billing_reason = $stripe_invoice->billing_reason;
+
             $stripe_subscription_id = $subscription->data[StripeService::getStripeMode().'stripe_subscription_id'];
 
             $stripe_subscription = StripeService::stripe()->subscriptions->retrieve(
@@ -279,6 +281,13 @@ if (!function_exists('pix_pro_update_license')) {
             $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
 
             $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
+
+
+            if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($stripe_previous_attributes?->plan?->id ?? null)) {
+                // If the billing_reason is subscription_update or subscription_create WHILE previous_attributes plan change are present:
+                // Compare differences in bought licenses and their quantities and based on that create more licenses if needed.
+                
+            }
 
             if(!empty($pix_pro_user['user_id'] ?? null)) {
                 $number_of_images = $subscription->subject->getCoreMeta('number_of_images'); // get default meta from Plan, not previous subscription!
@@ -359,7 +368,7 @@ if (!function_exists('pix_pro_update_single_license')) {
     function pix_pro_update_single_license(&$license, $old_license) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
         
-        $subscription = $license->user_subscription;
+        $subscription = $license->user_subscription->first();
 
         $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
@@ -379,6 +388,7 @@ if (!function_exists('pix_pro_update_single_license')) {
             $body = pix_pro_add_auth_params([
                 "UserEmail" => $pix_pro_user['email'],
                 "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
+                "LicenseId" => $license->getData('id') ?? '',
                 "SubscriptionId" => $subscription->id,
                 "LicenseName" => $license_subscription_type, // This is actually `license_subscription_type` column in PixPro DB
                 "LicenseCloudService" => $cloud_service_param,
@@ -401,9 +411,9 @@ if (!function_exists('pix_pro_update_single_license')) {
                     $license->setData('license_subscription_type', $pix_license['license_subscription_type'] ?? null, null);
                     $license->save();
 
-                    $subscription->saveCoreMeta('number_of_images', $number_of_images);
-                    $subscription->saveCoreMeta('includes_cloud', $cloud_service_param);
-                    $subscription->saveCoreMeta('includes_offline', $offline_service_param);
+                    $license->saveCoreMeta('number_of_images', $number_of_images);
+                    $license->saveCoreMeta('includes_cloud', $cloud_service_param);
+                    $license->saveCoreMeta('includes_offline', $offline_service_param);
 
                     // If hardware_id is changed on our end, change it on pixpro end too (by activating license)
                     // 1. Hardware ID was not present in license data -> activate license
@@ -563,7 +573,7 @@ if (!function_exists('pix_pro_get_license_by_serial_number')) {
             return false;
         }
         $route = pix_pro_endpoint().'/licenses/get_license_by_serial_number/';
-        $user = $license->user_subscription->user;
+        $user = $license->user_subscription->first()->user;
 
         $body = pix_pro_add_auth_params([
             "UserPassword" => $user->getCoreMeta('password_md5', true),

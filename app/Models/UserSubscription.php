@@ -8,6 +8,7 @@ use App\Traits\GalleryTrait;
 use App\Traits\CoreMetaTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
+use App\Traits\HasDataColumn;
 use Laravel\Passport\HasApiTokens;
 use App\Enums\AmountPercentTypeEnum;
 use Stripe\Invoice as StripeInvoice;
@@ -27,6 +28,7 @@ class UserSubscription extends WeBaseModel
     use UploadTrait;
     // use GalleryTrait;
     use CoreMetaTrait;
+    use HasDataColumn;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
     protected $table = 'user_subscriptions';
@@ -36,7 +38,6 @@ class UserSubscription extends WeBaseModel
     // protected $with = ['order.order_items.subject'];
 
     protected $casts = [
-        'data' => 'array',
         // 'start_date' => 'date',
         // 'end_date' => 'date'
     ];
@@ -88,19 +89,28 @@ class UserSubscription extends WeBaseModel
     }
 
     public function getStripeUpcomingInvoice() {
-        $upcoming_invoice = \StripeService::getUpcomingInvoice($this, $this->plan, $this->order->invoicing_period);
+        // Try to get upcoming invoice from Order meta column
+        $upcoming_invoice = $this->order->getData(stripe_prefix('stripe_upcoming_invoice'));
+
+        // If no upcoming invoice is present in meta column, get upcoming invoice from stripe directly, and store it in meta
+        if(empty($upcoming_invoice)) {
+            $upcoming_invoice = \StripeService::getUpcomingInvoice($this);
+            $this->order->setData(stripe_prefix('stripe_upcoming_invoice'), is_array($upcoming_invoice) ? $upcoming_invoice : $upcoming_invoice->toArray());
+        }
 
         if($upcoming_invoice instanceof Order) {
             return array_merge(['invoice_source' => 'we'], $upcoming_invoice->toArray());
         } else if($upcoming_invoice instanceof StripeInvoice) {
             return array_merge(['invoice_source' => 'stripe'], $upcoming_invoice->toArray());
+        } else if(is_array($upcoming_invoice)) {
+            return $upcoming_invoice;
         }
 
         return null;
     }
 
     public function getUpcomingInvoiceStats() {
-        return $invoice = $this->getStripeUpcomingInvoice();
+        return $this->getStripeUpcomingInvoice();
         // return \Cache::remember('user_subscription_'.$this->id.'_upcoming_invoice_stats', 60*60, function () {
         //     $invoice = $this->getStripeUpcomingInvoice();
         //     return $invoice;

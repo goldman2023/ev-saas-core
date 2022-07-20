@@ -6,6 +6,16 @@ use App\Models\Product;
 use App\Models\CoreMeta;
 use App\Facades\StripeService;
 
+if (!function_exists('stripe_prefix')) {
+    function stripe_prefix($value = null) {
+        if(!empty($value) && is_string($value)) {
+            return StripeService::getStripeMode().$value;
+        }
+
+        return StripeService::getStripeMode();
+    }
+}
+
 if (!function_exists('get_user_by_stripe_customer_id')) {
     function get_user_by_stripe_customer_id($stripe_customer_id) {
         return User::select('users.*')->join('core_meta', function($join) {
@@ -13,7 +23,7 @@ if (!function_exists('get_user_by_stripe_customer_id')) {
             $join->on('core_meta.subject_type', '=', DB::raw("'".addslashes(User::class)."'") );
         })
         ->where([
-            ['key', StripeService::getStripeMode().'stripe_customer_id'],
+            ['key', stripe_prefix('stripe_customer_id')],
             ['value', empty($stripe_customer_id) ? '-1' : $stripe_customer_id]
         ])->first();
     }
@@ -38,7 +48,7 @@ if (!function_exists('get_product_by_stripe_price_id')) {
             $join->on('core_meta.subject_type', '=', DB::raw("'".addslashes(Product::class)."'") );
         })
         ->where([
-            ['key', StripeService::getStripeMode().'stripe_price_id'],
+            ['key', stripe_prefix('stripe_price_id')],
             ['value', empty($stripe_price_id) ? '-1' : $stripe_price_id]
         ])->first();
     }
@@ -51,7 +61,7 @@ if (!function_exists('get_product_by_stripe_product_id')) {
             $join->on('core_meta.subject_type', '=', DB::raw("'".addslashes(Product::class)."'") );
         })
         ->where([
-            ['key', StripeService::getStripeMode().'stripe_product_id'],
+            ['key', stripe_prefix('stripe_product_id')],
             ['value', empty($stripe_product_id) ? '-1' : $stripe_product_id]
         ])->first();
     }
@@ -60,7 +70,7 @@ if (!function_exists('get_product_by_stripe_product_id')) {
 if (!function_exists('get_model_by_stripe_product_id')) {
     function get_model_by_stripe_product_id($stripe_product_id) {
         $core_meta = CoreMeta::where([
-            ['key', StripeService::getStripeMode().'stripe_product_id'],
+            ['key', stripe_prefix('stripe_product_id')],
             ['value', empty($stripe_product_id) ? '-1' : $stripe_product_id]
         ])->first();
 

@@ -248,6 +248,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(UserSubscription::class);
     }
 
+    public function licenses()
+    {
+        return $this->hasMany(License::class);
+    }
+
     // TODO: Shoud be appended to User model based on if Quiz Feature is added to the tenant or not!
     public function quizzes()
     {
@@ -270,14 +275,15 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function isSubscribed()
     {
-        return $this->plan_subscriptions->count() > 0;
+        // TODO: Think about introducing shop_id into this check because we may want to check if user is subscribed to any plan from different vendors!
+        return $this->subscriptions->count() > 0;
     }
 
     public function isOnTrial()
     {
-        /* TODO: Adjust this for multiplan */
+        // TODO: Think about introducing shop_id into this check because we may want to check if user is subscribed to any plan from different vendors!
         if ($this->isSubscribed()) {
-            return $this->plan_subscriptions->first()?->status == 'trial';
+            return $this->subscriptions->first()?->status == 'trial';
         } else {
             return false;
         }

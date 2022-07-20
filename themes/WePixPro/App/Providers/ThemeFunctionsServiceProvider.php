@@ -199,9 +199,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 20, 2);
 
             // Update PixPro License
-            add_action('stripe.webhook.subscriptions.updated', function ($user_subscription) {
-                pix_pro_update_license($user_subscription);
-            }, 20, 1);
+            add_action('stripe.webhook.subscriptions.updated', function ($user_subscription, $stripe_invoice, $stripe_previous_attributes) {
+                pix_pro_update_license($user_subscription, $stripe_invoice, $stripe_previous_attributes);
+            }, 20, 3);
 
             // Extend PixPro License
             add_action('invoice.paid.subscription_cycle', function ($user_subscription, $stripe_invoice) {
@@ -300,24 +300,27 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Fetch all licenses for desired user and get the latest data about license from Pixpro DB. Update hardware_id if hardware_id is different!
             add_action('dashboard.table.licenses.mount.end', function ($user) {
-                $subscriptions = $user->subscriptions()->with('license')->get();
+                $subscriptions = $user->subscriptions()->with('licenses')->get();
+
                 if (!empty($subscriptions)) {
                     foreach ($subscriptions as $subscription) {
-                        $license = $subscription->license->first();
+                        $licenses = $subscription->licenses;
 
-                        if (!empty($license) && method_exists($license, 'get_license')) {
-                            $data = $license->get_license(); // gets the license from Pixpro DB
-
-                            if ($license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
-                                $license->setData('hardware_id', $data['hardware_id']);
-                                $license->save();
+                        foreach($licenses as $license) {
+                            if (!empty($license) && method_exists($license, 'get_license')) {
+                                $data = $license->get_license(); // gets the license from Pixpro DB
+                                
+                                if ($license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
+                                    $license->setData('hardware_id', $data['hardware_id']);
+                                    $license->save();
+                                }
                             }
                         }
                     }
                 }
             }, 20, 1);
 
-            // There are changes to license on WeSaaS end, so we need to update
+            // There are changes to license on WeSaaS end, so we need to update license on Pixpro END
             add_action('license.saved', function (&$new_license, $old_license) {
                 pix_pro_update_single_license($new_license, $old_license);
             }, 20, 2);

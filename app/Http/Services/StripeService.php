@@ -583,10 +583,10 @@ class StripeService
 
             $invoice = $this->stripe->invoices->upcoming($params);
 
-            return $invoice;
+            return array_merge(['invoice_source' => 'stripe'], $invoice->toArray());
         } catch(\Exception $e) {
             Log::error(array_merge(['error' => $e]));
-            return $user_subscription->order; // return our Order just in case...
+            return array_merge(['invoice_source' => 'we'], $user_subscription->order->toArray()); // return our Order just in case...
         }
     }
 
@@ -1196,7 +1196,7 @@ class StripeService
                 'subscription' => $stripe_subscription->id,
             ]);
 
-            $meta[$this->mode_prefix .'stripe_upcoming_invoice'] = $stripe_upcoming_invoice->toArray();
+            $meta[$this->mode_prefix .'stripe_upcoming_invoice'] = array_merge(['invoice_source' => 'stripe'], $stripe_upcoming_invoice->toArray());
         }
 
         $order->meta = $meta;
@@ -2235,6 +2235,7 @@ class StripeService
                         $stripe_subscription->id,
                         [
                             'metadata' => [
+                                'user_subscription_id' => $user_subscription->id,
                                 'order_id' => $order->id,
                                 'invoice_id' => $invoice->id,
                                 'latest_invoice_id' => $invoice->id,
@@ -2461,7 +2462,7 @@ class StripeService
                 
             }
 
-            do_action('stripe.webhook.subscriptions.updated', $subscription);
+            do_action('stripe.webhook.subscriptions.updated', $subscription, $stripe_invoice, $stripe_previous_attributes);
 
         } catch (\Exception $e) {
             http_response_code(400);

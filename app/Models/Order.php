@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
 use App\Traits\PermalinkTrait;
+use App\Traits\HasDataColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -15,6 +16,7 @@ class Order extends WeBaseModel
 {
     use SoftDeletes;
     use PermalinkTrait;
+    use HasDataColumn;
 
     protected $table = 'orders';
 
@@ -58,6 +60,11 @@ class Order extends WeBaseModel
     public function getRouteKeyName()
     {
         return 'id';
+    }
+
+    public function getDataColumnName()
+    {
+        return 'meta';
     }
 
     public function user()
@@ -110,7 +117,7 @@ class Order extends WeBaseModel
 
             $order->initCoreProperties();
 
-            if($order->user_subscriptions->isNotEmpty()) {
+            if(!empty($order->user_subscription)) {
                 foreach ($sums_properties as $property) {
                     $order->{$property} = 0;
 
@@ -123,11 +130,6 @@ class Order extends WeBaseModel
                     }
 
                     // TODO: Fix this to populate each price with correct data. For now, all 4 properties are `total_price` -_-
-                    
-
-                    // foreach ($order->user_subscriptions as $user_subscription) {
-                    //     $order->{$property} += 0; //$user_subscription->getTotalPrice(format: false);
-                    // }
                 }
             } else {
                 foreach ($sums_properties as $property) {

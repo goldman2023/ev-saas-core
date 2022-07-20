@@ -1,10 +1,9 @@
 <x-livewire-tables::table.cell class="align-middle text-center ">
     #{{ $row->id }}
-    @dd($row)
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle ">
-    {{ $row->subject->getTranslation('name') }}
+    {{ 'Subscription' }}
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
@@ -59,7 +58,6 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    {{-- TODO: Store upcoming invoice somewhere! --}}
     <strong class="text-14">{{ $row->getTotalPrice() }}</strong><span class="text-14">{{ '/'.$row->order->invoicing_period }}</span>
 </x-livewire-tables::table.cell>
 
@@ -87,7 +85,7 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a> --}}
 
-        @if(auth()->user()?->plan_subscriptions->first()?->isTrial())
+        @if($row->isTrial())
             <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="$dispatch('display-modal', {'id': 'change-trial-plan-modal'})" target="_blank">
                 {{ translate('Change') }}
             </button>

@@ -1,7 +1,7 @@
 <section class="w-full" x-data="{
     pricing_mode: 'year',
-    current_plan_mode: '{{ auth()->user()->plan_subscriptions?->first()?->order?->invoicing_period ?? '' }}',
-    current_plan_id: {{ auth()->user()->plan_subscriptions?->first()?->subject->id ?? 'null' }},
+    current_plan_mode: '{{ auth()->user()->subscriptions?->first()?->order?->invoicing_period ?? '' }}',
+    current_plan_id: {{ auth()->user()->subscriptions?->first()?->subject->id ?? 'null' }},
     current_is_trial: {{ $isTrial ? 'true' : 'false' }},
 }">
     @if((auth()->user()?->isSubscribed() ?? false) && !$hideTitle)
@@ -123,7 +123,7 @@
                             </template>
                             <template x-if="!is_active()">
                                 <a
-                                    @if(auth()->user()?->plan_subscriptions->first()?->isTrial())
+                                    @if(auth()->user()?->subscriptions->first()?->isTrial())
                                         x-bind:href="is_active() ? $getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode}) : 'javascript:void(0)'"
                                         x-on:click="is_active() ? '' : $dispatch('display-modal', {id: 'change-trial-plan-confirmation-modal', subscription_id: {{ auth()->user()?->plan_subscriptions->first()?->id ?? 'null' }}, new_plan: @js($plan->toArray()), interval: pricing_mode })"
                                         target="_parent"
