@@ -12,7 +12,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
 
-class TasksTable extends Component
+class TasksTable extends DataTableComponent
 {
     public ?int $searchFilterDebounce = 800;
 
@@ -52,7 +52,6 @@ class TasksTable extends Component
 
     public function query(): Builder
     {
-
         return Task::query()
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status))
@@ -67,13 +66,16 @@ class TasksTable extends Component
             Column::make('Name', 'name')
                 ->excludeFromSelectable()
                 ->addClass('hidden md:table-cell'),
-            Column::make('Assigne', 'assignee_id')
-                ->excludeFromSelectable()
-                ->addClass('hidden md:table-cell'),
-            Column::make('Status', 'status')
-                ->excludeFromSelectable(),
             Column::make('Type', 'type')
                 ->excludeFromSelectable(),
+            Column::make('Status', 'status')
+                ->excludeFromSelectable(),
+            Column::make('Assignee', 'assignee_id')
+                ->excludeFromSelectable()
+                ->addClass('hidden md:table-cell'),
+            Column::make('Creator', 'user_id')
+                ->excludeFromSelectable()
+                ->addClass('hidden md:table-cell'),
             Column::make('Date', 'created_at')
                 ->excludeFromSelectable()
                 ->sortable(),
