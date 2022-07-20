@@ -3,7 +3,8 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush
 <div class="w-full" x-data="{
-    status: @js($task->status ?? App\Enums\TaskTypesEnum::issue()->value),
+    type: @js($task->type ?? App\Enums\TaskTypesEnum::issue()->value),
+    status: @js($task->status ?? App\Enums\TaskStatusEnum::scoping()->value),
     assignee_id: @js($task->assignee_id ?? Auth::id()),
 }" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" x-cloak>
     <div class="w-full relative">
@@ -56,22 +57,19 @@
                             </div>
                             <!-- END Subject Type -->
 
-                            <!-- Type -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{}">
+                        <!-- Assignee -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                            <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                <span class="mr-2">{{ translate('Assignee') }}</span>
 
-                                <label for="task.type"
-                                    class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Type') }}
-                                </label>
+                            </label>
 
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <x-dashboard.form.input field="task.type" placeholder="Type" />
-
-                                </div>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.select :items="$shop_staff" selected="assignee_id" :nullable="false">
+                                </x-dashboard.form.select>
                             </div>
-                            <!-- END Type -->
-
+                        </div>
+                        <!-- END Assignee -->
 
                             <!-- Excerpt -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
@@ -125,39 +123,51 @@
                             <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 <span class="mr-2">{{ translate('Status') }}</span>
 
-                                @if ($task->status === App\Enums\TaskTypesEnum::issue()->value)
+                                @if ($task->status === App\Enums\TaskStatusEnum::scoping()->value)
                                     <span class="badge-success">{{ ucfirst($task->status) }}</span>
-                                @elseif($task->status === App\Enums\TaskTypesEnum::payment()->value)
+                                @elseif($task->status === App\Enums\TaskStatusEnum::backlog()->value)
                                     <span class="badge-info">{{ ucfirst($task->status) }}</span>
-                                @elseif($task->status === App\Enums\TaskTypesEnum::improvement()->value)
+                                @elseif($task->status === App\Enums\TaskStatusEnum::in_progress()->value)
                                     <span class="badge-danger">{{ ucfirst($task->status) }}</span>
-                                @elseif($task->status === App\Enums\TaskTypesEnum::other()->value)
+                                @elseif($task->status === App\Enums\TaskStatusEnum::review()->value)
                                     <span class="badge-purple">{{ ucfirst($task->status) }}</span>
-                                @elseif($task->status === App\Enums\TaskTypesEnum::request()->value)
+                                @elseif($task->status === App\Enums\TaskStatusEnum::done()->value)
                                     <span class="badge-blue">{{ ucfirst($task->status) }}</span>
                                 @endif
                             </label>
 
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <x-dashboard.form.select :items="\App\Enums\TaskTypesEnum::toArray()" selected="status" :nullable="false">
+                                <x-dashboard.form.select :items="\App\Enums\TaskStatusEnum::toArray()" selected="status" :nullable="false">
                                 </x-dashboard.form.select>
                             </div>
                         </div>
                         <!-- END Status -->
-
-                        <!-- Assignee -->
+                        
+                        <!-- Type -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
                             <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                <span class="mr-2">{{ translate('Assignee') }}</span>
+                                <span class="mr-2">{{ translate('Type') }}</span>
 
+                                @if ($task->type === App\Enums\TaskTypesEnum::issue()->value)
+                                    <span class="badge-success">{{ ucfirst($task->type) }}</span>
+                                @elseif($task->type === App\Enums\TaskTypesEnum::payment()->value)
+                                    <span class="badge-info">{{ ucfirst($task->type) }}</span>
+                                @elseif($task->type === App\Enums\TaskTypesEnum::improvement()->value)
+                                    <span class="badge-danger">{{ ucfirst($task->type) }}</span>
+                                @elseif($task->type === App\Enums\TaskTypesEnum::other()->value)
+                                    <span class="badge-purple">{{ ucfirst($task->type) }}</span>
+                                @elseif($task->type === App\Enums\TaskTypesEnum::request()->value)
+                                    <span class="badge-blue">{{ ucfirst($task->type) }}</span>
+                                @endif
                             </label>
 
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <x-dashboard.form.select :items="$shop_staff" selected="assignee_id" :nullable="false">
+                                <x-dashboard.form.select :items="\App\Enums\TaskTypesEnum::toArray()" selected="type" :nullable="false">
                                 </x-dashboard.form.select>
                             </div>
                         </div>
-                        <!-- END Assignee -->
+                        <!-- END Type -->
+
                         <!-- SaveTask Button -->
                         <div
                             class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
@@ -166,6 +176,7 @@
                                 @click="
                                 $wire.set('task.status', status, true);
                                 $wire.set('task.assignee_id', assignee_id, true);
+                                $wire.set('task.type', type, true);
                                 @do_action('view.task-form.wire_set')
                             "
                                 wire:click="saveTask()">

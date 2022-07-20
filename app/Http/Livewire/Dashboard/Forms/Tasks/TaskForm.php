@@ -3,12 +3,12 @@
 namespace App\Http\Livewire\Dashboard\Forms\Tasks;
 
 use App\Enums\TaskTypesEnum;
+use App\Enums\TaskStatusEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\CoreMeta;
 use App\Models\Task;
 use App\Builders\BaseBuilder;
-use MyShop;
 use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\RulesSets;
 use Permissions;
@@ -38,10 +38,11 @@ class TaskForm extends Component
     {
         $this->task = empty($task) ? new Task() : $task;
         $this->is_update = isset($this->task->id) && ! empty($this->task->id);
-        $this->shop_staff = MyShop::getShop()->users;
+        $this->shop_staff = User::where('user_type','customer')->get()->keyBy('id')->map(fn($user) => $user->name.' '.$user->surname.' ('.$user->email.')')->toArray();
 
         if (!$this->is_update) {
-            $this->task->status = TaskTypesEnum::issue()->value;
+            $this->task->type = TaskTypesEnum::issue()->value;
+            $this->task->status = TaskStatusEnum::scoping()->value;
         }
 
     }
@@ -52,11 +53,11 @@ class TaskForm extends Component
         return [
             'task.name' => 'required',
             'task.subject_type' => 'required',
-            'task.type' => 'required',
             'task.excerpt' => 'required',
             'task.content' => 'required',
-            'task.status' => [Rule::in(TaskTypesEnum::toValues())],
-            'task.assignee_id' => [Rule::in($this->shop_staff)],
+            'task.status' => [Rule::in(TaskStatusEnum::toValues())],
+            'task.type' => [Rule::in(TaskTypesEnum::toValues())],
+            'task.assignee_id' => [Rule::in(array_keys($this->shop_staff))],
         ];
     }
 
@@ -65,10 +66,10 @@ class TaskForm extends Component
         return [
             'task.name.required' => translate("The Task Name is required"),
             'task.subject_type.required' => translate("The Subject Type is required"),
-            'task.type.required' => translate("The Task type is required"),
             'task.excerpt.required' => translate("The excerpt is required"),
             'task.content.required' => translate("The Content is required"),
-            'task.status.in' => translate('Status must be one of the following:').' '.TaskTypesEnum::implodedLabels(),
+            'task.type.in' => translate('Type must be one of the following:').' '.TaskTypesEnum::implodedLabels(),
+            'task.status.in' => translate('Status must be one of the following:').' '.TaskStatusEnum::implodedLabels(),
             'task.assignee_id.in' => translate('Task assignee must be chosen from the list of shop staff'),
         ];
     }
@@ -76,11 +77,13 @@ class TaskForm extends Component
     public function saveTask(){
 
         $msg = '';
+        \Debugbar::info($this->task->assignee_id);
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatchValidationErrors($e);
-            $this->task->status = TaskTypesEnum::issue()->value;
+            $this->task->type = TaskTypesEnum::issue()->value;
+            $this->task->status = TaskStatusEnum::scoping()->value;
             $this->validate();
         }
 
@@ -89,7 +92,7 @@ class TaskForm extends Component
         try {
 
             $this->task->user_id = Auth::id();
-            $this->task->subject_id = $this->task->subject() || 1;
+            $this->task->subject_id =  1;
 
 
             $this->task->save();

@@ -1,7 +1,7 @@
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     <a class="media align-items-center text-14" href="{{ route('task.details', ['id' => $row->id]) }}">
         #{{ $row->id }}
-        @if(!$row->viewed)
+        @if (!$row->viewed)
             <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
         @endif
     </a>
@@ -11,46 +11,60 @@
     {{ $row->name }}
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle">
-    {{ $row->type }}
+<x-livewire-tables::table.cell class="align-middle text-center">
+
+    @if ($row->type === App\Enums\TaskTypesEnum::issue()->value)
+        <span class="badge-success">{{ ucfirst($row->type) }}</span>
+    @elseif($row->type === App\Enums\TaskTypesEnum::payment()->value)
+        <span class="badge-info">{{ ucfirst($row->type) }}</span>
+    @elseif($row->type === App\Enums\TaskTypesEnum::improvement()->value)
+        <span class="badge-danger">{{ ucfirst($row->type) }}</span>
+    @elseif($row->type === App\Enums\TaskTypesEnum::other()->value)
+        <span class="badge-purple">{{ ucfirst($row->type) }}</span>
+    @elseif($row->type === App\Enums\TaskTypesEnum::request()->value)
+        <span class="badge-blue">{{ ucfirst($row->type) }}</span>
+    @endif
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
-    
-    @if ($row->status === App\Enums\TaskTypesEnum::issue()->value)
+
+    @if ($row->status === App\Enums\TaskStatusEnum::scoping()->value)
         <span class="badge-success">{{ ucfirst($row->status) }}</span>
-    @elseif($row->status === App\Enums\TaskTypesEnum::payment()->value)
+    @elseif($row->status === App\Enums\TaskStatusEnum::backlog()->value)
         <span class="badge-info">{{ ucfirst($row->status) }}</span>
-    @elseif($row->status === App\Enums\TaskTypesEnum::improvement()->value)
+    @elseif($row->status === App\Enums\TaskStatusEnum::in_progress()->value)
         <span class="badge-danger">{{ ucfirst($row->status) }}</span>
-    @elseif($row->status === App\Enums\TaskTypesEnum::other()->value)
+    @elseif($row->status === App\Enums\TaskStatusEnum::review()->value)
         <span class="badge-purple">{{ ucfirst($row->status) }}</span>
-    @elseif($row->status === App\Enums\TaskTypesEnum::request()->value)
+    @elseif($row->status === App\Enums\TaskStatusEnum::done()->value)
         <span class="badge-blue">{{ ucfirst($row->status) }}</span>
     @endif
+
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
     <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->assignee_id]) }}">
-    @php
-        $user = App\Models\User::where('id',$row->assignee_id)->first()
-    @endphp
-        @if(!empty($user->thumbnail))
-            <img class="h-10 w-10 rounded-full border-3 ring-2 border-gray-200 mr-3 object-cover shrink-0" src="{{ $user->getThumbnail(['w' => '120']) }}" />
+        @php
+            $user = App\Models\User::where('id', $row->assignee_id)->first();
+        @endphp
+        @if (!empty($user->thumbnail))
+            <img class="h-10 w-10 rounded-full border-3 ring-2 border-gray-200 mr-3 object-cover shrink-0"
+                src="{{ $user->getThumbnail(['w' => '120']) }}" />
         @endif
-   <span class="text-blue-600"> {{  $user->name.' '.$user->surname }}</span>
+        <span class="text-blue-600"> {{ $user->name . ' ' . $user->surname }}</span>
     </a>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
     <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user_id]) }}">
-    @php
-        $user = App\Models\User::where('id',$row->user_id)->first()
-    @endphp
-        @if(!empty($user->thumbnail))
-            <img class="h-10 w-10 rounded-full border-3 ring-2 border-gray-200 mr-3 object-cover shrink-0" src="{{ $user->getThumbnail(['w' => '120']) }}" />
+        @php
+            $user = App\Models\User::where('id', $row->user_id)->first();
+        @endphp
+        @if (!empty($user->thumbnail))
+            <img class="h-10 w-10 rounded-full border-3 ring-2 border-gray-200 mr-3 object-cover shrink-0"
+                src="{{ $user->getThumbnail(['w' => '120']) }}" />
         @endif
-   <span class="text-blue-600"> {{  $user->name.' '.$user->surname }}</span>
+        <span class="text-blue-600"> {{ $user->name . ' ' . $user->surname }}</span>
     </a>
 </x-livewire-tables::table.cell>
 
@@ -64,21 +78,15 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a>
 
-        <button 
-            @click="isOpen = !isOpen" 
-            @keydown.escape="isOpen = false" 
-            class="flex items-center btn" 
-        >
+        <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="flex items-center btn">
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
-        <ul x-show="isOpen"
-            @click.outside="isOpen = false"
-            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow"
-        >
+        <ul x-show="isOpen" @click.outside="isOpen = false"
+            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow">
             <li>
-                <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="{{ route('task.edit',['id'=>$row->id]) }} "
-                    target="_blank">
-                    @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) 
+                <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14"
+                    href="{{ route('task.edit', ['id' => $row->id]) }} " target="_blank">
+                    @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2'])
                     <span class="ml-2">{{ translate('Edit') }}</span>
                 </a>
             </li>
