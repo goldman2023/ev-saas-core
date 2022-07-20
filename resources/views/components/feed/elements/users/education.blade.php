@@ -4,7 +4,7 @@
     </div>
 
     <div class="px-5 pb-4 flex flex-col ">
-        @if(!empty($user->getUserMeta('education')))
+        @if(!empty($user->getUserMeta('education')) && is_array($user->getUserMeta('education')))
             @foreach($user->getUserMeta('education') as $index => $edu)
                 <div class="w-full flex flex-col  @if($index !== count($user->getUserMeta('education')) - 1) border-b border-gray-200 pb-3 mb-3 @endif">
                     <strong class="block mb-0 text-16 text-typ-1">{{ $edu['school'] ?? '' }}</strong>
@@ -34,7 +34,7 @@
                             <strong class="text-typ-3">{{ $human_diff }}</strong>
                         @endif
                     </div>
-                    
+
                     @if(!empty($edu['description']))
                         <div class="w-full" x-data="{
                             clamped: true,
@@ -63,8 +63,8 @@
                             <span x-text="read_more_text" class="w-full justify-center cursor-pointer text-right text-typ-3 text-12 mt-1" @click="readMore()" :class="{'hidden':!read_more_visible, 'inline-flex':read_more_visible}"></span>
                         </div>
                     @endif
-             
-                    
+
+
                     @if(!empty($edu['certificates']))
                         <div class="w-full flex flex-row items-center mt-2">
                             @foreach($edu['certificates'] as $key => $cert)

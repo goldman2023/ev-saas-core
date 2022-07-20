@@ -5,6 +5,7 @@
 @section('panel_content')
 
 <section>
+
     <x-dashboard.section-headers.section-header title="{{ translate('All products') }}" text="Manage and create new products">
         <x-slot name="content">
             <a href="{{ route('product.create') }}" class="btn-primary">
@@ -13,6 +14,10 @@
             </a>
         </x-slot>
     </x-dashboard.section-headers.section-header>
+
+    <div class="mb-6">
+        <x-dashboard.widgets.business.dynamic-k-p-i></x-dashboard.widgets.business.dynamic-k-p-i>
+        </div>
 
     <div class="w-full">
         @if($products->isNotEmpty())

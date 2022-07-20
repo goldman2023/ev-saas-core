@@ -246,8 +246,9 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                    <x-dashboard.form.froala field="content" id="blogPost-content-wysiwyg">
-                                    </x-dashboard.form.froala>
+
+                                    <x-dashboard.form.editor-js field="content" id="blogPost-content-wysiwyg" />
+
 
                                     <x-system.invalid-msg class="w-full" field="blogPost.content">
                                     </x-system.invalid-msg>
@@ -412,7 +413,7 @@
                                     {{ translate('Save') }}
                                 </button>
                             </div>
-                            
+
                         </div>
                     </div>
                     {{-- END Actions --}}
