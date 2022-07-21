@@ -72,4 +72,11 @@ class WeSubscriptionsController extends Controller
 
         return response()->json(['status' => 'success', 'data' => StripeService::getUpcomingInvoice($user_subscription, $new_plan, $interval)]);
     }
+
+    public function calculate_potential_invoice(Request $request) {
+        $cart = $request->input('cart');
+        $interval = $request->input('interval');
+
+        return response()->json(['status' => 'success', 'data' => StripeService::projectSubscriptionInvoice($cart, $interval)]);
+    }
 }

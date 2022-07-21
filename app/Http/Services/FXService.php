@@ -46,7 +46,7 @@ class FXService
 
     protected function setCurrency()
     {
-        $code = get_setting('system_default_currency'); // Already converted to Currency in TenantSettingsService
+        $code = get_tenant_setting('system_default_currency'); // Already converted to Currency in TenantSettingsService
 
         if ($code) {
             $code = $code->code;
@@ -71,9 +71,9 @@ class FXService
 
     public function getCurrency($symbol = null)
     {
-        if(!empty($symbol)) {
-            dd('asdasd');
-        }
+        // if(!empty($symbol)) {
+        //     dd('asdasd');
+        // }
 
         return $this->currency;
     }
@@ -103,20 +103,20 @@ class FXService
         }
 
         /* Get Default Decimals number */
-        $displayedDecimals = get_setting('no_of_decimals');
+        $displayedDecimals = get_tenant_setting('no_of_decimals');
 
         /* Check if decimals are overided in a function call */
         if($decimals) {
             $displayedDecimals = $decimals;
         }
 
-        if (get_setting('decimal_separator') === 1) {
+        if (get_tenant_setting('decimal_separator') === 1) {
             $formatted_price = number_format($price, $displayedDecimals);
         } else {
             $formatted_price = number_format($price, $displayedDecimals, ',', ' ');
         }
 
-        if (get_setting('symbol_format') === 1) {
+        if (get_tenant_setting('symbol_format') === 1) {
             return $this->currency_symbol.$formatted_price;
         }
 

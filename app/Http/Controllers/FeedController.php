@@ -49,4 +49,11 @@ class FeedController extends Controller
 
         return view('frontend.feed.products', compact('products'));
     }
+
+    public function courses()
+    {
+        $products = Product::where('status', 'published')->where('type', '=' ,'course')->paginate(50);
+
+        return view('frontend.feed.products', compact('products'));
+    }
 }

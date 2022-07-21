@@ -34,7 +34,7 @@ class CancelStripePlanSubscription
         if(Payments::stripe()->enabled) {
             // Cancel subscription in stripe
 
-            if(!get_tenant_setting('multiplan_purchase')) {
+            if(!get_tenant_setting('multi_item_subscription_enabled')) {
                 if(!empty($stripe_subscription_id = $event->plan_subscription->data['stripe_subscription_id'])
                     && $event->plan_subscription->status === UserSubscriptionStatusEnum::active()->value
                     && $event->plan_subscription->payment_status === PaymentStatusEnum::paid()->value) {

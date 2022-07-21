@@ -103,8 +103,8 @@
     @yield('script')
 
     @stack('footer_scripts')
-    {{-- Global Plausible Script --}}
-    <script defer data-domain="we-saas.com" src="https://plausible.io/js/plausible.js"></script>
+    {{-- TODO: Global Plausible Script --}}
+
     @auth
     @endauth
 

@@ -98,7 +98,7 @@
 
         
 
-        {{-- @if(!get_tenant_setting('multiplan_purchase'))
+        {{-- @if(!get_tenant_setting('multi_item_subscription_enabled'))
             <button 
                 @click="isOpen = !isOpen" 
                 @keydown.escape="isOpen = false" 

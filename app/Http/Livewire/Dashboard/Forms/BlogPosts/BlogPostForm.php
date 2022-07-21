@@ -75,7 +75,7 @@ class BlogPostForm extends Component
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
     }
-    
+
     protected function rules()
     {
         return [
@@ -138,6 +138,7 @@ class BlogPostForm extends Component
             $this->validate();
         }
 
+
         DB::beginTransaction();
 
         try {
@@ -151,6 +152,8 @@ class BlogPostForm extends Component
                 $msg = translate('Blog post status is set to '.(StatusEnum::pending()->value).' because you don\'t have enough Permissions to publish it right away.');
             }
 
+
+
             $this->blogPost->save();
 
             // Sync gallery and uploads
@@ -161,7 +164,10 @@ class BlogPostForm extends Component
 
             $this->saveModelCoreMeta();
 
+
+
             // Save Other Product Core Meta
+            /* TODO: Fix Saving Core meta, core meta fields are missing in the form, so add those and uncoment */
             $this->setCoreMeta($this->blogPost);
 
             // TODO: Make a function to relate blog post and plans in order to make posts subscription_only
@@ -172,6 +178,8 @@ class BlogPostForm extends Component
             // TODO: Determine which package to use for Translations! Set Translations...
 //
             DB::commit();
+
+
 
             if ($this->is_update) {
                 $this->inform(translate('Blog post successfully updated!'), $msg, 'success');
@@ -209,6 +217,7 @@ class BlogPostForm extends Component
     // TODO: Move this to Trait and replace this function in PlanForm and in ProductForm
     protected function saveModelCoreMeta()
     {
+        return true;
         foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {
             $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
 

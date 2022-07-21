@@ -64,8 +64,10 @@ class AppSettingsForm extends Component
             ]),
             'features' => apply_filters('app-settings-features-rules', [
                 /* Example field for creating new TenantSetting */
+                'settings.multiple_subscriptions_enabled' => ['boolean'],
+                'settings.multi_item_subscription_enabled' => ['boolean'],
+                'settings.subscription_items_distribution_enabled' => ['boolean'],
                 'settings.feed_enabled' => ['boolean'],
-                'settings.multiplan_purchase' => ['boolean'],
                 'settings.onboarding_flow' => ['boolean'],
                 'settings.force_email_verification' => ['boolean'],
                 'settings.register_redirect_url' => ['nullable'],
@@ -75,6 +77,7 @@ class AppSettingsForm extends Component
 
                 'settings.chat_feature' => ['boolean'],
                 'settings.addresses_feature' => ['boolean'],
+                'settings.notifications_feature' => ['boolean'],
                 'settings.weedit_feature' => ['boolean'],
                 'settings.wishlist_feature' => ['boolean'],
                 'settings.vendor_mode_feature' => ['boolean'],

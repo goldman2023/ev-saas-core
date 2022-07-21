@@ -217,6 +217,7 @@ Route::middleware([
     Route::get('/feed/bookmarks', [FeedController::class, 'bookmarks'])->name('feed.bookmarks');
     Route::get('/feed/shops', [FeedController::class, 'shops'])->name('feed.shops');
     Route::get('/feed/products', [FeedController::class, 'products'])->name('feed.products');
+    Route::get('/feed/courses', [FeedController::class, 'courses'])->name('feed.courses');
 
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');
@@ -244,7 +245,8 @@ Route::middleware([
     Route::post('/quiz/save/{id}', [WeQuizController::class, 'save_quiz'])->name('we-quiz.update');
     Route::post('/quiz/result/{id}/passed-toggle', [WeQuizController::class, 'toggle_passed'])->name('we-quiz.toggle-passed');
 
-    // Change free trial plan api route
     Route::get('/subscription/{subscription_id}/change-free-trial-plan/{new_plan_id}', [WeSubscriptionsController::class, 'change_free_trial_plan'])->name('subscription.change-free-trial-plan');
     Route::get('/subscription/{subscription_id}/upcoming-invoice/plan/{new_plan_id}/{interval}', [WeSubscriptionsController::class, 'generate_upcoming_invoice_from_stripe'])->name('subscription.upcoming.invoice.stripe');
+    Route::post('/subscription/calculate-potential-invoice', [WeSubscriptionsController::class, 'calculate_potential_invoice'])->name('subscription.calculate-potential-invoice.stripe');
+
 });
