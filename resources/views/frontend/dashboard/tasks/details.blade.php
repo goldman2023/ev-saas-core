@@ -52,12 +52,9 @@
                 <span class="text-center"> Name: {{ $task->name }} </span>
             </div>
             
-            <div>
-                <span class="text-center"> Subject: {{ $task->subject_id }} </span>
-            </div>
 
             <div>
-                <span class="text-center"> Subject Type: {{ $task->subject_type }} </span>
+                <span class="text-center"> Subject Type: {{ App\Models\Product::where('id',$task->subject_id)->first()->name }} </span>
             </div>
 
             <div>
