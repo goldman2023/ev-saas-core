@@ -1,12 +1,15 @@
 @push('head_scripts')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+    <script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush
 <div class="w-full" x-data="{
     type: @js($task->type ?? App\Enums\TaskTypesEnum::issue()->value),
     status: @js($task->status ?? App\Enums\TaskStatusEnum::scoping()->value),
     assignee_id: @js($task->assignee_id ?? Auth::id()),
-}" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" x-cloak>
+        content: @entangle('task.content').defer,
+}" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
+    x-cloak>
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:target="saveTask()"
             wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
@@ -20,8 +23,10 @@
                         <div>
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Task Details') }}
                             </h3>
-                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Here you can edit all task basic
-                                information') }}</p>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                {{ translate('Here you can edit all task basic
+                                                                information') }}
+                            </p>
                         </div>
 
                         <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
@@ -29,13 +34,12 @@
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
                                 x-data="{}">
 
-                                <label for="task.name"
-                                    class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                <label for="task.name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Name') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <x-dashboard.form.input field="task.name" placeholder="Name of Task" />
+                                    <x-dashboard.form.input field="task.name" placeholder="Name of Task" />
 
                                 </div>
                             </div>
@@ -51,25 +55,25 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <x-dashboard.form.input field="task.subject_type" placeholder="Subject Type" />
+                                    <x-dashboard.form.input field="task.subject_type" placeholder="Subject Type" />
 
                                 </div>
                             </div>
                             <!-- END Subject Type -->
 
-                        <!-- Assignee -->
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                            <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                <span class="mr-2">{{ translate('Assignee') }}</span>
+                            <!-- Assignee -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    <span class="mr-2">{{ translate('Assignee') }}</span>
 
-                            </label>
+                                </label>
 
-                            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <x-dashboard.form.select :items="$shop_staff" selected="assignee_id" :nullable="false">
-                                </x-dashboard.form.select>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select :items="$shop_staff" selected="assignee_id" :nullable="false">
+                                    </x-dashboard.form.select>
+                                </div>
                             </div>
-                        </div>
-                        <!-- END Assignee -->
+                            <!-- END Assignee -->
 
                             <!-- Excerpt -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
@@ -81,25 +85,24 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            <x-dashboard.form.input field="task.excerpt" placeholder="Excerpt" />
+                                    <x-dashboard.form.input field="task.excerpt" placeholder="Excerpt" />
 
                                 </div>
                             </div>
                             <!-- END Excerpt -->
 
-                            
+
                             <!-- Content -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{}">
+                                x-data="{}" wire:ignore>
 
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Content') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <textarea type="text" class="form-standard h-[80px] @error('task.content') is-invalid @enderror"
-                                        placeholder="{{ translate('Write a short content to describe the task') }}" wire:model.defer="task.content">
-                                </textarea>
+                                    <x-dashboard.form.editor-js field="content" id="task-content-editor">
+                                    </x-dashboard.form.editor-js>
 
                                     <x-system.invalid-msg class="w-full" field="task.content">
                                     </x-system.invalid-msg>
@@ -142,7 +145,7 @@
                             </div>
                         </div>
                         <!-- END Status -->
-                        
+
                         <!-- Type -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
                             <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
@@ -175,6 +178,7 @@
                             <button type="button" class="btn btn-primary ml-auto btn-sm"
                                 @click="
                                 $wire.set('task.status', status, true);
+                                $wire.set('task.content', content, true);
                                 $wire.set('task.assignee_id', assignee_id, true);
                                 $wire.set('task.type', type, true);
                                 @do_action('view.task-form.wire_set')
