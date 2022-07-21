@@ -1,6 +1,4 @@
 @push('head_scripts')
-<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
 {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
@@ -20,8 +18,8 @@
             left: 0,
             top: document.getElementById(value).offsetTop
         });
-    })" 
-    @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
+    })"
+    @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
     @submit-form.window="
         $wire.set('shop.thumbnail', thumbnail.id, true);
         $wire.set('shop.cover', cover.id, true);
@@ -241,8 +239,8 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                    <x-dashboard.form.froala field="content" id="shop-content-wysiwyg">
-                                    </x-dashboard.form.froala>
+
+                                    <x-dashboard.form.editor-js field="content" id="shop-content-wysiwyg" />
 
                                     <x-system.invalid-msg class="w-full" field="shop.content"></x-system.invalid-msg>
                                 </div>

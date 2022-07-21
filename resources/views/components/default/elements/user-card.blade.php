@@ -1,7 +1,7 @@
 <div>
     <li class="col-span-1 flex flex-col text-center bg-white rounded-lg border border-gray-200 shadow divide-y divide-gray-200">
         <div class="flex-1 flex flex-col p-8">
-            <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full"
+            <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full border object-contain"
                 src="{{ $user->getThumbnail() }}"
                 alt="">
             <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ $user->name .' '.$user->surname }}</h3>

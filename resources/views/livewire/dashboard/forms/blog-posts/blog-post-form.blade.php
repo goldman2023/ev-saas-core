@@ -27,6 +27,9 @@
 
     }
 }" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" x-cloak>
+@push('head_scripts')
+<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+@endpush
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:target="saveBlogPost"
             wire:loading.class.remove="hidden"></x-ev.loaders.spinner>

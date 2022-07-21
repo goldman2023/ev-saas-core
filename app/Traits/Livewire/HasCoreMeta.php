@@ -33,7 +33,8 @@ trait HasCoreMeta
         if (!empty($model)) {
             $old_core_meta_keys = $model->core_meta()->select('key')->get()->pluck('key');
             $missing_core_meta_keys = $old_core_meta_keys->diff(collect($this->core_meta)->pluck('key'));
-            
+
+
             foreach ($this->core_meta as $meta) {
                 // Skip predefined keys for various content types
                 if($model instanceof Product && array_key_exists($meta['key'], CoreMeta::metaProductDataTypes()) ) {
@@ -60,7 +61,7 @@ trait HasCoreMeta
 
             // Delete missing core_meta
             if($missing_core_meta_keys->isNotEmpty()) {
-                
+
                 // Skip predefined keys for various content types
                 if($model instanceof Product) {
                     $keys_to_delete = array_keys(array_diff_key(array_flip($missing_core_meta_keys->toArray()), CoreMeta::metaProductDataTypes()));

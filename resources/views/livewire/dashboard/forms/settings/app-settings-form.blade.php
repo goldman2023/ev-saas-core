@@ -485,6 +485,23 @@
                                 </div>
                                 {{-- END Addresses Feature --}}
 
+                                {{-- Addresses Feature --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
+                                    x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Notifications')
+                                            }}</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('If you want to enable notifications for users inside website') }}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <x-dashboard.form.toggle field="settings.notifications_feature" />
+                                    </div>
+                                </div>
+                                {{-- END Addresses Feature --}}
+
                                 {{-- WeEdit Feature --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
                                     x-data="{}">
@@ -751,6 +768,7 @@
                                         $wire.set('settings.force_email_verification', settings.force_email_verification, true);
                                         $wire.set('settings.chat_feature', settings.chat_feature, true);
                                         $wire.set('settings.addresses_feature', settings.addresses_feature, true);
+                                        $wire.set('settings.notifications_feature', settings.notifications_feature, true);
                                         $wire.set('settings.weedit_feature', settings.weedit_feature, true);
                                         $wire.set('settings.wishlist_feature', settings.wishlist_feature, true);
                                         $wire.set('settings.vendor_mode_feature', settings.vendor_mode_feature, true);

@@ -17,7 +17,13 @@ class Footer extends WeComponent
     public function __construct($template = 'footer_01')
     {
         if(get_tenant_setting('footer_style')) {
-            $this->template = get_tenant_setting('footer_style')->value;
+
+            /* Check if view exits */
+            if(view()->exists('components.tailwind-ui.footers.'.$template)) {
+                $this->template = get_tenant_setting('footer_style');
+            } else {
+                $this->template = 'footer_01';
+            }
         } else {
             $this->template = $template;
 

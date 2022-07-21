@@ -9,7 +9,7 @@
       Menu open: "fixed inset-0 z-40 overflow-y-auto", Menu closed: ""
     -->
     <div class="py-10">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:max-w-7xl lg:px-0 lg:grid lg:grid-cols-12 lg:gap-8">
             <div class="hidden lg:block lg:col-span-2 xl:col-span-2">
                 <x-feed.elements.feed-sidebar>
                 </x-feed.elements.feed-sidebar>
