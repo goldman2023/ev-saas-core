@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\CoreMeta;
 use App\Models\Task;
+use App\Models\Product;
 use App\Builders\BaseBuilder;
 use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\RulesSets;
@@ -28,6 +29,7 @@ class TaskForm extends Component
 
     public $is_update;
     public $shop_staff;
+    public $products;
 
     /**
      * Create a new component instance.
@@ -38,7 +40,9 @@ class TaskForm extends Component
     {
         $this->task = empty($task) ? new Task() : $task;
         $this->is_update = isset($this->task->id) && ! empty($this->task->id);
-        $this->shop_staff = User::where('user_type','customer')->get()->keyBy('id')->map(fn($user) => $user->name.' '.$user->surname.' ('.$user->email.')')->toArray();
+        $this->shop_staff = User::where('user_type','customer')->get()->keyBy('id')->
+        map(fn($user) =>  $user->name.' '.$user->surname.' ('.$user->email.')')->toArray();
+        $this->products = Product::published()->limit(10)->get()->keyBy('id')->map(fn($product) => $product->name)->toArray();
 
         if (!$this->is_update) {
             $this->task->type = TaskTypesEnum::issue()->value;
@@ -52,12 +56,13 @@ class TaskForm extends Component
 
         return [
             'task.name' => 'required',
-            'task.subject_type' => 'required',
+            'task.subject_type' => ['required'],
             'task.excerpt' => 'required',
             'task.content' => 'required',
             'task.status' => [Rule::in(TaskStatusEnum::toValues())],
             'task.type' => [Rule::in(TaskTypesEnum::toValues())],
             'task.assignee_id' => [Rule::in(array_keys($this->shop_staff))],
+            'task.subject_id' => ['required',Rule::in(array_keys($this->products))],
         ];
     }
 
@@ -71,6 +76,7 @@ class TaskForm extends Component
             'task.type.in' => translate('Type must be one of the following:').' '.TaskTypesEnum::implodedLabels(),
             'task.status.in' => translate('Status must be one of the following:').' '.TaskStatusEnum::implodedLabels(),
             'task.assignee_id.in' => translate('Task assignee must be chosen from the list of shop staff'),
+            'task.subject_id.in' => translate('Task subject must be chosen from the list of subjects'),
         ];
     }
 
@@ -92,7 +98,6 @@ class TaskForm extends Component
         try {
 
             $this->task->user_id = Auth::id();
-            $this->task->subject_id =  1;
 
 
             $this->task->save();

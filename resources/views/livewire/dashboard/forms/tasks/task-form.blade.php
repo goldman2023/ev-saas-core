@@ -1,13 +1,13 @@
 @push('head_scripts')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
     <script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush
 <div class="w-full" x-data="{
     type: @js($task->type ?? App\Enums\TaskTypesEnum::issue()->value),
     status: @js($task->status ?? App\Enums\TaskStatusEnum::scoping()->value),
     assignee_id: @js($task->assignee_id ?? Auth::id()),
-        content: @entangle('task.content').defer,
+    subject_type: @js($task->subject_type ?? App\Models\Product::find(1)),
+    subject_id: @js($task->subject_type->id ?? App\Models\Product::find(1)->id),
+    content: @entangle('task.content').defer,
 }" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
     x-cloak>
     <div class="w-full relative">
@@ -54,10 +54,10 @@
                                     {{ translate('Subject Type') }}
                                 </label>
 
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="task.subject_type" placeholder="Subject Type" />
-
-                                </div>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.select :items="$products" selected="subject_type" :nullable="false">
+                                </x-dashboard.form.select>
+                            </div>
                             </div>
                             <!-- END Subject Type -->
 
@@ -179,6 +179,8 @@
                                 @click="
                                 $wire.set('task.status', status, true);
                                 $wire.set('task.content', content, true);
+                                $wire.set('task.subject_type', subject_type, true);
+                                $wire.set('task.subject_id', subject_id, true);
                                 $wire.set('task.assignee_id', assignee_id, true);
                                 $wire.set('task.type', type, true);
                                 @do_action('view.task-form.wire_set')
