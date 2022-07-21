@@ -34,7 +34,6 @@ class ProductsObserver
             StripeService::saveStripeProduct($product);
         }
 
-        auth()->user()->notify(new InvoicePaid($invoice));
 
     }
 

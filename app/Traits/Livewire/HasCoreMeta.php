@@ -34,30 +34,32 @@ trait HasCoreMeta
             $old_core_meta_keys = $model->core_meta()->select('key')->get()->pluck('key');
             $missing_core_meta_keys = $old_core_meta_keys->diff(collect($this->core_meta)->pluck('key'));
 
+            if(is_array($this->core_meta)) {
+                foreach ($this->core_meta as $meta) {
+                    // Skip predefined keys for various content types
+                    if($model instanceof Product && array_key_exists($meta['key'], CoreMeta::metaProductDataTypes()) ) {
+                        continue;
+                    } else if($model instanceof Plan && array_key_exists($meta['key'], CoreMeta::metaPlanDataTypes()) ) {
+                        continue;
+                    } else if($model instanceof BlogPost && array_key_exists($meta['key'], CoreMeta::metaBlogPostDataTypes()) ) {
+                        continue;
+                    }
 
-            foreach ($this->core_meta as $meta) {
-                // Skip predefined keys for various content types
-                if($model instanceof Product && array_key_exists($meta['key'], CoreMeta::metaProductDataTypes()) ) {
-                    continue;
-                } else if($model instanceof Plan && array_key_exists($meta['key'], CoreMeta::metaPlanDataTypes()) ) {
-                    continue;
-                } else if($model instanceof BlogPost && array_key_exists($meta['key'], CoreMeta::metaBlogPostDataTypes()) ) {
-                    continue;
-                }
-
-                if(!empty($meta['key'] ?? null)) {
-                    CoreMeta::updateOrCreate(
-                        [
-                            'key' => $meta['key'],
-                            'subject_id' => $model->id,
-                            'subject_type' => $model::class
-                        ],
-                        [
-                            'value' => $meta['value']
-                        ]
-                    );
+                    if(!empty($meta['key'] ?? null)) {
+                        CoreMeta::updateOrCreate(
+                            [
+                                'key' => $meta['key'],
+                                'subject_id' => $model->id,
+                                'subject_type' => $model::class
+                            ],
+                            [
+                                'value' => $meta['value']
+                            ]
+                        );
+                    }
                 }
             }
+
 
             // Delete missing core_meta
             if($missing_core_meta_keys->isNotEmpty()) {

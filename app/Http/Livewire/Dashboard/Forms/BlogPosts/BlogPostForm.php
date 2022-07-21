@@ -168,7 +168,7 @@ class BlogPostForm extends Component
 
             // Save Other Product Core Meta
             /* TODO: Fix Saving Core meta, core meta fields are missing in the form, so add those and uncoment */
-            // $this->setCoreMeta($this->blogPost);
+            $this->setCoreMeta($this->blogPost);
 
             // TODO: Make a function to relate blog post and plans in order to make posts subscription_only
 

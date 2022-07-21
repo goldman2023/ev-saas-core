@@ -81,6 +81,20 @@
             <span class="truncate"> {{ translate('Tags and Topics') }} </span>
         </a>
 
+        <a href="{{ route('feed.products') }}"
+            class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <!-- Heroicon name: outline/user-group -->
+            @svg('heroicon-o-shopping-cart', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+            <span class="truncate"> {{ translate('Products') }} </span>
+        </a>
+
+        <a href="{{ route('feed.courses') }}"
+            class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <!-- Heroicon name: outline/user-group -->
+            @svg('heroicon-o-academic-cap', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+            <span class="truncate"> {{ translate('Courses') }} </span>
+        </a>
+
         <a href="{{  route('feed.shops') }}"
             class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
             <!-- Heroicon name: outline/fire -->
@@ -88,17 +102,7 @@
 
             <span class="truncate"> {{ translate('Shops') }} </span>
         </a>
-        <a href="{{ route('feed.products') }}"
-            class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-            <!-- Heroicon name: outline/user-group -->
-            <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <span class="truncate"> {{ translate('Products') }} </span>
-        </a>
+
 
         <!-- This example requires Tailwind CSS v2.0+ -->
         <div class="relative py-3">
@@ -185,33 +189,7 @@
         @endauth
 
     </div>
-    <div class="pt-6 mb-6">
-        <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider" id="communities-headline">
-            {{ translate('My Shop') }}
-        </p>
-        <div class="mt-3 space-y-2" aria-labelledby="communities-headline">
 
-        </div>
-        <a href="{{ route('settings.shop_settings') }}" class="px-3 relative flex items-start group">
-            <span class="h-9 w-9 flex items-center">
-                    <!-- Heroicon name: solid/check -->
-
-                    <img class="w-full flex-shrink-0  rounded-full object-contain mt-[50px] ring-2 ring-indigo-600 p-1" src="{{ \MyShop::getShop()->getThumbnail()}}" />
-
-            </span>
-            <span class="ml-4 min-w-0 flex flex-col">
-                <span class="text-xs font-semibold tracking-wide uppercase">
-                    {{ \MyShop::getShop()->name }}
-                </span>
-                <span class="text-sm text-gray-500">
-                   {{ translate('Manage') }}
-                </span>
-            </span>
-        </a>
-
-
-
-    </div>
 
     {{-- <x-dashboard.elements.support-card class="mt-3"></x-dashboard.elements.support-card> --}}
     <div class="pt-6">
