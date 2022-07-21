@@ -88,7 +88,6 @@
     @livewireChartsScripts
     @yield('script')
 
-
     @stack('footer_scripts')
 </body>
 

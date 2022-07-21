@@ -1,6 +1,6 @@
 <div class="w-full" x-data="{
     current: 0,
-    experiences: {{ $field }},
+    experiences: [],
     item_template: {
         'title': 'Position...',
         'company_name': 'Company name...',
@@ -12,8 +12,8 @@
         'description': '',
     },
     add() {
-        if(this.experiences === undefined || this.experiences === null) { 
-            this.experiences = [ {...this.item_template} ]; 
+        if(this.experiences === undefined || this.experiences === null) {
+            this.experiences = [ {...this.item_template} ];
         } else {
             this.experiences.push({...this.item_template});
         }
@@ -28,9 +28,13 @@
         $wire.set('{{ $field }}', this.experiences.filter(function(x){return x}), true);
         $wire.saveWorkExperience();
     }
-}" 
-    x-init="if(experiences === undefined || experiences === null) { 
-        experiences = [  ]; 
+}"
+    x-init="if(experiences === undefined || experiences === null) {
+        if({{ $field }} === undefined || {{ $field }} === null) {
+            experiences = [];
+        } else {
+            experiences = {{ $field }};
+        }
     }"
 >
     <ul class="border-b border-gray-200 divide-y divide-gray-200" x-show="experiences != null && experiences.length > 0">
