@@ -41,7 +41,10 @@
     @stack('head_scripts')
 </head>
 
-<body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{}"
+<body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{
+    all_categories: @js(Categories::getAllFormatted(true)),
+    all_categories_flat: @js(Categories::getAllFormatted(true, true)),
+}"
     @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
 
     @include('frontend.layouts.global-partials.global-integrations-body')
