@@ -33,7 +33,7 @@ class StripePaymentController extends Controller
 
         // Check if data has one or more items
         if(!empty($data['items'] ?? null) && get_tenant_setting('multi_item_subscription_enabled')) {
-            $link = \StripeService::createSubscriptionCheckoutLink($data['items'], $data['interval'] ?? null);
+            $link = \StripeService::createSubscriptionCheckoutLink($data['items'], $data['interval'] ?? null, $data['previous_subscription_id'] ?? null);
         } else {
             $model = app($data['class'])->find($data['id']);
 

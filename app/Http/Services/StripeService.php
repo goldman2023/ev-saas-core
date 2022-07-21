@@ -628,11 +628,23 @@ class StripeService
         }
     }
 
-    public function createSubscriptionCheckoutLink($items, $interval = null) {
+    public function createSubscriptionCheckoutLink($items, $interval = null, $previous_subscription_id = null) {
         $order = null;
 
         $stripe_line_items = [];
         $order_line_items = [];
+
+        $previous_subscription = !empty($previous_subscription_id) ? UserSubscription::find($previous_subscription_id) : null;
+        /**
+         * Multi-items subscription logic: 
+         * 1. In subscription created/updated webhook, compare each previous subscription item quantity with corresponding qty of same item in
+         * new subscription and 1) if qty is bigger, create DIFF amount of licenses, 2) if qty is smaller, use previously selected license serial_numbers (actually IDs) from new subscription metadata and revoke/delete these Licenses.
+         * ---DONE---*IMPORTANT: Don't forget to create LicenseObserver to remove sub <-> license relation from `user_subscription_relationships` table on license delete.
+         * *IMPORTANT: for other licenses which where not removed nor newly created, update the `user_subscription_id` to hold ID of new subscription!!!
+         * 2. Remove old subscription from our end (it's important to remove old subscription only after new one is created and old sub. <-> license relations are remapped)
+         * - Removing of old-subscription will remove all old-subscription relations with plans, BUT NOT with old licenses, cuz old licenses are remapped to relate to new subscription in previous step
+         * 3. Immediately terminate old-subscription on stripe end
+         */
 
         // Loop through desired $items and construct stripe line_items
         if(!empty($items)) {
@@ -702,6 +714,9 @@ class StripeService
                         'invoice_id' => $invoice->id,
                         'user_id' => $order->user_id,
                         'shop_id' => $order->shop_id,
+                        'previous_subscription_id' => $previous_subscription?->id ?? '',
+                        'previous_stripe_subscription_id' => $previous_subscription?->getData(stripe_prefix('stripe_subscription_id')) ?? '',
+                        'items_to_remove' => [], // TODO: This should be consisted of array of ["subject_id" => xx, "subject_type" => "App\Models\XXX"]
                     ],
                 ],
             ];
@@ -1942,7 +1957,13 @@ class StripeService
         $stripe_subscription = $this->stripe->subscriptions->retrieve(
             $stripe_subscription_id,
             []
-          );
+        );
+
+        // Get previous subscription ids (our and stripe's) from stripe_subscription metadata, if any
+        $previous_subscription_id = $stripe_subscription->metadata->previous_subscription_id ?? null;
+        $previous_stripe_subscription_id = $stripe_subscription->metadata->previous_stripe_subscription_id ?? null;
+        $previous_subscription = UserSubscription::find($previous_subscription_id);
+
 
         DB::beginTransaction();
 
@@ -2033,15 +2054,15 @@ class StripeService
         }
 
         try {
-            // Fire Subscription(s) is created and paid Event
+            // Fire Subscription(s) "is created and paid" Event
             if($stripe_billing_reason === 'subscription_create') {
-                do_action('invoice.paid.subscription_create', $subscription, $stripe_invoice);
+                do_action('invoice.paid.subscription_create', $subscription, $previous_subscription, $stripe_invoice);
             }
-            // Fire Subscription(s) is updated and paid Event
+            // Fire Subscription(s) "is updated and paid" Event
             else if($stripe_billing_reason === 'subscription_update') {
-                do_action('invoice.paid.subscription_update', $subscription, $stripe_invoice);
+                do_action('invoice.paid.subscription_update', $subscription, $previous_subscription, $stripe_invoice);
             }
-            // Fire Subscription(s) is cycled and paid Event
+            // Fire Subscription "is cycled and paid" Event
             else if($stripe_billing_reason === 'subscription_cycle') {
                 do_action('invoice.paid.subscription_cycle', $subscription, $stripe_invoice);
             }
@@ -2157,6 +2178,8 @@ class StripeService
         $stripe_subscription_id = $stripe_subscription->id;
         $order_id = $stripe_subscription->metadata->order_id ?? null;
         $invoice_id = $stripe_subscription->metadata->invoice_id ?? null;
+        $previous_subscription_id = $stripe_subscription->metadata->previous_subscription_id ?? null;
+        $previous_stripe_subscription_id = $stripe_subscription->metadata->previous_stripe_subscription_id ?? null;
         $latest_stripe_invoice_id = $stripe_subscription->latest_invoice ?? null;
 
         try {
@@ -2279,11 +2302,19 @@ class StripeService
 
                 $subscription->save();
 
+
+                // Deal with previous subscription if there's any
+                $previous_subscription = UserSubscription::find($previous_subscription_id);
+                // if(!empty($previous_subscription = UserSubscription::find($previous_subscription_id))) {
+                //     // If $previous_subscription is present in DB, compare it's items and quantity with new one
+                    
+                // }
+
                 // Status of subscription in this webhook is always: "status": "incomplete" or "trialing"
                 // So we should just update start and end date and not change status and payment_status IF subscription is not 'trialing'! 
                 // These will be changed in subscription.updated if it's fired from Stripe
                 
-                do_action('stripe.webhook.subscriptions.created', $subscription);
+                do_action('stripe.webhook.subscriptions.created', $subscription, $previous_subscription);
             }
         } catch (\Exception $e) {
             http_response_code(400);

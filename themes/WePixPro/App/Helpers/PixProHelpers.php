@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Facades\StripeService;
 use App\Models\License;
+use App\Models\UserSubscriptionRelationship;
 use Illuminate\Support\Facades\DB;
 
 if (!function_exists('pix_pro_register_user')) {
@@ -156,10 +157,98 @@ if (!function_exists('pix_pro_disconnect_license')) {
     }
 }
 
+if (!function_exists('pix_pro_create_licenses_action')) {
+    function pix_pro_create_licenses_action($plan, $subscription, $stripe_subscription, $pix_pro_user, $qty = null) {
+        if(empty($qty)) {
+            $qty = $plan->pivot->qty;
+        }
+
+        // Create X amount of licenses based on pivot table qty column (if there's only one $plan and qty 1, then only one license will be created)
+        for ($i = 1; $i <= $qty; $i++) {
+            $stripe_item = collect($stripe_subscription->items->data)->firstWhere('price.product', $plan->getCoreMeta(StripeService::getStripeMode().'stripe_product_id'));
+
+            $number_of_images = $plan->getCoreMeta('number_of_images');
+
+            if(!empty($number_of_images) && (is_int($number_of_images || ctype_digit($number_of_images)))) {
+                $number_of_images = $plan->getCoreMeta('number_of_images') ?? 150;
+            } else {
+                $number_of_images = 150;
+            }
+
+            $cloud_service_param = $plan->getCoreMeta('includes_cloud') === true ? 1 : 0;
+            $offline_service_param = $plan->getCoreMeta('includes_offline') === true ? 1 : 0;
+            $license_subscription_type = $plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+
+            $body = pix_pro_add_auth_params([
+                "UserEmail" => $pix_pro_user['email'],
+                "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
+                "Qty" => 1, // THIS IS NUMBER OF TRIAL LICENSES TO BE CREATED! - WE SHOULD ALWAYS PUT 1, since we loop it on our end!
+                "LicenseType" => 'full', // TODO: Can be `manual` too
+                "LicenseCloudService" => $cloud_service_param,
+                "LicenseOfflineService" => $offline_service_param,
+                "LicenseImageLimit" => $number_of_images,
+                "PackageTypes" => 'mining',
+                "SubscriptionId" => $subscription->id,
+                "LicenseSubscriptionType" => $license_subscription_type,
+                "Status" => 'active',
+                "Tax" => 21, // TODO: Make this respect Stripe tax!
+                "PurchaseDate" => $subscription->start_date->format('Y-m-d H:i:s'),
+                "ExpirationDate" => $subscription->end_date->format('Y-m-d H:i:s'),
+                "OrderCurrency" => $stripe_item?->price?->currency ?? 'eur',
+                "Price" => ($stripe_item?->price?->unit_amount / 100) ?? $plan->getTotalPrice(),
+            ]);
+
+            $response = Http::post($route_paid, $body);
+            $response_json = $response->json();
+
+            if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                // If status is not success for any reason, throw an error
+                http_response_code(400);
+                Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
+            } else {
+                if(!empty($response_json['license'] ?? null)) {
+                    $pix_license = $response_json['license'];
+
+                    DB::beginTransaction();
+
+                    try {
+                        $license = new License();
+                        $license->plan_id = $plan->id;
+                        $license->user_id = $subscription->user_id;
+                        $license->license_name = $pix_license['license_name'] ?? '';
+                        $license->serial_number = $pix_license['serial_number'] ?? '';
+                        $license->license_type = $pix_license['license_type'] ?? '';
+
+                        $data = empty($license->data) ? [] : $license->data;
+                        $license->data = array_merge($data, $pix_license); // Will be populated when user activates the license
+                        $license->save();
+
+                        // Add a license <-> user_subscription relationship
+                        DB::table('user_subscription_relationships')->updateOrInsert(
+                            ['user_subscription_id' => $subscription->id, 'subject_id' => $license->id, 'subject_type' => $license::class],
+                            ['created_at' => date('Y:m:d H:i:s'), 'updated_at' => date('Y:m:d H:i:s')]
+                        );
+
+                        DB::commit();
+                    } catch(\Throwable $e) {
+                        DB::rollback();
+                        http_response_code(400);
+                        print_r($e);
+                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license on WeSaaS end and link it to user_subscription.', $e));
+
+                        die();
+                    }
+
+                }
+            }
+
+        }
+    }
+}
 
 // CREATE LICENSE
 if (!function_exists('pix_pro_create_license')) {
-    function pix_pro_create_license($subscription, $stripe_invoice) {
+    function pix_pro_create_license($subscription, $previous_subscription, $stripe_invoice) {
         $route_paid = pix_pro_endpoint().'/paid/add_license/';
 
         if (!empty($subscription)) {
@@ -175,87 +264,113 @@ if (!function_exists('pix_pro_create_license')) {
             $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
             if(!empty($pix_pro_user['user_id'] ?? null)) {
-                foreach($subscription->items as $plan) {
-                    // Create X amount of licenses based on pivot table qty column (if there's only one $plan and qty 1, then only one license will be created)
-                    for ($i = 1; $i <= $plan->pivot->qty; $i++) {
-                        $stripe_item = collect($stripe_subscription->items->data)->firstWhere('price.product', $plan->getCoreMeta(StripeService::getStripeMode().'stripe_product_id'));
 
-                        $number_of_images = $plan->getCoreMeta('number_of_images');
+                // If previous subscription is provided, we need to compare previous subscription items and their quantities with the new subscription
+                if(!empty($previous_subscription) && $previous_subscription->items->isNotEmpty()) {
+                    /**
+                     * 1.Loop through OLD-subscription items and compare with NEW-subscription items, there are four cases:
+                     *   1. Previous subscription item is included in new subscription but new_qty > old_qty -> Create DIFF amount of licenses
+                     *   2. Previous subscription item is included in new subscription but new_qty < old_qty -> Get licenses IDs to be removed from stripe_subscription metadata and remove them (user must specify which licenses to remove, otherwise last DIFF amount of licenses for that sub. item type will be removed)
+                     *   3. Previous subscription item is included in new subscription but new_qty = old_qty -> Do nothing for that item, leave Licenses as they are
+                     *   4. Previous subscription item is NOT included in new subscription -> Remove all licenses of previous subscription item type
+                     * 
+                     * 2. Loop through NEW-subscription items and if certain item(plan) is not included in OLD-subscription, create licenses based on qty
+                     * 
+                     * 3. Re-map all remaining Licenses from previous-subscription to point to new-subscription
+                     * 
+                     * 4. Then immediately cancel old-subscription on Stripe
+                     * 
+                     * 5. Then remove old-subscription from our DB since all data is remapped to relate to new-subscription
+                     */
 
-                        if(!empty($number_of_images) && (is_int($number_of_images || ctype_digit($number_of_images)))) {
-                            $number_of_images = $plan->getCoreMeta('number_of_images') ?? 150;
-                        } else {
-                            $number_of_images = 150;
-                        }
+                    // 1.Loop through OLD-subscription items and compare with NEW-subscription items
+                    foreach($previous_subscription->items as $old_plan) {
+                        $same_new_plan = $subscription->items->firstWhere('id', $old_plan->id);
 
-                        $cloud_service_param = $plan->getCoreMeta('includes_cloud') === true ? 1 : 0;
-                        $offline_service_param = $plan->getCoreMeta('includes_offline') === true ? 1 : 0;
-                        $license_subscription_type = $plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+                        if(!empty($same_new_plan) && $same_new_plan->pivot->qty > $old_plan->pivot->qty) {
+                            // Create DIFF amount of licenses
+                            $diff_amount = $same_new_plan->pivot->qty - $old_plan->pivot->qty;
+                            
+                            pix_pro_create_licenses_action($same_new_plan, $subscription, $stripe_subscription, $pix_pro_user, $diff_amount);
+                        } else if(!empty($same_new_plan) && $same_new_plan->pivot->qty < $old_plan->pivot->qty) {
+                            // Get licenses IDs to be removed from stripe_subscription metadata and remove them (user must specify which licenses to remove, otherwise last DIFF amount of licenses for that sub. item type will be removed)
+                            $diff_amount = $old_plan->pivot->qty - $same_new_plan->pivot->qty;
 
-                        $body = pix_pro_add_auth_params([
-                            "UserEmail" => $pix_pro_user['email'],
-                            "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
-                            "Qty" => 1, // THIS IS NUMBER OF TRIAL LICENSES TO BE CREATED! - WE SHOULD ALWAYS PUT 1, since we loop it on our end!
-                            "LicenseType" => 'full', // TODO: Can be `manual` too
-                            "LicenseCloudService" => $cloud_service_param,
-                            "LicenseOfflineService" => $offline_service_param,
-                            "LicenseImageLimit" => $number_of_images,
-                            "PackageTypes" => 'mining',
-                            "SubscriptionId" => $subscription->id,
-                            "LicenseSubscriptionType" => $license_subscription_type,
-                            "Status" => 'active',
-                            "Tax" => 21, // TODO: Make this respect Stripe tax!
-                            "PurchaseDate" => $subscription->start_date->format('Y-m-d H:i:s'),
-                            "ExpirationDate" => $subscription->end_date->format('Y-m-d H:i:s'),
-                            "OrderCurrency" => $stripe_item?->price?->currency ?? 'eur',
-                            "Price" => ($stripe_item?->price?->unit_amount / 100) ?? $plan->getTotalPrice(),
-                        ]);
-        
-                        $response = Http::post($route_paid, $body);
-                        $response_json = $response->json();
-        
-                        if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
-                            // If status is not success for any reason, throw an error
-                            http_response_code(400);
-                            Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
-                        } else {
-                            if(!empty($response_json['license'] ?? null)) {
-                                $pix_license = $response_json['license'];
-        
-                                DB::beginTransaction();
-        
-                                try {
-                                    $license = new License();
-                                    $license->user_id = $subscription->user->id;
-                                    $license->license_name = $pix_license['license_name'] ?? '';
-                                    $license->serial_number = $pix_license['serial_number'] ?? '';
-                                    $license->license_type = $pix_license['license_type'] ?? '';
-        
-                                    $data = empty($license->data) ? [] : $license->data;
-                                    $license->data = array_merge($data, $pix_license); // Will be populated when user activates the license
-                                    $license->save();
-        
-                                    // Add a license <-> user_subscription relationship
-                                    DB::table('user_subscription_relationships')->updateOrInsert(
-                                        ['user_subscription_id' => $subscription->id, 'subject_id' => $license->id, 'subject_type' => $license::class],
-                                        ['created_at' => date('Y:m:d H:i:s'), 'updated_at' => date('Y:m:d H:i:s')]
-                                    );
-        
-                                    DB::commit();
-                                } catch(\Throwable $e) {
-                                    DB::rollback();
-                                    http_response_code(400);
-                                    print_r($e);
-                                    Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license on WeSaaS end and link it to user_subscription.', $e));
-        
-                                    die();
+                            $licenses_idx_to_remove = $stripe_subscription->metadata->items_to_remove;
+
+                            if(!empty($licenses_idx_to_remove)) {
+                                // Remove specific licenses cuz they are specified in new stripe subscription metadata (consider disabling qty change in stripe checkout session window)
+                                foreach($licenses_idx_to_remove as $license) {
+                                    if(!empty($license['subject_id'] ?? null) && !empty($license['subject_type'] ?? null)) {
+                                        // Remove License
+                                        app($license['subject_type'])->where('id', $license['subject_id'])->delete();
+
+                                        // Remove License <-> UserSubscription relationship (with bulk delete() laravel doesn't trigger deleted event, so we have to manually remove it here)
+                                        UserSubscriptionRelationship::where([
+                                            ['subject_type', $license['subject_type']],
+                                            ['subject_id', $license['subject_id']]
+                                        ])->delete();
+
+                                        // TODO: Deactivate/Remove license on PixPro end
+                                    }
                                 }
-        
+                            } else if($diff_amount > 0) {
+                                // Remove last $diff_amount of licenses, since user didn't specify which licenses to remove! ( this should be a fallback, and we should enforce user to choose which licenses should be removed)
+                                $licenses_to_remove = License::where('plan_id', $same_new_plan->id)->where('user_id', $subscription->user_id)->latest()->take($diff_amount)->get();
+                                foreach($licenses_to_remove as $license_to_remove) {
+                                    $license_to_remove->delete();
+
+                                    // TODO: Deactivate/Remove license on PixPro end
+                                }
+                            }
+                        } else if(!empty($same_new_plan) && $same_new_plan->pivot->qty === $old_plan->pivot->qty) {
+                            // Do nothing! Leave Licenses as they are!
+                        } else if(empty($same_new_plan)) {
+                            // Remove all licenses of previous subscription item type (which have the plan_id = $old_plan->id)
+
+                            $licenses_to_remove = License::where('plan_id', $old_plan->id)->where('user_id', $subscription->user_id)->delete();
+                            foreach($licenses_to_remove as $license_to_remove) {
+                                $license_to_remove->delete();
+
+                                // TODO: Deactivate/Remove licenses on PixPro end
                             }
                         }
+                    }
 
+                    // 2. Loop through NEW-subscription items and if certain item(plan) is not included in OLD-subscription, create licenses based on qty
+                    foreach($subscription->items as $new_plan) {
+                        $same_old_plan = $previous_subscription->items->firstWhere('id', $new_plan->id);
+
+                        // New-subscription includes an item/plan which is not present in old-subscription, otherwise skip cuz the case is already taken care in previous foreach
+                        if(empty($same_old_plan)) {
+                            // Create licenses with desired qty
+                            pix_pro_create_licenses_action($new_plan, $subscription, $stripe_subscription, $pix_pro_user, $new_plan->pivot->qty);
+                        }
+                    }
+
+                    // 3. Get all remaining licenses from previous subscription and remap them to relate to new-subscription
+                    UserSubscriptionRelationship::where([
+                        ['user_subscription_id', $previous_subscription->id],
+                        ['subject_type', License::class],
+                    ])->update([
+                        'user_subscription_id' => $subscription->id
+                    ]);
+
+                    // 4. Immediately cancel old Stripe subscription
+                    $this->stripe->subscriptions->cancel(
+                        $previous_subscription->getData(stripe_prefix('stripe_subscription_id')),
+                        []
+                    );
+
+                    // 5. Remove old-subscription from our DB
+                    $previous_subscription->forceDelete();
+                } else {
+                    // This means no previous subscription is provided, so just create new licenses and attach to new subscription without any care for anything else xD
+                    foreach($subscription->items as $new_plan) {
+                        pix_pro_create_licenses_action($new_plan, $subscription, $stripe_subscription, $pix_pro_user, $new_plan->pivot->qty);
                     }
                 }
+
             } else {
                 Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, Could not get the user y email from pix-pro api', ''));
             }
@@ -265,7 +380,7 @@ if (!function_exists('pix_pro_create_license')) {
 
 // UPDATE LICENSE
 if (!function_exists('pix_pro_update_license')) {
-    function pix_pro_update_license($subscription, $stripe_invoice, $stripe_previous_attributes) {
+    function pix_pro_update_license($subscription, $previous_subscription, $stripe_invoice, $stripe_previous_attributes) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
         
         if (!empty($subscription)) {

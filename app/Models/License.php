@@ -41,6 +41,10 @@ class License extends WeBaseModel
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function plan() {
+        return $this->belongsTo(Plan::class, 'plan_id');
+    }
+
     /*
      * Scope searchable parameters
      */

@@ -57,7 +57,8 @@
 
                 let data = {
                     'interval': this.pricing_mode,
-                    'items': []
+                    'items': [],
+                    'previous_subscription_id': @js($previous_subscription?->id ?? null), 
                 };
 
                 for (const item_key in this.plans_cart) {

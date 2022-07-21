@@ -9,24 +9,16 @@ use App\Traits\CoreMetaTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
 use App\Traits\HasDataColumn;
-use Laravel\Passport\HasApiTokens;
 use App\Enums\AmountPercentTypeEnum;
 use Stripe\Invoice as StripeInvoice;
-use Spatie\Permission\Traits\HasRoles;
 use Spatie\Activitylog\Models\Activity;
-use Illuminate\Notifications\Notifiable;
 use App\Enums\UserSubscriptionStatusEnum;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Auth\User as Authenticatable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Notifications\EmailVerificationNotification;
-use Illuminate\Database\Eloquent\Relations\MorphPivot;
 
 class UserSubscription extends WeBaseModel
 {
     use LogsActivity;
     use UploadTrait;
-    // use GalleryTrait;
     use CoreMetaTrait;
     use HasDataColumn;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
@@ -73,6 +65,10 @@ class UserSubscription extends WeBaseModel
 
     public function isTrial() {
         return $this->status === UserSubscriptionStatusEnum::trial()->value;
+    }
+
+    public function scopeActive($query) {
+        return $query->whereIn('status', UserSubscriptionStatusEnum::toValues(skip: 'inactive'))->where('end_date', '>', time());
     }
 
     // public static function getSubscriptionsAmount($subscriptions) {
