@@ -35,7 +35,7 @@
                                 @elseif($task->status === App\Enums\TaskStatusEnum::review()->value)
                                     <span class="badge-success">{{ ucfirst(\Str::replace('_', ' ', $task->status)) }}</span>
                                 @elseif($task->status === App\Enums\TaskStatusEnum::done()->value)
-                                    <span class="badge-blue">{{ ucfirst(\Str::replace('_', ' ', $task->status)) }}</span>
+                                    <span class="badge-info">{{ ucfirst(\Str::replace('_', ' ', $task->status)) }}</span>
                                 @endif
                             </div>
 
@@ -55,6 +55,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        <livewire:actions.social-comments :reviews="true" :item="$task" />
                     </div>
                     <!-- Right column -->
                     <div class="grid grid-cols-1 gap-4">
@@ -106,19 +108,19 @@
                                         </a>
                                     </div>
                                     <div class="space-x-20">
-                                        <a target="_blank" href="{{ route('task.edit', ['id' => $task->id]) }}"
+                                        <a href="{{ route('task.edit', ['id' => $task->id]) }}"
                                             class="inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                                             {{ translate('Edit') }}
                                             @svg('heroicon-s-pencil', ['class' => 'w-6 h-6 ml-2'])
                                         </a>
 
-                                        <a target="_blank" href="#"
+                                        <a href="{{ route('task.destroy', ['id' => $task->id]) }}"
                                             class="inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-[#ff0000] hover:bg-gray-50">
                                             {{ translate('Delete') }}
                                             @svg('heroicon-s-trash', ['class' => 'w-6 h-6 ml-2'])
                                         </a>
                                     </div>
-                                    <a target="_blank" href="#"
+                                        <a href="{{ route('task.completed', ['id' => $task->id]) }}"
                                         class="w-full flex justify-center items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         {{ translate('Mark as Done') }}
                                         @svg('heroicon-s-badge-check', ['class' => 'w-6 h-6 ml-2'])
