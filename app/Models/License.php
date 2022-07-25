@@ -7,6 +7,7 @@ use App\Traits\GalleryTrait;
 use App\Traits\UploadTrait;
 use App\Traits\SocialAccounts;
 use App\Traits\CoreMetaTrait;
+use App\Traits\HasDataColumn;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Auth\User as Authenticatable;
@@ -16,10 +17,12 @@ use App\Notifications\EmailVerificationNotification;
 use App\Traits\PermalinkTrait;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class License extends WeBaseModel
 {
     use CoreMetaTrait;
+    use HasDataColumn;
     use LogsActivity;
 
     protected $table = 'licenses';
@@ -27,7 +30,7 @@ class License extends WeBaseModel
     protected $fillable = ['license_name', 'user_id', 'serial_number', 'license_type', 'data', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'data' => 'array'
+
     ];
 
     public function user_subscription() {
@@ -36,6 +39,10 @@ class License extends WeBaseModel
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function plan() {
+        return $this->belongsTo(Plan::class, 'plan_id');
     }
 
     /*
@@ -48,35 +55,6 @@ class License extends WeBaseModel
                 ->orWhere('license_name', 'like', '%'.$term.'%')
         );
     }
-
-    /*
-     * Get any value from data column using a desired key (accepts dot notaion)
-     */
-    public function getData($key) {
-        return Arr::get(empty($this->data) ? [] : $this->data, $key, null);
-    }
-
-    /*
-     * Set any value from data column using a desired key (accepts dot notaion)
-     */
-    public function setData($key, $value = null, $default = null) {
-        $data = $this->data;
-        if(empty($data)) {
-            $data = [];
-        }
-        Arr::set($data, $key, empty($value) ? $default : $value);
-        $this->data = $data;
-    }
-
-    public function mergeData($new_data = []) {
-        $old_data = $this->data;
-
-        // if(is_array()) {
-
-        // }
-        // $this->data = 
-    }
-
 
     public function getEditableData() {
         $keys = apply_filters('license.get.data.editable.keys');

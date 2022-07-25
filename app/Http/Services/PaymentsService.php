@@ -109,16 +109,12 @@ class PaymentsService
 
     public function isStripeLiveMode()
     {
-        if ($this->stripe) {
-            return $this->stripe->stripe_mode === 'live';
-        } else {
-            return abort(404);
-        }
+        return ($this->stripe?->stripe_mode ?? null) === 'live';
     }
 
     public function isStripeTestMode()
     {
-        return $this->stripe->stripe_mode !== 'live';
+        return ($this->stripe?->stripe_mode ?? null) !== 'live';
     }
     // END Stripe functions
 

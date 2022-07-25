@@ -87,7 +87,7 @@ class LicensesTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return $this->user->plan_subscriptions()->with('license')->getQuery()
+        return $this->user->licenses()->with('user_subscription')->getQuery()
                     // ->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
                     ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
                     // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));

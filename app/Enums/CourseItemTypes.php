@@ -6,6 +6,7 @@ namespace App\Enums;
  * @method static self wysiwyg()
  * @method static self video()
  * @method static self quizz()
+ * @method static self livestream()
  */
 class CourseItemTypes extends EVBaseEnum
 {
@@ -15,6 +16,7 @@ class CourseItemTypes extends EVBaseEnum
             'wysiwyg' => 'wysiwyg',
             'video' => 'video',
             'quizz' => 'quizz',
+            'livestream' => 'livestream',
         ];
     }
 
@@ -24,6 +26,7 @@ class CourseItemTypes extends EVBaseEnum
             'wysiwyg' => 'WYSIWYG',
             'video' => 'Video',
             'quizz' => 'Quizz',
+            'livestream' => 'Livestream',
         ];
     }
 }

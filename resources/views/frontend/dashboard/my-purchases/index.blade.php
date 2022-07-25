@@ -3,7 +3,7 @@
 @section('meta_title', translate('My Purchases'))
 
 @push('head_scripts')
-    
+
 @endpush
 
 @section('panel_content')
@@ -23,8 +23,8 @@
                     'per_page' => 10
                 ])
             @else
-                <x-dashboard.empty-states.no-items-in-collection 
-                    icon="heroicon-o-shopping-bag" 
+                <x-dashboard.empty-states.no-items-in-collection
+                    icon="heroicon-o-shopping-bag"
                     title="{{ translate('Nothing to show') }}"
                     text="{{ translate('You have not made any purchases yet!') }}"
                     link-href-route="home"
@@ -34,9 +34,9 @@
         </div>
         <div class="col-span-12 md:col-span-4">
             {{-- Create Activity Log livewire component but only for Ownerships! --}}
-            @livewire('dashboard.elements.activity-log', ['causer' => auth()->user(), 'per_page' => 5]) 
+            @livewire('dashboard.elements.activity-log', ['causer' => auth()->user(), 'per_page' => 5])
         </div>
-        
+
     </div>
 
 @endsection
