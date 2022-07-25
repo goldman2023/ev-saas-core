@@ -86,9 +86,9 @@
                 {{ translate('Dashboard') }}
             </a>
 
-            @if(get_tenant_setting('vendor_mode'))
+            @if(get_tenant_setting('vendor_mode_feature'))
             <a href="{{ route('my.account.shops') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
-                tabindex="-1" id="user-menu-item-1">
+                tabindex="-1" id="user-menu-item-6">
                 @if(auth()->user()->isCustomer())
                     {{ translate('Create new shop') }}
                 @else
