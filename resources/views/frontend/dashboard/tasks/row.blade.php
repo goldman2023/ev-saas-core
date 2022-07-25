@@ -22,7 +22,7 @@
     @elseif($row->type === App\Enums\TaskTypesEnum::other()->value)
         <span class="badge-purple">{{ ucfirst($row->type) }}</span>
     @elseif($row->type === App\Enums\TaskTypesEnum::request()->value)
-        <span class="badge-blue">{{ ucfirst($row->type) }}</span>
+        <span class="badge-info">{{ ucfirst($row->type) }}</span>
     @endif
 </x-livewire-tables::table.cell>
 
@@ -37,7 +37,7 @@
     @elseif($row->status === App\Enums\TaskStatusEnum::review()->value)
         <span class="badge-purple">{{ ucfirst($row->status) }}</span>
     @elseif($row->status === App\Enums\TaskStatusEnum::done()->value)
-        <span class="badge-blue">{{ ucfirst($row->status) }}</span>
+        <span class="badge-info">{{ ucfirst($row->status) }}</span>
     @endif
 
 </x-livewire-tables::table.cell>
