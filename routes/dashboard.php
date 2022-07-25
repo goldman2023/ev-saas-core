@@ -122,7 +122,8 @@ Route::middleware([
         Route::get('/task/create', [EVTaskController::class, 'create'])->name('task.create');
         Route::get('/task/edit/{id}', [EVTaskController::class, 'edit'])->name('task.edit');
         Route::get('/task/details/{id}', [EVTaskController::class, 'details'])->name('task.details');
-        Route::get('/tasks/destroy/{id}', [EVTaskController::class, 'destroy'])->name('tasks.destroy');
+        Route::get('/tasks/destroy/{id}', [EVTaskController::class, 'destroy'])->name('task.destroy');
+        Route::get('/tasks/completed/{id}', [EVTaskController::class, 'completed'])->name('task.completed');
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.index');
