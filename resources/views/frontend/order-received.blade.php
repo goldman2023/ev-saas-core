@@ -103,7 +103,7 @@
       </div>
 
       <div class="border-t border-gray-200">
-
+        @if($order->order_items)
         @if($order->order_items->isNotEmpty())
             @foreach($order->order_items as $item)
               {{-- @dd($item->subject) --}}
@@ -133,6 +133,7 @@
                 </div>
               </div>
             @endforeach
+        @endif
         @endif
 
         @do_action('view.order-received.items.end', $order)
@@ -222,7 +223,7 @@
                           }
                         @endphp
                     @endforeach
-                  
+
                 </div>
               @endforeach
 
@@ -241,7 +242,7 @@
 
                   <div class="w-full flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
                     <span class="text-14 text-gray-600 font-normal">
-                        {{ translate('Next payment due on') }} 
+                        {{ translate('Next payment due on') }}
                         <strong>
                           {{-- @dd($order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices) --}}
                           {{ \Carbon::createFromTimestamp($order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices->first()?->end_date)->format('d M, Y') }}
@@ -275,13 +276,13 @@
                   <dd class="text-gray-700">{{  \FX::formatPrice(0) }}</dd>
                 </div>
               @endif
-              
+
               <div class="flex justify-between pt-3 mb-1 border-t border-gray-200">
                 <dt class="font-semibold text-gray-900">{{ translate('Total') }}</dt>
                 <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
               </div>
             @endif
-            
+
           </dl>
         </div>
 

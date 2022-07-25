@@ -6,6 +6,33 @@
         <h1 class="we-seconds" x-text="time().seconds"></h1>
     </div>
 
+    @if($item)
+    <div>
+        <div class="atcb mt-[60px]" style="display:none;">
+            {
+              "name":"{{ $item->name }}",
+              "description":"{{ $item->name }}",
+              "startDate":"2022-07-14",
+              "endDate":"2022-07-18",
+              "startTime":"10:15",
+              "endTime":"23:30",
+              "location":"World Wide Web",
+              "options":[
+                "Apple",
+                "Google",
+                "iCal",
+                "Microsoft365",
+                "MicrosoftTeams",
+                "Outlook.com",
+                "Yahoo"
+              ],
+              "timeZone":"Europe/Berlin",
+              "iCalFileName":"Reminder-Event"
+            }
+            </div>
+    </div>
+    @endif
+
 
     <style>
         .timer {
@@ -106,4 +133,7 @@
 }
 
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/add-to-calendar-button/assets/css/atcb.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/add-to-calendar-button" async defer></script>
+
 </div>

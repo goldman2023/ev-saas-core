@@ -72,7 +72,7 @@
                     {{-- TODO: add a relative date --}}
                     {{-- {{ $course_item->accessible_after }} --}}
                 </h2>
-                <x-system.countdown :date="$course_item->accessible_after">
+                <x-system.countdown :item="$course_item" :date="$course_item->accessible_after">
                 </x-system.countdown>
             </div>
             @else
