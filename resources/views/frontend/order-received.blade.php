@@ -84,6 +84,14 @@ $is_bookable_product = $first_item instanceof \App\Models\Product && $first_item
                 <x-system.alert type="warning"
                     text="{!! translate('Please finalize your registration before scheduling a meeting.').'<br>'.translate('Email').': '.$ghost_user->email !!}"
                     :only-text="true" />
+
+                    <div class="w-full">
+                        <a class="btn btn-primary"
+                            href="{{ route('user.registration.finalize',
+                            ['id' => $ghost_user->id, 'hash' => sha1($ghost_user->id.'_'.$ghost_user->email)]) }}" >
+                            {{ translate('Complete your registration')}}
+                        </a>
+                    </div>
                 @else
                 @if($is_bookable_product)
                 <button type="button" class="btn-primary"

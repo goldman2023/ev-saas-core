@@ -127,7 +127,7 @@ Route::middleware([
 
         /* My account */
         Route::get('/account-settings', [EVAccountController::class, 'account_settings'])->name('my.account.settings');
-        Route::get('/account-settings/shops', [EVAccountController::class, 'account_shops_settings'])->name('my.account.shops');
+        Route::get('/account-settings/shops', [EVAccountController::class, 'shop_settings'])->name('my.account.shops');
         Route::get('/profile/{id}', [EVAccountController::class, 'user_profile'])->name('user.profile');
         Route::get('/user/{id}/details', [EVAccountController::class, 'user_details'])->name('user.details');
 

@@ -114,15 +114,23 @@
         </div>
 
 
-        <a href="{{ route('feed.bookmarks') }}"
+        {{-- <a href="{{ route('feed.bookmarks') }}"
             class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
             <!-- Heroicon name: outline/user-group -->
             @svg('heroicon-o-bookmark', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
 
             <span class="truncate"> {{ translate('Saved') }} </span>
-        </a>
+        </a> --}}
 
         @auth
+        {{-- TODO: add notification with new purchases --}}
+        <a href="{{ route('my.purchases.index') }}"
+            class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+            <!-- Heroicon name: outline/user-group -->
+            @svg('heroicon-o-shopping-cart', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+            <span class="truncate"> {{ translate('My Purchases') }} </span>
+        </a>
+
         <a href="{{ auth()->user()->getPermalink() }}"
             class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
             <!-- Heroicon name: outline/user-group -->
@@ -131,13 +139,7 @@
             <span class="truncate"> {{ translate('My Profile') }} </span>
         </a>
 
-        <a href="{{ route('my.purchases.index') }}"
-            class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-            <!-- Heroicon name: outline/user-group -->
-            @svg('heroicon-o-shopping-cart', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
 
-            <span class="truncate"> {{ translate('My Purchases') }} </span>
-        </a>
 
         @if(auth()->user()->isSeller() || auth()->user()->isAdmin())
         <!-- This example requires Tailwind CSS v2.0+ -->
