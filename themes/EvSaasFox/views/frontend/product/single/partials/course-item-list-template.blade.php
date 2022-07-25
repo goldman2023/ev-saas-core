@@ -1,10 +1,9 @@
-
-{{-- TODO: Add active state.  --}}
+{{-- TODO: Add active state. --}}
 
 {{-- WIP: Need to check if current_course item is set
-    @if($course_item->id == $current_course_item->id)
-    active bg-gray-200 rounded p-3
-    @endif
+@if($course_item->id == $current_course_item->id)
+active bg-gray-200 rounded p-3
+@endif
 --}}
 <li class="w-full flex flex-col ">
     <div class="flex items-center justify-between">
@@ -31,23 +30,23 @@
             @elseif($course_item->type === 'quizz')
             @svg('heroicon-o-pencil', ['class' => 'w-4 h-4 mr-2'])
             @endif
-
-            {{ $course_item->name }}
-
+            <div class="inline-flex items-center text-14">
+                {{ $course_item->name }}
+            </div>
             @auth
-                @if(auth()->user()?->manages($product))
-                    @if( $course_item->type === 'quizz')
-                        <a class="text-gray-400 text-xs" target="_blank"
-                            href="{{ route('dashboard.we-quiz.details', [$course_item->subject_id]) }}">
-                            {{ translate('View Results') }} ({{ $course_item->subject->results()->count() }})
-                        </a>
-                    @else
-                        {{-- <a class="text-gray-400 text-xs" target="_blank"
-                            href="{{ route('course.item.single', [$product->slug, $course_item->slug]) }}">
-                            {{ translate('Preview') }}
-                        </a> --}}
-                    @endif
-                @endif
+            @if(auth()->user()?->manages($product))
+            @if( $course_item->type === 'quizz')
+            <a class="text-gray-400 text-xs" target="_blank"
+                href="{{ route('dashboard.we-quiz.details', [$course_item->subject_id]) }}">
+                {{ translate('View Results') }} ({{ $course_item->subject->results()->count() }})
+            </a>
+            @else
+            {{-- <a class="text-gray-400 text-xs" target="_blank"
+                href="{{ route('course.item.single', [$product->slug, $course_item->slug]) }}">
+                {{ translate('Preview') }}
+            </a> --}}
+            @endif
+            @endif
             @endauth
 
 
@@ -60,6 +59,9 @@
             @click="$dispatch('display-modal', {'id': 'gated-content-cta-modal'})">
             @svg('heroicon-o-lock-closed', ['class' => 'w-4 h-4 mr-2'])
 
+            <div class="inline-flex items-center text-14">
+                {{ $course_item->name }}
+            </div>
 
         </div>
         @endif
