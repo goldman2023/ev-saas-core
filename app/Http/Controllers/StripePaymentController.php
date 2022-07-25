@@ -31,9 +31,15 @@ class StripePaymentController extends Controller
     {
         $data = json_decode(base64_decode(request()->data), true);
 
-        $model = app($data['class'])->find($data['id']);
+        // Check if data has one or more items
+        if(!empty($data['items'] ?? null) && get_tenant_setting('multi_item_subscription_enabled')) {
+            $link = \StripeService::createSubscriptionCheckoutLink($data['items'], $data['interval'] ?? null, $data['previous_subscription_id'] ?? null);
+        } else {
+            $model = app($data['class'])->find($data['id']);
+
+            $link = \StripeService::createCheckoutLink($model, $data['qty'] ?? 1, $data['interval'] ?? null, $data['preview'] ?? false, $data['abandoned_order_id'] ?? null);
+        }
         
-        $link = \StripeService::createCheckoutLink($model, $data['qty'] ?? 1, $data['interval'] ?? null, $data['preview'] ?? false, $data['abandoned_order_id'] ?? null);
         
         // Redirect to Stripe session checkout
         return redirect($link);

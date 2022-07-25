@@ -86,7 +86,7 @@ class MySubscriptionsTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return $this->user->plan_subscriptions()->getQuery()->with(['subject', 'order'])
+        return $this->user->subscriptions()->getQuery()->with(['items', 'licenses', 'order'])
             // ->where('end_date', '>', now())->orWhere('end_date', null)
             // ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));

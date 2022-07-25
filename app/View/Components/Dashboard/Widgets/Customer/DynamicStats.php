@@ -17,7 +17,7 @@ class DynamicStats extends Component
      */
     public function __construct()
     {
-        $this->user_subscription = auth()->user()->plan_subscriptions->load(['order', 'order.invoices' => function($query) {
+        $this->user_subscription = auth()->user()->subscriptions->load(['order', 'order.invoices' => function($query) {
             $query->withoutGlobalScopes();
         }])->first(); // TODO: For now we are using just first subscrption, but what i there are more subs????
         $this->order = $this->user_subscription->order;

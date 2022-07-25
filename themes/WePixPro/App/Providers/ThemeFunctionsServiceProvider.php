@@ -189,23 +189,23 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 20, 1);
 
             // Create PixPro License
-            add_action('invoice.paid.subscription_create', function ($user_subscriptions, $stripe_invoice) {
-                pix_pro_create_license($user_subscriptions, $stripe_invoice);
-            }, 20, 2);
+            add_action('invoice.paid.subscription_create', function ($user_subscription, $previous_subscription, $stripe_invoice) {
+                pix_pro_create_license($user_subscription, $previous_subscription, $stripe_invoice);
+            }, 20, 3);
 
             // Create PixPro License(s) when subscription is created through Stripe
-            add_action('stripe.webhook.subscriptions.created_from_stripe', function($user_subscriptions, $stripe_invoice) {
-                pix_pro_create_license($user_subscriptions, $stripe_invoice);
+            add_action('stripe.webhook.subscriptions.created_from_stripe', function($user_subscription, $stripe_invoice) {
+                pix_pro_create_license($user_subscription, null, $stripe_invoice);
             }, 20, 2);
 
             // Update PixPro License
-            add_action('stripe.webhook.subscriptions.updated', function ($user_subscriptions) {
-                pix_pro_update_license($user_subscriptions);
-            }, 20, 1);
+            add_action('stripe.webhook.subscriptions.updated', function ($user_subscription, $previous_subscription, $stripe_invoice, $stripe_previous_attributes) {
+                pix_pro_update_license($user_subscription, $previous_subscription, $stripe_invoice, $stripe_previous_attributes);
+            }, 20, 4);
 
             // Extend PixPro License
-            add_action('invoice.paid.subscription_cycle', function ($user_subscriptions, $stripe_invoice) {
-                pix_pro_extend_license($user_subscriptions, $stripe_invoice);
+            add_action('invoice.paid.subscription_cycle', function ($user_subscription, $stripe_invoice) {
+                pix_pro_extend_licenses($user_subscription, $stripe_invoice);
             }, 20, 2);
 
             // PixPro License disconnect by removing hardware_id
@@ -300,24 +300,27 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Fetch all licenses for desired user and get the latest data about license from Pixpro DB. Update hardware_id if hardware_id is different!
             add_action('dashboard.table.licenses.mount.end', function ($user) {
-                $subscriptions = $user->plan_subscriptions()->with('license')->get();
+                $subscriptions = $user->subscriptions()->with('licenses')->get();
+
                 if (!empty($subscriptions)) {
                     foreach ($subscriptions as $subscription) {
-                        $license = $subscription->license->first();
+                        $licenses = $subscription->licenses;
 
-                        if (!empty($license) && method_exists($license, 'get_license')) {
-                            $data = $license->get_license(); // gets the license from Pixpro DB
-
-                            if ($license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
-                                $license->setData('hardware_id', $data['hardware_id']);
-                                $license->save();
+                        foreach($licenses as $license) {
+                            if (!empty($license) && method_exists($license, 'get_license')) {
+                                $data = $license->get_license(); // gets the license from Pixpro DB
+                                
+                                if ($license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
+                                    $license->setData('hardware_id', $data['hardware_id']);
+                                    $license->save();
+                                }
                             }
                         }
                     }
                 }
             }, 20, 1);
 
-            // There are changes to license on WeSaaS end, so we need to update
+            // There are changes to license on WeSaaS end, so we need to update license on Pixpro END
             add_action('license.saved', function (&$new_license, $old_license) {
                 pix_pro_update_single_license($new_license, $old_license);
             }, 20, 2);

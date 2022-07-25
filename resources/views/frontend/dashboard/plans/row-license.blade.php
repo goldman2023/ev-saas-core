@@ -1,16 +1,16 @@
 <x-livewire-tables::table.cell class="align-middle text-center">
-    #{{ $row->license?->first()?->id ?? '' }}
+    #{{ $row->id ?? '' }}
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle  text-center">
-    {{ empty($row->license?->first()?->serial_number ?? null) ? translate('Generating...') : ($row->license?->first()?->serial_number ?? '') }}
+    {{ empty($row?->serial_number ?? null) ? translate('Generating...') : ($row?->serial_number ?? '') }}
 </x-livewire-tables::table.cell>
 
-@do_action('view.dashboard.row-license.columns', $row->license?->first())
+@do_action('view.dashboard.row-license.columns', $row)
 
 <x-livewire-tables::table.cell class="align-middle  text-center">
-    @if(!empty($row->end_date))
-        {{ $row->end_date->format('d. M Y, H:i') }}
+    @if(!empty($row->user_subscription->first()->end_date))
+        {{ $row->user_subscription->first()->end_date->format('d. M Y, H:i') }}
     @else
         -
     @endif
@@ -18,7 +18,7 @@
 
 <x-livewire-tables::table.cell class="align-middle static ">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        @do_action('view.dashboard.plans.row-license.actions.start', $row->license->first())
+        @do_action('view.dashboard.plans.row-license.actions.start', $row)
 
         <button 
             @click="isOpen = !isOpen" 
@@ -31,7 +31,7 @@
             @click.away="isOpen = false"
             class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow overflow-hidden"
         >
-            @do_action('view.dashboard.plans.row-license.actions.dropdown.start', $row->license->first())
+            @do_action('view.dashboard.plans.row-license.actions.dropdown.start', $row)
 
         </ul>
     </div>

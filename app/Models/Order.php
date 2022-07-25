@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
 use App\Traits\PermalinkTrait;
+use App\Traits\HasDataColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -15,6 +16,7 @@ class Order extends WeBaseModel
 {
     use SoftDeletes;
     use PermalinkTrait;
+    use HasDataColumn;
 
     protected $table = 'orders';
 
@@ -60,6 +62,11 @@ class Order extends WeBaseModel
         return 'id';
     }
 
+    public function getDataColumnName()
+    {
+        return 'meta';
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -75,9 +82,9 @@ class Order extends WeBaseModel
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
-    public function user_subscriptions()
+    public function user_subscription()
     {
-        return $this->hasMany(UserSubscription::class, 'order_id', 'id');
+        return $this->hasOne(UserSubscription::class);
     }
 
     public function invoices()
@@ -110,7 +117,7 @@ class Order extends WeBaseModel
 
             $order->initCoreProperties();
 
-            if($order->user_subscriptions->isNotEmpty()) {
+            if(!empty($order->user_subscription)) {
                 foreach ($sums_properties as $property) {
                     $order->{$property} = 0;
 
@@ -123,11 +130,6 @@ class Order extends WeBaseModel
                     }
 
                     // TODO: Fix this to populate each price with correct data. For now, all 4 properties are `total_price` -_-
-                    
-
-                    // foreach ($order->user_subscriptions as $user_subscription) {
-                    //     $order->{$property} += 0; //$user_subscription->getTotalPrice(format: false);
-                    // }
                 }
             } else {
                 foreach ($sums_properties as $property) {

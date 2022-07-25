@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 class MultipleItemsSubscriptionForm extends Component
 {
     public $plans;
+    public $previous_subscription;
 
     /**
      * Create a new component instance.
@@ -21,6 +22,9 @@ class MultipleItemsSubscriptionForm extends Component
         }
 
         $this->plans = $shop->plans->where('non_standard', false);
+        $this->previous_subscription = auth()->user()->subscriptions()->active()->whereHas('order', function ($query) use ($shop) {
+            $query->where('shop_id', $shop->id);
+        })->first();
     }
 
     /**
