@@ -83,7 +83,6 @@ class TaskForm extends Component
     public function saveTask(){
 
         $msg = '';
-        \Debugbar::info($this->task->assignee_id);
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -121,11 +120,6 @@ class TaskForm extends Component
         }
     }
 
-    public function removeTask(){
-
-//       $task = app($this->Task::class)->find($this->task->id)->fill($this->task->toArray());
-  //     $task->remove();
-    }
 
     public function dehydrate()
     {
