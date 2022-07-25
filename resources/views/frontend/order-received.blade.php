@@ -195,6 +195,7 @@
           @endif
 
           <dl class="space-y-6 border-t border-gray-200 text-sm pt-6 col-start-1 md:col-start-2 col-end-4">
+            @if($order->user_subscriptions)
             @if($order->user_subscriptions->isNotEmpty())
               {{-- Subscription Orders --}}
 
@@ -281,6 +282,7 @@
                 <dt class="font-semibold text-gray-900">{{ translate('Total') }}</dt>
                 <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
               </div>
+            @endif
             @endif
 
           </dl>
