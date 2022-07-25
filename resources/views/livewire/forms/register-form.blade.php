@@ -73,7 +73,7 @@
 
         <div class="hidden mb-3">
             <fieldset class="mt-4">
-              <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+              <div class="hidden space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
                 <div class="flex items-center">
                     <input id="entity_individual" name="entity_field" selected type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
                     <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700">

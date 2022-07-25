@@ -7,14 +7,18 @@ use Illuminate\View\Component;
 class Countdown extends Component
 {
     public $date;
+    public $item;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($date)
+    public function __construct($date, $item = null)
     {
         $this->date = $date * 1000;
+        if($item) {
+            $this->item = $item;
+        }
         //
     }
 
