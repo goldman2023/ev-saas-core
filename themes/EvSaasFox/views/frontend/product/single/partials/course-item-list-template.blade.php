@@ -12,7 +12,6 @@ active bg-gray-200 rounded p-3
         @if($course_item->children?->isNotEmpty() ?? null)
         <div class="inline-flex items-center text-14">
             {{ $course_item->name }}
-
         </div>
 
         @else
@@ -29,6 +28,8 @@ active bg-gray-200 rounded p-3
             @svg('heroicon-o-document', ['class' => 'w-4 h-4 mr-2'])
             @elseif($course_item->type === 'quizz')
             @svg('heroicon-o-pencil', ['class' => 'w-4 h-4 mr-2'])
+            @elseif($course_item->type === 'livestream')
+            @svg('heroicon-o-video-camera', ['class' => 'w-4 h-4 mr-2'])
             @endif
             <div class="inline-flex items-center text-14">
                 {{ $course_item->name }}

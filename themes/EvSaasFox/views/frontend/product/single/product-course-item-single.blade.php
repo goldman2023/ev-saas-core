@@ -65,21 +65,29 @@
             </div>
             @endif
 
-
-
+            @if($course_item->accessible_after > time())
+            <div class="p-6 text-center">
+                <h2 class="text-2xl font-medium">
+                    {{ translate('Lesson starts in') }}
+                    {{-- TODO: add a relative date --}}
+                    {{-- {{ $course_item->accessible_after }} --}}
+                </h2>
+                <x-system.countdown :date="$course_item->accessible_after">
+                </x-system.countdown>
+            </div>
+            @else
             @if($course_item->type === \App\Enums\CourseItemTypes::video()->value)
             <div class="w-full pb-4">
                 <div class="aspect-w-16 aspect-h-9 " x-html="video_data"></div>
             </div>
             @endif
 
-
             @if($course_item->type === \App\Enums\CourseItemTypes::livestream()->value)
             <div class="w-full pb-4">
-                <iframe
-                class="w-full min-h-[620px]"
-                src="https://eimsolutions-foxask.app.100ms.live/preview/qfs-ftl-bby"> </iframe>
+                <iframe class="w-full min-h-[620px]"
+                    src="https://eimsolutions-foxask.app.100ms.live/preview/qfs-ftl-bby"> </iframe>
             </div>
+            @endif
             @endif
 
             {{-- Product Header --}}
@@ -305,12 +313,19 @@
                 <ul class="w-full flex-flex-col space-y-3">
                     @if($course_items->isNotEmpty())
                     @foreach($course_items as $course_item)
-                    @include('frontend.product.single.partials.course-item-list-template',
-                    [
+                    @if($active_course_item->id === $course_item->id)
+                    <div class="font-bold">
+                        @endif
+                        @include('frontend.product.single.partials.course-item-list-template',
+                        [
                         'product' => $product,
                         'course_item' => $course_item,
                         'current_course_item' => $active_course_item,
-                    ])
+                        ])
+
+                        @if($active_course_item->id === $course_item->id)
+                    </div>
+                    @endif
                     @endforeach
                     @endif
                 </ul>
@@ -325,45 +340,47 @@
             </a>
         </div>
         @auth
-            @if(auth()->user()->manages($product) ?? false)
-            {{-- Course Stats --}}
-            <div class="w-full bg-white rounded-xl shadow p-5 max-h-[500px] overflow-y-auto">
-                <div class="w-full pb-2 mb-2 flex justify-between items-center border-b border-gray-200">
-                    <h5 class="text-14 font-semibold">{{ translate('Manage Course') }}</h5>
-                </div>
-
-                <div class="pb-3 w-full">
-                    <ul class="w-full flex-flex-col space-y-3">
-                        <li>
-                            <a target="_blank" href="{{ route('product.details', [$product->id]) }}">
-                                {{ translate('Manage Course') }}
-                            </a>
-                        </li>
-
-                        <li>
-                            <a target="_blank" href="{{ route('product.edit.course', [$product->id]) }}">
-                                {{ translate('Manage course material') }}
-                            </a>
-                        </li>
-
-                        @isset($course_item->subject->quiz_json)
-                        <li>
-                            <a target="_blank" href="{{ route('dashboard.we-quiz.details', [$course_item->subject_id]) }}">
-                                {{ translate('Quiz Submissions') }} ({{ $course_item->subject->results()->count() }})
-                            </a>
-                        </li>
-                        @endisset
-                    </ul>
-                </div>
+        @if(auth()->user()->manages($product) ?? false)
+        {{-- Course Stats --}}
+        <div class="w-full bg-white rounded-xl shadow p-5 max-h-[500px] overflow-y-auto">
+            <div class="w-full pb-2 mb-2 flex justify-between items-center border-b border-gray-200">
+                <h5 class="text-14 font-semibold">{{ translate('Manage Course') }}</h5>
             </div>
-            @if($course_item->type === \App\Enums\CourseItemTypes::livestream()->value)
-                <a class="btn btn-primary w-full mt-6"
-                target="_blank"
-                href="https://eimsolutions-foxask.app.100ms.live/meeting/qfs-ftl-bby">
-                    {{ translate('Go Live') }}
-                </a>
-            @endif
-            @endif
+
+            <div class="pb-3 w-full">
+                <ul class="w-full flex-flex-col space-y-3">
+                    <li>
+                        <a target="_blank" href="{{ route('product.details', [$product->id]) }}">
+                            {{ translate('Manage Course') }}
+                        </a>
+                    </li>
+
+                    <li>
+                        <a target="_blank" href="{{ route('product.edit.course', [$product->id]) }}">
+                            {{ translate('Manage course material') }}
+                        </a>
+                    </li>
+
+                    @isset($course_item->subject->quiz_json)
+                    <li>
+                        <a target="_blank" href="{{ route('dashboard.we-quiz.details', [$course_item->subject_id]) }}">
+                            {{ translate('Quiz Submissions') }} ({{ $course_item->subject->results()->count() }})
+                        </a>
+                    </li>
+                    @endisset
+                </ul>
+            </div>
+        </div>
+        @if($course_item->type === \App\Enums\CourseItemTypes::livestream()->value)
+        <a class="btn btn-primary w-full mt-6" target="_blank"
+            href="https://eimsolutions-foxask.app.100ms.live/meeting/qfs-ftl-bby">
+            {{ translate('Go Live') }}
+        </a>
+
+
+
+        @endif
+        @endif
         @endauth
     </div>
 
