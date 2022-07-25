@@ -65,9 +65,20 @@
             </div>
             @endif
 
+
+
             @if($course_item->type === \App\Enums\CourseItemTypes::video()->value)
             <div class="w-full pb-4">
                 <div class="aspect-w-16 aspect-h-9 " x-html="video_data"></div>
+            </div>
+            @endif
+
+
+            @if($course_item->type === \App\Enums\CourseItemTypes::livestream()->value)
+            <div class="w-full pb-4">
+                <iframe
+                class="w-full min-h-[620px]"
+                src="https://eimsolutions-foxask.app.100ms.live/preview/qfs-ftl-bby"> </iframe>
             </div>
             @endif
 
@@ -345,6 +356,13 @@
                     </ul>
                 </div>
             </div>
+            @if($course_item->type === \App\Enums\CourseItemTypes::livestream()->value)
+                <a class="btn btn-primary w-full mt-6"
+                target="_blank"
+                href="https://eimsolutions-foxask.app.100ms.live/meeting/qfs-ftl-bby">
+                    {{ translate('Go Live') }}
+                </a>
+            @endif
             @endif
         @endauth
     </div>
