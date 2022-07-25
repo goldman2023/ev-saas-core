@@ -161,7 +161,7 @@
 
                         <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
 
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <div class="hidden  sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                                 <fieldset class="mt-4">
                                   <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
                                     <div class="flex items-center">
