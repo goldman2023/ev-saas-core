@@ -25,7 +25,7 @@ class UserSubscription extends WeBaseModel
 
     protected $table = 'user_subscriptions';
 
-    protected $fillable = ['user_id', 'order_id', 'start_date', 'end_date', 'status', 'payment_status', 'qty', 'data'];
+    protected $fillable = ['user_id', 'order_id', 'start_date', 'end_date', 'status', 'payment_status', 'qty', 'data', 'created_at', 'updated_at'];
 
     // protected $with = ['order.order_items.subject'];
 
@@ -71,6 +71,10 @@ class UserSubscription extends WeBaseModel
         return $query->whereIn('status', UserSubscriptionStatusEnum::toValues(skip: 'inactive'))->where('end_date', '>', time());
     }
 
+    public function scopeTrial($query) {
+        return $query->where('status', UserSubscriptionStatusEnum::trial()->value)->where('end_date', '>', time());
+    }
+
     // public static function getSubscriptionsAmount($subscriptions) {
     //     return $subscriptions->where([])
     // }
@@ -80,8 +84,12 @@ class UserSubscription extends WeBaseModel
     }
 
     // STRIPE
+    public function isUsingStripe() {
+        return !empty($this->getData(stripe_prefix('stripe_subscription_id')));
+    }
+
     public function getStripeSubscriptionID() {
-        return $this->data[StripeService::getStripeMode().'stripe_subscription_id'];
+        return $this->getData(stripe_prefix('stripe_subscription_id'));
     }
 
     public function getStripeUpcomingInvoice() {
@@ -91,7 +99,8 @@ class UserSubscription extends WeBaseModel
         // If no upcoming invoice is present in meta column, get upcoming invoice from stripe directly, and store it in meta
         if(empty($upcoming_invoice)) {
             $upcoming_invoice = \StripeService::getUpcomingInvoice($this);
-            $this->order->setData(stripe_prefix('stripe_upcoming_invoice'), is_array($upcoming_invoice) ? $upcoming_invoice : $upcoming_invoice->toArray());
+            $this->order->setData(stripe_prefix('stripe_upcoming_invoice'), is_array($upcoming_invoice) ? $upcoming_invoice : $upcoming_invoice->toArray());            
+            $this->order->save();
         }
 
         if($upcoming_invoice instanceof Order) {
@@ -106,11 +115,8 @@ class UserSubscription extends WeBaseModel
     }
 
     public function getUpcomingInvoiceStats() {
+        // TODO: Add logic for different payment gateways later on
         return $this->getStripeUpcomingInvoice();
-        // return \Cache::remember('user_subscription_'.$this->id.'_upcoming_invoice_stats', 60*60, function () {
-        //     $invoice = $this->getStripeUpcomingInvoice();
-        //     return $invoice;
-        // });
     }
 
     public function getTotalPrice($format = true) {
@@ -129,7 +135,7 @@ class UserSubscription extends WeBaseModel
 
     public function getTaxAmount($format = true) {
         $invoice = $this->getUpcomingInvoiceStats();
-
+        
         if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
             if($invoice['invoice_source'] === 'stripe') {
                 return $format ?  \FX::formatPrice($invoice['tax'] / 100) : ($invoice['tax'] / 100);

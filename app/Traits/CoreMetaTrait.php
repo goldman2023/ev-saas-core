@@ -96,22 +96,22 @@ trait CoreMetaTrait
 
     // Specific CoreMeta
     public function getStripeCustomerID() {
-        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_customer_id');
+        return $this->getCoreMeta(stripe_prefix('stripe_customer_id'));
     }
 
     public function getStripeProductID() {
-        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_product_id');
+        return $this->getCoreMeta(stripe_prefix('stripe_product_id'));
     }
     
     public function getStripePriceID() {
-        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_price_id');
+        return $this->getCoreMeta(stripe_prefix('stripe_price_id'));
     }
 
     public function getStripeAnnualPriceID() {
-        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_annual_price_id');
+        return $this->getCoreMeta(stripe_prefix('stripe_annual_price_id'));
     }
 
     public function getStripeMonthlyPriceID() {
-        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_monthly_price_id');
+        return $this->getCoreMeta(stripe_prefix('stripe_monthly_price_id'));
     }
 }

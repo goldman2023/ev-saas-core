@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\Pool;
+use GuzzleHttp\Promise\Utils;
 use Illuminate\Support\Facades\Log;
 
 use App\Facades\StripeService;
@@ -157,19 +159,63 @@ if (!function_exists('pix_pro_disconnect_license')) {
     }
 }
 
+if (!function_exists('pix_pro_remove_license')) {
+    function pix_pro_remove_license($license, $pix_pro_user) {
+        $route_paid = pix_pro_endpoint().'/paid/delete_specific_license/';
+
+        $body = pix_pro_add_auth_params([
+            "UserEmail" => $pix_pro_user['email'],
+            "UserPassword" => $license->user->getCoreMeta('password_md5'),
+            "LicenseId" => $license->getData('id'),
+        ]);
+
+        $response = Http::post($route_paid, $body);
+        $response_json = $response->json();
+
+        if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+            // If status is not success for any reason, log an error
+            Log::error(pix_pro_error($route_paid, 'There was an error while trying to remove a license(order) in pix-pro API DB, check the response below.', $response_json));
+        };
+    }
+}
+
+if (!function_exists('pix_pro_update_subscription_id')) {
+    function pix_pro_update_subscription_id($old_subscription_id, $new_subscription_id, $user, $pix_pro_user) {
+        $route_paid = pix_pro_endpoint().'/paid/update_subscription_id/';
+
+        $body = pix_pro_add_auth_params([
+            "UserEmail" => $pix_pro_user['email'],
+            "UserPassword" => $user->getCoreMeta('password_md5'),
+            "OldSubscriptionId" => $old_subscription_id,
+            "NewSubscriptionId" => $new_subscription_id,
+        ]);
+
+        $response = Http::post($route_paid, $body);
+        $response_json = $response->json();
+
+        if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+            // If status is not success for any reason, log an error
+            Log::error(pix_pro_error($route_paid, 'There was an error while trying to update license subscription_id in pix-pro API DB, check the response below.', $response_json));
+        };
+    }
+}
+
 if (!function_exists('pix_pro_create_licenses_action')) {
     function pix_pro_create_licenses_action($plan, $subscription, $stripe_subscription, $pix_pro_user, $qty = null) {
+        $route_paid = pix_pro_endpoint().'/paid/add_license/';
+        $response_promises = [];
+        
         if(empty($qty)) {
             $qty = $plan->pivot->qty;
         }
 
         // Create X amount of licenses based on pivot table qty column (if there's only one $plan and qty 1, then only one license will be created)
         for ($i = 1; $i <= $qty; $i++) {
-            $stripe_item = collect($stripe_subscription->items->data)->firstWhere('price.product', $plan->getCoreMeta(StripeService::getStripeMode().'stripe_product_id'));
+            $stripe_item = collect($stripe_subscription->items->data)->firstWhere('price.product', $plan->getCoreMeta(stripe_prefix('stripe_product_id')));
 
             $number_of_images = $plan->getCoreMeta('number_of_images');
 
-            if(!empty($number_of_images) && (is_int($number_of_images || ctype_digit($number_of_images)))) {
+            if(!empty($number_of_images) && (is_int($number_of_images) || ctype_digit($number_of_images))) {
                 $number_of_images = $plan->getCoreMeta('number_of_images') ?? 150;
             } else {
                 $number_of_images = 150;
@@ -187,7 +233,7 @@ if (!function_exists('pix_pro_create_licenses_action')) {
                 "LicenseCloudService" => $cloud_service_param,
                 "LicenseOfflineService" => $offline_service_param,
                 "LicenseImageLimit" => $number_of_images,
-                "PackageTypes" => 'mining',
+                "PackageType" => 'mining',
                 "SubscriptionId" => $subscription->id,
                 "LicenseSubscriptionType" => $license_subscription_type,
                 "Status" => 'active',
@@ -198,61 +244,57 @@ if (!function_exists('pix_pro_create_licenses_action')) {
                 "Price" => ($stripe_item?->price?->unit_amount / 100) ?? $plan->getTotalPrice(),
             ]);
 
-            $response = Http::post($route_paid, $body);
-            $response_json = $response->json();
+            // Since Http::async()->then() IS NOT REALLY an ASYNC function, we need to dispatch license creation jobs to queue
+            dispatch(function () use ($route_paid, $body, $plan, $subscription) {
+                $response = Http::post($route_paid, $body);
+                $response_json = $response->json();
+                
+                if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                    // If status is not success for any reason, log an error
+                    Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
+                } else {
+                    if(!empty($response_json['license'] ?? null)) {
+                        $pix_license = $response_json['license'];
+                        
+                        DB::beginTransaction();
 
-            if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
-                // If status is not success for any reason, throw an error
-                http_response_code(400);
-                Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
-            } else {
-                if(!empty($response_json['license'] ?? null)) {
-                    $pix_license = $response_json['license'];
+                        try {
+                            $license = new License();
+                            $license->plan_id = $plan->id;
+                            $license->user_id = $subscription->user_id;
+                            $license->license_name = $pix_license['license_name'] ?? '';
+                            $license->serial_number = $pix_license['serial_number'] ?? '';
+                            $license->license_type = $pix_license['license_type'] ?? '';
 
-                    DB::beginTransaction();
+                            $license->mergeData($pix_license);
+                            $license->save();
 
-                    try {
-                        $license = new License();
-                        $license->plan_id = $plan->id;
-                        $license->user_id = $subscription->user_id;
-                        $license->license_name = $pix_license['license_name'] ?? '';
-                        $license->serial_number = $pix_license['serial_number'] ?? '';
-                        $license->license_type = $pix_license['license_type'] ?? '';
+                            // Add a license <-> user_subscription relationship
+                            DB::table('user_subscription_relationships')->updateOrInsert(
+                                ['user_subscription_id' => $subscription->id, 'subject_id' => $license->id, 'subject_type' => $license::class],
+                                ['created_at' => date('Y:m:d H:i:s'), 'updated_at' => date('Y:m:d H:i:s')]
+                            );
 
-                        $data = empty($license->data) ? [] : $license->data;
-                        $license->data = array_merge($data, $pix_license); // Will be populated when user activates the license
-                        $license->save();
-
-                        // Add a license <-> user_subscription relationship
-                        DB::table('user_subscription_relationships')->updateOrInsert(
-                            ['user_subscription_id' => $subscription->id, 'subject_id' => $license->id, 'subject_type' => $license::class],
-                            ['created_at' => date('Y:m:d H:i:s'), 'updated_at' => date('Y:m:d H:i:s')]
-                        );
-
-                        DB::commit();
-                    } catch(\Throwable $e) {
-                        DB::rollback();
-                        http_response_code(400);
-                        print_r($e);
-                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license on WeSaaS end and link it to user_subscription.', $e));
-
-                        die();
+                            DB::commit();
+                        } catch(\Exception $e) {
+                            DB::rollback();
+                            Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license on WeSaaS and link it to user_subscription.', $e));
+                        }
                     }
-
                 }
-            }
-
+            });
         }
     }
 }
+
 
 // CREATE LICENSE
 if (!function_exists('pix_pro_create_license')) {
     function pix_pro_create_license($subscription, $previous_subscription, $stripe_invoice) {
         $route_paid = pix_pro_endpoint().'/paid/add_license/';
-
+        
         if (!empty($subscription)) {
-            $stripe_subscription_id = $subscription->data[StripeService::getStripeMode().'stripe_subscription_id'];
+            $stripe_subscription_id = $subscription->data[stripe_prefix('stripe_subscription_id')];
 
             $stripe_subscription = StripeService::stripe()->subscriptions->retrieve(
                 $stripe_subscription_id,
@@ -262,11 +304,11 @@ if (!function_exists('pix_pro_create_license')) {
             $is_trial = $stripe_subscription->status === 'trialing';
 
             $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
-
+            
             if(!empty($pix_pro_user['user_id'] ?? null)) {
-
                 // If previous subscription is provided, we need to compare previous subscription items and their quantities with the new subscription
                 if(!empty($previous_subscription) && $previous_subscription->items->isNotEmpty()) {
+                    
                     /**
                      * 1.Loop through OLD-subscription items and compare with NEW-subscription items, there are four cases:
                      *   1. Previous subscription item is included in new subscription but new_qty > old_qty -> Create DIFF amount of licenses
@@ -296,31 +338,43 @@ if (!function_exists('pix_pro_create_license')) {
                             // Get licenses IDs to be removed from stripe_subscription metadata and remove them (user must specify which licenses to remove, otherwise last DIFF amount of licenses for that sub. item type will be removed)
                             $diff_amount = $old_plan->pivot->qty - $same_new_plan->pivot->qty;
 
-                            $licenses_idx_to_remove = $stripe_subscription->metadata->items_to_remove;
+                            $licenses_idx_to_remove = $stripe_subscription->metadata?->items_to_remove ?? null;
 
                             if(!empty($licenses_idx_to_remove)) {
                                 // Remove specific licenses cuz they are specified in new stripe subscription metadata (consider disabling qty change in stripe checkout session window)
-                                foreach($licenses_idx_to_remove as $license) {
-                                    if(!empty($license['subject_id'] ?? null) && !empty($license['subject_type'] ?? null)) {
-                                        // Remove License
-                                        app($license['subject_type'])->where('id', $license['subject_id'])->delete();
+                                foreach($licenses_idx_to_remove as $license_params) {
+                                    if(!empty($license_params['subject_id'] ?? null) && !empty($license_params['subject_type'] ?? null)) {
+                                        // Get License
+                                        $license = app($license_params['subject_type'])->find($license_params['subject_id']);
 
-                                        // Remove License <-> UserSubscription relationship (with bulk delete() laravel doesn't trigger deleted event, so we have to manually remove it here)
-                                        UserSubscriptionRelationship::where([
-                                            ['subject_type', $license['subject_type']],
-                                            ['subject_id', $license['subject_id']]
-                                        ])->delete();
+                                        if(!empty($license)) {
+                                            // Remove License
+                                            $license->delete();
 
-                                        // TODO: Deactivate/Remove license on PixPro end
+                                            // Remove License <-> UserSubscription relationship (with bulk delete() laravel doesn't trigger deleted event, so we have to manually remove it here)
+                                            UserSubscriptionRelationship::where([
+                                                ['subject_type', $license::class],
+                                                ['subject_id', $license->id]
+                                            ])->delete();
+
+                                            pix_pro_remove_license($license, $pix_pro_user);
+                                        }
                                     }
                                 }
                             } else if($diff_amount > 0) {
                                 // Remove last $diff_amount of licenses, since user didn't specify which licenses to remove! ( this should be a fallback, and we should enforce user to choose which licenses should be removed)
                                 $licenses_to_remove = License::where('plan_id', $same_new_plan->id)->where('user_id', $subscription->user_id)->latest()->take($diff_amount)->get();
+                                
+                                // TODO: First select those licenses which do not have HardwareID yet. If the diff is still > 0, select diff-amount of those who have hardwareID
                                 foreach($licenses_to_remove as $license_to_remove) {
+                                    pix_pro_remove_license($license_to_remove, $pix_pro_user);
+
                                     $license_to_remove->delete();
 
-                                    // TODO: Deactivate/Remove license on PixPro end
+                                    UserSubscriptionRelationship::where([
+                                        ['subject_id', $license_to_remove->id],
+                                        ['subject_type', $license_to_remove::class],
+                                    ])->delete();
                                 }
                             }
                         } else if(!empty($same_new_plan) && $same_new_plan->pivot->qty === $old_plan->pivot->qty) {
@@ -328,11 +382,16 @@ if (!function_exists('pix_pro_create_license')) {
                         } else if(empty($same_new_plan)) {
                             // Remove all licenses of previous subscription item type (which have the plan_id = $old_plan->id)
 
-                            $licenses_to_remove = License::where('plan_id', $old_plan->id)->where('user_id', $subscription->user_id)->delete();
+                            $licenses_to_remove = License::where('plan_id', $old_plan->id)->where('user_id', $subscription->user_id)->get();
                             foreach($licenses_to_remove as $license_to_remove) {
+                                pix_pro_remove_license($license_to_remove, $pix_pro_user);
+
                                 $license_to_remove->delete();
 
-                                // TODO: Deactivate/Remove licenses on PixPro end
+                                UserSubscriptionRelationship::where([
+                                    ['subject_id', $license_to_remove->id],
+                                    ['subject_type', $license_to_remove::class],
+                                ])->delete();
                             }
                         }
                     }
@@ -341,14 +400,14 @@ if (!function_exists('pix_pro_create_license')) {
                     foreach($subscription->items as $new_plan) {
                         $same_old_plan = $previous_subscription->items->firstWhere('id', $new_plan->id);
 
-                        // New-subscription includes an item/plan which is not present in old-subscription, otherwise skip cuz the case is already taken care in previous foreach
+                        // New-subscription includes an item/plan which is not present in old-subscription, otherwise skip cuz the case is already taken care of in previous foreach
                         if(empty($same_old_plan)) {
                             // Create licenses with desired qty
                             pix_pro_create_licenses_action($new_plan, $subscription, $stripe_subscription, $pix_pro_user, $new_plan->pivot->qty);
                         }
                     }
 
-                    // 3. Get all remaining licenses from previous subscription and remap them to relate to new-subscription
+                    // 3.1 Get all remaining licenses from previous subscription and remap them to relate to new-subscription
                     UserSubscriptionRelationship::where([
                         ['user_subscription_id', $previous_subscription->id],
                         ['subject_type', License::class],
@@ -356,29 +415,31 @@ if (!function_exists('pix_pro_create_license')) {
                         'user_subscription_id' => $subscription->id
                     ]);
 
+                    // 3.2 Remap licenses but on Pixpro end
+                    pix_pro_update_subscription_id($previous_subscription->id, $subscription->id, $subscription->user, $pix_pro_user);
+
                     // 4. Immediately cancel old Stripe subscription
-                    $this->stripe->subscriptions->cancel(
-                        $previous_subscription->getData(stripe_prefix('stripe_subscription_id')),
-                        []
-                    );
+                    StripeService::cancelStripeSubscriptions(subscription: $previous_subscription);
 
                     // 5. Remove old-subscription from our DB
                     $previous_subscription->forceDelete();
                 } else {
                     // This means no previous subscription is provided, so just create new licenses and attach to new subscription without any care for anything else xD
+                    // IMPORTANT: It may happen that `invoice.paid` webhook timesout and return error in stripe webhook panel BUT that's because of time needed
                     foreach($subscription->items as $new_plan) {
                         pix_pro_create_licenses_action($new_plan, $subscription, $stripe_subscription, $pix_pro_user, $new_plan->pivot->qty);
                     }
                 }
 
             } else {
-                Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, Could not get the user y email from pix-pro api', ''));
+                Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, Could not get the user by email from pix-pro api', ''));
             }
         }
     }
 }
 
 // UPDATE LICENSE
+// TODO: Make this function similar to pix_pro_create_license (to actually include logic for )
 if (!function_exists('pix_pro_update_license')) {
     function pix_pro_update_license($subscription, $previous_subscription, $stripe_invoice, $stripe_previous_attributes) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
@@ -386,7 +447,7 @@ if (!function_exists('pix_pro_update_license')) {
         if (!empty($subscription)) {
             $stripe_billing_reason = $stripe_invoice->billing_reason;
 
-            $stripe_subscription_id = $subscription->data[StripeService::getStripeMode().'stripe_subscription_id'];
+            $stripe_subscription_id = $subscription->data[stripe_prefix('stripe_subscription_id')];
 
             $stripe_subscription = StripeService::stripe()->subscriptions->retrieve(
                 $stripe_subscription_id,
@@ -402,20 +463,24 @@ if (!function_exists('pix_pro_update_license')) {
                 // If the billing_reason is subscription_update or subscription_create WHILE previous_attributes plan change are present:
                 // Compare differences in bought licenses and their quantities and based on that create more licenses if needed.
                 
+                // TODO: Can this actually happen on multi-item subscription checkout?
             }
 
-            if(!empty($pix_pro_user['user_id'] ?? null)) {
-                $number_of_images = $subscription->subject->getCoreMeta('number_of_images'); // get default meta from Plan, not previous subscription!
+            // IMPORTANT: THIS SHOULD BE FIRED ONLY FOR single-item subscriptions (FOR NOW!)!!!!
+            if(!empty($pix_pro_user['user_id'] ?? null) && empty($previous_subscription)) {
+                $new_plan = $subscription->items->first();
+
+                $number_of_images = $new_plan->getCoreMeta('number_of_images'); // get default meta from Plan, not previous subscription!
                 
                 if(!empty($number_of_images) && (is_int($number_of_images) || ctype_digit($number_of_images))) {
-                    $number_of_images = $subscription->subject->getCoreMeta('number_of_images') ?? 150; // get default meta from Plan, not previous subscription!
+                    $number_of_images = $new_plan->getCoreMeta('number_of_images') ?? 150; // get default meta from Plan, not previous subscription!
                 } else {
                     $number_of_images = 150;
                 }
 
-                $cloud_service_param = $subscription->subject->getCoreMeta('includes_cloud') === true ? 1 : 0;
-                $offline_service_param = $subscription->subject->getCoreMeta('includes_offline') === true ? 1 : 0;
-                $license_subscription_type = $subscription->plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+                $cloud_service_param = $new_plan->getCoreMeta('includes_cloud') === true ? 1 : 0;
+                $offline_service_param = $new_plan->getCoreMeta('includes_offline') === true ? 1 : 0;
+                $license_subscription_type = $new_plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
 
                 $body = pix_pro_add_auth_params([
                     "UserEmail" => $pix_pro_user['email'],
@@ -443,7 +508,7 @@ if (!function_exists('pix_pro_update_license')) {
                         DB::beginTransaction();
 
                         try {
-                            $license = $subscription->license->first();
+                            $license = $subscription->licenses->first();
                             $license->user_id = $subscription->user->id;
                             $license->license_name = $pix_license['license_name'] ?? '';
                             // $license->serial_number = $pix_license['serial_number'] ?? '';
@@ -451,11 +516,6 @@ if (!function_exists('pix_pro_update_license')) {
                             
                             $license->mergeData($pix_license); // Keep in mind that expiration date is NOT YET CHANGED ON PixPro end, because this endpoint doesn't set it. We'll update each subscription expiration_date in following function: `$this->pix_pro_update_licenses_status($subscription);`
                             $license->save();
-
-                            // Change subscription default attributes based on a new selected Plan
-                            $subscription->saveCoreMeta('number_of_images', $number_of_images);
-                            $subscription->saveCoreMeta('includes_cloud', $subscription->subject->getCoreMeta('includes_cloud'));
-                            $subscription->saveCoreMeta('includes_offline', $subscription->subject->getCoreMeta('includes_offline'));
 
                             DB::commit();
                         } catch(\Throwable $e) {
@@ -568,7 +628,7 @@ if (!function_exists('pix_pro_update_licenses_status')) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_status/';
         
         if (!empty($subscription)) {
-            $stripe_subscription_id = $subscription->data[StripeService::getStripeMode().'stripe_subscription_id'];
+            $stripe_subscription_id = $subscription->data[stripe_prefix('stripe_subscription_id')];
 
             $stripe_subscription = StripeService::stripe()->subscriptions->retrieve(
                 $stripe_subscription_id,
@@ -606,7 +666,7 @@ if (!function_exists('pix_pro_update_licenses_status')) {
                                 $license->user_id = $subscription->user->id;
                                 $license->mergeData($pix_license);
                                 $license->save();
-    
+                                
                                 DB::commit();
                             } catch(\Throwable $e) {
                                 DB::rollback();
@@ -634,7 +694,7 @@ if (!function_exists('pix_pro_extend_licenses')) {
         $route_paid = pix_pro_endpoint().'/paid/renew_licenses/';
 
         if (!empty($subscription)) {
-            $stripe_subscription_id = $subscription->data[StripeService::getStripeMode().'stripe_subscription_id'];
+            $stripe_subscription_id = $subscription->data[stripe_prefix('stripe_subscription_id')];
 
             $stripe_subscription = StripeService::stripe()->subscriptions->retrieve(
                 $stripe_subscription_id,

@@ -9,13 +9,14 @@
 @endif
 
 @if(!empty($license?->data['hardware_id'] ?? null))
-<li class="border-t border-gray-200">
-    <a type="button" href="{{ route('my.plans.management') }}"
+
+{{-- <li class="border-t border-gray-200">
+    <button type="button" href="{{ route('my.plans.management') }}"
         class="w-full flex items-center px-3 py-3 pr-4 text-gray-900 text-14 hover:bg-danger hover:text-white">
         @svg('heroicon-o-x', ['class' => 'w-[18px] h-[18px] mr-2'])
         <span class="ml-2">{{ translate('Upgrade') }}</span>
     </button>
-</li>
+</li> --}}
 <li class="border-t border-gray-200">
     <button type="button" wire:click="downloadLicense({{ $license->id }})"
         class="w-full flex items-center px-3 py-3 pr-4 text-gray-900 text-14 hover:bg-danger hover:text-white">

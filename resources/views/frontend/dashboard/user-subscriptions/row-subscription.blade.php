@@ -85,8 +85,12 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a> --}}
 
-        @if($row->isTrial())
+        @if($row->isTrial() && ($row->items->count() === 1 && ($row->items->first()?->pivot?->qty ?? null) === 1))
             <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="$dispatch('display-modal', {'id': 'change-trial-plan-modal'})" target="_blank">
+                {{ translate('Change') }}
+            </button>
+        @elseif($row->items->count() > 1 || ($row->items->first()?->pivot?->qty ?? null) > 1)
+            <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="$dispatch('display-modal', {id: 'purchase-subscription-with-multiple-items-modal'})" target="_blank">
                 {{ translate('Change') }}
             </button>
         @else

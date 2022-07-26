@@ -23,7 +23,7 @@ class PricingTable extends Component
         if($isTrial) {
             $this->isTrial = $isTrial;
         } else {
-            $this->isTrial = auth()->user()->plan_subscriptions?->first()?->isTrial();
+            $this->isTrial = auth()->user()?->subscriptions?->first()?->isTrial();
         }
 
         if($subscribed) {

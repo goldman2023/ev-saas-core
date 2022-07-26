@@ -15,6 +15,8 @@ use Categories;
 use DB;
 use EVS;
 use MailerService;
+use Payments;
+use StripeService;
 use App\Enums\WeMailingListsEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
@@ -94,6 +96,11 @@ class LoginForm extends Component
                         ['value' => 1]
                     );
                 }
+            }
+
+            // Check customer existence in Stripe if Stripe is enabled
+            if(Payments::isStripeEnabled()) {
+                StripeService::createStripeCustomer(auth()->user()); // will create customer in stripe if one doesn't already exist
             }
 
             if (!empty(get_tenant_setting('login_redirect_url'))) {

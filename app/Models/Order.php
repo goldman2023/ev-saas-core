@@ -26,7 +26,6 @@ class Order extends WeBaseModel
         'phone_numbers' => 'array',
         'same_billing_shipping' => 'boolean',
         'viewed' => 'boolean',
-        'meta' => 'array',
         'is_temp' => 'boolean',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
