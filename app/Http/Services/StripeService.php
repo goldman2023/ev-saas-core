@@ -1244,7 +1244,7 @@ class StripeService
         $order->shipping_city = $shipping_city;
         $order->shipping_zip = $shipping_zip;
         $order->number_of_invoices = $number_of_invoices;
-        $order->invoicing_period = $stripe_subscription?->plan?->interval ?? null;
+        $order->invoicing_period = $stripe_subscription?->items?->data[0]?->plan?->interval ?? null;
         $order->invoice_grace_period = 0;
         $order->shipping_method = '';
         $order->shipping_cost = 0;
@@ -2244,8 +2244,8 @@ class StripeService
                         $subscription->items()->attach($model, ['qty' => 1]); // since multi-item subscription is disabled here, qty can only be 1!
                     } else {
                         foreach($order->order_items as $order_item) {
-                            // Associate subject from order_item to subscription and set quantity to $order_item->qty
-                            $subscription->items()->attach($order_item->subject, ['qty' => $order_item->qty]);
+                            // Associate subject from order_item to subscription and set quantity to $order_item->quantity
+                            $subscription->items()->attach($order_item->subject, ['qty' => $order_item->quantity]);
                         }
                     }
 
@@ -2257,6 +2257,7 @@ class StripeService
                     DB::commit();
                 } catch(\Throwable $e) {
                     DB::rollback();
+                    http_response_code(400);
                     die(print_r($e));
                 }
 
