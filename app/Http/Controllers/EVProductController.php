@@ -214,6 +214,7 @@ class EVProductController extends Controller
             return abort(404);
         }
 
+
         // Check if Course item is free or product owned by user
         if($course_item->free || (Auth::check() && ((auth()->user()?->bought($product) ?? false) || (auth()->user()?->manages($product) ?? false)))) {
             $data = [

@@ -4,7 +4,7 @@
     </div>
 
     <div class="px-5 pb-4 flex flex-col ">
-        @if(!empty($user->getUserMeta('work_experience')))
+        @if(!empty($user->getUserMeta('work_experience')) && is_array($user->getUserMeta('work_experience')))
             @foreach($user->getUserMeta('work_experience') as $index => $wrk)
                 <div class="w-full flex flex-col  @if($index !== count($user->getUserMeta('work_experience')) - 1) border-b border-gray-200 pb-3 mb-3 @endif">
                     <strong class="block mb-0 text-16 text-typ-1">{{ $wrk['title'] ?? '' }}</strong>

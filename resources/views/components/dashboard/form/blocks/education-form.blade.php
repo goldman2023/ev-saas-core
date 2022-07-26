@@ -1,6 +1,6 @@
 <div class="w-full" x-data="{
     current: 0,
-    educations: {{ $field }},
+    educations: [],
     item_template: {
         'school': 'School/Institution...',
         'degree_title': 'Degree title...',
@@ -11,8 +11,8 @@
         'description': '',
     },
     add() {
-        if(this.educations === undefined || this.educations === null) { 
-            this.educations = [ {...this.item_template} ]; 
+        if(this.educations === undefined || this.educations === null) {
+            this.educations = [ {...this.item_template} ];
         } else {
             this.educations.push({...this.item_template});
         }
@@ -27,10 +27,12 @@
         $wire.set('{{ $field }}', this.educations.filter(function(x){return x}), true);
         $wire.saveEducation();
     }
-}" 
-    x-init="if(educations === undefined || educations === null) { 
-    educations = []; 
-}">
+}"
+    x-init="if({{ $field }} === undefined || {{ $field }} === null) {
+        experiences = [];
+    } else {
+        experiences = {{ $field }};
+    }">
     <ul class="border-b border-gray-200 divide-y divide-gray-200" x-show="educations != null && educations.length > 0">
         <template x-for="(item, index) in educations">
             <li class="py-4 flex items-center justify-between space-x-3">

@@ -127,7 +127,7 @@ Route::middleware([
 
         /* My account */
         Route::get('/account-settings', [EVAccountController::class, 'account_settings'])->name('my.account.settings');
-        Route::get('/account-settings/shops', [EVAccountController::class, 'account_shops_settings'])->name('my.account.shops');
+        Route::get('/account-settings/shops', [EVAccountController::class, 'shop_settings'])->name('my.account.shops');
         Route::get('/profile/{id}', [EVAccountController::class, 'user_profile'])->name('user.profile');
         Route::get('/user/{id}/details', [EVAccountController::class, 'user_details'])->name('user.details');
 
@@ -217,6 +217,7 @@ Route::middleware([
     Route::get('/feed/bookmarks', [FeedController::class, 'bookmarks'])->name('feed.bookmarks');
     Route::get('/feed/shops', [FeedController::class, 'shops'])->name('feed.shops');
     Route::get('/feed/products', [FeedController::class, 'products'])->name('feed.products');
+    Route::get('/feed/courses', [FeedController::class, 'courses'])->name('feed.courses');
 
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');

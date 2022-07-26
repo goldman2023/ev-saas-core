@@ -55,6 +55,21 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
         if (function_exists('add_action')) {
             // Actions
+
+            add_filter('global.layout', function ($layout) {
+                if(auth()->user()) {
+                        /* Apply feed layout to all users except admin */
+
+                    if(auth()->user()->isAdmin()) {
+                        return $layout;
+                    } else {
+                        return 'feed';
+                    }
+                }
+
+                return $layout;
+
+            }, 20, 1);
         }
 
         if (function_exists('add_filter')) {

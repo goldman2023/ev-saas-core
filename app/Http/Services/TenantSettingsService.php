@@ -186,6 +186,12 @@ class TenantSettingsService
 
             // Payments
 
+            // Design
+            'product_page_style' => 'string',
+            'footer_style' => 'string',
+
+
+
             // Features
             'feed_enabled' => 'boolean',
             'multiple_subscriptions_enabled' => 'boolean', // Allowing users to have multiple subscriptions (needed for multi-vendor apps AND if you want to allow users to buy different interval subscriptions)
@@ -195,6 +201,7 @@ class TenantSettingsService
             'onboarding_flow' => 'boolean',
             'chat_feature' => 'boolean',
             'addresses_feature' => 'boolean',
+            'notifications_feature' => 'boolean',
             'weedit_feature' => 'boolean',
             'wishlist_feature' => 'boolean',
             'vendor_mode_feature' => 'boolean',

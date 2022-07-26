@@ -1,3 +1,4 @@
+@if($courses->count() > 1)
 <div class="w-full bg-white rounded-xl shadow">
     <div class="w-full px-5 py-4 mb-5 flex justify-between border-b border-gray-200">
         <h5 class="text-14 font-semibold">{{ translate('My Courses') }}</h5>
@@ -37,7 +38,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
 
                             <div class="w-full flex flex-col relative">
                                 {{-- <div class="absolute top-0 right-0 flex items-center mb-2">
@@ -53,14 +54,14 @@
                                         @svg('heroicon-o-calendar', ['class' => 'h-4 h-5 mr-2 '])
                                         <span class="text-14">{{ translate('Started on') }}:</span>
                                     </div>
-                                   
+
                                     <time datetime="{{ $ownership->created_at->format('d M, Y') }}" class="pl-7 text-12">
                                         {{ $ownership->created_at->format('d M, Y') }}
                                     </time>
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             @endforeach
@@ -76,3 +77,4 @@
         </div>
     </div>
 </div>
+@endif

@@ -23,6 +23,9 @@
             <livewire:feed.blocks.upcoming-events />
 
             {{--  --}}
+
+
+
             <livewire:feed.blocks.my-courses />
 
             <x-feed.elements.follow-suggestions>

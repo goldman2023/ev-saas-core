@@ -1,9 +1,6 @@
 @push('head_scripts')
-<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
-
+<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
-{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush
 
@@ -164,7 +161,7 @@
 
                         <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
 
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <div class="hidden  sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                                 <fieldset class="mt-4">
                                   <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
                                     <div class="flex items-center">
@@ -296,7 +293,6 @@
                                             {{  Str::title(str_replace('_', ' ', $key)) }}
                                             @if($options['required'] ?? false) <span class="text-danger">*</span>@endif
                                         </label>
-
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             @if(($options['type']??'string') == 'string')
                                                 <x-dashboard.form.input field="meta.{{ $key }}" />
