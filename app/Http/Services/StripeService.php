@@ -1289,12 +1289,12 @@ class StripeService
                     return $carry + $value['amount'];
                 }) / 100;
             } else {
-                $tax = collect($subscription_item->tax_amounts)->reduce(function ($carry, $value, $key) {
+                $tax = collect($subscription_item?->tax_amounts ?? [])->reduce(function ($carry, $value, $key) {
                     return $carry + $value->amount;
                 }) / 100;
             }
-
-            $subscription_item = (array) $subscription_item;
+            
+            $subscription_item = !is_array($subscription_item) ? $subscription_item->toArray() : $subscription_item;
 
             $order_item = new OrderItem();
             $order_item->order_id = $order->id;
@@ -2192,6 +2192,7 @@ class StripeService
 
         try {
             if(empty($order_id) && empty($invoice_id)) {
+
                 // This means that subscription is NOT created through checkout link from our app -> It's most probably created through Stripe directly!
                 $latest_stripe_invoice = $this->stripe->invoices->retrieve(
                     $latest_stripe_invoice_id,
@@ -2209,7 +2210,7 @@ class StripeService
 
                     // 3. Create UserSubscription
                     if(!get_tenant_setting('multiple_subscriptions_enabled')) {
-                        $order->user->subscriptions()->forceDelete(); // Delete all subscriptions
+                        //$order->user->subscriptions()->forceDelete(); // Delete all subscriptions
                         // TODO: Cancel other subscriptions on Stripe here immediately!!!
                     }
 
@@ -2239,20 +2240,12 @@ class StripeService
                     if (!get_tenant_setting('multi_item_subscription_enabled')) {
                         // Associate $model from subscription set quantity to 1
                         $model = get_model_by_stripe_product_id($stripe_subscription->plan->product);
-
-                        $subscription->items()->create([
-                            'subject_id' => $model->id,
-                            'subject_type' => $model::class,
-                            'qty' => 1, // since multi-item subscription is disabled here, qty can only be 1!
-                        ]);
+                        
+                        $subscription->items()->attach($model, ['qty' => 1]); // since multi-item subscription is disabled here, qty can only be 1!
                     } else {
                         foreach($order->order_items as $order_item) {
                             // Associate subject from order_item to subscription and set quantity to $order_item->qty
-                            $subscription->items()->create([
-                                'subject_id' => $order_item->subject->id,
-                                'subject_type' => $order_item->subject::class,
-                                'qty' => $order_item->qty,
-                            ]);
+                            $subscription->items()->attach($order_item->subject, ['qty' => $order_item->qty]);
                         }
                     }
 
@@ -2260,29 +2253,30 @@ class StripeService
                     $order->load('user_subscription');
                     $user_subscription = $order->user_subscription;
 
-                    // 5. Update stripe subscription with metadata needed for further actions (cycle/updat etc.)
-                    // IMPORTANT - This fires subscription.update, but it'll have only metadata in previous_attributes property!!! We should do basically...nothing on this webhook...
-                    $this->stripe->subscriptions->update(
-                        $stripe_subscription->id,
-                        [
-                            'metadata' => [
-                                'user_subscription_id' => $user_subscription->id,
-                                'order_id' => $order->id,
-                                'invoice_id' => $invoice->id,
-                                'latest_invoice_id' => $invoice->id,
-                                'user_id' => $order->user->id,
-                                'shop_id' => $order->shop->id,
-                            ]
-                        ]
-                    );
-
-                    do_action('stripe.webhook.subscriptions.created_from_stripe', $user_subscription, $latest_stripe_invoice);
 
                     DB::commit();
                 } catch(\Throwable $e) {
                     DB::rollback();
                     die(print_r($e));
                 }
+
+                // 5. Update stripe subscription with metadata needed for further actions (cycle/updat etc.)
+                // IMPORTANT - This fires subscription.update, but it'll have only metadata in previous_attributes property!!! We should do basically...nothing on this webhook...
+                $this->stripe->subscriptions->update(
+                    $stripe_subscription->id,
+                    [
+                        'metadata' => [
+                            'user_subscription_id' => $user_subscription->id,
+                            'order_id' => $order->id,
+                            'invoice_id' => $invoice->id,
+                            'latest_invoice_id' => $invoice->id,
+                            'user_id' => $order->user->id,
+                            'shop_id' => $order->shop->id,
+                        ]
+                    ]
+                );
+
+                do_action('stripe.webhook.subscriptions.created_from_stripe', $user_subscription, $latest_stripe_invoice);
 
                 die();
             }

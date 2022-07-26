@@ -504,7 +504,7 @@ if (!function_exists('pix_pro_update_license')) {
                     if(!empty($response_json['license'] ?? null)) {
                         // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
                         $pix_license = $response_json['license'];
-
+                        
                         DB::beginTransaction();
 
                         try {
