@@ -564,15 +564,22 @@ class StripeService
      * @param  mixed $interval
      * @return $invoice
      */
-    public function getUpcomingInvoice($user_subscription, $new_plan = null, $interval = null) {
+    public function getUpcomingInvoice($user_subscription = null, $new_plan = null, $interval = null, $stripe_customer_id = null, $stripe_subscription_id = null) {
         try {
             if(empty($new_plan) && empty($interval)) { 
                 // Get upcoming invoice for provided subscription.
-                $invoice = $this->stripe->invoices->upcoming([
-                    'customer' => $user_subscription->user->getStripeCustomerID(),
-                    'subscription' => $user_subscription->getStripeSubscriptionID(),
-                ]);
-
+                if(!empty($stripe_customer_id) && !empty($stripe_subscription_id)) {
+                    $invoice = $this->stripe->invoices->upcoming([
+                        'customer' => $stripe_customer_id,
+                        'subscription' => $stripe_subscription_id,
+                    ]);
+                } else {
+                    $invoice = $this->stripe->invoices->upcoming([
+                        'customer' => $user_subscription->user->getStripeCustomerID(),
+                        'subscription' => $user_subscription->getStripeSubscriptionID(),
+                    ]);
+                }
+                
                 return array_merge(['invoice_source' => 'stripe'], $invoice->toArray());
             }
             
@@ -622,7 +629,7 @@ class StripeService
             $invoice = $this->stripe->invoices->upcoming($params);
             
             return array_merge(['invoice_source' => 'stripe'], $invoice->toArray());
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             Log::error(array_merge(['error' => $e]));
             return array_merge(['invoice_source' => 'we'], $user_subscription->order->toArray()); // return our Order just in case...
         }
@@ -1198,13 +1205,18 @@ class StripeService
             $user_id = !empty($stripe_subscription->metadata?->user_id ?? null) ? $stripe_subscription->metadata?->user_id : $previous_order->user_id;
             $shop_id = !empty($stripe_subscription->metadata?->shop_id ?? null) ? $stripe_subscription->metadata?->shop_id : $previous_order->shop_id;
 
-            $shipping_first_name = !empty(explode(' ', $stripe_invoice->customer_shipping->name)[0] ?? null) ? explode(' ', $stripe_invoice->customer_shipping->name)[0] : $previous_order->shipping_first_name;
-            $shipping_last_name = !empty(explode(' ', $stripe_invoice->customer_shipping->name)[1] ?? null) ? explode(' ', $stripe_invoice->customer_shipping->name)[1] : $previous_order->shipping_last_name;
+            $shipping_first_name = !empty(explode(' ', ($stripe_invoice->customer_shipping?->name ?? ''))[0] ?? null) ? explode(' ', ($stripe_invoice->customer_shipping?->name ?? ''))[0] : $previous_order->shipping_first_name;
+            $shipping_last_name = !empty(explode(' ', ($stripe_invoice->customer_shipping?->name ?? ''))[1] ?? null) ? explode(' ', ($stripe_invoice->customer_shipping?->name ?? ''))[1] : $previous_order->shipping_last_name;
             $shipping_address = !empty($stripe_invoice->customer_shipping->address->line1 ?? null) ? $stripe_invoice->customer_shipping->address->line1 : $previous_order?->shipping_address;
             $shipping_country = !empty($stripe_invoice->customer_shipping->address->country ?? null) ? $stripe_invoice->customer_shipping->address->country : $previous_order?->shipping_country;
             $shipping_state = !empty($stripe_invoice->customer_shipping->address->state ?? null) ? $stripe_invoice->customer_shipping->address->state : $previous_order?->shipping_state;
             $shipping_city = !empty($stripe_invoice->customer_shipping->address->city ?? null) ? $stripe_invoice->customer_shipping->address->city : $previous_order?->shipping_city;
             $shipping_zip = !empty($stripe_invoice->customer_shipping->address->postal_code ?? null) ? $stripe_invoice->customer_shipping->address->postal_code : $previous_order?->shipping_zip;
+        }
+
+        if(in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons)) {
+            // Get Upcoming invoice from stripe if Order is for SUBSCRIPTION and save it to Order meta field under `{prefix}stripe_upcoming_invoice` property
+            $upcoming_invoice = \StripeService::getUpcomingInvoice(stripe_customer_id: $stripe_subscription->customer, stripe_subscription_id: $stripe_subscription->id);
         }
 
         $number_of_invoices = in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons) ? '-1' : '1';
@@ -1222,7 +1234,7 @@ class StripeService
         $order->billing_state = $stripe_invoice->customer_address->state;
         $order->billing_city = $stripe_invoice->customer_address->city;
         $order->billing_zip = $stripe_invoice->customer_address->postal_code;
-        $order->phone_numbers = [$stripe_invoice->customer_shipping->phone, $stripe_invoice->customer_phone];
+        $order->phone_numbers = array_filter([$stripe_invoice->customer_shipping?->phone ?? null, $stripe_invoice->customer_phone]);
         $order->same_billing_shipping = false;
         $order->shipping_first_name = $shipping_first_name;
         $order->shipping_last_name = $shipping_last_name;
@@ -1236,26 +1248,20 @@ class StripeService
         $order->invoice_grace_period = 0;
         $order->shipping_method = '';
         $order->shipping_cost = 0;
-        $order->tax = 0; // TODO: SHould we add tax from stripe? :-?
+        $order->tax = isset($upcoming_invoice) && !empty($upcoming_invoice) ? ($upcoming_invoice['tax'] / 100) : ($stripe_invoice->tax / 100);
+        // Reason for getting tax amount from upcoming_invoice for subscriptions is TRIAL. If subscription is still in trial mode, it means that current $stripe_invoice has a tax of 0!
 
-        $meta = [];
-        $meta[$this->mode_prefix .'stripe_payment_mode'] = in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons) ? 'subscription' : 'payment'; // IMPORTANT: when mode is `subscription`, stripe_payment_intent_id is NOT SENT, because payment intent is related to future INVOICE not one time session checkout!
-        $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription->id;
-        $meta[$this->mode_prefix .'stripe_latest_invoice_id'] = $stripe_subscription->latest_invoice;
-        $meta[$this->mode_prefix .'stripe_payment_intent_id'] = null;
-        $meta[$this->mode_prefix .'stripe_checkout_session_id'] = null;
+        $order->mergeData([
+            stripe_prefix('stripe_payment_mode') => in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons) ? 'subscription' : 'payment', // IMPORTANT: when mode is `subscription`, stripe_payment_intent_id is NOT SENT, because payment intent is related to future INVOICE not one time session checkout!
+            stripe_prefix('stripe_subscription_id') => $stripe_subscription->id,
+            stripe_prefix('stripe_latest_invoice_id') => $stripe_subscription->latest_invoice,
+            stripe_prefix('stripe_payment_intent_id') => null,
+            stripe_prefix('stripe_checkout_session_id') => null,
+        ]);
 
         if(in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons)) {
-            // Get Upcoming invoice from stripe if Order is for SUBSCRIPTION and save it to Order meta field under `{prefix}stripe_upcoming_invoice` property
-            $stripe_upcoming_invoice = $this->stripe->invoices->upcoming([
-                'customer' => $stripe_subscription->customer,
-                'subscription' => $stripe_subscription->id,
-            ]);
-
-            $meta[$this->mode_prefix .'stripe_upcoming_invoice'] = array_merge(['invoice_source' => 'stripe'], $stripe_upcoming_invoice->toArray());
+            $order->setData(stripe_prefix('stripe_upcoming_invoice'), is_array($upcoming_invoice) ? $upcoming_invoice : $upcoming_invoice->toArray());
         }
-
-        $order->meta = $meta;
 
         if($stripe_invoice->paid && $stripe_subscription->status === 'active') {
             $order->payment_status = PaymentStatusEnum::paid()->value;
@@ -1277,19 +1283,32 @@ class StripeService
                 $model = $this->stripe->products->retrieve($subscription_item->price->product, []);
             }
 
+            if($stripe_subscription->status === 'trialing') {
+                $subscription_item = collect($upcoming_invoice['lines']['data'])->firstWhere('price.product', $subscription_item->price->product);
+                $tax = collect($subscription_item['tax_amounts'])->reduce(function ($carry, $value, $key) {
+                    return $carry + $value['amount'];
+                }) / 100;
+            } else {
+                $tax = collect($subscription_item->tax_amounts)->reduce(function ($carry, $value, $key) {
+                    return $carry + $value->amount;
+                }) / 100;
+            }
+
+            $subscription_item = (array) $subscription_item;
+
             $order_item = new OrderItem();
             $order_item->order_id = $order->id;
             $order_item->subject_id = !empty($model->id ?? null) ? $model->id : null;
             $order_item->subject_type = !empty($model ?? null) ? $model::class : null;
             $order_item->name = $model?->name ?? '';
             $order_item->excerpt = $model?->excerpt ?? ($model?->description ?? null);
-            $order_item->quantity = $subscription_item->quantity;
+            $order_item->quantity = $subscription_item['quantity'];
             // $order_item->serial_numbers = $model::class; // TODO: Add serial numbers here!!! Serial numbers must be provided in metadata through checkout link!
-            $order_item->base_price = $subscription_item->price->unit_amount / 100;
+            $order_item->base_price = $subscription_item['price']['unit_amount'] / 100;
             $order_item->discount_amount = 0; // TODO: How to add discount if there's any??
-            $order_item->subtotal_price = $subscription_item->price->unit_amount / 100;
-            $order_item->total_price = $subscription_item->price->unit_amount / 100;
-            $order_item->tax = 0; // TODO: Should we add Stripe tax rates here?
+            $order_item->subtotal_price = $subscription_item['price']['unit_amount'] / 100;
+            $order_item->total_price = $subscription_item['price']['unit_amount'] / 100;
+            $order_item->tax = $tax;
 
             // If $model is variation, add `variant` json column
             if($model?->is_variation ?? false) {
@@ -2473,7 +2492,7 @@ class StripeService
                 
             }
 
-            do_action('stripe.webhook.subscriptions.updated', $subscription, $stripe_invoice, $stripe_previous_attributes);
+            do_action('stripe.webhook.subscriptions.updated', $subscription, null, $stripe_invoice, $previous_attributes);
 
         } catch (\Exception $e) {
             http_response_code(400);
