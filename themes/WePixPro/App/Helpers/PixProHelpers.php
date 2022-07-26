@@ -209,7 +209,7 @@ if (!function_exists('pix_pro_create_licenses_action')) {
             $qty = $plan->pivot->qty;
         }
 
-            // Create X amount of licenses based on pivot table qty column (if there's only one $plan and qty 1, then only one license will be created)
+        // Create X amount of licenses based on pivot table qty column (if there's only one $plan and qty 1, then only one license will be created)
         for ($i = 1; $i <= $qty; $i++) {
             $stripe_item = collect($stripe_subscription->items->data)->firstWhere('price.product', $plan->getCoreMeta(stripe_prefix('stripe_product_id')));
 
@@ -286,6 +286,7 @@ if (!function_exists('pix_pro_create_licenses_action')) {
         }
     }
 }
+
 
 // CREATE LICENSE
 if (!function_exists('pix_pro_create_license')) {
@@ -438,6 +439,7 @@ if (!function_exists('pix_pro_create_license')) {
 }
 
 // UPDATE LICENSE
+// TODO: Make this function similar to pix_pro_create_license (to actually include logic for )
 if (!function_exists('pix_pro_update_license')) {
     function pix_pro_update_license($subscription, $previous_subscription, $stripe_invoice, $stripe_previous_attributes) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
@@ -464,18 +466,21 @@ if (!function_exists('pix_pro_update_license')) {
                 // TODO: Can this actually happen on multi-item subscription checkout?
             }
 
+            // IMPORTANT: THIS SHOULD BE FIRED ONLY FOR single-item subscriptions (FOR NOW!)!!!!
             if(!empty($pix_pro_user['user_id'] ?? null) && empty($previous_subscription)) {
-                $number_of_images = $subscription->subject->getCoreMeta('number_of_images'); // get default meta from Plan, not previous subscription!
+                $new_plan = $subscription->items->first();
+
+                $number_of_images = $new_plan->getCoreMeta('number_of_images'); // get default meta from Plan, not previous subscription!
                 
                 if(!empty($number_of_images) && (is_int($number_of_images) || ctype_digit($number_of_images))) {
-                    $number_of_images = $subscription->subject->getCoreMeta('number_of_images') ?? 150; // get default meta from Plan, not previous subscription!
+                    $number_of_images = $new_plan->getCoreMeta('number_of_images') ?? 150; // get default meta from Plan, not previous subscription!
                 } else {
                     $number_of_images = 150;
                 }
 
-                $cloud_service_param = $subscription->subject->getCoreMeta('includes_cloud') === true ? 1 : 0;
-                $offline_service_param = $subscription->subject->getCoreMeta('includes_offline') === true ? 1 : 0;
-                $license_subscription_type = $subscription->plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+                $cloud_service_param = $new_plan->getCoreMeta('includes_cloud') === true ? 1 : 0;
+                $offline_service_param = $new_plan->getCoreMeta('includes_offline') === true ? 1 : 0;
+                $license_subscription_type = $new_plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
 
                 $body = pix_pro_add_auth_params([
                     "UserEmail" => $pix_pro_user['email'],
@@ -503,7 +508,7 @@ if (!function_exists('pix_pro_update_license')) {
                         DB::beginTransaction();
 
                         try {
-                            $license = $subscription->license->first();
+                            $license = $subscription->licenses->first();
                             $license->user_id = $subscription->user->id;
                             $license->license_name = $pix_license['license_name'] ?? '';
                             // $license->serial_number = $pix_license['serial_number'] ?? '';
@@ -511,11 +516,6 @@ if (!function_exists('pix_pro_update_license')) {
                             
                             $license->mergeData($pix_license); // Keep in mind that expiration date is NOT YET CHANGED ON PixPro end, because this endpoint doesn't set it. We'll update each subscription expiration_date in following function: `$this->pix_pro_update_licenses_status($subscription);`
                             $license->save();
-
-                            // Change subscription default attributes based on a new selected Plan
-                            $subscription->saveCoreMeta('number_of_images', $number_of_images);
-                            $subscription->saveCoreMeta('includes_cloud', $subscription->subject->getCoreMeta('includes_cloud'));
-                            $subscription->saveCoreMeta('includes_offline', $subscription->subject->getCoreMeta('includes_offline'));
 
                             DB::commit();
                         } catch(\Throwable $e) {
@@ -666,7 +666,7 @@ if (!function_exists('pix_pro_update_licenses_status')) {
                                 $license->user_id = $subscription->user->id;
                                 $license->mergeData($pix_license);
                                 $license->save();
-    
+                                
                                 DB::commit();
                             } catch(\Throwable $e) {
                                 DB::rollback();
