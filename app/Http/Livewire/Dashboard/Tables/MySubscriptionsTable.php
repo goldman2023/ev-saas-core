@@ -100,7 +100,7 @@ class MySubscriptionsTable extends DataTableComponent
     // public function cancelPlan($user_subscription_id) {
 
     //     if($this->for === 'me') {
-    //         $plan_subscription = auth()->user()->plan_subscriptions->where('id', $user_subscription_id)->first();
+    //         $plan_subscription = auth()->user()?->subscriptions->where('id', $user_subscription_id)->first();
 
     //         try {
     //             if(!empty($plan_subscription)) {
@@ -121,7 +121,7 @@ class MySubscriptionsTable extends DataTableComponent
     // public function revivePlan($user_subscription_id) {
 
     //     if($this->for === 'me') {
-    //         $plan_subscription = auth()->user()->plan_subscriptions->where('id', $user_subscription_id)->first();
+    //         $plan_subscription = auth()->user()?->subscriptions->where('id', $user_subscription_id)->first();
 
     //         try {
     //             if(!empty($plan_subscription)) {

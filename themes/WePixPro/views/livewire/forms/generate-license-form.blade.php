@@ -8,6 +8,7 @@ wire:loading.class="opacity-30 pointer-events-none"
     if($event.detail.id === id) {
         serial_number = $event.detail.serial_number;
         license_id = $event.detail.license_id;
+        hw_id = null;
     }
 ">
     <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:loading.class.remove="hidden"></x-ev.loaders.spinner>

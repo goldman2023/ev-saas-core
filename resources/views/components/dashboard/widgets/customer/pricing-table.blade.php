@@ -125,7 +125,7 @@
                                 <a
                                     @if(auth()->user()?->subscriptions->first()?->isTrial())
                                         x-bind:href="is_active() ? $getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode}) : 'javascript:void(0)'"
-                                        x-on:click="is_active() ? '' : $dispatch('display-modal', {id: 'change-trial-plan-confirmation-modal', subscription_id: {{ auth()->user()?->plan_subscriptions->first()?->id ?? 'null' }}, new_plan: @js($plan->toArray()), interval: pricing_mode })"
+                                        x-on:click="is_active() ? '' : $dispatch('display-modal', {id: 'change-trial-plan-confirmation-modal', subscription_id: {{ auth()->user()?->subscriptions->first()?->id ?? 'null' }}, new_plan: @js($plan->toArray()), interval: pricing_mode })"
                                         target="_parent"
                                     @else
                                         x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})"

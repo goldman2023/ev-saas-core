@@ -14,7 +14,7 @@ class UserSubscriptionRelationship extends WeBaseModel
 
     protected $table = 'user_subscription_relationships';
 
-    protected $fillable = ['user_subscription_id', 'subject_id', 'subject_type', 'qty'];
+    protected $fillable = ['user_subscription_id', 'subject_id', 'subject_type', 'qty', 'created_at', 'updated_at'];
 
     public function subscription()
     {

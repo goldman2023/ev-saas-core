@@ -188,7 +188,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 pix_pro_register_user($user);
             }, 20, 1);
 
-            // Create PixPro License
+            // Create PixPro License(s) when invoice is paid!
             add_action('invoice.paid.subscription_create', function ($user_subscription, $previous_subscription, $stripe_invoice) {
                 pix_pro_create_license($user_subscription, $previous_subscription, $stripe_invoice);
             }, 20, 3);
@@ -239,9 +239,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             });
             // When new subscription is created, take the plans core_meta and add it to the subscription!
             add_action('observer.user_subscription.created', function ($user_subscription) {
-                $user_subscription->saveCoreMeta('number_of_images', $user_subscription->plan->getCoreMeta('number_of_images', true));
-                $user_subscription->saveCoreMeta('includes_cloud', $user_subscription->plan->getCoreMeta('includes_cloud', true));
-                $user_subscription->saveCoreMeta('includes_offline', $user_subscription->plan->getCoreMeta('includes_offline', true));
+                
             });
 
             add_action('view.order-received.items.end', function ($order) {
@@ -310,8 +308,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                             if (!empty($license) && method_exists($license, 'get_license')) {
                                 $data = $license->get_license(); // gets the license from Pixpro DB
                                 
-                                if ($license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
-                                    $license->setData('hardware_id', $data['hardware_id']);
+                                if (!empty($data) && $license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
+                                    $license->setData('hardware_id', $data['hardware_id'] ?? null);
                                     $license->save();
                                 }
                             }

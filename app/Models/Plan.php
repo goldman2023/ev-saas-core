@@ -55,14 +55,14 @@ class Plan extends WeBaseModel
         // TODO: Fix to show all plans in Frontend and only my posts in Backend
         // Show only MyShop Suscription Plans
         static::addGlobalScope('from_my_shop', function (BaseBuilder $builder) {
-            if (request()->route()->getName() == 'my.plans.management') {
-                $builder->where('shop_id', '=', 1);
-            } else {
-                if (request()->is_dashboard) {
-                    $builder->where('shop_id', '=', 1);
-                    // $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
-                }
-            }
+            // if (!empty(request()->route()) && (request()->route()?->getName() ?? null) == 'my.plans.management') {
+            //     $builder->where('shop_id', '=', 1);
+            // } else {
+            //     if (request()?->is_dashboard ?? null) {
+            //         $builder->where('shop_id', '=', 1);
+            //         // $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
+            //     }
+            // }
         });
     }
 

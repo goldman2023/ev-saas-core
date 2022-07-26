@@ -31,7 +31,7 @@ class PlansObserver
 
         if(Payments::isStripeEnabled()) {
             // Update Stripe plan
-            StripeService::saveStripeProduct($plan);
+            // StripeService::saveStripeProduct($plan);
         }
     }
 

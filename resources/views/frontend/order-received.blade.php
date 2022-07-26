@@ -124,8 +124,8 @@
                                 <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
                             </div>
                             <div class="pl-4 flex sm:pl-6">
-                                <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
-                                <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price * $item->quantity) }}</dd>
+                                <dt class="font-semibold text-gray-900">{{ translate('Total price') }}</dt>
+                                <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price) }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -194,37 +194,32 @@
           @endif
 
           <dl class="space-y-6 border-t border-gray-200 text-sm pt-6 col-start-1 md:col-start-2 col-end-4">
-            @if($order->user_subscriptions->isNotEmpty())
-              {{-- Subscription Orders --}}
-
-              @foreach($order->user_subscriptions as $subscription)
+            @if(!empty($subscription = $order->user_subscription))
                 @php
                   $tax_sum = 0;
                   $items_sum = 0;
                 @endphp
                 <div class="w-full flex flex-col">
-                    <div class="w-full flex justify-between mb-2">
-                        <strong class="text-16 font-semibold">{{ $subscription->plan->name }}</strong>
-                    </div>
-                    @foreach($subscription->order->order_items as $order_item)
-                        <div class="w-full flex justify-between mb-1">
-                            <span class="text-14 text-gray-600 font-normal">
-                                {{ $order_item->quantity.' '.translate('user') }} x {{ \FX::formatPrice($order_item->total_price / $order_item->quantity) }} / {{ translate('user') }} / {{ $order->invoicing_period }}
-                            </span>
+                  <div class="w-full flex justify-between mb-2">
+                      <strong class="text-16 font-semibold">{{ translate('Subscription') }}</strong>
+                  </div>
+                  @foreach($subscription->order->order_items as $order_item)
+                      <div class="w-full flex justify-between mb-1">
+                          <span class="text-14 text-gray-600 font-normal">
+                              {{ $order_item->subject->name }}: {{ $order_item->quantity.' '.translate('user') }} x {{ \FX::formatPrice($order_item->total_price / $order_item->quantity) }} / {{ translate('user') }} / {{ $order->invoicing_period }}
+                          </span>
 
-                            <span class="text-14 text-gray-600 font-normal">{{ \FX::formatPrice($order_item->total_price * $order_item->quantity) }} / {{ $order->invoicing_period }}</span>
-                        </div>
+                          <span class="text-14 text-gray-600 font-normal">{{ \FX::formatPrice($order_item->total_price) }} / {{ $order->invoicing_period }}</span>
+                      </div>
 
-                        @php
-                          $items_sum += $order_item->total_price * $order_item->quantity;
-                          if($subscription->getTaxAmount(false) > 0) {
-                            $tax_sum += $subscription->getTaxAmount(format: false);
-                          }
-                        @endphp
-                    @endforeach
-                  
+                      @php
+                        $items_sum += $order_item->total_price;
+                        if($subscription->getTaxAmount(false) > 0) {
+                          $tax_sum += $subscription->getTaxAmount(format: false);
+                        }
+                      @endphp
+                  @endforeach
                 </div>
-              @endforeach
 
 
               <div class="w-full flex flex-col mt-3 pt-3 border-t border-gray-200">
@@ -234,7 +229,7 @@
                               {{ translate('VAT amount') }}:
                           </span>
                           <span class="text-14 text-gray-500 font-normal">
-                              {{ \FX::formatPrice($tax_sum) }} / {{ $order->invoicing_period }}
+                              {{ $subscription->getTaxAmount(format: true) }} / {{ $order->invoicing_period }}
                           </span>
                       </div>
                   @endif
@@ -249,7 +244,7 @@
                     </span>
 
                     <span class="text-14 text-gray-600 font-normal">
-                        {{ translate('Total') }}: <strong>{{ \FX::formatPrice($tax_sum + $items_sum) }} / {{ $order->invoicing_period }}</strong>
+                        {{ translate('Total') }}: <strong>{{ $subscription->getTotalPrice(format: true) }} / {{ $order->invoicing_period }}</strong>
                     </span>
                   </div>
               </div>

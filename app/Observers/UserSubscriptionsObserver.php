@@ -40,9 +40,7 @@ class UserSubscriptionsObserver
      */
     public function updated(UserSubscription $user_subscription)
     {
-        // Remove upcoming invoice for subscription total price
-    //    \Cache::forget('user_subscription_'.$user_subscription->id.'_upcoming_invoice_stats');
-    //    $user_subscription->getUpcomingInvoiceStats();
+        // TODO: Where in the code should we send UpdatedSubscription notification?
     }
 
     /**
@@ -75,6 +73,7 @@ class UserSubscriptionsObserver
      */
     public function forceDeleted(UserSubscription $user_subscription)
     {
-        //
+        // TODO: Where in the code should we send CanceledSubscription notification?
+
     }
 }
