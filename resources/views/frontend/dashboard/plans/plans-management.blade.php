@@ -45,7 +45,10 @@
 @endsection
 
 @push('modal')
-    @if((auth()->user()?->isSubscribed() ?? false) && auth()->user()?->subscriptions->first()->isTrial())
+    @if((auth()->user()?->isSubscribed() ?? false) && 
+        auth()->user()?->subscriptions->first()->isTrial() && 
+        auth()->user()?->subscriptions->first()->items->count() === 1 &&
+        auth()->user()?->subscriptions->first()->items->first()->pivot->qty === 1)
         <x-system.form-modal id="change-trial-plan-modal" title="{{ translate('Change trial plan') }}" class="!max-w-7xl" title-class="text-20 font-semibold">
             <div class="w-full py-3">
                 <x-dashboard.widgets.customer.pricing-table :plans="$plans" :hide-title="true">
@@ -54,7 +57,7 @@
         </x-system.form-modal>
 
         @php
-            $current_plan = auth()->user()?->subscriptions->first()->plan;
+            $current_plan = auth()->user()?->subscriptions->first()->items->first();
         @endphp
         <x-system.form-modal id="change-trial-plan-confirmation-modal" title="{{ translate('Are you sure you want to change trial plan?') }}" class="!max-w-2xl" title-class="text-20 font-semibold">
             <div class="w-full" x-data="{

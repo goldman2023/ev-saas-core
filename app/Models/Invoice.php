@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use MyShop;
 use App\Builders\BaseBuilder;
+use App\Traits\HasDataColumn;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
-use MyShop;
 
 /**
  * App\Models\Invoice
@@ -14,6 +15,7 @@ use MyShop;
 class Invoice extends WeBaseModel
 {
     use SoftDeletes;
+    use HasDataColumn;
 
     protected $table = 'invoices';
 
@@ -28,7 +30,6 @@ class Invoice extends WeBaseModel
     protected $casts = [
         'viewed_by_customer' => 'boolean',
         'is_temp' => 'boolean',
-        'meta' => 'array',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
         'deleted_at' => 'datetime:d.m.Y H:i',
@@ -47,6 +48,11 @@ class Invoice extends WeBaseModel
         static::addGlobalScope('skip_negative_invoices', function (BaseBuilder $builder) {
             $builder->where('total_price', '>', 0);
         });
+    }
+
+    public function getDataColumnName()
+    {
+        return 'meta';
     }
 
     public function user()
