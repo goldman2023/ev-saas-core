@@ -37,7 +37,7 @@ class VendorMode
         }
 
         View::share('globalShop', $globalShop);
-        View::share('globalLayout', $globalLayout);
+        View::share('globalLayout', apply_filters('global.layout', $globalLayout));
 
         return $next($request);
     }

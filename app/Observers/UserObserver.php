@@ -45,11 +45,7 @@ class UserObserver
             Log::error($e->getMessage());
         }
 
-        try {
-            $user->notify(new UserWelcomeNotification());
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
-        }
+
 
         if(!$user->is_temp && get_tenant_setting('force_email_verification')) {
             $data= [];
@@ -77,6 +73,16 @@ class UserObserver
                 Log::error($e->getMessage());
             }
         }
+
+        /* TODO: Send user welcome notification inly if user is not Ghost/Guest */
+        if(!$user->is_temp) {
+            try {
+                $user->notify(new UserWelcomeNotification());
+            } catch(\Exception $e) {
+                Log::error($e->getMessage());
+            }
+        }
+
 
         // Create Stripe Customer if stripe is enabled
         if(Payments::isStripeEnabled()) {

@@ -47,7 +47,7 @@
                                 href="{{ $item->subject->getPermalink() }}">
                                 <img src="{{ $item->subject->getThumbnail() }}" class="w-10" />
 
-                                <span class="font-medium text-left text-gray-900">
+                                <span class="font-medium text-left col-span-2 text-gray-900">
                                     {{ $item->subject->name }}
                                 </span>
                             </a>

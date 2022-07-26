@@ -33,6 +33,8 @@ class ProductsObserver
             // Update Stripe product
             StripeService::saveStripeProduct($product);
         }
+
+
     }
 
     /**

@@ -126,7 +126,13 @@ class EVAccountController extends Controller
 
     public function shop_settings(Request $request)
     {
-        Permissions::canAccess(User::$non_customer_user_types, ['view_shop_data', 'view_shop_settings']);
+        try {
+            Permissions::canAccess(User::$non_customer_user_types, ['view_shop_data', 'view_shop_settings']);
+
+        } catch(\Exception $e) {
+            return redirect()->route('onboarding.step3');
+        }
+
 
         $shop = MyShop::getShop();
 

@@ -11,7 +11,7 @@
         </svg>
     </button>
     @endguest
-   {{--  <button type="button" @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'})"
+    {{-- <button type="button" @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'})"
         class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
         <span class="sr-only">{{ translate('View Cart') }}</span>
         <!-- Heroicon name: outline/bell -->
@@ -26,7 +26,7 @@
         @svg('heroicon-o-heart', ['class' => 'h-6 w-6'])
 
     </button>
- --}}
+    --}}
     <!-- Profile dropdown -->
     <div class="ml-3 relative" x-data="{
         show: false,
@@ -61,8 +61,7 @@
                 class="relative px-3 py-2 flex items-center space-x-3 hover:bg-gray-50 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500">
                 <div class="flex-shrink-0">
                     <img class="h-10 w-10 rounded-full object-contain ring-2 ring-indigo-400"
-                        src="{{ auth()->user()->getThumbnail() }}"
-                        alt="User photo">
+                        src="{{ auth()->user()->getThumbnail() }}" alt="User photo">
                 </div>
                 <div class="flex-1 min-w-0">
                     <a href="{{ route('dashboard') }}" class="focus:outline-none">
@@ -87,10 +86,16 @@
                 {{ translate('Dashboard') }}
             </a>
 
-            <a href="{{-- {{ route('my.account.shops') }} --}}" class="hidden  px-4 py-2 text-sm text-gray-700" role="menuitem"
+            @if(get_tenant_setting('vendor_mode'))
+            <a href="{{ route('my.account.shops') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
                 tabindex="-1" id="user-menu-item-1">
-                {{ translate('My Shops') }}
+                @if(auth()->user()->isCustomer())
+                    {{ translate('Create new shop') }}
+                @else
+                    {{ translate('My Shops') }}
+                @endif
             </a>
+            @endif
 
             <a href="{{ route('my.account.settings') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
                 tabindex="-1" id="user-menu-item-1">
