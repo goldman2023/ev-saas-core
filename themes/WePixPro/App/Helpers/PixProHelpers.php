@@ -458,7 +458,6 @@ if (!function_exists('pix_pro_update_license')) {
 
             $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
-
             if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($stripe_previous_attributes?->plan?->id ?? null)) {
                 // If the billing_reason is subscription_update or subscription_create WHILE previous_attributes plan change are present:
                 // Compare differences in bought licenses and their quantities and based on that create more licenses if needed.
@@ -466,72 +465,74 @@ if (!function_exists('pix_pro_update_license')) {
                 // TODO: Can this actually happen on multi-item subscription checkout?
             }
 
-            // IMPORTANT: THIS SHOULD BE FIRED ONLY FOR single-item subscriptions (FOR NOW!)!!!!
-            if(!empty($pix_pro_user['user_id'] ?? null) && empty($previous_subscription)) {
-                $new_plan = $subscription->items->first();
+            if($stripe_billing_reason !== 'subscription_cycle') {
+                // IMPORTANT: THIS SHOULD BE FIRED ONLY FOR single-item subscriptions (FOR NOW!)!!!!
+                if(!empty($pix_pro_user['user_id'] ?? null) && empty($previous_subscription)) {
+                    $new_plan = $subscription->items->first();
 
-                $number_of_images = $new_plan->getCoreMeta('number_of_images'); // get default meta from Plan, not previous subscription!
-                
-                if(!empty($number_of_images) && (is_int($number_of_images) || ctype_digit($number_of_images))) {
-                    $number_of_images = $new_plan->getCoreMeta('number_of_images') ?? 150; // get default meta from Plan, not previous subscription!
-                } else {
-                    $number_of_images = 150;
-                }
+                    $number_of_images = $new_plan->getCoreMeta('number_of_images'); // get default meta from Plan, not previous subscription!
+                    
+                    if(!empty($number_of_images) && (is_int($number_of_images) || ctype_digit($number_of_images))) {
+                        $number_of_images = $new_plan->getCoreMeta('number_of_images') ?? 150; // get default meta from Plan, not previous subscription!
+                    } else {
+                        $number_of_images = 150;
+                    }
 
-                $cloud_service_param = $new_plan->getCoreMeta('includes_cloud') === true ? 1 : 0;
-                $offline_service_param = $new_plan->getCoreMeta('includes_offline') === true ? 1 : 0;
-                $license_subscription_type = $new_plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+                    $cloud_service_param = $new_plan->getCoreMeta('includes_cloud') === true ? 1 : 0;
+                    $offline_service_param = $new_plan->getCoreMeta('includes_offline') === true ? 1 : 0;
+                    $license_subscription_type = $new_plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
 
-                $body = pix_pro_add_auth_params([
-                    "UserEmail" => $pix_pro_user['email'],
-                    "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
-                    "SubscriptionId" => $subscription->id,
-                    "LicenseName" => $license_subscription_type, // This is actually `license_subscription_type` column in PixPro DB
-                    "LicenseCloudService" => $cloud_service_param,
-                    "LicenseOfflineService" => $offline_service_param,
-                    "LicenseImageLimit" => $number_of_images,
-                ]);
+                    $body = pix_pro_add_auth_params([
+                        "UserEmail" => $pix_pro_user['email'],
+                        "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
+                        "SubscriptionId" => $subscription->id,
+                        "LicenseName" => $license_subscription_type, // This is actually `license_subscription_type` column in PixPro DB
+                        "LicenseCloudService" => $cloud_service_param,
+                        "LicenseOfflineService" => $offline_service_param,
+                        "LicenseImageLimit" => $number_of_images,
+                    ]);
 
-                $response = Http::post($route_paid, $body);
+                    $response = Http::post($route_paid, $body);
 
-                $response_json = $response->json();
-                
-                if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
-                    // If status is not success for any reason, throw an error
-                    http_response_code(400);
-                    Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in pix-pro API DB, check the response below.', $response_json));
-                } else {
-                    if(!empty($response_json['license'] ?? null)) {
-                        // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
-                        $pix_license = $response_json['license'];
-
-                        DB::beginTransaction();
-
-                        try {
-                            $license = $subscription->licenses->first();
-                            $license->user_id = $subscription->user->id;
-                            $license->license_name = $pix_license['license_name'] ?? '';
-                            // $license->serial_number = $pix_license['serial_number'] ?? '';
-                            $license->license_type = $pix_license['license_type'] ?? '';
+                    $response_json = $response->json();
+                    
+                    if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                        // If status is not success for any reason, throw an error
+                        http_response_code(400);
+                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in pix-pro API DB, check the response below.', $response_json));
+                    } else {
+                        if(!empty($response_json['license'] ?? null)) {
+                            // If licenses are correctly added, fetch them with pix_pro_get_user_licenses() and crete them on our end...
+                            $pix_license = $response_json['license'];
                             
-                            $license->mergeData($pix_license); // Keep in mind that expiration date is NOT YET CHANGED ON PixPro end, because this endpoint doesn't set it. We'll update each subscription expiration_date in following function: `$this->pix_pro_update_licenses_status($subscription);`
-                            $license->save();
+                            DB::beginTransaction();
 
-                            DB::commit();
-                        } catch(\Throwable $e) {
-                            DB::rollback();
-                            http_response_code(400);
-                            print_r($e);
-                            Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license on WeSaaS end and link it to user_subscription.', $e));
+                            try {
+                                $license = $subscription->licenses->first();
+                                $license->user_id = $subscription->user->id;
+                                $license->license_name = $pix_license['license_name'] ?? '';
+                                // $license->serial_number = $pix_license['serial_number'] ?? '';
+                                $license->license_type = $pix_license['license_type'] ?? '';
+                                
+                                $license->mergeData($pix_license); // Keep in mind that expiration date is NOT YET CHANGED ON PixPro end, because this endpoint doesn't set it. We'll update each subscription expiration_date in following function: `$this->pix_pro_update_licenses_status($subscription);`
+                                $license->save();
 
-                            die();
+                                DB::commit();
+                            } catch(\Throwable $e) {
+                                DB::rollback();
+                                http_response_code(400);
+                                print_r($e);
+                                Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license on WeSaaS end and link it to user_subscription.', $e));
+
+                                die();
+                            }
                         }
                     }
+                } else {
+                    Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in pix-pro API DB, Could not get the user by email from pix-pro api', ''));
                 }
-            } else {
-                Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in pix-pro API DB, Could not get the user by email from pix-pro api', ''));
             }
-
+            
             // Update licenses statuses AND expiration_date(s) by looping through subscription licenses
             pix_pro_update_licenses_status($subscription);
         }
@@ -649,35 +650,41 @@ if (!function_exists('pix_pro_update_licenses_status')) {
                         "ExpirationDate" => $subscription->end_date->format('Y-m-d H:i:s'),
                         "NewStatus" => in_array($subscription->status, ['active', 'active_until_end', 'trial']) ? 'active' : 'cancelled',
                     ]);
-                    $response = Http::post($route_paid, $body);
-                    $response_json = $response->json();
 
-                    if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
-                        // If status is not success for any reason, throw an error
-                        http_response_code(400);
-                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to update license status and expiration date in pix-pro API DB, check the response below.', $response_json));
-                    } else {
-                        if(!empty($response_json['license'] ?? null)) {
-                            $pix_license = $response_json['license'];
-    
-                            DB::beginTransaction();
-    
-                            try {
-                                $license->user_id = $subscription->user->id;
-                                $license->mergeData($pix_license);
-                                $license->save();
-                                
-                                DB::commit();
-                            } catch(\Throwable $e) {
-                                DB::rollback();
-                                http_response_code(400);
-                                print_r($e);
-                                Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license on WeSaaS (after status and expiration_date are updated on PixPro end)', $e));
-    
-                                die();
+                    dispatch(function () use ($route_paid, $body, $license, $subscription) {
+                        $response = Http::post($route_paid, $body);
+                        $response_json = $response->json();
+
+                        if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                            // If status is not success for any reason, throw an error
+                            http_response_code(400);
+                            Log::error(pix_pro_error($route_paid, 'There was an error while trying to update license status and expiration date in pix-pro API DB, check the response below.', $response_json));
+                        } else {
+                            if(!empty($response_json['license'] ?? null)) {
+                                $pix_license = $response_json['license'];
+                                // DB::beginTransaction();
+        
+                                // try {
+                                    // $license->user_id = $subscription->user->id;
+                                    $license->mergeData($pix_license);
+                                    $license->save();
+                                    
+                                //     DB::commit();
+                                // } catch(\Throwable $e) {
+                                //     DB::rollback();
+                                //     http_response_code(400);
+                                //     print_r($e);
+                                //     Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license on WeSaaS (after status and expiration_date are updated on PixPro end)', $e));
+        
+                                //     die();
+                                // }
                             }
                         }
-                    }
+                    });
+
+                    
+
+                    
                 }
             } else {
                 Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in Pixpro API DB. Could not get the user by email from Pixpro api', ''));
