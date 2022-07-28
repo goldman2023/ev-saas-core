@@ -45,8 +45,8 @@
 @endsection
 
 @push('modal')
-    @if((auth()->user()?->isSubscribed() ?? false) && 
-        auth()->user()?->subscriptions->first()->isTrial() && 
+    @if((auth()->user()?->isSubscribed() ?? false) &&
+        auth()->user()?->subscriptions->first()->isTrial() &&
         auth()->user()?->subscriptions->first()->items->count() === 1 &&
         auth()->user()?->subscriptions->first()->items->first()->pivot->qty === 1)
         <x-system.form-modal id="change-trial-plan-modal" title="{{ translate('Change trial plan') }}" class="!max-w-7xl" title-class="text-20 font-semibold">
@@ -81,8 +81,8 @@
                     wetch.get(invoiceProjectionUrl)
                     .then(data => {
                         if(data.status === 'success') {
-                            this.total_projected_price = data.data.total / 100;
-                            this.total_annual_projected_price = data.data.total / 100;
+                            this.total_projected_price = FX.formatPrice(data.data.total / 100, 2);
+                            this.total_annual_projected_price = FX.formatPrice(data.data.total / 100, 2);
                         } else {
 
                         }
