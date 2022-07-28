@@ -771,8 +771,12 @@ class StripeService
 
             // If plans trial mode is enabled
             if(get_tenant_setting('plans_trial_mode') && !empty(get_tenant_setting('plans_trial_duration'))) {
-                // TODO: Amount of Trial days DEPENDS ON the (tenant_setting number of days - already used number of days from last trial subscription)
-                $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration');
+                // TODO: THIS IS WRONG! Track trial usage per user!!!!
+                if(!empty($previous_subscription)) {
+                    $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration') - ($previous_subscription->created_at->diff(\Carbon::now())->days);
+                } else {
+                    $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration');
+                }
             }
     
     
@@ -1110,11 +1114,20 @@ class StripeService
                 $order_item->excerpt = ($model?->is_variation ?? false) ? $model->main->excerpt : $model->excerpt;
                 $order_item->variant = ($model?->is_variation ?? false) ? $model->getVariantName(key_by: 'name') : null;
                 $order_item->quantity = !empty($qty) ? $qty : 1;
-                $order_item->base_price = empty($qty) ? $model->base_price : ($qty * $model->base_price);
-                $order_item->discount_amount = empty($qty) ? ($model->base_price - $model->total_price) : (($model->base_price - $model->total_price) * $qty) ;
-                $order_item->subtotal_price = empty($qty) ? $model->total_price : ($model->total_price * $qty); // TODO: This should use subtotal_price instead of total_price
-                $order_item->total_price = empty($qty) ? $model->total_price : ($model->total_price * $qty);
                 $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
+
+                if ($model->isSubscribable()) {
+                    $order_item->base_price = $model->getOriginalPrice();
+                    $order_item->discount_amount = ($interval === 'year' || $interval === 'annual') ? (($model->getOriginalPrice() * 12) - $model->getTotalAnnualPrice()) : ($model->getOriginalPrice()  - $model->getTotalPrice());
+                    $order_item->subtotal_price = ($interval === 'year' || $interval === 'annual') ? $model->getTotalAnnualPrice() : $model->getTotalPrice(); // TODO: This should use subtotal_price instead of total_price
+                    $order_item->total_price = ($interval === 'year' || $interval === 'annual') ? $model->getTotalAnnualPrice() : $model->getTotalPrice();
+                } else {
+                    $order_item->base_price = $model->getOriginalPrice();
+                    $order_item->discount_amount = $model->getOriginalPrice()  - $model->getTotalPrice();
+                    $order_item->subtotal_price = $model->getTotalPrice(); // TODO: This should use subtotal_price instead of total_price
+                    $order_item->total_price = $model->getTotalPrice();
+                }
+
                 $order_item->saveQuietly(); // there could be memory leaks if we use just save()
             }
             

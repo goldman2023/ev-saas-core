@@ -58,23 +58,22 @@
                 let data = {
                     'interval': this.pricing_mode,
                     'items': [],
-                    'previous_subscription_id': @js($previous_subscription?->id ?? null), 
+                    'previous_subscription_id': @js($previous_subscription?->id ?? null),
                 };
 
                 for (const item_key in this.plans_cart) {
                     let item = this.plans_cart[item_key];
 
-                    data['items'].push({ 
-                        id: item.plan_id, 
+                    data['items'].push({
+                        id: item.plan_id,
                         class: 'App\\Models\\Plan', // TODO: make this universal! 
-                        qty: item.qty, 
+                        qty: item.qty,
                         preview: false,
                         interval: this.pricing_mode
                     });
                 }
 
                 url_params.set('data', btoa(JSON.stringify(data)));
-                console.log(data);
 
                 window.open(base_route.toString()+'?'+url_params.toString(), '_blank').focus();
             }
