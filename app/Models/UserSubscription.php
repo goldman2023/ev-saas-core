@@ -155,4 +155,16 @@ class UserSubscription extends WeBaseModel
 
         return 0;
     }
+
+    public function hasSingleItem() {
+        return $this->items->count() === 1 && $this->items->first()->pivot->qty === 1;
+    }
+
+    public function hasSingleItemMultipleQty() {
+        return $this->items->count() === 1 && $this->items->first()->pivot->qty > 1;
+    }
+
+    public function hasMultipleItems() {
+        return $this->items->count() > 0;
+    }
 }
