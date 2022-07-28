@@ -206,10 +206,10 @@
                   @foreach($subscription->order->order_items as $order_item)
                       <div class="w-full flex justify-between mb-1">
                           <span class="text-14 text-gray-600 font-normal">
-                              {{ $order_item->subject->name }}: {{ $order_item->quantity.' '.translate('user') }} x {{ \FX::formatPrice($order_item->total_price / $order_item->quantity) }} / {{ translate('user') }} / {{ $order->invoicing_period }}
+                              {{ $order_item->subject->name }}: {{ $order_item->quantity.' '.translate('user') }} x {{ \FX::formatPrice($order_item->total_price) }} / {{ translate('user') }} / {{ $order->invoicing_period }}
                           </span>
 
-                          <span class="text-14 text-gray-600 font-normal">{{ \FX::formatPrice($order_item->total_price) }} / {{ $order->invoicing_period }}</span>
+                          <span class="text-14 text-gray-600 font-normal">{{ \FX::formatPrice($order_item->quantity * $order_item->total_price) }} / {{ $order->invoicing_period }}</span>
                       </div>
 
                       @php
