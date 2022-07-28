@@ -31,7 +31,7 @@
                         qty: 1,
                         plan_id: {{ $plan->id }},
                         month_price: @js($plan->getTotalPrice(true)),
-                        annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice() / 12)),
+                        annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice() / 12, 0)),
                         is_active() {
                             return this.plan_id == current_plan_id && current_plan_mode == pricing_mode;
                         }
