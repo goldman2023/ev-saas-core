@@ -2088,7 +2088,7 @@ class StripeService
                     $subscription->end_date = $stripe_subscription->current_period_end;
                 }
 
-                $subscription->save();
+                $subscription->saveQuietly();
             }
 
             DB::commit();
