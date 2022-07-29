@@ -42,6 +42,7 @@
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
+        "laraveldaily/laravel-invoices": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1",
