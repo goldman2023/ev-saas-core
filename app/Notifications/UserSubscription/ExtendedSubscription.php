@@ -48,6 +48,7 @@ class ExtendedSubscription extends Notification
 
     public function toDatabase($notifiable)
     {
+        // die(print_r($this));
         return [
             'subscription' => $this->subscription->attributesToArray(),
             // some other properties if necessary...

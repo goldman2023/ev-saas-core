@@ -28,7 +28,11 @@ class UserSubscriptionsObserver
     {
         if ($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
             // Trial has started, send notification
-            $user_subscription->user->notify(new TrialStarted($user_subscription));
+            try {
+                $user_subscription->user->notify(new TrialStarted($user_subscription));
+            } catch(\Exception $e) {
+                Log::error($e);
+            }
         }
 
         try {
@@ -71,12 +75,27 @@ class UserSubscriptionsObserver
         $old_end_date = $user_subscription->getOriginal('end_date');
         $new_end_date = $user_subscription->end_date;
 
-        if ($user_subscription->isDirty('end_date') && $new_end_date > $old_end_date) {
+        if ($user_subscription->isDirty('end_date') && !empty($old_end_date) && $new_end_date > $old_end_date) {
             // This means that new end_date is about to be updated - should we send notification that subscription has been successfully extended?
-            $user->notify(new ExtendedSubscription($user_subscription));
+            try {
+                $user->notify(new ExtendedSubscription($user_subscription));
+            } catch(\Exception $e) {
+                Log::error($e);
+            }
         } else if($user_subscription->isDirty('status')) {
             // Send notification on subscription status update!
-            $user->notify(new SubscriptionStatusChanged($user_subscription));            
+            try {
+                $user->notify(new SubscriptionStatusChanged($user_subscription)); 
+            } catch(\Exception $e) {
+                Log::error($e);
+            }          
+        } else if($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time() && empty($old_end_date)) {
+            // Trial has started, send notification
+            try {
+                $user_subscription->user->notify(new TrialStarted($user_subscription));
+            } catch(\Exception $e) {
+                Log::error($e);
+            }
         }
     }
 
