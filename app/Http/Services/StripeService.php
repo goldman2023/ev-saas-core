@@ -511,14 +511,14 @@ class StripeService
 
         return $stripe_customer;
     }
-    
+
     /**
      * cancelStripeSubscriptions
-     * 
-     * This function cancels the stripe subscription via Stripe SDK. 
+     *
+     * This function cancels the stripe subscription via Stripe SDK.
      * If UserSubscription instance is provided and it's based on Stripe, that one UserSubscription will be cancel on Stripe via `stripe_subscription_id`
      * If User instance is provided, all Stripe based subscriptions from provided User will be cancelled
-     * 
+     *
      * @param  mixed $subscription
      * @param  mixed $user
      * @return void
@@ -528,7 +528,7 @@ class StripeService
             if(!($subscription instanceof UserSubscription) && !($user instanceof User)) {
                 return null;
             }
-    
+
             if($subscription instanceof UserSubscription && $subscription->isUsingStripe()) {
                 $this->stripe->subscriptions->cancel(
                     $subscription->getStripeSubscriptionID(),
@@ -548,17 +548,17 @@ class StripeService
             Log::error($e);
         }
     }
-    
+
     /**
      * getUpcomingInvoice
-     * 
+     *
      * Returns real or projected Upcoming invoice from Stripe based on provided subscription and new plan.
      * If no $new_plan and $interval are provided, real upcoming invoice for provided subscription will be returned.
      * If no $new_plan is provided, but $interval is, projected upcoming invoice for different interval for given subscription will be returned.
      * If both $new_plan and $interval are provided, fully-rojected upcoming invoice will be returned. (this can be used for )
      *
      * TODO: Make this function work for multiple quantity and plans in one subscription!
-     * 
+     *
      * @param  mixed $user_subscription
      * @param  mixed $new_plan
      * @param  mixed $interval
@@ -579,10 +579,10 @@ class StripeService
                         'subscription' => $user_subscription->getStripeSubscriptionID(),
                     ]);
                 }
-                
+
                 return array_merge(['invoice_source' => 'stripe'], $invoice->toArray());
             }
-            
+
             // Set proration date to this moment:
             $proration_date = time();
 
@@ -606,7 +606,7 @@ class StripeService
                 }
             }
 
-            $params = [ 
+            $params = [
                 'customer' => $user_subscription->user->getStripeCustomerID(),
                 'subscription' => $user_subscription->getStripeSubscriptionID(),
                 'subscription_proration_date' => $proration_date,
@@ -627,7 +627,7 @@ class StripeService
             }
 
             $invoice = $this->stripe->invoices->upcoming($params);
-            
+
             return array_merge(['invoice_source' => 'stripe'], $invoice->toArray());
         } catch(\Throwable $e) {
             Log::error(array_merge(['error' => $e]));
@@ -637,7 +637,7 @@ class StripeService
 
     public function projectSubscriptionInvoice($cart, $interval) {
         $cart_items = [];
-        
+
         if(!empty($cart)) {
 
             $params = [
@@ -664,7 +664,7 @@ class StripeService
                     ];
                 }
             }
-            
+
             $params['subscription_items'] = $cart_items;
 
             $invoice = $this->stripe->invoices->upcoming($params);
@@ -681,7 +681,7 @@ class StripeService
 
         $previous_subscription = !empty($previous_subscription_id) ? UserSubscription::find($previous_subscription_id) : null;
         /**
-         * Multi-items subscription logic: 
+         * Multi-items subscription logic:
          * 1. In subscription created/updated webhook, compare each previous subscription item quantity with corresponding qty of same item in
          * new subscription and 1) if qty is bigger, create DIFF amount of licenses, 2) if qty is smaller, use previously selected license serial_numbers (actually IDs) from new subscription metadata and revoke/delete these Licenses.
          * ---DONE---*IMPORTANT: Don't forget to create LicenseObserver to remove sub <-> license relation from `user_subscription_relationships` table on license delete.
@@ -706,7 +706,7 @@ class StripeService
 
                 $stripe_product = $this->getStripeProduct(model: $line_item);
                 $stripe_price = $this->getStripePrice(model: $line_item, interval: $interval);
-                
+
                 $stripe_line_items[] = [
                     'price' => $stripe_price->id,
                     'quantity' => !empty($qty) ? $qty : 1,
@@ -778,13 +778,13 @@ class StripeService
                     $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration');
                 }
             }
-    
-    
+
+
             if (!empty(auth()->user())) {
                 // Create Stripe customer if it doesn't exist
                 $stripe_customer = $this->createStripeCustomer();
                 $stripe_args['customer'] = $stripe_customer->id;
-    
+
                 $stripe_args['customer_update'] = [
                     'name' => 'auto',
                     'address' => 'auto',
@@ -801,7 +801,7 @@ class StripeService
             ]);
 
             $order->save();
-    
+
             return $checkout_link['url'] ?? null;
         }
     }
@@ -810,7 +810,7 @@ class StripeService
     {
         // Check if Stripe Product actually exists
         $order = null;
-        
+
         // TODO: Replace with: $this->getStripeProduct()
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
 
@@ -933,7 +933,7 @@ class StripeService
                 'session_id' => Session::getId(),
             ],
             'success_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
-            'cancel_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
+            'cancel_url' => route('my.plans.management'),
             'automatic_tax' => [
                 'enabled' => Payments::stripe()->stripe_automatic_tax_enabled === true ? true : false,
             ],
@@ -1093,7 +1093,7 @@ class StripeService
             $order->billing_zip = '';
             $order->phone_numbers = [];
             $order->shipping_method = '';
-            
+
             $order->saveQuietly(); // there could be memory leaks if we use just save()
 
             $order_line_items = empty($model) ? $line_items : [
@@ -1130,7 +1130,7 @@ class StripeService
 
                 $order_item->saveQuietly(); // there could be memory leaks if we use just save()
             }
-            
+
             /*
             * Create Invoice
             */
@@ -1176,21 +1176,21 @@ class StripeService
             'invoice' => $invoice
         ];
     }
-    
+
     /**
      * createOrder
      *
      * Creates new Order based on provided parameters from stripe!
-     * 
+     *
      * TODO: Improve this function to include Order creation for both STANDARD and SUBSCRIPTION based Orders! (for now it's only for SUBSCRIPTION)
-     * 
+     *
      * @param  mixed $stripe_invoice
      * @param  mixed $stripe_subscription
      * @return $order
      */
     public function createOrder($stripe_invoice, $stripe_subscription) {
         if(empty($stripe_subscription?->metadata?->order_id ?? null)) {
-            // This means that webhook which uses this action originates from Stripe directly and not from our system! 
+            // This means that webhook which uses this action originates from Stripe directly and not from our system!
             // (We always supply metadata if checkout process goes through WeSaaS)
             $user = get_user_by_stripe_customer_id($stripe_subscription->customer);
 
@@ -1283,7 +1283,7 @@ class StripeService
         } else {
             $order->payment_status = PaymentStatusEnum::pending()->value;
         }
-        
+
         $order->save();
 
 
@@ -1306,7 +1306,7 @@ class StripeService
                     return $carry + $value->amount;
                 }) / 100;
             }
-            
+
             $subscription_item = !is_array($subscription_item) ? $subscription_item->toArray() : $subscription_item;
 
             $order_item = new OrderItem();
@@ -1338,9 +1338,9 @@ class StripeService
      * createInvoice
      *
      * Creates new Invoice based on provided parameters from stripe and our order!
-     * 
+     *
      * TODO: Improve this function to include Order creation for both STANDARD and SUBSCRIPTION based Orders! (for now it's only for SUBSCRIPTION)
-     * 
+     *
      * @param  mixed $stripe_invoice
      * @param  mixed $stripe_subscription
      * @return $invoice
@@ -1424,7 +1424,7 @@ class StripeService
             } else {
                 $invoice->payment_status = PaymentStatusEnum::pending()->value;
             }
-            
+
             if(!empty($stripe_invoice->number ?? null)) {
                 $stripe_invoice_number = $stripe_invoice->number;
             }
@@ -1577,7 +1577,7 @@ class StripeService
 
                 // Add Stripe Customer ID core_meta to $user
                 $user->saveCoreMeta($this->mode_prefix.'stripe_customer_id', $stripe_customer_id);
-                
+
                 // Create primary billing address, only if customer in stripe has it defined (must have country, city and address 1)
                 if(!empty($customer->address->country) && !empty($customer->address->city) && !empty($customer->address->line1)) {
                     $primary_address = $user->addresses()->create([
@@ -1616,7 +1616,7 @@ class StripeService
                 http_response_code(400);
                 die($e->getMessage());
             }
-            
+
 
         }
     }
@@ -1631,7 +1631,7 @@ class StripeService
 
         if(!empty($user)) {
             $user_subscriptions = $user->subscriptions()->active()->get();
-            
+
             if($user_subscriptions->isNotEmpty()) {
                 foreach($user_subscriptions as $subscription) {
                     if($subscription->isUsingStripe()) {
@@ -1652,7 +1652,7 @@ class StripeService
         $session = $event->data->object;
 
         DB::beginTransaction();
-        
+
         try {
             // Populate Order with data from stripe
             $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
@@ -1733,7 +1733,7 @@ class StripeService
                     $this->mode_prefix.'stripe_subscription_id' => $session->subscription ?? null, // store stripe_subscription_id
                 ];
                 $subscription->save();
-                
+
             } else {
                 // ONE-TIME PAYMENT logic
             }
@@ -1744,7 +1744,7 @@ class StripeService
                 if(!get_tenant_setting('multi_item_subscription_enabled') && $index > 0) {
                     break;
                 }
-                
+
                 $model = $order_item->subject; // get the Model from the order_item
                 $qty = $order_item->quantity; // get the quantity of the order_item
 
@@ -1772,7 +1772,7 @@ class StripeService
                     // Reduce the stock quantity of an $model if the inventory is tracked and model has stocks trait
                     if (method_exists($model, 'stock') && $model->track_inventory) {
                         $serial_numbers = $model->reduceStock($qty);
-        
+
                         // Serial Numbers only work for Simple Products.
                         // TODO: Make Product Variations support serial numbers!
                         if ($model->use_serial) {
@@ -2029,7 +2029,7 @@ class StripeService
                 } else if($stripe_billing_reason === 'subscription_cycle') {
                     $invoice = $order->invoices()->withoutGlobalScopes()->get()->firstWhere('meta.'.$this->mode_prefix.'stripe_invoice_id', $stripe_invoice->id);
                 }
-                
+
                 if (!empty($invoice)) {
                     $invoice->is_temp = false; // Make this Invoice real!!!
                     $invoice->payment_status = PaymentStatusEnum::paid()->value;
@@ -2275,11 +2275,11 @@ class StripeService
                         'created_at' => date('Y-m-d H:i:s'),
                         'updated_at' =>  date('Y-m-d H:i:s')
                     ]);
-                
+
                     if (!get_tenant_setting('multi_item_subscription_enabled')) {
                         // Associate $model from subscription set quantity to 1
                         $model = get_model_by_stripe_product_id($stripe_subscription->plan->product);
-                        
+
                         $subscription->items()->attach($model, ['qty' => 1]); // since multi-item subscription is disabled here, qty can only be 1!
                     } else {
                         foreach($order->order_items as $order_item) {
@@ -2346,9 +2346,9 @@ class StripeService
                 $previous_subscription = UserSubscription::find($previous_subscription_id);
 
                 // Status of subscription in this webhook is always: "status": "incomplete" or "trialing"
-                // So we should just update start and end date and not change status and payment_status IF subscription is not 'trialing'! 
+                // So we should just update start and end date and not change status and payment_status IF subscription is not 'trialing'!
                 // These will be changed in subscription.updated if it's fired from Stripe
-                
+
                 do_action('stripe.webhook.subscriptions.created', $subscription, $previous_subscription);
             }
         } catch (\Exception $e) {
@@ -2379,7 +2379,7 @@ class StripeService
         try {
             $order = Order::withoutGlobalScopes()->findOrFail($order_id);
             $subscription = $order->user_subscription;
-            
+
             if (!empty($subscription)) {
                 $subscription->start_date = $stripe_subscription->current_period_start;
                 $subscription->end_date = $stripe_subscription->current_period_end;
@@ -2415,7 +2415,7 @@ class StripeService
                     if($stripe_billing_reason === 'subscription_cycle') {
                         // This means that subscription is cycled - just create a new invoice
                         $new_invoice = $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
-                        
+
                         // Update latest_invoice_id in stripe subscription metadata
                         $new_metadata = $stripe_subscription->metadata;
                         $new_metadata->latest_invoice_id = $new_invoice->id;
@@ -2454,13 +2454,13 @@ class StripeService
 
                             try {
                                 $new_order = $this->createOrder(stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
-                                
+
                                 // Update the Order ID of the subscription with $new_order
                                 $subscription->order_id = $new_order->id;
 
                                 // Add Last Order ID to Stripe subscription metadata
                                 $new_metadata = $stripe_subscription->metadata;
-                                $new_metadata->order_id = $new_order->id;                                    
+                                $new_metadata->order_id = $new_order->id;
 
                                 // if($stripe_subscription->status != 'trialing') {
                                 $new_invoice = $this->createInvoice(order: $new_order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
@@ -2501,7 +2501,7 @@ class StripeService
 
                                 DB::commit();
 
-                                
+
                             } catch(\Throwable $e) {
                                 DB::rollback();
                                 http_response_code(400);
@@ -2513,8 +2513,8 @@ class StripeService
 
                 }
 
-                $subscription->save();                    
-                
+                $subscription->save();
+
             }
 
             do_action('stripe.webhook.subscriptions.updated', $subscription, null, $stripe_invoice, $previous_attributes);
@@ -2531,7 +2531,7 @@ class StripeService
                 ['metadata' => $new_metadata->toArray()]
             );
         }
-        
+
 
         http_response_code(200);
         die();
