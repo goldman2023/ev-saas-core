@@ -31,7 +31,7 @@ class TrialStarted extends Notification
     {
         try {
             return (new WeMailMessage)
-                ->markdown('vendor.notifications.subdcription.trial-started', ['subscription' => $this->subscription, 'user' => $notifiable])
+                ->markdown('vendor.notifications.subscription.trial-started', ['subscription' => $this->subscription, 'user' => $notifiable])
                 ->subject(translate('Trial of').' '.get_tenant_setting('plans_trial_duration').' '.translate('days successfully started!'));
         } catch(\Exception $e) {
             Log::error($e->getMessage());

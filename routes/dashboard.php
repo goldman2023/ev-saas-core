@@ -104,17 +104,15 @@ Route::middleware([
         Route::get('/attributes/type/{content_type}/create', [EVAttributesController::class, 'create'])->name('attributes.create');
         Route::get('/attributes/edit/{id}', [EVAttributesController::class, 'edit'])->name('attributes.edit');
 
-        /* Orders */
+        /* Orders & Invoices*/
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
         Route::get('/order/create', [EVOrderController::class, 'create'])->name('order.create');
         Route::get('/order/details/{id}', [EVOrderController::class, 'details'])->name('order.details');
-        //        Route::resource('orders', 'EVOrderController')->parameters([
-        //            'orders' => 'id',
-        //        ])->except(['destroy']);
         Route::get('/orders/destroy/{id}', [EVOrderController::class, 'destroy'])->name('orders.destroy');
         Route::post('/orders/details', [EVOrderController::class, 'order_details'])->name('orders.details');
         Route::post('/orders/update_delivery_status', [EVOrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
         Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
+        Route::get('/invoice/{id}/download', [EVOrderController::class, 'download_invoice'])->name('invoice.download');
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.index');
