@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications\Invoice;
+namespace App\Notifications\UserSubscription;
 
 use Carbon\Carbon;
 use Illuminate\Notifications\Notification;
@@ -13,7 +13,7 @@ use App\Mail\EmailVerification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CanceledSubscription extends Notification
+class ExtendedSubscription extends Notification
 {
     public $subscription;
 
@@ -31,8 +31,8 @@ class CanceledSubscription extends Notification
     {
         try {
             return (new WeMailMessage)
-                ->markdown('vendor.notifications.subdcription.subscription-canceled', ['subscription' => $this->subscription, 'user' => $notifiable])
-                ->subject(translate('Canceled subscription on '.get_tenant_setting('site_name')));
+                ->markdown('vendor.notifications.subdcription.subscription-extended', ['subscription' => $this->subscription, 'user' => $notifiable])
+                ->subject(translate('Subscription extended on '.get_tenant_setting('site_name')));
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
