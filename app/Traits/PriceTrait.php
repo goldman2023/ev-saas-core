@@ -90,8 +90,10 @@ trait PriceTrait
 
     // TODO: Create tax_relationship table and link it to subjects and taxes!
     // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-    public function getTotalPrice(bool $display = false, bool $both_formats = false): mixed
+    public function getTotalPrice(bool $display = false, bool $both_formats = false, $decimals = null): mixed
     {
+        $decimals = is_int($decimals) ? $decimals : get_tenant_setting('no_of_decimals');
+
         if (empty($this->attributes[$this->getPriceColumn()])) {
             $this->total_price = 0;
         } elseif (empty($this->total_price)) {
@@ -162,11 +164,11 @@ trait PriceTrait
         if ($both_formats) {
             return [
                 'raw' => $this->total_price,
-                'display' => FX::formatPrice($this->total_price),
+                'display' => FX::formatPrice($this->total_price, $decimals),
             ];
         }
 
-        return $display ? FX::formatPrice($this->total_price) : $this->total_price;
+        return $display ? FX::formatPrice($this->total_price, $decimals) : $this->total_price;
     }
 
     public function getTotalPriceAttribute()
@@ -183,8 +185,10 @@ trait PriceTrait
      * @param bool $both_formats
      * @return mixed
      */
-    public function getDiscountedPrice(bool $display = false, bool $both_formats = false): mixed
+    public function getDiscountedPrice(bool $display = false, bool $both_formats = false, $decimals = null): mixed
     {
+        $decimals = is_int($decimals) ? $decimals : get_tenant_setting('no_of_decimals');
+
         if (empty($this->attributes[$this->getPriceColumn()])) {
             $this->discounted_price = 0;
         } elseif (empty($this->discounted_price)) {
@@ -239,11 +243,11 @@ trait PriceTrait
         if ($both_formats) {
             return [
                 'raw' => $this->discounted_price,
-                'display' => FX::formatPrice($this->discounted_price),
+                'display' => FX::formatPrice($this->discounted_price, $decimals),
             ];
         }
 
-        return $display ? FX::formatPrice($this->discounted_price) : $this->discounted_price;
+        return $display ? FX::formatPrice($this->discounted_price, $decimals) : $this->discounted_price;
     }
 
     public function getDiscountedPriceAttribute()
@@ -260,7 +264,7 @@ trait PriceTrait
      * @param bool $both_formats
      * @return mixed
      */
-    public function getBasePrice(bool $display = false, bool $both_formats = false): mixed
+    public function getBasePrice(bool $display = false, bool $both_formats = false, $decimals = null): mixed
     {
         if (empty($this->attributes[$this->getPriceColumn()])) {
             $this->base_price = 0;
@@ -281,11 +285,11 @@ trait PriceTrait
         if ($both_formats) {
             return [
                 'raw' => $this->base_price,
-                'display' => FX::formatPrice($this->base_price),
+                'display' => FX::formatPrice($this->base_price, $decimals),
             ];
         }
 
-        return $display ? FX::formatPrice($this->base_price) : $this->base_price;
+        return $display ? FX::formatPrice($this->base_price, $decimals) : $this->base_price;
     }
 
     public function getBasePriceAttribute()
@@ -302,21 +306,21 @@ trait PriceTrait
      * @param bool $both_formats
      * @return mixed
      */
-    public function getOriginalPrice(bool $display = false, bool $both_formats = false): mixed
+    public function getOriginalPrice(bool $display = false, bool $both_formats = false, $decimals = null): mixed
     {
         $price_column = $this->getPriceColumn();
 
         if ($both_formats) {
             return [
                 'raw' => $this->attributes[$price_column] ?? 0,
-                'display' => FX::formatPrice($this->attributes[$price_column] ?? 0),
+                'display' => FX::formatPrice($this->attributes[$price_column] ?? 0, $decimals),
             ];
         }
 
-        return $display ? FX::formatPrice($this->attributes[$price_column] ?? 0) : $this->attributes[$price_column] ?? 0;
+        return $display ? FX::formatPrice($this->attributes[$price_column] ?? 0, $decimals) : $this->attributes[$price_column] ?? 0;
     }
 
-    public function getTotalAnnualPrice(bool $display = false, bool $both_formats = false)
+    public function getTotalAnnualPrice(bool $display = false, bool $both_formats = false, $decimals = null)
     {
         try {
             /* This if is required for create to work */
@@ -350,11 +354,11 @@ trait PriceTrait
             if ($both_formats) {
                 return [
                     'raw' => $total_annual_price,
-                    'display' => FX::formatPrice($total_annual_price),
+                    'display' => FX::formatPrice($total_annual_price, $decimals),
                 ];
             }
 
-            return $display ? FX::formatPrice($total_annual_price) : $total_annual_price;
+            return $display ? FX::formatPrice($total_annual_price, $decimals) : $total_annual_price;
         } catch(\Throwable $e) {
             return 0;
         }

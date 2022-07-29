@@ -106,8 +106,8 @@
                             plan_id: {{ $plan->id }},
                             plan_slug: '{{ $plan->slug }}',
                             qty: 0,
-                            month_price: @js($plan->getTotalPrice(true)),
-                            annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice() / 12)),
+                            month_price: @js($plan->getTotalPrice(display: true, decimals: 0)),
+                            annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice(display: false) / 12, 0)),
                         }">
                             <span class="flex-1 flex">
                                 <div class="flex flex-col">
