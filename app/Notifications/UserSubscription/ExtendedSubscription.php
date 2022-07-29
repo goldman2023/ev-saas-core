@@ -31,7 +31,7 @@ class ExtendedSubscription extends Notification
     {
         try {
             return (new WeMailMessage)
-                ->markdown('vendor.notifications.subdcription.subscription-extended', ['subscription' => $this->subscription, 'user' => $notifiable])
+                ->markdown('vendor.notifications.subscription.subscription-extended', ['subscription' => $this->subscription, 'user' => $notifiable])
                 ->subject(translate('Subscription extended on '.get_tenant_setting('site_name')));
         } catch(\Exception $e) {
             Log::error($e->getMessage());
