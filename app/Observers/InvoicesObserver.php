@@ -40,7 +40,7 @@ class InvoicesObserver
      */
     public function updated(Invoice $invoice)
     {
-        if(!$invoice->is_temp && !$invoice->getData('invoice_created_email_sent')) {
+        if(!$invoice->is_temp && !$invoice->getData('invoice_created_email_sent') && $invoice->total_price > 0) {
             try {
                 $invoice->user->notify(new InvoiceCreated($invoice));
                 $invoice->setData('invoice_created_email_sent', true);
