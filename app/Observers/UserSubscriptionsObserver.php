@@ -89,10 +89,12 @@ class UserSubscriptionsObserver
             } catch(\Exception $e) {
                 Log::error($e);
             }          
-        } else if($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
+        } else if($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time() && !$user_subscription->getData('trial_started_email_sent')) {
             // Trial has started, send notification
             try {
                 $user_subscription->user->notify(new TrialStarted($user_subscription));
+                $user_subscription->setData('trial_started_email_sent', true);
+                $user_subscription->saveQuietly();
             } catch(\Exception $e) {
                 Log::error($e);
             }
