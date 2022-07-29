@@ -9,6 +9,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use LaravelDaily\Invoices\Invoice as LaravelInvoice;
+use LaravelDaily\Invoices\Classes\Party;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
+
 /**
  * App\Models\Invoice
  */
@@ -149,22 +153,81 @@ class Invoice extends WeBaseModel
         }
     }
 
+    public function generateInvoicePDF() {
+        $shop = $this->shop;
+
+        $business = new Party([
+            'name'          => $shop->name,
+            'phone'         => is_array($shop->phones) ? implode(',', $shop->phones) : '',
+            'custom_fields' => [
+                // 'address' => ,
+                // 'city' => ,
+                // 'country' => ,
+                // 'postal_code' => ,
+                // 'company '
+                'Tax ID'        => $shop->getShopMeta('tax_number'),
+                'Reg. number' => $shop->getShopMeta('registration_number'),
+            ],
+        ]);
+
+        $customer = new Party([
+            'name'          => $this->billing_first_name.' '.$this->billing_last_name,
+            'address'       => $this->billing_address.', '.$this->billing_zip.' '.$this->billing_city.', '.$this->billing_country,
+            'code'          => '#'.$this->id,
+            'custom_fields' => [
+                'order number' => $this->order->id,
+            ],
+        ]);
+
+        $invoice_items = [];
+
+        foreach($this->order->order_items as $item) {
+            $invoice_items[] = (new InvoiceItem())
+                    ->title($item->name)
+                    ->description($item->excerpt)
+                    ->pricePerUnit($item->base_price)
+                    ->quantity($item->quantity)
+                    ->discount($item->discount_amount);
+        }
+
+        $notes = [
+            'your multiline',
+            'additional notes',
+            'in regards of delivery or something else',
+        ];
+        $notes = implode("<br>", $notes);
+
+        $invoice = LaravelInvoice::make('Invoice')
+            ->series(!empty($this->real_invoice_number) ? $this->real_invoice_number : '')
+            // ->sequence()
+            ->serialNumberFormat('{SERIES}')
+            // ability to include translated invoice status
+            // in case it was paid
+            ->status($this->payment_status)
+            ->seller($business)
+            ->buyer($customer)
+            ->date($this->created_at)
+            ->dateFormat('d M, Y')
+            ->payUntilDays(!empty($this->due_date) ? $this->created_at->diffInDays(Carbon::createFromTimestamp($this->due_date)) : 0)
+            ->currencySymbol('€')
+            ->currencyCode('EUR')
+            ->currencyFormat('{SYMBOL}{VALUE}')
+            ->currencyThousandsSeparator('.')
+            ->currencyDecimalPoint(',')
+            ->filename($business->name . ' ' . $customer->name)
+            ->addItems($invoice_items)
+            ->notes($notes)
+            ->totalTaxes($this->order->tax);
+            // ->logo(public_path('vendor/invoices/sample-logo.png'))
+            // You can additionally save generated invoice to configured disk
+            // ->save('public');
+
+        return $invoice->stream();
+    }
+
 //    TODO: ORDER TRACKING NUMBER!!!
 //    public function refund_requests()
 //    {
 //        return $this->hasMany(RefundRequest::class);
-//    }
-//    public function pickup_point()
-//    {
-//        return $this->belongsTo(PickupPoint::class);
-//    }
-//    public function affiliate_log()
-//    {
-//        return $this->hasMany(AffiliateLog::class);
-//    }
-//
-//    public function club_point()
-//    {
-//        return $this->hasMany(ClubPoint::class);
 //    }
 }

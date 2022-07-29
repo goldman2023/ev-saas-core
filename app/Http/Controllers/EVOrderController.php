@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Facades\MyShop;
 use App\Models\Order;
+use App\Models\Invoice;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,6 @@ class EVOrderController extends Controller
 {
     public function index()
     {
-
         if(!\Permissions::canAccess(User::$non_customer_user_types, ['all_orders', 'browse_orders'], false)) {
             return redirect()->route('my.orders.all');
         }
@@ -55,5 +55,20 @@ class EVOrderController extends Controller
         $orders_count = auth()->user()->orders()->count();
 
         return view('frontend.dashboard.my-orders.index', compact('orders', 'orders_count'));
+    }
+
+    public function download_invoice(Request $request, $id) {
+        try {
+            $invoice = Invoice::findOrFail($id);
+            // TODO: Move access restrictions to some Policy classes!!!!
+            if($invoice->user_id === auth()->user()->id || $invoice->shop_id === \MyShop::getShopID() || auth()->user()->isAdmin()) {
+                return $invoice->generateInvoicePDF();
+            }
+
+            throw new \Exception();
+        } catch(\Exception $e) {
+            dd($e);
+            abort(404);
+        }
     }
 }

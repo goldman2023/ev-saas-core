@@ -58,10 +58,15 @@
             {{ translate('View') }}
         </a>
 
-        <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ $row->meta[stripe_prefix('stripe_invoice_pdf_url')] ?? '#' }} ">
+        <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ route('invoice.download', $row->id) }}">
             @svg('heroicon-s-download', ['class' => 'w-[18px] h-[18px] '])
             {{ translate('Download') }}
         </a>
+
+        {{-- <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ $row->meta[stripe_prefix('stripe_invoice_pdf_url')] ?? '#' }} ">
+            @svg('heroicon-s-download', ['class' => 'w-[18px] h-[18px] '])
+            {{ translate('Download') }}
+        </a> --}}
 
         {{-- <button 
             @click="isOpen = !isOpen" 

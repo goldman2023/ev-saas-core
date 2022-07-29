@@ -1117,7 +1117,7 @@ class StripeService
                 $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
 
                 if ($model->isSubscribable()) {
-                    $order_item->base_price = $model->getOriginalPrice();
+                    $order_item->base_price = ($interval === 'year' || $interval === 'annual') ? ($model->getOriginalPrice() * 12) : $model->getOriginalPrice();;
                     $order_item->discount_amount = ($interval === 'year' || $interval === 'annual') ? (($model->getOriginalPrice() * 12) - $model->getTotalAnnualPrice()) : ($model->getOriginalPrice()  - $model->getTotalPrice());
                     $order_item->subtotal_price = ($interval === 'year' || $interval === 'annual') ? $model->getTotalAnnualPrice() : $model->getTotalPrice(); // TODO: This should use subtotal_price instead of total_price
                     $order_item->total_price = ($interval === 'year' || $interval === 'annual') ? $model->getTotalAnnualPrice() : $model->getTotalPrice();

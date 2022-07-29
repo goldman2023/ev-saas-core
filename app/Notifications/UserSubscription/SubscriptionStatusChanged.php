@@ -48,7 +48,7 @@ class SubscriptionStatusChanged extends Notification
     {
         try {
             return (new WeMailMessage)
-                ->markdown('vendor.notifications.subdcription.subscription-status-changed', [
+                ->markdown('vendor.notifications.subscription.subscription-status-changed', [
                     'subscription' => $this->subscription, 
                     'user' => $notifiable,
                     'old_status' => $old_status,
