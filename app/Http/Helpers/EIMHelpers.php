@@ -67,7 +67,7 @@ function get_system_name()
 }
 function get_site_name()
 {
-    $site_name = get_setting('site_name');
+    $site_name = get_tenant_setting('site_name');
 
     return $site_name;
 }

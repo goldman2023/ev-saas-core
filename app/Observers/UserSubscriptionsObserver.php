@@ -9,8 +9,11 @@ use MailerService;
 use StripeService;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Notifiable;
-use App\Notifications\UserWelcomeNotification;
-use App\Notifications\UserFinalizeRegistration;
+use App\Notifications\UserSubscription\ExtendedSubscription;
+use App\Notifications\UserSubscription\SubscriptionStatusChanged;
+use App\Notifications\UserSubscription\TrialStarted;
+
+
 use App\Notifications\Admin\GeneralTransactionalNotification;
 
 class UserSubscriptionsObserver
@@ -23,12 +26,16 @@ class UserSubscriptionsObserver
      */
     public function created(UserSubscription $user_subscription)
     {
+        if ($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
+            // Trial has started, send notification
+            $user_subscription->user->notify(new TrialStarted($user_subscription));
+        }
 
         try {
             do_action('observer.user_subscription.created', $user_subscription);
         } catch(\Exception $e) {
-            die(print_r($e));
             Log::error($e->getMessage());
+            die(print_r($e));
         }
     }
 
@@ -41,6 +48,36 @@ class UserSubscriptionsObserver
     public function updated(UserSubscription $user_subscription)
     {
         // TODO: Where in the code should we send UpdatedSubscription notification?
+
+    }
+
+    /**
+     * Handle the UserSubscription "updating" event.
+     *
+     * @param  \App\Models\UserSubscription  $user_subscription
+     * @return void
+     */
+    public function updating(UserSubscription $user_subscription)
+    {
+        // TODO: Where in the code should we send UpdatedSubscription notification?
+        $user = $user_subscription->user;
+
+        /**
+         * Theer few possible scenarios happening when subscription is updating:
+         * 1. Status changes (trial -> active, active -> inactive, active -> active_until_end)
+         * 2. new end_date > old end_date - subscription is extended (cycled)
+         * 3. ???
+         */
+        $old_end_date = $user_subscription->getOriginal('end_date');
+        $new_end_date = $user_subscription->end_date;
+
+        if ($user_subscription->isDirty('end_date') && $new_end_date > $old_end_date) {
+            // This means that new end_date is about to be updated - should we send notification that subscription has been successfully extended?
+            $user->notify(new ExtendedSubscription($user_subscription));
+        } else if($user_subscription->isDirty('status')) {
+            // Send notification on subscription status update!
+            $user->notify(new SubscriptionStatusChanged($user_subscription));            
+        }
     }
 
     /**

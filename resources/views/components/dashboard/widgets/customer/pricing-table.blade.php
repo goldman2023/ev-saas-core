@@ -30,8 +30,8 @@
                 x-data="{
                         qty: 1,
                         plan_id: {{ $plan->id }},
-                        month_price: @js($plan->getTotalPrice(true)),
-                        annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice() / 12)),
+                        month_price: @js($plan->getTotalPrice(display: true, decimals: 0)),
+                        annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice() / 12, 0)),
                         is_active() {
                             return this.plan_id == current_plan_id && current_plan_mode == pricing_mode;
                         }
@@ -109,8 +109,8 @@
                             </a>
                         @else
                             <div class="w-full text-danger text-center pb-3 text-14" x-show="pricing_mode === 'year'" x-cloak>
-                                {{ str_replace('%d%', \FX::formatPrice(abs($plan->getTotalAnnualPrice() -
-                                ($plan->getTotalPrice() * 12))), translate('You save %d% per year')) }}
+                                {{ str_replace('%d%', \FX::formatPrice(abs($plan->getTotalAnnualPrice(display: false, decimals: 0) -
+                                ($plan->getTotalPrice(display: false, decimals: 0) * 12))), translate('You save %d% per year')) }}
                             </div>
 
                         <div class="flex flex-row gap-4">

@@ -101,19 +101,13 @@ class FXService
         if ($convert) {
             $price = $this->convertPrice($price, $base_currency);
         }
-
-        /* Get Default Decimals number */
-        $displayedDecimals = get_tenant_setting('no_of_decimals');
-
-        /* Check if decimals are overided in a function call */
-        if($decimals) {
-            $displayedDecimals = $decimals;
-        }
+        
+        $decimals = is_int($decimals) ? $decimals : get_tenant_setting('no_of_decimals');
 
         if (get_tenant_setting('decimal_separator') === 1) {
-            $formatted_price = number_format($price, $displayedDecimals);
+            $formatted_price = number_format($price, $decimals);
         } else {
-            $formatted_price = number_format($price, $displayedDecimals, ',', ' ');
+            $formatted_price = number_format($price, $decimals, ',', ' ');
         }
 
         if (get_tenant_setting('symbol_format') === 1) {

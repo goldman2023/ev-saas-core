@@ -566,7 +566,7 @@ class StripeService
      */
     public function getUpcomingInvoice($user_subscription = null, $new_plan = null, $interval = null, $stripe_customer_id = null, $stripe_subscription_id = null) {
         try {
-            if(empty($new_plan) && empty($interval)) { 
+            if(empty($new_plan) && empty($interval)) {
                 // Get upcoming invoice for provided subscription.
                 if(!empty($stripe_customer_id) && !empty($stripe_subscription_id)) {
                     $invoice = $this->stripe->invoices->upcoming([
@@ -1498,6 +1498,9 @@ class StripeService
             case 'customer.created':
                 $this->whCustomerCreated($event);
                 break;
+            case 'customer.updated':
+                $this->whCustomerUpdated($event);
+                break;
             case 'charge.succeeded':
                 // $this->whChargeSucceeded($event);
                 break;
@@ -1615,6 +1618,31 @@ class StripeService
             }
             
 
+        }
+    }
+
+    // customer.updated
+    public function whCustomerUpdated($event) {
+        $customer = $event->data->object;
+
+        $stripe_customer_id = $customer->id;
+
+        $user = get_user_by_stripe_customer_id($stripe_customer_id);
+
+        if(!empty($user)) {
+            $user_subscriptions = $user->subscriptions()->active()->get();
+            
+            if($user_subscriptions->isNotEmpty()) {
+                foreach($user_subscriptions as $subscription) {
+                    if($subscription->isUsingStripe()) {
+                        dispatch(function () use ($user, $subscription, $stripe_customer_id) {
+                            $order = $subscription->order;
+                            $order->setData(stripe_prefix('stripe_upcoming_invoice'), $this->getUpcomingInvoice($subscription));
+                            $order->save();
+                        });
+                    }
+                }
+            }
         }
     }
 
