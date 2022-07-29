@@ -65,7 +65,7 @@ class UserSubscriptionsObserver
     {
         // TODO: Where in the code should we send UpdatedSubscription notification?
         $user = $user_subscription->user;
-
+        
         /**
          * Theer few possible scenarios happening when subscription is updating:
          * 1. Status changes (trial -> active, active -> inactive, active -> active_until_end)
@@ -89,7 +89,7 @@ class UserSubscriptionsObserver
             } catch(\Exception $e) {
                 Log::error($e);
             }          
-        } else if($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time() && empty($old_end_date)) {
+        } else if($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
             // Trial has started, send notification
             try {
                 $user_subscription->user->notify(new TrialStarted($user_subscription));
@@ -97,6 +97,7 @@ class UserSubscriptionsObserver
                 Log::error($e);
             }
         }
+
     }
 
     /**
