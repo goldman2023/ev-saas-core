@@ -10,3 +10,4 @@
 @lang('Regards'),<br>
 {{ get_tenant_setting('site_name') }}
 @endcomponent
+
