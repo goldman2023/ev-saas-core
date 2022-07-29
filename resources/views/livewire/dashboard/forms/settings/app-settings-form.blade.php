@@ -766,6 +766,8 @@
                                         $wire.set('settings.subscription_items_distribution_enabled', settings.subscription_items_distribution_enabled, true);
                                         $wire.set('settings.onboarding_flow', settings.onboarding_flow, true);
                                         $wire.set('settings.force_email_verification', settings.force_email_verification, true);
+                                        $wire.set('settings.register_dynamic_redirect', settings.register_dynamic_redirect, true);
+                                        $wire.set('settings.login_dynamic_redirect', settings.login_dynamic_redirect, true);
                                         $wire.set('settings.chat_feature', settings.chat_feature, true);
                                         $wire.set('settings.addresses_feature', settings.addresses_feature, true);
                                         $wire.set('settings.notifications_feature', settings.notifications_feature, true);
