@@ -42,6 +42,7 @@ class RegisterController extends Controller
             $selectedPlan = Plan::findOrFail($request->get('plan'));
             $dynamicRedirectUrl = StripeService::createCheckoutLink($selectedPlan);
             $request->session()->put('registration_redirect', $dynamicRedirectUrl);
+            $request->session()->put('selected_plan', $selectedPlan);
 
         }
 

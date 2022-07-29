@@ -58,6 +58,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
+        Nova::withoutNotificationCenter();
+
         Nova::style('admin', asset('nova/css/custom-nova-styles.css'));
 
         Nova::serving(function () {

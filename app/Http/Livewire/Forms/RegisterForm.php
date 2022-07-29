@@ -24,7 +24,7 @@ use App\Traits\Livewire\RulesSets;
 use App\Traits\Livewire\DispatchSupport;
 use MailerService;
 use App\Enums\WeMailingListsEnum;
-
+use App\Facades\StripeService;
 use Illuminate\Auth\Events\Registered;
 use MikeMcLin\WpPassword\Facades\WpPassword;
 use Permissions;
@@ -274,6 +274,9 @@ class RegisterForm extends Component
 
         if (get_tenant_setting('register_dynamic_redirect')) {
             if (session()->get('registration_redirect')) {
+                $selectedPlan = session()->get('selected_plan');
+                $dynamicRedirectUrl = StripeService::createCheckoutLink($selectedPlan);
+                session()->put('registration_redirect', $dynamicRedirectUrl);
                 return redirect(session()->get('registration_redirect'));
             }
         }
