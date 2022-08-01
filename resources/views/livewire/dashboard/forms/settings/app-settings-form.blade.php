@@ -217,6 +217,117 @@
                                 </div>
                                 {{-- END Enable/Disable Brands --}}
 
+                                {{-- Company Information --}}
+                                <div class="mt-7 text-20 font-semibold">
+                                    {{ translate('Company Information') }}
+                                </div>
+
+                                <!-- Company name -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company name') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_name" />
+                                    </div>
+                                </div>
+                                <!-- END Company name -->
+
+                                <!-- Company number -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company number') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_number" />
+                                    </div>
+                                </div>
+                                <!-- END Company number -->
+
+                                <!-- Company vat -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company VAT number') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_vat" />
+                                    </div>
+                                </div>
+                                <!-- END Company vat -->
+
+                                <!-- Company email -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company email') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input type="email" field="settings.company_email" />
+                                    </div>
+                                </div>
+                                <!-- END Company number -->
+
+                                <!-- Company address -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company address') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_address" />
+                                    </div>
+                                </div>
+                                <!-- END Company address -->
+
+                                <!-- Company city -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company city') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_city" />
+                                    </div>
+                                </div>
+                                <!-- END Company city -->
+
+                                <!-- Company postal code -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company postal code') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_postal_code" />
+                                    </div>
+                                </div>
+                                <!-- END Company postal code -->
+
+                                <!-- Company country -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company country') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_country" />
+                                    </div>
+                                </div>
+                                <!-- END Company country -->
+
+                                {{-- END Company Information --}}
+
 
                                 {{-- POLICIES URLS --}}
                                 <div class="mt-7 text-20 font-semibold">
@@ -1167,106 +1278,50 @@
 
                             {{-- Payments --}}
                             <div class="w-full px-5" x-show="current_tab === 'payments'" wire:ignore>
-                                @if($universal_payment_methods->isNotEmpty())
-                                @foreach($universal_payment_methods as $key => $payment_method)
-                                <livewire:dashboard.forms.payment-methods.payment-method-card
-                                    :payment-method="$payment_method" type="universal" class="mb-2">
-                                </livewire:dashboard.forms.payment-methods.payment-method-card>
-                                @endforeach
-                                @endif
+                                {{-- Invoice numbering --}}
+                                <div class="mt-2 text-20 font-semibold">
+                                    {{ translate('Invoice numbering') }}
+                                </div>
 
-                                {{-- Stripe Test & Live api keys --}}
-                                {{-- <div class="w-full mt-1">
-                                    <h4 class="">{{ translate('Stripe API settings') }}</h4>
+                                <!-- Invoice prefix -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Invoice prefix') }}
+                                    </label>
 
-                                    <div class="w-full sm:border-t sm:border-gray-400 sm:pt-4 sm:mt-2">
-                                        <!-- Stripe Publishable Test Key  -->
-                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
-                                            <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
-                                                {{ translate('Stripe Publishable Test Key') }}
-                                            </label>
-
-                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                <input type="text"
-                                                    class="form-standard @error('settings.stripe_pk_test_key') is-invalid @enderror"
-                                                    placeholder="{{ translate('PK Test') }}"
-                                                    wire:model.defer="settings.stripe_pk_test_key" />
-
-                                                <x-system.invalid-msg field="settings.stripe_pk_test_key">
-                                                </x-system.invalid-msg>
-                                            </div>
-                                        </div>
-                                        <!-- END Stripe Publishable Test Key -->
-
-                                        <!-- Stripe Secret Test Key -->
-                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
-                                            x-data="{}">
-                                            <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
-                                                {{ translate('Stripe Secret Test Key') }}
-                                            </label>
-
-                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                <input type="text"
-                                                    class="form-standard @error('settings.stripe_sk_test_key') is-invalid @enderror"
-                                                    placeholder="{{ translate('SK Test') }}"
-                                                    wire:model.defer="settings.stripe_sk_test_key" />
-
-                                                <x-system.invalid-msg field="settings.stripe_sk_test_key">
-                                                </x-system.invalid-msg>
-                                            </div>
-                                        </div>
-                                        <!-- END Stripe Secrets Test Key -->
-
-                                        <!-- Stripe Publishable Live Key  -->
-                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
-                                            x-data="{}">
-                                            <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
-                                                {{ translate('Stripe Publishable Live Key') }}
-                                            </label>
-
-                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                <input type="text"
-                                                    class="form-standard @error('settings.stripe_pk_live_key') is-invalid @enderror"
-                                                    placeholder="{{ translate('PK Live') }}"
-                                                    wire:model.defer="settings.stripe_pk_live_key" />
-
-                                                <x-system.invalid-msg field="settings.stripe_pk_live_key">
-                                                </x-system.invalid-msg>
-                                            </div>
-                                        </div>
-                                        <!-- END Stripe Publishable Live Key -->
-
-                                        <!-- Stripe Secrets Live Key  -->
-                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
-                                            x-data="{}">
-                                            <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
-                                                {{ translate('Stripe Secrets Live Key') }}
-                                            </label>
-
-                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                <input type="text"
-                                                    class="form-standard @error('settings.stripe_sk_live_key') is-invalid @enderror"
-                                                    placeholder="{{ translate('SK Live') }}"
-                                                    wire:model.defer="settings.stripe_sk_live_key" />
-
-                                                <x-system.invalid-msg field="settings.stripe_sk_live_key">
-                                                </x-system.invalid-msg>
-                                            </div>
-                                        </div>
-                                        <!-- END Stripe Secrets Live Key -->
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.invoice_prefix" />
                                     </div>
-                                </div> --}}
-                                {{-- END Stripe Test & Live api keys --}}
+                                </div>
+                                <!-- END Invoice prefix -->
 
                                 {{-- Save Payments --}}
-                                {{-- <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
+                                <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
                                     x-data="{}">
                                     <button type="button" class="btn btn-primary ml-auto btn-sm" @click=""
                                         wire:click="savePayments()">
                                         {{ translate('Save') }}
                                     </button>
-                                </div> --}}
+                                </div>
                                 {{-- END Save Payments --}}
+
+                                {{-- END Invoice numbering --}}
+
+
+                                {{-- Payments --}}
+                                <div class="mt-3 text-20 font-semibold pb-3 mb-5 border-b">
+                                    {{ translate('Payments') }}
+                                </div>
+
+                                @if($universal_payment_methods->isNotEmpty())
+                                    @foreach($universal_payment_methods as $key => $payment_method)
+                                    <livewire:dashboard.forms.payment-methods.payment-method-card
+                                        :payment-method="$payment_method" type="universal" class="mb-2">
+                                    </livewire:dashboard.forms.payment-methods.payment-method-card>
+                                    @endforeach
+                                @endif
+                                
                             </div>
                             {{-- END Payments --}}
 

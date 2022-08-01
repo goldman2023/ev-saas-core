@@ -1430,6 +1430,11 @@ class StripeService
             }
         }
 
+        $invoice->real_invoice_prefix = get_tenant_setting('invoice_prefix');
+        if(empty($invoice->real_invoice_number) ) {
+            $invoice->real_invoice_number = Invoice::where('total_price', '>', 0)->where('is_temp', 0)->count() + 1;
+        }
+        
         $meta = $invoice->meta;
         $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
         $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
@@ -1816,6 +1821,11 @@ class StripeService
             $invoice->billing_city = $order->billing_city;
             $invoice->billing_zip = $order->billing_zip;
 
+            $invoice->real_invoice_prefix = get_tenant_setting('invoice_prefix');
+            if(empty($invoice->real_invoice_number) ) {
+                $invoice->real_invoice_number = Invoice::where('total_price', '>', 0)->where('is_temp', 0)->count() + 1;
+            }
+
             // Take the info from stripe...
             $invoice->mergeData([
                 stripe_prefix('stripe_payment_mode') => $session->mode ?? null,
@@ -1937,6 +1947,11 @@ class StripeService
                     $invoice->discount_amount = $order->discount_amount;
                     $invoice->subtotal_price = $stripe_invoice->subtotal / 100; // take from stripe and divide by 100
                     $invoice->total_price = $stripe_invoice->total / 100; // take from stripe and divide by 100
+
+                    $invoice->real_invoice_prefix = get_tenant_setting('invoice_prefix');
+                    if(empty($invoice->real_invoice_number) ) {
+                        $invoice->real_invoice_number = Invoice::where('total_price', '>', 0)->where('is_temp', 0)->count() + 1;
+                    }
 
                     $invoice->mergeData([
                         stripe_prefix('stripe_invoice_id') => $stripe_invoice->id ?? '',
