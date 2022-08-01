@@ -46,6 +46,8 @@ class StripeService
 
     public function __construct($app)
     {
+        \Stripe\Stripe::setMaxNetworkRetries(2);
+        
         // Depending on Stripe Mode for current tenant, use live or test key!
         // Stripe mode can be changed in App Settings!
         if (Payments::isStripeLiveMode()) {
@@ -1363,6 +1365,11 @@ class StripeService
             die();
         }
 
+        if(in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons)) {
+            // Get Upcoming invoice from stripe if Order is for SUBSCRIPTION and save it to Order meta field under `{prefix}stripe_upcoming_invoice` property
+            $upcoming_invoice = \StripeService::getUpcomingInvoice(stripe_customer_id: $stripe_subscription->customer, stripe_subscription_id: $stripe_subscription->id);
+        }
+
         // If new invoice is already created at this moment, it means that invoice.paid already happened, so skip creation cuz invoice already exists and is paid
         if(empty($invoice)) {
             /*
@@ -1404,7 +1411,7 @@ class StripeService
             // TODO: How to display this?
             // Answer: For now it's minus :D and we hide such invoices on our end, but still log them!
 
-            // TODO: Add TAX from Stripe to invoice!!!
+            $invoice->tax = $stripe_invoice->tax / 100;
 
             $invoice->email = $order->email;
             $invoice->billing_first_name = $order->billing_first_name;
@@ -1429,6 +1436,8 @@ class StripeService
                 $stripe_invoice_number = $stripe_invoice->number;
             }
         }
+
+        $invoice->setRealInvoiceNumber();
 
         $meta = $invoice->meta;
         $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
@@ -1807,6 +1816,8 @@ class StripeService
                 $invoice->invoice_number = $invoice->invoice_number;
             }
 
+            $invoice->tax = $session->total_details->amount_tax / 100;
+
             $invoice->billing_first_name = $order->billing_first_name;
             $invoice->billing_last_name = $order->billing_last_name;
             $invoice->billing_company = $order->billing_company; // TODO: Get company name from invoice somehow...
@@ -1815,6 +1826,8 @@ class StripeService
             $invoice->billing_state = $order->billing_state;
             $invoice->billing_city = $order->billing_city;
             $invoice->billing_zip = $order->billing_zip;
+
+            $invoice->setRealInvoiceNumber();
 
             // Take the info from stripe...
             $invoice->mergeData([
@@ -1937,6 +1950,8 @@ class StripeService
                     $invoice->discount_amount = $order->discount_amount;
                     $invoice->subtotal_price = $stripe_invoice->subtotal / 100; // take from stripe and divide by 100
                     $invoice->total_price = $stripe_invoice->total / 100; // take from stripe and divide by 100
+
+                    $invoice->setRealInvoiceNumber();
 
                     $invoice->mergeData([
                         stripe_prefix('stripe_invoice_id') => $stripe_invoice->id ?? '',
@@ -2088,7 +2103,7 @@ class StripeService
                     $subscription->end_date = $stripe_subscription->current_period_end;
                 }
 
-                $subscription->save();
+                $subscription->saveQuietly();
             }
 
             DB::commit();
@@ -2363,6 +2378,8 @@ class StripeService
     // customer.subscription.updated
     public function whCustomerSubscriptionUpdated($event)
     {
+        \Stripe\Stripe::setMaxNetworkRetries(2);
+
         $previous_attributes = $event->data->previous_attributes ?? (object) [];
         $stripe_subscription = $event->data->object;
         $stripe_subscription_id = $stripe_subscription->id;

@@ -28,7 +28,11 @@ class UserSubscriptionsObserver
     {
         if ($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
             // Trial has started, send notification
-            $user_subscription->user->notify(new TrialStarted($user_subscription));
+            try {
+                $user_subscription->user->notify(new TrialStarted($user_subscription));
+            } catch(\Exception $e) {
+                Log::error($e);
+            }
         }
 
         try {
@@ -61,7 +65,7 @@ class UserSubscriptionsObserver
     {
         // TODO: Where in the code should we send UpdatedSubscription notification?
         $user = $user_subscription->user;
-
+        
         /**
          * Theer few possible scenarios happening when subscription is updating:
          * 1. Status changes (trial -> active, active -> inactive, active -> active_until_end)
@@ -71,13 +75,31 @@ class UserSubscriptionsObserver
         $old_end_date = $user_subscription->getOriginal('end_date');
         $new_end_date = $user_subscription->end_date;
 
-        if ($user_subscription->isDirty('end_date') && $new_end_date > $old_end_date) {
+        if ($user_subscription->isDirty('end_date') && !empty($old_end_date) && $new_end_date > $old_end_date) {
             // This means that new end_date is about to be updated - should we send notification that subscription has been successfully extended?
-            $user->notify(new ExtendedSubscription($user_subscription));
+            try {
+                $user->notify(new ExtendedSubscription($user_subscription));
+            } catch(\Exception $e) {
+                Log::error($e);
+            }
         } else if($user_subscription->isDirty('status')) {
             // Send notification on subscription status update!
-            $user->notify(new SubscriptionStatusChanged($user_subscription));            
+            try {
+                $user->notify(new SubscriptionStatusChanged($user_subscription)); 
+            } catch(\Exception $e) {
+                Log::error($e);
+            }          
+        } else if($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time() && !$user_subscription->getData('trial_started_email_sent')) {
+            // Trial has started, send notification
+            try {
+                $user_subscription->user->notify(new TrialStarted($user_subscription));
+                $user_subscription->setData('trial_started_email_sent', true);
+                $user_subscription->saveQuietly();
+            } catch(\Exception $e) {
+                Log::error($e);
+            }
         }
+
     }
 
     /**

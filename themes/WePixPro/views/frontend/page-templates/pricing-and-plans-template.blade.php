@@ -34,8 +34,8 @@ $models = \App\Models\Plan::published()->get();
             @if($models->isNotEmpty())
             @foreach($models as $model)
             <div class="w-full min-w-[250px] md:min-w-inherit" x-data="{
-              month_price: @js($model->getTotalPrice(true)),
-              annual_price: @js(\FX::formatPrice($model->getTotalAnnualPrice() / 12)),
+              month_price: @js($model->getTotalPrice(true, decimals: 0)),
+              annual_price: @js(\FX::formatPrice($model->getTotalAnnualPrice() / 12, 0)),
               {{-- discount_percent: @js(abs($model->getTotalAnnualPrice() - ($model->getTotalPrice() * 12))), --}}
           }">
                 <div class="relative flex flex-col justify-between px-4 py-4 border-gray-300 hover:border-primary border rounded transition-all duration-300 hover:shadow-green"

@@ -223,7 +223,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // View actions
             add_action('view.dashboard.form.left.end', function ($plan) {
-                if (View::exists('frontend.partials.plan-form-custom-meta-box')) {
+                if (\View::exists('frontend.partials.plan-form-custom-meta-box')) {
                     echo view('frontend.partials.plan-form-custom-meta-box', compact('plan'));
                 }
             });
@@ -244,21 +244,21 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             });
 
             add_action('view.order-received.items.end', function ($order) {
-                if (View::exists('frontend.partials.order-received-download-cta')) {
+                if (\View::exists('frontend.partials.order-received-download-cta')) {
                     echo view('frontend.partials.order-received-download-cta', compact('order'));
                 }
             });
 
             // Add Pix-Pro API Integration Form
             add_action('view.integrations.end', function () {
-                if (View::exists('frontend.partials.pix-pro-api-integration-form')) {
+                if (\View::exists('frontend.partials.pix-pro-api-integration-form')) {
                     echo view('frontend.partials.pix-pro-api-integration-form');
                 }
             });
 
             // Add Pix-Pro General Settings
             add_action('view.app-settings-form.general.end', function () {
-                if (View::exists('frontend.partials.pix-pro-general-settings')) {
+                if (\View::exists('frontend.partials.pix-pro-general-settings')) {
                     echo view('frontend.partials.pix-pro-general-settings');
                 }
             });
@@ -271,7 +271,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
 
             add_action('view.dashboard.my-downloads.end', function () {
-                if (View::exists('frontend.partials.pix-pro-software-downloads-table')) {
+                if (\View::exists('frontend.partials.pix-pro-software-downloads-table')) {
                     echo view('frontend.partials.pix-pro-software-downloads-table', [
                         'downloads' => collect(TenantSettings::get('pix_pro_downloads'))
                     ]);
@@ -279,20 +279,20 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             });
 
             add_action('view.dashboard.plans-management.plans-table.end', function ($data) {
-                if (View::exists('frontend.partials.pix-pro-licenses-table')) {
+                if (\View::exists('frontend.partials.pix-pro-licenses-table')) {
                     echo view('frontend.partials.pix-pro-licenses-table', compact('data'));
                 }
             }, 20, 1);
 
             // Add Columns to Licenses table (View)
             add_action('view.dashboard.row-license.columns', function ($license) {
-                if (View::exists('frontend.partials.row-license-custom-columns')) {
+                if (\View::exists('frontend.partials.row-license-custom-columns')) {
                     echo view('frontend.partials.row-license-custom-columns', compact('license'));
                 }
             }, 20, 1);
 
             add_action('view.dashboard.plans.row-license.actions.dropdown.start', function ($license) {
-                if (View::exists('frontend.partials.row-license-actions')) {
+                if (\View::exists('frontend.partials.row-license-actions')) {
                     echo view('frontend.partials.row-license-actions', compact('license'));
                 }
             }, 20, 1);

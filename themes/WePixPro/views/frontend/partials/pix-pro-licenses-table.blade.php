@@ -5,7 +5,7 @@
     {{-- <h2 class="text-32 text-gray-700 font-semibold mb-1">{{ translate('Licenses')}}</h2> --}}
      @php
         if(empty($data)) {
-            $data = Auth::user();
+            $data = \Auth::user();
         }
      @endphp
     <livewire:dashboard.tables.licenses-table :user="$data" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
