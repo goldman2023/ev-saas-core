@@ -157,25 +157,28 @@ class Invoice extends WeBaseModel
         $shop = $this->shop;
 
         $business = new Party([
-            'name'          => $shop->name,
-            'phone'         => is_array($shop->phones) ? implode(',', $shop->phones) : '',
+            'name'          => get_tenant_setting('company_name'),
+            // 'phone'         => is_array($shop->phones) ? implode(',', $shop->phones) : '',
             'custom_fields' => [
-                // 'address' => ,
-                // 'city' => ,
-                // 'country' => ,
-                // 'postal_code' => ,
-                // 'company '
-                'Tax ID'        => $shop->getShopMeta('tax_number'),
-                'Reg. number' => $shop->getShopMeta('registration_number'),
+                'address' => get_tenant_setting('company_address'),
+                'city' => get_tenant_setting('company_city'),
+                'country' => get_tenant_setting('company_country'),
+                'postal_code' => get_tenant_setting('company_postal_code'),
+                'email' => get_tenant_setting('company_email'),
+                'VAT no.' => get_tenant_setting('company_vat'),
+                'Company no.' => get_tenant_setting('company_number'),
             ],
         ]);
 
         $customer = new Party([
             'name'          => $this->billing_first_name.' '.$this->billing_last_name,
-            'address'       => $this->billing_address.', '.$this->billing_zip.' '.$this->billing_city.', '.$this->billing_country,
-            'code'          => '#'.$this->id,
+            'address'       => $this->billing_address.', '.$this->billing_zip,
+            // 'code'          => '#'.$this->id,
             'custom_fields' => [
-                'order number' => $this->order->id,
+                'city' => $this->billing_city,
+                'country' => \Countries::get(code: $this->billing_country)?->name ?? $this->billing_country,
+                'email' => $this->email,
+                'order number' => '#'.$this->order->id,
             ],
         ]);
 
@@ -198,7 +201,7 @@ class Invoice extends WeBaseModel
         $notes = implode("<br>", $notes);
 
         $invoice = LaravelInvoice::make('Invoice')
-            ->series(!empty($this->real_invoice_number) ? $this->real_invoice_number : '')
+            ->series(!empty($this->real_invoice_number) ? $this->real_invoice_number : $this->invoice_number)
             // ->sequence()
             ->serialNumberFormat('{SERIES}')
             // ability to include translated invoice status
@@ -214,10 +217,10 @@ class Invoice extends WeBaseModel
             ->currencyFormat('{SYMBOL}{VALUE}')
             ->currencyThousandsSeparator('.')
             ->currencyDecimalPoint(',')
-            ->filename($business->name . ' ' . $customer->name)
+            ->filename(!empty($this->real_invoice_number) ? $this->real_invoice_number : $this->invoice_number)
             ->addItems($invoice_items)
-            ->notes($notes)
-            ->totalTaxes($this->order->tax);
+            ->totalTaxes($this->order->tax)
+            ->notes($notes);
             // ->logo(public_path('vendor/invoices/sample-logo.png'))
             // You can additionally save generated invoice to configured disk
             // ->save('public');

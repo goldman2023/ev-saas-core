@@ -113,6 +113,16 @@ class TenantSettingsService
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
 
+            'company_name' => 'string',
+            'company_address' => 'string',
+            'company_city' => 'string',
+            'company_country' => 'string',
+            'company_postal_code' => 'string',
+            'company_number' => 'string',
+            'company_vat' => 'string',
+            'company_email' => 'string',
+
+
             // Content Types
             'brands_ct_enabled' => 'boolean',
 
@@ -185,6 +195,7 @@ class TenantSettingsService
             'guest_checkout_active' => 'boolean',
 
             // Payments
+            'invoice_prefix' => 'string',
 
             // Design
             'product_page_style' => 'string',

@@ -56,6 +56,14 @@ class AppSettingsForm extends Component
                 'settings.shipping_policy_url' => [''],
                 'settings.returns_and_refunds_url' => [''],
                 'settings.documentation_url' => [''],
+                'settings.company_name' => [''],
+                'settings.company_address' => [''],
+                'settings.company_city' => [''],
+                'settings.company_country' => [''],
+                'settings.company_postal_code' => [''],
+                'settings.company_number' => [''],
+                'settings.company_vat' => [''],
+                'settings.company_email' => [''],
             ]),
             /* TODO: Enable disable specific product types in app settings */
             /* WARNING THIS OPTION IS WORK IN PROGRESS */
@@ -151,10 +159,7 @@ class AppSettingsForm extends Component
                 'settings.symbol_format' => ['required', Rule::in([1,2])],
             ],
             'payments' => [
-                'settings.stripe_pk_test_key' => [],
-                'settings.stripe_sk_test_key' => [],
-                'settings.stripe_pk_live_key' => [],
-                'settings.stripe_sk_live_key' => [],
+                'settings.invoice_prefix' => [''],
             ],
             'design' => [
                 'settings.colors' => [''],
