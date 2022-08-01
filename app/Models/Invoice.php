@@ -153,6 +153,22 @@ class Invoice extends WeBaseModel
         }
     }
 
+    public function getRealInvoiceNumber($fallback = false) {
+        if($fallback && empty($this->real_invoice_number)) {
+            return $this->invoice_number;
+
+        }
+
+        return $this->real_invoice_prefix.'-0000'.$this->real_invoice_number;
+    }
+
+    public function setRealInvoiceNumber() {
+        if($this->is_temp === false && $this->total_price > 0) {
+            $this->real_invoice_number = Invoice::where('total_price', '>', 0)->where('is_temp', 0)->count() + 1;
+            $this->real_invoice_prefix = get_tenant_setting('invoice_prefix');
+        }
+    }
+
     public function generateInvoicePDF() {
         $shop = $this->shop;
 
@@ -190,7 +206,8 @@ class Invoice extends WeBaseModel
                     ->description($item->excerpt)
                     ->pricePerUnit($item->base_price)
                     ->quantity($item->quantity)
-                    ->discount($item->discount_amount);
+                    ->discount($item->discount_amount)
+                    ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
         }
 
         $notes = [
@@ -201,7 +218,7 @@ class Invoice extends WeBaseModel
         $notes = implode("<br>", $notes);
 
         $invoice = LaravelInvoice::make('Invoice')
-            ->series(!empty($this->real_invoice_number) ? $this->real_invoice_number : $this->invoice_number)
+            ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             // ->sequence()
             ->serialNumberFormat('{SERIES}')
             // ability to include translated invoice status
@@ -217,9 +234,9 @@ class Invoice extends WeBaseModel
             ->currencyFormat('{SYMBOL}{VALUE}')
             ->currencyThousandsSeparator('.')
             ->currencyDecimalPoint(',')
-            ->filename(!empty($this->real_invoice_number) ? $this->real_invoice_number : $this->invoice_number)
+            ->filename(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             ->addItems($invoice_items)
-            ->totalTaxes($this->order->tax)
+            ->totalTaxes($this->tax)
             ->notes($notes);
             // ->logo(public_path('vendor/invoices/sample-logo.png'))
             // You can additionally save generated invoice to configured disk
