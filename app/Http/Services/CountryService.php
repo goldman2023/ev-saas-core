@@ -37,6 +37,13 @@ class CountryService
         return $as_array ? $codes->toArray() : $codes;
     }
 
+    public function getCodesForSelect($as_array = false)
+    {
+        $codes = $this->countries->keyBy('code')->map(fn($item) => $item->name);
+
+        return $as_array ? $codes->toArray() : $codes;
+    }
+
     public function get($id = null, $code = null)
     {
         if ($id) {
@@ -64,5 +71,14 @@ class CountryService
         }
 
         $this->countries = $countries->isNotEmpty() ? $countries : collect([]);
+    }
+
+    function isEU($code) {
+        $eu_code = array(
+            'AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'EL',
+            'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV',
+            'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK'
+        );
+        return (in_array($code, $eu_code));
     }
 }

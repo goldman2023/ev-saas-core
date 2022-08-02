@@ -6,6 +6,7 @@ use App\Models\Shop;
 use App\Rules\IfIDExists;
 use App\Rules\MatchPassword;
 use DebugBar\DebugBar;
+use Mpociot\VatCalculator\Facades\VatCalculator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
@@ -65,6 +66,33 @@ class AppServiceProvider extends ServiceProvider
             return count(array_filter($value, function ($var) use ($parameters) {
                 return ($var && $var >= $parameters[0] && strlen($var) >= $parameters[1]);
             }));
+        });
+
+        Validator::extend('check_eu_vat_number', function ($attribute, $value, $parameters, $validator) {
+            $country_field_name = $parameters[0];
+            $meta_field_name = explode('.', $attribute)[0];
+
+            $country = $validator->getData()[$meta_field_name][$country_field_name];
+
+            if(!empty($country) && !empty(\Countries::get(code: $country)) && \Countries::isEU($country)) {
+                try {
+                    if(str_starts_with($value, $country)) {
+                        $validVAT = VatCalculator::isValidVATNumber($value);
+                    } else {
+                        $validVAT = VatCalculator::isValidVATNumber($country.$value);
+                    }
+                } catch (VATCheckUnavailableException $e) {
+                    // The VAT check API is unavailable...
+                }
+
+                if($validVAT) {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
         });
     }
 

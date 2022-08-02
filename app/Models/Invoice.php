@@ -210,6 +210,9 @@ class Invoice extends WeBaseModel
                     ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
         }
 
+        // Tax notes
+        
+
         $notes = [
             'your multiline',
             'additional notes',

@@ -82,7 +82,7 @@ class AppSettingsForm extends Component
                 'settings.login_redirect_url' => ['nullable'],
                 'settings.login_dynamic_redirect' => ['boolean'],
                 'settings.register_dynamic_redirect' => ['boolean'],
-
+                'settings.user_entity_choice' => ['boolean'],
                 'settings.chat_feature' => ['boolean'],
                 'settings.addresses_feature' => ['boolean'],
                 'settings.notifications_feature' => ['boolean'],

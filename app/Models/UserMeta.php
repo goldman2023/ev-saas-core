@@ -38,6 +38,7 @@ class UserMeta extends WeBaseModel
             'company_name' => 'string',
             'company_vat' => 'string',
             'company_registration_number' => 'string',
+            'company_country' => 'select',
             'work_experience' => 'array',
             'education' => 'array',
             'bio' => 'wysiwyg',
@@ -66,7 +67,7 @@ class UserMeta extends WeBaseModel
     }
 
     public static function metaForCompanyEntity() {
-        return ['company_name', 'company_vat', 'company_registration_number'];
+        return ['company_name', 'company_vat', 'company_registration_number', 'company_country'];
     }
 
     public static function metaSelectValues($key) {

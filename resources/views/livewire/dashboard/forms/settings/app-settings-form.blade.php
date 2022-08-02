@@ -680,6 +680,24 @@
                                 {{-- Onboarding flow --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
                                     x-data="{}">
+
+                                    {{-- Enable entity selection --}}
+                                    <div class="col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-3"
+                                        x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">{{ translate('Enable entity selection') }}:</span>
+                                            <p class="text-gray-500 text-sm">
+                                                {{ translate('Enable/Disable if users can choose their account type: individual/company') }}
+                                            </p>
+                                        </div>
+
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.toggle field="settings.user_entity_choice" />
+                                        </div>
+                                    </div>
+                                    {{-- END Enable entity selection --}}
+
+
                                     <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                         <span class="text-sm font-medium text-gray-900">{{ translate('Onboarding flow')
                                             }}</span>
@@ -875,6 +893,7 @@
                                         $wire.set('settings.multiple_subscriptions_enabled', settings.multiple_subscriptions_enabled, true);
                                         $wire.set('settings.multi_item_subscription_enabled', settings.multi_item_subscription_enabled, true);
                                         $wire.set('settings.subscription_items_distribution_enabled', settings.subscription_items_distribution_enabled, true);
+                                        $wire.set('settings.user_entity_choice', settings.user_entity_choice, true);
                                         $wire.set('settings.onboarding_flow', settings.onboarding_flow, true);
                                         $wire.set('settings.force_email_verification', settings.force_email_verification, true);
                                         $wire.set('settings.register_dynamic_redirect', settings.register_dynamic_redirect, true);

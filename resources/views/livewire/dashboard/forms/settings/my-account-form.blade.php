@@ -161,21 +161,23 @@
 
                         <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
 
-                            <div class="hidden  sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                                <fieldset class="mt-4">
-                                  <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
-                                    <div class="flex items-center">
-                                      <input id="entity_individual" name="entity_field" type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                                      <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Individual') }} </label>
-                                    </div>
+                            @if(get_tenant_setting('user_entity_choice'))
+                                <div class="sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <fieldset class="mt-4">
+                                        <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                                            <div class="flex items-center">
+                                                <input id="entity_individual" name="entity_field" type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                                <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Individual') }} </label>
+                                            </div>
 
-                                    <div class="flex items-center">
-                                      <input id="entity_company" name="entity_field" type="radio" x-model="entity"  value="company" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                                      <label for="entity_company" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Company') }} </label>
-                                    </div>
-                                  </div>
-                                </fieldset>
-                            </div>
+                                            <div class="flex items-center">
+                                                <input id="entity_company" name="entity_field" type="radio" x-model="entity"  value="company" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                                <label for="entity_company" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Company') }} </label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            @endif
 
                             <!-- First name -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
@@ -298,6 +300,8 @@
                                                 <x-dashboard.form.input field="meta.{{ $key }}" />
                                             @elseif(($options['type']??'string') == 'date')
                                                 <x-dashboard.form.date field="meta.{{ $key }}" />
+                                            @elseif(($options['type']??'string') == 'select' && $key === 'company_country')
+                                                <x-dashboard.form.select field="meta.{{ $key }}" selected="meta.{{ $key }}" :items="\Countries::getCodesForSelect(as_array: true)" :search="true" :nullable="false" />
                                             @elseif(($options['type']??'string') == 'select')
                                                 <x-dashboard.form.select field="meta.{{ $key }}" selected="meta.{{ $key }}" :items="\App\Models\UserMeta::metaSelectValues($key)" />
                                             @elseif(($options['type']??'string') == 'wysiwyg')
