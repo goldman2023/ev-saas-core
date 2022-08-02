@@ -50,6 +50,7 @@
         "masterminds/html5": "^2.7",
         "mews/purifier": "^3.3",
         "mikemclin/laravel-wp-password": "^2.0",
+        "mpociot/vat-calculator": "^3.1",
         "nerdroid23/blade-icomoon": "^1.0",
         "outl1ne/nova-menu-builder": "^7.0",
         "owen-it/laravel-auditing": "^13.0",

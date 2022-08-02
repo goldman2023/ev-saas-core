@@ -71,6 +71,11 @@ class RegisterForm extends Component
 
                 if (in_array($key, UserMeta::metaForCompanyEntity())) {
                     $rules['user_meta.' . $key][] = 'exclude_if:entity,individual';
+
+                    if($key === 'company_vat') {
+                        $rules['user_meta.' . $key][] = 'check_eu_vat_number:company_country';
+
+                    }
                 }
 
                 if ($options['required'] ?? false) {
@@ -100,6 +105,7 @@ class RegisterForm extends Component
             'terms_consent.required' => translate('Terms and conditions consent is required.'),
             'terms_consent.boolean' => translate('Terms and conditions consent is required.'),
             'terms_consent.is_true' => translate('Terms and conditions consent is required bool.'),
+            'user_meta.company_vat.check_eu_vat_number' => translate('VAT number not valid'),
         ];
 
         if ($this->available_meta->count() > 0) {

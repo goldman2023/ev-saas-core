@@ -3,7 +3,7 @@
 @section('content')
 <div class="bg-gray-100 pt-10 pb-10">
     <div
-        class="min-h-full flex md:w-full md:max-w-6xl sm:rounded-2xl sm:shadow overflow-hidden sm:bg-card mx-auto bg-white">
+        class="min-h-full flex md:w-full md:max-w-6xl sm:rounded-2xl sm:shadow sm:bg-card mx-auto bg-white">
         <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
             <div class="mx-auto w-full max-w-sm lg:w-96">
                 <div>
