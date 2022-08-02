@@ -35,6 +35,7 @@ use Uuid;
 use App\Models\CoreMeta;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
+use Mpociot\VatCalculator\Facades\VatCalculator;
 
 class StripeService
 {
@@ -47,7 +48,7 @@ class StripeService
     public function __construct($app)
     {
         \Stripe\Stripe::setMaxNetworkRetries(2);
-        
+
         // Depending on Stripe Mode for current tenant, use live or test key!
         // Stripe mode can be changed in App Settings!
         if (Payments::isStripeLiveMode()) {
@@ -507,6 +508,33 @@ class StripeService
             }
 
             $stripe_customer = $this->stripe->customers->create($params);
+
+            // If $customer is company, add TaxID if applicable
+            if($me->entity === 'company') {
+                $company_country = $me->getUserMeta('company_country');
+                $company_vat = $me->getUserMeta('company_vat');
+
+                if(!empty($company_country) && !empty(\Countries::get(code: $company_country)) && \Countries::isEU($company_country)) {
+                    try {
+                        if(str_starts_with($company_vat, $company_country)) {
+                            $validVAT = VatCalculator::isValidVATNumber($company_vat);
+                            $stripe_vat = $company_vat;
+                        } else {
+                            $validVAT = VatCalculator::isValidVATNumber($company_country.$company_vat);
+                            $stripe_vat = $company_country.$company_vat;
+                        }
+
+                        if($validVAT) {
+                            $this->stripe->customers->createTaxId(
+                                $stripe_customer->id,
+                                ['type' => 'eu_vat', 'value' => $stripe_vat]
+                            );   
+                        }
+                    } catch (VATCheckUnavailableException $e) {
+                        // The VAT check API is unavailable...
+                    }
+                }
+            }
         }
 
         $me->saveCoreMeta($stripe_customer_id_key, $stripe_customer->id);

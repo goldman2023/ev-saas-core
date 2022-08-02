@@ -112,6 +112,7 @@ class TenantSettingsService
             'site_contact_email' => 'string',
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
+            
 
             'company_name' => 'string',
             'company_address' => 'string',
@@ -224,6 +225,8 @@ class TenantSettingsService
             'login_redirect_url' => 'string', //
             'login_dynamic_redirect' => 'boolean', //
             'register_dynamic_redirect' => 'boolean', //
+            'user_entity_choice' => 'boolean', // enables individual or company radio buttons
+            
 
             // Integrations
             'mailerlite_api_token' => 'string',
