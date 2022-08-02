@@ -171,6 +171,83 @@ class Invoice extends WeBaseModel
 
     public function generateInvoicePDF() {
         $shop = $this->shop;
+        $user = $this->user;
+
+        $invoice_items = [];
+
+        foreach($this->order->order_items as $item) {
+            $invoice_items[] = (new InvoiceItem())
+                    ->title($item->name)
+                    ->description($item->excerpt)
+                    ->pricePerUnit($item->base_price)
+                    ->quantity($item->quantity)
+                    ->discount($item->discount_amount)
+                    ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
+        }
+
+        $customer_custom_fields = [
+            'city' => $this->billing_city,
+            'country' => \Countries::get(code: $this->billing_country)?->name ?? $this->billing_country,
+            'email' => $this->email,
+            'order number' => '#'.$this->order->id,
+        ];
+
+        // Tax notes
+        // TODO: Add this part as a filter!!!!!!!!!
+
+        $notes = [];
+
+        $stripe_invoice = $this->getData(stripe_prefix('stripe_invoice_data'));
+        if(empty($stripe_invoice)) {
+            $stripe_invoice = \StripeService::stripe()->invoices->retrieve(
+                $this->getData(stripe_prefix('stripe_invoice_id')),
+                []
+            );
+
+            if(!empty($stripe_invoice)) {
+                $this->setData(stripe_prefix('stripe_invoice_data'), $stripe_invoice->toArray());
+            }
+        }
+
+        if($user->entity === 'company') {
+            // Company
+            $company_country = $user->getUserMeta('company_country');
+            $company_vat = $user->getUserMeta('company_vat');
+            $company_registration_number = $user->getUserMeta('company_registration_number');
+
+            if(!empty($company_country) && !empty(\Countries::get(code: $company_country))) {
+                if($company_country === 'LT') {
+                    $customer_custom_fields['company no.'] = $company_registration_number;
+                } else {
+                    if(\Countries::isEU($company_country)) {
+                        $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
+                    } else {
+                        $notes[] = 'PVMĮ 13str. 2 d.';
+                        $customer_custom_fields['company no.'] = $company_registration_number;
+                    }
+                }
+            }
+        } else {
+            // Individual
+            $country = $stripe_invoice['customer_address']['country'];
+
+            if(!empty($country) && !empty(\Countries::get(code: $country))) {
+                if($country === 'LT') {
+                    
+                } else {
+                    if(\Countries::isEU($country)) {
+                        $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
+                    } else {
+                        $notes[] = 'PVMĮ 13 str. 14 d.';
+                    }
+                }
+                
+            }
+        }
+
+        
+        $notes = implode("<br>", $notes);
+
 
         $business = new Party([
             'name'          => get_tenant_setting('company_name'),
@@ -186,39 +263,13 @@ class Invoice extends WeBaseModel
             ],
         ]);
 
+        
         $customer = new Party([
             'name'          => $this->billing_first_name.' '.$this->billing_last_name,
             'address'       => $this->billing_address.', '.$this->billing_zip,
             // 'code'          => '#'.$this->id,
-            'custom_fields' => [
-                'city' => $this->billing_city,
-                'country' => \Countries::get(code: $this->billing_country)?->name ?? $this->billing_country,
-                'email' => $this->email,
-                'order number' => '#'.$this->order->id,
-            ],
+            'custom_fields' => $customer_custom_fields,
         ]);
-
-        $invoice_items = [];
-
-        foreach($this->order->order_items as $item) {
-            $invoice_items[] = (new InvoiceItem())
-                    ->title($item->name)
-                    ->description($item->excerpt)
-                    ->pricePerUnit($item->base_price)
-                    ->quantity($item->quantity)
-                    ->discount($item->discount_amount)
-                    ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
-        }
-
-        // Tax notes
-        
-
-        $notes = [
-            'your multiline',
-            'additional notes',
-            'in regards of delivery or something else',
-        ];
-        $notes = implode("<br>", $notes);
 
         $invoice = LaravelInvoice::make('Invoice')
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
