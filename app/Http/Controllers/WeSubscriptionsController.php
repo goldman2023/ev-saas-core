@@ -7,6 +7,7 @@ use App\Facades\Payments;
 use Illuminate\Http\Request;
 use App\Models\UserSubscription;
 use App\Models\Plan;
+use App\Exceptions\WeAPIException;
 
 class WeSubscriptionsController extends Controller
 {
@@ -17,7 +18,7 @@ class WeSubscriptionsController extends Controller
         $interval = $request->input('interval'); // GET parameter: annual or year
 
 
-        if($subscription->isTrial()) {
+        // if($subscription->isTrial()) {
             $stripe_sub_id = $subscription->getStripeSubscriptionID();
             $stripe_prod_id = $new_plan->getStripeProductID();
             $stripe_new_plan_price = null;
@@ -57,19 +58,20 @@ class WeSubscriptionsController extends Controller
                     );
 
                     if(!empty($updated_stripe_subscription->id)) {
+                        // 
                         return response()->json(['status' => 'success', 'data' => $updated_stripe_subscription]);
                     }
                 }
             }
-        }
+        // }
 
-        throw new WeAPIException(message: translate('Your previous subscription is not under trial'), type: 'WeApiException', code: 400);
+        throw new WeAPIException(message: translate('Could not change the subscription plan...'), type: 'WeApiException', code: 400);
     }
 
     public function generate_upcoming_invoice_from_stripe(Request $request, $user_subscription_id, $new_plan_id, $interval) {
         $user_subscription = UserSubscription::findOrFail($user_subscription_id);
         $new_plan = Plan::findOrFail($new_plan_id);
-
+        
         return response()->json(['status' => 'success', 'data' => StripeService::getUpcomingInvoice($user_subscription, $new_plan, $interval)]);
     }
 
