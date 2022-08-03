@@ -43,11 +43,11 @@
 @endsection
 
 @push('modal')
+    
     @if((auth()->user()?->isSubscribed() ?? false) &&
-        auth()->user()?->subscriptions->first()->isTrial() &&
         auth()->user()?->subscriptions->first()->items->count() === 1 &&
         auth()->user()?->subscriptions->first()->items->first()->pivot->qty === 1)
-        <x-system.form-modal id="change-trial-plan-modal" title="{{ translate('Change trial plan') }}" class="!max-w-7xl" title-class="text-20 font-semibold">
+        <x-system.form-modal id="change-plan-modal" title="{{ translate('Change plan') }}" class="!max-w-7xl" title-class="text-20 font-semibold">
             <div class="w-full py-3">
                 <x-dashboard.widgets.customer.pricing-table :plans="$plans" :hide-title="true">
                 </x-dashboard.widgets.customer.pricing-table>
@@ -57,12 +57,12 @@
         @php
             $current_plan = auth()->user()?->subscriptions->first()->items->first();
         @endphp
-        <x-system.form-modal id="change-trial-plan-confirmation-modal" title="{{ translate('Are you sure you want to change trial plan?') }}" class="!max-w-2xl" title-class="text-20 font-semibold">
+        <x-system.form-modal id="change-plan-confirmation-modal" title="{{ translate('Are you sure you want to change plan?') }}" class="!max-w-2xl" title-class="text-20 font-semibold">
             <div class="w-full" x-data="{
                 subscription_id: null,
                 new_plan: null,
                 interval: null,
-                trial: true,
+                trial: @js(auth()->user()?->subscriptions->first()->isTrial()),
                 trial_ends_at: '{{ auth()->user()?->subscriptions->first()->end_date->format('d M, Y') }}',
                 current_plan: @js($current_plan->toArray()),
                 total_projected_price: '',
@@ -79,8 +79,8 @@
                     wetch.get(invoiceProjectionUrl)
                     .then(data => {
                         if(data.status === 'success') {
-                            this.total_projected_price = FX.formatPrice(data.data.total / 100, 2);
-                            this.total_annual_projected_price = FX.formatPrice(data.data.total / 100, 2);
+                            this.total_projected_price = FX.formatPrice(data.data.amount_remaining / 100, 2);
+                            this.total_annual_projected_price = FX.formatPrice(data.data.amount_remaining / 100, 2);
                         } else {
 
                         }
@@ -95,7 +95,7 @@
                     wetch.get(changePlanUrl)
                     .then(data => {
                         if(data.status === 'success') {
-                            alert('You have successfully changed the trial plan. Please refresh the page.');
+                            alert('You have successfully changed the plan. Please refresh the page.');
                         } else {
                             console.log(data);
                         }
@@ -112,14 +112,29 @@
                 }
             ">
                 <div class="pt-2 pb-4">
-                    {{-- TODO: Add php FX service equivalent to JS (same as IMGProxy) --}}
-                    <p class="w-full text-16 text-gray-500"  x-show="interval === 'month'"
-                        x-html="'{{ translate('By changing the subscription plan, you will be billed ') }}<strong>'+total_projected_price+'{{ get_tenant_setting('system_default_currency')?->symbol ?? '' }}</strong>{{ translate(' per month (tax included), after the trial ends on ') }}<strong>'+trial_ends_at+'</strong>'">
-                    </p>
 
-                    <p class="w-full text-16 text-gray-500" x-show="interval === 'year'"
+                    <div class="" x-show="!trial">
+                        {{-- TODO: Add php FX service equivalent to JS (same as IMGProxy) --}}
+                        <p class="w-full text-16 text-gray-500"  x-show="interval === 'month'"
+                        x-html="'{{ translate('By changing the subscription plan, you will be billed ') }}<strong>'+total_projected_price+'{{ get_tenant_setting('system_default_currency')?->symbol ?? '' }}</strong>{{ translate(' per month (tax included, if applied)') }}'">
+                        </p>
+
+                        <p class="w-full text-16 text-gray-500" x-show="interval === 'year'"
+                        x-html="'{{ translate('By changing the subscription plan, you will be billed ') }}<strong>'+total_annual_projected_price+'{{ get_tenant_setting('system_default_currency')?->symbol ?? '' }}</strong>{{ translate(' per year (tax included, if applied)') }}'">
+                        </p>
+                    </div>
+
+                    <div class="" x-show="trial">
+                        {{-- TODO: Add php FX service equivalent to JS (same as IMGProxy) --}}
+                        <p class="w-full text-16 text-gray-500"  x-show="interval === 'month'"
+                        x-html="'{{ translate('By changing the subscription plan, you will be billed ') }}<strong>'+total_projected_price+'{{ get_tenant_setting('system_default_currency')?->symbol ?? '' }}</strong>{{ translate(' per month (tax included), after the trial ends on ') }}<strong>'+trial_ends_at+'</strong>'">
+                        </p>
+
+                        <p class="w-full text-16 text-gray-500" x-show="interval === 'year'"
                         x-html="'{{ translate('By changing the subscription plan, you will be billed ') }}<strong>'+total_annual_projected_price+'{{ get_tenant_setting('system_default_currency')?->symbol ?? '' }}</strong>{{ translate(' per year (tax included), after the trial ends on ') }}<strong>'+trial_ends_at+'</strong>'">
-                    </p>
+                        </p>
+                    </div>
+                    
                 </div>
                 <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="changePlan()" >
                     {{ translate('Change plan') }}

@@ -676,7 +676,7 @@ class StripeService
                 $cycle_anchor = 'now';
             } else {
                 if($user_subscription->order->invoicing_period === $interval) {
-                    $cycle_anchor = 'unchanged';
+                    $cycle_anchor = 'now'; // was: 'unchanged'...wtf?
                 } else {
                     // TODO: This may not be correct...check other options just in case
                     $cycle_anchor = 'now';
@@ -685,18 +685,20 @@ class StripeService
 
             $params = [
                 'customer' => $user_subscription->user->getStripeCustomerID(),
-                'subscription' => $user_subscription->getStripeSubscriptionID(),
-                'subscription_proration_date' => $proration_date,
+                // 'subscription' => $user_subscription->getStripeSubscriptionID(),
+                // 'subscription_proration_date' => $proration_date,
                 'subscription_billing_cycle_anchor' => $cycle_anchor,
-                'subscription_trial_end' => $cycle_anchor,
+                // 'subscription_trial_end' => $cycle_anchor,
+                'automatic_tax' => ['enabled' => true],
             ];
 
             if(!empty($new_plan) && !empty($interval)) {
                 // See what the next invoice would look like with a price switch and proration set:
                 $items = [
                     [
-                        'id' => $stripe_subscription->items->data[0]->id,
+                        // 'id' => $stripe_subscription->items->data[0]->id,
                         'price' => $stripe_price_id, # Switch to new price
+                        'quantity' => 1
                     ],
                 ];
 
@@ -704,7 +706,6 @@ class StripeService
             }
 
             $invoice = $this->stripe->invoices->upcoming($params);
-
             return array_merge(['invoice_source' => 'stripe'], $invoice->toArray());
         } catch(\Throwable $e) {
             Log::error(array_merge(['error' => $e]));
