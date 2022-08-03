@@ -539,7 +539,7 @@ class StripeService
                                     $this->stripe->customers->update(
                                         $stripe_customer->id,
                                         [
-                                            'tax_exempt' => 'taxable'
+                                            'tax_exempt' => 'none'
                                         ]
                                     );
                                 } else {
@@ -561,7 +561,7 @@ class StripeService
                                 $this->stripe->customers->update(
                                     $stripe_customer->id,
                                     [
-                                        'tax_exempt' => 'taxable'
+                                        'tax_exempt' => 'none'
                                     ]
                                 );
                             }
