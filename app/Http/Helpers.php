@@ -1052,7 +1052,7 @@ if (!function_exists('my_asset')) {
     function my_asset($path, $secure = null)
     {
         if (config('filesystems.default') === 'do') {
-            return Storage::disk('do')->url($path);
+            return Storage::disk(config('filesystems.default'))->url($path);
         } else {
             return app('url')->asset($path, $secure);
         }
