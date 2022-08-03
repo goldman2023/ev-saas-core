@@ -29,7 +29,7 @@ class OrderItem extends WeBaseModel
 
     public function subject()
     {
-        return $this->morphTo('subject')->withoutGlobalScopes();
+        return $this->morphTo('subject');
     }
 
 //    public function pickup_point()

@@ -91,7 +91,7 @@ class WooCommerceController extends Controller
             }
 
             try {
-                $featured_image = Storage::disk('s3')->put($tenant_path.'/'.$product->images[0]->name, file_get_contents($product->images[0]->src), 'public');
+                $featured_image = Storage::disk(config('filesystems.default'))->put($tenant_path.'/'.$product->images[0]->name, file_get_contents($product->images[0]->src), 'public');
                 $upload = new Upload();
 
                 $upload->file_original_name = 'labas.png';
