@@ -56,4 +56,8 @@ trait HasDataColumn
         $old_data = empty($this->{$this->getDataColumnName()}) ? [] : $this->{$this->getDataColumnName()};
         $this->{$this->getDataColumnName()} = array_merge($old_data, $new_data);
     }
+
+    public function keyExistsInData($key) {
+        return Arr::has($this->{$this->getDataColumnName()}, $key);
+    }
 }

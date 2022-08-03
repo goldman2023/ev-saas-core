@@ -52,11 +52,11 @@
 
 <x-livewire-tables::table.cell class="align-middle text-center">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        <a class="btn btn-primary flex items-center mr-2" target="_blank" href="{{ $row->meta[stripe_prefix('stripe_hosted_invoice_url')] ?? '#' }}">
-            {{-- {{ route('order.details', ['id' => $row->id]) }} --}}
+        {{-- <a class="btn btn-primary flex items-center mr-2" target="_blank" href="{{ $row->meta[stripe_prefix('stripe_hosted_invoice_url')] ?? '#' }}">
+            {{ route('order.details', ['id' => $row->id]) }}
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] '])
             {{ translate('View') }}
-        </a>
+        </a> --}}
 
         <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ route('invoice.download', $row->id) }}">
             @svg('heroicon-s-download', ['class' => 'w-[18px] h-[18px] '])

@@ -159,13 +159,14 @@ class Invoice extends WeBaseModel
 
         }
 
-        return $this->real_invoice_prefix.'-0000'.$this->real_invoice_number;
+        return $this->real_invoice_prefix.str_pad((string) $this->real_invoice_number, 5, '0', STR_PAD_LEFT);
     }
 
     public function setRealInvoiceNumber() {
         if($this->is_temp === false && $this->total_price > 0) {
-            $this->real_invoice_number = Invoice::where('total_price', '>', 0)->where('is_temp', 0)->count() + 1;
             $this->real_invoice_prefix = get_tenant_setting('invoice_prefix');
+            
+            $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('is_temp', 0)->latest()->first()?->real_invoice_number ?? 0) + 1;
         }
     }
 
@@ -218,9 +219,11 @@ class Invoice extends WeBaseModel
             if(!empty($company_country) && !empty(\Countries::get(code: $company_country))) {
                 if($company_country === 'LT') {
                     $customer_custom_fields['company no.'] = $company_registration_number;
+                    $customer_custom_fields['VAT no.'] = $company_vat;
                 } else {
                     if(\Countries::isEU($company_country)) {
                         $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
+                        $customer_custom_fields['VAT no.'] = $company_vat;
                     } else {
                         $notes[] = 'PVMĮ 13str. 2 d.';
                         $customer_custom_fields['company no.'] = $company_registration_number;
@@ -297,6 +300,10 @@ class Invoice extends WeBaseModel
             // ->save('public');
 
         return $invoice->stream();
+    }
+
+    public function isTestMode() {
+        return $invoice->keyExistsInData('test_stripe_invoice_id');
     }
 
 //    TODO: ORDER TRACKING NUMBER!!!
