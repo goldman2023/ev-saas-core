@@ -525,10 +525,21 @@ class StripeService
                         }
 
                         if($validVAT) {
+                            $this->stripe->customers->update(
+                                $stripe_customer->id,
+                                [
+                                    'address' => [
+                                        'country' => $company_country
+                                    ]
+                                ]
+                            );
+                                
                             $this->stripe->customers->createTaxId(
                                 $stripe_customer->id,
                                 ['type' => 'eu_vat', 'value' => $stripe_vat]
-                            );   
+                            );
+                            
+                            
                         }
                     } catch (VATCheckUnavailableException $e) {
                         // The VAT check API is unavailable...
