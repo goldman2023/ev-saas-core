@@ -100,22 +100,7 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => [], // always show, independent of permissions
                     ],
-                    [
-                        'label' => translate('Billing Portal'),
-                        'icon' => 'heroicon-o-credit-card',
-                        'route' => route('stripe.portal_session'),
-                        'route_name' => 'stripe.portal_session',
-                        'is_active' => areActiveRoutes(['stripe.portal_session']),
-                        'user_types' => User::$user_types,
-                        'permissions' => [], // always show, independent of permissions
-                        'badge' => [
-                            'class' => 'badge-info',
-                            'content' => function () {
 
-                                return 'New';
-                            },
-                        ],
-                    ],
                     [
                         'label' => translate('Chat'),
                         'icon' => 'heroicon-o-chat',
@@ -373,6 +358,22 @@ class EVService
                         'is_active' => areActiveRoutes(['my.account.settings']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
+                    ],
+                    [
+                        'label' => translate('Billing Portal'),
+                        'icon' => 'heroicon-o-credit-card',
+                        'route' => route('stripe.portal_session'),
+                        'route_name' => 'stripe.portal_session',
+                        'is_active' => areActiveRoutes(['stripe.portal_session']),
+                        'user_types' => User::$user_types,
+                        'permissions' => [], // always show, independent of permissions
+                        // 'badge' => [
+                        //     'class' => 'badge-info',
+                        //     'content' => function () {
+
+                        //         return 'New';
+                        //     },
+                        // ],
                     ],
 
 
