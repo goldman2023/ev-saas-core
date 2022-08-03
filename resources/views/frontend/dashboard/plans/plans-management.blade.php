@@ -34,8 +34,6 @@
             <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
                 :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
         </div>
-
-
     @endif
 
     <x-dashboard.widgets.customer.pricing-table :plans="$plans">
