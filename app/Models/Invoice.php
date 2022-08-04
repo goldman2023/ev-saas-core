@@ -93,7 +93,7 @@ class Invoice extends WeBaseModel
         // Invoices are real if is_temp is 0/false
         return $query->where('is_temp', '=', 0);
     }
-    
+
     /*
      * Scope searchable parameters
      */
@@ -165,7 +165,7 @@ class Invoice extends WeBaseModel
     public function setRealInvoiceNumber() {
         if($this->is_temp === false && $this->total_price > 0) {
             $this->real_invoice_prefix = get_tenant_setting('invoice_prefix');
-            
+
             $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('is_temp', 0)->latest()->first()?->real_invoice_number ?? 0) + 1;
         }
     }
@@ -236,7 +236,7 @@ class Invoice extends WeBaseModel
 
             if(!empty($country) && !empty(\Countries::get(code: $country))) {
                 if($country === 'LT') {
-                    
+
                 } else {
                     if(\Countries::isEU($country)) {
                         $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
@@ -244,11 +244,11 @@ class Invoice extends WeBaseModel
                         $notes[] = 'PVMĮ 13 str. 14 d.';
                     }
                 }
-                
+
             }
         }
 
-        
+
         $notes = implode("<br>", $notes);
 
 
@@ -266,7 +266,7 @@ class Invoice extends WeBaseModel
             ],
         ]);
 
-        
+
         $customer = new Party([
             'name'          => $this->billing_first_name.' '.$this->billing_last_name,
             'address'       => $this->billing_address.', '.$this->billing_zip,
@@ -274,7 +274,15 @@ class Invoice extends WeBaseModel
             'custom_fields' => $customer_custom_fields,
         ]);
 
+        $invoice_name = "VAT Invoice";
+        /* TODO: Should invoice name be "Invoice" if tax is 0? */
+        /* if($this->tax < 0) {
+            $invoice_name = "VAT Invoice";
+        } */
+
+
         $invoice = LaravelInvoice::make('Invoice')
+        ->name($invoice_name)
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             // ->sequence()
             ->serialNumberFormat('{SERIES}')
