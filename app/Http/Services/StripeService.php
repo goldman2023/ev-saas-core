@@ -1478,10 +1478,19 @@ class StripeService
 
             $invoice->due_date = $stripe_invoice->due_date ?? null;
 
-            $invoice->base_price = $stripe_invoice->subtotal / 100;
-            $invoice->discount_amount = $order->discount_amount;
-            $invoice->subtotal_price = $stripe_invoice->subtotal / 100; // take from stripe and divide by 100
-            $invoice->total_price = $stripe_invoice->total / 100; // take from stripe and divide by 100
+            if($stripe_invoice->amount_due > 0) {
+                $invoice->base_price = $stripe_invoice->subtotal / 100;
+                $invoice->discount_amount = $order->discount_amount;
+                $invoice->subtotal_price = $stripe_invoice->subtotal / 100;
+                $invoice->total_price = $stripe_invoice->total / 100;
+            } else {
+                // If amount due is 0, make invoice totals 0!!!!
+                $invoice->base_price = 0;
+                $invoice->discount_amount = 0;
+                $invoice->subtotal_price = 0;
+                $invoice->total_price = 0;
+            }
+            
             // TODO: What happens when you downgrade???? Total/Subtotal are prorated BUT the proration is in user favor!
             // NOTE: When user downgrade, stripe invoice creates proration in user's favor, and the amount in invoice is the difference between two plans.
             // TODO: How to display this?
@@ -1526,6 +1535,8 @@ class StripeService
         $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
         $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
         $meta[$this->mode_prefix .'stripe_billing_reason'] = $stripe_invoice->billing_reason ?? '';
+        $meta[$this->mode_prefix .'stripe_invoice_data'] = $stripe_invoice->toArray();
+
 
         // On subscription_cycle, this is probably empty, but let it be just in case
         if(!empty($stripe_invoice->payment_intent ?? null)) {
@@ -1888,8 +1899,10 @@ class StripeService
                 // TODO: How to align one-time payments invoice numbers with stripe if stripe doesn't create an invoice for one-time payment???
                 $invoice->invoice_number = Invoice::generateInvoiceNumber($order->billing_first_name, $order->billing_last_name, $order->billing_company);
             } else if($session->mode === 'subscription') {
-                $invoice->payment_status = PaymentStatusEnum::pending()->value; // Change status to 'pending' because status will truly change on 'invoice.paid' webhook
-                $invoice->invoice_number = $invoice->invoice_number;
+                if($invoice->payment_status !== PaymentStatusEnum::paid()->value) {
+                    $invoice->payment_status = PaymentStatusEnum::pending()->value; // Change status to 'pending' because status will truly change on 'invoice.paid' webhook
+                    $invoice->invoice_number = $invoice->invoice_number;
+                }
             }
 
             $invoice->tax = $session->total_details->amount_tax / 100;

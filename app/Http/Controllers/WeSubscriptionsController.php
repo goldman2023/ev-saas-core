@@ -47,6 +47,7 @@ class WeSubscriptionsController extends Controller
                     $updated_stripe_subscription = $stripe->subscriptions->update(
                         $stripe_sub_id,
                         [
+                            'proration_behavior' => 'always_invoice',
                             'items' => [
                                 [
                                     'id' => $si_to_update,

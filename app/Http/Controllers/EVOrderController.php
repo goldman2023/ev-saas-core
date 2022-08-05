@@ -67,7 +67,7 @@ class EVOrderController extends Controller
 
             throw new \Exception();
         } catch(\Exception $e) {
-            dd($e);
+            // dd($e);
             abort(404);
         }
     }
