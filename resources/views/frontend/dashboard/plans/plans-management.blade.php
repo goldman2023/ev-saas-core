@@ -59,6 +59,7 @@
         @endphp
         <x-system.form-modal id="change-plan-confirmation-modal" title="{{ translate('Are you sure you want to change plan?') }}" class="!max-w-2xl" title-class="text-20 font-semibold">
             <div class="w-full" x-data="{
+                in_process: false,
                 subscription_id: null,
                 new_plan: null,
                 interval: null,
@@ -79,8 +80,8 @@
                     wetch.get(invoiceProjectionUrl)
                     .then(data => {
                         if(data.status === 'success') {
-                            this.total_projected_price = FX.formatPrice(data.data.amount_remaining / 100, 2);
-                            this.total_annual_projected_price = FX.formatPrice(data.data.amount_remaining / 100, 2);
+                            this.total_projected_price = FX.formatPrice(data.data.total / 100, 2);
+                            this.total_annual_projected_price = FX.formatPrice(data.data.total / 100, 2);
                         } else {
 
                         }
@@ -111,7 +112,7 @@
                     getProjectedUpcomingInvoice();
                 }
             ">
-                <div class="pt-2 pb-4">
+                <div class="pt-2 pb-4" :class="{'opacity-30 pointer-events-none': in_process}">
 
                     <div class="" x-show="!trial">
                         {{-- TODO: Add php FX service equivalent to JS (same as IMGProxy) --}}
@@ -136,7 +137,7 @@
                     </div>
                     
                 </div>
-                <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="changePlan()" >
+                <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="!in_process ? changePlan() : event.preventDefault()" >
                     {{ translate('Change plan') }}
                 </button>
             </div>

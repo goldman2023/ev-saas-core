@@ -8,7 +8,7 @@ use App\Traits\HasDataColumn;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use StripeService;
 use LaravelDaily\Invoices\Invoice as LaravelInvoice;
 use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
@@ -93,7 +93,7 @@ class Invoice extends WeBaseModel
         // Invoices are real if is_temp is 0/false
         return $query->where('is_temp', '=', 0);
     }
-
+    
     /*
      * Scope searchable parameters
      */
@@ -165,7 +165,7 @@ class Invoice extends WeBaseModel
     public function setRealInvoiceNumber() {
         if($this->is_temp === false && $this->total_price > 0) {
             $this->real_invoice_prefix = get_tenant_setting('invoice_prefix');
-
+            
             $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('is_temp', 0)->latest()->first()?->real_invoice_number ?? 0) + 1;
         }
     }
@@ -173,18 +173,6 @@ class Invoice extends WeBaseModel
     public function generateInvoicePDF() {
         $shop = $this->shop;
         $user = $this->user;
-
-        $invoice_items = [];
-
-        foreach($this->order->order_items as $item) {
-            $invoice_items[] = (new InvoiceItem())
-                    ->title($item->name)
-                    ->description($item->excerpt)
-                    ->pricePerUnit($item->base_price)
-                    ->quantity($item->quantity)
-                    ->discount($item->discount_amount)
-                    ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
-        }
 
         $customer_custom_fields = [
             'city' => $this->billing_city,
@@ -195,20 +183,28 @@ class Invoice extends WeBaseModel
 
         // Tax notes
         // TODO: Add this part as a filter!!!!!!!!!
-
+        
         $notes = [];
 
-        $stripe_invoice = $this->getData(stripe_prefix('stripe_invoice_data'));
-        if(empty($stripe_invoice)) {
-            $stripe_invoice = \StripeService::stripe()->invoices->retrieve(
-                $this->getData(stripe_prefix('stripe_invoice_id')),
-                []
-            );
-
-            if(!empty($stripe_invoice)) {
-                $this->setData(stripe_prefix('stripe_invoice_data'), $stripe_invoice->toArray());
+        if($this->isFromStripe()) {
+            $stripe_invoice = $this->getData(stripe_prefix('stripe_invoice_data'));
+            
+            if(empty($stripe_invoice)) {
+                $stripe_invoice = \StripeService::stripe()->invoices->retrieve(
+                    $this->getData(stripe_prefix('stripe_invoice_id')),
+                    []
+                );
+                
+                if(!empty($stripe_invoice)) {
+                    $this->setData(stripe_prefix('stripe_invoice_data'), append_stripe_source($stripe_invoice->toArray()));
+                    $this->saveQuietly();
+                }
             }
+
+            // Get line items from stripe invoice
+            $stripe_line_items = collect($stripe_invoice['lines']['data']);
         }
+        
 
         if($user->entity === 'company') {
             // Company
@@ -232,11 +228,15 @@ class Invoice extends WeBaseModel
             }
         } else {
             // Individual
-            $country = $stripe_invoice['customer_address']['country'];
+            if($this->isFromStripe()) {
+                $country = $stripe_invoice['customer_address']['country'];
+            } else {
+                $country = $this->billing_country;
+            }
 
             if(!empty($country) && !empty(\Countries::get(code: $country))) {
                 if($country === 'LT') {
-
+                    
                 } else {
                     if(\Countries::isEU($country)) {
                         $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
@@ -244,11 +244,11 @@ class Invoice extends WeBaseModel
                         $notes[] = 'PVMĮ 13 str. 14 d.';
                     }
                 }
-
+                
             }
         }
 
-
+        
         $notes = implode("<br>", $notes);
 
 
@@ -266,7 +266,7 @@ class Invoice extends WeBaseModel
             ],
         ]);
 
-
+        
         $customer = new Party([
             'name'          => $this->billing_first_name.' '.$this->billing_last_name,
             'address'       => $this->billing_address.', '.$this->billing_zip,
@@ -274,15 +274,40 @@ class Invoice extends WeBaseModel
             'custom_fields' => $customer_custom_fields,
         ]);
 
-        $invoice_name = "VAT Invoice";
-        /* TODO: Should invoice name be "Invoice" if tax is 0? */
-        /* if($this->tax < 0) {
-            $invoice_name = "VAT Invoice";
-        } */
 
+        $invoice_items = [];
 
+        foreach($this->order->order_items as $item) {
+            if($this->isFromStripe()) {
+                $stripe_product_id = $item->subject->getCoreMeta(stripe_prefix('stripe_product_id'));
+
+                // In order to identify correct line item, 2 conditions must be met:
+                // 1. productID must be $stripe_product_id,
+                // 2. proration property must be FALSE (cuz invoice items can be proration items with the same $stripe_product_id),
+                $stripe_line_item = $stripe_line_items->filter( fn($item) => $item['price']['product'] === $stripe_product_id && $item['proration'] === false)->first();
+                
+                if(!empty($stripe_line_item)) {
+                    $invoice_items[] = (new InvoiceItem())
+                        ->title($item->name)
+                        ->description($item->excerpt)
+                        ->pricePerUnit($item->base_price)
+                        ->quantity($stripe_line_item['quantity'])
+                        ->discount($item->discount_amount)
+                        ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
+                }                
+            } else {
+                $invoice_items[] = (new InvoiceItem())
+                    ->title($item->name)
+                    ->description($item->excerpt)
+                    ->pricePerUnit($item->base_price)
+                    ->quantity($item->quantity)
+                    ->discount($item->discount_amount)
+                    ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
+            }
+            
+        }
+        
         $invoice = LaravelInvoice::make('Invoice')
-        ->name($invoice_name)
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             // ->sequence()
             ->serialNumberFormat('{SERIES}')
@@ -301,8 +326,24 @@ class Invoice extends WeBaseModel
             ->currencyDecimalPoint(',')
             ->filename(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             ->addItems($invoice_items)
-            ->totalTaxes($this->tax)
             ->notes($notes);
+
+            if($this->isFromStripe()) {
+                // dd($stripe_invoice);
+                if($stripe_invoice['starting_balance'] > 0) {
+                    $invoice->totalDiscount( abs($stripe_invoice['starting_balance']) / 100 );
+                }
+
+                $invoice
+                    // ->totalDiscount( ($stripe_invoice['subtotal_excluding_tax'] / 100) - ($stripe_invoice['total_excluding_tax'] / 100) )
+                    ->taxableAmount($stripe_invoice['total_excluding_tax'] / 100)
+                    ->totalTaxes($stripe_invoice['tax'] / 100)
+                    ->totalAmount($stripe_invoice['total'] / 100);
+            } else {
+                $invoice
+                    ->totalTaxes($this->tax);
+            }
+
             // ->logo(public_path('vendor/invoices/sample-logo.png'))
             // You can additionally save generated invoice to configured disk
             // ->save('public');
@@ -310,8 +351,20 @@ class Invoice extends WeBaseModel
         return $invoice->stream();
     }
 
+    public function getRealTotalPrice($format = true) {
+        if(is_array($invoice = $this->getData(stripe_prefix('stripe_invoice_data')))) {
+            return $format ? \FX::formatPrice($invoice['amount_due'] / 100) : $invoice['amount_due'] / 100;
+        }
+
+        return $this->total_price;
+    }
+
     public function isTestMode() {
-        return $invoice->keyExistsInData('test_stripe_invoice_id');
+        return $this->keyExistsInData('test_stripe_invoice_id');
+    }
+
+    public function isFromStripe() {
+        return $this->keyExistsInData('test_stripe_invoice_id') || $this->keyExistsInData('live_stripe_invoice_id');
     }
 
 //    TODO: ORDER TRACKING NUMBER!!!

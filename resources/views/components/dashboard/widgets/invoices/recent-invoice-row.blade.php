@@ -42,7 +42,11 @@
 
 
 <x-livewire-tables::table.cell class="align-middle text-left">
-    <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
+    <strong class="text-14">
+
+        {{ $row->getRealTotalPrice() }}
+    
+    </strong>
 </x-livewire-tables::table.cell>
 
 
