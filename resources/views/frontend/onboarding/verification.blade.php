@@ -242,7 +242,7 @@
             </div>
             <div class="mb-6 text-center">
                 <img class="inline-block max-w-[220px]"
-                    src="https://ev-saas.fra1.digitaloceanspaces.com/uploads/c71c779f-d325-4175-8b55-7d31b6f21257/1648825121_qr_4gwbINfaF1wd4o09AB.png" />
+                    src="https://businesspress.fra1.digitaloceanspaces.com/uploads/c71c779f-d325-4175-8b55-7d31b6f21257/1648825121_qr_4gwbINfaF1wd4o09AB.png" />
 
             </div>
             <div class="mb-6 relative">

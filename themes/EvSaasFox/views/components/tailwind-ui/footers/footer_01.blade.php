@@ -30,7 +30,7 @@
             </div>
             <div class="col-span-1 lg:col-span-2 xl:mt-0 text-right">
                 <x-tenant.system.image alt="{{ get_site_name() }} logo" class="ml-auto h-20 w-auto sm:h-20"
-                image="https://ev-saas.fra1.digitaloceanspaces.com/uploads/5469dff5-3707-417d-b152-d9950de45daf/1648806310_512_ae4e1a3771304b463cf4d72c68e44722.jpeg">
+                image="https://businesspress.fra1.digitaloceanspaces.com/uploads/5469dff5-3707-417d-b152-d9950de45daf/1648806310_512_ae4e1a3771304b463cf4d72c68e44722.jpeg">
             </x-tenant.system.image>
             </div>
         </div>

@@ -9,8 +9,8 @@
     <div class="flex flex-0 items-center -space-x-1.5 ">
         <a href="/page/downloads" class="" target="blank" >
 
-        <img src="https://ev-saas.fra1.digitaloceanspaces.com/uploads/bf9205a4-3473-4472-953e-ec6a9dabbe85/1651855528_Download-Pix-Pro-Photogrammetry-Software.gif"
-            class="flex-0 w-full object-cover ">
+        <img src="https://businesspress.fra1.digitaloceanspaces.com/uploads/bf9205a4-3473-4472-953e-ec6a9dabbe85/1651855528_Download-Pix-Pro-Photogrammetry-Software.gif"
+            class="flex-0 w-full object-cover">
         </a>
     </div>
     <div>
