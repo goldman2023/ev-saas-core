@@ -196,7 +196,7 @@ class Invoice extends WeBaseModel
                 );
                 
                 if(!empty($stripe_invoice)) {
-                    $this->setData(stripe_prefix('stripe_invoice_data'), $stripe_invoice->toArray());
+                    $this->setData(stripe_prefix('stripe_invoice_data'), append_stripe_source($stripe_invoice->toArray()));
                     $this->saveQuietly();
                 }
             }
@@ -349,6 +349,14 @@ class Invoice extends WeBaseModel
             // ->save('public');
 
         return $invoice->stream();
+    }
+
+    public function getRealTotalPrice($format = true) {
+        if(is_array($invoice = $this->getData(stripe_prefix('stripe_invoice_data')))) {
+            return $format ? \FX::formatPrice($invoice['amount_due'] / 100) : $invoice['amount_due'] / 100;
+        }
+
+        return $this->total_price;
     }
 
     public function isTestMode() {

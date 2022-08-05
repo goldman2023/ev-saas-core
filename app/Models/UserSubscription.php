@@ -124,7 +124,7 @@ class UserSubscription extends WeBaseModel
 
         if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
             if($invoice['invoice_source'] === 'stripe') {
-                return $format ? \FX::formatPrice($invoice['amount_remaining'] / 100) : $invoice['amount_remaining'] / 100;
+                return $format ? \FX::formatPrice($invoice['amount_due'] / 100) : $invoice['amount_due'] / 100;
             } else if($invoice['invoice_source'] === 'we') {
                 return $format ? \FX::formatPrice($invoice['total_price'] ?? 0) : ($invoice['total_price'] ?? 0);
             }
