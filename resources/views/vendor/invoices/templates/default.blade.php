@@ -353,7 +353,12 @@
             @if($invoice->hasItemOrInvoiceTax())
             <tr>
                 <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
-                <td class="text-right pl-0">{{ __('invoices::invoice.total_taxes') }}</td>
+                @if(!empty($invoice->getCustomData()['total_taxes_label'] ?? null))
+                    <td class="text-right pl-0">{{ $invoice->getCustomData()['total_taxes_label'] }}</td>
+                @else
+                    <td class="text-right pl-0">{{ __('invoices::invoice.total_taxes') }}</td>
+                @endif
+
                 <td class="text-right pr-0">
                     {{ $invoice->formatCurrency($invoice->total_taxes) }}
                 </td>

@@ -18,6 +18,7 @@ use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\CRMController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\WeSubscriptionsController;
+use App\Http\Controllers\WeInvoiceController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\Integrations\IntegrationsController;
 use App\Http\Controllers\Integrations\WooCommerceController;
@@ -112,6 +113,8 @@ Route::middleware([
         Route::post('/orders/details', [EVOrderController::class, 'order_details'])->name('orders.details');
         Route::post('/orders/update_delivery_status', [EVOrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
         Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
+        
+        Route::get('/invoices', [WeInvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoice/{id}/download', [EVOrderController::class, 'download_invoice'])->name('invoice.download');
 
         /* My Purchases/Wishlist/Viewed Items */

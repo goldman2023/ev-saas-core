@@ -153,6 +153,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'attributes.index',
                     'categories.index',
                     'orders.index',
+                    'invoices.index',
                     'blog.posts.index',
                     'pages.index',
                     'crm.all_customers',

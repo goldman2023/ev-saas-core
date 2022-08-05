@@ -1,7 +1,7 @@
 {{-- PixPro API --}}
 <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
     <div class="flex-1 flex flex-col p-8">
-        <img class="mx-auto h-[32px]" src="https://images.we-saas.com/insecure/fill/0/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/200203e2-4466-464d-a2fe-df1bc05bc2fa/1649756663_Logo%20(6).svg@webp" loading="lazy">
+        <img class="mx-auto h-[32px]" src="https://images.we-saas.com/insecure/fill/0/0/ce/0/plain/https://businesspress.fra1.digitaloceanspaces.com/uploads/200203e2-4466-464d-a2fe-df1bc05bc2fa/1649756663_Logo%20(6).svg@webp" loading="lazy">
         <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ translate('PixPro API') }}</h3>
     </div>
     <div>

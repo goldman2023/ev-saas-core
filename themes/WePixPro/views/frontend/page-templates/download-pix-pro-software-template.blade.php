@@ -17,7 +17,7 @@
 
             <div class="relative mb-10 mx-auto max-w-max">
                 <img class="relative z-10"
-                    src="https://ev-saas.fra1.digitaloceanspaces.com/uploads/bf9205a4-3473-4472-953e-ec6a9dabbe85/1651855528_Download-Pix-Pro-Photogrammetry-Software.gif"
+                    src="https://businesspress.fra1.digitaloceanspaces.com/uploads/bf9205a4-3473-4472-953e-ec6a9dabbe85/1651855528_Download-Pix-Pro-Photogrammetry-Software.gif"
                     alt="">
             </div>
 

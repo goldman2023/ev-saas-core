@@ -51,6 +51,14 @@ return [
             'throw' => false,
         ],
 
+        'shared_public' => [
+            'driver' => 'local',
+            'root' => base_path().'/../shared/',
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         'google' => [
             'driver' => 'google',
             'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
@@ -88,8 +96,8 @@ return [
     ],
 
     'disk_types' => [
-        'local' => ['local', 'public', 'backup-local'],
-        'cloud' => ['s3', 'do', 'google'],
+        'local' => ['local', 'public', 'backup-local', 'shared_public'],
+        'cloud' => ['s3', 'do', 'google', 'shared_public'],
         'remote_plain' => [], // This is for 'sftp', 'ftp' etc.
     ],
 

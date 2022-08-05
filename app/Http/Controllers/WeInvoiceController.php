@@ -8,7 +8,7 @@ use App\Models\Invoice;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class EVOrderController extends Controller
+class WeInvoiceController extends Controller
 {
     public function index()
     {
@@ -16,9 +16,9 @@ class EVOrderController extends Controller
             return redirect()->route('my.orders.all');
         }
 
-        $orders_count = MyShop::getShop()->orders()->count(); // Reminder: there is a global scope to add shop_id
+        $invoices_count = MyShop::getShop()->invoices()->count(); // Reminder: there is a global scope to add shop_id
 
-        return view('frontend.dashboard.orders.index', compact('orders_count'));
+        return view('frontend.dashboard.invoices.index', compact('invoices_count'));
     }
 
     public function create()

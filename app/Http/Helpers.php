@@ -1132,6 +1132,8 @@ if (!function_exists('getStorageBaseURL')) {
     {
         if (config('filesystems.default') === 'do') {
             return config('filesystems.disks.do.subdomain_endpoint') . '/';
+        } else if (config('filesystems.default') === 'shared_public') {
+            return config('filesystems.disks.shared_public.url'). '/';
         } else {
             return getBaseURL();
         }
@@ -1143,6 +1145,8 @@ if (!function_exists('getBucketBaseURL')) {
     {
         if (config('filesystems.default') === 'do') {
             return config('filesystems.disks.do.subdomain_endpoint') . '/';
+        } else if (config('filesystems.default') === 'shared_public') {
+            return config('filesystems.disks.shared_public.url'). '/';
         } else {
             return getBaseURL();
         }

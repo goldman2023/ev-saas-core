@@ -65,7 +65,7 @@
                     <div class="w-full md:hidden px-4">
                         <div class="relative max-w-max mx-auto">
                             <img class="absolute p-1 ml-11 top-1 left-0 z-10 h-52 object-cover"
-                                src="https://ev-saas.fra1.digitaloceanspaces.com/uploads/c71c779f-d325-4175-8b55-7d31b6f21257/1649656340_Screenshot%202022-04-11%20at%2008.50.38.png">
+                                src="https://businesspress.fra1.digitaloceanspaces.com/uploads/c71c779f-d325-4175-8b55-7d31b6f21257/1649656340_Screenshot%202022-04-11%20at%2008.50.38.png">
                             <img class="hidden h-56 mx-auto object-cover"
                                 src="/flex-ui-assets/images/headers/mockup-light1.png" alt="">
                         </div>
@@ -78,7 +78,7 @@
                     src="/flex-ui-assets/elements/circle4-violet.svg" alt="">
                 <img class="relative z-10" src="/flex-ui-assets/images/headers/mockup-light2.png" alt="">
                 <img class="absolute z-20 top-6 left-36 transform translate-x-4 max-h-[460px]"
-                    src="https://ev-saas.fra1.digitaloceanspaces.com/uploads/c71c779f-d325-4175-8b55-7d31b6f21257/1649656340_Screenshot%202022-04-11%20at%2008.50.38.png">
+                    src="https://businesspress.fra1.digitaloceanspaces.com/uploads/c71c779f-d325-4175-8b55-7d31b6f21257/1649656340_Screenshot%202022-04-11%20at%2008.50.38.png">
             </div>
         </div>
     </section>

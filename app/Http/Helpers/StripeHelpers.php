@@ -6,6 +6,12 @@ use App\Models\Product;
 use App\Models\CoreMeta;
 use App\Facades\StripeService;
 
+if (!function_exists('append_stripe_source')) {
+    function append_stripe_source($array) {
+        return array_merge(['invoice_source' => 'stripe'], $array);
+    }
+}
+
 if (!function_exists('stripe_prefix')) {
     function stripe_prefix($value = null) {
         if(!empty($value) && is_string($value)) {
