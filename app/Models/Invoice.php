@@ -27,7 +27,7 @@ class Invoice extends WeBaseModel
 
     protected $connection = 'tenant'; // Don't understand why this is necessary but it is! It should pick up tenant connection from Builder, but that's not working for Invoice model o_0
 
-    protected $fillables = ['is_temp', 'order_id', 'shop_id', 'user_id', 'payment_method_type', 'payment_method_id', 'invoice_number', 'email', 'billing_first_name','billing_last_name','billing_company', 'billing_address', 'billing_country',
+    protected $fillables = ['is_temp', 'mode', 'order_id', 'shop_id', 'user_id', 'payment_method_type', 'payment_method_id', 'invoice_number', 'email', 'billing_first_name','billing_last_name','billing_company', 'billing_address', 'billing_country',
                 'billing_state', 'billing_city', 'billing_zip', 'base_price', 'discount_amount', 'subtotal_price', 'total_price','shipping_cost', 'tax', 'payment_status',
                 'start_date', 'end_date', 'due_date', 'grace_period', 'viewed_by_customer', 'meta', 'note', 'created_at', 'updated_at'];
 
@@ -156,7 +156,6 @@ class Invoice extends WeBaseModel
     public function getRealInvoiceNumber($fallback = false) {
         if($fallback && empty($this->real_invoice_number)) {
             return $this->invoice_number;
-
         }
 
         return $this->real_invoice_prefix.str_pad((string) $this->real_invoice_number, 5, '0', STR_PAD_LEFT);
@@ -165,8 +164,12 @@ class Invoice extends WeBaseModel
     public function setRealInvoiceNumber() {
         if($this->is_temp === false && $this->total_price > 0) {
             $this->real_invoice_prefix = get_tenant_setting('invoice_prefix');
-            
-            $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('is_temp', 0)->latest()->first()?->real_invoice_number ?? 0) + 1;
+
+            if($this->mode === 'live') {
+                $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'live')->where('is_temp', 0)->latest()->first()?->real_invoice_number ?? 0) + 1;
+            } else {
+                $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'test')->where('is_temp', 0)->latest()->first()?->real_invoice_number ?? 0) + 1;
+            }
         }
     }
 
@@ -239,7 +242,7 @@ class Invoice extends WeBaseModel
                     
                 } else {
                     if(\Countries::isEU($country)) {
-                        $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
+                        // $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
                     } else {
                         $notes[] = 'PVMĮ 13 str. 14 d.';
                     }
@@ -297,7 +300,7 @@ class Invoice extends WeBaseModel
                 }                
             } else {
                 $invoice_items[] = (new InvoiceItem())
-                    ->title($item->name)
+                    ->title(translate(''))
                     ->description($item->excerpt)
                     ->pricePerUnit($item->base_price)
                     ->quantity($item->quantity)
@@ -305,6 +308,16 @@ class Invoice extends WeBaseModel
                     ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
             }
             
+        }
+
+        if($this->isFromStripe()) {
+            $invoice_items[] = (new InvoiceItem())
+                ->title($item->name)
+                ->description($item->excerpt)
+                ->pricePerUnit($item->base_price)
+                ->quantity($stripe_line_item['quantity'])
+                ->discount($item->discount_amount)
+                ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
         }
         
         $invoice = LaravelInvoice::make('Invoice')
@@ -329,10 +342,10 @@ class Invoice extends WeBaseModel
             ->notes($notes);
 
             if($this->isFromStripe()) {
-                // dd($stripe_invoice);
-                if($stripe_invoice['starting_balance'] > 0) {
-                    $invoice->totalDiscount( abs($stripe_invoice['starting_balance']) / 100 );
-                }
+                // dd($stripe_invoice['starting_balance']);
+                // if($stripe_invoice['starting_balance'] < 0) {
+                //     $invoice->totalDiscount( abs($stripe_invoice['starting_balance']) / 100 );
+                // }
 
                 $invoice
                     // ->totalDiscount( ($stripe_invoice['subtotal_excluding_tax'] / 100) - ($stripe_invoice['total_excluding_tax'] / 100) )

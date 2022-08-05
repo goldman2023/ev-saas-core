@@ -1213,6 +1213,7 @@ class StripeService
             * Create Invoice
             */
             $invoice = new Invoice();
+            $invoice->mode = Payments::isStripeLiveMode() ? 'live' : 'test';
             $invoice->is_temp = true; // MUST BE TEMP
             $invoice->payment_method_type = (Payments::stripe())::class;
             $invoice->payment_method_id = Payments::stripe()->id;
@@ -1454,6 +1455,7 @@ class StripeService
             $invoice = Invoice::withoutGlobalScopes()->where('invoice_number', $stripe_invoice->number)->first(); // get invoice by number if it exists
 
             $invoice = empty($invoice) ? new Invoice() : $invoice;
+            $invoice->mode = Payments::isStripeLiveMode() ? 'live' : 'test';
             $invoice->is_temp = false;
             $invoice->payment_method_type = (Payments::stripe())::class;
             $invoice->payment_method_id = Payments::stripe()->id;
@@ -1479,10 +1481,16 @@ class StripeService
             $invoice->due_date = $stripe_invoice->due_date ?? null;
 
             if($stripe_invoice->amount_due > 0) {
-                $invoice->base_price = $stripe_invoice->subtotal / 100;
-                $invoice->discount_amount = $order->discount_amount;
-                $invoice->subtotal_price = $stripe_invoice->subtotal / 100;
-                $invoice->total_price = $stripe_invoice->total / 100;
+                $invoice->base_price = $stripe_invoice->subtotal_excluding_tax / 100;
+
+                if($stripe_invoice->starting_balance < 0) {
+                    $invoice->discount_amount = abs($stripe_invoice->starting_balance) / 100; // incudes proration as discount
+                } else {
+                    $invoice->discount_amount = $order->discount_amount;
+                }
+
+                $invoice->subtotal_price = $stripe_invoice->subtotal_excluding_tax / 100;
+                $invoice->total_price = $stripe_invoice->amount_due / 100; // This is basically most important...it's the end price user must pay
             } else {
                 // If amount due is 0, make invoice totals 0!!!!
                 $invoice->base_price = 0;
