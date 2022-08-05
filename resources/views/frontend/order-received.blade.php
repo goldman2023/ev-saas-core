@@ -141,9 +141,11 @@
           @if(!$order->is_temp)
             <div class="col-span-3 md:col-span-1 py-4 md:py-6 space-y-0 space-x-3 md:space-x-0 md:space-y-3 border-b border-gray-200 md:border-none">
               {{-- @if(!empty($order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? null)) --}}
+                @if($order->invoices->first())
                 <a href="{{ route('invoice.download', $order->invoices->first()->id) }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
-                  {{ translate('Latest invoice') }}
+                    {{ translate('Latest invoice') }}
                 </a>
+                @endif
               {{-- @endif --}}
 
               @if($order->order_items?->first()?->subject?->isSubscribable() ?? false)
@@ -236,7 +238,7 @@
 
                   <div class="w-full flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
                     <span class="text-14 text-gray-600 font-normal">
-                        {{ translate('Next payment due on') }} 
+                        {{ translate('Next payment due on') }}
                         <strong>
                           {{-- @dd($order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices) --}}
                           {{ \Carbon::createFromTimestamp($order->load(['invoices' => fn($query) => $query->withoutGlobalScopes()])->invoices->first()?->end_date)->format('d M, Y') }}
@@ -270,13 +272,13 @@
                   <dd class="text-gray-700">{{  \FX::formatPrice(0) }}</dd>
                 </div>
               @endif
-              
+
               <div class="flex justify-between pt-3 mb-1 border-t border-gray-200">
                 <dt class="font-semibold text-gray-900">{{ translate('Total') }}</dt>
                 <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
               </div>
             @endif
-            
+
           </dl>
         </div>
 
