@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use MyShop;
+use App\Enums\UserEntityEnum;
 use App\Builders\BaseBuilder;
 use App\Traits\HasDataColumn;
 use Illuminate\Support\Carbon;
@@ -91,7 +92,15 @@ class Invoice extends WeBaseModel
 
     public function scopeReal($query) {
         // Invoices are real if is_temp is 0/false
-        return $query->where('is_temp', '=', 0);
+        $query = $query->where('is_temp', '=', 0);
+
+        // if(\Payments::isStripeEnabled() && \Payments::isStripeLiveMode()) {
+        //     $query->where('mode', 'live');
+        // } else if(\Payments::isStripeEnabled() && !\Payments::isStripeLiveMode()) {
+        //     $query->where('mode', 'test');
+        // }
+
+        return $query;
     }
     
     /*
@@ -102,10 +111,12 @@ class Invoice extends WeBaseModel
         return $query->where(
             fn ($query) => $query->where('id', 'like', '%'.$term.'%')
                 ->orWhere('invoice_number', 'like', '%'.$term.'%')
+                ->orWhere('real_invoice_number', 'like', '%'.$term.'%') // TODO: How to search by real invoice number???
+                ->orWhere('real_invoice_prefix', 'like', '%'.$term.'%')
                 ->orWhere('email', 'like', '%'.$term.'%')
                 ->orWhere('billing_first_name', 'like', '%'.$term.'%')
                 ->orWhere('billing_last_name', 'like', '%'.$term.'%')
-                ->orWhere('payment_status', 'like', '%'.$term.'%')
+                // ->orWhere('payment_status', 'like', '%'.$term.'%')
                 ->orWhere('total_price', 'like', '%'.$term.'%')
         );
     }
@@ -199,7 +210,7 @@ class Invoice extends WeBaseModel
                 );
                 
                 if(!empty($stripe_invoice)) {
-                    $this->setData(stripe_prefix('stripe_invoice_data'), append_stripe_source($stripe_invoice->toArray()));
+                    $this->setData(stripe_prefix('stripe_invoice_data'), $stripe_invoice->toArray());
                     $this->saveQuietly();
                 }
             }
@@ -262,20 +273,29 @@ class Invoice extends WeBaseModel
                 'address' => get_tenant_setting('company_address'),
                 'city' => get_tenant_setting('company_city'),
                 'country' => get_tenant_setting('company_country'),
-                'postal_code' => get_tenant_setting('company_postal_code'),
+                'postal code' => get_tenant_setting('company_postal_code'),
                 'email' => get_tenant_setting('company_email'),
                 'VAT no.' => get_tenant_setting('company_vat'),
                 'Company no.' => get_tenant_setting('company_number'),
             ],
         ]);
 
+        if($this->user->entity === UserEntityEnum::company()->value) {
+            $customer = new Party([
+                'name'          => !empty($this->user->getUserMeta('company_name')) ? $this->user->getUserMeta('company_name') : $this->billing_first_name.' '.$this->billing_last_name,
+                'address'       => $this->billing_address.', '.$this->billing_zip,
+                // 'code'          => '#'.$this->id,
+                'custom_fields' => $customer_custom_fields,
+            ]);
+        } else {
+            $customer = new Party([
+                'name'          => $this->user->name.' '.$this->user->surname,
+                'address'       => $this->billing_address.', '.$this->billing_zip,
+                // 'code'          => '#'.$this->id,
+                'custom_fields' => $customer_custom_fields,
+            ]);
+        }
         
-        $customer = new Party([
-            'name'          => $this->billing_first_name.' '.$this->billing_last_name,
-            'address'       => $this->billing_address.', '.$this->billing_zip,
-            // 'code'          => '#'.$this->id,
-            'custom_fields' => $customer_custom_fields,
-        ]);
 
 
         $invoice_items = [];
@@ -290,8 +310,14 @@ class Invoice extends WeBaseModel
                 $stripe_line_item = $stripe_line_items->filter( fn($item) => $item['price']['product'] === $stripe_product_id && $item['proration'] === false)->first();
                 
                 if(!empty($stripe_line_item)) {
+                    $li_name = $item->name;
+
+                    if($item->subject->isSubscribable()) {
+                        $li_name = $item->name.' / '.$stripe_line_item['price']['recurring']['interval'];
+                    }
+
                     $invoice_items[] = (new InvoiceItem())
-                        ->title($item->name)
+                        ->title($li_name)
                         ->description($item->excerpt)
                         ->pricePerUnit($item->base_price)
                         ->quantity($stripe_line_item['quantity'])
@@ -310,17 +336,37 @@ class Invoice extends WeBaseModel
             
         }
 
+        // Append Credit discounts and adjustments if there's any proration
         if($this->isFromStripe()) {
-            $invoice_items[] = (new InvoiceItem())
-                ->title($item->name)
-                ->description($item->excerpt)
-                ->pricePerUnit($item->base_price)
-                ->quantity($stripe_line_item['quantity'])
-                ->discount($item->discount_amount)
-                ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
+            if($stripe_invoice['starting_balance'] < 0) {
+                $invoice_items[] = (new InvoiceItem())
+                    ->title(translate('Credit adjustments'))
+                    ->description(translate('Sum of previous prorated credits'))
+                    ->pricePerUnit($stripe_invoice['starting_balance'] / 100)
+                    ->quantity(1)
+                    ->subTotalPrice($stripe_invoice['starting_balance'] / 100);
+            }   
+        }
+
+        if(empty($total_taxes_label = $this->getData(stripe_prefix('total_taxes_label')))) {
+            if(!empty($stripe_invoice['total_tax_amounts']) && !empty($stripe_invoice['total_tax_amounts'][0]['tax_rate'] ?? null)) {
+                // Get tax rate for this invoice and store it
+                $tax_rate = StripeService::stripe()->taxRates->retrieve(
+                    $stripe_invoice['total_tax_amounts'][0]['tax_rate'],
+                    []
+                );
+    
+                $total_taxes_label = !empty($tax_rate->description) ? $tax_rate->description : $tax_rate->display_name.' '.$tax_rate->jurisdiction;
+                $total_taxes_label = $total_taxes_label.' ('.(int) $tax_rate->percentage.'%)';
+
+                $this->setData(stripe_prefix('total_taxes_label'), $total_taxes_label);
+                $this->saveQuietly();    
+            }
         }
         
-        $invoice = LaravelInvoice::make('Invoice')
+        
+        
+        $invoice = LaravelInvoice::make('VAT Invoice')
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             // ->sequence()
             ->serialNumberFormat('{SERIES}')
@@ -339,6 +385,7 @@ class Invoice extends WeBaseModel
             ->currencyDecimalPoint(',')
             ->filename(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             ->addItems($invoice_items)
+            ->setCustomData(['total_taxes_label' => $total_taxes_label])
             ->notes($notes);
 
             if($this->isFromStripe()) {
@@ -351,7 +398,7 @@ class Invoice extends WeBaseModel
                     // ->totalDiscount( ($stripe_invoice['subtotal_excluding_tax'] / 100) - ($stripe_invoice['total_excluding_tax'] / 100) )
                     ->taxableAmount($stripe_invoice['total_excluding_tax'] / 100)
                     ->totalTaxes($stripe_invoice['tax'] / 100)
-                    ->totalAmount($stripe_invoice['total'] / 100);
+                    ->totalAmount($stripe_invoice['amount_due'] / 100);
             } else {
                 $invoice
                     ->totalTaxes($this->tax);
@@ -369,7 +416,7 @@ class Invoice extends WeBaseModel
             return $format ? \FX::formatPrice($invoice['amount_due'] / 100) : $invoice['amount_due'] / 100;
         }
 
-        return $this->total_price;
+        return $format ? \FX::formatPrice($this->total_price) : $this->total_price;
     }
 
     public function isTestMode() {

@@ -208,6 +208,24 @@ class EVService
                             },
                         ],
                     ],
+                    [
+                        'label' => translate('Invoices'),
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('invoices.index'),
+                        'route_name' => 'invoices.index',
+                        'is_active' => areActiveRoutes(['invoices.index']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_orders'],
+                        'badge' => [
+                            'class' => 'badge-danger',
+                            'content' => function () {
+                                return 0;
+                                // return 0;
+
+                                // return MyShop::getShop()->invoices()->where('viewed', 0)->count();
+                            },
+                        ],
+                    ],
                    /*  [
                         'label' => translate('Leads'),
                         'icon' => 'heroicon-o-calendar',
