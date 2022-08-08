@@ -534,7 +534,7 @@ if (!function_exists('pix_pro_update_license')) {
             }
             
             // Update licenses statuses AND expiration_date(s) by looping through subscription licenses
-            pix_pro_update_licenses_status($subscription);
+            pix_pro_update_licenses_status($subscription, $stripe_invoice);
         }
     }
 }
@@ -625,7 +625,7 @@ if (!function_exists('pix_pro_update_single_license')) {
 
 // UPDATE LICENSE STATUS
 if (!function_exists('pix_pro_update_licenses_status')) {
-    function pix_pro_update_licenses_status($subscription) {
+    function pix_pro_update_licenses_status($subscription, $stripe_invoice) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_status/';
         
         if (!empty($subscription)) {
@@ -640,7 +640,7 @@ if (!function_exists('pix_pro_update_licenses_status')) {
 
             $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
             
-            if(!empty($pix_pro_user['user_id'] ?? null)) {
+            if(!empty($pix_pro_user['user_id'] ?? null) && $stripe_invoice->paid) {
                 foreach($subscription->licenses as $license) {
                     $body = pix_pro_add_auth_params([
                         "UserEmail" => $pix_pro_user['email'],
@@ -712,7 +712,7 @@ if (!function_exists('pix_pro_extend_licenses')) {
 
             $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
 
-            if(!empty($pix_pro_user['user_id'] ?? null)) {
+            if(!empty($pix_pro_user['user_id'] ?? null) && $stripe_invoice->paid) {
                 $body = pix_pro_add_auth_params([
                     "UserEmail" => $pix_pro_user['email'],
                     "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
