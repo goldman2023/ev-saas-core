@@ -12,6 +12,8 @@ use Log;
 
 class InvoicesObserver
 {
+    public $afterCommit = true;
+
     /**
      * Handle the Invoice "created" event.
      *
