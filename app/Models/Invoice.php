@@ -355,7 +355,7 @@ class Invoice extends WeBaseModel
                     $stripe_invoice['total_tax_amounts'][0]['tax_rate'],
                     []
                 );
-    
+
                 $total_taxes_label = !empty($tax_rate->description) ? $tax_rate->description : $tax_rate->display_name.' '.$tax_rate->jurisdiction;
                 $total_taxes_label = $total_taxes_label.' ('.(int) $tax_rate->percentage.'%)';
 
