@@ -1,7 +1,7 @@
 @component('mail::message')
 # New Invoice
  
-@lang('New invoice has been issued: #') {{ $invoice->id }} 
+@lang('New invoice has been issued: #') {{ $invoice->getRealInvoiceNumber() }} 
 
 @component('mail::table')
 | # | ID | Item name | Price | Quantity | Total
@@ -11,9 +11,22 @@
 @endforeach
 @endcomponent
 
-<strong>Subtotal:</strong> <span>{{ \FX::formatPrice($invoice->order->subtotal_price) }}</span> <br>
-<strong>Tax:</strong> <span>{{ \FX::formatPrice($invoice->order->tax) }}</span> <br>
-<strong>Total:</strong> <span>{{ \FX::formatPrice($invoice->order->total_price) }}</span> <br>
+@component('mail::panel')
+@if($invoice->isFromStripe())
+    @php
+        $stripe_invoice = $invoice->getData(stripe_prefix('stripe_invoice_data'));
+    @endphp
+    <strong>Subtotal:</strong> <span>{{ \FX::formatPrice($stripe_invoice['total_excluding_tax'] / 100) }}</span> <br>
+    <strong>Tax:</strong> <span>{{ \FX::formatPrice($stripe_invoice['tax'] / 100) }}</span> <br>
+    <strong>Total:</strong> <span>{{ $invoice->getRealTotalPrice() }}</span> <br>
+@else
+    <strong>Subtotal:</strong> <span>{{ \FX::formatPrice($invoice->subtotal_price) }}</span> <br>
+    <strong>Tax:</strong> <span>{{ \FX::formatPrice($invoice->tax) }}</span> <br>
+    <strong>Total:</strong> <span>{{ $invoice->getRealTotalPrice() }}</span> <br>
+@endif
+@endcomponent
+
+
  
 @component('mail::button', ['url' => $invoice->order->getPermalink()])
 @lang('View Invoice')

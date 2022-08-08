@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Notifications\UserSubscription\ExtendedSubscription;
 use App\Notifications\UserSubscription\SubscriptionStatusChanged;
 use App\Notifications\UserSubscription\TrialStarted;
+use App\Notifications\UserSubscription\NonTrialSubscriptionStarted;
 
 
 use App\Notifications\Admin\GeneralTransactionalNotification;
@@ -30,6 +31,8 @@ class UserSubscriptionsObserver
             // Trial has started, send notification
             try {
                 $user_subscription->user->notify(new TrialStarted($user_subscription));
+                $user_subscription->setData('trial_started_email_sent', true);
+                $user_subscription->saveQuietly();
             } catch(\Exception $e) {
                 Log::error($e);
             }
@@ -67,28 +70,22 @@ class UserSubscriptionsObserver
         $user = $user_subscription->user;
         
         /**
-         * Theer few possible scenarios happening when subscription is updating:
+         * There are few possible scenarios happening when subscription is updating:
          * 1. Status changes (trial -> active, active -> inactive, active -> active_until_end)
          * 2. new end_date > old end_date - subscription is extended (cycled)
          * 3. ???
          */
-        $old_end_date = $user_subscription->getOriginal('end_date');
+        $uncasted_old_end_date = $user_subscription->getRawOriginal('end_date');
+        $casted_old_end_date = $user_subscription->getOriginal('end_date');
         $new_end_date = $user_subscription->end_date;
 
-        if ($user_subscription->isDirty('end_date') && !empty($old_end_date) && $new_end_date > $old_end_date) {
-            // This means that new end_date is about to be updated - should we send notification that subscription has been successfully extended?
+        if ($user_subscription->isDirty('end_date') && empty($uncasted_old_end_date) && $user_subscription->status !== 'trial') {
+            // This means that non-trial user_subscription is just created!
             try {
-                $user->notify(new ExtendedSubscription($user_subscription));
+                $user->notify(new NonTrialSubscriptionStarted($user_subscription));
             } catch(\Exception $e) {
                 Log::error($e);
             }
-        } else if($user_subscription->isDirty('status')) {
-            // Send notification on subscription status update!
-            try {
-                $user->notify(new SubscriptionStatusChanged($user_subscription)); 
-            } catch(\Exception $e) {
-                Log::error($e);
-            }          
         } else if($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time() && !$user_subscription->getData('trial_started_email_sent')) {
             // Trial has started, send notification
             try {
@@ -98,8 +95,21 @@ class UserSubscriptionsObserver
             } catch(\Exception $e) {
                 Log::error($e);
             }
+        } else if ($user_subscription->isDirty('end_date') && !empty($uncasted_old_end_date) && $new_end_date > $casted_old_end_date) {
+            // This means that new end_date is about to be updated - should we send notification that subscription has been successfully extended?
+            try {
+                $user->notify(new ExtendedSubscription($user_subscription));
+            } catch(\Exception $e) {
+                Log::error($e);
+            }
+        } else if($user_subscription->isDirty('status') && $user_subscription->getRawOriginal('status') !== $user_subscription->status) {
+            // Send notification on subscription status update!
+            try {
+                $user->notify(new SubscriptionStatusChanged($user_subscription)); 
+            } catch(\Exception $e) {
+                Log::error($e);
+            }          
         }
-
     }
 
     /**

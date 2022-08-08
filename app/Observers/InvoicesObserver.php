@@ -20,8 +20,8 @@ class InvoicesObserver
      */
     public function created(Invoice $invoice)
     {
-        // Fire only if Invoice is not temporary!
-        if(!$invoice->is_temp) {
+        // Fire only if Invoice is not temporary and price is bigger than 0!
+        if(!$invoice->is_temp && $invoice->getRealTotalPrice(format: false) > 0) {
             try {
                 $invoice->user->notify(new InvoiceCreated($invoice));
                 $invoice->setData('invoice_created_email_sent', true);
@@ -40,7 +40,7 @@ class InvoicesObserver
      */
     public function updated(Invoice $invoice)
     {
-        if(!$invoice->is_temp && !$invoice->getData('invoice_created_email_sent') && $invoice->total_price > 0) {
+        if(!$invoice->is_temp && !$invoice->getData('invoice_created_email_sent') && $invoice->getRealTotalPrice(format: false)) {
             try {
                 $invoice->user->notify(new InvoiceCreated($invoice));
                 $invoice->setData('invoice_created_email_sent', true);
@@ -49,7 +49,7 @@ class InvoicesObserver
                 Log::error($e->getMessage());
                 die(print_r($e));
             }
-        }
+        } 
     }
 
     /**

@@ -23,7 +23,9 @@
                 <h1 class="ftext-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{{ translate('Order') }}:
                     #{{ $order->id }}</h1>
 
-                    <span class="badge-dark ml-2">{{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}</span>
+                    <span class="badge-dark ml-2">
+                        {{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}
+                    </span>
                 {{-- <a href="#" class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block">View
                     invoice<span aria-hidden="true"> &rarr;</span></a> --}}
             </div>
@@ -40,17 +42,20 @@
         {{-- Actions --}}
         <div class="px-4 py-2 space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0 mb-4">
             <div class="flex items-center">
-                @if($order->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
+                @php
+                    $last_invoice = $order->invoices->first(); // it's already sorted by created_at DESC
+                @endphp
+                @if($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
                 <span class="badge-success !py-1 !px-3 mr-3">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->payment_status)) }}
+                    {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
                 </span>
-                @elseif($order->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
+                @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
                 <span class="badge-warning  !py-1 !px-3 mr-3">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->payment_status)) }}
+                    {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
                 </span>
-                @elseif($order->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
+                @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
                 <span class="badge-danger  !py-1 !px-3 mr-3">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->payment_status)) }}
+                    {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
                 </span>
                 @endif
 
@@ -129,8 +134,10 @@
                                             </div>
                                             <div class="pl-4 flex sm:pl-6">
                                                 <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
-                                                <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price *
-                                                    $item->quantity) }}</dd>
+                                                <dd class="ml-2 text-gray-700">
+                                                    {{ FX::formatPrice($item->total_price *
+                                                    $item->quantity) }} / {{ $order->invoicing_period }}
+                                                </dd>
                                             </div>
                                         </dl>
                                     </div>
@@ -202,7 +209,6 @@
             <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
                 <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
              </div>
-
             <livewire:dashboard.tables.recent-invoices-widget-table :order="$order" :per-page="10" :show-per-page="false" :show-search="false" :column-select="false" />
         </div>
 
@@ -212,20 +218,20 @@
                 <dl class="grid grid-cols-2 gap-6 text-sm sm:grid-cols-2 md:gap-x-8 lg:col-span-7">
                     <div>
                         <dt class="font-medium text-gray-900">{{ translate('Billing address') }}</dt>
-                        @if($order->isPaid())
+                        {{-- @if($order->isPaid()) --}}
                             <dd class="mt-3 text-gray-500">
                                 <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
                                 <span class="block">{{ $order->billing_address }}</span>
                                 <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
-                                <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '') . \Countries::get(code: $order->billing_country)->name }}</span>
+                                <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '') . (\Countries::get(code: $order->billing_country)?->name ?? '') }}</span>
                             </dd>
-                        @else
+                        {{-- @else
                             <dd class="mt-3 text-gray-500">
                                 <span class="block">
                                     {{ translate('Order is processing, this can take a few minutes.') }}
                                 </span>
                             </dd>
-                        @endif
+                        @endif --}}
                     </div>
                     <div>
                         @if((auth()->user()?->isAdmin() ?? false) && !empty($order->meta['stripe_payment_intent_id'] ?? null))

@@ -186,7 +186,7 @@ class Order extends WeBaseModel
 
     public function isPaid()
     {
-        return ! $this->is_temp && $this->payment_status === \App\Enums\PaymentStatusEnum::paid()->value;
+        return ! $this->is_temp && $this->invoices->filter(fn($item) => $item->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)->count() === $this->invoices->count();
     }
     // END All possible Order statuses
 

@@ -218,15 +218,17 @@ class Invoice extends WeBaseModel
             // Get line items from stripe invoice
             $stripe_line_items = collect($stripe_invoice['lines']['data']);
         }
-        
 
         if($user->entity === 'company') {
             // Company
             $company_country = $user->getUserMeta('company_country');
             $company_vat = $user->getUserMeta('company_vat');
             $company_registration_number = $user->getUserMeta('company_registration_number');
-
+            
             if(!empty($company_country) && !empty(\Countries::get(code: $company_country))) {
+                // Override company country
+                $customer_custom_fields['country'] = \Countries::get(code: $company_country)->name; // TODO: Which country to use? From our system or from Stripe billing info?
+
                 if($company_country === 'LT') {
                     $customer_custom_fields['company no.'] = $company_registration_number;
                     $customer_custom_fields['VAT no.'] = $company_vat;
@@ -240,6 +242,8 @@ class Invoice extends WeBaseModel
                     }
                 }
             }
+
+            
         } else {
             // Individual
             if($this->isFromStripe()) {
@@ -313,7 +317,7 @@ class Invoice extends WeBaseModel
                     $li_name = $item->name;
 
                     if($item->subject->isSubscribable()) {
-                        $li_name = $item->name.' / '.$stripe_line_item['price']['recurring']['interval'];
+                        $li_name = $item->name.' / '.$stripe_line_item['price']['recurring']['interval'].' ('.\Carbon::createFromTimestamp($this->start_date)->format('d M, Y').' - '.\Carbon::createFromTimestamp($this->end_date)->format('d M, Y').')';
                     }
 
                     $invoice_items[] = (new InvoiceItem())
@@ -355,7 +359,7 @@ class Invoice extends WeBaseModel
                     $stripe_invoice['total_tax_amounts'][0]['tax_rate'],
                     []
                 );
-    
+
                 $total_taxes_label = !empty($tax_rate->description) ? $tax_rate->description : $tax_rate->display_name.' '.$tax_rate->jurisdiction;
                 $total_taxes_label = $total_taxes_label.' ('.(int) $tax_rate->percentage.'%)';
 
@@ -365,6 +369,10 @@ class Invoice extends WeBaseModel
         }
         
         
+        // Set custom data
+        $custom_data = [
+            'total_taxes_label' => $total_taxes_label,
+        ];
         
         $invoice = LaravelInvoice::make('VAT Invoice')
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
@@ -385,7 +393,7 @@ class Invoice extends WeBaseModel
             ->currencyDecimalPoint(',')
             ->filename(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             ->addItems($invoice_items)
-            ->setCustomData(['total_taxes_label' => $total_taxes_label])
+            ->setCustomData($custom_data)
             ->notes($notes);
 
             if($this->isFromStripe()) {
