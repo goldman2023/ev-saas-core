@@ -2324,13 +2324,13 @@ class StripeService
                 $subscription->payment_status = PaymentStatusEnum::unpaid()->value;
 
 
-                // if(empty($subscription->getRawOriginal('start_date'))) {
-                //     $subscription->start_date = $stripe_subscription->current_period_start;
-                // }
+                if(empty($subscription->getRawOriginal('start_date'))) {
+                    $subscription->start_date = $stripe_subscription->current_period_start;
+                }
 
-                // if(empty($subscription->getRawOriginal('end_date'))) {
-                //     $subscription->end_date = $stripe_subscription->current_period_end;
-                // }
+                if(empty($subscription->getRawOriginal('end_date'))) {
+                    $subscription->end_date = $stripe_subscription->current_period_end;
+                }
 
                 $subscription->saveQuietly();
             }
