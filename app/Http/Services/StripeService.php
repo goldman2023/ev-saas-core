@@ -2,40 +2,41 @@
 
 namespace App\Http\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Facades\CartService;
-use App\Enums\OrderTypeEnum;
-use App\Enums\PaymentStatusEnum;
-use App\Enums\UserSubscriptionStatusEnum;
-use App\Enums\UserTypeEnum;
-use App\Enums\UserEntityEnum;
-use App\Models\Address;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\User;
-use App\Models\Invoice;
-use App\Models\Product;
-use App\Models\Plan;
-use App\Models\UserSubscription;
-use App\Models\UserSubscriptionRelationship;
-use App\Models\Ownership;
-use App\Models\WeBaseModel;
-use Cache;
-use Illuminate\Database\Eloquent\Collection;
-use Session;
-use EVS;
-use FX;
 use DB;
-use Stripe;
-use Payments;
-use Carbon;
+use FX;
+use EVS;
 use Log;
 use Uuid;
+use Cache;
+use Carbon;
+use Stripe;
+use Session;
+use Payments;
+use App\Models\Plan;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Address;
+use App\Models\Invoice;
+use App\Models\Product;
 use App\Models\CoreMeta;
+use App\Models\OrderItem;
+use App\Models\Ownership;
+use App\Enums\UserTypeEnum;
+use App\Models\WeBaseModel;
+use App\Enums\OrderTypeEnum;
+use App\Facades\CartService;
+use Illuminate\Http\Request;
+use App\Enums\UserEntityEnum;
+use App\Enums\PaymentStatusEnum;
+use App\Models\UserSubscription;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Stancl\Tenancy\Resolvers\DomainTenantResolver;
+use App\Enums\UserSubscriptionStatusEnum;
+use App\Models\UserSubscriptionRelationship;
+use Illuminate\Database\Eloquent\Collection;
 use Mpociot\VatCalculator\Facades\VatCalculator;
+use Stancl\Tenancy\Resolvers\DomainTenantResolver;
+use App\Notifications\Invoice\InvoicePaymentFailed;
 
 class StripeService
 {
@@ -1559,7 +1560,7 @@ class StripeService
         }
 
         $invoice->meta = $meta;
-
+        
         $invoice->save();
 
         return $invoice;
@@ -1662,7 +1663,7 @@ class StripeService
         $stripe_customer_id = $customer->id;
 
         $user = get_user_by_stripe_customer_id($stripe_customer_id);
-
+        
         if(empty($user)) {
             DB::beginTransaction();
 
@@ -1926,6 +1927,20 @@ class StripeService
 
             $invoice->setRealInvoiceNumber();
 
+            // Get latest invoice_id
+            $stripe_subscription = $this->stripe->subscriptions->retrieve(
+                $session->subscription,
+                []
+            );
+
+            if(!empty($stripe_subscription)) {
+                $stripe_invoice = $this->stripe->invoices->retrieve(
+                    $stripe_subscription->latest_invoice,
+                    []
+                );
+            }
+            
+
             // Take the info from stripe...
             $invoice->mergeData([
                 stripe_prefix('stripe_payment_mode') => $session->mode ?? null,
@@ -1937,6 +1952,7 @@ class StripeService
                 stripe_prefix('stripe_payment_intent_id') => $session->payment_intent ?? '', // this will be null on all future automatic reccuring payments
                 stripe_prefix('stripe_subscription_id') =>  $session->subscription ?? null,
                 stripe_prefix('stripe_currency') => $session->currency ?? null,
+                stripe_prefix('stripe_invoice_data') => isset($stripe_invoice) ? ($stripe_invoice?->toArray() ?? []) : [],
             ]);
 
             if ($session->mode === 'payment') {
@@ -2017,7 +2033,7 @@ class StripeService
             // Add latest stripe invoice id to the Order meta (only if billing reasons are subscription create/cycle - because new order is not being created)
             if($stripe_billing_reason === 'subscription_create' || $stripe_billing_reason === 'subscription_cycle') {
                 $order->setData(stripe_prefix('stripe_latest_invoice_id'), $stripe_invoice->id);
-                $order->save();
+                $order->saveQuietly();
             }
 
 
@@ -2072,7 +2088,7 @@ class StripeService
                         }
                     }
 
-                    $invoice->save();
+                    $invoice->saveQuietly();
 
                     DB::commit();
                 }
@@ -2133,7 +2149,7 @@ class StripeService
             if($stripe_billing_reason === 'subscription_create' || $stripe_billing_reason === 'subscription_cycle') {
                 // Add latest stripe invoice id to the Order meta (only if billing reasons are subscription create/cycle - because new order is not being created)
                 $order->setData(stripe_prefix('stripe_latest_invoice_id'), $stripe_invoice->id);
-                $order->save();
+                $order->saveQuietly();
 
                 if($stripe_billing_reason === 'subscription_create') {
                     // This means that subscription is created for the first time
@@ -2192,13 +2208,13 @@ class StripeService
                     $subscription->payment_status = PaymentStatusEnum::paid()->value;
                 }
 
-                // if(empty($subscription->getRawOriginal('start_date'))) {
-                //     $subscription->start_date = $stripe_subscription->current_period_start;
-                // }
+                if(empty($subscription->getRawOriginal('start_date'))) {
+                    $subscription->start_date = $stripe_subscription->current_period_start;
+                }
 
-                // if(empty($subscription->getRawOriginal('end_date'))) {
-                //     $subscription->end_date = $stripe_subscription->current_period_end;
-                // }
+                if(empty($subscription->getRawOriginal('end_date'))) {
+                    $subscription->end_date = $stripe_subscription->current_period_end;
+                }
 
                 $subscription->saveQuietly();
             }
@@ -2293,11 +2309,11 @@ class StripeService
 
             } else if($stripe_billing_reason === 'subscription_cycle') {
                 // This means that subscription is cycled
-                $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
+                $invoice = $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
 
             } else if($stripe_billing_reason === 'subscription_update') {
                 // Subscription is updated (downgraded, upgraded etc.)
-                $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
+                $invoice = $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
             } else {
                 // No idea...
             }
@@ -2308,15 +2324,15 @@ class StripeService
                 $subscription->payment_status = PaymentStatusEnum::unpaid()->value;
 
 
-                if(empty($subscription->getRawOriginal('start_date'))) {
-                    $subscription->start_date = $stripe_subscription->current_period_start;
-                }
+                // if(empty($subscription->getRawOriginal('start_date'))) {
+                //     $subscription->start_date = $stripe_subscription->current_period_start;
+                // }
 
-                if(empty($subscription->getRawOriginal('end_date'))) {
-                    $subscription->end_date = $stripe_subscription->current_period_end;
-                }
+                // if(empty($subscription->getRawOriginal('end_date'))) {
+                //     $subscription->end_date = $stripe_subscription->current_period_end;
+                // }
 
-                $subscription->save();
+                $subscription->saveQuietly();
             }
 
             DB::commit();
@@ -2324,6 +2340,14 @@ class StripeService
             Log::error($e);
             DB::rollBack();
             http_response_code(400);
+        }
+
+        try {
+            $invoice->user->notify(new InvoicePaymentFailed($invoice));
+            $invoice->saveQuietly();
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+            die(print_r($e));
         }
 
         http_response_code(200);

@@ -19,6 +19,8 @@ use App\Notifications\Admin\GeneralTransactionalNotification;
 
 class UserSubscriptionsObserver
 {
+    public $afterCommit = true;
+
     /**
      * Handle the UserSubscription "created" event.
      *
@@ -42,7 +44,6 @@ class UserSubscriptionsObserver
             do_action('observer.user_subscription.created', $user_subscription);
         } catch(\Exception $e) {
             Log::error($e->getMessage());
-            die(print_r($e));
         }
     }
 

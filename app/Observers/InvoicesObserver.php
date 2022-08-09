@@ -12,6 +12,8 @@ use Log;
 
 class InvoicesObserver
 {
+    public $afterCommit = true;
+
     /**
      * Handle the Invoice "created" event.
      *
@@ -25,7 +27,7 @@ class InvoicesObserver
             try {
                 $invoice->user->notify(new InvoiceCreated($invoice));
                 $invoice->setData('invoice_created_email_sent', true);
-                $invoice->save();
+                $invoice->saveQuietly();
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
             }
@@ -40,14 +42,13 @@ class InvoicesObserver
      */
     public function updated(Invoice $invoice)
     {
-        if(!$invoice->is_temp && !$invoice->getData('invoice_created_email_sent') && $invoice->getRealTotalPrice(format: false)) {
+        if(!$invoice->is_temp && $invoice->getData('invoice_created_email_sent') !== true && $invoice->getRealTotalPrice(format: false) > 0) {
             try {
                 $invoice->user->notify(new InvoiceCreated($invoice));
                 $invoice->setData('invoice_created_email_sent', true);
-                $invoice->save();
+                $invoice->saveQuietly();
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
-                die(print_r($e));
             }
         } 
     }

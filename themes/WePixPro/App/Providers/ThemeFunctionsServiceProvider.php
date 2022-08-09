@@ -8,6 +8,7 @@ use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
 use Livewire;
 use TenantSettings;
+use Log;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
@@ -308,12 +309,18 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
                         foreach($licenses as $license) {
                             if (!empty($license) && method_exists($license, 'get_license')) {
+                                // Dispatch license hardware ID update (if any)
                                 $data = $license->get_license(); // gets the license from Pixpro DB
-                                
+
+                                // If hardware_id is missing on our end or is different than hwID on Pixpro end, update it on our end
                                 if (!empty($data) && $license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
                                     $license->setData('hardware_id', $data['hardware_id'] ?? null);
-                                    $license->save();
+                                    $license->saveQuietly();
                                 }
+
+                                // dispatch(function () use ($license) {
+                                    
+                                // });
                             }
                         }
                     }

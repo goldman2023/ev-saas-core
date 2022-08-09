@@ -16,9 +16,12 @@
     @php
         $stripe_invoice = $invoice->getData(stripe_prefix('stripe_invoice_data'));
     @endphp
-    <strong>Subtotal:</strong> <span>{{ \FX::formatPrice($stripe_invoice['total_excluding_tax'] / 100) }}</span> <br>
-    <strong>Tax:</strong> <span>{{ \FX::formatPrice($stripe_invoice['tax'] / 100) }}</span> <br>
-    <strong>Total:</strong> <span>{{ $invoice->getRealTotalPrice() }}</span> <br>
+
+    @if(!empty($stripe_invoice))
+        <strong>Subtotal:</strong> <span>{{ \FX::formatPrice($stripe_invoice['total_excluding_tax'] / 100) }}</span> <br>
+        <strong>Tax:</strong> <span>{{ \FX::formatPrice($stripe_invoice['tax'] / 100) }}</span> <br>
+        <strong>Total:</strong> <span>{{ $invoice->getRealTotalPrice() }}</span> <br>
+    @endif
 @else
     <strong>Subtotal:</strong> <span>{{ \FX::formatPrice($invoice->subtotal_price) }}</span> <br>
     <strong>Tax:</strong> <span>{{ \FX::formatPrice($invoice->tax) }}</span> <br>
