@@ -25,14 +25,23 @@ class UserSubscription extends WeBaseModel
 
     protected $table = 'user_subscriptions';
 
-    protected $fillable = ['user_id', 'order_id', 'start_date', 'end_date', 'status', 'payment_status', 'qty', 'data', 'created_at', 'updated_at'];
+    protected $fillable = ['user_id', 'order_id', 'is_temp', 'start_date', 'end_date', 'status', 'payment_status', 'qty', 'data', 'created_at', 'updated_at'];
 
     // protected $with = ['order.order_items.subject'];
 
     protected $casts = [
         // 'start_date' => 'date',
-        // 'end_date' => 'date'
+        // 'end_date' => 'date',
+        'is_temp' => 'boolean',
     ];
+
+    protected static function booted()
+    {
+        // Display only real subscritions (is_temp = false)
+        static::addGlobalScope('real_subscriptions', function ($builder) {
+            $builder->real();
+        });
+    }
 
     public function user()
     {
@@ -73,6 +82,11 @@ class UserSubscription extends WeBaseModel
 
     public function scopeTrial($query) {
         return $query->where('status', UserSubscriptionStatusEnum::trial()->value)->where('end_date', '>', time());
+    }
+
+    public function scopeReal($query) {
+        // Invoices are real if is_temp is 0/false
+        return $query->where('is_temp', '=', 0);
     }
 
     // public static function getSubscriptionsAmount($subscriptions) {

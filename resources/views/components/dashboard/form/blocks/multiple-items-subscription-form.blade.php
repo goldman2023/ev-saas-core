@@ -109,11 +109,12 @@
                 window.open(base_route.toString()+'?'+url_params.toString(), '_blank').focus();
             }
         }" x-init="
-            $watch('plans_cart', (cart) => getProjectedInvoice(cart));
+            $watch('plans_cart', (cart) => getProjectedInvoice(cart, pricing_mode));
             $watch('pricing_mode', (mode) => getProjectedInvoice(plans_cart, mode));
         "
         @display-modal.window="
             if($event.detail.id === 'purchase-subscription-with-multiple-items-modal') {
+                pricing_mode = $event.detail.interval;
                 addToSubscriptionCart($event.detail.plan_id, $event.detail.plan_slug, $event.detail.qty, $event.detail.month_price, $event.detail.annual_price);
             }
         "
