@@ -1940,7 +1940,6 @@ class StripeService
                 );
             }
             
-
             // Take the info from stripe...
             $invoice->mergeData([
                 stripe_prefix('stripe_payment_mode') => $session->mode ?? null,
@@ -2176,6 +2175,7 @@ class StripeService
                         stripe_prefix('stripe_payment_intent_id') => $stripe_invoice->payment_intent ?? '', // this will be null on all future automatic reccuring payments
                         stripe_prefix('stripe_subscription_id') => $stripe_subscription_id, // store subscription ID in invoice meta
                         stripe_prefix('stripe_currency') => $stripe_invoice->currency ?? null,
+                        stripe_prefix('stripe_invoice_data') => $stripe_invoice?->toArray() ?? [],
                     ]);
 
                     if(!empty($stripe_invoice->payment_intent)) {
@@ -2290,6 +2290,8 @@ class StripeService
                     $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
                     $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
                     $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
+                    $meta[$this->mode_prefix .'stripe_invoice_data'] = $stripe_invoice?->toArray() ?? [];
+
 
                     if(!empty($stripe_invoice->payment_intent)) {
                         $pi = $this->stripe->paymentIntents->retrieve(

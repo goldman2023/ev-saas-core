@@ -123,12 +123,20 @@
                             </template>
                             <template x-if="!is_active()">
                                 <a
+                                    @click="$dispatch('display-modal', {
+                                        id: 'purchase-subscription-with-multiple-items-modal', 
+                                        plan_id: @js($plan->id),
+                                        plan_slug: @js($plan->slug),
+                                        qty: 1,
+                                        month_price: @js($plan->getTotalPrice(display: true, decimals: 0)),
+                                        annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice(display: false) / 12, 0)),
+                                    })"
                                     @if(!empty(auth()->user()?->subscriptions->first()))
-                                        x-bind:href="is_active() ? $getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode}) : 'javascript:void(0)'"
-                                        x-on:click="is_active() ? '' : $dispatch('display-modal', {id: 'change-plan-confirmation-modal', subscription_id: {{ auth()->user()?->subscriptions->first()?->id ?? 'null' }}, new_plan: @js($plan->toArray()), interval: pricing_mode })"
+                                        {{-- x-bind:href="is_active() ? $getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode}) : 'javascript:void(0)'" --}}
+                                        {{-- x-on:click="is_active() ? '' : $dispatch('display-modal', {id: 'change-plan-confirmation-modal', subscription_id: {{ auth()->user()?->subscriptions->first()?->id ?? 'null' }}, new_plan: @js($plan->toArray()), interval: pricing_mode })" --}}
                                         target="_parent"
                                     @else
-                                        x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})"
+                                        {{-- x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" --}}
                                     @endif
                                     class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
 
@@ -164,14 +172,15 @@
 
             {{-- Multi-item plan subscription --}}
             @if(get_tenant_setting('multi_item_subscription_enabled'))
-                <div class="col-span-12 w-full flex justify-center">
+                {{-- <div class="col-span-12 w-full flex justify-center">
                     <button type="button" class="btn-primary" @click="$dispatch('display-modal', {id: 'purchase-subscription-with-multiple-items-modal'})">
                         {{ translate('Buy multiple licenses') }}
                     </button>
-                </div>
-
-                <x-dashboard.form.blocks.multiple-items-subscription-form > </x-dashboard.form.blocks.multiple-items-subscription-form>
+                </div> --}}
             @endif
+
+            <x-dashboard.form.blocks.multiple-items-subscription-form > </x-dashboard.form.blocks.multiple-items-subscription-form>
+
             {{-- END Multi-item plan subscription --}}
         @else
 
