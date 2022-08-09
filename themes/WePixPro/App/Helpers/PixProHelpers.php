@@ -248,7 +248,7 @@ if (!function_exists('pix_pro_create_licenses_action')) {
             dispatch(function () use ($route_paid, $body, $plan, $subscription) {
                 $response = Http::post($route_paid, $body);
                 $response_json = $response->json();
-                
+
                 if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                     // If status is not success for any reason, log an error
                     Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
@@ -754,7 +754,7 @@ if (!function_exists('pix_pro_get_license_by_serial_number')) {
         if(empty($license)) {
             return false;
         }
-        $route = pix_pro_endpoint().'/licenses/get_license_by_serial_number/';
+        $route = pix_pro_endpoint().'/licenses/get_license_by_serial_number';
         $user = $license->user_subscription->first()->user;
 
         $body = pix_pro_add_auth_params([

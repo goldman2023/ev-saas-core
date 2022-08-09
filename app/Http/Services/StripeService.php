@@ -2033,7 +2033,7 @@ class StripeService
             // Add latest stripe invoice id to the Order meta (only if billing reasons are subscription create/cycle - because new order is not being created)
             if($stripe_billing_reason === 'subscription_create' || $stripe_billing_reason === 'subscription_cycle') {
                 $order->setData(stripe_prefix('stripe_latest_invoice_id'), $stripe_invoice->id);
-                $order->save();
+                $order->saveQuietly();
             }
 
 
@@ -2088,7 +2088,7 @@ class StripeService
                         }
                     }
 
-                    $invoice->save();
+                    $invoice->saveQuietly();
 
                     DB::commit();
                 }
@@ -2149,7 +2149,7 @@ class StripeService
             if($stripe_billing_reason === 'subscription_create' || $stripe_billing_reason === 'subscription_cycle') {
                 // Add latest stripe invoice id to the Order meta (only if billing reasons are subscription create/cycle - because new order is not being created)
                 $order->setData(stripe_prefix('stripe_latest_invoice_id'), $stripe_invoice->id);
-                $order->save();
+                $order->saveQuietly();
 
                 if($stripe_billing_reason === 'subscription_create') {
                     // This means that subscription is created for the first time
@@ -2208,13 +2208,13 @@ class StripeService
                     $subscription->payment_status = PaymentStatusEnum::paid()->value;
                 }
 
-                // if(empty($subscription->getRawOriginal('start_date'))) {
-                //     $subscription->start_date = $stripe_subscription->current_period_start;
-                // }
+                if(empty($subscription->getRawOriginal('start_date'))) {
+                    $subscription->start_date = $stripe_subscription->current_period_start;
+                }
 
-                // if(empty($subscription->getRawOriginal('end_date'))) {
-                //     $subscription->end_date = $stripe_subscription->current_period_end;
-                // }
+                if(empty($subscription->getRawOriginal('end_date'))) {
+                    $subscription->end_date = $stripe_subscription->current_period_end;
+                }
 
                 $subscription->saveQuietly();
             }
@@ -2332,7 +2332,7 @@ class StripeService
                 //     $subscription->end_date = $stripe_subscription->current_period_end;
                 // }
 
-                $subscription->save();
+                $subscription->saveQuietly();
             }
 
             DB::commit();
@@ -2344,7 +2344,7 @@ class StripeService
 
         try {
             $invoice->user->notify(new InvoicePaymentFailed($invoice));
-            $invoice->save();
+            $invoice->saveQuietly();
         } catch(\Exception $e) {
             Log::error($e->getMessage());
             die(print_r($e));
