@@ -279,12 +279,28 @@ class RegisterForm extends Component
         }
 
         if (get_tenant_setting('register_dynamic_redirect')) {
-            if (session()->get('registration_redirect')) {
-                $selectedPlan = session()->get('selected_plan');
-                $dynamicRedirectUrl = StripeService::createCheckoutLink($selectedPlan);
-                session()->put('registration_redirect', $dynamicRedirectUrl);
-                return redirect(session()->get('registration_redirect'));
+            try {
+                $selected_plan_id = request()->session()->get('selected_plan');
+                $selected_plan_interval = request()->session()->get('selected_plan_interval');
+                
+                if(!empty($selected_plan_id) && ($selected_plan_interval == 'month' || $selected_plan_interval == 'year' || $selected_plan_interval == 'annual')) {
+                    $selected_plan = \App\Models\Plan::findOrFail($selected_plan_id);
+
+                    $stripe_checkout_link = \StripeService::createSubscriptionCheckoutLink(items: [
+                        [
+                            'id' => $selected_plan->id,
+                            'class' => $selected_plan::class,
+                            'qty' => 1
+                        ]
+                    ], interval: $selected_plan_interval);
+
+                    return redirect($stripe_checkout_link);
+                }
+            } catch(\Exception $e) {
+                return redirect(get_tenant_setting('register_redirect_url'));
             }
+
+            return redirect(get_tenant_setting('register_redirect_url'));
         }
 
         if (!get_tenant_setting('onboarding_flow')) {

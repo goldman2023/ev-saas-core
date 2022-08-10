@@ -37,15 +37,14 @@ class RegisterController extends Controller
      */
     public function user_registration(Request $request, $token = null)
     {
-        if($request->get('plan')) {
-            $request->session()->put('selected_plan', $request->get('plan'));
-            $selectedPlan = Plan::findOrFail($request->get('plan'));
-            $dynamicRedirectUrl = StripeService::createCheckoutLink($selectedPlan);
-            $request->session()->put('registration_redirect', $dynamicRedirectUrl);
-            $request->session()->put('selected_plan', $selectedPlan);
+        $plan = $request->get('plan');
+        $interval = $request->get('interval');
 
+        if(!empty($plan) && ($interval == 'month' || $interval == 'year' || $interval == 'annual')) {
+            $request->session()->put('selected_plan', $plan);
+            $request->session()->put('selected_plan_interval', $interval);
         }
-
+        
         if (Auth::check()) {
             return redirect()->route('home');
         }
