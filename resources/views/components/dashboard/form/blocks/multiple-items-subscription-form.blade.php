@@ -6,6 +6,8 @@
             pricing_mode: 'year',
             plans: @js($plans),
             projected_invoice: null,
+            selected_plan_id: null,
+            selected_plan_interval: null,
             current_plan_mode: '{{ auth()->user()->subscriptions?->first()?->order?->invoicing_period ?? '' }}',
             current_plan_id: {{ auth()->user()->subscriptions?->first()?->items->first()?->id ?? 'null' }},
             current_is_trial: @js(auth()->user()?->subscriptions?->first()?->isTrial()),
@@ -42,6 +44,8 @@
                         };
                     @endif
                 }
+
+                this.selected_plan_id = plan_id;
             },
             getProjectedInvoice(cart, mode = null) {
                 if(cart === null || cart.length <= 0)
@@ -71,10 +75,13 @@
                     alert(error.error.msg);
                     this.processing = false;
                 });
+
+                this.selected_plan_interval = mode;
             },
             clearCart() {
                 this.plans_cart = {};
                 this.projected_invoice = null;
+                this.selected_plan_id = null;
             },
             checkout() {
                 {{-- TODO: Compare old subscriptions items with new subscription items AND check if there is less items of same type in new subscription. If there is, prompt a new modal where user must select which licenses/seats will be revoked/removed. --}}
@@ -107,6 +114,9 @@
                 url_params.set('data', btoa(JSON.stringify(data)));
 
                 window.open(base_route.toString()+'?'+url_params.toString(), '_blank').focus();
+            },
+            selectedIsActive() {
+                return this.selected_plan_id === this.current_plan_id && this.current_plan_mode ===  this.pricing_mode;
             }
         }" x-init="
             $watch('plans_cart', (cart) => getProjectedInvoice(cart, pricing_mode));
@@ -135,7 +145,7 @@
                 </div>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+            <div class="mt-8 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
 
                 @if($plans->isNotEmpty())
                     @foreach($plans as $plan)
@@ -147,8 +157,23 @@
                             annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice(display: false) / 12, 0)),
                             is_active() {
                                 return this.plan_id == current_plan_id && current_plan_mode == pricing_mode;
+                            },
+                            is_selected() {
+                                return this.plan_id == selected_plan_id && selected_plan_interval == pricing_mode;
                             }
-                        }" :class="{'border-2 border-primary':  is_active() }">
+                        }" :class="{'border-2 border-primary':  is_active(), 'border-2 border-info': is_selected() }">
+                            <template x-if="is_active()">
+                                <div class="absolute top-[-15px] right-[15px] bg-white rounded-full border border-primary py-1 px-2 text-12">
+                                    <span>{{ translate('Active') }}</span>
+                                </div>
+                            </template>
+
+                            <template x-if="is_selected()">
+                                <div class="absolute top-[-15px] right-[15px] bg-white rounded-full border border-info py-1 px-2 text-12">
+                                    <span>{{ translate('Selected') }}</span>
+                                </div>
+                            </template>
+                            
                             <span class="flex-1 flex">
                                 <div class="flex flex-col">
                                     <span class="block text-sm font-medium text-gray-900 mb-1 line-clamp-2">{{ $plan->name }}</span>
@@ -262,9 +287,11 @@
                         </table>
                     </div>
 
-                    <div class="w-full flex justify-center mt-4">
-                        <div class="btn-primary" @click="checkout()">{{ translate('Proceed to checkout') }}</div>
-                    </div>
+                    <template x-if="!selectedIsActive()">
+                        <div class="w-full flex justify-center mt-4">
+                            <div class="btn-primary" @click="checkout()">{{ translate('Proceed to checkout') }}</div>
+                        </div>
+                    </template>
                 </div>
             </template>
 
