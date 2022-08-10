@@ -1,4 +1,4 @@
-<x-system.form-modal id="purchase-subscription-with-multiple-items-modal" title="{{ translate('Buy subscription with multiple items') }}" :prevent-close="true" class="!max-w-5xl" title-class="text-20 font-semibold">
+<x-system.form-modal id="purchase-subscription-with-multiple-items-modal" title="{{ translate('Select your plan') }}" :prevent-close="true" class="!max-w-5xl" title-class="text-20 font-semibold">
     <div class="w-full">
         <fieldset x-data="{
             processing: false,
@@ -99,7 +99,7 @@
 
                     data['items'].push({
                         id: item.plan_id,
-                        class: 'App\\Models\\Plan', // TODO: make this universal! 
+                        class: 'App\\Models\\Plan', // TODO: make this universal!
                         @if(get_tenant_setting('multi_item_subscription_enabled'))
                             {{-- qty: item.qty, --}}
                             qty: 1,
@@ -173,12 +173,12 @@
                                     <span>{{ translate('Selected') }}</span>
                                 </div>
                             </template>
-                            
+
                             <span class="flex-1 flex">
                                 <div class="flex flex-col">
                                     <span class="block text-sm font-medium text-gray-900 mb-1 line-clamp-2">{{ $plan->name }}</span>
                                     <span class="flex items-center text-sm text-gray-500 mb-3 line-clamp-2">{{ $plan->excerpt }}</span>
-                                    
+
                                     <div class="flex items-end">
                                         <h3 class="text-16 text-dark font-bold mb-0"
                                             x-text="pricing_mode === 'year' ? annual_price : month_price"></h3>
@@ -198,21 +198,21 @@
                                     @else
                                         {{-- <label class="block text-sm font-medium text-gray-700">{{ translate('License quantity') }}</label> --}}
                                         {{-- <div class="mt-1 relative rounded-md shadow-sm">
-                                            
+
                                             <x-dashboard.form.input type="number" min="1" step="1" field="qty" :x="true" />
                                         </div> --}}
                                     @endif
 
                                     <div class="w-full mt-3">
                                         @if(get_tenant_setting('multi_item_subscription_enabled'))
-                                            {{-- <button type="button" class="btn-primary" @click="addToSubscriptionCart(plan_id, plan_slug, qty, month_price, annual_price); qty = 0;" :disabled="qty <= 0"> 
+                                            {{-- <button type="button" class="btn-primary" @click="addToSubscriptionCart(plan_id, plan_slug, qty, month_price, annual_price); qty = 0;" :disabled="qty <= 0">
                                                 {{ translate('Add') }}
                                             </button> --}}
-                                            <button type="button" class="btn-primary" @click="addToSubscriptionCart(plan_id, plan_slug, 1, month_price, annual_price); qty = 1;" :disabled="qty <= 0"> 
+                                            <button type="button" class="btn-primary w-full" @click="addToSubscriptionCart(plan_id, plan_slug, 1, month_price, annual_price); qty = 1;" :disabled="qty <= 0">
                                                 {{ translate('Select plan') }}
                                             </button>
                                         @else
-                                            <button type="button" class="btn-primary" @click="addToSubscriptionCart(plan_id, plan_slug, 1, month_price, annual_price); qty = 1;"> 
+                                            <button type="button" class="btn-primary w-full" @click="addToSubscriptionCart(plan_id, plan_slug, 1, month_price, annual_price); qty = 1;">
                                                 {{ translate('Select plan') }}
                                             </button>
                                         @endif
@@ -232,7 +232,7 @@
                   <span class="px-2 bg-white text-20 font-semibold text-gray-500"> {{ translate('Subscription breakdown') }} </span>
                 </div>
             </div>
-            
+
             <template x-if="_.get(projected_invoice, 'lines.data', []).length > 0">
                 <div class="px-4" :class="{'opacity-30 pointer-events-none': processing}">
                     <div class="sm:flex sm:items-center">
