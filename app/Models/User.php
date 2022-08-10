@@ -25,7 +25,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Cashier\Billable;
 use Laravel\Nova\Auth\Impersonatable;
 use DB;
-use Carbon\Carbon;
+use Carbon;
+use Log;
 
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
@@ -352,13 +353,34 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         }
     }
 
-    public function getUserMeta($key)
+    public function getUserMeta($key, $default = null)
     {
         $user_meta = $this->user_meta->where('key', $key)->keyBy('key')->toArray();
 
         castValuesForGet($user_meta, UserMeta::metaDataTypes());
 
-        return $user_meta[$key] ?? null;
+        return !empty($user_meta[$key] ?? null) ? $user_meta[$key] : $default;
+    }
+
+    public function saveUserMeta($key, $value)
+    {
+        $data_types = UserMeta::metaDataTypes();
+
+        try {
+            UserMeta::updateOrCreate(
+                [
+                    'user_id' => $this->id,
+                    'key' => $key,
+                ],
+                [
+                    'value' => castValueForSave($key, $value, $data_types),
+                ]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**
