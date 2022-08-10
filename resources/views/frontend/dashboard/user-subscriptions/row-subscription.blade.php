@@ -101,7 +101,8 @@
         @endif --}}
 
         <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="$dispatch('display-modal', {
-            id: 'purchase-subscription-with-multiple-items-modal', 
+            id: 'purchase-subscription-with-multiple-items-modal',
+            interval: @js($row->order->invoicing_period),
             plan_id: @js($row->items->first()?->id),
             plan_slug: @js($row->items->first()?->slug),
             qty: 1,
