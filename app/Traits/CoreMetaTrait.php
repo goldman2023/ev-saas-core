@@ -56,8 +56,6 @@ trait CoreMetaTrait
                 return $this->core_meta->where('key', $key)?->first()?->value ?? null;
             }
         }
-
-        
     }
 
     public function saveCoreMeta($key, $value)

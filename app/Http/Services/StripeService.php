@@ -853,11 +853,32 @@ class StripeService
 
             // If plans trial mode is enabled
             if(get_tenant_setting('plans_trial_mode') && !empty(get_tenant_setting('plans_trial_duration'))) {
-                // TODO: THIS IS WRONG! Track trial usage per user!!!!
-                if(!empty($previous_subscription)) {
-                    $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration') - ($previous_subscription->created_at->diff(\Carbon::now())->days);
+                $started_trials = collect(auth()->user()->getUserMeta('started_trials_on', []));
+                $trial_data = $started_trials->firstWhere('shop_id', $order->shop_id);
+
+                if(!empty($trial_data) && !empty($trial_data['started_on'] ?? null)) {
+                    // This user already started trial for the given shop before
+                    try {
+                        $trial_days_left = get_tenant_setting('plans_trial_duration') - \Carbon::createFromTimestamp($trial_data['started_on'])->diffInDays(\Carbon::now());
+
+                        if($trial_days_left > 0) {
+                            // Apply trial if there are any days left...
+                            $stripe_args['subscription_data']['trial_period_days'] = (int) $trial_days_left;
+                        }
+                    } catch(\Throwable $e) {
+                        // $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration');
+                        Log::error($e->getMessage());
+                    }
                 } else {
+                    // This user DID NOT start trial for the given shop before
                     $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration');
+
+                    $started_trials[] = [
+                        'shop_id' => $order->shop_id,
+                        'started_on' => time(),
+                    ];
+
+                    auth()->user()->saveUserMeta('started_trials_on', $started_trials);
                 }
             }
 
@@ -1834,6 +1855,29 @@ class StripeService
             }
 
             $order->save();
+
+            // If trial mode is active and user doesn't have `started_trial_on` or it's empty, save timestamp when user started the trial mode
+            if(get_tenant_setting('plans_trial_mode') && !empty(get_tenant_setting('plans_trial_duration'))) {
+                $started_trials = collect($initiator->getUserMeta('started_trials_on', []));
+                $trial_data = $started_trials->firstWhere('shop_id', $order->shop_id);
+
+                if(!empty($trial_data)) {
+                    $trial_data_index = $started_trials->search(fn($item, $key) => $item['shop_id'] == $order->shop_id);
+
+                    if(empty($trial_data['started_on'] ?? null) || !is_int($trial_data['started_on'])) {
+                        $started_trials->put($trial_data_index.'.started_on', time());
+                    }
+                } else {
+                    // This means that trial subscription was NOT started at `started_on` timestamp for the given shop
+                    $started_trials[] = [
+                        'shop_id' => $order->shop_id,
+                        'started_on' => time()
+                    ];
+                }
+
+                $initiator->saveUserMeta('started_trials_on', $started_trials);
+                $initiator->saveQuietly();
+            }
 
 
             // Loop through OrderItems and:

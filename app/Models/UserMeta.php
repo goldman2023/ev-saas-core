@@ -43,6 +43,7 @@ class UserMeta extends WeBaseModel
             'education' => 'array',
             'bio' => 'wysiwyg',
             'locale' => 'select',
+            'started_trials_on' => 'array',
 
             // 'work_experience' => [
             //     'title' => 'string',
