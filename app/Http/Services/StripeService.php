@@ -2226,6 +2226,7 @@ class StripeService
             // We are sure that invoice is paid so we make user_subscription(s) active and paid too (even though they may already be active and paid as a result of subscription.updated webhook)!
             if (!empty($subscription)) {
                 $subscription->is_temp = false;
+                $subscription->setData(stripe_prefix('stripe_subscription_id'), $stripe_subscription_id);
 
                 // If subscription has trial start/end (provided from checkout.session)
                 if($stripe_subscription->status === 'trialing') {
@@ -2308,17 +2309,18 @@ class StripeService
                     $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
                     $invoice->invoice_number = !empty($stripe_invoice->number) ? $stripe_invoice->number : $invoice->invoice_number;
 
-                    $meta = $invoice->meta;
-                    $meta[$this->mode_prefix .'stripe_invoice_paid'] = $stripe_invoice->paid ?? true;
-                    $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
-                    $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
-                    $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
-                    $meta[$this->mode_prefix .'stripe_invoice_number'] = $stripe_invoice->number ?? '';
-                    $meta[$this->mode_prefix .'stripe_customer_id'] = $stripe_invoice->customer ?? '';
-                    $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
-                    $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
-                    $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
-                    $meta[$this->mode_prefix .'stripe_invoice_data'] = $stripe_invoice?->toArray() ?? [];
+                    $invoice->mergeData([
+                        stripe_prefix('stripe_invoice_paid') => $stripe_invoice->paid ?? true,
+                        stripe_prefix('stripe_invoice_id') => $stripe_invoice->id ?? '',
+                        stripe_prefix('stripe_hosted_invoice_url') => $stripe_invoice->hosted_invoice_url ?? '',
+                        stripe_prefix('stripe_invoice_pdf_url') => $stripe_invoice->invoice_pdf ?? '',
+                        stripe_prefix('stripe_invoice_number') => $stripe_invoice->number ?? '',
+                        stripe_prefix('stripe_customer_id') => $stripe_invoice->customer ?? '',
+                        stripe_prefix('stripe_payment_intent_id') => $stripe_invoice->payment_intent ?? '',
+                        stripe_prefix('stripe_subscription_id') => $stripe_subscription_id,
+                        stripe_prefix('stripe_currency') => $stripe_invoice->currency ?? null,
+                        stripe_prefix('stripe_invoice_data') => $stripe_invoice?->toArray() ?? [],
+                    ]);
 
 
                     if(!empty($stripe_invoice->payment_intent)) {
@@ -2328,11 +2330,9 @@ class StripeService
                         );
 
                         if(!empty($pi?->charges?->data[0]?->receipt_url ?? null)) {
-                            $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
+                            $invoice->setData(stripe_prefix('stripe_receipt_url'), $pi->charges->data[0]?->receipt_url);
                         }
                     }
-
-                    $invoice->meta = $meta;
 
                     $invoice->save();
                 }
@@ -2362,6 +2362,8 @@ class StripeService
                 if(empty($subscription->getRawOriginal('end_date'))) {
                     $subscription->end_date = $stripe_subscription->current_period_end;
                 }
+
+                $subscription->setData(stripe_prefix('stripe_subscription_id'), $stripe_subscription_id);
 
                 $subscription->saveQuietly();
             }
@@ -2497,6 +2499,7 @@ class StripeService
                 $subscription->start_date = $stripe_subscription->current_period_start;
                 $subscription->end_date = $stripe_subscription->current_period_end;
 
+                $subscription->setData(stripe_prefix('stripe_subscription_id'), $stripe_subscription_id);
                 $subscription->setData(stripe_prefix('stripe_latest_invoice_id'), $stripe_subscription->latest_invoice ?? null);
 
                 // Only change status and payment_status of subscription and order if stripe subscription is in Trial mode
@@ -2579,6 +2582,7 @@ class StripeService
                         $subscription->payment_status = PaymentStatusEnum::paid()->value;
                     }
 
+                    $subscription->setData(stripe_prefix('stripe_subscription_id'), $stripe_subscription_id);
                     $subscription->setData(stripe_prefix('stripe_latest_invoice_id'), $latest_invoice_id);
 
                     // Determine if subscription is cycled or upgraded/downgraded
