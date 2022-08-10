@@ -144,6 +144,7 @@ class UserSubscriptionsObserver
     public function forceDeleted(UserSubscription $user_subscription)
     {
         // TODO: Where in the code should we send CanceledSubscription notification?
+        // TODO: Remove licenses via hook!
 
     }
 }

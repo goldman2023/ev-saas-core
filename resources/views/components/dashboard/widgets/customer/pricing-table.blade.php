@@ -113,46 +113,53 @@
                                 ($plan->getTotalPrice(display: false, decimals: 0) * 12))), translate('You save %d% per year')) }}
                             </div>
 
-                        <div class="flex flex-row gap-4">
-                            <template x-if="is_active()">
-                                <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})"
+                            <div class="flex flex-row gap-4">
+                                <template x-if="is_active()">
+                                    <a x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})"
 
-                                    class="btn-danger-outline btn-sm inline-block pt-2 text-danger text-14 justify-center w-full text-center">
-                                    {{ translate('Cancel plan') }}
-                                </a>
-                            </template>
-                            <template x-if="!is_active()">
-                                <a
-                                    @if(!empty(auth()->user()?->subscriptions->first()))
-                                        x-bind:href="is_active() ? $getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode}) : 'javascript:void(0)'"
-                                        x-on:click="is_active() ? '' : $dispatch('display-modal', {id: 'change-plan-confirmation-modal', subscription_id: {{ auth()->user()?->subscriptions->first()?->id ?? 'null' }}, new_plan: @js($plan->toArray()), interval: pricing_mode })"
-                                        target="_parent"
-                                    @else
-                                        x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})"
-                                    @endif
-                                    class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
+                                        class="btn-danger-outline btn-sm inline-block pt-2 text-danger text-14 justify-center w-full text-center">
+                                        {{ translate('Cancel plan') }}
+                                    </a>
+                                </template>
+                                <template x-if="!is_active()">
+                                    <a
+                                        @click="$dispatch('display-modal', {
+                                            id: 'purchase-subscription-with-multiple-items-modal',
+                                            interval: pricing_mode,
+                                            plan_id: @js($plan->id),
+                                            plan_slug: @js($plan->slug),
+                                            qty: 1,
+                                            month_price: @js($plan->getTotalPrice(display: true, decimals: 0)),
+                                            annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice(display: false) / 12, 0)),
+                                        })"
+                                        @if(!empty(auth()->user()?->subscriptions->first()))
+                                            {{-- x-bind:href="is_active() ? $getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode}) : 'javascript:void(0)'" --}}
+                                            {{-- x-on:click="is_active() ? '' : $dispatch('display-modal', {id: 'change-plan-confirmation-modal', subscription_id: {{ auth()->user()?->subscriptions->first()?->id ?? 'null' }}, new_plan: @js($plan->toArray()), interval: pricing_mode })" --}}
+                                            target="_parent"
+                                        @else
+                                            {{-- x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" --}}
+                                        @endif
+                                        class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
 
-                                    {{-- We should support following scenarios:
-                                    1. *If trial mode is disabled and no plan is purchased: Buy now
-                                    2. *If trial mode is enabled and no plan is purchased: Try for free
-                                    3. *If trial mode is disabled and plan is purchased: Upgrade plan
-                                    4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you
-                                    pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
+                                        {{-- We should support following scenarios:
+                                        1. *If trial mode is disabled and no plan is purchased: Buy now
+                                        2. *If trial mode is enabled and no plan is purchased: Try for free
+                                        3. *If trial mode is disabled and plan is purchased: Upgrade plan
+                                        4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you
+                                        pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
 
-                                    @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                        <span>{{ translate('Buy now') }}</span>
-                                    @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
-                                        <span>{{ translate('Try for free') }}</span>
-                                    @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                        <span>{{ translate('Change plan') }}</span>
-                                    @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
-                                        <span>{{ translate('Change plan') }}</span>
-                                    @endif
-                                </a>
-                            </template>
-                        </div>
-
-
+                                        @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                            <span>{{ translate('Buy now') }}</span>
+                                        @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
+                                            <span>{{ translate('Try for free') }}</span>
+                                        @elseif(!get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                            <span>{{ translate('Change plan') }}</span>
+                                        @elseif(get_tenant_setting('plans_trial_mode') && auth()->user()->isSubscribed())
+                                            <span>{{ translate('Change plan') }}</span>
+                                        @endif
+                                    </a>
+                                </template>
+                            </div>
                         @endif
 
 
@@ -164,14 +171,15 @@
 
             {{-- Multi-item plan subscription --}}
             @if(get_tenant_setting('multi_item_subscription_enabled'))
-                <div class="col-span-12 w-full flex justify-center">
+                {{-- <div class="col-span-12 w-full flex justify-center">
                     <button type="button" class="btn-primary" @click="$dispatch('display-modal', {id: 'purchase-subscription-with-multiple-items-modal'})">
                         {{ translate('Buy multiple licenses') }}
                     </button>
-                </div>
-
-                <x-dashboard.form.blocks.multiple-items-subscription-form > </x-dashboard.form.blocks.multiple-items-subscription-form>
+                </div> --}}
             @endif
+
+            <x-dashboard.form.blocks.multiple-items-subscription-form > </x-dashboard.form.blocks.multiple-items-subscription-form>
+
             {{-- END Multi-item plan subscription --}}
         @else
 

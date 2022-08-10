@@ -6,19 +6,46 @@
             pricing_mode: 'year',
             plans: @js($plans),
             projected_invoice: null,
+            selected_plan_id: null,
+            selected_plan_interval: null,
+            current_plan_mode: '{{ auth()->user()->subscriptions?->first()?->order?->invoicing_period ?? '' }}',
+            current_plan_id: {{ auth()->user()->subscriptions?->first()?->items->first()?->id ?? 'null' }},
+            current_is_trial: @js(auth()->user()?->subscriptions?->first()?->isTrial()),
             addToSubscriptionCart(plan_id, plan_slug, qty, month_price, annual_price) {
                 if(this.plans_cart.hasOwnProperty(plan_slug)) {
                     // Add qty to existing plan in cart
-                    this.plans_cart[plan_slug]['qty'] = Number(this.plans_cart[plan_slug]['qty']) + Number(qty);
+                    @if(get_tenant_setting('multi_item_subscription_enabled'))
+                        {{-- this.plans_cart[plan_slug]['qty'] = Number(this.plans_cart[plan_slug]['qty']) + Number(qty); --}}
+                        this.plans_cart[plan_slug]['qty'] = 1;
+                    @else
+                        this.plans_cart[plan_slug]['qty'] = 1;
+                    @endif
                 } else {
-                    this.plans_cart[plan_slug] = {
-                        plan_id: plan_id,
-                        plan_slug: plan_slug,
-                        qty: Number(qty),
-                        month_price: month_price,
-                        annual_price: annual_price,
-                    };
+                    @if(get_tenant_setting('multi_item_subscription_enabled'))
+                        this.clearCart(); // TODO: Remove this when multi-items are enabled
+
+                        this.plans_cart[plan_slug] = {
+                            plan_id: plan_id,
+                            plan_slug: plan_slug,
+                            {{-- qty: Number(qty), --}}
+                            qty: 1,
+                            month_price: month_price,
+                            annual_price: annual_price,
+                        };
+                    @else
+                        this.clearCart();
+
+                        this.plans_cart[plan_slug] = {
+                            plan_id: plan_id,
+                            plan_slug: plan_slug,
+                            qty: 1,
+                            month_price: month_price,
+                            annual_price: annual_price,
+                        };
+                    @endif
                 }
+
+                this.selected_plan_id = plan_id;
             },
             getProjectedInvoice(cart, mode = null) {
                 if(cart === null || cart.length <= 0)
@@ -44,11 +71,17 @@
 
                     this.processing = false;
                 })
-                .catch(error => alert(error.error.msg));
+                .catch(error => {
+                    alert(error.error.msg);
+                    this.processing = false;
+                });
+
+                this.selected_plan_interval = mode;
             },
             clearCart() {
                 this.plans_cart = {};
                 this.projected_invoice = null;
+                this.selected_plan_id = null;
             },
             checkout() {
                 {{-- TODO: Compare old subscriptions items with new subscription items AND check if there is less items of same type in new subscription. If there is, prompt a new modal where user must select which licenses/seats will be revoked/removed. --}}
@@ -67,7 +100,12 @@
                     data['items'].push({
                         id: item.plan_id,
                         class: 'App\\Models\\Plan', // TODO: make this universal! 
-                        qty: item.qty,
+                        @if(get_tenant_setting('multi_item_subscription_enabled'))
+                            {{-- qty: item.qty, --}}
+                            qty: 1,
+                        @else
+                            qty: 1,
+                        @endif
                         preview: false,
                         interval: this.pricing_mode
                     });
@@ -76,10 +114,19 @@
                 url_params.set('data', btoa(JSON.stringify(data)));
 
                 window.open(base_route.toString()+'?'+url_params.toString(), '_blank').focus();
+            },
+            selectedIsActive() {
+                return this.selected_plan_id === this.current_plan_id && this.current_plan_mode ===  this.pricing_mode;
             }
         }" x-init="
-            $watch('plans_cart', (cart) => getProjectedInvoice(cart));
+            $watch('plans_cart', (cart) => getProjectedInvoice(cart, pricing_mode));
             $watch('pricing_mode', (mode) => getProjectedInvoice(plans_cart, mode));
+        "
+        @display-modal.window="
+            if($event.detail.id === 'purchase-subscription-with-multiple-items-modal') {
+                pricing_mode = $event.detail.interval;
+                addToSubscriptionCart($event.detail.plan_id, $event.detail.plan_slug, $event.detail.qty, $event.detail.month_price, $event.detail.annual_price);
+            }
         "
         class="pt-3">
             <div class="w-full sm:flex sm:flex-col sm:align-center mb-5">
@@ -98,17 +145,35 @@
                 </div>
             </div>
 
-            <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+            <div class="mt-8 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
 
                 @if($plans->isNotEmpty())
                     @foreach($plans as $plan)
                         <div class="relative bg-white border rounded-lg shadow-sm p-4 flex focus:outline-none" x-data="{
                             plan_id: {{ $plan->id }},
                             plan_slug: '{{ $plan->slug }}',
-                            qty: 0,
+                            qty: @js(get_tenant_setting('multi_item_subscription_enabled') ? 1 : 1),
                             month_price: @js($plan->getTotalPrice(display: true, decimals: 0)),
                             annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice(display: false) / 12, 0)),
-                        }">
+                            is_active() {
+                                return this.plan_id == current_plan_id && current_plan_mode == pricing_mode;
+                            },
+                            is_selected() {
+                                return this.plan_id == selected_plan_id && selected_plan_interval == pricing_mode;
+                            }
+                        }" :class="{'border-2 border-primary':  is_active(), 'border-2 border-info': is_selected() }">
+                            <template x-if="is_active()">
+                                <div class="absolute top-[-15px] right-[15px] bg-white rounded-full border border-primary py-1 px-2 text-12">
+                                    <span>{{ translate('Active') }}</span>
+                                </div>
+                            </template>
+
+                            <template x-if="is_selected()">
+                                <div class="absolute top-[-15px] right-[15px] bg-white rounded-full border border-info py-1 px-2 text-12">
+                                    <span>{{ translate('Selected') }}</span>
+                                </div>
+                            </template>
+                            
                             <span class="flex-1 flex">
                                 <div class="flex flex-col">
                                     <span class="block text-sm font-medium text-gray-900 mb-1 line-clamp-2">{{ $plan->name }}</span>
@@ -123,17 +188,34 @@
                                         *{{ translate('Billed annually') }}
                                     </div>
 
-                                    <div class="w-full pb-3 mt-5">
-                                        <label class="block text-sm font-medium text-gray-700">{{ translate('License quantity') }}</label>
-                                        <div class="mt-1 relative rounded-md shadow-sm">
+                                    @if(get_tenant_setting('multi_item_subscription_enabled'))
+                                        {{-- <div class="w-full pb-3 mt-5">
+                                            <label class="block text-sm font-medium text-gray-700">{{ translate('License quantity') }}</label>
+                                            <div class="mt-1 relative rounded-md shadow-sm">
+                                                <x-dashboard.form.input type="number" min="1" step="1" field="qty" :x="true" />
+                                            </div>
+                                        </div> --}}
+                                    @else
+                                        {{-- <label class="block text-sm font-medium text-gray-700">{{ translate('License quantity') }}</label> --}}
+                                        {{-- <div class="mt-1 relative rounded-md shadow-sm">
+                                            
                                             <x-dashboard.form.input type="number" min="1" step="1" field="qty" :x="true" />
-                                        </div>
-                                    </div>
+                                        </div> --}}
+                                    @endif
 
-                                    <div class="w-full">
-                                        <button type="button" class="btn-primary" @click="addToSubscriptionCart(plan_id, plan_slug, qty, month_price, annual_price); qty = 0;" :disabled="qty <= 0"> 
-                                            {{ translate('Add') }}
-                                        </button>
+                                    <div class="w-full mt-3">
+                                        @if(get_tenant_setting('multi_item_subscription_enabled'))
+                                            {{-- <button type="button" class="btn-primary" @click="addToSubscriptionCart(plan_id, plan_slug, qty, month_price, annual_price); qty = 0;" :disabled="qty <= 0"> 
+                                                {{ translate('Add') }}
+                                            </button> --}}
+                                            <button type="button" class="btn-primary" @click="addToSubscriptionCart(plan_id, plan_slug, 1, month_price, annual_price); qty = 1;" :disabled="qty <= 0"> 
+                                                {{ translate('Select plan') }}
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn-primary" @click="addToSubscriptionCart(plan_id, plan_slug, 1, month_price, annual_price); qty = 1;"> 
+                                                {{ translate('Select plan') }}
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
                             </span>
@@ -205,17 +287,25 @@
                         </table>
                     </div>
 
-                    <div class="w-full flex justify-center mt-4">
-                        <div class="btn-primary" @click="checkout()">{{ translate('Proceed to checkout') }}</div>
-                    </div>
+                    <template x-if="!selectedIsActive()">
+                        <div class="w-full flex justify-center mt-4">
+                            <div class="btn-primary" @click="checkout()">{{ translate('Proceed to checkout') }}</div>
+                        </div>
+                    </template>
                 </div>
             </template>
 
-            <template x-if="_.get(projected_invoice, 'lines.data', []).length <= 0">
-                <div class="w-full flex justify-center text-16 text-gray-500">
-                    {{ translate('No plans added yet...') }}
+            <template x-if="_.get(projected_invoice, 'lines.data', []).length <= 0" >
+                <div class="w-full flex justify-center text-16 text-gray-500" :class="{'opacity-70 pointer-events-none': processing}">
+                    <template x-if="processing">
+                        <span>{{ translate('Generating projection...') }}</span>
+                    </template>
+
+                    <template x-if="!processing">
+                        <span>{{ translate('No plans added yet...') }}</span>
+                    </template>
                 </div>
             </template>
-        </div>
+        </fieldset>
     </div>
 </x-system.form-modal>

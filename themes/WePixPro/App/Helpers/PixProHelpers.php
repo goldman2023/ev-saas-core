@@ -294,7 +294,7 @@ if (!function_exists('pix_pro_create_license')) {
         $route_paid = pix_pro_endpoint().'/paid/add_license/';
         
         if (!empty($subscription)) {
-            $stripe_subscription_id = $subscription->data[stripe_prefix('stripe_subscription_id')];
+            $stripe_subscription_id = $subscription->getData(stripe_prefix('stripe_subscription_id'));
 
             $stripe_subscription = StripeService::stripe()->subscriptions->retrieve(
                 $stripe_subscription_id,
@@ -386,7 +386,7 @@ if (!function_exists('pix_pro_create_license')) {
                             foreach($licenses_to_remove as $license_to_remove) {
                                 pix_pro_remove_license($license_to_remove, $pix_pro_user);
 
-                                $license_to_remove->delete();
+                                $license_to_remove->forceDelete();
 
                                 UserSubscriptionRelationship::where([
                                     ['subject_id', $license_to_remove->id],

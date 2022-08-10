@@ -84,9 +84,10 @@
         {{-- <a class="btn btn-white flex items-center mr-2" href="#">
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a> --}}
+        
 
-        @if(($row->items->count() === 1 && ($row->items->first()?->pivot?->qty ?? null) === 1))
-            <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="$dispatch('display-modal', {'id': 'change-plan-modal'})" target="_blank">
+        {{-- @if(($row->items->count() === 1 && ($row->items->first()?->pivot?->qty ?? null) === 1))
+            <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="$dispatch('display-modal', {id: 'purchase-subscription-with-multiple-items-modal'})" target="_blank">
                 {{ translate('Change') }}
             </button>
         @elseif($row->items->count() > 1 || ($row->items->first()?->pivot?->qty ?? null) > 1)
@@ -94,10 +95,23 @@
                 {{ translate('Change') }}
             </button>
         @else
-            <a type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" x-bind:href="$getStripeCheckoutPermalink()" target="_blank">
+            <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="$dispatch('display-modal', {id: 'purchase-subscription-with-multiple-items-modal'})" target="_blank">
                 {{ translate('Change') }}
-            </a>
-        @endif
+            </button>
+        @endif --}}
+
+        <button type="button" class="btn btn-primary flex items-center mr-2 cursor-pointer" @click="$dispatch('display-modal', {
+            id: 'purchase-subscription-with-multiple-items-modal', 
+            plan_id: @js($row->items->first()?->id),
+            plan_slug: @js($row->items->first()?->slug),
+            qty: 1,
+            month_price: @js($row->items->first()?->getTotalPrice(display: true, decimals: 0) ?? 0),
+            annual_price: @js(\FX::formatPrice(($row->items->first()?->getTotalAnnualPrice(display: false) ?? 0) / 12, 0)),
+        })">
+            {{ translate('Change') }}
+        </button>
+
+        
 
         
 

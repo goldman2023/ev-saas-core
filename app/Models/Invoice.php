@@ -92,15 +92,7 @@ class Invoice extends WeBaseModel
 
     public function scopeReal($query) {
         // Invoices are real if is_temp is 0/false
-        $query = $query->where('is_temp', '=', 0);
-
-        // if(\Payments::isStripeEnabled() && \Payments::isStripeLiveMode()) {
-        //     $query->where('mode', 'live');
-        // } else if(\Payments::isStripeEnabled() && !\Payments::isStripeLiveMode()) {
-        //     $query->where('mode', 'test');
-        // }
-
-        return $query;
+        return $query->where('is_temp', '=', 0);
     }
     
     /*
