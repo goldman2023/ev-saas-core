@@ -759,6 +759,7 @@ class StripeService
         $order_line_items = [];
 
         $previous_subscription = !empty($previous_subscription_id) ? UserSubscription::find($previous_subscription_id) : null;
+
         /**
          * Multi-items subscription logic:
          * 1. In subscription created/updated webhook, compare each previous subscription item quantity with corresponding qty of same item in
@@ -882,6 +883,32 @@ class StripeService
                 }
             }
 
+            // If there is a previous subscription, check if total price of current temp-subscription has lower or same price as previous subscription
+            $one_time_stripe_coupon_code = null;
+
+            if(!empty($previous_subscription) && $subscription->getTotalPrice(format: false) <= $previous_subscription->getTotalPrice(format: false)) {
+                // Create a downgrade with 100% discount for first month (like a partial proration)
+                // IMPORTANT: We can do this only bu applying one-time custom coupon code with duration of `once`
+                $one_time_stripe_coupon_code = $this->stripe->coupons->create([
+                    'percent_off' => 100,
+                    'duration' => 'once',
+                    'max_redemptions' => 1,
+                    'name' => 'downgrade-'.substr(str_shuffle('abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789'),0,28),
+                    'redeem_by' => \Carbon::now()->addMinutes(10)->timestamp
+                ]);
+
+                if(!empty($one_time_stripe_coupon_code) && isset($one_time_stripe_coupon_code->id)) {
+                    $stripe_args['discounts'] = [
+                        [
+                            'coupon' => $one_time_stripe_coupon_code->id,
+                        ]
+                    ];
+
+                    unset($stripe_args['allow_promotion_codes']);
+                }
+                
+            }
+
 
             if (!empty(auth()->user())) {
                 // Create Stripe customer if it doesn't exist
@@ -894,7 +921,6 @@ class StripeService
                     'shipping' => 'auto',
                 ];
             }
-
 
             $checkout_link = $this->stripe->checkout->sessions->create($stripe_args);
 
