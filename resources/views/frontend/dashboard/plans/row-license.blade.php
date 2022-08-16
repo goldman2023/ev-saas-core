@@ -20,10 +20,10 @@
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
         @do_action('view.dashboard.plans.row-license.actions.start', $row)
 
-        <button 
-            @click="isOpen = !isOpen" 
-            @keydown.escape="isOpen = false" 
-            class="flex items-center btn" 
+        <button
+            @click="isOpen = !isOpen"
+            @keydown.escape="isOpen = false"
+            class="flex items-center btn"
         >
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>

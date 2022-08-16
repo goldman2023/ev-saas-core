@@ -163,7 +163,12 @@ class CheckoutSingleForm extends Component
         $this->items = CartService::getItems();
 
         $this->order = new Order();
-        $this->order->shop_id = ($this->items->first()?->shop_id ?? 1); // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
+
+        /* TODO: This is temp workaround before implementing bellow option fully  */
+        $this->order->shop_id = 1;
+
+        // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
+        // $this->order->shop_id = ($this->items->first()?->shop_id ?? 1);
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
 
