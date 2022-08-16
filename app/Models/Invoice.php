@@ -211,7 +211,7 @@ class Invoice extends WeBaseModel
             $stripe_line_items = collect($stripe_invoice['lines']['data']);
         }
 
-        if($user->entity === 'company') {
+        if($user->entity === UserEntityEnum::company()->value) {
             // Company
             $company_country = $user->getUserMeta('company_country');
             $company_vat = $user->getUserMeta('company_vat');
@@ -389,11 +389,6 @@ class Invoice extends WeBaseModel
             ->notes($notes);
 
             if($this->isFromStripe()) {
-                // dd($stripe_invoice['starting_balance']);
-                // if($stripe_invoice['starting_balance'] < 0) {
-                //     $invoice->totalDiscount( abs($stripe_invoice['starting_balance']) / 100 );
-                // }
-
                 $invoice
                     // ->totalDiscount( ($stripe_invoice['subtotal_excluding_tax'] / 100) - ($stripe_invoice['total_excluding_tax'] / 100) )
                     ->taxableAmount($stripe_invoice['total_excluding_tax'] / 100)
