@@ -853,6 +853,8 @@ class StripeService
             ];
 
             // If plans trial mode is enabled
+            $trial_days_left = 0;
+
             if(get_tenant_setting('plans_trial_mode') && !empty(get_tenant_setting('plans_trial_duration'))) {
                 $started_trials = collect(auth()->user()->getUserMeta('started_trials_on', []));
                 $trial_data = $started_trials->firstWhere('shop_id', $order->shop_id);
@@ -886,7 +888,7 @@ class StripeService
             // If there is a previous subscription, check if total price of current temp-subscription has lower or same price as previous subscription
             $one_time_stripe_coupon_code = null;
 
-            if(!empty($previous_subscription) && $subscription->getTotalPrice(format: false) <= $previous_subscription->getTotalPrice(format: false)) {
+            if($trial_days_left <= 0 && !empty($previous_subscription) && $subscription->getTotalPrice(format: false) <= $previous_subscription->getTotalPrice(format: false)) {
                 // Create a downgrade with 100% discount for first month (like a partial proration)
                 // IMPORTANT: We can do this only bu applying one-time custom coupon code with duration of `once`
                 $one_time_stripe_coupon_code = $this->stripe->coupons->create([
