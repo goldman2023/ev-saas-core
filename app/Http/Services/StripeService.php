@@ -518,25 +518,25 @@ class StripeService
         return $stripe_customer;
     }
 
-    public function updateStripeCustomerTax($user = null) {
+    public function updateStripeCustomerTax($user = null, $update_tax_exempt_for_individual = false) {
         // Dispatch a job to update customer Tax data in stripe
-        dispatch(function () use ($user) {
+        dispatch(function () use ($user, $update_tax_exempt_for_individual) {
             $user = !empty($user) && $user instanceof \App\Models\User ? $user : auth()->user();
 
             $stripe_customer_id_key = stripe_prefix('stripe_customer_id');
             $stripe_customer_id = $user->getCoreMeta($stripe_customer_id_key);
-
+    
             try {
                 $stripe_customer = $this->stripe->customers->retrieve(
                     $stripe_customer_id,
                     []
                 );
-
+    
                 if ($stripe_customer->deleted ?? null) {
                     throw new \Exception();
                 }
                 
-
+                
                 // If $customer is company, add TaxID if applicable
                 if($user->entity === 'company') {
                     $company_country = $user->getUserMeta('company_country');
@@ -588,13 +588,46 @@ class StripeService
                         );
                     }
                 } else {
+                    
                     // Individuals - Stripe checkout will decide it
+                    $customer_country = $stripe_customer?->address?->country ?? null;
+
+                    if($update_tax_exempt_for_individual && !empty($customer_country) && !empty(\Countries::get(code: $customer_country))) {
+                        
+                        if(\Countries::isEU($customer_country)) {
+                            $stripe_params['tax_exempt'] = 'none';
+                        } else {
+                            $stripe_params['tax_exempt'] = 'exempt';
+                        }
+                        
+                        // IMPORTANT: In order to take tax_exempt into consideration, we need to remove all previously added stripe TaxIDs for this user (if any)
+                        $previous_tax_ids = $this->stripe->customers->allTaxIds(
+                            $stripe_customer->id,
+                            ['limit' => 100]
+                        );
+    
+                        if(!empty($previous_tax_ids->data)) {
+                            foreach($previous_tax_ids->data as $tax_id) {
+                                // Remove previous taxIDs
+                                $this->stripe->customers->deleteTaxId(
+                                    $stripe_customer->id,
+                                    $tax_id->id,
+                                    []
+                                );
+                            }
+                        }
+    
+                        $this->stripe->customers->update(
+                            $stripe_customer->id,
+                            $stripe_params
+                        );
+                        
+                    }
                 }
             } catch (\Exception $e) {
                 $this->createStripeCustomer($user);
-            }
+            } 
         });
-        
     }
 
     /**
