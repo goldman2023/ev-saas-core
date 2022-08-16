@@ -60,7 +60,11 @@ class MyAccountForm extends Component
         if($user_meta_fields_in_use->count() > 0) {
             foreach($user_meta_fields_in_use as $key => $options) {
                 if(in_array($key, UserMeta::metaForCompanyEntity())) {
-                    $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required'] : [];
+                    if($key === 'company_vat') {
+                        $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required', 'check_eu_vat_number:company_country'] : ['nullable', 'check_eu_vat_number'];
+                    } else {
+                        $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required'] : [];
+                    }
                 } else {
                     $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['required'] : [];
                 }
@@ -97,7 +101,7 @@ class MyAccountForm extends Component
 
     protected function messages()
     {
-        return [
+        $msgs = [
             'me.thumbnail.exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
             'me.cover.exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
             'me.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
@@ -112,7 +116,19 @@ class MyAccountForm extends Component
             'newPassword.min' => translate('Length of password must not be less than :min'),
             'newPassword.regex' => translate('New password is not as per requirements. Please read requirements below.'),
             'newPassword.confirmed' => translate('Your new password confirmation does not match the new password. New password and confirmation must match.'),
+
+            'meta.company_vat.check_eu_vat_number' => translate('Either VAT number is not valid or VAT number and company country are not alignd correctly'),
         ];
+
+        $user_meta_fields_in_use = collect(get_tenant_setting('user_meta_fields_in_use'));
+
+        if($user_meta_fields_in_use->count() > 0) {
+            foreach($user_meta_fields_in_use as $key => $options) {
+                $msgs['meta.'.$key.'.required'] = translate('Required');
+            }
+        }
+
+        return $msgs;
     }
 
     /**
