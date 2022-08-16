@@ -47,6 +47,7 @@
         @endif
 
         {{-- First Name --}}
+        <div class="sm:grid-cols-2 grid gap-3">
         <div class="mb-3">
             <label class="block text-16 font-medium text-gray-700">{{ translate('First name') }}</label>
 
@@ -75,6 +76,7 @@
             <x-system.invalid-msg field="surname" />
         </div>
         {{-- END Last Name --}}
+        </div>
 
         {{-- Email --}}
         <div class="mb-3">
