@@ -71,7 +71,7 @@ class User extends Resource
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
-            HasMany::make('User Subscription', 'plan_subscriptions'),
+            HasMany::make('User Subscription', 'subscriptions'),
 
             HasMany::make('Invoices'),
 

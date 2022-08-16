@@ -48,7 +48,7 @@ class UserSubscription extends Resource
     {
         return [
             ID::make()->sortable(),
-            MorphTo::make('Plan', 'plan', Plan::class),
+            // MorphTo::make('Plan', 'plan', Plan::class),
             BelongsTo::make('User', 'user', 'App\Nova\Tenant\User'),
             Select::make(__('Status'), 'payment_status')->options(UserSubscriptionStatusEnum::values()),
 

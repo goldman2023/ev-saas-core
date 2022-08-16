@@ -12,7 +12,12 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
-    <span class="text-14">{{ $row->billing_first_name.' '.$row->billing_last_name }}</span>
+    <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user_id]) }}">
+        <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
+         {{ $row->user->email }}
+     </a>
+
+    {{-- <span class="text-14">{{ $row->billing_first_name.' '.$row->billing_last_name }}</span> --}}
 </x-livewire-tables::table.cell>
 
 
@@ -53,10 +58,10 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a>
 
-        <button 
-            @click="isOpen = !isOpen" 
-            @keydown.escape="isOpen = false" 
-            class="flex items-center btn" 
+        <button
+            @click="isOpen = !isOpen"
+            @keydown.escape="isOpen = false"
+            class="flex items-center btn"
         >
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
@@ -67,7 +72,7 @@
             <li>
                 <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="{{ $row->getPermalink() }} "
                     target="_blank">
-                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) 
+                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2'])
                     <span class="ml-2">{{ translate('Preview') }}</span>
                 </a>
             </li>

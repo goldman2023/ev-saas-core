@@ -74,19 +74,19 @@ class InvoicesTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('Invoice ID')
-                ->excludeFromSelectable()
-                ->addClass('text-left'),
             Column::make('Invoice Number')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
-            Column::make('Order ID')
+            Column::make('Customer')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
             Column::make('Status', 'status')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
             Column::make('Amount', 'total_price')
+                ->excludeFromSelectable()
+                ->addClass('text-left'),
+            Column::make('Tax', 'total_price')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
             Column::make('Next Invoice Date', 'created_at')
@@ -109,10 +109,10 @@ class InvoicesTable extends DataTableComponent
             $query = $query->where('user_id', $this->user->id);
         } else if(!empty($this->shop)) {
             $query = $query->where('shop_id', $this->shop->id);
-        } else if(!empty($this->order)) { 
+        } else if(!empty($this->order)) {
             $query = $query->where('order_id', $this->order->id);
         }
-        
+
         return $query
             ->orderBy('updated_at', 'desc')
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))

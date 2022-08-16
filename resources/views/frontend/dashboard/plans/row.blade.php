@@ -1,11 +1,18 @@
 <x-livewire-tables::table.cell class="align-middle ">
+    <div class="flex items-center">
     <a class="media items-center text-14" href="{{ route('plan.edit', ['id' => $row->id]) }}">
-        #{{ $row->id }}
+       <img class="w-12 rounded mr-3" src="{{ $row->getThumbnail() }}" />
     </a>
+    {{-- <a class="text-14" href="{{ route('plan.edit', ['id' => $row->id]) }}">
+        #{{ $row->id }}
+    </a> --}}
+    </div>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle ">
-    {{ $row->getTranslation('name') }}
+    <a class="media items-center text-14" href="{{ route('plan.edit', ['id' => $row->id]) }}">
+        {{ $row->getTranslation('name') }}
+    </a>
 
     @if($row->primary)
         <span class="badge-info">
@@ -59,10 +66,10 @@
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>
 
-        <button 
-            @click="isOpen = !isOpen" 
-            @keydown.escape="isOpen = false" 
-            class="flex items-center btn" 
+        <button
+            @click="isOpen = !isOpen"
+            @keydown.escape="isOpen = false"
+            class="flex items-center btn"
         >
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>

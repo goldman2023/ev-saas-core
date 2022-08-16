@@ -45,7 +45,7 @@ class LicensesTable extends DataTableComponent
 
     public function mount($user) {
         $this->user = $user;
-        
+
         parent::mount();
 
         do_action('dashboard.table.licenses.mount.end', $this->user);
@@ -70,6 +70,10 @@ class LicensesTable extends DataTableComponent
 
         $columns = apply_filters('dashboard.table.licenses.columns', [
             Column::make('ID', 'license_id')
+                ->excludeFromSelectable(),
+                Column::make('ID', 'license_id')
+                ->excludeFromSelectable(),
+                Column::make('ID', 'license_id')
                 ->excludeFromSelectable(),
             Column::make('Serial Number', 'serial_number')
                 ->excludeFromSelectable(),
@@ -109,15 +113,15 @@ class LicensesTable extends DataTableComponent
             $license->setData('file_name', $response['file_name']);
             $license->setData('file_contents', $response['file_contents']);
             $license->save();
-            
-            return response()->streamDownload(function () use($response) { 
+
+            return response()->streamDownload(function () use($response) {
                 echo $response['file_contents'];
             }, $response['file_name']);
         }
 
         $this->inform(translate('Error: Coudld not download latest .DAT file...'), translate('Please refresh and try again.'), 'fail');
     }
-    
+
     public function disconnect(License $license) {
         do_action('license.disconnect', $license, $this->user, $this);
 
