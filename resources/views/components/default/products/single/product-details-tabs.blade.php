@@ -279,11 +279,6 @@
                 </span>
 
                 <div class="media-body">
-                    <h4 class="mb-1">
-                        <a class="text-dark" href="#">GunOB</a>
-                    </h4>
-
-
                     <a class="btn  btn-sm btn-primary" href="#">Register</a>
                 </div>
             </div>

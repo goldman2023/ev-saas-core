@@ -147,7 +147,7 @@ $models = \App\Models\Plan::published()->get();
 @endguest
 
 {{-- Plan Features table --}}
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="plan-features">
     <div>
         <div class="mb-5 md:mb-0 py-4 overflow-x-auto">
             <div class="inline-block min-w-full overflow-hidden">

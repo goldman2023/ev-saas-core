@@ -23,15 +23,16 @@
                 <h1 class="ftext-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{{ translate('Order') }}:
                     #{{ $order->id }}</h1>
 
-                    <span class="badge-dark ml-2">
-                        {{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}
-                    </span>
+                <span class="badge-dark ml-2">
+                    {{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}
+                </span>
                 {{-- <a href="#" class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block">View
                     invoice<span aria-hidden="true"> &rarr;</span></a> --}}
             </div>
             <p class="text-sm text-gray-600">
                 {{ translate('Order placed on:') }}
-                <time datetime="2021-03-22" class="font-semibold text-gray-900">{{ $order->created_at->format('M d, Y H:i') }}</time>
+                <time datetime="2021-03-22" class="font-semibold text-gray-900">{{ $order->created_at->format('M d, Y
+                    H:i') }}</time>
             </p>
             <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:hidden">
                 {{ translate('View invoice') }}
@@ -43,8 +44,10 @@
         <div class="px-4 py-2 space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0 mb-4">
             <div class="flex items-center">
                 @php
-                    $last_invoice = $order->invoices->first(); // it's already sorted by created_at DESC
+                $last_invoice = $order->invoices->first(); // it's already sorted by created_at DESC
                 @endphp
+
+                @if($last_invoice)
                 @if($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
                 <span class="badge-success !py-1 !px-3 mr-3">
                     {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
@@ -58,29 +61,31 @@
                     {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
                 </span>
                 @endif
+                @endif
 
                 {{-- Shipping status (only for Standard Products) --}}
-                @if($order_items->filter(fn($item) => $item->subject->isProduct() && $item->subject->isShippable())->count() > 0)
-                    @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
-                        <span class="badge-success !py-1 !px-3 mr-2">
-                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                        </span>
-                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
-                        <span class="badge-warning !py-1 !px-3 mr-2">
-                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                        </span>
-                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
-                        <span class="badge-danger !py-1 !px-3 mr-2">
-                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                        </span>
-                    @endif
+                @if($order_items->filter(fn($item) => $item->subject->isProduct() &&
+                $item->subject->isShippable())->count() > 0)
+                @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
+                <span class="badge-success !py-1 !px-3 mr-2">
+                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                </span>
+                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
+                <span class="badge-warning !py-1 !px-3 mr-2">
+                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                </span>
+                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
+                <span class="badge-danger !py-1 !px-3 mr-2">
+                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                </span>
+                @endif
 
-                    {{-- Tracking number (only for Standard Products) --}}
-                    @if(empty($order->tracking_number))
-                        <span class="badge-danger !py-1 !px-3 mr-2">
-                            {{ translate('Tracking number not added') }}
-                        </span>
-                    @endif
+                {{-- Tracking number (only for Standard Products) --}}
+                @if(empty($order->tracking_number))
+                <span class="badge-danger !py-1 !px-3 mr-2">
+                    {{ translate('Tracking number not added') }}
+                </span>
+                @endif
                 @endif
             </div>
 
@@ -110,63 +115,63 @@
         <div class="w-full">
             <div class="space-y-8">
                 @if($order_items->isNotEmpty())
-                    @foreach($order_items as $item)
-                        <div class="bg-white border-t border-b border-gray-200 shadow-sm sm:border sm:rounded-lg">
-                            <div class="py-6 px-4 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
-                                <div class="sm:flex lg:col-span-7">
-                                    <div
-                                        class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40 border border-gray-200 shadow">
-                                        <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
-                                            class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+                @foreach($order_items as $item)
+                <div class="bg-white border-t border-b border-gray-200 shadow-sm sm:border sm:rounded-lg">
+                    <div class="py-6 px-4 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
+                        <div class="sm:flex lg:col-span-7">
+                            <div
+                                class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40 border border-gray-200 shadow">
+                                <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
+                                    class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+                            </div>
+
+                            <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6">
+                                <h3 class="text-base font-medium text-gray-900">
+                                    <a href="#">{{ $item->name }}</a>
+                                </h3>
+
+                                <p class="mt-3 text-sm text-gray-500">{{ $item->excerpt }}</p>
+
+                                <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6 mt-5">
+                                    <div class="flex">
+                                        <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}</dt>
+                                        <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
                                     </div>
-
-                                    <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6">
-                                        <h3 class="text-base font-medium text-gray-900">
-                                            <a href="#">{{ $item->name }}</a>
-                                        </h3>
-
-                                        <p class="mt-3 text-sm text-gray-500">{{ $item->excerpt }}</p>
-
-                                        <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6 mt-5">
-                                            <div class="flex">
-                                                <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}</dt>
-                                                <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
-                                            </div>
-                                            <div class="pl-4 flex sm:pl-6">
-                                                <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
-                                                <dd class="ml-2 text-gray-700">
-                                                    {{ FX::formatPrice($item->total_price *
-                                                    $item->quantity) }} / {{ $order->invoicing_period }}
-                                                </dd>
-                                            </div>
-                                        </dl>
+                                    <div class="pl-4 flex sm:pl-6">
+                                        <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
+                                        <dd class="ml-2 text-gray-700">
+                                            {{ FX::formatPrice($item->total_price *
+                                            $item->quantity) }} / {{ $order->invoicing_period }}
+                                        </dd>
                                     </div>
-                                </div>
-
-                                {{-- <div class="mt-6 lg:mt-0 lg:col-span-5">
-                                    <dl class="grid grid-cols-2 gap-x-6 text-sm">
-                                        <div>
-                                            <dt class="font-medium text-gray-900">Delivery address</dt>
-                                            <dd class="mt-3 text-gray-500">
-                                                <span class="block">Floyd Miles</span>
-                                                <span class="block">7363 Cynthia Pass</span>
-                                                <span class="block">Toronto, ON N3Y 4H8</span>
-                                            </dd>
-                                        </div>
-                                        <div>
-                                            <dt class="font-medium text-gray-900">Shipping updates</dt>
-                                            <dd class="mt-3 text-gray-500 space-y-3">
-                                                <p>f•••@example.com</p>
-                                                <p>1•••••••••40</p>
-                                                <button type="button"
-                                                    class="font-medium text-indigo-600 hover:text-indigo-500">Edit</button>
-                                            </dd>
-                                        </div>
-                                    </dl>
-                                </div> --}}
+                                </dl>
                             </div>
                         </div>
-                    @endforeach
+
+                        {{-- <div class="mt-6 lg:mt-0 lg:col-span-5">
+                            <dl class="grid grid-cols-2 gap-x-6 text-sm">
+                                <div>
+                                    <dt class="font-medium text-gray-900">Delivery address</dt>
+                                    <dd class="mt-3 text-gray-500">
+                                        <span class="block">Floyd Miles</span>
+                                        <span class="block">7363 Cynthia Pass</span>
+                                        <span class="block">Toronto, ON N3Y 4H8</span>
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt class="font-medium text-gray-900">Shipping updates</dt>
+                                    <dd class="mt-3 text-gray-500 space-y-3">
+                                        <p>f•••@example.com</p>
+                                        <p>1•••••••••40</p>
+                                        <button type="button"
+                                            class="font-medium text-indigo-600 hover:text-indigo-500">Edit</button>
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div> --}}
+                    </div>
+                </div>
+                @endforeach
                 @endif
 
                 {{-- TODO: for digital products skip shipping --}}
@@ -208,8 +213,9 @@
         <div class="mt-6">
             <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
                 <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
-             </div>
-            <livewire:dashboard.tables.recent-invoices-widget-table :order="$order" :per-page="10" :show-per-page="false" :show-search="false" :column-select="false" />
+            </div>
+            <livewire:dashboard.tables.recent-invoices-widget-table :order="$order" :per-page="10"
+                :show-per-page="false" :show-search="false" :column-select="false" />
         </div>
 
         <!-- Billing -->
@@ -219,23 +225,25 @@
                     <div>
                         <dt class="font-medium text-gray-900">{{ translate('Billing address') }}</dt>
                         {{-- @if($order->isPaid()) --}}
-                            <dd class="mt-3 text-gray-500">
-                                <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
-                                <span class="block">{{ $order->billing_address }}</span>
-                                <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
-                                <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '') . (\Countries::get(code: $order->billing_country)?->name ?? '') }}</span>
-                            </dd>
+                        <dd class="mt-3 text-gray-500">
+                            <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
+                            <span class="block">{{ $order->billing_address }}</span>
+                            <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
+                            <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '') .
+                                (\Countries::get(code: $order->billing_country)?->name ?? '') }}</span>
+                        </dd>
                         {{-- @else
-                            <dd class="mt-3 text-gray-500">
-                                <span class="block">
-                                    {{ translate('Order is processing, this can take a few minutes.') }}
-                                </span>
-                            </dd>
+                        <dd class="mt-3 text-gray-500">
+                            <span class="block">
+                                {{ translate('Order is processing, this can take a few minutes.') }}
+                            </span>
+                        </dd>
                         @endif --}}
                     </div>
                     <div>
-                        @if((auth()->user()?->isAdmin() ?? false) && !empty($order->meta['stripe_payment_intent_id'] ?? null))
-                            <dt class="font-medium text-gray-900">{{ translate('Payment information') }}</dt>
+                        @if((auth()->user()?->isAdmin() ?? false) && !empty($order->meta['stripe_payment_intent_id'] ??
+                        null))
+                        <dt class="font-medium text-gray-900">{{ translate('Payment information') }}</dt>
                         @endif
                         <div class="mt-3">
                             <dd class="-ml-4 -mt-4 flex flex-wrap">
@@ -253,18 +261,19 @@
                                     <p class="text-gray-900">Ending with ****</p>
                                     <p class="text-gray-600">Expires ** / **</p>
                                 </div> --}}
-                                @if((auth()->user()?->isAdmin() ?? false) && !empty($order->meta['stripe_payment_intent_id'] ?? null))
-                                    @if(\StripeService::getStripeMode() === 'live')
-                                        <a target="_blank" class="btn btn-primary"
-                                            href="https://dashboard.stripe.com/live/payments/{{ $order->meta['stripe_payment_intent_id'] ?? null }}">
-                                            {{ translate('View transaction details on Stripe') }}
-                                        </a>
-                                    @else
-                                        <a target="_blank" class="btn btn-primary"
-                                            href="https://dashboard.stripe.com/test/payments/{{ $order->meta['stripe_payment_intent_id'] ?? null }}">
-                                            {{ translate('View transaction details on Stripe') }}
-                                        </a>
-                                    @endif
+                                @if((auth()->user()?->isAdmin() ?? false) &&
+                                !empty($order->meta['stripe_payment_intent_id'] ?? null))
+                                @if(\StripeService::getStripeMode() === 'live')
+                                <a target="_blank" class="btn btn-primary"
+                                    href="https://dashboard.stripe.com/live/payments/{{ $order->meta['stripe_payment_intent_id'] ?? null }}">
+                                    {{ translate('View transaction details on Stripe') }}
+                                </a>
+                                @else
+                                <a target="_blank" class="btn btn-primary"
+                                    href="https://dashboard.stripe.com/test/payments/{{ $order->meta['stripe_payment_intent_id'] ?? null }}">
+                                    {{ translate('View transaction details on Stripe') }}
+                                </a>
+                                @endif
                                 @endif
                             </dd>
                         </div>

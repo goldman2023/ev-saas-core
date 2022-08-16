@@ -111,16 +111,15 @@ class OrdersTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('Order')
+            Column::make('Order', 'id')
                 ->sortable()
                 ->excludeFromSelectable()
                 ->addClass('hidden md:table-cell'),
             Column::make('Type', 'type')
                 ->excludeFromSelectable()
                 ->addClass('hidden md:table-cell'),
-            Column::make('Customer')
-                ->excludeFromSelectable()
-                ->sortable(),
+            Column::make('Customer', 'user_id')
+                ->excludeFromSelectable(),
             Column::make('Date', 'created_at')
                 ->excludeFromSelectable()
                 ->sortable(),
@@ -131,8 +130,7 @@ class OrdersTable extends DataTableComponent
             //     ->sortable()
             //     ->addClass('hidden md:table-cell'),
             Column::make('Total', 'total')
-                ->excludeFromSelectable()
-                ->sortable(),
+                ->excludeFromSelectable(),
             Column::make('Actions')
                 ->excludeFromSelectable(),
         ];

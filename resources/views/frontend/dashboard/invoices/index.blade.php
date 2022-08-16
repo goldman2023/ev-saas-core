@@ -9,14 +9,18 @@
 @section('panel_content')
     <x-dashboard.section-headers.section-header title="{{ translate('All invoices') }}" text="">
         <x-slot name="content">
-            <a href="{{ route('order.create') }}" class="btn-primary">
+            {{-- TODO: Manual Order creation, and then display this button --}}
+            {{-- <a href="{{ route('order.create') }}" class="btn-primary">
                 @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
                 <span>{{ translate('Add new Order') }}</span>
-            </a>
+            </a> --}}
         </x-slot>
     </x-dashboard.section-headers.section-header>
 
     <div class="w-full">
+         <x-dashboard.widgets.business.quick-actions>
+                    </x-dashboard.widgets.business.quick-actions>
+
         @if($invoices_count > 0)
             <livewire:dashboard.tables.invoices-table :per-page="10" />
         @else

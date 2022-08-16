@@ -1,22 +1,17 @@
+
+
 <x-livewire-tables::table.cell class="align-middle text-left">
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->order->id]) }}">
-        #{{ $row->id }}
-
-        @if(!$row->viewed_by_customer && $row->user_id === auth()->user()->id)
-            <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
-        @endif
+        #{{ $row->getRealInvoiceNumber() }}  @if(!$row->viewed_by_customer && $row->user_id === auth()->user()->id)
+        <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
+    @endif
     </a>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-left">
-    <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->order->id]) }}">
-        #{{ $row->getRealInvoiceNumber() }}
-    </a>
-</x-livewire-tables::table.cell>
-
-<x-livewire-tables::table.cell class="align-middle text-left">
-    <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->order->id]) }}">
-        #{{ $row->order->id }}
+    <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user_id]) }}">
+       <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
+        {{ $row->user->email }}
     </a>
 </x-livewire-tables::table.cell>
 
@@ -45,7 +40,15 @@
     <strong class="text-14">
 
         {{ $row->getRealTotalPrice() }}
-    
+
+    </strong>
+</x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="align-middle text-left">
+    <strong class="text-14">
+
+        {{ FX::formatPrice($row->tax) }}
+
     </strong>
 </x-livewire-tables::table.cell>
 
@@ -72,10 +75,10 @@
             {{ translate('Download') }}
         </a> --}}
 
-        {{-- <button 
-            @click="isOpen = !isOpen" 
-            @keydown.escape="isOpen = false" 
-            class="flex items-center btn" 
+        {{-- <button
+            @click="isOpen = !isOpen"
+            @keydown.escape="isOpen = false"
+            class="flex items-center btn"
         >
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
@@ -86,7 +89,7 @@
             <li>
                 <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="{{ $row->getPermalink() }} "
                     target="_blank">
-                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) 
+                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2'])
                     <span class="ml-2">{{ translate('Preview') }}</span>
                 </a>
             </li>
