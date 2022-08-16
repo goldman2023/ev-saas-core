@@ -174,10 +174,12 @@ class MyAccountForm extends Component
 
         try {
             $this->me->syncUploads();
-            $this->me->save();
+            $this->me->saveQuietly();
             $this->saveMeta($rules);
 
             DB::commit();
+
+            event('eloquent.updated: App\Models\User', $this->me);
 
             $this->inform(translate('Basic information successfully saved.'), '', 'success');
         } catch (\Exception $e) {

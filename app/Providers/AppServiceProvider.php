@@ -75,14 +75,12 @@ class AppServiceProvider extends ServiceProvider
             $country = $validator->getData()[$meta_field_name][$country_field_name];
 
             if(!empty($country) && !empty(\Countries::get(code: $country)) && \Countries::isEU($country)) {
-                try {
-                    if(str_starts_with($value, $country)) {
-                        $validVAT = VatCalculator::isValidVATNumber($value);
-                    } else {
-                        $validVAT = VatCalculator::isValidVATNumber($country.$value);
-                    }
+                try { 
+                    // VAT Number MUST INCLUDE COUNTRY TWO-LETTER CODE AT THE BEGINNING
+                    $validVAT = VatCalculator::isValidVATNumber($value);
                 } catch (VATCheckUnavailableException $e) {
                     // The VAT check API is unavailable...
+                    \Log::warning($e);
                 }
 
                 if($validVAT) {

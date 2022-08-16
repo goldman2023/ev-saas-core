@@ -101,7 +101,9 @@ class UserObserver
      */
     public function updated(User $user)
     {
-
+        if(Payments::isStripeEnabled()) {
+            StripeService::updateStripeCustomerTax($user);
+        }
     }
 
     /**
