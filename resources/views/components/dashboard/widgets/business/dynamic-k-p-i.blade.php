@@ -49,7 +49,7 @@
                     </svg>
                 </div>
                 <p class="ml-16 text-sm font-medium text-gray-500 truncate">
-                    {{ translate('Orders Today') }}
+                    {{ translate('Orders') }}
                 </p>
             </dt>
             <dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
