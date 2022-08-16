@@ -510,84 +510,91 @@ class StripeService
 
             $stripe_customer = $this->stripe->customers->create($params);
 
-            // If $customer is company, add TaxID if applicable
-            if($me->entity === 'company') {
-                $company_country = $me->getUserMeta('company_country');
-                $company_vat = $me->getUserMeta('company_vat');
-
-                if(!empty($company_country) && !empty(\Countries::get(code: $company_country))) {
-                    $this->stripe->customers->update(
-                        $stripe_customer->id,
-                        [
-                            'address' => [
-                                'country' => $company_country
-                            ]
-                        ]
-                    );
-
-                    if(\Countries::isEU($company_country)) {
-                        try {
-                            if(str_starts_with($company_vat, $company_country)) {
-                                $validVAT = VatCalculator::isValidVATNumber($company_vat);
-                                $stripe_vat = $company_vat;
-                            } else {
-                                $validVAT = VatCalculator::isValidVATNumber($company_country.$company_vat);
-                                $stripe_vat = $company_country.$company_vat;
-                            }
-    
-                            if($validVAT) {
-                                if($company_country === 'LT') {
-                                    $this->stripe->customers->update(
-                                        $stripe_customer->id,
-                                        [
-                                            'tax_exempt' => 'none'
-                                        ]
-                                    );
-                                } else {
-                                    // Company which has a valid VAT number
-                                    $this->stripe->customers->update(
-                                        $stripe_customer->id,
-                                        [
-                                            'tax_exempt' => 'reverse'
-                                        ]
-                                    );
-                                }
-
-                                $this->stripe->customers->createTaxId(
-                                    $stripe_customer->id,
-                                    ['type' => 'eu_vat', 'value' => $stripe_vat]
-                                );
-                            } else {
-                                // Company which doesn't have a VAT number
-                                $this->stripe->customers->update(
-                                    $stripe_customer->id,
-                                    [
-                                        'tax_exempt' => 'none'
-                                    ]
-                                );
-                            }
-                        } catch (VATCheckUnavailableException $e) {
-                            // The VAT check API is unavailable...
-                        }
-                    } else {
-                        // Company outside of EU - exempt of tax
-                        $this->stripe->customers->update(
-                            $stripe_customer->id,
-                            [
-                                'tax_exempt' => 'exempt'
-                            ]
-                        );
-                    }
-                    
-                }
-            } else {
-                // Individuals - Stripe checkout will decide it
-            }
+            $this->updateStripeCustomerTax($me);
         }
 
         $me->saveCoreMeta($stripe_customer_id_key, $stripe_customer->id);
 
         return $stripe_customer;
+    }
+
+    public function updateStripeCustomerTax($user = null) {
+        // Dispatch a job to update customer Tax data in stripe
+        dispatch(function () use ($user) {
+            $user = !empty($user) && $user instanceof \App\Models\User ? $user : auth()->user();
+
+            $stripe_customer_id_key = stripe_prefix('stripe_customer_id');
+            $stripe_customer_id = $user->getCoreMeta($stripe_customer_id_key);
+
+            try {
+                $stripe_customer = $this->stripe->customers->retrieve(
+                    $stripe_customer_id,
+                    []
+                );
+
+                if ($stripe_customer->deleted ?? null) {
+                    throw new \Exception();
+                }
+                
+
+                // If $customer is company, add TaxID if applicable
+                if($user->entity === 'company') {
+                    $company_country = $user->getUserMeta('company_country');
+                    $company_vat = $user->getUserMeta('company_vat');
+                    $stripe_params = [];
+                    
+                    if(!empty($company_country) && !empty(\Countries::get(code: $company_country))) {
+                        $stripe_params['address'] = [
+                            'country' => $company_country
+                        ];
+                        
+                        if(\Countries::isEU($company_country)) {
+                            try {
+                                $validVAT = VatCalculator::isValidVATNumber($company_vat);
+                                $stripe_vat = $company_vat;
+        
+                                if($validVAT) {
+                                    if($company_country === 'LT') {
+                                        $stripe_params['tax_exempt'] = 'none';
+                                    } else {
+                                        // Company which has a valid VAT number
+                                        $stripe_params['tax_exempt'] = 'reverse';
+                                    }
+                                    
+                                    try {
+                                        $this->stripe->customers->createTaxId(
+                                            $stripe_customer->id,
+                                            ['type' => 'eu_vat', 'value' => $stripe_vat]
+                                        );
+                                    } catch(\Exception $e) {
+                                        Log::info($e);
+                                    }
+                                } else {
+                                    // Company which doesn't have a VAT number
+                                    $stripe_params['tax_exempt'] = 'none';
+                                }
+                            } catch (VATCheckUnavailableException $e) {
+                                // The VAT check API is unavailable...
+                                Log::warning($e);
+                            }
+                        } else {
+                            // Company outside of EU - exempt of tax
+                            $stripe_params['tax_exempt'] = 'exempt';
+                        }
+                        
+                        $this->stripe->customers->update(
+                            $stripe_customer->id,
+                            $stripe_params
+                        );
+                    }
+                } else {
+                    // Individuals - Stripe checkout will decide it
+                }
+            } catch (\Exception $e) {
+                $this->createStripeCustomer($user);
+            }
+        });
+        
     }
 
     /**
