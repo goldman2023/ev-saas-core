@@ -90,6 +90,8 @@ class AppServiceProvider extends ServiceProvider
                 }
 
                 return false;
+            } else if(empty($country) || (!empty($country) && empty(\Countries::get(code: $country)))) {
+                return false;
             }
 
             return true;
