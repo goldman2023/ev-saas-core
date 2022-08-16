@@ -36,7 +36,6 @@ Documentation can be found at: https://docs.we-saas.com/
 
 ## Demo
 https://demo.we-saas.com
-https://gunob.com
 
 ## Remote Development Environment
 https://app.gitbook.com/o/2dee19VQhhAOUjO27T0L/s/3mdkYoieCX8rouQqo60o/
