@@ -799,7 +799,7 @@ class StripeService
         $order_line_items = [];
 
         $previous_subscription = !empty($previous_subscription_id) ? UserSubscription::find($previous_subscription_id) : null;
-
+        
         /**
          * Multi-items subscription logic:
          * 1. In subscription created/updated webhook, compare each previous subscription item quantity with corresponding qty of same item in
@@ -1206,7 +1206,7 @@ class StripeService
         DB::beginTransaction();
 
         $model = null;
-
+        
         if($line_items instanceof WeBaseModel) {
             // Only one $model is provided as $line_items
             $model = $line_items;

@@ -3,6 +3,7 @@
     current_plan_mode: '{{ auth()->user()->subscriptions?->first()?->order?->invoicing_period ?? '' }}',
     current_plan_id: {{ auth()->user()->subscriptions?->first()?->items->first()->id ?? 'null' }},
     current_is_trial: {{ $isTrial ? 'true' : 'false' }},
+    
 }">
     @if((auth()->user()?->isSubscribed() ?? false) && !$hideTitle)
     <h2 class="text-32 text-gray-700 font-semibold mb-5">{{ translate('Explore other plans')}}</h2>
@@ -123,21 +124,36 @@
                                 </template>
                                 <template x-if="!is_active()">
                                     <a
-                                        @click="$dispatch('display-modal', {
-                                            id: 'purchase-subscription-with-multiple-items-modal',
-                                            interval: pricing_mode,
-                                            plan_id: @js($plan->id),
-                                            plan_slug: @js($plan->slug),
-                                            qty: 1,
-                                            month_price: @js($plan->getTotalPrice(display: true, decimals: 0)),
-                                            annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice(display: false) / 12, 0)),
-                                        })"
-                                        @if(!empty(auth()->user()?->subscriptions->first()))
+                                        
+                                        @if(auth()->user()?->isSubscribed() ?? false)
+                                            @click="$dispatch('display-modal', {
+                                                id: 'purchase-subscription-with-multiple-items-modal',
+                                                interval: pricing_mode,
+                                                plan_id: @js($plan->id),
+                                                plan_slug: @js($plan->slug),
+                                                qty: 1,
+                                                month_price: @js($plan->getTotalPrice(display: true, decimals: 0)),
+                                                annual_price: @js(\FX::formatPrice($plan->getTotalAnnualPrice(display: false) / 12, 0)),
+                                            })"
+
                                             {{-- x-bind:href="is_active() ? $getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode}) : 'javascript:void(0)'" --}}
                                             {{-- x-on:click="is_active() ? '' : $dispatch('display-modal', {id: 'change-plan-confirmation-modal', subscription_id: {{ auth()->user()?->subscriptions->first()?->id ?? 'null' }}, new_plan: @js($plan->toArray()), interval: pricing_mode })" --}}
-                                            target="_parent"
+                                            {{-- target="_parent" --}}
                                         @else
-                                            {{-- x-bind:href="$getStripeCheckoutPermalink({model_id: {{ $plan->id }}, model_class: '{{ base64_encode($plan::class) }}', interval: pricing_mode})" --}}
+                                            x-bind:href="$getStripeCheckoutPermalink(
+                                                {
+                                                    'interval': pricing_mode,
+                                                    'items': [
+                                                        {
+                                                            id: @js($plan->id),
+                                                            class: 'App\\Models\\Plan', // TODO: make this universal!
+                                                            qty: 1,
+                                                            preview: false,
+                                                            interval: pricing_mode
+                                                        }
+                                                    ],
+                                                    'previous_subscription_id': null,
+                                                })"
                                         @endif
                                         class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
 
