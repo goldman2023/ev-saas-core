@@ -855,7 +855,7 @@ class StripeService
                 'mode' => 'subscription',
                 'allow_promotion_codes' => true,
                 'tax_id_collection' => [
-                    'enabled' => true,
+                    'enabled' => false,
                 ],
                 'billing_address_collection' => 'required',
                 'client_reference_id' => $order->id,
@@ -876,7 +876,7 @@ class StripeService
                     'enabled' => Payments::stripe()->stripe_automatic_tax_enabled === true ? true : false,
                 ],
                 'tax_id_collection' => [
-                    'enabled' => true,
+                    'enabled' => false,
                 ],
                 'subscription_data' => [
                     'metadata' => [
@@ -1338,9 +1338,11 @@ class StripeService
                 $user = auth()->user();
                 
                 if($user->entity === 'company') {
+                    $invoice->billing_company = $user->getUserMeta('company_name');
+
                     $invoice->mergeData([
                         'customer' => [
-                            'country' => $user->getUserMeta('company_country'),
+                            'company_country' => $user->getUserMeta('company_country'),
                             'vat' => $user->getUserMeta('company_vat'),
                             'company_registration_number' => $user->getUserMeta('company_registration_number'),
                             'company_name' => $user->getUserMeta('company_name'),
@@ -1684,7 +1686,7 @@ class StripeService
         if($user->entity === 'company') {
             $invoice->mergeData([
                 'customer' => [
-                    'country' => $user->getUserMeta('company_country'),
+                    'company_country' => $user->getUserMeta('company_country'),
                     'vat' => $user->getUserMeta('company_vat'),
                     'company_registration_number' => $user->getUserMeta('company_registration_number'),
                     'company_name' => $user->getUserMeta('company_name'),
@@ -1894,6 +1896,11 @@ class StripeService
                         });
                     }
                 }
+            }
+
+            // Update address and stuff
+            if($user->entity === 'company') {
+                $user->saveUserMeta('company_country', $customer->address->country);
             }
         }
     }
@@ -2122,14 +2129,16 @@ class StripeService
             ]);
 
             if($initiator->entity === 'company') {
-                // $invoice->mergeData([
-                //     'customer' => [
-                //         'country' => $initiator->getUserMeta('company_country'),
-                //         'vat' => $initiator->getUserMeta('company_vat'),
-                //         'company_registration_number' => $initiator->getUserMeta('company_registration_number'),
-                //         'company_name' => $initiator->getUserMeta('company_name'),
-                //     ]
-                // ]);
+                $invoice->mergeData([
+                    'customer' => [
+                        'company_country' => $session->customer_details->address->country,
+                        'vat' => $initiator->getUserMeta('company_vat'),
+                        'company_registration_number' => $initiator->getUserMeta('company_registration_number'),
+                        'company_name' => $initiator->getUserMeta('company_name'),
+                    ]
+                ]);
+
+                $initiator->saveUserMeta('company_country', $session->customer_details->address->country);
             }
 
             if ($session->mode === 'payment') {
