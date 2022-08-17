@@ -28,20 +28,34 @@ class PermissionsService
         }
     }
 
-    public function canAccess(string|array $allowed_user_types, string|array $allowed_permissions, bool $abort = true)
+    public function canAccess(string|array $user_types, string|array $permissions, bool $abort = true, string|null $redirect_url = null, \Closure|null $fallback = null)
     {
         // Super admin has the access to all pages!
         if (auth()->user()->user_type === 'admin') {
             return true;
         }
 
-        /* Old version that causes the error  */
-        if (in_array(auth()->user()->user_type, $allowed_user_types, true) &&
-            (empty($allowed_permissions) || auth()->user()->hasAnyDirectPermission($allowed_permissions))) {
+        if (in_array(auth()->user()->user_type, $user_types, true) &&
+            (empty($permissions) || auth()->user()->hasAnyDirectPermission($permissions))) {
             return true;
+        } else {
+            // If there's no enough permissions, check if $fallback Closure is defined and check if it's return value is true
+            if(!empty($fallback) && $fallback instanceof \Closure) {
+                if($fallback() === true) {
+                    return true;
+                }
+            }
         }
 
-        return $abort ? abort(403) : false;
+        if(!empty($redirect_url)) {
+            redirect_now($redirect_url);
+        }
+
+        if($abort) {
+            abort(403);
+        }
+
+        return false;
     }
 
     public function getPermissions()

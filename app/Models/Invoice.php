@@ -211,15 +211,15 @@ class Invoice extends WeBaseModel
             $stripe_line_items = collect($stripe_invoice['lines']['data']);
         }
 
-        if($user->entity === 'company') {
+        if($user->entity === UserEntityEnum::company()->value) {
             // Company
-            $company_country = $user->getUserMeta('company_country');
-            $company_vat = $user->getUserMeta('company_vat');
-            $company_registration_number = $user->getUserMeta('company_registration_number');
+            $company_country = $this->billing_country;
+            $company_vat = $this->getData('vat');
+            $company_registration_number = $this->getData('company_registration_number');
             
             if(!empty($company_country) && !empty(\Countries::get(code: $company_country))) {
                 // Override company country
-                $customer_custom_fields['country'] = \Countries::get(code: $company_country)->name; // TODO: Which country to use? From our system or from Stripe billing info?
+                $customer_custom_fields['country'] = \Countries::get(code: $this->billing_country)->name; // TODO: Which country to use? From our system or from Stripe billing info?
 
                 if($company_country === 'LT') {
                     $customer_custom_fields['company no.'] = $company_registration_number;
@@ -234,8 +234,6 @@ class Invoice extends WeBaseModel
                     }
                 }
             }
-
-            
         } else {
             // Individual
             if($this->isFromStripe()) {
@@ -278,7 +276,8 @@ class Invoice extends WeBaseModel
 
         if($this->user->entity === UserEntityEnum::company()->value) {
             $customer = new Party([
-                'name'          => !empty($this->user->getUserMeta('company_name')) ? $this->user->getUserMeta('company_name') : $this->billing_first_name.' '.$this->billing_last_name,
+                'name'          => $this->billing_first_name.' '.$this->billing_last_name,
+                'company'       => $this->getData('company_name', ''),
                 'address'       => $this->billing_address.', '.$this->billing_zip,
                 // 'code'          => '#'.$this->id,
                 'custom_fields' => $customer_custom_fields,
@@ -389,11 +388,6 @@ class Invoice extends WeBaseModel
             ->notes($notes);
 
             if($this->isFromStripe()) {
-                // dd($stripe_invoice['starting_balance']);
-                // if($stripe_invoice['starting_balance'] < 0) {
-                //     $invoice->totalDiscount( abs($stripe_invoice['starting_balance']) / 100 );
-                // }
-
                 $invoice
                     // ->totalDiscount( ($stripe_invoice['subtotal_excluding_tax'] / 100) - ($stripe_invoice['total_excluding_tax'] / 100) )
                     ->taxableAmount($stripe_invoice['total_excluding_tax'] / 100)

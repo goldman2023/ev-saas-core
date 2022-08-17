@@ -47,9 +47,10 @@ class EVAccountController extends Controller
     public function user_profile(Request $request, $id)
     {
         try {
-            $user = User::findOrFail($id);
-
-            return view('frontend.dashboard.users.account-settings', compact('user'));
+            abort(404);
+            // $user = User::findOrFail($id);
+            
+            // return view('frontend.dashboard.users.account-settings', compact('user'));
         } catch (\Exception $e) {
             abort(404);
         }
@@ -58,6 +59,15 @@ class EVAccountController extends Controller
     public function user_details(Request $request, $id)
     {
         try {
+            \Permissions::canAccess(
+                user_types: User::$non_customer_user_types,
+                permissions: ['view_customer'],
+                // redirect_url: route('user.details', auth()->user()?->id), 
+                // fallback: function() use($id) {
+                //     return auth()->user()->id === (int) $id;
+                // }
+            );
+
             $user = User::findOrFail($id);
 
             return view('frontend.dashboard.users.user-details', compact('user'));
