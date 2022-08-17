@@ -1333,6 +1333,28 @@ class StripeService
             $invoice->start_date = 0; // will be updated on stripe webhooks
             $invoice->end_date = 0; // will be updated on stripe webhooks
 
+            if (Auth::check()) {
+                // If User is logged-in, add customer/user data to invoice
+                $user = auth()->user();
+                
+                if($user->entity === 'company') {
+                    $invoice->mergeData([
+                        'customer' => [
+                            'country' => $user->getUserMeta('company_country'),
+                            'vat' => $user->getUserMeta('company_vat'),
+                            'company_registration_number' => $user->getUserMeta('company_registration_number'),
+                            'company_name' => $user->getUserMeta('company_name'),
+                        ]
+                    ]);
+                } else {
+                    $invoice->mergeData([
+                        'customer' => []
+                    ]);
+                }
+                
+            }
+            
+
             $invoice->saveQuietly(); // there could be memory leaks if we use just save()
 
             if($mode === 'subscription') {
@@ -1561,6 +1583,8 @@ class StripeService
 
         // If new invoice is already created at this moment, it means that invoice.paid already happened, so skip creation cuz invoice already exists and is paid
         if(empty($invoice)) {
+            $user = User::findOrFail($order->user_id);
+
             /*
             * Create or Update Invoice (with same number)
             */
@@ -1643,20 +1667,34 @@ class StripeService
         }
 
         $invoice->setRealInvoiceNumber();
+        $invoice->mergeData([
+            stripe_prefix('stripe_invoice_id') => $stripe_invoice->id ?? '',
+            stripe_prefix('stripe_hosted_invoice_url') => $stripe_invoice->hosted_invoice_url ?? '',
+            stripe_prefix('stripe_invoice_pdf_url') =>  $stripe_invoice->invoice_pdf ?? '',
+            stripe_prefix('stripe_invoice_number') => $stripe_invoice->number ?? '',
+            stripe_prefix('stripe_customer_id') => $stripe_invoice->customer ?? '',
+            stripe_prefix('stripe_payment_intent_id') => $stripe_invoice->payment_intent ?? '', // this will be null on all future automatic reccuring payments
+            stripe_prefix('stripe_subscription_id') => $stripe_subscription->id, // store subscription ID in invoice meta
+            stripe_prefix('stripe_currency') => $stripe_invoice->currency ?? null,
+            stripe_prefix('stripe_billing_reason') => $stripe_invoice->billing_reason ?? '',
+            stripe_prefix('stripe_invoice_data') => $stripe_invoice->toArray(),
+        ]);
 
-        $meta = $invoice->meta;
-        $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
-        $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
-        $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
-        $meta[$this->mode_prefix .'stripe_invoice_number'] = $stripe_invoice->number ?? '';
-        $meta[$this->mode_prefix .'stripe_customer_id'] = $stripe_invoice->customer ?? '';
-        $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
-        $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription->id; // store subscription ID in invoice meta
-        $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
-        $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
-        $meta[$this->mode_prefix .'stripe_billing_reason'] = $stripe_invoice->billing_reason ?? '';
-        $meta[$this->mode_prefix .'stripe_invoice_data'] = $stripe_invoice->toArray();
 
+        if($user->entity === 'company') {
+            $invoice->mergeData([
+                'customer' => [
+                    'country' => $user->getUserMeta('company_country'),
+                    'vat' => $user->getUserMeta('company_vat'),
+                    'company_registration_number' => $user->getUserMeta('company_registration_number'),
+                    'company_name' => $user->getUserMeta('company_name'),
+                ]
+            ]);
+        } else {
+            $invoice->mergeData([
+                'customer' => []
+            ]);
+        }
 
         // On subscription_cycle, this is probably empty, but let it be just in case
         if(!empty($stripe_invoice->payment_intent ?? null)) {
@@ -1666,11 +1704,9 @@ class StripeService
             );
 
             if(!empty($pi?->charges?->data[0]?->receipt_url ?? null)) {
-                $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
+                $invoice->setData(stripe_prefix('stripe_receipt_url'), $pi->charges->data[0]?->receipt_url ?? null, null);
             }
         }
-
-        $invoice->meta = $meta;
         
         $invoice->save();
 
@@ -2084,6 +2120,17 @@ class StripeService
                 stripe_prefix('stripe_currency') => $session->currency ?? null,
                 stripe_prefix('stripe_invoice_data') => isset($stripe_invoice) ? ($stripe_invoice?->toArray() ?? []) : [],
             ]);
+
+            if($initiator->entity === 'company') {
+                // $invoice->mergeData([
+                //     'customer' => [
+                //         'country' => $initiator->getUserMeta('company_country'),
+                //         'vat' => $initiator->getUserMeta('company_vat'),
+                //         'company_registration_number' => $initiator->getUserMeta('company_registration_number'),
+                //         'company_name' => $initiator->getUserMeta('company_name'),
+                //     ]
+                // ]);
+            }
 
             if ($session->mode === 'payment') {
                 // Append receipt_url to order and invoice (and get it through payment_intent)
