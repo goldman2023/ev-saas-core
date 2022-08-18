@@ -285,6 +285,8 @@ class StripeService
             $model = app($model_class)->find($model);
         }
 
+        $stripe_product_id = $model->getStripeProductID();
+
         // Check latest price existance
         if($model instanceof Plan) {
             // We need to check for both monthly and anual price here
