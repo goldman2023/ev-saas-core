@@ -9,10 +9,17 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-left">
+    @if(auth()->user()->isAdmin())
     <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user_id]) }}">
        <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
         {{ $row->user->email }}
     </a>
+    @else
+    <span class="media align-items-center text-14">
+        <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
+         {{ $row->user->email }}
+    </span>
+    @endif
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-left">
