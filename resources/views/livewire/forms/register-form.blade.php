@@ -94,21 +94,23 @@
         {{-- END Email --}}
 
 
-
-
-
-
+        
         @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
             @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
                 <div class="mb-4" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif >
-                    <label class="block text-16 font-medium text-gray-700">{{  Str::title(str_replace('_', ' ', $key)) }}</label>
+                    <label class="block text-16 font-medium text-gray-700">
+                        {{  Str::title(str_replace('_', ' ', $key)) }}
+                        @if($options['required'])
+                        <small class="text-danger">*</small>
+                        @endif
+                    </label>
 
                     <div class="mt-1 relative rounded-md shadow-sm">
                         @if(($options['type']??'string') == 'string')
                             <x-dashboard.form.input field="user_meta.{{ $key }}" />
                         @elseif(($options['type']??'string') == 'date')
                             <x-dashboard.form.date field="user_meta.{{ $key }}" />
-                        @elseif(($options['type']??'string') == 'select' && $key === 'company_country')
+                        @elseif(($options['type']??'string') == 'select' && $key === 'address_country')
                             <x-dashboard.form.select field="user_meta.{{ $key }}" selected="user_meta.{{ $key }}" :items="\Countries::getCodesForSelect(as_array: true)" :search="true" :nullable="false" />
                         @elseif(($options['type']??'string') == 'select')
                             <x-dashboard.form.select field="user_meta.{{ $key }}" selected="user_meta.{{ $key }}" :items="\App\Models\UserMeta::metaSelectValues($key)" />

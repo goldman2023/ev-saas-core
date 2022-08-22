@@ -123,6 +123,9 @@ class TenantSettingsService
             'company_vat' => 'string',
             'company_email' => 'string',
 
+            'company_tax_rate' => 'decimal',
+
+
 
             // Content Types
             'brands_ct_enabled' => 'boolean',
@@ -218,7 +221,7 @@ class TenantSettingsService
             'wishlist_feature' => 'boolean',
             'vendor_mode_feature' => 'boolean',
             'plans_trial_mode' => 'boolean',
-            'plans_trial_duration' => 'integer',
+            'plans_trial_duration' => 'int',
 
             'force_email_verification' => 'boolean',
             'register_redirect_url' => 'string',

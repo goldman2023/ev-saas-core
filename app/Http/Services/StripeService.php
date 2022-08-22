@@ -493,6 +493,14 @@ class StripeService
                     'postal_code' => $billing_address->zip_code,
                     'line1' => $billing_address->address,
                 ];
+            } else {
+                $params['address'] = [
+                    'city' => $me->getUserMeta('address_city'),
+                    'country' => $me->getUserMeta('address_country'),
+                    'state' => $me->getUserMeta('address_state'),
+                    'postal_code' => $me->getUserMeta('address_postal_code'),
+                    'line1' => $me->getUserMeta('address_line'),
+                ];
             }
 
             // Shipping address
@@ -507,6 +515,14 @@ class StripeService
                     ],
                     'name' => $me->name . ' ' . $me->surname,
                     'phone' => $me->phone
+                ];
+            } else {
+                $params['address'] = [
+                    'city' => $me->getUserMeta('address_city'),
+                    'country' => $me->getUserMeta('address_country'),
+                    'state' => $me->getUserMeta('address_state'),
+                    'postal_code' => $me->getUserMeta('address_postal_code'),
+                    'line1' => $me->getUserMeta('address_line'),
                 ];
             }
 
@@ -533,22 +549,22 @@ class StripeService
                     $stripe_customer_id,
                     []
                 );
+                $stripe_customer_array = $stripe_customer->toArray();
     
                 if ($stripe_customer->deleted ?? null) {
                     throw new \Exception();
                 }
                 
-                
                 // If $customer is company, add TaxID if applicable
                 if($user->entity === 'company') {
-                    $company_country = $user->getUserMeta('company_country');
+                    $company_country = $user->getUserMeta('address_country');
                     $company_vat = $user->getUserMeta('company_vat');
                     $stripe_params = [];
                     
                     if(!empty($company_country) && !empty(\Countries::get(code: $company_country))) {
-                        $stripe_params['address'] = [
+                        $stripe_params['address'] = array_merge($stripe_customer_array['address'], [
                             'country' => $company_country
-                        ];
+                        ]);
                         
                         if(\Countries::isEU($company_country)) {
                             try {
@@ -618,7 +634,7 @@ class StripeService
                                 );
                             }
                         }
-    
+
                         $this->stripe->customers->update(
                             $stripe_customer->id,
                             $stripe_params
@@ -856,10 +872,7 @@ class StripeService
                 'line_items' => $stripe_line_items,
                 'mode' => 'subscription',
                 'allow_promotion_codes' => true,
-                'tax_id_collection' => [
-                    'enabled' => false,
-                ],
-                'billing_address_collection' => 'required',
+                'billing_address_collection' => 'auto',
                 'client_reference_id' => $order->id,
                 'metadata' => [
                     'order_id' => $order->id,
@@ -960,9 +973,9 @@ class StripeService
                 $stripe_args['customer'] = $stripe_customer->id;
 
                 $stripe_args['customer_update'] = [
-                    'name' => 'auto',
-                    'address' => 'auto',
-                    'shipping' => 'auto',
+                    'name' => 'never',
+                    'address' => 'never',
+                    'shipping' => 'never',
                 ];
             }
 
@@ -1094,9 +1107,9 @@ class StripeService
             'mode' => $model->isSubscribable() ? 'subscription' : 'payment',
             'allow_promotion_codes' => true,
             'tax_id_collection' => [
-                'enabled' => true,
+                'enabled' => false,
             ],
-            'billing_address_collection' => 'required',
+            'billing_address_collection' => 'auto',
             'client_reference_id' => $is_preview ? 'preview' : $order->id,
             'metadata' => [
                 'order_id' => $is_preview ? 'preview' : $order->id,
@@ -1110,10 +1123,6 @@ class StripeService
             'automatic_tax' => [
                 'enabled' => Payments::stripe()->stripe_automatic_tax_enabled === true ? true : false,
             ],
-            'tax_id_collection' => [
-                'enabled' => true,
-            ],
-
         ];
 
         // Check whether mode is 'subscription' or 'payment'
@@ -1154,8 +1163,8 @@ class StripeService
 
             $stripe_args['customer_update'] = [
                 'name' => 'auto',
-                'address' => 'auto',
-                'shipping' => 'auto',
+                'address' => 'never',
+                'shipping' => 'never',
             ];
         }
 
@@ -1255,15 +1264,24 @@ class StripeService
             if (Auth::check()) {
                 $order->email = auth()->user()->email ?? null;
                 $order->user_id = auth()->user()->id ?? null;
+                $order->billing_first_name = auth()->user()->name;
+                $order->billing_last_name = auth()->user()->surname;
+                $order->billing_address = auth()->user()->getUserMeta('address_line');
+                $order->billing_country = auth()->user()->getUserMeta('address_country');
+                $order->billing_state = auth()->user()->getUserMeta('address_state');
+                $order->billing_city = auth()->user()->getUserMeta('address_city');
+                $order->billing_zip = auth()->user()->getUserMeta('address_postal_code');
+            } else {
+                $order->billing_first_name = '';
+                $order->billing_last_name = '';
+                $order->billing_address = '';
+                $order->billing_country = '';
+                $order->billing_state = '';
+                $order->billing_city = '';
+                $order->billing_zip = '';
             }
 
-            $order->billing_first_name = '';
-            $order->billing_last_name = '';
-            $order->billing_address = '';
-            $order->billing_country = '';
-            $order->billing_state = '';
-            $order->billing_city = '';
-            $order->billing_zip = '';
+            
             $order->phone_numbers = [];
             $order->shipping_method = '';
 
@@ -1344,7 +1362,8 @@ class StripeService
 
                     $invoice->mergeData([
                         'customer' => [
-                            'company_country' => $user->getUserMeta('company_country'),
+                            'entity' => $user->entity,
+                            'billing_country' => $user->getUserMeta('address_country'),
                             'vat' => $user->getUserMeta('company_vat'),
                             'company_registration_number' => $user->getUserMeta('company_registration_number'),
                             'company_name' => $user->getUserMeta('company_name'),
@@ -1352,7 +1371,10 @@ class StripeService
                     ]);
                 } else {
                     $invoice->mergeData([
-                        'customer' => []
+                        'customer' => [
+                            'entity' => $user->entity,
+                            'billing_country' => $user->getUserMeta('address_country'),
+                        ]
                     ]);
                 }
                 
@@ -1406,10 +1428,12 @@ class StripeService
      * @return $order
      */
     public function createOrder($stripe_invoice, $stripe_subscription) {
+        $user = get_user_by_stripe_customer_id($stripe_subscription->customer);
+
         if(empty($stripe_subscription?->metadata?->order_id ?? null)) {
             // This means that webhook which uses this action originates from Stripe directly and not from our system!
             // (We always supply metadata if checkout process goes through WeSaaS)
-            $user = get_user_by_stripe_customer_id($stripe_subscription->customer);
+            // $user = get_user_by_stripe_customer_id($stripe_subscription->customer);
 
             // *IMPORTANT: We don't support one Order with mixed products from different vendors! If cart contains products from different vendors, it must be separated as 1 order per 1 vendor!!!
             $model = get_model_by_stripe_product_id($stripe_subscription->items->data[0]->price->product);
@@ -1457,13 +1481,20 @@ class StripeService
         $order->user_id = $user_id;
         $order->shop_id = $shop_id;
         $order->email = $stripe_invoice->customer_email;
-        $order->billing_first_name = $first_name;
-        $order->billing_last_name = $last_name;
-        $order->billing_address = $stripe_invoice->customer_address->line1;
-        $order->billing_country = $stripe_invoice->customer_address->country;
-        $order->billing_state = $stripe_invoice->customer_address->state;
-        $order->billing_city = $stripe_invoice->customer_address->city;
-        $order->billing_zip = $stripe_invoice->customer_address->postal_code;
+        // $order->billing_first_name = $first_name;
+        // $order->billing_last_name = $last_name;
+        $order->billing_first_name = $user->name;
+        $order->billing_last_name = $user->surname;
+        $order->billing_address = $user->getUserMeta('address_line');
+        $order->billing_country = $user->getUserMeta('address_country');
+        $order->billing_state = $user->getUserMeta('address_state');
+        $order->billing_city = $user->getUserMeta('address_city');
+        $order->billing_zip = $user->getUserMeta('address_postal_code');
+        // $order->billing_address = $stripe_invoice->customer_address->line1;
+        // $order->billing_country = $stripe_invoice->customer_address->country;
+        // $order->billing_state = $stripe_invoice->customer_address->state;
+        // $order->billing_city = $stripe_invoice->customer_address->city;
+        // $order->billing_zip = $stripe_invoice->customer_address->postal_code;
         $order->phone_numbers = array_filter([$stripe_invoice->customer_shipping?->phone ?? null, $stripe_invoice->customer_phone]);
         $order->same_billing_shipping = false;
         $order->shipping_first_name = $shipping_first_name;
@@ -1580,6 +1611,8 @@ class StripeService
             die();
         }
 
+        $user = User::findOrFail($order->user_id);
+
         if(in_array($stripe_invoice->billing_reason, $this->subscription_billing_reasons)) {
             // Get Upcoming invoice from stripe if Order is for SUBSCRIPTION and save it to Order meta field under `{prefix}stripe_upcoming_invoice` property
             $upcoming_invoice = \StripeService::getUpcomingInvoice(stripe_customer_id: $stripe_subscription->customer, stripe_subscription_id: $stripe_subscription->id);
@@ -1587,8 +1620,6 @@ class StripeService
 
         // If new invoice is already created at this moment, it means that invoice.paid already happened, so skip creation cuz invoice already exists and is paid
         if(empty($invoice)) {
-            $user = User::findOrFail($order->user_id);
-
             /*
             * Create or Update Invoice (with same number)
             */
@@ -1647,14 +1678,23 @@ class StripeService
             $invoice->tax = $stripe_invoice->tax / 100;
 
             $invoice->email = $order->email;
-            $invoice->billing_first_name = $order->billing_first_name;
-            $invoice->billing_last_name = $order->billing_last_name;
-            $invoice->billing_company = ''; // TODO: Get company name from invoice somehow...
-            $invoice->billing_address = $order->billing_address;
-            $invoice->billing_country = $order->billing_country;
-            $invoice->billing_state = $order->billing_state;
-            $invoice->billing_city = $order->billing_city;
-            $invoice->billing_zip = $order->billing_zip;
+
+            $order->billing_first_name = $user->name;
+            $order->billing_last_name = $user->surname;
+            $order->billing_address = $user->getUserMeta('address_line');
+            $order->billing_country = $user->getUserMeta('address_country');
+            $order->billing_state = $user->getUserMeta('address_state');
+            $order->billing_city = $user->getUserMeta('address_city');
+            $order->billing_zip = $user->getUserMeta('address_postal_code');
+
+            // $invoice->billing_first_name = $order->billing_first_name;
+            // $invoice->billing_last_name = $order->billing_last_name;
+            // $invoice->billing_company = ''; // TODO: Get company name from invoice somehow...
+            // $invoice->billing_address = $order->billing_address;
+            // $invoice->billing_country = $order->billing_country;
+            // $invoice->billing_state = $order->billing_state;
+            // $invoice->billing_city = $order->billing_city;
+            // $invoice->billing_zip = $order->billing_zip;
         } else {
             // If invoice with same number already exists on our end, just update it's status based on stripe params!
             if($stripe_invoice->paid && $stripe_subscription->status === 'active') {
@@ -1671,6 +1711,7 @@ class StripeService
         }
 
         $invoice->setRealInvoiceNumber();
+
         $invoice->mergeData([
             stripe_prefix('stripe_invoice_id') => $stripe_invoice->id ?? '',
             stripe_prefix('stripe_hosted_invoice_url') => $stripe_invoice->hosted_invoice_url ?? '',
@@ -1688,7 +1729,8 @@ class StripeService
         if($user->entity === 'company') {
             $invoice->mergeData([
                 'customer' => [
-                    'company_country' => $user->getUserMeta('company_country'),
+                    'entity' => $user->entity,
+                    'billing_country' => $user->getUserMeta('address_country'), //$stripe_invoice->customer_address->country,
                     'vat' => $user->getUserMeta('company_vat'),
                     'company_registration_number' => $user->getUserMeta('company_registration_number'),
                     'company_name' => $user->getUserMeta('company_name'),
@@ -1696,7 +1738,10 @@ class StripeService
             ]);
         } else {
             $invoice->mergeData([
-                'customer' => []
+                'customer' => [
+                    'entity' => $user->entity,
+                    'billing_country' => $user->getUserMeta('address_country'), //$stripe_invoice->customer_address->country,
+                ]
             ]);
         }
 
@@ -1900,10 +1945,14 @@ class StripeService
                 }
             }
 
-            // Update address and stuff
-            if($user->entity === 'company') {
-                $user->saveUserMeta('company_country', $customer->address->country);
-            }
+            // DEPRECATED: Update address and stuff (DONT UPDATE USER META BASED ON STRIPE BILLING INFO!!!)
+            // if($user->entity === 'company') {
+            //     $user->saveUserMeta('address_country', $customer->address->country);
+            //     $user->saveUserMeta('address_city', $customer->address->city);
+            //     $user->saveUserMeta('address_line', $customer->address->line1);
+            //     $user->saveUserMeta('address_postal_code', $customer->address->postal_code);
+            //     $user->saveUserMeta('address_state', $customer->address->state);
+            // }
         }
     }
 
@@ -1917,17 +1966,23 @@ class StripeService
         try {
             // Populate Order with data from stripe
             $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
+            $user = $order->user;
+
             $order->payment_status = $session->mode === 'payment' ? PaymentStatusEnum::paid()->value : PaymentStatusEnum::pending()->value;
             $order->is_temp = false;
             $order->email = empty($order->email) ? $session->customer_details->email : $order->email;
             $order->billing_company = '';
-            $order->billing_first_name = explode(' ', $session->customer_details->name)[0] ?? '';
-            $order->billing_last_name = explode(' ', $session->customer_details->name)[1] ?? '';
-            $order->billing_address = !empty($session->customer_details->address->line1) ? $session->customer_details->address->line1 : '';
-            $order->billing_country = !empty($session->customer_details->address->country) ? $session->customer_details->address->country : '';
-            $order->billing_state = !empty($session->customer_details->address->state) ? $session->customer_details->address->state : '';
-            $order->billing_city = !empty($session->customer_details->address->city) ? $session->customer_details->address->city : '';
-            $order->billing_zip = !empty($session->customer_details->address->postal_code) ? $session->customer_details->address->postal_code : '';
+
+            if(empty($order->user)) {
+                $order->billing_first_name = explode(' ', $session->customer_details->name)[0] ?? '';
+                $order->billing_last_name = explode(' ', $session->customer_details->name)[1] ?? '';
+                $order->billing_address = !empty($session->customer_details->address->line1) ? $session->customer_details->address->line1 : '';
+                $order->billing_country = !empty($session->customer_details->address->country) ? $session->customer_details->address->country : '';
+                $order->billing_state = !empty($session->customer_details->address->state) ? $session->customer_details->address->state : '';
+                $order->billing_city = !empty($session->customer_details->address->city) ? $session->customer_details->address->city : '';
+                $order->billing_zip = !empty($session->customer_details->address->postal_code) ? $session->customer_details->address->postal_code : '';
+            }
+            
             $order->phone_numbers = !empty($session->customer_details->phone) ? $session->customer_details->phone : [];
 
             $order->shipping_method = ''; // TODO: Should mimic shipping_method from tenant!!!
@@ -2130,19 +2185,6 @@ class StripeService
                 stripe_prefix('stripe_invoice_data') => isset($stripe_invoice) ? ($stripe_invoice?->toArray() ?? []) : [],
             ]);
 
-            if($initiator->entity === 'company') {
-                $invoice->mergeData([
-                    'customer' => [
-                        'company_country' => $session->customer_details->address->country,
-                        'vat' => $initiator->getUserMeta('company_vat'),
-                        'company_registration_number' => $initiator->getUserMeta('company_registration_number'),
-                        'company_name' => $initiator->getUserMeta('company_name'),
-                    ]
-                ]);
-
-                $initiator->saveUserMeta('company_country', $session->customer_details->address->country);
-            }
-
             if ($session->mode === 'payment') {
                 // Append receipt_url to order and invoice (and get it through payment_intent)
                 $pi = $this->stripe->paymentIntents->retrieve(
@@ -2166,6 +2208,7 @@ class StripeService
             http_response_code(400);
             die(print_r($e));
         }
+        
         die();
     }
 
@@ -2231,10 +2274,8 @@ class StripeService
                 $order->saveQuietly();
             }
 
-
             if($stripe_billing_reason === 'subscription_create') {
                 // This means that subscription is created for the first time
-
                 $invoice = $order->invoices()->withoutGlobalScopes()->first();
 
                 if (!empty($invoice)) {
@@ -2289,18 +2330,55 @@ class StripeService
                 }
 
             } else if($stripe_billing_reason === 'subscription_cycle') {
+                $invoice = $order->invoices()->withoutGlobalScopes()->get()->firstWhere('meta.'.stripe_prefix('stripe_invoice_id'), $stripe_invoice->id);
+
                 // Subscription is cycled
                 // New order and invoice will be created in subscription.updated webhook
                 //$this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
 
                 //DB::commit();
             } else if($stripe_billing_reason === 'subscription_update') {
+                $invoice = $order->invoices()->withoutGlobalScopes()->get()->firstWhere('meta.'.stripe_prefix('stripe_invoice_id'), $stripe_invoice->id);
+
                 // Subscription is updated (downgraded, upgraded etc.) - DON'T DO ANYTHING HERE!!!
                 // New order and invoice will be created in subscription.updated webhook
                 // $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
 
                 // DB::commit();
             }
+
+            // Set invoice customer data
+            if(!empty($invoice) && !empty($invoice->user ?? null)) {
+                $user = $invoice->user;
+                
+                $invoice->mergeData([
+                    'customer' => [
+                        'entity' => $user->entity,
+                    ],
+                ]);
+    
+                if($initiator->entity === 'company') {
+                    $invoice->mergeData([
+                        'customer' => [
+                            'billing_country' => $user->getUserMeta('address_country'), //$stripe_invoice->customer_address->country,
+                            'vat' => $initiator->getUserMeta('company_vat'),
+                            'company_registration_number' => $initiator->getUserMeta('company_registration_number'),
+                            'company_name' => $initiator->getUserMeta('company_name'),
+                        ]
+                    ]);
+
+                    // $initiator->saveUserMeta('company_country', $session->customer_details->address->country);
+                } else {
+                    $invoice->mergeData([
+                        'customer' => [
+                            'billing_country' => $user->getUserMeta('address_country'), //$stripe_invoice->customer_address->country,
+                        ],
+                    ]);
+                }
+
+                $invoice->saveQuietly();
+            }
+            
         } catch (\Throwable $e) {
             Log::error($e);
             DB::rollBack();

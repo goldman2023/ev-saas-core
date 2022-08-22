@@ -73,7 +73,7 @@ class RegisterForm extends Component
                     $rules['user_meta.' . $key][] = 'exclude_if:entity,individual';
 
                     if($key === 'company_vat') {
-                        $rules['user_meta.' . $key][] = 'check_eu_vat_number:company_country';
+                        $rules['user_meta.' . $key][] = 'check_eu_vat_number:address_country';
 
                     }
                 }
