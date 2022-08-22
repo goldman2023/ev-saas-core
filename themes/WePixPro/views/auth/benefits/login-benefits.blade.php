@@ -2,7 +2,7 @@
     <div class="">{{ translate('Welcome to') }} </div>
     <div class="">{{ translate('our community') }}</div>
 </div>
-<div class="mt-6 text-lg tracking-tight leading-6 text-gray-400 ">
+<div class="mt-6 text-lg leading-6 text-gray-400 ">
     {{ translate('Join the global community of likeminded people') }}
 </div>
 <div class=" items-center mt-8 ">
