@@ -8,6 +8,8 @@ use Illuminate\View\Component;
 class Header extends WeComponent
 {
     public $template;
+    public $header_menu;
+    public $header_menu_items;    
 
     /**
      * Create a new component instance.
@@ -16,7 +18,9 @@ class Header extends WeComponent
      */
     public function __construct($template = 'header_01')
     {
-
+        $this->header_menu = nova_get_menu_by_slug('header');
+        $this->header_menu_items = $header_menu['menuItems'] ?? null;
+        
         $this->template = $template;
     }
 
