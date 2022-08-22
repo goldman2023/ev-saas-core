@@ -261,6 +261,19 @@
                                 </div>
                                 <!-- END Company vat -->
 
+                                <!-- Company tax rate -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company tax rate (decimal percentage)') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input type="number" min="0" max="100" field="settings.company_tax_rate" />
+                                    </div>
+                                </div>
+                                <!-- END Company tax rate  -->
+
                                 <!-- Company email -->
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
                                     x-data="{}">

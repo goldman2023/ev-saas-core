@@ -214,8 +214,8 @@ class Invoice extends WeBaseModel
         if($user->entity === UserEntityEnum::company()->value) {
             // Company
             $company_country = $this->billing_country;
-            $company_vat = $this->getData('vat');
-            $company_registration_number = $this->getData('company_registration_number');
+            $company_vat = $this->getData('customer.vat');
+            $company_registration_number = $this->getData('customer.company_registration_number');
             
             if(!empty($company_country) && !empty(\Countries::get(code: $company_country))) {
                 // Override company country
@@ -277,7 +277,7 @@ class Invoice extends WeBaseModel
         if($this->user->entity === UserEntityEnum::company()->value) {
             $customer = new Party([
                 'name'          => $this->billing_first_name.' '.$this->billing_last_name,
-                'company'       => $this->getData('company_name', ''),
+                'company'       => $this->getData('customer.company_name', ''),
                 'address'       => $this->billing_address.', '.$this->billing_zip,
                 // 'code'          => '#'.$this->id,
                 'custom_fields' => $customer_custom_fields,
@@ -343,22 +343,30 @@ class Invoice extends WeBaseModel
             }   
         }
 
-        if(empty($total_taxes_label = $this->getData(stripe_prefix('total_taxes_label')))) {
-            if(!empty($stripe_invoice['total_tax_amounts']) && !empty($stripe_invoice['total_tax_amounts'][0]['tax_rate'] ?? null)) {
-                // Get tax rate for this invoice and store it
-                $tax_rate = StripeService::stripe()->taxRates->retrieve(
-                    $stripe_invoice['total_tax_amounts'][0]['tax_rate'],
-                    []
-                );
+        // if(empty($total_taxes_label = $this->getData(stripe_prefix('total_taxes_label')))) {
+        //     if(!empty($stripe_invoice['total_tax_amounts']) && !empty($stripe_invoice['total_tax_amounts'][0]['tax_rate'] ?? null)) {
+        //         // Get tax rate for this invoice and store it
 
-                $total_taxes_label = !empty($tax_rate->description) ? $tax_rate->description : $tax_rate->display_name.' '.$tax_rate->jurisdiction;
-                $total_taxes_label = $total_taxes_label.' ('.(int) $tax_rate->percentage.'%)';
+        //         // TODO: If "VAT OSS is enabled" (uncomment below):
+        //         // $tax_rate = StripeService::stripe()->taxRates->retrieve(
+        //         //     $stripe_invoice['total_tax_amounts'][0]['tax_rate'],
+        //         //     []
+        //         // );
 
-                $this->setData(stripe_prefix('total_taxes_label'), $total_taxes_label);
-                $this->saveQuietly();    
-            }
-        }
-        
+        //         // $total_taxes_label = !empty($tax_rate->description) ? $tax_rate->description : $tax_rate->display_name.' '.$tax_rate->jurisdiction;
+        //         // $total_taxes_label = $total_taxes_label.' ('.(int) $tax_rate->percentage.'%)';
+
+        //         // DONE: If "VAT Small seller - EU" is enabled
+
+        //         $total_taxes_label = 'VAT '.\Countries::get(code: $stripe_invoice['account_country']).' ('.(int) get_tenant_setting('company_tax_rate').'%)';
+
+        //         $this->setData(stripe_prefix('total_taxes_label'), $total_taxes_label);
+        //         $this->saveQuietly();
+        //     }
+        // }
+
+        // DONE: If "VAT Small seller - EU" is enabled
+        $total_taxes_label = 'VAT ('.(int) get_tenant_setting('company_tax_rate').'%)';
         
         // Set custom data
         $custom_data = [
@@ -388,14 +396,18 @@ class Invoice extends WeBaseModel
             ->notes($notes);
 
             if($this->isFromStripe()) {
+                if($stripe_invoice['tax'] / 100 > 0) {
+                    $invoice->totalTaxes($stripe_invoice['tax'] / 100);
+                }
+
                 $invoice
                     // ->totalDiscount( ($stripe_invoice['subtotal_excluding_tax'] / 100) - ($stripe_invoice['total_excluding_tax'] / 100) )
                     ->taxableAmount($stripe_invoice['total_excluding_tax'] / 100)
-                    ->totalTaxes($stripe_invoice['tax'] / 100)
                     ->totalAmount($stripe_invoice['amount_due'] / 100);
             } else {
-                $invoice
-                    ->totalTaxes($this->tax);
+                if($this->tax > 0) {
+                    $invoice->totalTaxes($this->tax);
+                }
             }
 
             // ->logo(public_path('vendor/invoices/sample-logo.png'))

@@ -300,7 +300,7 @@
                                                 <x-dashboard.form.input field="meta.{{ $key }}" />
                                             @elseif(($options['type']??'string') == 'date')
                                                 <x-dashboard.form.date field="meta.{{ $key }}" />
-                                            @elseif(($options['type']??'string') == 'select' && $key === 'company_country')
+                                            @elseif(($options['type']??'string') == 'select' && $key === 'address_country')
                                                 <x-dashboard.form.select field="meta.{{ $key }}" selected="meta.{{ $key }}" :items="\Countries::getCodesForSelect(as_array: true)" :search="true" :nullable="false" />
                                             @elseif(($options['type']??'string') == 'select')
                                                 <x-dashboard.form.select field="meta.{{ $key }}" selected="meta.{{ $key }}" :items="\App\Models\UserMeta::metaSelectValues($key)" />

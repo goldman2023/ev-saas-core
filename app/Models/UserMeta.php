@@ -38,7 +38,13 @@ class UserMeta extends WeBaseModel
             'company_name' => 'string',
             'company_vat' => 'string',
             'company_registration_number' => 'string',
-            'company_country' => 'select',
+            // 'company_country' => 'select',
+            'address_country' => 'select',
+            'address_city' => 'string',
+            'address_line' => 'string',
+            'address_postal_code' => 'string',
+            'address_state' => 'string',
+
             'work_experience' => 'array',
             'education' => 'array',
             'bio' => 'wysiwyg',
@@ -68,7 +74,7 @@ class UserMeta extends WeBaseModel
     }
 
     public static function metaForCompanyEntity() {
-        return ['company_name', 'company_vat', 'company_registration_number', 'company_country'];
+        return ['company_name', 'company_vat', 'company_registration_number'];
     }
 
     public static function metaSelectValues($key) {

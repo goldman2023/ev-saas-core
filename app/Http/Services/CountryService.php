@@ -74,6 +74,8 @@ class CountryService
     }
 
     function isEU($code) {
+        $code = $code instanceof Country ? $code->code : $code;
+        
         $eu_code = array(
             'AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'EL',
             'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV',
