@@ -152,6 +152,16 @@ class MacrosServiceProvider extends ServiceProvider
             return $result;
         });
 
+        Collection::macro('sortByOrderProperty', function () {
+            return $this->sortBy(function ($item) {
+                if (!isset($item['order']) || empty($item['order'] ?? null) || (isset($item['order']) && $item['order'] == 0)) {
+                    return PHP_INT_MAX;
+                }
+            
+                return $item['order'];
+            });
+        });
+
         // Change all Models `connection` property (usually needed for Livewire collections manipulations)
         \Illuminate\Database\Eloquent\Collection::macro('setConnection', function () {
             return $this->map(function ($item, $key) {

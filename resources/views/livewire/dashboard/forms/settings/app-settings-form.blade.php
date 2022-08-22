@@ -2116,6 +2116,7 @@
                                                 'onboarding': false,
                                                 'registration': false,
                                                 'type': this.all_user_meta[key],
+                                                'order': 0,
                                                 'entity': 'individual'
                                             };
                                         }
@@ -2156,7 +2157,7 @@
                                     </div>
 
                                     <x-system.form-modal id="app-settings-user_meta_fields_in_use"
-                                        title="User meta fields in use" class="sm:max-w-2xl">
+                                        title="User meta fields in use" class="sm:max-w-3xl">
                                         <!-- User meta fields in use-->
                                         <div class="mt-0 flex flex-col">
                                             <div class="overflow-x-auto ">
@@ -2180,6 +2181,9 @@
                                                                     <th scope="col"
                                                                         class="px-1 py-1 text-center text-sm font-semibold text-gray-900">
                                                                         {{ translate('Registration') }}</th>
+                                                                    <th scope="col"
+                                                                        class="px-1 py-1 text-center text-sm font-semibold text-gray-900">
+                                                                        {{ translate('Ordering') }}</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="divide-y divide-gray-200 bg-white">
@@ -2237,6 +2241,10 @@
                                                                                     :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use, key+'.registration', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use, key+'.registration', false) === false}"
                                                                                     class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                                                             </button>
+                                                                        </td>
+                                                                        <td
+                                                                            class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
+                                                                            <input type="number" step="1" min="0" class="form-standard max-w-[60px]" x-model="settings.user_meta_fields_in_use[key].order"/>
                                                                         </td>
                                                                     </tr>
                                                                 </template>

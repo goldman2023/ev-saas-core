@@ -849,7 +849,7 @@ class StripeService
                     'price' => $stripe_price->id,
                     'quantity' => !empty($qty) ? $qty : 1,
                     'adjustable_quantity' => [
-                        'enabled' => get_tenant_setting('multi_item_subscription_enabled') === true ? true : false,
+                        'enabled' => get_tenant_setting('multi_item_subscription_enabled') === true ? false : false,
                         // 'minimum' => 0,
                         // 'maximum' => 99
                     ]
@@ -1098,7 +1098,7 @@ class StripeService
                     'price' => $stripe_price->id,
                     'quantity' => get_tenant_setting('multi_item_subscription_enabled') === true ? $qty : 1,
                     'adjustable_quantity' => [
-                        'enabled' => get_tenant_setting('multi_item_subscription_enabled') === true ? true : false,
+                        'enabled' => get_tenant_setting('multi_item_subscription_enabled') === true ? false : false,
                         // 'minimum' => 0,
                         // 'maximum' => 99
                     ]
@@ -2208,7 +2208,7 @@ class StripeService
             http_response_code(400);
             die(print_r($e));
         }
-        
+
         die();
     }
 

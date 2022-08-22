@@ -96,7 +96,7 @@
 
         
         @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
-            @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
+            @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->sortByOrderProperty() as $key => $options)
                 <div class="mb-4" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif >
                     <label class="block text-16 font-medium text-gray-700">
                         {{  Str::title(str_replace('_', ' ', $key)) }}
