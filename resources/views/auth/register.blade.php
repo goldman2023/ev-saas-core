@@ -25,7 +25,7 @@
         </div>
         <div class="hidden lg:block relative w-0 flex-1">
             <div
-                class="relative hidden md:flex flex-auto items-center justify-center h-full p-16 lg:px-20 overflow-hidden bg-gray-800 dark:border-l ">
+                class="relative hidden md:flex flex-auto items-start justify-center h-full p-16 lg:px-20 overflow-hidden bg-gray-800 dark:border-l ">
                 <svg viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice"
                     xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 pointer-events-none ">
                     <g fill="none" stroke="currentColor" stroke-width="100" class="text-gray-700 opacity-25 ">
