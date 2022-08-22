@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AppSettingsGroupEnum;
-use App\Models\PaymentMethod;
-use App\Models\PaymentMethodUniversal;
-use App\Models\User;
 use Cookie;
-use Illuminate\Http\Request;
 use MyShop;
-use Permissions;
 use Session;
+use Permissions;
+use App\Models\User;
+use Illuminate\Http\Request;
+use App\Models\PaymentMethod;
+use App\Exceptions\WeAPIException;
+use App\Enums\AppSettingsGroupEnum;
+use App\Models\PaymentMethodUniversal;
 use Spatie\Activitylog\Models\Activity;
+use Mpociot\VatCalculator\Facades\VatCalculator;
 
 class EVAccountController extends Controller
 {
@@ -147,5 +149,37 @@ class EVAccountController extends Controller
         $shop = MyShop::getShop();
 
         return view('frontend.dashboard.settings.shop-settings', compact('shop'));
+    }
+
+    public function validateVAT(Request $request) {
+        $vat = $request->vat;
+        $country = $request->country;
+
+        if(!empty($vat) && !empty($country = \Countries::get(code: $country))) {
+            if(\Countries::isEU($country)) {
+                try {
+                    // VAT Number MUST INCLUDE COUNTRY TWO-LETTER CODE AT THE BEGINNING
+                    $validVAT = VatCalculator::isValidVATNumber($vat);
+
+                    return response()->json([
+                        'status' => 'success',
+                        'is_vat_valid' => $validVAT,
+                        'is_country_eu' => true,
+                    ]);
+                } catch (VATCheckUnavailableException $e) {
+                    // The VAT check API is unavailable...
+                    \Log::warning($e);
+                    throw new WeAPIException(message: translate('Couldn\'t validate VAT number - Service unavailable.'), type: 'WeApiException', code: 400);
+                }
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'is_vat_valid' => false,
+                'is_country_eu' => false,
+            ]);
+        }
+
+        throw new WeAPIException(message: translate('VAT or Country not provided'), type: 'WeApiException', code: 400);
     }
 }

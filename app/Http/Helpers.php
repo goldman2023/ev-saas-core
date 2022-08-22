@@ -43,7 +43,9 @@ if (!function_exists('castValueForSave')) {
             }
         } else if($data_type === 'int') {
             $setting = ctype_digit($setting) || is_numeric($setting) ? ((int) $setting) : $setting;
-        } else if($data_type === 'boolean') {
+        } else if($data_type === 'decimal') {
+            $setting = ctype_digit($setting) || is_numeric($setting) ? ((float) $setting) : $setting;
+        }else if($data_type === 'boolean') {
             $setting = $setting ? 1 : 0;
         } else if($data_type === 'object' || $data_type === 'array' || $data_type === 'uploads' || is_array($data_type) || is_object($data_type)) {
             $setting = json_encode($setting);
@@ -134,6 +136,8 @@ if (!function_exists('castValuesForGet')) {
                             $setting = $setting;
                         } else if($data_type === 'int') {
                             $setting = ctype_digit($setting) ? ((int) $setting) : $setting;
+                        } else if($data_type === 'decimal') {
+                            $setting = ctype_digit($setting) ? ((float) $setting) : $setting;
                         } else if($data_type === 'boolean') {
                             $setting = ($setting == 0 || $setting == "0") ? false : true;
                         } else if($data_type === 'array') {

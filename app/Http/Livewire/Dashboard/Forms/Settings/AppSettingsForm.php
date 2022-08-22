@@ -64,6 +64,7 @@ class AppSettingsForm extends Component
                 'settings.company_number' => [''],
                 'settings.company_vat' => [''],
                 'settings.company_email' => [''],
+                'settings.company_tax_rate' => ['required', 'numeric'],
             ]),
             /* TODO: Enable disable specific product types in app settings */
             /* WARNING THIS OPTION IS WORK IN PROGRESS */
@@ -561,6 +562,10 @@ class AppSettingsForm extends Component
             $setting_key = explode('.', $key)[1]; // get the part after `settings.`
 
             if(!empty($setting_key) && $setting_key !== '*') {
+                if($setting_key === 'user_meta_fields_in_use') {
+                    $this->settings[$setting_key] = array_intersect_key($this->settings[$setting_key], \App\Models\UserMeta::metaDataTypes());
+                }
+
                 TenantSetting::where('setting', $setting_key)
                     ->update(['value' => castValueForSave($setting_key, $this->settings[$setting_key], TenantSettings::settingsDataTypes())]);
             }

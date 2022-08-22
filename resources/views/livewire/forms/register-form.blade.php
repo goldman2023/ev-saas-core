@@ -94,21 +94,67 @@
         {{-- END Email --}}
 
 
-
-
-
-
+        
         @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
             @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
                 <div class="mb-4" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif >
-                    <label class="block text-16 font-medium text-gray-700">{{  Str::title(str_replace('_', ' ', $key)) }}</label>
+                    <label class="block text-16 font-medium text-gray-700">
+                        {{  Str::title(str_replace('_', ' ', $key)) }}
+                        @if($options['required'])
+                        <small class="text-danger">*</small>
+                        @endif
+                    </label>
 
                     <div class="mt-1 relative rounded-md shadow-sm">
-                        @if(($options['type']??'string') == 'string')
+                        @if($key === 'company_vat')
+                            <div x-data="{
+                                valid_vat: null,
+                                checkVATvalidity() {
+                                    wetch.get('{{ route('api.validate.vat') }}?vat='+user_meta.company_vat+'&country='+user_meta.address_country)
+                                    .then(data => {
+                                        if(data.status === 'success') {
+                                            if(data.is_country_eu && user_meta.company_vat !== undefined && user_meta.company_vat !== '' && user_meta.company_vat !== null) {
+                                                this.valid_vat = data.is_vat_valid;
+                                            } else {
+                                                this.valid_vat = null;
+                                            }
+                                        }
+                                    })
+                                    .catch(error => {
+                                        this.valid_vat = null;
+                                    });
+                                }
+                            }" x-init="$watch('user_meta.address_country', (country) => checkVATvalidity())">
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <input type="text" x-model="user_meta.{{ $key }}" 
+                                    :class="{'is-valid':valid_vat === true, 'is-invalid':valid_vat === false}"
+                                    class="form-standard pr-10" @input.debounce.500ms="checkVATvalidity()">
+
+                                    <template x-if="valid_vat === false">
+                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                            <!-- Heroicon name: solid/exclamation-circle -->
+                                            @svg('heroicon-s-exclamation-circle', ['class' => 'h-5 w-5 text-red-500'])
+                                        </div>
+                                    </template>
+
+                                    <template x-if="valid_vat === true">
+                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                            @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-green-500'])
+                                        </div>
+                                    </template>
+                                </div>
+                                @error('user_meta.company_vat')
+                                    <template x-if="valid_vat === false">
+                                        <x-system.invalid-msg field="user_meta.company_vat"></x-system.invalid-msg>
+                                    </template>
+                                @enderror
+                                {{-- <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less than 4 characters.</p> --}}
+                            </div>
+                        @elseif(($options['type']??'string') == 'string')
                             <x-dashboard.form.input field="user_meta.{{ $key }}" />
                         @elseif(($options['type']??'string') == 'date')
                             <x-dashboard.form.date field="user_meta.{{ $key }}" />
-                        @elseif(($options['type']??'string') == 'select' && $key === 'company_country')
+                        @elseif(($options['type']??'string') == 'select' && $key === 'address_country')
                             <x-dashboard.form.select field="user_meta.{{ $key }}" selected="user_meta.{{ $key }}" :items="\Countries::getCodesForSelect(as_array: true)" :search="true" :nullable="false" />
                         @elseif(($options['type']??'string') == 'select')
                             <x-dashboard.form.select field="user_meta.{{ $key }}" selected="user_meta.{{ $key }}" :items="\App\Models\UserMeta::metaSelectValues($key)" />
@@ -179,7 +225,7 @@
                     $wire.set('entity', entity, true);
                     @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
                         @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
-                            @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date')
+                            @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date' || $key == 'company_vat')
                                 $wire.set('user_meta.{{ $key }}', user_meta.{{ $key }}, true);
                             @endif
                         @endforeach
