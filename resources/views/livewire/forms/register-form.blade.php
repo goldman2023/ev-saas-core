@@ -99,9 +99,16 @@
             @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->sortByOrderProperty() as $key => $options)
                 <div class="mb-4" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif >
                     <label class="block text-16 font-medium text-gray-700">
-                        {{  Str::title(str_replace('_', ' ', $key)) }}
+                        @if($key === 'company_vat')
+                            {{ translate('Company VAT') }}
+                        @elseif($key === 'address_country')
+                            {{ translate('Country') }}
+                        @else
+                            {{  Str::title(str_replace('_', ' ', $key)) }}
+                        @endif
+
                         @if($options['required'])
-                        <small class="text-danger">*</small>
+                            <small class="text-danger">*</small>
                         @endif
                     </label>
 
