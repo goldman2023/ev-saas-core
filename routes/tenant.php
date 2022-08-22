@@ -287,6 +287,7 @@ Route::middleware([
 ])->prefix('api')->name('api.')->group(function () {
     // Quizz Result Save
     Route::post('/we-quizz-result/{id}', [WeQuizController::class, 'save_result'])->name('we-quiz.result.save');
+    Route::get('/validate/vat', [EVAccountController::class, 'validateVAT'])->name('validate.vat');
 
     // TODO: Make these api Routes PROTECTED by AUTH!
     Route::middleware('auth')->group(function () {

@@ -197,6 +197,10 @@ if($colors) {
             @apply border-danger;
         }
 
+        .is-valid {
+            @apply border-success;
+        }
+
         .card {
             @apply relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden;
         }
