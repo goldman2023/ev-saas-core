@@ -2,25 +2,27 @@
 
 namespace App\Providers;
 
-use App\Http\Services\AttributesService;
-use App\Http\Services\CartService;
-use App\Http\Services\CountryService;
-use App\Http\Services\IMGProxyService;
-use App\Http\Services\MyShopService;
-use App\Http\Services\VendorService;
-use App\Http\Services\MediaService;
-use App\Http\Services\MailerService;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Container\Container;
-use App\Http\Services\CategoryService;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\ServiceProvider;
+use App\WeEngine\WeEngine;
 use App\Http\Services\EVService;
-use App\Http\Services\TenantSettingsService;
 use App\Http\Services\FXService;
-use App\Http\Services\WeBuilderService;
+use App\Http\Services\CartService;
+use Illuminate\Support\Collection;
+use App\Http\Services\MediaService;
+use Illuminate\Container\Container;
+use App\Http\Services\MailerService;
+use App\Http\Services\MyShopService;
 use App\Http\Services\StripeService;
+use App\Http\Services\VendorService;
+use App\Http\Services\CountryService;
+use Illuminate\Support\Facades\Blade;
+use App\Http\Services\CategoryService;
+use App\Http\Services\IMGProxyService;
+use App\Http\Services\WeEngineService;
+use App\Http\Services\WeBuilderService;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\ServiceProvider;
+use App\Http\Services\AttributesService;
+use App\Http\Services\TenantSettingsService;
 
 
 class EVServiceProvider extends ServiceProvider
@@ -103,6 +105,11 @@ class EVServiceProvider extends ServiceProvider
         // Register Countries Singleton
         $this->app->singleton('stripe_service', function() {
             return new StripeService(fn () => Container::getInstance());
+        });
+
+        // WeEngine
+        $this->app->singleton('we_engine', function() {
+            return new WeEngine(fn () => Container::getInstance());
         });
     }
 

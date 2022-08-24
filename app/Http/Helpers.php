@@ -30,6 +30,16 @@ use Illuminate\Support\Facades\Log;
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
 include('Helpers/EIMHelpers.php');
 
+if (!function_exists('we_query')) {
+    function we_query($args) {
+        if(empty($args['content_type'] ?? null) || !empty(ContentTypeEnum::values()[$args['content_type']] ?? null))
+            return null;
+
+        $we_query = app(ContentTypeEnum::values()[$args['content_type']]);
+        
+    }
+}
+
 
 if (!function_exists('castValueForSave')) {
     function castValueForSave($key, $setting, $data_types) {
