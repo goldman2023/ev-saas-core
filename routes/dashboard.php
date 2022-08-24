@@ -1,39 +1,40 @@
 <?php
 
-use App\Http\Controllers\ActivityController;
+use App\Models\User;
 use App\Http\Controllers\App;
-use App\Http\Controllers\DocumentGalleryController;
+use App\Http\Middleware\VendorMode;
+use App\Http\Middleware\SetDashboard;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CRMController;
+use App\Http\Controllers\FeedController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LeadController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\EVPageController;
+use App\Http\Controllers\EVPlanController;
+use App\Http\Controllers\WeQuizController;
+use App\Http\Controllers\EVOrderController;
+use App\Http\Controllers\WeMediaController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EVAccountController;
-use App\Http\Controllers\EVAttributesController;
+use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\WeInvoiceController;
+use App\Http\Controllers\WeSectionController;
 use App\Http\Controllers\EVBlogPostController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
-use App\Http\Controllers\EVOrderController;
-use App\Http\Controllers\EVPageController;
-use App\Http\Controllers\EVPlanController;
-use App\Http\Controllers\EVProductController;
-use App\Http\Controllers\FeedController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EVDownloadsController;
-use App\Http\Controllers\CRMController;
-use App\Http\Controllers\DocumentsController;
-use App\Http\Controllers\WeSubscriptionsController;
-use App\Http\Controllers\WeInvoiceController;
-use App\Http\Controllers\Integrations\FacebookBusinessController;
-use App\Http\Controllers\Integrations\IntegrationsController;
-use App\Http\Controllers\Integrations\WooCommerceController;
-use App\Http\Controllers\LeadController;
+use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\WeMediaController;
-use App\Http\Controllers\WeQuizController;
-use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
-use App\Http\Middleware\SetDashboard;
-use App\Http\Middleware\VendorMode;
+use App\Http\Controllers\DocumentGalleryController;
+use App\Http\Controllers\WeSubscriptionsController;
 use App\Http\Services\PaymentMethods\PayseraGateway;
-use App\Models\User;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Integrations\WooCommerceController;
+use App\Http\Controllers\Integrations\IntegrationsController;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use App\Http\Controllers\Integrations\FacebookBusinessController;
+use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 
 Route::middleware([
     'web',
@@ -85,10 +86,15 @@ Route::middleware([
         Route::get('/products/edit/{id}/course-management', [EVProductController::class, 'edit_course'])->name('product.edit.course');
         Route::get('/products/preview/{id}/thank-you', [EVProductController::class, 'thank_you_preview'])->name('product.thank_you_preview');
 
-        /* Pages */
+        /* Pages & Sections */
         Route::get('/pages', [EVPageController::class, 'index'])->name('pages.index');
         Route::get('/pages/create', [EVPageController::class, 'create'])->name('page.create');
         Route::get('/pages/edit/{id}', [EVPageController::class, 'edit'])->name('page.edit');
+        Route::get('/sections', [WeSectionController::class, 'index'])->name('sections.index');
+        Route::get('/sections/create', [WeSectionController::class, 'create'])->name('section.create');
+        Route::get('/sections/edit/{id}', [WeSectionController::class, 'edit'])->name('section.edit');
+        Route::get('/section/{id}/preview', [WeSectionController::class, 'preview'])->name('section.preview');
+
 
         /* Blog Posts */
         Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');
