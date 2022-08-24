@@ -78,11 +78,12 @@
                 <dt class="text-gray-500">{{ translate('Next payment: ') }}</dt>
                 <dd class="text-gray-900"></dd>
             </div>
-
+            @if($user->created_at)
             <div class="py-3 flex justify-between text-sm font-medium">
                 <dt class="text-gray-500">{{ translate('Registered') }}</dt>
                 <dd class="text-gray-900">{{ $user->created_at->diffForHumans() }}</dd>
             </div>
+            @endif
 
             <div class="py-3 flex justify-between text-sm font-medium">
                 <dt class="text-gray-500">{{ translate('Payments') }}</dt>

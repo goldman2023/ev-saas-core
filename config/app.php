@@ -300,6 +300,7 @@ return [
         'UUID' => Webpatser\Uuid\Uuid::class,
         'StripeService' => App\Facades\StripeService::class,
         'MailerService' => App\Facades\MailerService::class,
+        'WeEngine' => App\WeEngine\Facades\WeEngine::class,
     ],
 
 ];

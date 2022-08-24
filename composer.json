@@ -78,6 +78,7 @@
         "staudenmeir/laravel-adjacency-list": "^1.10",
         "stripe/stripe-php": "^7.124",
         "symfony/dom-crawler": "^6.0",
+        "twig/twig": "^3.0",
         "webpatser/laravel-uuid": "^4.0",
         "webtopay/libwebtopay": "^1.8"
     },

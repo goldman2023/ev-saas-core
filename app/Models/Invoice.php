@@ -225,7 +225,7 @@ class Invoice extends WeBaseModel
                     $customer_custom_fields['company no.'] = $company_registration_number;
                     $customer_custom_fields['VAT no.'] = $company_vat;
                 } else {
-                    if(\Countries::isEU($company_country)) {
+                    if(\Countries::isEU($company_country) && !empty($company_vat)) {
                         $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
                         $customer_custom_fields['VAT no.'] = $company_vat;
                     } else {
@@ -275,18 +275,19 @@ class Invoice extends WeBaseModel
         ]);
 
         if($this->user->entity === UserEntityEnum::company()->value) {
+            $customer_custom_fields = array_merge([
+                'company' => $this->getData('customer.company_name', ''),
+                'address' => $this->billing_address.', '.$this->billing_zip
+            ], $customer_custom_fields);
+
             $customer = new Party([
                 'name'          => $this->billing_first_name.' '.$this->billing_last_name,
-                'company'       => $this->getData('customer.company_name', ''),
-                'address'       => $this->billing_address.', '.$this->billing_zip,
-                // 'code'          => '#'.$this->id,
                 'custom_fields' => $customer_custom_fields,
             ]);
         } else {
             $customer = new Party([
                 'name'          => $this->user->name.' '.$this->user->surname,
                 'address'       => $this->billing_address.', '.$this->billing_zip,
-                // 'code'          => '#'.$this->id,
                 'custom_fields' => $customer_custom_fields,
             ]);
         }

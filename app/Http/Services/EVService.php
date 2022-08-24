@@ -2,26 +2,27 @@
 
 namespace App\Http\Services;
 
-use App\Enums\AppSettingsGroupEnum;
-use App\Facades\MyShop;
-use App\Models\Attribute;
-use App\Models\AttributeValue;
-use App\Models\BlogPost;
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\Currency;
+use EVS;
+use Cache;
+use Session;
 use App\Models\Lead;
 use App\Models\Page;
-use App\Models\Product;
-use App\Models\ProductVariation;
-use App\Models\User;
 use App\Models\Plan;
-use Cache;
-use EVS;
-use Illuminate\Support\Collection;
-use Illuminate\View\ComponentAttributeBag;
+use App\Models\User;
+use App\Models\Brand;
+use App\Facades\MyShop;
+use App\Models\Product;
+use App\Models\Section;
+use App\Models\BlogPost;
+use App\Models\Category;
+use App\Models\Currency;
 use Qirolab\Theme\Theme;
-use Session;
+use App\Models\Attribute;
+use App\Models\AttributeValue;
+use App\Models\ProductVariation;
+use Illuminate\Support\Collection;
+use App\Enums\AppSettingsGroupEnum;
+use Illuminate\View\ComponentAttributeBag;
 
 class EVService
 {
@@ -278,6 +279,23 @@ class EVService
                             'class' => 'badge-info',
                             'content' => function () {
                                 return Page::count();
+                            },
+                        ],
+                    ],
+                    [
+                        'label' => translate('Sections'),
+                        'icon' => 'heroicon-o-collection',
+                        'route' => route('sections.index'),
+                        'route_name' => 'sections.index',
+
+                        'is_active' => areActiveRoutes(['sections.index', 'sections.create']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => [], // TODO: Add App Pages Permissions
+                        'enabled' => true,
+                        'badge' => [
+                            'class' => 'badge-info',
+                            'content' => function () {
+                                return Section::count();
                             },
                         ],
                     ],
