@@ -282,14 +282,12 @@ class Invoice extends WeBaseModel
 
             $customer = new Party([
                 'name'          => $this->billing_first_name.' '.$this->billing_last_name,
-                // 'code'          => '#'.$this->id,
                 'custom_fields' => $customer_custom_fields,
             ]);
         } else {
             $customer = new Party([
                 'name'          => $this->user->name.' '.$this->user->surname,
                 'address'       => $this->billing_address.', '.$this->billing_zip,
-                // 'code'          => '#'.$this->id,
                 'custom_fields' => $customer_custom_fields,
             ]);
         }
