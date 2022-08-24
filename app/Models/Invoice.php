@@ -284,7 +284,7 @@ class Invoice extends WeBaseModel
             ], $customer_custom_fields);
 
             $customer = new Party([
-                'name'          => $this->billing_first_name.' '.$this->billing_last_name,
+                // 'name'          => $this->billing_first_name.' '.$this->billing_last_name,
                 'custom_fields' => $customer_custom_fields,
             ]);
         } else {

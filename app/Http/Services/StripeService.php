@@ -748,7 +748,7 @@ class StripeService
                 // 'subscription_proration_date' => $proration_date,
                 'subscription_billing_cycle_anchor' => $cycle_anchor,
                 // 'subscription_trial_end' => $cycle_anchor,
-                'automatic_tax' => ['enabled' => true],
+                'automatic_tax' => ['enabled' => Payments::stripe()->stripe_automatic_tax_enabled === true ? true : false],
             ];
 
             if(!empty($new_plan) && !empty($interval)) {
@@ -780,7 +780,7 @@ class StripeService
             $params = [
                 'customer' => auth()->user()->getStripeCustomerID(), // TODO: Think about changing this to include other users if admin is doing projection for somebody else
                 'subscription_billing_cycle_anchor' => 'now',
-                'automatic_tax' => ['enabled' => true],
+                'automatic_tax' => ['enabled' => Payments::stripe()->stripe_automatic_tax_enabled === true ? true : false],
             ];
 
             foreach($cart as $cart_item) {
