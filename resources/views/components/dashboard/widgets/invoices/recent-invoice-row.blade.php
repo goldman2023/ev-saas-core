@@ -59,11 +59,6 @@
     </strong>
 </x-livewire-tables::table.cell>
 
-
-<x-livewire-tables::table.cell class="align-middle text-left">
-    <span class="d-block text-14 mb-0">{{ !empty($row->end_date) ? date('d M, Y', $row->end_date) : '-' }}</span>
-</x-livewire-tables::table.cell>
-
 <x-livewire-tables::table.cell class="align-middle text-center">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
         {{-- <a class="btn btn-primary flex items-center mr-2" target="_blank" href="{{ $row->meta[stripe_prefix('stripe_hosted_invoice_url')] ?? '#' }}">

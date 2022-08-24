@@ -72,9 +72,9 @@ class RecentInvoicesWidgetTable extends DataTableComponent
             Column::make('Tax', 'tax')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
-            Column::make('Next Invoice Date', 'created_at')
-                ->excludeFromSelectable()
-                ->addClass('text-left'),
+            // Column::make('Next Invoice Date', 'created_at')
+            //     ->excludeFromSelectable()
+            //     ->addClass('text-left'),
             Column::make('Actions')
                 ->excludeFromSelectable(),
         ];
