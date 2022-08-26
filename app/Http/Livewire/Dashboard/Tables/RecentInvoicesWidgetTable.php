@@ -69,9 +69,6 @@ class RecentInvoicesWidgetTable extends DataTableComponent
             Column::make('Amount(with tax)', 'total_price')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
-            Column::make('Amount(with tax)', 'total_price')
-                ->excludeFromSelectable()
-                ->addClass('text-left'),
             Column::make('Tax', 'tax')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
