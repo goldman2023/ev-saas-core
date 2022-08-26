@@ -7,6 +7,8 @@ use Illuminate\View\Component;
 class StripeCustomerCard extends Component
 {
     public $user;
+    public $user_balance;
+    public $stripe_customer_endpoint;
     /**
      * Create a new component instance.
      *
@@ -16,6 +18,9 @@ class StripeCustomerCard extends Component
     {
         //
         $this->user = $user;
+        $this->user_balance = \StripeService::stripe()->customers->retrieve($user->getStripeCustomerId(), [] )->balance;
+        $this->stripe_customer_endpoint = "https://dashboard.stripe.com/customers/" . $user->getStripeCustomerId() . "/";
+
     }
 
     /**

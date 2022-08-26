@@ -89,9 +89,9 @@ class InvoicesTable extends DataTableComponent
             Column::make('Tax', 'total_price')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
-            Column::make('Next Invoice Date', 'created_at')
-                ->excludeFromSelectable()
-                ->addClass('text-left'),
+            // Column::make('Next Invoice Date', 'created_at')
+            //     ->excludeFromSelectable()
+            //     ->addClass('text-left'),
             Column::make('Actions')
                 ->excludeFromSelectable(),
         ];

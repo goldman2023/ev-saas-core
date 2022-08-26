@@ -1,15 +1,22 @@
 <div class="card pb-16 space-y-6 mb-6">
     <div>
-        <div class="block w-full aspect-w-6 aspect-h-5 rounded-lg overflow-hidden">
-            <img src="{{ $user->getThumbnail() }}" alt="{{ $user->name }}" class="object-cover w-full h-full">
-        </div>
-        <div class="mt-4 flex items-start justify-between">
+
+        <div class="flex items-start justify-between">
             <div>
-                <h2 class="text-lg font-medium text-gray-900">
-                    <span class="sr-only"></span>
-                    {{ $user->name }}
-                </h2>
-                <p class="text-sm font-medium text-gray-500">{{ $user->email }}</p>
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-4 block w-full aspect-w-6 aspect-h-5 rounded-lg overflow-hidden">
+                        <img src="{{ $user->getThumbnail() }}" alt="{{ $user->name }}" class="object-cover w-full h-full">
+                    </div>
+
+                    <div class="col-span-8">
+                        <h2 class="text-lg font-medium text-gray-900">
+                            <span class="sr-only"></span>
+                            {{ $user->name }}
+                        </h2>
+                        <p class="text-sm font-medium text-gray-500">{{ $user->email }}</p>
+                    </div>
+                </div>
+
             </div>
             <button type="button"
                 class="hidden ml-4 bg-white rounded-full h-8 w-8 flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -73,16 +80,29 @@
         <h3 class="font-medium text-gray-900">{{ translate('Summary') }}</h3>
 
         <dl class="mt-2 border-t border-b border-gray-200 divide-y divide-gray-200">
-
-            <div class="py-3 flex justify-between text-sm font-medium">
-                <dt class="text-gray-500">{{ translate('Next payment: ') }}</dt>
-                <dd class="text-gray-900"></dd>
-            </div>
-
+            @if($user->created_at)
             <div class="py-3 flex justify-between text-sm font-medium">
                 <dt class="text-gray-500">{{ translate('Registered') }}</dt>
                 <dd class="text-gray-900">{{ $user->created_at->diffForHumans() }}</dd>
             </div>
+            @endif
+
+            @if($user->getStripeCustomerId())
+            <div class="py-3 flex justify-between text-sm font-medium">
+                <dt class="text-gray-500">{{ translate('User Credit Balance') }}
+
+                    <div>
+                        <a class="text-gray-600 text-xs" href="{{ $stripe_customer_endpoint }}" target="_blank">
+                            {{ translate('View transaction history') }}
+                        </a>
+                    </div>
+                </dt>
+                <dd class="text-gray-900 text-right">{{ FX::formatPrice($user_balance) }}
+
+                </dd>
+
+            </div>
+            @endif
 
             <div class="py-3 flex justify-between text-sm font-medium">
                 <dt class="text-gray-500">{{ translate('Payments') }}</dt>
@@ -117,7 +137,7 @@
                     <p class="ml-4 text-sm font-medium text-gray-900">{{ translate('Stripe') }}</p>
                 </div>
                 <a target="_blank"
-                    href="https://dashboard.stripe.com/customers/{{ $user->getCoreMeta('test_stripe_customer_id') }}"
+                    href="{{ $stripe_customer_endpoint }}"
                     type="button"
                     class="ml-6 bg-white rounded-md text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     {{ translate('View') }}
@@ -170,10 +190,7 @@
             class="hidden flex-1 bg-indigo-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             Download
         </button>
-        <a
-        href="/we/admin/resources/users/{{ $user->id }}"
-        type="button"
-        target="_blank"
+        <a href="/we/admin/resources/users/{{ $user->id }}" type="button" target="_blank"
             class="flex-1 ml-3 bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             {{ translate('Impersonate') }}
         </a>

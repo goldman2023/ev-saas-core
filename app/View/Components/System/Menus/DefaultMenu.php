@@ -16,7 +16,7 @@ class DefaultMenu extends Component
     {
         $header_menu = nova_get_menu_by_slug($menu_slug);
         $header_menu_items = $header_menu['menuItems'] ?? null;
-        //
+        
         if($header_menu_items) {
             $this->header_menu_items = $header_menu_items;
         }
