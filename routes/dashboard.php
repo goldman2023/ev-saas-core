@@ -252,6 +252,7 @@ Route::middleware([
     Route::post('/quiz/save/{id}', [WeQuizController::class, 'save_quiz'])->name('we-quiz.update');
     Route::post('/quiz/result/{id}/passed-toggle', [WeQuizController::class, 'toggle_passed'])->name('we-quiz.toggle-passed');
 
+    Route::post('/subscription/{subscription_id}/update', [WeSubscriptionsController::class, 'update_subscription'])->name('subscription.update');
     Route::get('/subscription/{subscription_id}/change-free-trial-plan/{new_plan_id}', [WeSubscriptionsController::class, 'change_free_trial_plan'])->name('subscription.change-free-trial-plan');
     Route::get('/subscription/{subscription_id}/upcoming-invoice/plan/{new_plan_id}/{interval}', [WeSubscriptionsController::class, 'generate_upcoming_invoice_from_stripe'])->name('subscription.upcoming.invoice.stripe');
     Route::post('/subscription/calculate-potential-invoice', [WeSubscriptionsController::class, 'calculate_potential_invoice'])->name('subscription.calculate-potential-invoice.stripe');

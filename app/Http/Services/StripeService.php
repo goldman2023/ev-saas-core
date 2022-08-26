@@ -744,12 +744,17 @@ class StripeService
 
             $params = [
                 'customer' => $user_subscription->user->getStripeCustomerID(),
-                // 'subscription' => $user_subscription->getStripeSubscriptionID(),
-                // 'subscription_proration_date' => $proration_date,
                 'subscription_billing_cycle_anchor' => $cycle_anchor,
-                // 'subscription_trial_end' => $cycle_anchor,
-                'automatic_tax' => ['enabled' => true],
+                'automatic_tax' => ['enabled' => Payments::stripe()->stripe_automatic_tax_enabled === true ? true : false],
             ];
+
+            if(Payments::stripe()->stripe_prorations_enabled) {
+                $params = array_merge($params, [
+                    'subscription' => $user_subscription->getStripeSubscriptionID(),
+                    'subscription_proration_date' => $proration_date,
+                    'subscription_trial_end' => $cycle_anchor,
+                ]);
+            }
 
             if(!empty($new_plan) && !empty($interval)) {
                 // See what the next invoice would look like with a price switch and proration set:
@@ -780,8 +785,36 @@ class StripeService
             $params = [
                 'customer' => auth()->user()->getStripeCustomerID(), // TODO: Think about changing this to include other users if admin is doing projection for somebody else
                 'subscription_billing_cycle_anchor' => 'now',
-                'automatic_tax' => ['enabled' => true],
+                'automatic_tax' => ['enabled' => Payments::stripe()->stripe_automatic_tax_enabled === true ? true : false],
             ];
+
+            if(Payments::stripe()->stripe_prorations_enabled) {
+                $params = array_merge($params, [
+                    'subscription' => auth()->user()->subscriptions->first()->getStripeSubscriptionID(),
+                    'subscription_proration_behavior' => 'create_prorations',
+                    'subscription_proration_date' => time(),
+                    'subscription_trial_end' => 'now',
+                ]);
+
+                // Get subscription
+                $stripe_subscription = $this->stripe->subscriptions->retrieve(
+                    auth()->user()->subscriptions->first()->getStripeSubscriptionID(),
+                    []
+                );
+
+                $previous_subscription_item_id = $stripe_subscription->items->data[0]->id;
+
+                if(!empty($stripe_subscription->items->data)) {
+                    foreach($stripe_subscription->items->data as $stripe_subscription_item) {
+                        if(!empty($stripe_subscription_item->id)) {
+                            $cart_items[] = [
+                                'id' => $previous_subscription_item_id,
+                                'deleted' => true
+                            ];
+                        }
+                    }
+                }
+            }
 
             foreach($cart as $cart_item) {
                 if(!empty($cart_item['plan_id'])) {
@@ -849,7 +882,7 @@ class StripeService
                     'price' => $stripe_price->id,
                     'quantity' => !empty($qty) ? $qty : 1,
                     'adjustable_quantity' => [
-                        'enabled' => get_tenant_setting('multi_item_subscription_enabled') === true ? false : false,
+                        'enabled' => get_tenant_setting('multi_item_subscription_enabled') === true ? false : false, // TODO: Remember to fix this later
                         // 'minimum' => 0,
                         // 'maximum' => 99
                     ]
@@ -940,32 +973,36 @@ class StripeService
                 }
             }
 
-            // If there is a previous subscription, check if total price of current temp-subscription has lower or same price as previous subscription
-            $one_time_stripe_coupon_code = null;
-
-            if($trial_days_left <= 0 && !empty($previous_subscription) && $subscription->getTotalPrice(format: false) <= $previous_subscription->getTotalPrice(format: false)) {
-                // Create a downgrade with 100% discount for first month (like a partial proration)
-                // IMPORTANT: We can do this only bu applying one-time custom coupon code with duration of `once`
-                $one_time_stripe_coupon_code = $this->stripe->coupons->create([
-                    'percent_off' => 100,
-                    'duration' => 'once',
-                    'max_redemptions' => 1,
-                    'name' => 'downgrade-'.substr(str_shuffle('abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789'),0,28),
-                    'redeem_by' => \Carbon::now()->addMinutes(10)->timestamp
-                ]);
-
-                if(!empty($one_time_stripe_coupon_code) && isset($one_time_stripe_coupon_code->id)) {
-                    $stripe_args['discounts'] = [
-                        [
-                            'coupon' => $one_time_stripe_coupon_code->id,
-                        ]
-                    ];
-
-                    unset($stripe_args['allow_promotion_codes']);
-                }
+            // Stripe Prorations or not
+            if(Payments::stripe()->stripe_prorations_enabled) {
                 
-            }
+            } else {
+                // If there is a previous subscription, check if total price of current temp-subscription has lower or same price as previous subscription
+                $one_time_stripe_coupon_code = null;
 
+                if($trial_days_left <= 0 && !empty($previous_subscription) && $subscription->getTotalPrice(format: false) <= $previous_subscription->getTotalPrice(format: false)) {
+                    // Create a downgrade with 100% discount for first month (like a partial proration)
+                    // IMPORTANT: We can do this only bu applying one-time custom coupon code with duration of `once`
+                    $one_time_stripe_coupon_code = $this->stripe->coupons->create([
+                        'percent_off' => 100,
+                        'duration' => 'once',
+                        'max_redemptions' => 1,
+                        'name' => 'downgrade-'.substr(str_shuffle('abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789'),0,28),
+                        'redeem_by' => \Carbon::now()->addMinutes(10)->timestamp
+                    ]);
+
+                    if(!empty($one_time_stripe_coupon_code) && isset($one_time_stripe_coupon_code->id)) {
+                        $stripe_args['discounts'] = [
+                            [
+                                'coupon' => $one_time_stripe_coupon_code->id,
+                            ]
+                        ];
+
+                        unset($stripe_args['allow_promotion_codes']);
+                    }
+                    
+                }
+            }
 
             if (!empty(auth()->user())) {
                 // Create Stripe customer if it doesn't exist
@@ -2851,6 +2888,7 @@ class StripeService
                         // but content of subscription is changed (different products included in subscription)
                         // For this reaon, we cannot just depend on identifying Order only based on `latest_invoice_id`. We must include previous and new price(s) too, in order to know if subscription content really changed
                         // *IMPORTANT* - Getting previous and new price MAY BE DIFFERENT based on multi-product subscriptions and single-product ones. Bu we'll see soon :)
+                        // IMORTANT**** -> THIS WILL BE SLOOOOOOOOOOOOW QUERY cuz meta json cols are not indexed!
                         $existing_order = Order::query()->withoutGlobalScopes()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_latest_invoice_id', $stripe_subscription->latest_invoice)->first();
                         $existing_invoice = Invoice::query()->withoutGlobalScopes()->whereJsonContains('meta->' . $this->mode_prefix .'stripe_invoice_id', $stripe_subscription->latest_invoice)->first();
 
@@ -2860,7 +2898,7 @@ class StripeService
                         // 2. Previous attributes plan->id (actually previous subscription price ID) is different than current subscription price ID
 
                         if(get_tenant_setting('multi_item_subscription_enabled')) {
-                            $should_proceed = false; // TODO: This must work according to multi-plan purchase
+                            $should_proceed = (empty($existing_order) && empty($existing_invoice)) || (($stripe_subscription?->plan?->id ?? 1) !== ($previous_attributes->plan->id ?? 1));; // TODO: This must work according to multi-plan purchase
                         } else {
                             $should_proceed = (empty($existing_order) && empty($existing_invoice)) || (($stripe_subscription?->plan?->id ?? 1) !== ($previous_attributes->plan->id ?? 1));
                         }

@@ -106,6 +106,13 @@ class UserSubscription extends WeBaseModel
         return $this->getData(stripe_prefix('stripe_subscription_id'));
     }
 
+    public function getStripeSubscription() {
+        return \StripeService::stripe()->subscriptions->retrieve(
+            $this->getStripeSubscriptionID(),
+            []
+        );
+    }
+
     public function getStripeUpcomingInvoice() {
         // Try to get upcoming invoice from Order meta column
         $upcoming_invoice = $this->order->getData(stripe_prefix('stripe_upcoming_invoice'));
@@ -139,6 +146,29 @@ class UserSubscription extends WeBaseModel
         if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
             if($invoice['invoice_source'] === 'stripe') {
                 return $format ? \FX::formatPrice($invoice['amount_due'] / 100) : $invoice['amount_due'] / 100;
+            } else if($invoice['invoice_source'] === 'we') {
+                return $format ? \FX::formatPrice($invoice['total_price'] ?? 0) : ($invoice['total_price'] ?? 0);
+            }
+        }
+
+        return 0;
+    }
+
+    public function getTotalUpcomingPrice($format = true) {
+        $invoice = $this->getUpcomingInvoiceStats();
+
+        if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
+            if($invoice['invoice_source'] === 'stripe') {
+                $total_price = 0;
+
+                foreach($invoice['lines']['data'] as $item) {
+                    if($item['proration'])
+                        continue;
+
+                    $total_price += $item['amount'] + $item['tax_amounts'][0]['amount'];
+                }
+
+                return $format ? \FX::formatPrice($total_price / 100) : $total_price / 100;
             } else if($invoice['invoice_source'] === 'we') {
                 return $format ? \FX::formatPrice($invoice['total_price'] ?? 0) : ($invoice['total_price'] ?? 0);
             }

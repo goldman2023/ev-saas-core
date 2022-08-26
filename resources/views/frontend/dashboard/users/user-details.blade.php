@@ -51,6 +51,18 @@
         <div class="col-span-12 sm:col-span-4">
             <x-dashboard.widgets.customers.stripe-customer-card :user="$user">
             </x-dashboard.widgets.customers.stripe-customer-card>
+
+            <div class="mb-6">
+                <x-dashboard.widgets.invoices.next-payment :user="$user">
+                </x-dashboard.widgets.invoices.next-payment>
+            </div>
+
+
+            <div class="mb-6">
+                <x-dashboard.widgets.invoices.user-balance :user="$user">
+                </x-dashboard.widgets.invoices.user-balance>
+            </div>
+
             @livewire('dashboard.elements.activity-log', ['causer' => $user])
         </div>
     </div>

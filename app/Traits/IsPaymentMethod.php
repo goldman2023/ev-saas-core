@@ -297,6 +297,14 @@ trait IsPaymentMethod
                     ],
                 ],
                 [
+                    'property_name' => 'stripe_prorations_enabled',
+                    'value' => $this->data->stripe_prorations_enabled ?? '',
+                    'rules' => ['boolean'],
+                    'messages' => [
+                        'boolean' => translate('Stripe prorations should either be enabled or disabled'),
+                    ],
+                ],
+                [
                     'property_name' => 'stripe_statement_descriptor',
                     'value' => $this->data->stripe_statement_descriptor ?? '',
                     'rules' => [],

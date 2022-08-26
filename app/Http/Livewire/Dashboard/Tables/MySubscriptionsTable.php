@@ -68,6 +68,8 @@ class MySubscriptionsTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Amount', 'amount')
                 ->excludeFromSelectable(),
+            Column::make('Upcoming amount')
+                ->excludeFromSelectable(),
             Column::make('Price', 'price')
                 ->excludeFromSelectable(),
             // Column::make('Starting', 'start_date')
