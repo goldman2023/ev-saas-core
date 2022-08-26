@@ -113,7 +113,30 @@
 
                 url_params.set('data', btoa(JSON.stringify(data)));
 
-                window.open(base_route.toString()+'?'+url_params.toString(), '_blank').focus();
+                // If stripe prorations are enabled and user already has subscriptions and is not on trial
+                @if(\Payments::stripe()->stripe_prorations_enabled && !auth()->user()->isOnTrial() && auth()->user()->isSubscribed())
+                    {{-- this.processing = true; --}}
+
+                    wetch.post('{{ route('api.dashboard.subscription.update', auth()->user()->subscriptions?->first()->id) }}', {
+                        data: data
+                    })
+                    .then(data => {
+                        console.log(data);return;
+                        if(data.status === 'success') {
+                            this.projected_invoice = data.data;
+                        } else {
+                            alert(translate('Could not create a new invoice projection.'));
+                        }
+
+                        this.processing = false;
+                    })
+                    .catch(error => {
+                        alert(error.error.msg);
+                        {{-- this.processing = false; --}}
+                    });
+                @else
+                    window.open(base_route.toString()+'?'+url_params.toString(), '_blank').focus();
+                @endif
             },
             selectedIsActive() {
                 return this.selected_plan_id === this.current_plan_id && this.current_plan_mode ===  this.pricing_mode;
@@ -290,11 +313,13 @@
                         </table>
                     </div>
 
+                    
                     <template x-if="!selectedIsActive()">
                         <div class="w-full flex justify-center mt-4">
                             <div class="btn-primary" @click="checkout()">{{ translate('Proceed to checkout') }}</div>
                         </div>
                     </template>
+                    
                 </div>
             </template>
 
