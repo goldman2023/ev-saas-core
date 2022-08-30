@@ -69,6 +69,13 @@
                         alert(translate('Could not create a new invoice projection.'));
                     }
 
+                    this.projected_invoice.total_price_without_prorations = 0;
+                    _.get(this.projected_invoice, 'lines.data', []).forEach((item, index) => {
+                        if(!item.proration) {
+                            this.projected_invoice.total_price_without_prorations += (item.amount + _.get(item, 'tax_amounts.0.amount', 0));
+                        }
+                    });
+
                     this.processing = false;
                 })
                 .catch(error => {
@@ -115,24 +122,26 @@
 
                 // If stripe prorations are enabled and user already has subscriptions and is not on trial
                 @if(\Payments::stripe()->stripe_prorations_enabled && !auth()->user()->isOnTrial() && auth()->user()->isSubscribed())
-                    {{-- this.processing = true; --}}
+                    this.processing = true;
 
                     wetch.post('{{ route('api.dashboard.subscription.update', auth()->user()->subscriptions?->first()->id) }}', {
                         data: data
                     })
                     .then(data => {
-                        console.log(data);return;
+                        
                         if(data.status === 'success') {
-                            this.projected_invoice = data.data;
+                            alert('{{ translate('You successfully changed your plan! Page will refresh to reflect the latest changes.') }}');
+                            window.location.reload();
+                            return;
                         } else {
-                            alert(translate('Could not create a new invoice projection.'));
+                            alert('{{ translate('Could not create a new invoice projection.') }}');
                         }
 
                         this.processing = false;
                     })
                     .catch(error => {
                         alert(error.error.msg);
-                        {{-- this.processing = false; --}}
+                        this.processing = false;
                     });
                 @else
                     window.open(base_route.toString()+'?'+url_params.toString(), '_blank').focus();
@@ -291,23 +300,35 @@
                                 </template>
                             </tbody>
                             <tfoot>
-                                <tr>
+                                <tr x-show="projected_invoice.subtotal_excluding_tax > 0">
                                     <th scope="row" colspan="3" class="hidden pl-6 pr-3 pt-6 text-right text-sm font-normal text-gray-500 sm:table-cell md:pl-0">{{ translate('Subtotal') }}</th>
                                     <th scope="row" class="pl-4 pr-3 pt-6 text-left text-sm font-normal text-gray-500 sm:hidden">{{ translate('Subtotal') }}</th>
                                     <td class="sm:hidden py-4 px-3 text-right text-sm text-gray-500 table-cell"></td>
                                     <td class="pl-3 pr-4 pt-6 text-right text-sm text-gray-500 sm:pr-6 md:pr-0" x-text="FX.formatPrice(projected_invoice.subtotal_excluding_tax / 100)"></td>
                                 </tr>
-                                <tr>
+                                <tr x-show="projected_invoice.tax > 0">
                                     <th scope="row" colspan="3" class="hidden pl-6 pr-3 pt-4 text-right text-sm font-normal text-gray-500 sm:table-cell md:pl-0">{{ translate('Tax') }}</th>
                                     <th scope="row" class="pl-4 pr-3 pt-4 text-left text-sm font-normal text-gray-500 sm:hidden">{{ translate('Tax') }}</th>
                                     <td class="sm:hidden py-4 px-3 text-right text-sm text-gray-500 table-cell"></td>
                                     <td class="pl-3 pr-4 pt-4 text-right text-sm text-gray-500 sm:pr-6 md:pr-0" x-text="FX.formatPrice(projected_invoice.tax / 100)"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="row" colspan="3" class="hidden pl-6 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell md:pl-0">{{ translate('Total') }}</th>
-                                    <th scope="row" class="pl-4 pr-3 pt-4 text-left text-sm font-semibold text-gray-900 sm:hidden">{{ translate('Total') }}</th>
+                                    <th scope="row" colspan="3" class="hidden pl-6 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell md:pl-0">{{ translate('Total due today') }}</th>
+                                    <th scope="row" class="pl-4 pr-3 pt-4 text-left text-sm font-semibold text-gray-900 sm:hidden">{{ translate('Total due today') }}</th>
                                     <td class="sm:hidden py-4 px-3 text-right text-sm text-gray-500 table-cell"></td>
-                                    <td class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0" x-text="FX.formatPrice(projected_invoice.total / 100)"></td>
+                                    <td class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0" x-text="FX.formatPrice(projected_invoice.amount_due / 100)"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" colspan="3" class="hidden pl-6 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell md:pl-0"
+                                        x-text="pricing_mode === 'year' ? '{{ translate('Yearly total') }}' : '{{ translate('Monthly total') }}'"></th>
+                                    <th scope="row" class="pl-4 pr-3 pt-4 text-left text-sm font-semibold text-gray-900 sm:hidden"
+                                        x-text="pricing_mode === 'year' ? '{{ translate('Yearly total') }}' : '{{ translate('Monthly total') }}'"></th>
+                                    <td class="sm:hidden py-4 px-3 text-right text-sm text-gray-500 table-cell"></td>
+                                    <td class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0" x-text="FX.formatPrice(projected_invoice.total_price_without_prorations / 100)"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="100%" class="pl-3 pr-4 pt-4 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0" 
+                                        x-text="'{{ translate('What you will pay per') }}'+' '+(pricing_mode)+' {{ translate('starting from') }}'+' '+(DateTime.fromSeconds(projected_invoice.period_start).plus(pricing_mode === 'year' ? { year: 1 } : { month: 1 }).toFormat('DD'))"></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -316,7 +337,13 @@
                     
                     <template x-if="!selectedIsActive()">
                         <div class="w-full flex justify-center mt-4">
-                            <div class="btn-primary" @click="checkout()">{{ translate('Proceed to checkout') }}</div>
+                            <div class="btn-primary" @click="checkout()">
+                                @if(\Payments::stripe()->stripe_prorations_enabled && !auth()->user()->isOnTrial() && auth()->user()->isSubscribed())
+                                    {{ translate('Checkout') }}
+                                @else
+                                    {{ translate('Proceed to checkout') }}
+                                @endif
+                            </div>
                         </div>
                     </template>
                     
