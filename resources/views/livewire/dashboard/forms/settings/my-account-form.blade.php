@@ -24,7 +24,7 @@
 
             @if($user_meta_fields_in_use->count() > 0)
                 @foreach($user_meta_fields_in_use as $key => $options)
-                    @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date' || ($options['type']??'string') == 'wysiwyg')
+                    @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date' || ($options['type']??'string') == 'wysiwyg' || $key == 'company_vat')
                         $wire.set('meta.{{ $key }}', this.meta.{{ $key }}, true);
                     @endif
                 @endforeach
@@ -153,7 +153,8 @@
                     {{-- Basic Information --}}
                     <div id="basicInformation" class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5">
                         <div>
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Basic Information') }}
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                {{ translate('Basic Information') }}
                             </h3>
                             {{-- <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed
                                 publicly so be careful what you share.</p> --}}
@@ -296,7 +297,50 @@
                                             @if($options['required'] ?? false) <span class="text-danger">*</span>@endif
                                         </label>
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            @if(($options['type']??'string') == 'string')
+                                            @if($key === 'company_vat')
+                                                <div x-data="{
+                                                    valid_vat: @error('meta.company_vat') false @else null @enderror,
+                                                    checkVATvalidity() {
+                                                        wetch.get('{{ route('api.validate.vat') }}?vat='+meta.company_vat+'&country='+meta.address_country)
+                                                        .then(data => {
+                                                            if(data.status === 'success') {
+                                                                if(data.is_country_eu && meta.company_vat !== undefined && meta.company_vat !== '' && meta.company_vat !== null) {
+                                                                    this.valid_vat = data.is_vat_valid;
+                                                                } else {
+                                                                    this.valid_vat = null;
+                                                                }
+                                                            }
+                                                        })
+                                                        .catch(error => {
+                                                            this.valid_vat = null;
+                                                        });
+                                                    }
+                                                }" wire:key="{{ \Uuid::generate(4)->string }}" key="{{ \Uuid::generate(4)->string }}" x-init="$watch('meta.address_country', (country) => checkVATvalidity())">
+                                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                                        <input type="text" x-model="meta.{{ $key }}" 
+                                                        :class="{'is-valid':valid_vat === true, 'is-invalid':valid_vat === false}"
+                                                        class="form-standard pr-10" @input.debounce.500ms="checkVATvalidity()">
+
+                                                        <template x-if="valid_vat === false">
+                                                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                                @svg('heroicon-s-exclamation-circle', ['class' => 'h-5 w-5 text-red-500'])
+                                                            </div>
+                                                        </template>
+
+                                                        <template x-if="valid_vat === true">
+                                                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                                @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-green-500'])
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                    @error('meta.company_vat')
+                                                        <template x-if="valid_vat === false">
+                                                            <x-system.invalid-msg field="meta.company_vat"></x-system.invalid-msg>
+                                                        </template>
+                                                    @enderror
+                                                    {{-- <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less than 4 characters.</p> --}}
+                                                </div>
+                                            @elseif(($options['type']??'string') == 'string')
                                                 <x-dashboard.form.input field="meta.{{ $key }}" />
                                             @elseif(($options['type']??'string') == 'date')
                                                 <x-dashboard.form.date field="meta.{{ $key }}" />
