@@ -92,6 +92,8 @@
             },
             checkout() {
                 {{-- TODO: Compare old subscriptions items with new subscription items AND check if there is less items of same type in new subscription. If there is, prompt a new modal where user must select which licenses/seats will be revoked/removed. --}}
+                this.processing = true;
+
                 let base_route = new URL('{{ route('stripe.checkout_redirect') }}');
                 var url_params = new URLSearchParams(base_route.search);
 
@@ -122,13 +124,11 @@
 
                 // If stripe prorations are enabled and user already has subscriptions and is not on trial
                 @if(\Payments::stripe()->stripe_prorations_enabled && !auth()->user()->isOnTrial() && auth()->user()->isSubscribed())
-                    this.processing = true;
 
                     wetch.post('{{ route('api.dashboard.subscription.update', auth()->user()->subscriptions?->first()->id) }}', {
                         data: data
                     })
                     .then(data => {
-                        
                         if(data.status === 'success') {
                             alert('{{ translate('You successfully changed your plan! Page will refresh to reflect the latest changes.') }}');
                             window.location.reload();
@@ -154,6 +154,7 @@
             $watch('plans_cart', (cart) => getProjectedInvoice(cart, pricing_mode));
             $watch('pricing_mode', (mode) => getProjectedInvoice(plans_cart, mode));
         "
+        @init-checkout.window="checkout()"
         @display-modal.window="
             if($event.detail.id === 'purchase-subscription-with-multiple-items-modal') {
                 pricing_mode = $event.detail.interval;
@@ -337,13 +338,15 @@
                     
                     <template x-if="!selectedIsActive()">
                         <div class="w-full flex justify-center mt-4">
-                            <div class="btn-primary" @click="checkout()">
-                                @if(\Payments::stripe()->stripe_prorations_enabled && !auth()->user()->isOnTrial() && auth()->user()->isSubscribed())
+                            @if(\Payments::stripe()->stripe_prorations_enabled && !auth()->user()->isOnTrial() && auth()->user()->isSubscribed())
+                                <div class="btn-primary" @click="$dispatch('display-modal', {'id': 'confirm-subscription-update-modal', 'amount_due': FX.formatPrice(projected_invoice.amount_due / 100), 'total_price_without_prorations': FX.formatPrice(projected_invoice.total_price_without_prorations / 100), 'starting_from':  DateTime.fromSeconds(projected_invoice.period_start).plus(pricing_mode === 'year' ? { year: 1 } : { month: 1 }).toFormat('DD'), interval: pricing_mode });">
                                     {{ translate('Checkout') }}
-                                @else
+                                </div>
+                            @else
+                                <div class="btn-primary" @click="checkout()">
                                     {{ translate('Proceed to checkout') }}
-                                @endif
-                            </div>
+                                </div>
+                            @endif
                         </div>
                     </template>
                     
@@ -362,5 +365,44 @@
                 </div>
             </template>
         </fieldset>
+    </div>
+</x-system.form-modal>
+
+<x-system.form-modal id="confirm-subscription-update-modal" title="{{ translate('Are you sure you want to change subscription plan?') }}" :prevent-close="true" class="!max-w-2xl !pt-4" title-class="text-20 font-semibold">
+    <div class="w-full" 
+        x-data="{
+            amount_due: null,
+            total_price_without_prorations: null,
+            starting_from: null,
+            interval: null,
+        }"    
+        @display-modal.window="if($event.detail.id == 'confirm-subscription-update-modal') { 
+            amount_due = $event.detail.amount_due;
+            total_price_without_prorations = $event.detail.total_price_without_prorations;
+            starting_from = $event.detail.starting_from;
+            interval = $event.detail.interval;
+        }">
+
+        <div class="w-full pb-1">
+            <span>{{ translate('You will be charged') }}</span>
+            <strong x-text="amount_due"></strong>
+            <span>{{ translate('immediately, and then') }}</span>
+            <strong x-text="total_price_without_prorations"></strong>
+            <span>{{ translate('each') }} <i x-text="interval"></i></span>
+            <span>{{ translate('for this subscription, starting on') }} <i x-text="starting_from"></i>.</span>
+        </div>
+
+        <div class="w-full pb-5">
+            <span class="text-12 text-gray-500">{{ translate('*Note: It may take some time for licenses to be properly updated.') }}</span>
+        </div>
+        
+        <div class="w-full flex gap-x-3 justify-center">
+            <div class="btn-primary" @click="$dispatch('init-checkout'); show = false;">
+                {{ translate('Confirm') }}
+            </div>
+            <div class="btn-danger-outline" @click="show = false;">
+                {{ translate('Cancel') }}
+            </div>
+        </div>
     </div>
 </x-system.form-modal>
