@@ -121,7 +121,7 @@ class WeSubscriptionsController extends Controller
                             $stripe_sub_id,
                             [
                                 'payment_behavior' => 'error_if_incomplete',
-                                'proration_behavior' => 'create_prorations',
+                                'proration_behavior' => 'always_invoice',
                                 'items' => [
                                     [
                                         'id' => $si_to_update,

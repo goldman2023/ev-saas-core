@@ -134,13 +134,16 @@
                             window.location.reload();
                             return;
                         } else {
-                            alert('{{ translate('Could not create a new invoice projection.') }}');
+                            $dispatch('display-modal', {id: 'failed-subscription-update-modal'});
                         }
 
                         this.processing = false;
                     })
                     .catch(error => {
-                        alert(error.error.msg);
+                        console.error(error);
+                        $dispatch('display-modal', {id: 'failed-subscription-update-modal'});
+
+                        {{-- alert(error.error.msg); --}}
                         this.processing = false;
                     });
                 @else
@@ -334,7 +337,6 @@
                             </tfoot>
                         </table>
                     </div>
-
                     
                     <template x-if="!selectedIsActive()">
                         <div class="w-full flex justify-center mt-4">
@@ -423,6 +425,20 @@
             <div class="btn-danger-outline" @click="show = false;">
                 {{ translate('Cancel') }}
             </div>
+        </div>
+    </div>
+</x-system.form-modal>
+
+<x-system.form-modal id="failed-subscription-update-modal" title="{{ translate('Could not process the payment...') }}" :prevent-close="true" class="!max-w-2xl !pt-4" title-class="text-danger text-20 font-semibold">
+    <div class="w-full pb-4">
+        <span>{{ translate('Payment could not be processed. Please go to billing portal and change the default payment method.') }}</span>
+    </div>
+    <div class="w-full flex gap-x-3 justify-center">
+        <a href="{{ route('stripe.portal_session') }}" class="btn-primary" target="_blank">
+            {{ translate('Go to Biling Portal') }}
+        </a>
+        <div class="btn-danger-outline" @click="show = false;">
+            {{ translate('Cancel') }}
         </div>
     </div>
 </x-system.form-modal>
