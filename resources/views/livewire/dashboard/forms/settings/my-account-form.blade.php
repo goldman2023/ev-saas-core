@@ -340,6 +340,47 @@
                                                     @enderror
                                                     {{-- <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less than 4 characters.</p> --}}
                                                 </div>
+                                            @elseif($key === 'address_state')
+                                                <x-dashboard.form.select field="meta.{{ $key }}" 
+                                                    selected="meta.{{ $key }}" 
+                                                    :items="[]" 
+                                                    :search="true" 
+                                                    :nullable="false"
+                                                    x-show-if="{{ json_encode(\Countries::getCountriesWithStates()) }}.includes(meta.address_country)" 
+                                                    x-append-to-init="
+                                                        $nextTick(() => {
+                                                            let us_states = {{ json_encode(\Countries::getStatesOfUS()) }};
+                                                            let ca_states = {{ json_encode(\Countries::getStatesOfCA()) }};
+                                                            let au_states = {{ json_encode(\Countries::getStatesOfAU()) }};
+
+                                                            if(meta.address_country === 'US') {
+                                                                items = us_states;
+                                                                displayed_items = us_states;
+                                                            } else if(meta.address_country === 'CA') {
+                                                                items = ca_states;
+                                                                displayed_items = ca_states;
+                                                            } else if(meta.address_country === 'AU') {
+                                                                items = au_states;
+                                                                displayed_items = au_states;
+                                                            }
+
+                                                            $watch('meta.address_country', (value) => {
+                                                                meta.{{ $key }} = '';
+
+                                                                if(value === 'US') {
+                                                                    items = us_states;
+                                                                    displayed_items = us_states;
+                                                                } else if(value === 'CA') {
+                                                                    items = ca_states;
+                                                                    displayed_items = ca_states;
+                                                                } else if(value === 'AU') {
+                                                                    items = au_states;
+                                                                    displayed_items = au_states;
+                                                                }
+                                                            });
+                                                        });
+                                                    "
+                                                />
                                             @elseif(($options['type']??'string') == 'string')
                                                 <x-dashboard.form.input field="meta.{{ $key }}" />
                                             @elseif(($options['type']??'string') == 'date')
