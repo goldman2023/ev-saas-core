@@ -1,7 +1,7 @@
 <x-system.form-modal id="purchase-subscription-with-multiple-items-modal" title="{{ translate('Select your plan') }}" :prevent-close="true" class="!max-w-5xl" title-class="text-20 font-semibold">
     <div class="w-full">
         <fieldset x-data="{
-            processing: false,
+            processing: true,
             plans_cart: {},
             pricing_mode: 'year',
             plans: @js($plans),
@@ -267,8 +267,8 @@
             </div>
 
             <template x-if="_.get(projected_invoice, 'lines.data', []).length > 0">
-                <div class="px-4" :class="{'opacity-30 pointer-events-none': processing}">
-                    <div class="sm:flex sm:items-center">
+                <div class="px-4" :class="{'pointer-events-none': processing}">
+                    <div class="sm:flex sm:items-center" :class="{'opacity-30 pointer-events-none': processing}">
                         <div class="sm:flex-auto">
                             <h1 class="text-xl font-semibold text-gray-900">{{ translate('Projected invoice') }}</h1>
                             <p class="mt-2 text-sm text-gray-700">Subscription billing period: <strong x-text="pricing_mode"></strong></p>
@@ -277,7 +277,7 @@
                             <div class="btn-danger-outline" @click="clearCart()">{{ translate('Clear') }}</div>
                         </div>
                     </div>
-                    <div class="-mx-4 mt-8 flex flex-col sm:-mx-6 md:mx-0">
+                    <div class="-mx-4 mt-8 flex flex-col sm:-mx-6 md:mx-0" :class="{'opacity-30 pointer-events-none': processing}">
                         <table class="min-w-full divide-y divide-gray-300">
                             <thead>
                                 <tr>
@@ -339,11 +339,31 @@
                     <template x-if="!selectedIsActive()">
                         <div class="w-full flex justify-center mt-4">
                             @if(\Payments::stripe()->stripe_prorations_enabled && !auth()->user()->isOnTrial() && auth()->user()->isSubscribed())
-                                <div class="btn-primary" @click="$dispatch('display-modal', {'id': 'confirm-subscription-update-modal', 'amount_due': FX.formatPrice(projected_invoice.amount_due / 100), 'total_price_without_prorations': FX.formatPrice(projected_invoice.total_price_without_prorations / 100), 'starting_from':  DateTime.fromSeconds(projected_invoice.period_start).plus(pricing_mode === 'year' ? { year: 1 } : { month: 1 }).toFormat('DD'), interval: pricing_mode });">
+                                <div class="btn-primary" @click="$dispatch('display-modal', {'id': 'confirm-subscription-update-modal', 'amount_due': FX.formatPrice(projected_invoice.amount_due / 100), 'total_price_without_prorations': FX.formatPrice(projected_invoice.total_price_without_prorations / 100), 'starting_from':  DateTime.fromSeconds(projected_invoice.period_start).plus(pricing_mode === 'year' ? { year: 1 } : { month: 1 }).toFormat('DD'), interval: pricing_mode });"
+                                    :class="{'opacity-30 pointer-events-none': processing}">
                                     {{ translate('Checkout') }}
                                 </div>
+
+                                <div class="flex items-center justify-center text-primary pl-4 gap-x-3" x-show="processing">
+                                    <svg width="30px" height="30px" version="1.1" id="L7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+                                        <path fill="currentColor" d="M31.6,3.5C5.9,13.6-6.6,42.7,3.5,68.4c10.1,25.7,39.2,38.3,64.9,28.1l-3.1-7.9c-21.3,8.4-45.4-2-53.8-23.3
+                                         c-8.4-21.3,2-45.4,23.3-53.8L31.6,3.5z">
+                                            <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="2s" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
+                                        </path>
+                                        <path fill="currentColor" d="M42.3,39.6c5.7-4.3,13.9-3.1,18.1,2.7c4.3,5.7,3.1,13.9-2.7,18.1l4.1,5.5c8.8-6.5,10.6-19,4.1-27.7
+                                         c-6.5-8.8-19-10.6-27.7-4.1L42.3,39.6z">
+                                            <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 50 50" to="-360 50 50" repeatCount="indefinite"></animateTransform>
+                                         </path>
+                                        <path fill="currentColor" d="M82,35.7C74.1,18,53.4,10.1,35.7,18S10.1,46.6,18,64.3l7.6-3.4c-6-13.5,0-29.3,13.5-35.3s29.3,0,35.3,13.5
+                                         L82,35.7z">
+                                            <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="2s" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
+                                        </path>
+                                    </svg>
+
+                                    <strong>{{ translate('Processing...') }}</strong>
+                                </div>
                             @else
-                                <div class="btn-primary" @click="checkout()">
+                                <div class="btn-primary" @click="checkout()" :class="{'opacity-30 pointer-events-none': processing}">
                                     {{ translate('Proceed to checkout') }}
                                 </div>
                             @endif
