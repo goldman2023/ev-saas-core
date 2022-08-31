@@ -161,13 +161,15 @@ class UserSubscription extends WeBaseModel
             if($invoice['invoice_source'] === 'stripe') {
                 $total_price = 0;
 
-                foreach($invoice['lines']['data'] as $item) {
-                    if($item['proration'])
-                        continue;
-
-                    $total_price += $item['amount'] + $item['tax_amounts'][0]['amount'];
+                if(!empty($invoice['lines']['data'])) {
+                    foreach($invoice['lines']['data'] as $item) {
+                        if($item['proration'] ?? false)
+                            continue;
+    
+                        $total_price += ($item['amount'] ?? 0) + ($item['tax_amounts'][0]['amount'] ?? 0);
+                    }
                 }
-
+                
                 return $format ? \FX::formatPrice($total_price / 100) : $total_price / 100;
             } else if($invoice['invoice_source'] === 'we') {
                 return $format ? \FX::formatPrice($invoice['total_price'] ?? 0) : ($invoice['total_price'] ?? 0);

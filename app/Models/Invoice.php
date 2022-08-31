@@ -299,41 +299,79 @@ class Invoice extends WeBaseModel
 
         $invoice_items = [];
 
-        foreach($this->order->order_items as $item) {
-            if($this->isFromStripe()) {
-                $stripe_product_id = $item->subject->getCoreMeta(stripe_prefix('stripe_product_id'));
+        if($this->isFromStripe()) {
+            foreach($stripe_line_items as $item) {
+                $stripe_line_item = $item;
+                $item = get_model_by_stripe_product_id($stripe_line_item['price']['product']);
 
-                // In order to identify correct line item, 2 conditions must be met:
-                // 1. productID must be $stripe_product_id,
-                // 2. proration property must be FALSE (cuz invoice items can be proration items with the same $stripe_product_id),
-                $stripe_line_item = $stripe_line_items->filter( fn($item) => $item['price']['product'] === $stripe_product_id && $item['proration'] === false)->first();
-                
-                if(!empty($stripe_line_item)) {
+                if(!empty($stripe_line_item) && !empty($item)) {
                     $li_name = $item->name;
 
-                    if($item->subject->isSubscribable()) {
+                    if($item->isSubscribable()) {
                         $li_name = $item->name.' / '.$stripe_line_item['price']['recurring']['interval'].' ('.\Carbon::createFromTimestamp($this->start_date)->format('d M, Y').' - '.\Carbon::createFromTimestamp($this->end_date)->format('d M, Y').')';
                     }
-
-                    $invoice_items[] = (new InvoiceItem())
-                        ->title($li_name)
-                        ->description($item->excerpt)
-                        ->pricePerUnit($item->base_price)
-                        ->quantity($stripe_line_item['quantity'])
-                        ->discount($item->discount_amount)
-                        ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
-                }                
-            } else {
+                    
+                    if($stripe_line_item['proration']) {
+                        $invoice_items[] = (new InvoiceItem())
+                            ->title($stripe_line_item['description'])
+                            ->pricePerUnit($stripe_line_item['amount_excluding_tax'] / 100)
+                            ->quantity($stripe_line_item['quantity'])
+                            ->discount(0)
+                            ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
+                    } else {
+                        $invoice_items[] = (new InvoiceItem())
+                            ->title($li_name)
+                            ->description($item->excerpt)
+                            ->pricePerUnit($stripe_line_item['price']['unit_amount'] / 100)
+                            ->quantity($stripe_line_item['quantity'])
+                            ->discount($item->discount_amount ?? 0)
+                            ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
+                    }
+                }  
+            }
+        } else {
+            foreach($this->order->order_items as $item) {
                 $invoice_items[] = (new InvoiceItem())
                     ->title(translate(''))
                     ->description($item->excerpt)
                     ->pricePerUnit($item->base_price)
                     ->quantity($item->quantity)
-                    ->discount($item->discount_amount)
+                    ->discount($item->discount_amount ?? 0)
                     ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
             }
-            
         }
+
+
+        
+        // foreach($this->order->order_items as $item) {
+        //     if($this->isFromStripe()) {
+        //         $stripe_product_id = $item->subject->getCoreMeta(stripe_prefix('stripe_product_id'));
+        //         dd($this->order->order_items);
+        //         // In order to identify correct line item, 2 conditions must be met:
+        //         // 1. productID must be $stripe_product_id,
+        //         // 2. proration property must be FALSE (cuz invoice items can be proration items with the same $stripe_product_id),
+        //         $stripe_line_item = $stripe_line_items->filter( fn($item) => $item['price']['product'] === $stripe_product_id)->first(); //  && $item['proration'] === false
+                
+        //         if(!empty($stripe_line_item)) {
+        //             $li_name = $item->name;
+
+        //             if($item->subject->isSubscribable()) {
+        //                 $li_name = $item->name.' / '.$stripe_line_item['price']['recurring']['interval'].' ('.\Carbon::createFromTimestamp($this->start_date)->format('d M, Y').' - '.\Carbon::createFromTimestamp($this->end_date)->format('d M, Y').')';
+        //             }
+
+        //             $invoice_items[] = (new InvoiceItem())
+        //                 ->title($li_name)
+        //                 ->description($item->excerpt)
+        //                 ->pricePerUnit($item->base_price)
+        //                 ->quantity($stripe_line_item['quantity'])
+        //                 ->discount($item->discount_amount)
+        //                 ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
+        //         }                
+        //     } else {
+                
+        //     }
+            
+        // }
 
         // Append Credit discounts and adjustments if there's any proration
         if($this->isFromStripe()) {

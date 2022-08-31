@@ -31,8 +31,8 @@ require('./sortable');
 require('./FX');
 
 // LUXON
-// let { DateTime } = require('luxon');
-// window.DateTime = DateTime;
+let { DateTime } = require('luxon');
+window.DateTime = DateTime;
 
 // FLARE (FE)
 /*import { flare } from "@flareapp/flare-client";
