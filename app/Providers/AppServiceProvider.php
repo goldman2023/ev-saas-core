@@ -99,6 +99,19 @@ class AppServiceProvider extends ServiceProvider
 
             return true;
         });
+
+        Validator::extend('validate_state', function ($attribute, $value, $parameters, $validator) {
+            $country_field_name = $parameters[0];
+            $meta_field_name = explode('.', $attribute)[0];
+
+            $country = $validator->getData()[$meta_field_name][$country_field_name];
+            
+            if(!empty($country) && !empty(\Countries::get(code: $country))) {
+                return \Countries::validateState($country, $value);
+            }
+
+            return true;
+        });
     }
 
     public function registerCustomBladeExtensions() {

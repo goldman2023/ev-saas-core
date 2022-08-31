@@ -43,7 +43,7 @@ class UserMeta extends WeBaseModel
             'address_city' => 'string',
             'address_line' => 'string',
             'address_postal_code' => 'string',
-            'address_state' => 'string',
+            'address_state' => 'select',
 
             'work_experience' => 'array',
             'education' => 'array',

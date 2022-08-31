@@ -13,17 +13,25 @@
       } 
       return 0;
     }
-}" x-init="$watch('search_query', (value) => {
-  let newItems = {};
-  Object.entries(items).filter(entry => {
-    if (entry[1].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
-      newItems[entry[0]] = entry[1];
-      return true;
-    }
+}" 
+x-init="
+  $watch('search_query', (value) => {
+    let newItems = {};
+    Object.entries(items).filter(entry => {
+      if (entry[1].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
+        newItems[entry[0]] = entry[1];
+        return true;
+      }
+    });
+
+    displayed_items = newItems;
   });
 
-  displayed_items = newItems;
-})" x-effect="items = @js($items)" wire:ignore.self>
+  {!! $xAppendToInit !!}
+"
+x-effect="items = @js($items)" 
+@if(!empty($xShowIf)) x-show="{!! $xShowIf !!}" @endif
+wire:ignore.self>
     <div class="relative" wire:ignore.self>
       <button type="button" @click="open_dropdown = !open_dropdown" 
               class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm {{ $selectorClass ?? '' }} @error($field) is-invalid @enderror">

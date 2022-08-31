@@ -78,6 +78,11 @@ class RegisterForm extends Component
                     }
                 }
 
+                if($key === 'address_state') {
+                    $rules['user_meta.' . $key][] = Rule::requiredIf(fn () => in_array($this->user_meta['address_country'], \Countries::getCountriesWithStates()));
+                    $rules['user_meta.' . $key][] = 'validate_state:address_country';
+                }
+                // in_array($rules['user_meta.address_country'], \Countries::getCountriesWithStates())
                 if ($options['required'] ?? false) {
                     $rules['user_meta.' . $key][] = 'required';
                 }
@@ -106,6 +111,8 @@ class RegisterForm extends Component
             'terms_consent.boolean' => translate('Terms and conditions consent is required.'),
             'terms_consent.is_true' => translate('Terms and conditions consent is required bool.'),
             'user_meta.company_vat.check_eu_vat_number' => translate('VAT number not valid'),
+            'user_meta.address_state.validate_state' => translate('Wrong state for selected country'),
+            'user_meta.address_state.required' => translate('State is required for selected country'),
         ];
 
         if ($this->available_meta->count() > 0) {

@@ -16,13 +16,15 @@ class Select extends Component
     public $multiple;
     public $hideError = false;
     public $class;
+    public $xShowIf = '';
+    public $xAppendToInit = '';
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($items = null, $multiple = false, $selected = null, $field = '', $placeholder = 'Please select', $nullable = true, $search = false, $selectorClass = '', $hideError = false, $class = '')
+    public function __construct($items = null, $multiple = false, $selected = null, $field = '', $placeholder = 'Please select', $nullable = true, $search = false, $selectorClass = '', $hideError = false, $class = '', $xShowIf = '', $xAppendToInit = '')
     {
         $this->items = empty($items) ? [] : $items;
         $this->multiple = $multiple;
@@ -34,6 +36,8 @@ class Select extends Component
         $this->selectorClass = $selectorClass;
         $this->hideError = $hideError;
         $this->class = $class;
+        $this->xShowIf = $xShowIf;
+        $this->xAppendToInit = $xAppendToInit;
     }
 
     /**
