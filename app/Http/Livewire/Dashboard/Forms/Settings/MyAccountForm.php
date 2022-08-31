@@ -59,14 +59,25 @@ class MyAccountForm extends Component
 
         if($user_meta_fields_in_use->count() > 0) {
             foreach($user_meta_fields_in_use as $key => $options) {
-                if(in_array($key, UserMeta::metaForCompanyEntity())) {
+                $meta['meta.' . $key] = [];
+
+                if (in_array($key, UserMeta::metaForCompanyEntity())) {
+                    $meta['meta.' . $key][] = 'exclude_if:me.entity,individual';
+
                     if($key === 'company_vat') {
-                        $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required', 'check_eu_vat_number:address_country'] : ['nullable', 'check_eu_vat_number:address_country'];
-                    } else {
-                        $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required'] : [];
+                        $meta['meta.' . $key][] = 'sometimes';
+                        $meta['meta.' . $key][] = 'check_eu_vat_number:address_country';
                     }
-                } else {
-                    $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['required'] : [];
+                }
+
+                if($key === 'address_state') {
+                    $meta['meta.' . $key][] = Rule::requiredIf(fn () => in_array($this->meta['address_country'], \Countries::getCountriesWithStates()));
+                    $meta['meta.' . $key][] = 'validate_state:address_country';
+                }
+                
+                // in_array($rules['user_meta.address_country'], \Countries::getCountriesWithStates())
+                if ($options['required'] ?? false) {
+                    $meta['meta.' . $key][] = 'required';
                 }
             }
         }
@@ -118,6 +129,8 @@ class MyAccountForm extends Component
             'newPassword.confirmed' => translate('Your new password confirmation does not match the new password. New password and confirmation must match.'),
 
             'meta.company_vat.check_eu_vat_number' => translate('Either VAT number is not valid or VAT number and company country are not alignd correctly'),
+            'meta.address_state.validate_state' => translate('Wrong state for selected country'),
+            'meta.address_state.required' => translate('State is required for selected country'),
         ];
 
         $user_meta_fields_in_use = collect(get_tenant_setting('user_meta_fields_in_use'));

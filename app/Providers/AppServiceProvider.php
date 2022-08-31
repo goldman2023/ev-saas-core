@@ -78,6 +78,11 @@ class AppServiceProvider extends ServiceProvider
                 try { 
                     // VAT Number MUST INCLUDE COUNTRY TWO-LETTER CODE AT THE BEGINNING
                     $validVAT = VatCalculator::isValidVATNumber($value);
+
+                    // Check if VAT number country is aligned with user selected country (compare codes)
+                    if($validVAT) {
+                        $validVAT = strtoupper(substr($value, 0, 2)) === strtoupper($country);
+                    }
                 } catch (VATCheckUnavailableException $e) {
                     // The VAT check API is unavailable...
                     \Log::warning($e);
@@ -90,6 +95,19 @@ class AppServiceProvider extends ServiceProvider
                 return false;
             } else if(empty($country) || (!empty($country) && empty(\Countries::get(code: $country)))) {
                 return false;
+            }
+
+            return true;
+        });
+
+        Validator::extend('validate_state', function ($attribute, $value, $parameters, $validator) {
+            $country_field_name = $parameters[0];
+            $meta_field_name = explode('.', $attribute)[0];
+
+            $country = $validator->getData()[$meta_field_name][$country_field_name];
+            
+            if(!empty($country) && !empty(\Countries::get(code: $country))) {
+                return \Countries::validateState($country, $value);
             }
 
             return true;

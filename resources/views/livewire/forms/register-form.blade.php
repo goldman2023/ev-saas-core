@@ -98,7 +98,11 @@
         @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
             @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->sortByOrderProperty() as $key => $options)
                 <div class="mb-4" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif >
-                    <label class="block text-16 font-medium text-gray-700">
+                    <label class="block text-16 font-medium text-gray-700" 
+                        @if($key === 'address_state') 
+                            x-show="{{ json_encode(\Countries::getCountriesWithStates()) }}.includes(user_meta.address_country)" 
+                        @endif >
+
                         @if($key === 'company_vat')
                             {{ translate('Company VAT') }}
                         @elseif($key === 'address_country')
@@ -139,7 +143,6 @@
 
                                     <template x-if="valid_vat === false">
                                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                            <!-- Heroicon name: solid/exclamation-circle -->
                                             @svg('heroicon-s-exclamation-circle', ['class' => 'h-5 w-5 text-red-500'])
                                         </div>
                                     </template>
@@ -157,6 +160,30 @@
                                 @enderror
                                 {{-- <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less than 4 characters.</p> --}}
                             </div>
+                        @elseif($key === 'address_state')
+                            <x-dashboard.form.select field="user_meta.{{ $key }}" 
+                                selected="user_meta.{{ $key }}" 
+                                :items="\Countries::getStatesOfCA()" 
+                                :search="true" 
+                                :nullable="false"
+                                x-show-if="{{ json_encode(\Countries::getCountriesWithStates()) }}.includes(user_meta.address_country)" 
+                                x-append-to-init="$watch('user_meta.address_country', (value) => {
+                                    user_meta.{{ $key }} = '';
+                                    let us_states = {{ json_encode(\Countries::getStatesOfUS()) }};
+                                    let ca_states = {{ json_encode(\Countries::getStatesOfCA()) }};
+                                    let au_states = {{ json_encode(\Countries::getStatesOfAU()) }};
+
+                                    if(value === 'US') {
+                                        items = us_states;
+                                        displayed_items = us_states;
+                                    } else if(value === 'CA') {
+                                        items = ca_states;
+                                        displayed_items = ca_states;
+                                    } else if(value === 'AU') {
+                                        items = au_states;
+                                        displayed_items = au_states;
+                                    }
+                            });" />
                         @elseif(($options['type']??'string') == 'string')
                             <x-dashboard.form.input field="user_meta.{{ $key }}" />
                         @elseif(($options['type']??'string') == 'date')
