@@ -60,13 +60,15 @@ class MyAccountForm extends Component
         if($user_meta_fields_in_use->count() > 0) {
             foreach($user_meta_fields_in_use as $key => $options) {
                 if(in_array($key, UserMeta::metaForCompanyEntity())) {
+                    $rules['meta.' . $key][] = 'exclude_if:me.entity,individual';
+
                     if($key === 'company_vat') {
-                        $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required', 'check_eu_vat_number:address_country'] : ['nullable', 'check_eu_vat_number:address_country'];
+                        $meta['meta.'.$key] = ($options['required'] ?? false) ? ['sometimes', 'check_eu_vat_number:address_country', 'required'] : ['sometimes', 'check_eu_vat_number:address_country'];
                     } else {
-                        $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required'] : [];
+                        $meta['meta.'.$key] = ($options['required'] ?? false) ? ['required'] : [];
                     }
                 } else {
-                    $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['required'] : [];
+                    $meta['meta.'.$key] = ($options['required'] ?? false) ? ['required'] : [];
                 }
             }
         }
