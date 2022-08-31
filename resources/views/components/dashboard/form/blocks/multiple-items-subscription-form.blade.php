@@ -327,7 +327,7 @@
                                     <td class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0" x-text="FX.formatPrice(projected_invoice.total_price_without_prorations / 100)"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="100%" class="pl-3 pr-4 pt-4 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0" 
+                                    <td colspan="100%" class="pl-3 pr-4 pt-1 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0" 
                                         x-text="'{{ translate('What you will pay per') }}'+' '+(pricing_mode)+' {{ translate('starting from') }}'+' '+(DateTime.fromSeconds(projected_invoice.period_start).plus(pricing_mode === 'year' ? { year: 1 } : { month: 1 }).toFormat('DD'))"></td>
                                 </tr>
                             </tfoot>
