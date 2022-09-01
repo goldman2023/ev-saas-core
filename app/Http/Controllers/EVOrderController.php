@@ -56,19 +56,5 @@ class EVOrderController extends Controller
 
         return view('frontend.dashboard.my-orders.index', compact('orders', 'orders_count'));
     }
-
-    public function download_invoice(Request $request, $id) {
-        try {
-            $invoice = Invoice::findOrFail($id);
-            // TODO: Move access restrictions to some Policy classes!!!!
-            if($invoice->user_id === auth()->user()->id || $invoice->shop_id === \MyShop::getShopID() || auth()->user()->isAdmin()) {
-                return $invoice->generateInvoicePDF();
-            }
-
-            throw new \Exception();
-        } catch(\Exception $e) {
-            // dd($e);
-            abort(404);
-        }
-    }
+    
 }

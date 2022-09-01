@@ -29,7 +29,7 @@ x-init="
 
   {!! $xAppendToInit !!}
 "
-x-effect="items = @js($items)" 
+{{-- x-effect="items = @js($items); console.log(items)"  --}}
 @if(!empty($xShowIf)) x-show="{!! $xShowIf !!}" @endif
 wire:ignore.self>
     <div class="relative" wire:ignore.self>
