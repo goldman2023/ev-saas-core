@@ -135,7 +135,11 @@
                                         this.valid_vat = null;
                                     });
                                 }
-                            }" x-init="$watch('user_meta.address_country', (country) => checkVATvalidity())">
+                            }" 
+                            wire:key="{{ \Uuid::generate(4)->string }}" 
+                            key="{{ \Uuid::generate(4)->string }}"
+                            x-init="$watch('user_meta.address_country', (country) => { if(entity === 'company') checkVATvalidity() })">
+                                
                                 <div class="mt-1 relative rounded-md shadow-sm">
                                     <input type="text" x-model="user_meta.{{ $key }}" 
                                     :class="{'is-valid':valid_vat === true, 'is-invalid':valid_vat === false}"
@@ -163,27 +167,43 @@
                         @elseif($key === 'address_state')
                             <x-dashboard.form.select field="user_meta.{{ $key }}" 
                                 selected="user_meta.{{ $key }}" 
-                                :items="\Countries::getStatesOfCA()" 
+                                :items="[]" 
                                 :search="true" 
                                 :nullable="false"
                                 x-show-if="{{ json_encode(\Countries::getCountriesWithStates()) }}.includes(user_meta.address_country)" 
-                                x-append-to-init="$watch('user_meta.address_country', (value) => {
-                                    user_meta.{{ $key }} = '';
-                                    let us_states = {{ json_encode(\Countries::getStatesOfUS()) }};
-                                    let ca_states = {{ json_encode(\Countries::getStatesOfCA()) }};
-                                    let au_states = {{ json_encode(\Countries::getStatesOfAU()) }};
+                                x-append-to-init="
+                                    $nextTick(() => {
+                                        let us_states = {{ json_encode(\Countries::getStatesOfUS()) }};
+                                        let ca_states = {{ json_encode(\Countries::getStatesOfCA()) }};
+                                        let au_states = {{ json_encode(\Countries::getStatesOfAU()) }};
 
-                                    if(value === 'US') {
-                                        items = us_states;
-                                        displayed_items = us_states;
-                                    } else if(value === 'CA') {
-                                        items = ca_states;
-                                        displayed_items = ca_states;
-                                    } else if(value === 'AU') {
-                                        items = au_states;
-                                        displayed_items = au_states;
-                                    }
-                            });" />
+                                        if(user_meta.address_country === 'US') {
+                                            items = us_states;
+                                            displayed_items = us_states;
+                                        } else if(user_meta.address_country === 'CA') {
+                                            items = ca_states;
+                                            displayed_items = ca_states;
+                                        } else if(user_meta.address_country === 'AU') {
+                                            items = au_states;
+                                            displayed_items = au_states;
+                                        }
+
+                                        $watch('user_meta.address_country', (value) => {
+                                            user_meta.{{ $key }} = '';
+
+                                            if(value === 'US') {
+                                                items = us_states;
+                                                displayed_items = us_states;
+                                            } else if(value === 'CA') {
+                                                items = ca_states;
+                                                displayed_items = ca_states;
+                                            } else if(value === 'AU') {
+                                                items = au_states;
+                                                displayed_items = au_states;
+                                            }
+                                        });
+                                    });
+                                " />
                         @elseif(($options['type']??'string') == 'string')
                             <x-dashboard.form.input field="user_meta.{{ $key }}" />
                         @elseif(($options['type']??'string') == 'date')

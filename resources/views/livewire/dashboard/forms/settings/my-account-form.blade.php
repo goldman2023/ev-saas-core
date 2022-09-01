@@ -290,7 +290,10 @@
                                     @endif
 
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                        x-data="{}" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif>
+                                        x-data="{}" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif
+                                        @if($key === 'address_state') 
+                                            x-show="{{ json_encode(\Countries::getCountriesWithStates()) }}.includes(meta.address_country)" 
+                                        @endif>
 
                                         <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                             {{  Str::title(str_replace('_', ' ', $key)) }}
@@ -315,7 +318,10 @@
                                                             this.valid_vat = null;
                                                         });
                                                     }
-                                                }" wire:key="{{ \Uuid::generate(4)->string }}" key="{{ \Uuid::generate(4)->string }}" x-init="$watch('meta.address_country', (country) => checkVATvalidity())">
+                                                }" wire:key="{{ \Uuid::generate(4)->string }}" 
+                                                    key="{{ \Uuid::generate(4)->string }}" 
+                                                    x-init="$watch('meta.address_country', (country) => { if(entity === 'company') checkVATvalidity() })">
+
                                                     <div class="mt-1 relative rounded-md shadow-sm">
                                                         <input type="text" x-model="meta.{{ $key }}" 
                                                         :class="{'is-valid':valid_vat === true, 'is-invalid':valid_vat === false}"
