@@ -121,7 +121,9 @@ Route::middleware([
         Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
         
         Route::get('/invoices', [WeInvoiceController::class, 'index'])->name('invoices.index');
-        Route::get('/invoice/{id}/download', [EVOrderController::class, 'download_invoice'])->name('invoice.download');
+        Route::get('/invoice/{id}/download', [WeInvoiceController::class, 'download_invoice'])->name('invoice.download');
+        Route::get('/order/{order_id}/upcoming-invoice/download', [WeInvoiceController::class, 'download_upcoming_invoice'])->name('invoice.upcoming.download');
+
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.index');

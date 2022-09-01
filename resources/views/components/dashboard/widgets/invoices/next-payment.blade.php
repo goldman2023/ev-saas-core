@@ -55,7 +55,7 @@
                     @endif
                 @endforeach
             </div>
-            <a href="{{ route('my.plans.management') }}" class="w-full btn-primary mt-5 text-center justify-center">
+            <a href="{{ route('invoice.upcoming.download', ['order_id' => $subscription->order->id]) }}" class="w-full btn-primary mt-5 text-center justify-center" target="_blank">
                 {{ translate('View next invoice') }}
             </a>
         @else

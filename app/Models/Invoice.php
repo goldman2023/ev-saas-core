@@ -176,7 +176,7 @@ class Invoice extends WeBaseModel
         }
     }
 
-    public function generateInvoicePDF() {
+    public function generateInvoicePDF($custom_title = null) {
         $shop = $this->shop;
         $user = $this->user;
 
@@ -415,7 +415,7 @@ class Invoice extends WeBaseModel
             'total_taxes_label' => $total_taxes_label,
         ];
         
-        $invoice = LaravelInvoice::make('VAT Invoice')
+        $invoice = LaravelInvoice::make(!empty($custom_title) ? $custom_title : translate('VAT Invoice'))
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             // ->sequence()
             ->serialNumberFormat('{SERIES}')

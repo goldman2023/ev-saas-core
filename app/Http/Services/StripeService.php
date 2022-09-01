@@ -1724,14 +1724,14 @@ class StripeService
             $order->billing_city = $user->getUserMeta('address_city');
             $order->billing_zip = $user->getUserMeta('address_postal_code');
 
-            // $invoice->billing_first_name = $order->billing_first_name;
-            // $invoice->billing_last_name = $order->billing_last_name;
-            // $invoice->billing_company = ''; // TODO: Get company name from invoice somehow...
-            // $invoice->billing_address = $order->billing_address;
-            // $invoice->billing_country = $order->billing_country;
-            // $invoice->billing_state = $order->billing_state;
-            // $invoice->billing_city = $order->billing_city;
-            // $invoice->billing_zip = $order->billing_zip;
+            $invoice->billing_first_name = $order->billing_first_name;
+            $invoice->billing_last_name = $order->billing_last_name;
+            $invoice->billing_company = ''; // TODO: Get company name from invoice somehow...
+            $invoice->billing_address = $order->billing_address;
+            $invoice->billing_country = $order->billing_country;
+            $invoice->billing_state = $order->billing_state;
+            $invoice->billing_city = $order->billing_city;
+            $invoice->billing_zip = $order->billing_zip;
         } else {
             // If invoice with same number already exists on our end, just update it's status based on stripe params!
             if($stripe_invoice->paid && $stripe_subscription->status === 'active') {
@@ -2387,6 +2387,17 @@ class StripeService
             // Set invoice customer data
             if(!empty($invoice) && !empty($invoice->user ?? null)) {
                 $user = $invoice->user;
+
+                // Save billing info
+                $invoice->billing_first_name = $order->billing_first_name;
+                $invoice->billing_last_name = $order->billing_last_name;
+                $invoice->billing_company = $user->getUserMeta('company_name');
+                $invoice->billing_address = $order->billing_address;
+                $invoice->billing_country = $order->billing_country;
+                $invoice->billing_state = $order->billing_state;
+                $invoice->billing_city = $order->billing_city;
+                $invoice->billing_zip = $order->billing_zip;
+
                 
                 $invoice->mergeData([
                     'customer' => [
@@ -2394,17 +2405,15 @@ class StripeService
                     ],
                 ]);
     
-                if($initiator->entity === 'company') {
+                if($user->entity === 'company') {
                     $invoice->mergeData([
                         'customer' => [
                             'billing_country' => $user->getUserMeta('address_country'), //$stripe_invoice->customer_address->country,
-                            'vat' => $initiator->getUserMeta('company_vat'),
-                            'company_registration_number' => $initiator->getUserMeta('company_registration_number'),
-                            'company_name' => $initiator->getUserMeta('company_name'),
+                            'vat' => $user->getUserMeta('company_vat'),
+                            'company_registration_number' => $user->getUserMeta('company_registration_number'),
+                            'company_name' => $user->getUserMeta('company_name'),
                         ]
                     ]);
-
-                    // $initiator->saveUserMeta('company_country', $session->customer_details->address->country);
                 } else {
                     $invoice->mergeData([
                         'customer' => [

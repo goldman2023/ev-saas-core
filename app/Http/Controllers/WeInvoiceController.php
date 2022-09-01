@@ -71,4 +71,31 @@ class WeInvoiceController extends Controller
             abort(404);
         }
     }
+
+    public function download_upcoming_invoice(Request $request, $order_id) {
+        $order = Order::findOrFail($order_id);
+
+        if($order->user_id === auth()->user()->id || $order->shop_id === \MyShop::getShopID() || auth()->user()->isAdmin()) {
+            $last_invoice = $order->invoices()->withoutGlobalScopes()->orderBy('created_at', 'desc')->first();
+
+            if(!empty($last_invoice)) {
+                $stripe_upcoming_invoice = $order->user_subscription->getUpcomingInvoiceStats();
+                $upcoming_invoice = clone $last_invoice;
+                $upcoming_invoice->setData(stripe_prefix('stripe_invoice_data'), $stripe_upcoming_invoice); // replace stripe_invoice_data meta property with upcoming_invoice
+                $upcoming_invoice->id = null;
+                $upcoming_invoice->invoice_number = 'invoice-draft';
+                $upcoming_invoice->payment_status = 'upcoming';
+                $upcoming_invoice->start_date = $stripe_upcoming_invoice['period_start'];
+                $upcoming_invoice->end_date = $stripe_upcoming_invoice['period_end'];
+                $upcoming_invoice->real_invoice_number = null;
+                $upcoming_invoice->real_invoice_prefix = 'AA';
+                $upcoming_invoice->created_at = \Carbon::createFromTimestamp($stripe_upcoming_invoice['created']);
+
+
+                return $upcoming_invoice->generateInvoicePDF(custom_title: translate('UPCOMING VAT INVOICE'));
+            }
+        }
+
+        abort(404);
+    }
 }
