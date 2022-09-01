@@ -1,4 +1,4 @@
-@if($user_balance != 0)
+@if($user_balance > 0)
 <div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
     <dt>
       <div class="absolute bg-indigo-500 rounded-md p-3">
@@ -21,7 +21,7 @@
       </p>
       <div class="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6">
         <div class="text-sm text-gray-500">
-            {{ translate('Your next payment will be covered by your existing balance') }}
+            {{ translate('Your next payment will be partially or fully covered by your existing balance') }}
         </div>
       </div>
     </dd>
