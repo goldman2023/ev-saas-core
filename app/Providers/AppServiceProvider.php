@@ -80,9 +80,9 @@ class AppServiceProvider extends ServiceProvider
                     $validVAT = VatCalculator::isValidVATNumber($value);
 
                     // Check if VAT number country is aligned with user selected country (compare codes)
-                    if($validVAT) {
-                        $validVAT = strtoupper(substr($value, 0, 2)) === strtoupper($country);
-                    }
+                    // if($validVAT) {
+                    //     $validVAT = strtoupper(substr($value, 0, 2)) === strtoupper($country);
+                    // }
                 } catch (VATCheckUnavailableException $e) {
                     // The VAT check API is unavailable...
                     \Log::warning($e);

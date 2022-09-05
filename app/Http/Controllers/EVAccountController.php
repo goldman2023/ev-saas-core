@@ -160,11 +160,11 @@ class EVAccountController extends Controller
                 try {
                     // VAT Number MUST INCLUDE COUNTRY TWO-LETTER CODE AT THE BEGINNING
                     $validVAT = VatCalculator::isValidVATNumber($vat);
-
-                    // Check if VAT number country is aligned with user selected country (compare codes)
-                    if($validVAT) {
-                        $validVAT = strtoupper(substr($vat, 0, 2)) === strtoupper($country);
-                    }
+                    
+                    // // Check if VAT number country is aligned with user selected country (compare codes)
+                    // if($validVAT) {
+                    //     $validVAT = strtoupper(substr($vat, 0, 2)) === strtoupper($country);
+                    // }
 
                     return response()->json([
                         'status' => 'success',
