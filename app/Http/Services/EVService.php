@@ -136,6 +136,15 @@ class EVService
                                 'permissions' => ['browse_products'],
                             ],
                             [
+                                'label' => translate('Product Addons'),
+                                'icon' => 'heroicon-o-archive',
+                                'route' => route('products.index'),
+                                'route_name' => 'products.index',
+                                'is_active' => areActiveRoutes(['products.index',  'product.details']),
+                                'user_types' => User::$non_customer_user_types,
+                                'permissions' => ['browse_products'],
+                            ],
+                            [
                                 'label' => translate('Attributes'),
                                 'icon' => 'heroicon-o-view-list',
                                 'route' => route('attributes.index', base64_encode(Product::class)),

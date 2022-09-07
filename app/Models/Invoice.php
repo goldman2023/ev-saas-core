@@ -231,6 +231,8 @@ class Invoice extends WeBaseModel
                     if(\Countries::isEU($company_country) && !empty($company_vat)) {
                         $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
                         $customer_custom_fields['VAT no.'] = $company_vat;
+                    } else if(\Countries::isEU($company_country)) {
+                        $customer_custom_fields['company no.'] = $company_registration_number;
                     } else {
                         $notes[] = 'PVMĮ 13str. 2 d.';
                         $customer_custom_fields['company no.'] = $company_registration_number;

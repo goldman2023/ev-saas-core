@@ -74,7 +74,7 @@ Route::middleware([
 
         // ---------------------------------------------------- //
 
-        /* Products */
+        /* Products & Addons */
         Route::get('/products', [EVProductController::class, 'index'])->name('products.index');
         Route::get('/products/create', [EVProductController::class, 'create2'])->name('product.create');
         // Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('product.create');
@@ -85,6 +85,8 @@ Route::middleware([
         Route::get('/products/edit/{id}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
         Route::get('/products/edit/{id}/course-management', [EVProductController::class, 'edit_course'])->name('product.edit.course');
         Route::get('/products/preview/{id}/thank-you', [EVProductController::class, 'thank_you_preview'])->name('product.thank_you_preview');
+        Route::get('/products/addons', [EVProductController::class, 'index_addons'])->name('products.addons.index');
+
 
         /* Pages & Sections */
         Route::get('/pages', [EVPageController::class, 'index'])->name('pages.index');

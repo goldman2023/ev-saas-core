@@ -31,6 +31,8 @@ return new class extends Migration
             $table->string('meta_title', 255)->nullable();
             $table->string('meta_description', 500)->nullable();
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
+
 
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('shop_id')->references('id')->on('shops')->onUpdate('cascade')->onDelete('cascade');
