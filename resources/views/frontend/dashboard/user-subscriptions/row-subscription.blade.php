@@ -58,11 +58,11 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    <strong class="text-14">{{ $row->getTotalPrice() }}</strong><span class="text-14">{{ '/'.$row->order->invoicing_period }}</span>
+    <strong class="text-14">{{ $row->getTotalUpcomingPrice() }}</strong><span class="text-14">{{ '/'.$row->order->invoicing_period }}</span>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
-    <strong class="text-14">{{ $row->getTotalUpcomingPrice() }}</strong><span class="text-14">{{ '/'.$row->order->invoicing_period }}</span>
+    <strong class="text-14">{{ $row->getTotalPrice() }}</strong><span class="text-14">{{ '/'.$row->order->invoicing_period }}</span>
 </x-livewire-tables::table.cell>
 
 {{-- <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">

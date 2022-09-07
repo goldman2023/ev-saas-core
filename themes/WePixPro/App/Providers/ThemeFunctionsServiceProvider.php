@@ -99,12 +99,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
 
                 if(auth()->user()->isAdmin()) {
-                    $data = array_merge($columns, [
+                    $data = array_merge($data, [
                         \Rappasoft\LaravelLivewireTables\Views\Column::make('Type', 'license_subscription_type')
                         ->excludeFromSelectable(),
                     ]);
-
-
                 }
 
                 return $data;

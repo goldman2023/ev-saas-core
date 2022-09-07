@@ -140,7 +140,7 @@ class UserSubscription extends WeBaseModel
         return $this->getStripeUpcomingInvoice();
     }
 
-    public function getTotalPrice($format = true) {
+    public function getTotalUpcomingPrice($format = true) {
         $invoice = $this->getUpcomingInvoiceStats();
 
         if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
@@ -154,7 +154,7 @@ class UserSubscription extends WeBaseModel
         return 0;
     }
 
-    public function getTotalUpcomingPrice($format = true) {
+    public function getTotalPrice($format = true) {
         $invoice = $this->getUpcomingInvoiceStats();
 
         if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
