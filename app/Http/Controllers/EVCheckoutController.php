@@ -450,9 +450,16 @@ class EVCheckoutController extends Controller
 
     public function orderReceived(Request $request, $order_id)
     {
+
+
         $order = Order::find($order_id);
 
-        /** 
+        /* Used for /order/demo/received demo */
+        if($order_id == 'demo') {
+            $order = Order::find(2);
+        }
+
+        /**
          * Order Received page (or Thank you page) can be accessed only by user who bought it.
          * But what are we going to do with Guest users?
          * 1. They will be identified by session ID
@@ -460,12 +467,15 @@ class EVCheckoutController extends Controller
         */
         $ghost_user = User::where('session_id', Session::getId())->first();
 
-        if(!Auth::check() && $order->user_id !== ($ghost_user?->id ?? null)) {
-            // Guest users - identify them by session_id and check if any user has that session_id, if not redirect!
-            return redirect()->route('user.registration');
-        } else if(Auth::check() && $order->user_id !== (auth()->user()?->id ?? null) && !auth()->user()->isAdmin()) {
-            return redirect()->route('home');
+        if($order_id != 'demo') {
+            if(!Auth::check() && $order->user_id !== ($ghost_user?->id ?? null)) {
+                // Guest users - identify them by session_id and check if any user has that session_id, if not redirect!
+                return redirect()->route('user.registration');
+            } else if(Auth::check() && $order->user_id !== (auth()->user()?->id ?? null) && !auth()->user()->isAdmin()) {
+                return redirect()->route('home');
+            }
         }
+
 
         return view('frontend.order-received', compact('order', 'ghost_user'));
     }

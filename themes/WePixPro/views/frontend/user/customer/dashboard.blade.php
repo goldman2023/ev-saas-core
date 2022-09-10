@@ -2,7 +2,12 @@
 
 @section('panel_content')
 <section>
+
     <div class="row">
+        <div class="grid w-full">
+            <x-dashboard.widgets.onboarding-notification></x-dashboard.widgets.onboarding-notification>
+        </div>
+
         <div class="grid w-full">
             <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
         </div>
@@ -19,7 +24,7 @@
                     <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('My Licenses') }}</h3>
 
                     <livewire:dashboard.tables.licenses-table :user="auth()->user()" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
-{{-- 
+{{--
                     <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
                         :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" :hide-actions="true" /> --}}
                 </div>

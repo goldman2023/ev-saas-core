@@ -56,24 +56,33 @@ class EVBlogPostController extends Controller
 
                 return view('frontend.blog.blog-archive', compact('blog_posts'));
             }
-            
-        } 
-        
+
+        }
+
         return $this->blog_archive();
-        
+
     }
 
     public function single(Request $request, $slug)
     {
-        $blog_post = BlogPost::where('slug', $slug)->published()->with(['authors', 'shop'])->first();
-        $categories_idx = $blog_post->categories->pluck('id')->toArray();
-        
-        $related_blog_posts = BlogPost::whereHas('categories', function ($query) use($categories_idx) { 
-            $query->whereIn('categories.id', $categories_idx);
-        })->where('id', '!=', $blog_post->id)->published()->with(['authors'])->latest()->take(3)->get();
+        if(\Auth::user()->isAdmin()) {
+            $blog_post = BlogPost::where('slug', $slug)->with(['authors', 'shop'])->first();
+
+        } else {
+            $blog_post = BlogPost::where('slug', $slug)->published()->with(['authors', 'shop'])->first();
+
+        }
+        if($blog_post) {
+            $categories_idx = $blog_post->categories->pluck('id')->toArray();
+            $related_blog_posts = BlogPost::whereHas('categories', function ($query) use($categories_idx) {
+                $query->whereIn('categories.id', $categories_idx);
+            })->where('id', '!=', $blog_post->id)->published()->with(['authors'])->latest()->take(3)->get();
+
+        }
+
 
         $latest_blog_posts = BlogPost::where('id', '!=', $blog_post->id)->published()->with(['authors'])->latest()->take(3)->get();
-        
+
         $authors = $blog_post->authors;
         $shop = $blog_post->shop;
 

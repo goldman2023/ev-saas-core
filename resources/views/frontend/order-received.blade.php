@@ -81,6 +81,7 @@
           <p class="mb-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Successfully bought a course!') }}</p>
           <p class="mb-2 text-base text-gray-500">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. You successfully bought a course.') }}</p>
 
+
           <div class="w-full mb-4">
             @if(!empty($ghost_user))
               <x-system.alert type="warning" text="{!! translate('Before accessing the course, please go to your email and finalize your registration.').' <br /> '.translate('Email').': '.$ghost_user->email !!}" :only-text="true" />
@@ -136,6 +137,9 @@
         @endif
 
         @do_action('view.order-received.items.end', $order)
+
+        <x-dashboard.widgets.calendly-demo-widget></x-dashboard.widgets.calendly-demo-widget>
+
 
         <div class="grid grid-cols-3">
           @if(!$order->is_temp)
