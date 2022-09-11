@@ -1,10 +1,13 @@
+@php
+    $form_id = \Uuid::generate(4)->string;
+@endphp
 <form class="w-full relative" wire:submit.prevent="register()" x-data="{
         entity: @js($entity),
         @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
             user_meta: {
                 @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
-                    @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date')
-                        {{ $key }}: '',
+                    @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date' || $key == 'company_vat')
+                        {{ $key }}: @js($user_meta[$key]),
                     @endif
                 @endforeach
             }
@@ -116,51 +119,67 @@
                         @endif
                     </label>
 
-                    <div class="mt-1 relative rounded-md shadow-sm">
+                    <div class="mt-1 relative rounded-md shadow-sm" x-data="{
+                        valid_vat: @error('user_meta.company_vat') false @else null @enderror,
+                        get isValidVAT() {
+                            return this.valid_vat;
+                        }
+                    }">
                         @if($key === 'company_vat')
+                            @php
+                                $company_vat_field_key = \Uuid::generate(4)->string;
+                            @endphp
                             <div x-data="{
-                                valid_vat: null,
+                                {{-- valid_vat: @error('user_meta.company_vat') false @else null @enderror, --}}
                                 checkVATvalidity() {
                                     wetch.get('{{ route('api.validate.vat') }}?vat='+user_meta.company_vat+'&country='+user_meta.address_country)
                                     .then(data => {
                                         if(data.status === 'success') {
                                             if(data.is_country_eu && user_meta.company_vat !== undefined && user_meta.company_vat !== '' && user_meta.company_vat !== null) {
-                                                this.valid_vat = data.is_vat_valid;
+                                                valid_vat = data.is_vat_valid;
                                             } else {
-                                                this.valid_vat = null;
+                                                valid_vat = null;
                                             }
+
+                                            console.log(valid_vat);
                                         }
                                     })
                                     .catch(error => {
-                                        this.valid_vat = null;
+                                        valid_vat = null;
                                     });
                                 }
-                            }" 
-                            wire:key="{{ \Uuid::generate(4)->string }}" 
-                            key="{{ \Uuid::generate(4)->string }}"
+                            }"
+                            x-effect="@error('user_meta.company_vat') false @else null @enderror"
+                            wire:ignore.self
+                            {{-- wire:key="{{ $form_id }}" 
+                            key="{{ $form_id }}" --}}
                             x-init="$watch('user_meta.address_country', (country) => { if(entity === 'company') checkVATvalidity() })">
-                                
-                                <div class="mt-1 relative rounded-md shadow-sm">
-                                    <input type="text" x-model="user_meta.{{ $key }}" 
-                                    :class="{'is-valid':valid_vat === true, 'is-invalid':valid_vat === false}"
-                                    class="form-standard pr-10" @input.debounce.500ms="checkVATvalidity()">
+                            
+                                <div class="mt-1 flex" :class="{'opacity-50 pointer-events-none': !user_meta.address_country}">
+                                    
+                                    <div class="relative grow">
+                                        <input type="text" x-model="user_meta.{{ $key }}"
+                                        :class="{'is-valid':isValidVAT === true, 'is-invalid':isValidVAT === false}"
+                                        class="form-standard pr-10" :disabled="user_meta.address_country ? false : true">
 
-                                    <template x-if="valid_vat === false">
-                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                        <div x-show="isValidVAT === false" class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                             @svg('heroicon-s-exclamation-circle', ['class' => 'h-5 w-5 text-red-500'])
                                         </div>
-                                    </template>
 
-                                    <template x-if="valid_vat === true">
-                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                        <div x-show="isValidVAT === true" class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                             @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-green-500'])
                                         </div>
-                                    </template>
+                                    </div>
+
+                                    <button type="button" @click="checkVATvalidity()" :disabled="user_meta.address_country ? false : true" class="relative -ml-px inline-flex items-center space-x-2 rounded-r-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                        <span>{{ translate('Verify') }}</span>
+                                    </button>
                                 </div>
+
                                 @error('user_meta.company_vat')
-                                    <template x-if="valid_vat === false">
+                                    <div class="w-full" x-show="isValidVAT === true">
                                         <x-system.invalid-msg field="user_meta.company_vat"></x-system.invalid-msg>
-                                    </template>
+                                    </div>
                                 @enderror
                                 {{-- <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less than 4 characters.</p> --}}
                             </div>
@@ -284,6 +303,8 @@
                             @endif
                         @endforeach
                     @endif
+
+                    console.log(user_meta);
                 "
                 data-test="we-register-submit">
                 {{ translate('Register')}}
@@ -291,9 +312,7 @@
         </div>
         {{-- END Register Action --}}
 
-
-
-        <div class="text-center">
+        <div class="text-center" @click="console.log(user_meta);">
             <span class="text-12 w-full text-muted">{{ translate('Already have an account?') }}</span>
             <a class="text-12 font-semibold" href="{{ route('user.login') }}">
                 {{ translate('Sign In') }}

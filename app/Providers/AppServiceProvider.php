@@ -78,7 +78,7 @@ class AppServiceProvider extends ServiceProvider
                 try { 
                     // VAT Number MUST INCLUDE COUNTRY TWO-LETTER CODE AT THE BEGINNING
                     $validVAT = VatCalculator::isValidVATNumber($value);
-
+                    
                     // Check if VAT number country is aligned with user selected country (compare codes)
                     // if($validVAT) {
                     //     $validVAT = strtoupper(substr($value, 0, 2)) === strtoupper($country);

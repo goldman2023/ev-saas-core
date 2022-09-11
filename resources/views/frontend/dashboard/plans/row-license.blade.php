@@ -9,8 +9,10 @@
 @do_action('view.dashboard.row-license.columns', $row)
 
 <x-livewire-tables::table.cell class="align-middle  text-center">
-    @if(!empty($row->user_subscription->first()->end_date))
+    @if(!empty($row->user_subscription->first()?->end_date ?? false))
         {{ $row->user_subscription->first()->end_date->format('d. M Y, H:i') }}
+    @elseif(!empty($row->getData('expiration_date')))
+        {{ \Carbon::createFromFormat('Y-m-d H:i:s', $row->getData('expiration_date'))->format('d. M Y, H:i') }}
     @else
         -
     @endif

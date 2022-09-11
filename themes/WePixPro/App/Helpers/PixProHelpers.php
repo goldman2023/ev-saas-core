@@ -22,7 +22,7 @@ if (!function_exists('pix_pro_register_user')) {
             "UserEmail" => $user->email
         ];
 
-        $response = Http::post($route, $body);
+        $response = Http::withoutVerifying()->post($route, $body);
         $response_json = $response->json();
 
         if(!empty($response_json['status'] ?? null)) {
@@ -51,7 +51,7 @@ if (!function_exists('pix_pro_activate_license')) {
             "HardwareId" => $hardware_id,
         ]);
 
-        $response = Http::post($route, $body);
+        $response = Http::withoutVerifying()->post($route, $body);
         $response_json = $response->json();
 
         if(!empty($response_json['status'] ?? null)) {
@@ -83,7 +83,7 @@ if (!function_exists('pix_pro_download_license')) {
             "LicenseId" => $license_id,
         ]);
 
-        $response = Http::post($route, $body);
+        $response = Http::withoutVerifying()->post($route, $body);
         $response_json = $response->json();
 
         if(!empty($response_json['status'] ?? null)) {
@@ -128,7 +128,7 @@ if (!function_exists('pix_pro_disconnect_license')) {
                 "HardwareId" => $license->data['hardware_id'] ?? ''
             ]);
 
-            $response = Http::post($route, $body);
+            $response = Http::withoutVerifying()->post($route, $body);
             $response_json = $response->json();
 
             if(!empty($response_json['status'] ?? null)) {
@@ -169,7 +169,7 @@ if (!function_exists('pix_pro_remove_license')) {
             "LicenseId" => $license->getData('id'),
         ]);
 
-        $response = Http::post($route_paid, $body);
+        $response = Http::withoutVerifying()->post($route_paid, $body);
         $response_json = $response->json();
 
         if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
@@ -190,7 +190,7 @@ if (!function_exists('pix_pro_update_subscription_id')) {
             "NewSubscriptionId" => $new_subscription_id,
         ]);
 
-        $response = Http::post($route_paid, $body);
+        $response = Http::withoutVerifying()->post($route_paid, $body);
         $response_json = $response->json();
 
         if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
@@ -244,9 +244,9 @@ if (!function_exists('pix_pro_create_licenses_action')) {
                 "Price" => ($stripe_item?->price?->unit_amount / 100) ?? $plan->getTotalPrice(),
             ]);
 
-            // Since Http::async()->then() IS NOT REALLY an ASYNC function, we need to dispatch license creation jobs to queue
+            // Since Http::withoutVerifying()->async()->then() IS NOT REALLY an ASYNC function, we need to dispatch license creation jobs to queue
             dispatch(function () use ($route_paid, $body, $plan, $subscription) {
-                $response = Http::post($route_paid, $body);
+                $response = Http::withoutVerifying()->post($route_paid, $body);
                 $response_json = $response->json();
 
                 if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
@@ -287,7 +287,81 @@ if (!function_exists('pix_pro_create_licenses_action')) {
     }
 }
 
+if(!function_exists('pix_pro_create_single_manual_license')) {
+    function pix_pro_create_single_manual_license(&$new_license) {
+        $route_paid = pix_pro_endpoint().'/paid/add_license/';
 
+        $user = $new_license->user;
+
+        $pix_pro_user = pix_pro_get_user($user)['data'] ?? [];
+        
+        if(!empty($pix_pro_user['user_id'] ?? null) && !empty($user)) {
+            $number_of_images = $new_license->getData('license_image_limit') ?? 150;
+            $cloud_service_param = $new_license->getData('cloud_service') === true || $new_license->getData('cloud_service') == 1 ? 1 : 0;
+            $offline_service_param = $new_license->getData('offline_service') === true || $new_license->getData('offline_service') == 1 ? 1 : 0;
+            $license_subscription_type = 'Manual_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+            $expiration_date = $new_license->getData('expiration_date');
+
+            $body = pix_pro_add_auth_params([
+                "UserEmail" => $pix_pro_user['email'],
+                "UserPassword" => $user->getCoreMeta('password_md5'),
+                "Qty" => 1, // THIS IS NUMBER OF TRIAL LICENSES TO BE CREATED! - WE SHOULD ALWAYS PUT 1, since we loop it on our end!
+                "LicenseType" => 'manual',
+                "LicenseCloudService" => $cloud_service_param,
+                "LicenseOfflineService" => $offline_service_param,
+                "LicenseImageLimit" => $number_of_images,
+                "PackageType" => 'mining',
+                "SubscriptionId" => -1,
+                "LicenseSubscriptionType" => $license_subscription_type,
+                "Status" => 'active',
+                "Tax" => 21,
+                "PurchaseDate" => $new_license->created_at->format('Y-m-d H:i:s'),
+                "ExpirationDate" => empty($expiration_date) ? $new_license->created_at->addDays(365)->format('Y-m-d H:i:s') : $expiration_date,
+                "OrderCurrency" => 'eur',
+                "Price" => 0,
+            ]);
+
+            // Since Http::withoutVerifying()->async()->then() IS NOT REALLY an ASYNC function, we need to dispatch license creation jobs to queue
+            // dispatch(function () use ($route_paid, $body, &$new_license) {
+                
+            // });
+
+            $response = Http::withoutVerifying()->post($route_paid, $body);
+            $response_json = $response->json();
+
+            if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                // If status is not success for any reason, log an error
+                Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a manual license in pix-pro API DB, check the response below.', $response_json));
+            } else {
+                if(!empty($response_json['license'] ?? null)) {
+                    $pix_license = $response_json['license'];
+
+                    DB::beginTransaction();
+
+                    try {
+                        // $new_license->license_name = $pix_license['license_name'] ?? '';
+                        $new_license->serial_number = $pix_license['serial_number'] ?? '';
+                        $new_license->license_type = $pix_license['license_type'] ?? '';
+
+                        $new_license->mergeData($pix_license);
+                        $new_license->save();
+
+                        // Add a license <-> user_subscription relationship
+                        // DB::table('user_subscription_relationships')->updateOrInsert(
+                        //     ['user_subscription_id' => $subscription->id, 'subject_id' => $license->id, 'subject_type' => $license::class],
+                        //     ['created_at' => date('Y:m:d H:i:s'), 'updated_at' => date('Y:m:d H:i:s')]
+                        // );
+
+                        DB::commit();
+                    } catch(\Exception $e) {
+                        DB::rollback();
+                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license on WeSaaS and link it to user_subscription.', $e));
+                    }
+                }
+            }
+        }
+    }
+}
 // CREATE LICENSE
 if (!function_exists('pix_pro_create_license')) {
     function pix_pro_create_license($subscription, $previous_subscription, $stripe_invoice) {
@@ -492,7 +566,7 @@ if (!function_exists('pix_pro_update_license')) {
                         "LicenseImageLimit" => $number_of_images,
                     ]);
 
-                    $response = Http::post($route_paid, $body);
+                    $response = Http::withoutVerifying()->post($route_paid, $body);
 
                     $response_json = $response->json();
                     
@@ -545,8 +619,11 @@ if (!function_exists('pix_pro_update_single_license')) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
         
         $subscription = $license->user_subscription->first();
+        $is_manual = empty($subscription);
 
-        $pix_pro_user = pix_pro_get_user($subscription->user)['data'] ?? [];
+        $user = $is_manual ? $license->user : $subscription->user;
+
+        $pix_pro_user = pix_pro_get_user($user)['data'] ?? [];
 
         if(!empty($pix_pro_user['user_id'] ?? null)) {
             $number_of_images = $license->getData('license_image_limit');
@@ -557,22 +634,24 @@ if (!function_exists('pix_pro_update_single_license')) {
                 $number_of_images = 150;
             }
 
-            $cloud_service_param = $license->getData('cloud_service');
-            $offline_service_param = $license->getData('offline_service');
-            $license_subscription_type = $subscription->plan->name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+            $cloud_service_param = $license->getData('cloud_service') === true || $license->getData('cloud_service') == 1 ? 1 : 0;
+            $offline_service_param = $license->getData('offline_service') === true || $license->getData('offline_service') == 1 ? 1 : 0;
+            $license_subscription_type = ($is_manual ? 'Manual' : $subscription->plan->name).'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+            $expiration_date = $license->getData('expiration_date');
 
             $body = pix_pro_add_auth_params([
                 "UserEmail" => $pix_pro_user['email'],
-                "UserPassword" => $subscription->user->getCoreMeta('password_md5'),
+                "UserPassword" => $user->getCoreMeta('password_md5'),
                 "LicenseId" => $license->getData('id') ?? '',
-                "SubscriptionId" => $subscription->id,
+                "SubscriptionId" => $is_manual ? -1 : $subscription->id,
                 "LicenseName" => $license_subscription_type, // This is actually `license_subscription_type` column in PixPro DB
                 "LicenseCloudService" => $cloud_service_param,
                 "LicenseOfflineService" => $offline_service_param,
                 "LicenseImageLimit" => $number_of_images,
+                "ExpirationDate" => empty($expiration_date) ? $license->created_at->addDays(365)->format('Y-m-d H:i:s') : $expiration_date,
             ]);
 
-            $response = Http::post($route_paid, $body);
+            $response = Http::withoutVerifying()->post($route_paid, $body);
 
             $response_json = $response->json();
 
@@ -598,12 +677,12 @@ if (!function_exists('pix_pro_update_single_license')) {
                     if(!empty($license->getData('hardware_id'))) {
                         // There was a hardware_id before, and new hardware_id is different than before -> deactive license first
                         if(!empty($pix_license['hardware_id'] ?? null) && $license->getData('hardware_id') != $pix_license['hardware_id']) {
-                            pix_pro_disconnect_license($old_license, $subscription->user);
+                            pix_pro_disconnect_license($old_license, $user);
                         }
 
                         // Just activate license now
-                        $activation_response = pix_pro_activate_license($subscription->user, $license->serial_number, $license->getData('hardware_id'));
-                            
+                        $activation_response = pix_pro_activate_license($user, $license->serial_number, $license->getData('hardware_id'));
+
                         $new_license_file = $activation_response['license_file'] ?? null;
 
                         if(!empty($new_license_file)) {
@@ -652,7 +731,7 @@ if (!function_exists('pix_pro_update_licenses_status')) {
                     ]);
 
                     dispatch(function () use ($route_paid, $body, $license, $subscription) {
-                        $response = Http::post($route_paid, $body);
+                        $response = Http::withoutVerifying()->post($route_paid, $body);
                         $response_json = $response->json();
 
                         if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
@@ -723,7 +802,7 @@ if (!function_exists('pix_pro_extend_licenses')) {
                     "basic_renew" => 'yes' // This will skip updating: license_image_limit, order_currency, price, tax; in Pixpro DB. Reason is that these settings are variable per license and pixpro updates all licenses with same subscription_id in bulk manner in renew_licenses function!
                 ]);
                 
-                $response = Http::post($route_paid, $body);
+                $response = Http::withoutVerifying()->post($route_paid, $body);
 
                 $response_json = $response->json();
 
@@ -755,7 +834,10 @@ if (!function_exists('pix_pro_get_license_by_serial_number')) {
             return false;
         }
         $route = pix_pro_endpoint().'/licenses/get_license_by_serial_number';
-        $user = $license->user_subscription->first()->user;
+        
+        $is_manual = empty($license->user_subscription->first());
+        
+        $user = $is_manual ? $license->user : $license->user_subscription->first()->user;
 
         $body = pix_pro_add_auth_params([
             "UserPassword" => $user->getCoreMeta('password_md5', true),
@@ -763,7 +845,7 @@ if (!function_exists('pix_pro_get_license_by_serial_number')) {
             "UserSn" => $license->serial_number,
         ]);
 
-        $response = Http::post($route, $body);
+        $response = Http::withoutVerifying()->post($route, $body);
         $response_json = $response->json();
 
         if(!empty($response_json['status'] ?? null)) {
@@ -787,7 +869,7 @@ if (!function_exists('pix_pro_get_user')) {
             "UserEmail" => $user->email
         ];
 
-        $response = Http::post($route, $body);
+        $response = Http::withoutVerifying()->post($route, $body);
         $response_json = $response->json();
 
         if(!empty($response_json['status'] ?? null)) {
@@ -833,7 +915,7 @@ if (!function_exists('pix_pro_update_user_password')) {
             "UserNewPassword" => $newPassword['wp_md5'],
         ]);
 
-        $response = Http::post($route, $body);
+        $response = Http::withoutVerifying()->post($route, $body);
         $response_json = $response->json();
 
         if(!empty($response_json['status'] ?? null)) {

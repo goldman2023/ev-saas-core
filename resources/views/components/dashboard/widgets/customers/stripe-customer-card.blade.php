@@ -97,7 +97,7 @@
                         </a>
                     </div>
                 </dt>
-                <dd class="text-gray-900 text-right">{{ FX::formatPrice($user_balance) / 100 * -1 }}
+                <dd class="text-gray-900 text-right">{{ FX::formatPrice($user_balance) }}
 
                 </dd>
 
