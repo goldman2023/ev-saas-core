@@ -353,6 +353,12 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         }
     }
 
+    public function hasLicenses()
+    {
+        // TODO: Think about introducing shop_id into this check because we may want to check if user has licenses of different vendors
+        return $this->licenses->count() > 0;
+    }
+
     public function getUserMeta($key, $default = null)
     {
         $user_meta = $this->user_meta->where('key', $key)->keyBy('key')->toArray();

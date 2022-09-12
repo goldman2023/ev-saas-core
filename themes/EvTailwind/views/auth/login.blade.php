@@ -6,7 +6,7 @@
 <div
     class="min-h-full flex md:w-full md:max-w-6xl sm:rounded-2xl sm:shadow overflow-hidden sm:bg-card mx-auto bg-white">
     <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div class="mx-auto w-full max-w-sm lg:w-96">
+        <div class="mx-auto w-full max-w-lg lg:w-96">
             <div>
                 <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-12 w-auto"
                     :image="get_site_logo()">
