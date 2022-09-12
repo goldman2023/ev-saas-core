@@ -151,6 +151,23 @@ class EVAccountController extends Controller
         return view('frontend.dashboard.settings.shop-settings', compact('shop'));
     }
 
+    // API Routes
+    public function api_search_users(Request $request) {
+        if(auth()->user()->isAdmin()) {
+            $q = $request->q;
+
+            $results = User::search($q)->get();
+
+            // TODO: Return this as an API RESOURCE!
+            return response()->json([
+                'status' => 'success',
+                'results' => $results
+            ]);
+        }
+
+        throw new WeAPIException(message: translate('Cannot search users if not admin or moderator'), type: 'WeApiException', code: 403);
+    }
+
     public function validateVAT(Request $request) {
         $vat = $request->vat;
         $country = $request->country;
@@ -187,4 +204,6 @@ class EVAccountController extends Controller
 
         throw new WeAPIException(message: translate('VAT or Country not provided'), type: 'WeApiException', code: 400);
     }
+
+
 }

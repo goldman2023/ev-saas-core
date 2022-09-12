@@ -70,4 +70,23 @@ class EVShopController extends Controller
 
         return view('frontend.dashboard.blog-posts.edit', compact('blog_post'));
     }
+
+    // API Routes
+    public function api_search_shops(Request $request)
+    {
+        if(auth()->user()->isAdmin()) {
+            $q = $request->q;
+
+            $results = Shop::search($q)->get();
+
+            // TODO: Return this as an API RESOURCE!
+
+            return response()->json([
+                'status' => 'success',
+                'results' => $results
+            ]);
+        }
+
+        throw new WeAPIException(message: translate('Cannot search shops if not admin or moderator'), type: 'WeApiException', code: 403);
+    }
 }
