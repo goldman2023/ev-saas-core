@@ -5,11 +5,11 @@
 
     <div class="row">
         <div class="grid w-full">
-            <x-dashboard.widgets.onboarding-notification></x-dashboard.widgets.onboarding-notification>
+            {{-- <x-dashboard.widgets.onboarding-notification></x-dashboard.widgets.onboarding-notification> --}}
         </div>
 
         <div class="grid w-full">
-            <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
+            {{-- <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome> --}}
         </div>
         <div class="grid sm:grid-cols-12 gap-8 mb-12">
 

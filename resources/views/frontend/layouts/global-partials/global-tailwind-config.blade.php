@@ -180,6 +180,11 @@ if($colors) {
             @apply flex-1 block w-full focus:ring-primary focus:border-primary min-w-0 rounded-md sm:text-sm border-gray-300 shadow-sm;
         }
 
+        .vat-input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
         .form-checkbox-standard {
             @apply focus:ring-primary h-5 w-5 text-primary border-gray-300 rounded cursor-pointer;
         }
