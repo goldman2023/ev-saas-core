@@ -187,6 +187,7 @@ class EVAccountController extends Controller
                         'status' => 'success',
                         'is_vat_valid' => $validVAT,
                         'is_country_eu' => true,
+                        'message' => $validVAT ? translate('VAT is valid') : translate('VAT is invalid'),
                     ]);
                 } catch (VATCheckUnavailableException $e) {
                     // The VAT check API is unavailable...
