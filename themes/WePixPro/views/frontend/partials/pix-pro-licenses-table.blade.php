@@ -7,7 +7,7 @@
                 {{ translate('Add New') }}
             </button>
         @endif
-        
+
      </div>
     {{-- <h2 class="text-32 text-gray-700 font-semibold mb-1">{{ translate('Licenses')}}</h2> --}}
      @php
@@ -26,10 +26,6 @@
     @if(auth()->user()?->isAdmin() ?? false)
         <x-system.form-modal id="pix-pro-edit-license" title="Edit License" class="!max-w-3xl">
             <livewire:dashboard.forms.licenses.license-form :user="$data" component-id="edit_license_form" />
-        </x-system.form-modal>
-
-        <x-system.form-modal id="pix-pro-license-history" title="License History" class="!max-w-3xl">
-            <livewire:dashboard.forms.licenses.license-history />
         </x-system.form-modal>
 
         <x-system.form-modal id="pix-pro-create-manual-license" title="Create Manual License" class="!max-w-3xl">
