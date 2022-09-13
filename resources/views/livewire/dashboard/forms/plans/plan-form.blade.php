@@ -1,5 +1,5 @@
 <div class="w-full" x-data="{
-    status: @js($plan->status ?? App\Enums\StatusEnum::draft()->value),
+    status: @js($plan->status ?? \App\Enums\StatusEnum::draft()->value),
     thumbnail: @js(['id' => $plan->thumbnail->id ?? null, 'file_name' => $plan->thumbnail->file_name ?? '']),
     cover: @js(['id' => $plan->cover->id ?? null, 'file_name' => $plan->cover->file_name ?? '']),
     meta_img: @js(['id' => $plan->meta_img->id ?? null, 'file_name' => $plan->meta_img->file_name ?? '']),

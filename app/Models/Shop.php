@@ -146,6 +146,17 @@ class Shop extends WeBaseModel
         return is_array($value) ? $value : json_decode($value, true);
     }
 
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where(
+            fn ($query) =>  $query->where('name', 'like', '%'.$term.'%')
+                ->orWhere('excerpt', 'like', '%'.$term.'%')
+        );
+    }
+
 
     public function get_company_logo()
     {
