@@ -2,41 +2,51 @@
 
 @section('panel_content')
 <section>
+
     <div class="row">
         <div class="grid w-full">
-            <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
+            {{-- <x-dashboard.widgets.onboarding-notification></x-dashboard.widgets.onboarding-notification> --}}
+        </div>
+
+        <div class="grid w-full">
+            {{-- <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome> --}}
         </div>
         <div class="grid sm:grid-cols-12 gap-8 mb-12">
 
             @if(auth()->user()?->isSubscribed() ?? false)
-                <div class="col-span-12">
-                    <x-dashboard.widgets.customer.dynamic-stats></x-dashboard.widgets.business.dynamic-stats>
-                </div>
+            <div class="col-span-12">
+                <x-dashboard.widgets.customer.dynamic-stats>
+                    </x-dashboard.widgets.business.dynamic-stats>
+            </div>
+            @endif
+
+            @if(auth()->user()?->hasLicenses())
+            <div class="col-span-12">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('My Licenses') }}</h3>
+
+                <livewire:dashboard.tables.licenses-table :user="auth()->user()" :show-search="false"
+                    :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
+            </div>
             @endif
 
             @if(auth()->user()?->isSubscribed() ?? false)
-                <div class="col-span-12">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('My Licenses') }}</h3>
 
-                    <livewire:dashboard.tables.licenses-table :user="auth()->user()" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
-{{-- 
-                    <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
-                        :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" :hide-actions="true" /> --}}
-                </div>
 
             @else
-                <div class="col-span-12">
-                    <div
-                        class="p-5 mb-5 border bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
-                        <div class="">
-                            <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('Welcome to') }} {{ get_site_name() }}</h3>
-                            <p class="mt-2 max-w-2xl text-sm text-gray-500">{{ translate('Select your plan and start your free trial') }}</p>
-                        </div>
-
+            <div class="col-span-12">
+                <div
+                    class="p-5 mb-5 border bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
+                    <div class="">
+                        <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('Welcome to') }} {{
+                            get_site_name() }}</h3>
+                        <p class="mt-2 max-w-2xl text-sm text-gray-500">{{ translate('Select your plan and start your
+                            free trial') }}</p>
                     </div>
-                    <x-dashboard.widgets.customer.pricing-table>
-                    </x-dashboard.widgets.customer.pricing-table>
+
                 </div>
+                <x-dashboard.widgets.customer.pricing-table>
+                </x-dashboard.widgets.customer.pricing-table>
+            </div>
             @endif
 
             <div class="col-span-12 md:col-span-6">
@@ -64,8 +74,7 @@
                             :image="get_site_logo()">
                         </x-tenant.system.image>
 
-                        <a href="{{ get_tenant_setting('documentation_url') }}"
-                            target="_blank"
+                        <a href="{{ get_tenant_setting('documentation_url') }}" target="_blank"
                             class="w-full btn-primary mt-5 text-center justify-center">
                             {{ translate('Pixpro support & community') }}
                         </a>
@@ -83,7 +92,7 @@
 @endsection
 
 @push('modal')
-    <x-system.form-modal id="pix-pro-generate-license" title="Online License Activation" class="!max-w-3xl">
-        <livewire:forms.generate-license-form />
-    </x-system.form-modal>
+<x-system.form-modal id="pix-pro-generate-license" title="Online License Activation" class="!max-w-3xl">
+    <livewire:forms.generate-license-form />
+</x-system.form-modal>
 @endpush

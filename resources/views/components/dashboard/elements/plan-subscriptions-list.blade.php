@@ -42,7 +42,7 @@
                             </span>
 
                             <span class="text-14 text-gray-600 font-normal">
-                                {{ translate('Total') }}: <strong>{{ $subscription->getTotalPrice(format: true) }} / {{ $subscription->order->invoicing_period }}</strong>
+                                {{ translate('Total') }}: <strong>{{ $subscription->getTotalUpcomingPrice(format: true) }} / {{ $subscription->order->invoicing_period }}</strong>
                             </span>
                         </div>
                     </div>

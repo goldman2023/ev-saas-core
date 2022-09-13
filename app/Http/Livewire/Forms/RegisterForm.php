@@ -2,34 +2,34 @@
 
 namespace App\Http\Livewire\Forms;
 
-use App\Mail\WelcomeEmail;
 use DB;
 use EVS;
-use Categories;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Hash;
-use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use Str;
-use Cookie;
-use Auth;
 use Log;
+use Str;
+use Auth;
+use Carbon;
+use Cookie;
+use Categories;
+use Permissions;
+use MailerService;
 use App\Models\User;
+use Livewire\Component;
 use App\Models\UserMeta;
+use App\Mail\WelcomeEmail;
 use App\Models\UserInvite;
 use App\Enums\UserTypeEnum;
-use App\Traits\Livewire\RulesSets;
-use App\Traits\Livewire\DispatchSupport;
-use MailerService;
-use App\Enums\WeMailingListsEnum;
 use App\Facades\StripeService;
-use Illuminate\Auth\Events\Registered;
-use MikeMcLin\WpPassword\Facades\WpPassword;
-use Permissions;
-use Carbon;
+use Illuminate\Validation\Rule;
+use App\Enums\WeMailingListsEnum;
+use App\Traits\Livewire\RulesSets;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Events\Registered;
+use App\Traits\Livewire\DispatchSupport;
+use Illuminate\Contracts\Support\Arrayable;
+use MikeMcLin\WpPassword\Facades\WpPassword;
+use Spatie\ValidationRules\Rules\ModelsExist;
 
 class RegisterForm extends Component
 {

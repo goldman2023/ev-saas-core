@@ -6,11 +6,12 @@
 <div class="relative w-full" x-data="{
     license: @entangle('license').defer,
     license_data: @entangle('license_data').defer,
+    form_type: @js($formType),
 }" 
 wire:loading.class="opacity-30 pointer-events-none"
 @display-modal.window="
     if($event.detail.id === id) {
-        $wire.setLicense($event.detail.license_id);
+        $wire.setLicense(_.get($event.detail, 'license_id', null));
     }
 ">
     <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
@@ -36,7 +37,7 @@ wire:loading.class="opacity-30 pointer-events-none"
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.input field="license.serial_number" :x="true" :disabled="true" />
+                <x-dashboard.form.input field="license.serial_number" :x="true" :disabled="true" placeholder="{{ translate('Serial number will be generated automatically') }}" />
             </div>
         </div>
         <!-- END Serial Number -->
@@ -60,7 +61,7 @@ wire:loading.class="opacity-30 pointer-events-none"
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.json-editor field="license_data" id="license-data-json-editor" />
+                <x-dashboard.form.json-editor field="license_data" id="{{ !empty($componentId) ? $componentId.'__' : '' }}license-data-json-editor" />
             </div>
         </div>
         <!-- END License Type -->
@@ -68,7 +69,11 @@ wire:loading.class="opacity-30 pointer-events-none"
 
     <div class="w-full flex justify-end mt-4" x-data="{}">
         <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="save()">
-            {{ translate('Save') }}
+            @if(!empty($license['id'] ?? null))
+                {{ translate('Save') }}
+            @else
+                {{ translate('Create') }}
+            @endif
         </button>
     </div>
 </div>

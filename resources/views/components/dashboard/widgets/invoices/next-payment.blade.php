@@ -48,7 +48,7 @@
 
                             <span class="text-14 text-gray-600 font-normal">
                                 {{ translate('Total') }}: <strong> <br>
-                                    {{ $subscription->getTotalPrice(format: true) }}</strong>
+                                    {{ $subscription->getTotalUpcomingPrice() }}</strong>
                             </span>
                         </div>
                     </div>

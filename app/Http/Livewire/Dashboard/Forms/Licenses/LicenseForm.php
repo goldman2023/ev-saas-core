@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\Admin\ContactNotification;
 use Str;
 use Log;
+use DB;
 
 class LicenseForm extends Component
 {
@@ -20,6 +21,9 @@ class LicenseForm extends Component
 
     public $license;
     public $license_data;
+    public $formType;
+    public $componentId;
+    public $user;
 
     protected function rules()
     {
@@ -44,8 +48,11 @@ class LicenseForm extends Component
      *
      * @return void
      */
-    public function mount($license = null)
+    public function mount($license = null, $componentId = '', $user = null)
     {
+        $this->componentId = $componentId;
+        $this->user = $user;
+
         if($license instanceof License) {
             $this->license = $license->toArray();
         }
@@ -63,17 +70,29 @@ class LicenseForm extends Component
 
     public function setLicense($license_id) {
         try {
-            $this->license = License::findOrFail($license_id);
-            $this->license_data = $this->license->getEditableData();
+            if(!empty($license_id)) {
+                // Update
+                $license = License::findOrFail($license_id);
+            } else {
+                // Insert
+                $license = new License();
+                $license->user_id = $this->user->id;
+                $license->plan_id = null;
+                $license->license_name = '';
+                $license->serial_number = '';
+                $license->license_type = '';
+            }
 
-            $this->license = $this->license->toArray();
+            $this->license = $license->toArray();
+            
+            $this->license_data = $license->getEditableData();
         } catch(\Exception $e) {
             $this->inform(translate('Error: Cannot edit selected license...Please refresh and try again.'), $e->getMessage(), 'fail');
         }
     }
 
     public function save()
-    { 
+    {
         $this->validate();
 
         if(!\Permissions::canAccess(User::$non_customer_user_types, ['all_licenses', 'browse_licenses'], false)) {
@@ -81,25 +100,41 @@ class LicenseForm extends Component
             return;
         }
 
+        DB::beginTransaction();
+
         try {
-            // From Array to Model object
-            $old_license = License::findOrFail($this->license['id']);
+            if(empty($this->license['id'] ?? false)) {
+                $old_license = null;
+                $license = new License();
+                $license->user_id = $this->user->id;
+                $license->plan_id = null;
+                $license->license_name = '';
+                $license->serial_number = '';
+                $license->license_type = '';
+            } else {
+                // From Array to Model object
+                $old_license = License::findOrFail($this->license['id'] ?? null);
+                $license = clone $old_license;
+            }
             
-            $license = License::findOrFail($this->license['id']);
             $license->forceFill($this->license);
             $license->setEditableData($this->license_data);
+            
             $license->save();
             
             do_action('license.saved', $license, $old_license);
             
-            $this->license = License::findOrFail($this->license['id'])->toArray();
+            $this->license = $license->toArray();
             $this->license_data = $license->getEditableData();
             
+            DB::commit();
+
             $this->emit('refreshDatatable');
             $this->inform(translate('You successfully saved the license!'), translate('Serial number: ').$license->serial_number, 'success');
         } catch(\Exception $e) {
-            $this->inform(translate('Error: Couldn\'t save/update license...'), $e->getMessage(), 'fail');
+            DB::rollback();
 
+            $this->inform(translate('Error: Couldn\'t save/update license...'), $e->getMessage(), 'fail');
             Log::error($e->getMessage());
         }
     }

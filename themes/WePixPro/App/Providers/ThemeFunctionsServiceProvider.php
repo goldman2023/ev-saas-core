@@ -99,12 +99,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
 
                 if(auth()->user()->isAdmin()) {
-                    $data = array_merge($columns, [
+                    $data = array_merge($data, [
                         \Rappasoft\LaravelLivewireTables\Views\Column::make('Type', 'license_subscription_type')
                         ->excludeFromSelectable(),
                     ]);
-
-
                 }
 
                 return $data;
@@ -117,7 +115,25 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Set editable License data properties
             add_filter('license.get.data.editable.keys', function () {
-                return ['license_image_limit', 'cloud_service', 'offline_service', 'hardware_id'];
+                return [
+                    'license_image_limit' => [
+                        'type' => 'int',
+                    ], 
+                    'cloud_service' => [
+                        'type' => 'boolean',
+                    ], 
+                    'offline_service' => [
+                        'type' => 'boolean',
+                    ], 
+                    'hardware_id' => [
+                        'type' => 'string',
+                    ], 
+                    'expiration_date' => [
+                        'default' => 'now',
+                        'type' => 'datetime',
+                        'format' => 'Y-m-d H:i:s'
+                    ]
+                ];
             }, 20, 1);
 
             // Add custom core meta to Plans
@@ -329,7 +345,13 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // There are changes to license on WeSaaS end, so we need to update license on Pixpro END
             add_action('license.saved', function (&$new_license, $old_license) {
-                pix_pro_update_single_license($new_license, $old_license);
+                if(empty($old_license)) {
+                    // Insert
+                    pix_pro_create_single_manual_license($new_license);
+                } else {
+                    // Update
+                    pix_pro_update_single_license($new_license, $old_license);
+                }
             }, 20, 2);
 
             // Hook to Blog Posts import in ImportWordPressBlogPosts and import PixPro UseCases CPT

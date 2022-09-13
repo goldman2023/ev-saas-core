@@ -1,13 +1,13 @@
 @component('mail::message')
 # New Invoice
- 
-@lang('New invoice has been issued: #') {{ $invoice->getRealInvoiceNumber() }} 
+
+@lang('Login to your ') {{ get_site_name() }} {{ ' profile and download your invoice' }}
 
 @component('mail::table')
-| # | ID | Item name | Price | Quantity | Total
-| :-- | :-- | :-- | :-- | :-- | :-- |
+Item name | Price | Quantity | Total
+:-- | :-- | :-- | :-- |
 @foreach ($invoice->order->order_items as $index => $order_item)
-| {{ $index }} | {{ $order_item->id }} | {{ $order_item->name }} | {{ \FX::formatPrice($order_item->total_price / $order_item->quantity) }} | {{ $order_item->quantity }} | {{ \FX::formatPrice($order_item->total_price) }} |
+ | {{ $order_item->name }} | {{ \FX::formatPrice($order_item->total_price / $order_item->quantity) }} | {{ $order_item->quantity }} | {{ \FX::formatPrice($order_item->total_price) }} |
 @endforeach
 @endcomponent
 
@@ -30,11 +30,11 @@
 @endcomponent
 
 
- 
+
 @component('mail::button', ['url' => $invoice->order->getPermalink()])
 @lang('View Invoice')
 @endcomponent
- 
+
 @lang('Regards'),<br>
 {{ get_tenant_setting('site_name') }}
 @endcomponent

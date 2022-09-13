@@ -301,6 +301,9 @@
                                         </label>
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             @if($key === 'company_vat')
+                                                @php
+                                                    $company_vat_field_key = \Uuid::generate(4)->string;
+                                                @endphp
                                                 <div x-data="{
                                                     valid_vat: @error('meta.company_vat') false @else null @enderror,
                                                     checkVATvalidity() {
@@ -318,27 +321,34 @@
                                                             this.valid_vat = null;
                                                         });
                                                     }
-                                                }" wire:key="{{ \Uuid::generate(4)->string }}" 
-                                                    key="{{ \Uuid::generate(4)->string }}" 
+                                                }" wire:key="{{ $company_vat_field_key }}" 
+                                                    key="{{ $company_vat_field_key }}" 
                                                     x-init="$watch('meta.address_country', (country) => { if(entity === 'company') checkVATvalidity() })">
 
-                                                    <div class="mt-1 relative rounded-md shadow-sm">
-                                                        <input type="text" x-model="meta.{{ $key }}" 
-                                                        :class="{'is-valid':valid_vat === true, 'is-invalid':valid_vat === false}"
-                                                        class="form-standard pr-10" @input.debounce.500ms="checkVATvalidity()">
+                                                    <div class="mt-1 flex rounded-md shadow-sm">
+                                                        <div class="mt-1 relative rounded-md shadow-sm">
+                                                            <input type="text" x-model="meta.{{ $key }}" 
+                                                            :class="{'is-valid':valid_vat === true, 'is-invalid':valid_vat === false, 'opacity-30': !meta.address_country}"
+                                                            class="form-standard pr-10" :disabled="meta.address_country ? false : true" @input.debounce.500ms="checkVATvalidity()">
+    
+                                                            <template x-if="valid_vat === false">
+                                                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                                    @svg('heroicon-s-exclamation-circle', ['class' => 'h-5 w-5 text-red-500'])
+                                                                </div>
+                                                            </template>
+    
+                                                            <template x-if="valid_vat === true">
+                                                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                                    @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-green-500'])
+                                                                </div>
+                                                            </template>
+                                                        </div>
 
-                                                        <template x-if="valid_vat === false">
-                                                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                                                @svg('heroicon-s-exclamation-circle', ['class' => 'h-5 w-5 text-red-500'])
-                                                            </div>
-                                                        </template>
-
-                                                        <template x-if="valid_vat === true">
-                                                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                                                @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-green-500'])
-                                                            </div>
-                                                        </template>
+                                                        <button type="button" class="relative -ml-px inline-flex items-center space-x-2 rounded-r-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                                            <span>{{ translate('Verify') }}</span>
+                                                        </button>
                                                     </div>
+                                                    
                                                     @error('meta.company_vat')
                                                         <template x-if="valid_vat === false">
                                                             <x-system.invalid-msg field="meta.company_vat"></x-system.invalid-msg>

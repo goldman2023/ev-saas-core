@@ -196,7 +196,6 @@ class WeBaseModel extends Model
         return $query->setEagerLoads([]);
     }
 
-
     /* Default Log */
     public function getActivitylogOptions(): LogOptions
     {

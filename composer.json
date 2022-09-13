@@ -43,7 +43,7 @@
         "laravel/ui": "^3.4",
         "laraveldaily/laravel-invoices": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "livewire/livewire": "^2.5",
+        "livewire/livewire": "^2.10.7",
         "maatwebsite/excel": "^3.1",
         "mailerlite/mailerlite-api-v2-php-sdk": "^0.3.2",
         "mailersend/laravel-driver": "^2.0",
