@@ -12,6 +12,7 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\EVPageController;
 use App\Http\Controllers\EVPlanController;
+use App\Http\Controllers\EVShopController;
 use App\Http\Controllers\WeQuizController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\WeMediaController;
@@ -260,5 +261,12 @@ Route::middleware([
     Route::get('/subscription/{subscription_id}/change-free-trial-plan/{new_plan_id}', [WeSubscriptionsController::class, 'change_free_trial_plan'])->name('subscription.change-free-trial-plan');
     Route::get('/subscription/{subscription_id}/upcoming-invoice/plan/{new_plan_id}/{interval}', [WeSubscriptionsController::class, 'generate_upcoming_invoice_from_stripe'])->name('subscription.upcoming.invoice.stripe');
     Route::post('/subscription/calculate-potential-invoice', [WeSubscriptionsController::class, 'calculate_potential_invoice'])->name('subscription.calculate-potential-invoice.stripe');
+
+
+    // Shop
+    Route::get('/shops/search', [EVShopController::class, 'api_search_shops'])->name('shops.search');
+
+    // Users
+    Route::get('/users/search', [EVAccountController::class, 'api_search_users'])->name('users.search');
 
 });
