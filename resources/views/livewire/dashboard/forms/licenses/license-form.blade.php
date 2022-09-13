@@ -37,7 +37,7 @@ wire:loading.class="opacity-30 pointer-events-none"
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.input field="license.serial_number" :x="true" :disabled="true" />
+                <x-dashboard.form.input field="license.serial_number" :x="true" :disabled="true" placeholder="{{ translate('Serial number will be generated automatically') }}" />
             </div>
         </div>
         <!-- END Serial Number -->
