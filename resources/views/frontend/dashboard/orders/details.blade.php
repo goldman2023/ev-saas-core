@@ -7,11 +7,16 @@
 @endpush
 
 @section('panel_content')
-<x-dashboard.section-headers.section-header title="{{ translate('All orders') }}" text="">
+<x-dashboard.section-headers.section-header title="{{ translate('Order Details') }}" text="">
     <x-slot name="content">
-        <a href="{{ route('orders.index') }}" class="btn-primary">
+        <a href="{{ route('orders.index') }}" class="btn-warning">
             @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
             <span>{{ translate('All orders') }}</span>
+        </a>
+
+        <a href="{{ route('order.edit', $order->id) }}" class="btn-primary ml-3">
+            @svg('heroicon-o-pencil', ['class' => 'h-4 h-4 mr-2'])
+            <span>{{ translate('Edit Order') }}</span>
         </a>
     </x-slot>
 </x-dashboard.section-headers.section-header>

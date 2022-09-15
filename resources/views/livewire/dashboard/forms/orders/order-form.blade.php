@@ -63,6 +63,7 @@ x-init="$watch('order_items', order_items => {
 });
 $watch('tax', order_items => calculateTotals());
 $watch('shipping_cost', order_items => calculateTotals());
+calculateTotals();
 "
 x-cloak>
     <div class="w-full relative">
@@ -95,9 +96,9 @@ x-cloak>
 
                                     <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
                                         x-data="{
-                                            image_src: '{{ \IMG::getPlaceholder(proxify: false)['url'] ?? '' }}',
-                                            shop_title: @js(translate('Vendor not selected')),
-                                            subtitle: @js(translate('Please select vendor by clicking this button')),
+                                            image_src: '{{ $order->shop?->getThumbnail() ?? \IMG::getPlaceholder(proxify: false)['url'] ?? '' }}',
+                                            shop_title: @js($order->shop?->name ?? translate('Vendor not selected')),
+                                            subtitle: @js($order->shop?->excerpt ?? translate('Please select vendor by clicking this button')),
                                         }"
                                         @click="$dispatch('display-modal', {'id': 'vendor-selector-modal' })">
                                         <div class="flex-shrink-0">
@@ -193,9 +194,9 @@ x-cloak>
 
                                     <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
                                         x-data="{
-                                            image_src: '{{ \IMG::getPlaceholder(proxify: false)['url'] ?? '' }}',
-                                            customer_title: @js(translate('Customer not selected')),
-                                            subtitle: @js(translate('Please select customer by clicking this button')),
+                                            image_src: '{{ $order->user?->getThumbnail() ?? \IMG::getPlaceholder(proxify: false)['url'] ?? '' }}',
+                                            customer_title: @js($order->user?->name ?? translate('Customer not selected')),
+                                            subtitle: @js($order->user?->email ?? translate('Please select customer by clicking this button')),
                                         }"
                                         @click="$dispatch('display-modal', {'id': 'customer-selector-modal' })">
                                         <div class="flex-shrink-0">
@@ -458,7 +459,7 @@ x-cloak>
                         <div class="w-full flex flex-col">
                             <template x-if="order_items">
                                 <ul class="w-full flex flex-col gap-y-4">
-                                    <template x-for="item in order_items">
+                                    <template x-for="item,index in order_items">
                                         <li class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm "
                                             x-data="{}">
                                             <div class="flex-shrink-0" x-show="item?.thumbnail">
@@ -473,6 +474,9 @@ x-cloak>
                                             <div class="flex-shrink-0 flex items-center gap-x-4">
                                                 <span x-text="FX.formatPrice(item.total_price)"></span>
                                                 <input type="number" min="0" x-model="item.qty" class="form-standard max-w-[90px]" />
+                                            </div>
+                                            <div class="flex-shrink-0 flex items-center " @click="order_items.splice(index, 1);">
+                                                @svg('heroicon-s-x', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
                                             </div>
                                         </li>
                                     </template>
@@ -560,7 +564,7 @@ x-cloak>
 
                                         if(existing_item_index !== -1) {
                                             order_items[existing_item_index].qty = Number(order_items[existing_item_index].qty) + 1;
-                                            order_items[existing_item_index].base_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
+                                            order_items[existing_item_index].base_price = Number(order_items[existing_item_index].unit_price);
                                             order_items[existing_item_index].subtotal_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
                                             order_items[existing_item_index].total_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
                                         } else {
@@ -572,7 +576,7 @@ x-cloak>
                                                 excerpt: item.excerpt,
                                                 qty: 1,
                                                 unit_price: item.unit_price,
-                                                base_price: item.unit_price * 1,
+                                                base_price: item.unit_price,
                                                 subtotal_price: item.unit_price * 1,
                                                 total_price: item.unit_price * 1,
                                                 tax: 0,
@@ -584,7 +588,7 @@ x-cloak>
                                         this.content_type = content_type;
                                     },
                                     insertCustomOrderItem() {
-                                        this.custom_order_item.base_price = Number(this.custom_order_item.qty) * this.custom_order_item.unit_price;
+                                        this.custom_order_item.base_price = Number(this.custom_order_item.unit_price);
                                         this.custom_order_item.subtotal_price = Number(this.custom_order_item.qty) * this.custom_order_item.unit_price;
                                         this.custom_order_item.total_price = Number(this.custom_order_item.qty) * this.custom_order_item.unit_price;
 
@@ -869,8 +873,8 @@ x-cloak>
                                     </div>
                           
                                     <div class="flex justify-between">
-                                      <dt>{{ translate('Tax') }}</dt>
-                                      <dd class="text-gray-900" x-text="tax+'%'"></dd>
+                                      <dt x-text="'{{ translate('Tax') }} ('+tax+'%)'"></dt>
+                                      <dd class="text-gray-900" x-text="FX.formatPrice((subtotal + shipping_cost) * tax / 100)"></dd>
                                     </div>
                           
                                     <div class="flex items-center justify-between border-t border-gray-200 pt-4 text-gray-900">
