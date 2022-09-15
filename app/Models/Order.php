@@ -105,8 +105,12 @@ class Order extends WeBaseModel
 
         // Get amounts/totals from $order_items and sum them to corresponding Orders core_properties - THEY ARE NOT SET DURING THE ORDER CREATION!!!
         static::relationsRetrieved(function ($order) {
-            // TODO: These should depend on "invoices number x order_items"
-            $sums_properties = ['base_price', 'discount_amount', 'subtotal_price', 'total_price'];
+            // 1. base_price in our DB should represent order_item's unit_price
+            // 2. quantity is ...quantity
+            // 3. subtotal_price =base_price * quantity
+            // 4. total_price = subtotal_price - discount(didn't add it yet) + shipping_cost + tax
+
+            $sums_properties = ['subtotal_price', 'total_price'];
             $order->appendCoreProperties($sums_properties);
             $order->append($sums_properties);
 
@@ -124,23 +128,20 @@ class Order extends WeBaseModel
                         // if($item->subject->isSubscribable() && $order->invoicing_period === 'year') {
                         //     $order->{$property} += $item->{$property} * $item->quantity;
                         // } else {
-                            $order->{$property} += $item->{$property} * $item->quantity;
+                            $order->{$property} += $item->{$property};
                         // }
                     }
 
                     // TODO: Fix this to populate each price with correct data. For now, all 4 properties are `total_price` -_-
                 }
             } else {
-                foreach ($sums_properties as $property) {
-                    foreach ($order->order_items as $item) {
-                        // if($item->subject->isSubscribable() && $order->invoicing_period === 'year') {
-                        //     $order->{$property} += $item->{$property} * $item->quantity;
-                        // } else {
-                            $order->{$property} += $item->{$property} * $item->quantity;
-                        // }
-                    }
+                foreach ($order->order_items as $item) {
+                    $order->subtotal_price += $item->base_price;
                 }
             }
+
+            $order->total_price = $order->subtotal_price + (float) $order->shipping_cost;
+            $order->total_price += ($order->total_price * ((float) $order->tax) / 100);
         });
     }
 

@@ -4,11 +4,13 @@ namespace App\Http\Livewire\Dashboard\Forms\Orders;
 
 use App\Models\Order;
 use Livewire\Component;
+use App\Models\OrderItem;
 use App\Enums\OrderTypeEnum;
 use Illuminate\Validation\Rule;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusEnum;
 use App\Traits\Livewire\RulesSets;
+use Illuminate\Support\Facades\DB;
 use App\Traits\Livewire\DispatchSupport;
 
 class OrderForm extends Component
@@ -17,7 +19,8 @@ class OrderForm extends Component
     use DispatchSupport;
 
     public $order;
-    public $order_items;
+    public $order_items = [];
+    public $is_update;
 
     /**
      * Create a new component instance.
@@ -28,6 +31,13 @@ class OrderForm extends Component
     {
         $this->order = empty($order) ? new Order() : $page;
 
+        $this->is_update = !empty($this->order->id) ? true : false;
+
+        if(!empty($this->order->order_items)) {
+            foreach($this->order->order_items as $item) {
+                // $this->order_items
+            }
+        }
     }
 
     protected function rules()
@@ -86,6 +96,48 @@ class OrderForm extends Component
     }
 
     public function saveOrder() {
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate();
+        }
 
+        DB::beginTransaction();
+
+        try {
+            $this->invoicing_period = null;
+            $this->order->save();
+
+            foreach($this->order_items as $item) {
+                $order_item = (new OrderItem())->fill($item);
+                $order_item->order_id = $this->order->id;
+
+                if(!empty($item['subject_type'] ?? '')) {
+                    $order_item->subject_type = base64_decode($item['subject_type']);
+                }
+
+                $order_item->quantity = (float) $item['qty'];
+                $order_item->save();
+            }
+
+            DB::commit();
+
+            $this->inform(translate('Order successfully saved!'), '', 'success');
+
+            if (!$this->is_update) {
+                return redirect()->route('order.edit', $this->order->id);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e);
+            if ($this->is_update) {
+                $this->dispatchGeneralError(translate('There was an error while updating an order...Please try again.'));
+                $this->inform(translate('There was an error while updating an order...Please try again.'), '', 'fail');
+            } else {
+                $this->dispatchGeneralError(translate('There was an error while creating an order...Please try again.'));
+                $this->inform(translate('There was an error while creating an order...Please try again.'), '', 'fail');
+            }
+        }
     }
 }

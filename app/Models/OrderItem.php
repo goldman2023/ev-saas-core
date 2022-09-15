@@ -11,9 +11,9 @@ class OrderItem extends WeBaseModel
 {
     protected $table = 'order_items';
 
-    protected $fillable = ['subject_id', 'subject_type', 'title', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'created_at', 'updated_at'];
+    protected $fillable = ['subject_id', 'subject_type', 'name', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'quantity', 'serial_numbers', 'variant', 'created_at', 'updated_at'];
 
-    protected $visible = ['id', 'subject_id', 'subject_type', 'title', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'created_at', 'updated_at'];
+    protected $visible = ['id', 'subject_id', 'subject_type', 'name', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'quantity', 'serial_numbers', 'variant', 'created_at', 'updated_at'];
 
     protected $guarded = [];
 

@@ -117,6 +117,7 @@ Route::middleware([
         /* Orders & Invoices*/
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
         Route::get('/order/create', [EVOrderController::class, 'create'])->name('order.create');
+        Route::get('/order/edit/{id}', [EVOrderController::class, 'edit'])->name('order.edit');
         Route::get('/order/details/{id}', [EVOrderController::class, 'details'])->name('order.details');
         Route::get('/orders/destroy/{id}', [EVOrderController::class, 'destroy'])->name('orders.destroy');
         Route::post('/orders/details', [EVOrderController::class, 'order_details'])->name('orders.details');
@@ -269,4 +270,7 @@ Route::middleware([
     // Users
     Route::get('/users/search', [EVAccountController::class, 'api_search_users'])->name('users.search');
 
+    // Products
+    Route::get('/products/search', [EVProductController::class, 'api_search_products'])->name('products.search');
+    Route::get('/product/addons/search', [EVProductController::class, 'api_search_product_addons'])->name('products.addons.search');
 });
