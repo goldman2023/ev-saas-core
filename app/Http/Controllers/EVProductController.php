@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ProductTypeEnum;
-use App\Enums\CourseItemTypes;
-use App\Facades\MyShop;
-use App\Facades\StripeService;
-use App\Models\Product;
-use App\Models\Shop;
-use App\Models\CourseItem;
-use Auth;
-use Categories;
 use EVS;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Laravel\Nova\Notifications\NovaNotification;
-use Spatie\Activitylog\Models\Activity;
+use Auth;
 use Stripe;
+use Categories;
+use App\Models\Shop;
+use App\Facades\MyShop;
+use App\Models\Product;
+use App\Models\CourseItem;
+use App\Models\ProductAddon;
+use Illuminate\Http\Request;
+use App\Enums\CourseItemTypes;
+use App\Enums\ProductTypeEnum;
+use App\Facades\StripeService;
+use Illuminate\Support\Facades\Gate;
+use Spatie\Activitylog\Models\Activity;
+use Laravel\Nova\Notifications\NovaNotification;
 
 class EVProductController extends Controller
 {
@@ -282,5 +283,38 @@ class EVProductController extends Controller
         return redirect($link);
     }
 
+
+    // API routes
+    public function api_search_products(Request $request) {
+        if(auth()->user()->isAdmin()) {
+            $q = $request->q;
+
+            $results = Product::published()->search($q)->get();
+
+            // TODO: Return this as an API RESOURCE!
+            return response()->json([
+                'status' => 'success',
+                'results' => $results
+            ]);
+        }
+
+        throw new WeAPIException(message: translate('Cannot search products if not admin or moderator'), type: 'WeApiException', code: 403);
+    }
+
+    public function api_search_product_addons(Request $request) {
+        if(auth()->user()->isAdmin()) {
+            $q = $request->q;
+
+            $results = ProductAddon::published()->search($q)->get();
+
+            // TODO: Return this as an API RESOURCE!
+            return response()->json([
+                'status' => 'success',
+                'results' => $results
+            ]);
+        }
+
+        throw new WeAPIException(message: translate('Cannot search product addons if not admin or moderator'), type: 'WeApiException', code: 403);
+    }
 
 }

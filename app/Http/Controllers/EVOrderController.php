@@ -26,6 +26,13 @@ class EVOrderController extends Controller
         return view('frontend.dashboard.orders.create');
     }
 
+    public function edit(Request $request, $order_id)
+    {
+        $order = Order::findOrFail($order_id);
+
+        return view('frontend.dashboard.orders.edit', compact('order'));
+    }
+
     public function details(Request $request, $order_id)
     {
         $order = Order::findOrFail($order_id);
