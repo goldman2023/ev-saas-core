@@ -7,11 +7,16 @@
 @endpush
 
 @section('panel_content')
-<x-dashboard.section-headers.section-header title="{{ translate('All orders') }}" text="">
+<x-dashboard.section-headers.section-header title="{{ translate('Order Details') }}" text="">
     <x-slot name="content">
-        <a href="{{ route('orders.index') }}" class="btn-primary">
+        <a href="{{ route('orders.index') }}" class="btn-warning">
             @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
             <span>{{ translate('All orders') }}</span>
+        </a>
+
+        <a href="{{ route('order.edit', $order->id) }}" class="btn-primary ml-3">
+            @svg('heroicon-o-pencil', ['class' => 'h-4 h-4 mr-2'])
+            <span>{{ translate('Edit Order') }}</span>
         </a>
     </x-slot>
 </x-dashboard.section-headers.section-header>
@@ -64,20 +69,20 @@
                 @endif
 
                 {{-- Shipping status (only for Standard Products) --}}
-                @if($order_items->filter(fn($item) => $item->subject->isProduct() &&
-                $item->subject->isShippable())->count() > 0)
-                @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
-                <span class="badge-success !py-1 !px-3 mr-2">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                </span>
-                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
-                <span class="badge-warning !py-1 !px-3 mr-2">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                </span>
-                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
-                <span class="badge-danger !py-1 !px-3 mr-2">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                </span>
+                @if($order_items->filter(fn($item) => ($item->subject?->isProduct() ?? false) &&
+                    ($item->subject?->isShippable() ?? false))->count() > 0)
+                    @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
+                        <span class="badge-success !py-1 !px-3 mr-2">
+                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                        </span>
+                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
+                        <span class="badge-warning !py-1 !px-3 mr-2">
+                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                        </span>
+                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
+                        <span class="badge-danger !py-1 !px-3 mr-2">
+                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                        </span>
                 @endif
 
                 {{-- Tracking number (only for Standard Products) --}}
@@ -121,8 +126,10 @@
                         <div class="sm:flex lg:col-span-7">
                             <div
                                 class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40 border border-gray-200 shadow">
-                                <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
-                                    class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+                                @if(!empty($item?->subject))
+                                    <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
+                                        class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+                                @endif
                             </div>
 
                             <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6">
@@ -140,8 +147,7 @@
                                     <div class="pl-4 flex sm:pl-6">
                                         <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
                                         <dd class="ml-2 text-gray-700">
-                                            {{ FX::formatPrice($item->total_price *
-                                            $item->quantity) }} / {{ $order->invoicing_period }}
+                                            {{ FX::formatPrice($item->total_price) }} {{ $order->type !== 'standard' ? ' / '.$order->invoicing_period : '' }}
                                         </dd>
                                     </div>
                                 </dl>
@@ -280,24 +286,24 @@
                     </div>
                 </dl>
 
-                {{-- <dl class="mt-8 divide-y divide-gray-200 text-sm lg:mt-0 lg:col-span-5">
+                <dl class="mt-8 divide-y divide-gray-200 text-sm lg:mt-0 lg:col-span-5">
                     <div class="pb-4 flex items-center justify-between">
                         <dt class="text-gray-600">{{ translate('Subtotal') }}</dt>
-                        <dd class="font-medium text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
+                        <dd class="font-medium text-gray-900">{{ \FX::formatPrice($order->subtotal_price) }}</dd>
                     </div>
                     <div class="py-4 flex items-center justify-between">
                         <dt class="text-gray-600">{{ translate('Shipping') }}</dt>
-                        <dd class="font-medium text-gray-900">$0</dd>
+                        <dd class="font-medium text-gray-900">{{ \FX::formatPrice($order->shipping_cost) }}</dd>
                     </div>
                     <div class="py-4 flex items-center justify-between">
-                        <dt class="text-gray-600">{{ translate('Tax') }}</dt>
-                        <dd class="font-medium text-gray-900">$0</dd>
+                        <dt class="text-gray-600">{{ translate('Tax') }} ({{ $order->tax }}%)</dt>
+                        <dd class="font-medium text-gray-900">{{ \FX::formatPrice(($order->subtotal_price + (float) $order->shipping_cost) * $order->tax / 100) }}</dd>
                     </div>
                     <div class="pt-4 flex items-center justify-between">
                         <dt class="font-medium text-gray-900">{{ translate('Order total') }}</dt>
                         <dd class="font-medium text-indigo-600">{{ \FX::formatPrice($order->total_price) }}</dd>
                     </div>
-                </dl> --}}
+                </dl>
             </div>
         </div>
     </div>

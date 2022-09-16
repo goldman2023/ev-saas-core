@@ -136,7 +136,6 @@
                                                 {{-- console.log(data); --}}
                                                 this.valid_vat = data.is_vat_valid;
                                                 this.message = data.message;
-                                                
                                             } else {
                                                 this.valid_vat = null;
                                                 this.message = '';
