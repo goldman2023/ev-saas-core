@@ -6,7 +6,7 @@ return [
      * Store URL eg: http://example.com
      *================================================================================.
      */
-    'store_url'         => env('WOOCOMMERCE_STORE_URL', 'https://we-saas.tempurl.host/'),
+    'store_url'         => env('WOOCOMMERCE_STORE_URL', 'https://baltic-priekabos.lt/'),
 
     /**
      *================================================================================
@@ -17,7 +17,7 @@ return [
     // 'consumer_key'      => env('WOOCOMMERCE_CONSUMER_KEY', 'ck_1f2fba2fffcd4019411441dcfb87c4ff449b14a7'),
 
     /* Debesunamai */
-    'consumer_key'      => env('WOOCOMMERCE_CONSUMER_KEY', 'ck_04e306e3ea1a38af323fc51ce7f6eea7ca27c338'),
+    'consumer_key'      => env('WOOCOMMERCE_CONSUMER_KEY', 'ck_2a79683d7bee812b6b17a4b8562656b5fa095e7a'),
 
     /**
      * Consumer Secret.
@@ -26,7 +26,7 @@ return [
     // 'consumer_secret'   => env('WOOCOMMERCE_CONSUMER_SECRET', 'cs_e2ef6104cdd1d5ddf5fca8a16826fff2db115b27'),
 
     /* Debesunamai */
-    'consumer_secret'   => env('WOOCOMMERCE_CONSUMER_SECRET', 'cs_720b148c3e8545d7ea87015c04ba256561c3bf82'),
+    'consumer_secret'   => env('WOOCOMMERCE_CONSUMER_SECRET', 'cs_1905ff4b5f8fb05876116df5df5ff997066be0cc'),
 
     /**
      *================================================================================

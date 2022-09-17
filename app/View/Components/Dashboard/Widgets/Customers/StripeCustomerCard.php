@@ -17,8 +17,10 @@ class StripeCustomerCard extends Component
     public function __construct($user)
     {
         $this->user = $user;
-        $this->user_balance = abs(\StripeService::stripe()->customers->retrieve($user->getStripeCustomerId(), [] )->balance / 100);
-        $this->stripe_customer_endpoint = "https://dashboard.stripe.com/customers/" . $user->getStripeCustomerId() . "/";
+        if ($user->getStripeCustomerId()) {
+            $this->user_balance = abs(\StripeService::stripe()->customers->retrieve($user->getStripeCustomerId(), [])->balance / 100);
+            $this->stripe_customer_endpoint = "https://dashboard.stripe.com/customers/" . $user->getStripeCustomerId() . "/";
+        }
     }
 
     /**

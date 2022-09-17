@@ -1,4 +1,5 @@
 <div class="ml-4 flex items-center md:ml-6">
+    <x-default.system.language-switcher></x-default.system.language-switcher>
     @guest
     <button type="button" @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})"
         class="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
