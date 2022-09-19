@@ -1,7 +1,7 @@
 <div class="rounded-lg bg-white overflow-hidden shadow">
     <div class="p-6 relative">
         <h3 class="text-base font-medium text-gray-900 relative mb-3">
-            {{ translate('Real-Time') }} {{ get_site_name() }} {{ translate('Activity') }}
+            {{ $title }}
         </h3>
         {{-- Live data badge --}}
         <div class="absolute right-6 top-6">

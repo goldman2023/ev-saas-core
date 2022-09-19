@@ -1,13 +1,14 @@
 <div>
-    <h3 class="text-2xl mb-2">Comments</h3>
+    <h3 class="text-2xl mb-2">{{ translate('Comments') }}</h3>
     @forelse ($comments as $comment)
         <div style="margin-bottom: 10px">
             <b>{{ $comment->username }} ({{ $comment->created_at->diffForHumans() }})</b>
             <br/>
             {{ $comment->comment_text }}
             <br/>
-            <a wire:click.prevent="reply({{ $comment->id }})" href="#" style="text-decoration: underline; font-size: 12px">Reply
-                to this comment</a>
+            <a wire:click.prevent="reply({{ $comment->id }})" href="#" style="text-decoration: underline; font-size: 12px">
+                {{ translate('Reply to this comment') }}
+            </a>
         </div>
         @foreach ($comment->replies as $reply)
             <div style="padding-left: 30px; margin-bottom: 10px">
@@ -17,7 +18,7 @@
             </div>
         @endforeach
     @empty
-        No comments yet.
+       {{ translate('No comments yet.')}}
     @endforelse
     <hr/>
     <h3 class="text-xl mt-2 mb-2">{{ is_null($replyCommentId) ? 'Add a comment' : 'Reply to a comment' }}</h3>

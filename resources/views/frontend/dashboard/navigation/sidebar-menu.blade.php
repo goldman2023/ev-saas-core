@@ -105,7 +105,5 @@
             @endforeach
         @endif
     </div>
-
-    <x-dashboard.elements.support-card></x-dashboard.elements.support-card>
 </nav>
 {{-- END Dashboard Sidebar Navigation --}}

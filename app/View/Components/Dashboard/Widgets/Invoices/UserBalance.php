@@ -23,7 +23,6 @@ class UserBalance extends Component
         }
 
         $this->user_balance = abs(\StripeService::stripe()->customers->retrieve($this->user->getStripeCustomerId(), [] )->balance / 100);
-
     }
 
     /**
