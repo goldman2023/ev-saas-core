@@ -20,6 +20,8 @@ class OrdersTable extends DataTableComponent
 
     public $for = 'me';
 
+    public $user;
+
     public ?int $searchFilterDebounce = 800;
 
     public string $defaultSortColumn = 'created_at';
@@ -50,10 +52,10 @@ class OrdersTable extends DataTableComponent
 
     protected string $tableName = 'orders';
 
-    public function mount($for = 'me')
+    public function mount($for = 'me', $user = null)
     {
         $this->for = $for;
-
+        $this->user = $user;
         parent::mount();
     }
 
@@ -139,7 +141,7 @@ class OrdersTable extends DataTableComponent
     public function query(): Builder
     {
         return Order::query()->where('is_temp', 0)
-            // ->when($this->for === 'me', fn ($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
+            ->when($this->for === 'me', fn ($query, $value) => $query->where('user_id', $this->user->id ?? null))
             // ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
