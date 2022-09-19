@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class OrderTimeline extends Component
 {
+    public $statuses = [];
     /**
      * Create a new component instance.
      *
@@ -14,6 +15,21 @@ class OrderTimeline extends Component
     public function __construct()
     {
         //
+        $this->statuses[] = [
+            "title" => translate('Contract'),
+            "description" => translate('Pending signature'),
+            "description_completed" => translate('Signed'),
+        ];
+
+        $this->statuses[] = [
+            "title" => translate('Manufacturing order approval'),
+            "description" => translate('Pending approval'),
+            "action_label" => translate('Approve'),
+            "action" => 'generate_invoice',
+            "description_completed" => translate('Signed'),
+        ];
+
+
     }
 
     /**

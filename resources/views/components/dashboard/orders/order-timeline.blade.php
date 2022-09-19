@@ -14,8 +14,8 @@
             </span>
           </span>
           <span class="ml-4 flex min-w-0 flex-col">
-            <span class="text-sm font-medium">Create account</span>
-            <span class="text-sm text-gray-500">Vitae sed mi luctus laoreet.</span>
+            <span class="text-sm font-medium">Contract</span>
+            <span class="text-sm text-gray-500">Signed.</span>
           </span>
         </a>
       </li>
@@ -30,8 +30,8 @@
             </span>
           </span>
           <span class="ml-4 flex min-w-0 flex-col">
-            <span class="text-sm font-medium text-indigo-600">Profile information</span>
-            <span class="text-sm text-gray-500">Cursus semper viverra facilisis et et some more.</span>
+            <span class="text-sm font-medium text-indigo-600">Manufacturing order approval</span>
+            <span class="text-sm text-gray-500">Pending.</span>
           </span>
         </a>
       </li>
@@ -46,8 +46,8 @@
             </span>
           </span>
           <span class="ml-4 flex min-w-0 flex-col">
-            <span class="text-sm font-medium text-gray-500">Business information</span>
-            <span class="text-sm text-gray-500">Penatibus eu quis ante.</span>
+            <span class="text-sm font-medium text-gray-500">Welding</span>
+            <span class="text-sm text-gray-500">Due date not set</span>
           </span>
         </a>
       </li>
@@ -62,8 +62,8 @@
             </span>
           </span>
           <span class="ml-4 flex min-w-0 flex-col">
-            <span class="text-sm font-medium text-gray-500">Theme</span>
-            <span class="text-sm text-gray-500">Faucibus nec enim leo et.</span>
+            <span class="text-sm font-medium text-gray-500">Welding QA</span>
+            <span class="text-sm text-gray-500">Not checked.</span>
           </span>
         </a>
       </li>
@@ -77,8 +77,118 @@
             </span>
           </span>
           <span class="ml-4 flex min-w-0 flex-col">
-            <span class="text-sm font-medium text-gray-500">Preview</span>
-            <span class="text-sm text-gray-500">Iusto et officia maiores porro ad non quas.</span>
+            <span class="text-sm font-medium text-gray-500">Zincification</span>
+            <span class="text-sm text-gray-500">Due date not set.</span>
+            <span class="text-sm text-gray-500">Generate Bill of landing</span>
+          </span>
+        </a>
+      </li>
+
+       <li class="relative">
+        <!-- Upcoming Step -->
+        <a href="#" class="group relative flex items-start">
+          <span class="flex h-9 items-center" aria-hidden="true">
+            <span class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">
+              <span class="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
+            </span>
+          </span>
+          <span class="ml-4 flex min-w-0 flex-col">
+            <span class="text-sm font-medium text-gray-500">Delivery to warehouse</span>
+            <span class="text-sm text-gray-500">Not delivered.</span>
+            <span class="text-sm text-gray-500">Notification to customer not sent</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="relative">
+        <!-- Upcoming Step -->
+        <a href="#" class="group relative flex items-start">
+          <span class="flex h-9 items-center" aria-hidden="true">
+            <span class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">
+              <span class="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
+            </span>
+          </span>
+          <span class="ml-4 flex min-w-0 flex-col">
+            <span class="text-sm font-medium text-gray-500">Assembly</span>
+            <span class="text-sm text-gray-500">Not started.</span>
+            <span class="text-sm text-gray-500">Generate manufacturing PDF</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="relative">
+        <!-- Upcoming Step -->
+        <a href="#" class="group relative flex items-start">
+          <span class="flex h-9 items-center" aria-hidden="true">
+            <span class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">
+              <span class="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
+            </span>
+          </span>
+          <span class="ml-4 flex min-w-0 flex-col">
+            <span class="text-sm font-medium text-gray-500">Final QA</span>
+            <span class="text-sm text-gray-500">Not checked</span>
+            <span class="text-sm text-gray-500">Notification to customer not sent</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="relative">
+        <!-- Upcoming Step -->
+        <a href="#" class="group relative flex items-start">
+          <span class="flex h-9 items-center" aria-hidden="true">
+            <span class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">
+              <span class="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
+            </span>
+          </span>
+          <span class="ml-4 flex min-w-0 flex-col">
+            <span class="text-sm font-medium text-gray-500">Final Invoice</span>
+            <span class="text-sm text-gray-500">Generate Invoice (Send to client)</span>
+            <span class="text-sm text-gray-500">Vin Code not Generated</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="relative">
+        <!-- Upcoming Step -->
+        <a href="#" class="group relative flex items-start">
+          <span class="flex h-9 items-center" aria-hidden="true">
+            <span class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">
+              <span class="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
+            </span>
+          </span>
+          <span class="ml-4 flex min-w-0 flex-col">
+            <span class="text-sm font-medium text-gray-500">Certificate Generation</span>
+            <span class="text-sm text-gray-500">Generate Certificate (Send to client)</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="relative">
+        <!-- Upcoming Step -->
+        <a href="#" class="group relative flex items-start">
+          <span class="flex h-9 items-center" aria-hidden="true">
+            <span class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">
+              <span class="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
+            </span>
+          </span>
+          <span class="ml-4 flex min-w-0 flex-col">
+            <span class="text-sm font-medium text-gray-500">Order Completed</span>
+            <span class="text-sm text-gray-500">Notify customer</span>
+          </span>
+        </a>
+      </li>
+
+      <li class="relative">
+        <!-- Upcoming Step -->
+        <a href="#" class="group relative flex items-start">
+          <span class="flex h-9 items-center" aria-hidden="true">
+            <span class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">
+              <span class="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"></span>
+            </span>
+          </span>
+          <span class="ml-4 flex min-w-0 flex-col">
+            <span class="text-sm font-medium text-gray-500">Customer Review</span>
+            <span class="text-sm text-gray-500">Not submited</span>
           </span>
         </a>
       </li>
