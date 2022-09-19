@@ -114,7 +114,7 @@ class Order extends WeBaseModel
             // 3. subtotal_price =base_price * quantity
             // 4. total_price = subtotal_price - discount(didn't add it yet) + shipping_cost + tax
 
-            $sums_properties = ['subtotal_price', 'total_price'];
+            $sums_properties = ['base_price', 'discount_amount', 'subtotal_price', 'total_price'];
             $order->appendCoreProperties($sums_properties);
             $order->append($sums_properties);
 
@@ -139,7 +139,13 @@ class Order extends WeBaseModel
                     // TODO: Fix this to populate each price with correct data. For now, all 4 properties are `total_price` -_-
                 }
             } else {
+                $order->base_price = 0;
+                $order->discount_amount = 0;
+                $order->subtotal_price = 0;
+
                 foreach ($order->order_items as $item) {
+                    $order->base_price += $item->base_price;
+                    $order->discount_amount += $item->discount_amount;
                     $order->subtotal_price += $item->base_price;
                 }
             }
