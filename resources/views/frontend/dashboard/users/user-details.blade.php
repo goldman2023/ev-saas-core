@@ -63,18 +63,24 @@
 
 
         <div class="col-span-12 sm:col-span-4">
-            {{-- <x-dashboard.widgets.customers.stripe-customer-card :user="$user">
-            </x-dashboard.widgets.customers.stripe-customer-card> --}}
+            @if(\Payments::isStripeEnabled())
+                <x-dashboard.widgets.customers.stripe-customer-card :user="$user">
+                </x-dashboard.widgets.customers.stripe-customer-card>
+            @endif
 
             <div class="mb-6">
-                {{-- <x-dashboard.widgets.invoices.next-payment :user="$user">
-                </x-dashboard.widgets.invoices.next-payment> --}}
+            @if(\Payments::isStripeEnabled())
+                <x-dashboard.widgets.invoices.next-payment :user="$user">
+                </x-dashboard.widgets.invoices.next-payment>
+                @endif
             </div>
 
 
             <div class="mb-6">
-                {{-- <x-dashboard.widgets.invoices.user-balance :user="$user">
-                </x-dashboard.widgets.invoices.user-balance> --}}
+                @if(\Payments::isStripeEnabled())
+                    <x-dashboard.widgets.invoices.user-balance :user="$user">
+                    </x-dashboard.widgets.invoices.user-balance>
+                @endif
             </div>
 
             @livewire('dashboard.elements.activity-log', ['causer' => $user])

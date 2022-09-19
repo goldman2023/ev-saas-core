@@ -27,37 +27,39 @@
             <div class="max-w-2xl mx-auto pt-8 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 mb-3">
                     <div class="flex items-center sm:space-x-4">
-                        <h1 class="ftext-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{{ translate('Order') }}:
+                        <h1 class="ftext-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{{
+                            translate('Order') }}:
                             #{{ $order->id }}</h1>
 
                         <span class="badge-dark ml-2">
                             {{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}
                         </span>
-                        {{-- <a href="#" class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block">View
+                        {{-- <a href="#"
+                            class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block">View
                             invoice<span aria-hidden="true"> &rarr;</span></a> --}}
                     </div>
                     <p class="text-sm text-gray-600">
-                        <div>
+                    <div>
                         {{ translate('Order placed on:') }} <br>
                         <time datetime="2021-03-22" class="font-semibold text-gray-900">
                             {{ $order->created_at->format('M d, Y H:i') }}
                         </time>
-                        </div>
-                        {{-- TODO: Create order delivery deadline mechanics --}}
-                        <div>
-                            {{ translate('Order delivery deadline:') }} <br>
-                            <time class="font-semibold text-gray-900">
-                                {{ $order->created_at->format('M d, Y H:i') }}
-                            </time>
-                        </div>
+                    </div>
+                    {{-- TODO: Create order delivery deadline mechanics --}}
+                    <div>
+                        {{ translate('Order delivery deadline:') }} <br>
+                        <time class="font-semibold text-gray-900">
+                            {{ $order->created_at->format('M d, Y H:i') }}
+                        </time>
+                    </div>
                     </p>
 
                     <div class="hidden">
                         {{-- TODO: Make invoice generation posible --}}
-                    <a href="#" class=" text-sm font-medium text-indigo-600 hover:text-indigo-500 ">
-                        {{ translate('View invoice') }}
-                        <span aria-hidden="true"> &rarr;</span>
-                    </a>
+                        <a href="#" class=" text-sm font-medium text-indigo-600 hover:text-indigo-500 ">
+                            {{ translate('View invoice') }}
+                            <span aria-hidden="true"> &rarr;</span>
+                        </a>
                     </div>
                 </div>
 
@@ -86,19 +88,19 @@
 
                         {{-- Shipping status (only for Standard Products) --}}
                         @if($order_items->filter(fn($item) => ($item->subject?->isProduct() ?? false) &&
-                            ($item->subject?->isShippable() ?? false))->count() > 0)
-                            @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
-                                <span class="badge-success !py-1 !px-3 mr-2">
-                                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                                </span>
-                            @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
-                                <span class="badge-warning !py-1 !px-3 mr-2">
-                                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                                </span>
-                            @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
-                                <span class="badge-danger !py-1 !px-3 mr-2">
-                                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                                </span>
+                        ($item->subject?->isShippable() ?? false))->count() > 0)
+                        @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
+                        <span class="badge-success !py-1 !px-3 mr-2">
+                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                        </span>
+                        @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
+                        <span class="badge-warning !py-1 !px-3 mr-2">
+                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                        </span>
+                        @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
+                        <span class="badge-danger !py-1 !px-3 mr-2">
+                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                        </span>
                         @endif
 
                         {{-- Tracking number (only for Standard Products) --}}
@@ -117,13 +119,15 @@
                             {{ translate('Print order') }}
                         </a> --}}
 
-                        {{-- <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="flex items-center">
+                        {{-- <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false"
+                            class="flex items-center">
                             @svg('heroicon-o-chevron-down', ['class' => 'ml-2 w-[18px] h-[18px]'])
                         </button>
                         <ul x-show="isOpen" @click.outside="isOpen = false"
                             class="absolute bg-white z-10 list-none p-0 border rounded top-[30px] right-0 shadow min-w-[150px]">
                             <li>
-                                <a href="#" target="_blank" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
+                                <a href="#" target="_blank"
+                                    class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
                                     @svg('heroicon-o-trash', ['class' => 'w-[18px] h-[18px]'])
                                     <span class="ml-2">{{ translate('Cacnel order') }}</span>
                                 </a>
@@ -143,8 +147,8 @@
                                     <div
                                         class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40 border border-gray-200 shadow">
                                         @if(!empty($item?->subject))
-                                            <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
-                                                class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+                                        <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
+                                            class="w-full h-full object-center object-cover sm:w-full sm:h-full">
                                         @endif
                                     </div>
 
@@ -163,7 +167,8 @@
                                             <div class="pl-4 flex sm:pl-6">
                                                 <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
                                                 <dd class="ml-2 text-gray-700">
-                                                    {{ FX::formatPrice($item->total_price) }} {{ $order->type !== 'standard' ? ' / '.$order->invoicing_period : '' }}
+                                                    {{ FX::formatPrice($item->total_price) }} {{ $order->type !==
+                                                    'standard' ? ' / '.$order->invoicing_period : '' }}
                                                 </dd>
                                             </div>
                                         </dl>
@@ -242,16 +247,19 @@
 
                 <!-- Billing -->
                 <div class="mt-16">
-                    <div class="bg-gray-100 py-6 px-4 sm:px-6 sm:rounded-lg lg:px-8 lg:py-8 lg:grid lg:grid-cols-12 lg:gap-x-8">
+                    <div
+                        class="bg-gray-100 py-6 px-4 sm:px-6 sm:rounded-lg lg:px-8 lg:py-8 lg:grid lg:grid-cols-12 lg:gap-x-8">
                         <dl class="grid grid-cols-2 gap-6 text-sm sm:grid-cols-2 md:gap-x-8 lg:col-span-7">
                             <div>
                                 <dt class="font-medium text-gray-900">{{ translate('Billing address') }}</dt>
                                 {{-- @if($order->isPaid()) --}}
                                 <dd class="mt-3 text-gray-500">
-                                    <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
+                                    <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name
+                                        }}</span>
                                     <span class="block">{{ $order->billing_address }}</span>
                                     <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
-                                    <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '') .
+                                    <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' :
+                                        '') .
                                         (\Countries::get(code: $order->billing_country)?->name ?? '') }}</span>
                                 </dd>
                                 {{-- @else
@@ -263,7 +271,8 @@
                                 @endif --}}
                             </div>
                             <div>
-                                @if((auth()->user()?->isAdmin() ?? false) && !empty($order->meta['stripe_payment_intent_id'] ??
+                                @if((auth()->user()?->isAdmin() ?? false) &&
+                                !empty($order->meta['stripe_payment_intent_id'] ??
                                 null))
                                 <dt class="font-medium text-gray-900">{{ translate('Payment information') }}</dt>
                                 @endif
@@ -305,7 +314,8 @@
                         <dl class="mt-8 divide-y divide-gray-200 text-sm lg:mt-0 lg:col-span-5">
                             <div class="pb-4 flex items-center justify-between">
                                 <dt class="text-gray-600">{{ translate('Subtotal') }}</dt>
-                                <dd class="font-medium text-gray-900">{{ \FX::formatPrice($order->subtotal_price) }}</dd>
+                                <dd class="font-medium text-gray-900">{{ \FX::formatPrice($order->subtotal_price) }}
+                                </dd>
                             </div>
                             <div class="py-4 flex items-center justify-between">
                                 <dt class="text-gray-600">{{ translate('Shipping') }}</dt>
@@ -313,7 +323,8 @@
                             </div>
                             <div class="py-4 flex items-center justify-between">
                                 <dt class="text-gray-600">{{ translate('Tax') }} ({{ $order->tax }}%)</dt>
-                                <dd class="font-medium text-gray-900">{{ \FX::formatPrice(($order->subtotal_price + (float) $order->shipping_cost) * $order->tax / 100) }}</dd>
+                                <dd class="font-medium text-gray-900">{{ \FX::formatPrice(($order->subtotal_price +
+                                    (float) $order->shipping_cost) * $order->tax / 100) }}</dd>
                             </div>
                             <div class="pt-4 flex items-center justify-between">
                                 <dt class="font-medium text-gray-900">{{ translate('Order total') }}</dt>
@@ -325,10 +336,10 @@
             </div>
         </div>
 
-<div class="card mb-3 mt-3">
-    <x-dashboard.general.files-manager>
-    </x-dashboard.general.files-manager>
-</div>
+        <div class="card mb-3 mt-3">
+            <x-dashboard.general.files-manager>
+            </x-dashboard.general.files-manager>
+        </div>
 
         <div class="card mb-3">
             <h3 class="text-2xl font-bold tracking-tight text-gray-900 mb-6">
@@ -337,6 +348,7 @@
             <livewire:actions.social-comments :item="$order">
             </livewire:actions.social-comments>
         </div>
+
 
     </div>
 
@@ -349,9 +361,18 @@
             {!! QrCode::size(300)->generate(URL::current()) !!}
         </div>
 
+        <div class="mb-6">
 
-       <x-dashboard.orders.order-timeline>
-       </x-dashboard.orders.order-timeline>
+        <x-dashboard.orders.order-timeline>
+        </x-dashboard.orders.order-timeline>
+        </div>
+
+        @livewire('dashboard.elements.activity-log',
+        [
+            'subject' => $order,
+            'title' => translate('Order Activity')
+        ])
+
     </div>
 </div>
 

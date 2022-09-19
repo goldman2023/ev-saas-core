@@ -12,6 +12,7 @@ class ActivityLog extends Component
     public $subject;
     public $scope;
     public $per_page;
+    public $title;
 
     public function rules() {
         return [
@@ -19,12 +20,17 @@ class ActivityLog extends Component
         ];
     }
 
-    public function mount($scope = 'all', $causer = null, $subject = null, $per_page = 10)
+    public function mount($scope = 'all', $causer = null, $subject = null, $per_page = 10, $title = null)
     {
         $this->scope = $scope;
         $this->subject = $subject;
         $this->causer = $causer;
         $this->per_page = $per_page;
+        if($title) {
+            $this->title = $title;
+        } else {
+            $this->title = translate('Real-Time ') . get_site_name() . translate('Activity');
+        }
 
         $this->acitivites = $this->query()->get();
         // dd($this->activities);

@@ -8,6 +8,8 @@ use App\Traits\PermalinkTrait;
 use App\Traits\HasDataColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
+
 
 /**
  * App\Models\Order
@@ -17,6 +19,8 @@ class Order extends WeBaseModel
     use SoftDeletes;
     use PermalinkTrait;
     use HasDataColumn;
+    use LogsActivity;
+
 
     protected $table = 'orders';
 

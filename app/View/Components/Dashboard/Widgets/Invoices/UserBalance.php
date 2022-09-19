@@ -21,11 +21,8 @@ class UserBalance extends Component
         } else {
             $this->user = auth()->user();
         }
-        if(get_tenant_setting('stripe')) {
-            $this->user_balance = abs(\StripeService::stripe()->customers->retrieve($this->user->getStripeCustomerId(), [] )->balance / 100);
-        }
 
-
+        $this->user_balance = abs(\StripeService::stripe()->customers->retrieve($this->user->getStripeCustomerId(), [] )->balance / 100);
     }
 
     /**

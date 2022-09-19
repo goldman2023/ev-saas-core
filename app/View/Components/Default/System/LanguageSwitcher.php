@@ -6,11 +6,11 @@ use Illuminate\View\Component;
 
 class LanguageSwitcher extends Component
 {
-    /* TODO: Make this an app setting */
+    /* TODO: Make this an app setting + Domains by language management */
     public $multiLanguageEnabled = true;
     public $languages = [
-        "en" => ['domain' => 'baltic-priekabos.com'],
-        "lt" => ['domain' => 'baltic-priekabos.lt'],
+        "en" => ['domain' => 'domain.com'],
+        "lt" => ['domain' => 'domain.lt'],
     ];
 
     /* TODO: Default language setting */
