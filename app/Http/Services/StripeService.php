@@ -2978,6 +2978,17 @@ class StripeService
                             }
                         }
 
+                    } else if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($previous_attributes?->current_period_end ?? null) && !empty($previous_attributes?->trial_end ?? null)) {
+                        // This means that Trial end_date was changed from Stripe
+                        $invoice_id = $stripe_subscription->metadata->invoice_id;
+                        $existing_invoice = Invoice::query()->withoutGlobalScopes()->find($invoice_id);
+
+                        if(!empty($existing_invoice)) {
+                            $existing_invoice->end_date = $previous_attributes?->trial_end ?? $existing_invoice->end_date;
+                            $existing_invoice->saveQuietly();
+                        }
+
+                        $subscription->end_date = $previous_attributes?->trial_end ?? $subscription->end_date;
                     }
 
                 }
