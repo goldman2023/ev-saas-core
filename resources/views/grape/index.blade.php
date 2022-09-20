@@ -65,7 +65,7 @@
                 container: '#gjs',
                 height: '90%',
                 selectorManager: { escapeName },
-                plugins: ['gjs-blocks-basic', 'grapesjs-custom-code', 'grapesjs-component-code-editor', 'grapesjs-parser-postcss'],
+                plugins: ['gjs-blocks-basic'],
                 pluginsOpts: {
                     'grapesjs-custom-code': {
 

@@ -92,10 +92,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // Add Columns to Licenses table (livewire)
             add_filter('dashboard.table.licenses.columns', function ($columns) {
                 $data = array_merge($columns, [
-                    \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
-                        ->excludeFromSelectable(),
                     \Rappasoft\LaravelLivewireTables\Views\Column::make('Image Limit', 'license_image_limit')
                         ->excludeFromSelectable(),
+                    \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
+                        ->excludeFromSelectable(),
+
                 ]);
 
                 if(auth()->user()->isAdmin()) {
@@ -118,16 +119,16 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return [
                     'license_image_limit' => [
                         'type' => 'int',
-                    ], 
+                    ],
                     'cloud_service' => [
                         'type' => 'boolean',
-                    ], 
+                    ],
                     'offline_service' => [
                         'type' => 'boolean',
-                    ], 
+                    ],
                     'hardware_id' => [
                         'type' => 'string',
-                    ], 
+                    ],
                     'expiration_date' => [
                         'default' => 'now',
                         'type' => 'datetime',
@@ -258,7 +259,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             });
             // When new subscription is created, take the plans core_meta and add it to the subscription!
             add_action('observer.user_subscription.created', function ($user_subscription) {
-                
+
             });
 
             add_action('view.order-received.items.end', function ($order) {
@@ -335,7 +336,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                                 }
 
                                 // dispatch(function () use ($license) {
-                                    
+
                                 // });
                             }
                         }

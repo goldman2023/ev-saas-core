@@ -68,7 +68,11 @@ class LicensesTable extends DataTableComponent
     public function columns(): array
     {
         $columns = apply_filters('dashboard.table.licenses.columns', [
-            Column::make('ID', 'license_id')
+            Column::make('Type', 'license_id')
+                ->excludeFromSelectable(),
+            Column::make('Cloud Services', 'data')
+                ->excludeFromSelectable(),
+            Column::make('Ofline Services', 'data')
                 ->excludeFromSelectable(),
             Column::make('Serial Number', 'serial_number')
                 ->excludeFromSelectable(),

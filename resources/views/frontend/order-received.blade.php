@@ -138,9 +138,6 @@
 
         @do_action('view.order-received.items.end', $order)
 
-        <x-dashboard.widgets.calendly-demo-widget></x-dashboard.widgets.calendly-demo-widget>
-
-
         <div class="grid grid-cols-3">
           @if(!$order->is_temp)
             <div class="col-span-3 md:col-span-1 py-4 md:py-6 space-y-0 space-x-3 md:space-x-0 md:space-y-3 border-b border-gray-200 md:border-none">

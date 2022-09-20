@@ -13,17 +13,25 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push('Home', route('home'));
 });
 
+Breadcrumbs::for('products', function (BreadcrumbTrail $trail) {
+    $trail->push('All Products', route('products.all'));
+});
+
 // Category
-Breadcrumbs::for('category', function (BreadcrumbTrail $trail, Category $category, $content_type = null) {
-    $trail->parent('home');
+Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category, $content_type = null) {
+    $trail->push('All Products', route('products.all'));
 
-    $ancestors = $category->ancestors;
+    // $trail->parent('home');
 
-    if (! empty($ancestors)) {
-        foreach ($ancestors as $ancestor) {
-            $trail->push($ancestor->name, $ancestor->getPermalink($content_type));
+    if (isset($category->ancestors)) {
+        $ancestors = $category->ancestors;
+
+        if (!empty($ancestors)) {
+            foreach ($ancestors as $ancestor) {
+                $trail->push($ancestor->name, $ancestor->getPermalink($content_type));
+            }
         }
-    }
 
-    $trail->push($category->name, $category->getPermalink($content_type));
+        $trail->push($category->name, $category->getPermalink($content_type));
+    }
 });

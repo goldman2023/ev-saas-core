@@ -1,5 +1,27 @@
 <x-livewire-tables::table.cell class="align-middle text-center">
-    #{{ $row->id ?? '' }}
+    @isset($row->plan)
+        {{ $row->plan->name }}
+    @else
+        {{ translate('No Plan') }}
+    @endisset
+</x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="align-middle text-center">
+    @if($row->data['cloud_service'] == 1)
+        @svg('heroicon-o-check', ['class' => 'h-4 inline w-4 text-green-600'])
+    @else
+        @svg('heroicon-o-x', ['class' => 'h-4 inline w-4 text-red-600'])
+    @endif
+
+</x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="align-middle text-center">
+    @if($row->data['offline_service'] == 1)
+        @svg('heroicon-o-check', ['class' => 'text-center inline h-4 w-4 text-green-600'])
+    @else
+        @svg('heroicon-o-x', ['class' => 'text-center inline h-4 w-4 text-red-600'])
+    @endif
+
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle  text-center">

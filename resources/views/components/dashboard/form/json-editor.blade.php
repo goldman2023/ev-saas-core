@@ -2,19 +2,22 @@
     id: '{{ $id }}',
     editor: null,
     setEditorJSON() {
-        this.editor.set({{ $field }});
+        var self = this;
+        setTimeout(function() {
+            self.editor.set({{ $field }});
+        }, 1000);
     },
     initEditor() {
         $nextTick(async () => {
             this.editor = new JSONEditor(document.getElementById(this.id), {
                 mode: '{{ $mode }}',
-                onChangeJSON: _.debounce((new_json) => { 
+                onChangeJSON: _.debounce((new_json) => {
                     {{ $field }} = this.editor.get();
                 }, 400)
             });
-        }); 
+        });
     }
-}" 
+}"
 x-init="$nextTick(() => { initEditor() });"
 x-on:init-form.window="$nextTick(() => { setEditorJSON() })"
 wire:ignore>

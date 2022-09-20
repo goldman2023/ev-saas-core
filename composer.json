@@ -61,6 +61,7 @@
         "romanzipp/laravel-seo": "^2.5",
         "sentry/sentry-laravel": "^2.12",
         "silviolleite/laravelpwa": "^2.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "soved/laravel-gdpr": "^1.6",
         "spatie/enum": "^3.12",
         "spatie/laravel-activitylog": "^4.5",

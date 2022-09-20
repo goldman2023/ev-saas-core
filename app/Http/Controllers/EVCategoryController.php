@@ -43,6 +43,6 @@ class EVCategoryController extends Controller
         $products = $selected_category->products()->orderBy('created_at', 'DESC')->paginate(10);
         $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
 
-        return view('frontend.categories.archive', compact('selected_category', 'products', 'shops'));
+        return view('frontend.products.archive', compact('selected_category', 'products', 'shops'));
     }
 }
