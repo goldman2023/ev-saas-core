@@ -1,5 +1,9 @@
 <x-livewire-tables::table.cell class="align-middle text-center">
-    {{ $row->plan->name }}
+    @isset($row->plan)
+        {{ $row->plan->name }}
+    @else
+        {{ translate('No Plan') }}
+    @endisset
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
