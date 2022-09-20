@@ -9,7 +9,7 @@
     same_billing_shipping: @js($order->same_billing_shipping === true ? true : false),
     order_items: @js($order_items ?? []),
     tax: @js($order->tax ?? 0),
-    shipping_cost: @js($order->shipping_cost),
+    shipping_cost: @js($hideShipping ? 0 : ($order->shipping_cost ?? 0)),
     email: @js($order->email),
     
     subtotal: 0,
@@ -367,71 +367,73 @@ x-cloak>
                                 {{-- END Billing Info --}}
 
                                 {{-- Shipping Info --}}
-                                <div class="col-span-12 md:col-span-6 flex flex-col gap-y-3">
+                                @if(!$hideShipping)
+                                    <div class="col-span-12 md:col-span-6 flex flex-col gap-y-3">
 
-                                    <div class="grid grid-cols-12 gap-x-3">
-                                        <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
-                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                                {{ translate('Shipping First Name') }}
-                                            </label>
-    
-                                            <x-dashboard.form.input field="order.shipping_first_name" />
+                                        <div class="grid grid-cols-12 gap-x-3">
+                                            <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
+                                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                    {{ translate('Shipping First Name') }}
+                                                </label>
+        
+                                                <x-dashboard.form.input field="order.shipping_first_name" />
+                                            </div>
+        
+                                            <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
+                                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                    {{ translate('Shipping Last Name') }}
+                                                </label>
+        
+                                                <x-dashboard.form.input field="order.shipping_last_name" />
+                                            </div>
                                         </div>
-    
-                                        <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
+                                        
+                                        <div class="w-full flex flex-col gap-y-2">
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                                {{ translate('Shipping Last Name') }}
+                                                {{ translate('Shipping Address') }}
                                             </label>
-    
-                                            <x-dashboard.form.input field="order.shipping_last_name" />
+
+                                            <x-dashboard.form.input field="order.shipping_address" />
                                         </div>
+
+                                        <div class="grid grid-cols-12 gap-x-3">
+                                            <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
+                                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                    {{ translate('Shipping Country') }}
+                                                </label>
+
+                                                <x-dashboard.form.select field="order.shipping_country" selected="shipping_country" :items="\Countries::getCodesForSelect(as_array: true)" :search="true" :nullable="false" />
+                                            </div>
+
+                                            <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
+                                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                    {{ translate('Shipping State') }}
+                                                </label>
+        
+                                                <x-dashboard.form.input field="order.shipping_state" />
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-12 gap-x-3">
+                                            <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
+                                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                    {{ translate('Shipping City') }}
+                                                </label>
+        
+                                                <x-dashboard.form.input field="order.shipping_city" />
+                                            </div>
+        
+                                            <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
+                                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                    {{ translate('Shipping ZIP') }}
+                                                </label>
+        
+                                                <x-dashboard.form.input field="order.shipping_zip" />
+                                            </div>
+                                        </div>
+                                        
                                     </div>
-                                    
-                                    <div class="w-full flex flex-col gap-y-2">
-                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                            {{ translate('Shipping Address') }}
-                                        </label>
-
-                                        <x-dashboard.form.input field="order.shipping_address" />
-                                    </div>
-
-                                    <div class="grid grid-cols-12 gap-x-3">
-                                        <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
-                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                                {{ translate('Shipping Country') }}
-                                            </label>
-
-                                            <x-dashboard.form.select field="order.shipping_country" selected="shipping_country" :items="\Countries::getCodesForSelect(as_array: true)" :search="true" :nullable="false" />
-                                        </div>
-
-                                        <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
-                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                                {{ translate('Shipping State') }}
-                                            </label>
-    
-                                            <x-dashboard.form.input field="order.shipping_state" />
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-12 gap-x-3">
-                                        <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
-                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                                {{ translate('Shipping City') }}
-                                            </label>
-    
-                                            <x-dashboard.form.input field="order.shipping_city" />
-                                        </div>
-    
-                                        <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
-                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                                {{ translate('Shipping ZIP') }}
-                                            </label>
-    
-                                            <x-dashboard.form.input field="order.shipping_zip" />
-                                        </div>
-                                    </div>
-                                    
-                                </div>
+                                @endif
                                 {{-- END Shipping Info --}}
 
                                 <div class="col-span-12 flex gap-x-2 pt-6 ">
@@ -777,25 +779,27 @@ x-cloak>
                             </div>
                             <!-- END Payment Status -->
 
-                            <!-- Payment Status -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    <span class="mr-2">{{ translate('Shipping status') }}</span>
+                            <!-- Shipping Status -->
+                            @if(!$hideShipping)
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                                    <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        <span class="mr-2">{{ translate('Shipping status') }}</span>
 
-                                    @if($order->shipping_status === App\Enums\ShippingStatusEnum::not_sent()->value)
-                                        <span class="badge-danger">{{ ucfirst($order->shipping_status) }}</span>
-                                    @elseif($order->shipping_status === App\Enums\ShippingStatusEnum::sent()->value)
-                                        <span class="badge-info">{{ ucfirst($order->shipping_status) }}</span>
-                                    @elseif($order->shipping_status === App\Enums\ShippingStatusEnum::delivered()->value)
-                                        <span class="badge-success">{{ ucfirst($order->shipping_status) }}</span>
-                                    @endif
-                                </label>
+                                        @if($order->shipping_status === App\Enums\ShippingStatusEnum::not_sent()->value)
+                                            <span class="badge-danger">{{ ucfirst($order->shipping_status) }}</span>
+                                        @elseif($order->shipping_status === App\Enums\ShippingStatusEnum::sent()->value)
+                                            <span class="badge-info">{{ ucfirst($order->shipping_status) }}</span>
+                                        @elseif($order->shipping_status === App\Enums\ShippingStatusEnum::delivered()->value)
+                                            <span class="badge-success">{{ ucfirst($order->shipping_status) }}</span>
+                                        @endif
+                                    </label>
 
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select :items="\App\Enums\ShippingStatusEnum::toArray()" selected="shipping_status" :nullable="false"></x-dashboard.form.select>
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.select :items="\App\Enums\ShippingStatusEnum::toArray()" selected="shipping_status" :nullable="false"></x-dashboard.form.select>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- END Payment Status -->
+                            @endif
+                            <!-- END Shipping Status -->
 
                             {{-- Tracking number --}}
                             <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:pt-5">
@@ -841,14 +845,16 @@ x-cloak>
                             </template>
 
                             <div class="w-full pt-3 mt-3 border-t flex flex-col">
-                                {{-- Shipping method --}}
-                                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 pt-2">
-                                    <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">{{ translate('Shipping cost') }}</label>
-                                    <div class="mt-1 sm:col-span-2 sm:mt-0">
-                                        <x-dashboard.form.input type="number" field="shipping_cost" min="0" :x="true" />
+                                @if(!$hideShipping)
+                                    {{-- Shipping method --}}
+                                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 pt-2">
+                                        <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">{{ translate('Shipping cost') }}</label>
+                                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                                            <x-dashboard.form.input type="number" field="shipping_cost" min="0" :x="true" />
+                                        </div>
                                     </div>
-                                </div>
-                                {{-- END Shipping method --}}
+                                    {{-- END Shipping method --}}
+                                @endif
 
                                 {{-- TAX --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 pt-2">
@@ -867,10 +873,12 @@ x-cloak>
                                       <dd class="text-gray-900" x-text="FX.formatPrice(subtotal)"></dd>
                                     </div>
                           
-                                    <div class="flex justify-between">
-                                      <dt>{{ translate('Shipping') }}</dt>
-                                      <dd class="text-gray-900" x-text="FX.formatPrice(shipping_cost)"></dd>
-                                    </div>
+                                    @if(!$hideShipping)
+                                        <div class="flex justify-between">
+                                            <dt>{{ translate('Shipping') }}</dt>
+                                            <dd class="text-gray-900" x-text="FX.formatPrice(shipping_cost)"></dd>
+                                        </div>
+                                    @endif
                           
                                     <div class="flex justify-between">
                                       <dt x-text="'{{ translate('Tax') }} ('+tax+'%)'"></dt>
