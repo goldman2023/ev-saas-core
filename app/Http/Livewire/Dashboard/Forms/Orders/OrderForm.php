@@ -21,17 +21,23 @@ class OrderForm extends Component
     public $order;
     public $order_items = [];
     public $is_update;
+    public $hideShipping;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function mount($order = null)
+    public function mount($order = null, $hideShipping = false)
     {
         $this->order = empty($order) ? new Order() : $order;
 
+        if(empty($this->order->id)) {
+            $this->order->shop_id = 1;
+        }
+
         $this->is_update = !empty($this->order->id) ? true : false;
+        $this->hideShipping = $hideShipping;
 
         if(!empty($this->order->order_items)) {
             foreach($this->order->order_items as $item) {
@@ -70,8 +76,8 @@ class OrderForm extends Component
             'order.billing_zip' => ['nullable'],
             'order.phone_numbers' => ['nullable'],
             'order.same_billing_shipping' => ['boolean'],
-            'order.shipping_first_name' => ['required'],
-            'order.shipping_last_name' => ['required'],
+            'order.shipping_first_name' => ['nullable'],
+            'order.shipping_last_name' => ['nullable'],
             'order.shipping_company' => ['nullable'],
             'order.shipping_address' => ['nullable'],
             'order.shipping_country' => ['nullable'],

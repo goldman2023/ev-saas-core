@@ -17,7 +17,7 @@
             </x-slot>
         </x-dashboard.section-headers.section-header>
 
-        <livewire:dashboard.forms.orders.order-form />
+        <livewire:dashboard.forms.orders.order-form hide-shipping="true" />
     </section>
 @endsection
 
