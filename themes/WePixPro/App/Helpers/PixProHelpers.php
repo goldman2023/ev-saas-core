@@ -17,7 +17,7 @@ if (!function_exists('pix_pro_register_user')) {
             "UserId" => $user->id,
             "FirstName" => $user->name,
             "LastName" => $user->surname,
-            "Company" => '', // TODO: add company
+            "Company" => $user?->getUserMeta('company_name') ?? '',
             "UserPassword" => $user->getCoreMeta('password_md5', true),
             "UserEmail" => $user->email
         ];
