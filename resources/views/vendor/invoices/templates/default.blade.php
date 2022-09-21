@@ -398,7 +398,7 @@
         <strong>{{ $invoice->status }}</strong>
     </h4>
     <p>
-        via Stripe
+        @php echo $invoice->getCustomData()['via_payment_method']() ?? null; @endphp
     </p>
     @else
     <p>

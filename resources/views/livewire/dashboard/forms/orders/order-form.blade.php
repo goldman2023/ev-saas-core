@@ -68,12 +68,10 @@ calculateTotals();
 x-cloak>
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden"
-                              wire:target="savePlan"
                               wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
         <div class="w-full"
              wire:loading.class="opacity-30 pointer-events-none"
-             wire:target="saveOrder"
         >
 
             <div class="grid grid-cols-12 gap-8 mb-10">
@@ -814,6 +812,12 @@ x-cloak>
                             {{-- END Tracking number --}}
 
                             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                                @if(!empty($order->id) && $order->invoices->isEmpty())
+                                    <button type="button" class="btn btn-warning btn-sm" wire:click="generateOrder()" >
+                                        {{ translate('Generate Invoice') }}
+                                    </button>
+                                @endif
+
                                 <button type="button" class="btn btn-primary ml-auto btn-sm" @click="save()" wire:click="saveOrder()" >
                                     {{ translate('Save') }}
                                 </button>

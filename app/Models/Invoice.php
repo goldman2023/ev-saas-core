@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use MyShop;
-use App\Enums\UserEntityEnum;
+use StripeService;
+use App\Facades\Payments;
 use App\Builders\BaseBuilder;
+use App\Enums\UserEntityEnum;
 use App\Traits\HasDataColumn;
 use Illuminate\Support\Carbon;
+use App\Models\PaymentMethodUniversal;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use StripeService;
-use LaravelDaily\Invoices\Invoice as LaravelInvoice;
 use LaravelDaily\Invoices\Classes\Party;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
+use LaravelDaily\Invoices\Invoice as LaravelInvoice;
 
 /**
  * App\Models\Invoice
@@ -334,7 +336,7 @@ class Invoice extends WeBaseModel
         } else {
             foreach($this->order->order_items as $item) {
                 $invoice_items[] = (new InvoiceItem())
-                    ->title(translate(''))
+                    ->title($item->name)
                     ->description($item->excerpt)
                     ->pricePerUnit($item->base_price)
                     ->quantity($item->quantity)
@@ -415,6 +417,14 @@ class Invoice extends WeBaseModel
         // Set custom data
         $custom_data = [
             'total_taxes_label' => $total_taxes_label,
+            'via_payment_method' => function() {
+                return match ($this->getPaymentMethodGateway()) {
+                    'stripe' => translate('Via Stripe'),
+                    'paypal' => translate('Via Paypal'),
+                    'paysera' => translate('Via Paysera'),
+                    'wire_transfer' => translate('Via Bank Transfer'),
+                };
+            }
         ];
         
         $invoice = LaravelInvoice::make(!empty($custom_title) ? $custom_title : translate('VAT Invoice'))
@@ -475,6 +485,17 @@ class Invoice extends WeBaseModel
 
     public function isFromStripe() {
         return $this->keyExistsInData('test_stripe_invoice_id') || $this->keyExistsInData('live_stripe_invoice_id');
+    }
+
+    // Check payment method
+    public function getPaymentMethodGateway() {
+        if(PaymentMethodUniversal::class === $this->payment_method_type) {
+            foreach(Payments::getPaymentMethodsAll() as $method) {
+                if($method->id === $this->payment_method_id) {
+                    return $method->gateway;
+                }
+            }
+        }
     }
 
 //    TODO: ORDER TRACKING NUMBER!!!
