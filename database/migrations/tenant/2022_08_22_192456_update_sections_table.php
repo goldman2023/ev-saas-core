@@ -14,10 +14,25 @@ return new class extends Migration
     public function up()
     {
         Schema::table('sections', function (Blueprint $table) {
-            $table->string('slug', 500)->after('title')->unique();
-            $table->longText('content')->after('order')->nullable();
-            $table->string('type')->after('section_id')->default('twig')->index();
-            $table->string('status', 50)->after('type')->default('draft')->index();
+
+            if (!Schema::hasColumn('sections', 'slug')) {
+                $table->string('slug', 500)->after('title');
+            }
+
+            if (!Schema::hasColumn('sections', 'content')) {
+                $table->longText('content')->after('order')->nullable();
+            }
+
+            if (!Schema::hasColumn('sections', 'type')) {
+                $table->string('type')->after('section_id')->default('twig')->index();
+            }
+
+            if (!Schema::hasColumn('sections', 'status')) {
+                $table->string('status', 50)->after('type')->default('draft')->index();
+            }
+
+
+
 
             // $table->dropColumn('thumbnail');
             $table->unsignedInteger('group_id')->nullable()->default(1)->change();
