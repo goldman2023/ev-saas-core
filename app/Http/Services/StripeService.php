@@ -50,21 +50,24 @@ class StripeService
     {
         \Stripe\Stripe::setMaxNetworkRetries(2);
 
-        // Depending on Stripe Mode for current tenant, use live or test key!
-        // Stripe mode can be changed in App Settings!
-        if (Payments::isStripeLiveMode()) {
-            $this->stripe = new \Stripe\StripeClient([
-                'api_key' => Payments::stripe()->stripe_sk_live_key,
-                "stripe_version" => "2020-08-27"
-            ]);
-            $this->mode_prefix = 'live_';
-        } else {
-            $this->stripe = new \Stripe\StripeClient([
-                'api_key' => Payments::stripe()->stripe_sk_test_key,
-                "stripe_version" => "2020-08-27"
-            ]);
-            $this->mode_prefix = 'test_';
+        if(Payments::isStripeEnabled()) {
+            // Depending on Stripe Mode for current tenant, use live or test key!
+            // Stripe mode can be changed in App Settings!
+            if (Payments::isStripeLiveMode()) {
+                $this->stripe = new \Stripe\StripeClient([
+                    'api_key' => Payments::stripe()->stripe_sk_live_key,
+                    "stripe_version" => "2020-08-27"
+                ]);
+                $this->mode_prefix = 'live_';
+            } else {
+                $this->stripe = new \Stripe\StripeClient([
+                    'api_key' => Payments::stripe()->stripe_sk_test_key,
+                    "stripe_version" => "2020-08-27"
+                ]);
+                $this->mode_prefix = 'test_';
+            }
         }
+        
 
         // Set supported shipping countries
         $this->supported_shipping_countries = array_values(array_diff(['LT', 'RS', 'DE', 'GB', 'ES', 'FR', 'US'], $this->unsupported_shipping_countries));
