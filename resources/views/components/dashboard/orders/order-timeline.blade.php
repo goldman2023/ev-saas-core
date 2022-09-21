@@ -1,7 +1,7 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <nav aria-label="Progress">
     <ol role="list" class="overflow-hidden">
-      <li class="relative pb-10">
+      <li class="relative pb-6">
         <div class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-indigo-600" aria-hidden="true"></div>
         <!-- Complete Step -->
         <a href="#" class="group relative flex items-start">
@@ -20,7 +20,7 @@
         </a>
       </li>
 
-      <li class="relative pb-10">
+      <li class="relative pb-6">
         <div class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-gray-300" aria-hidden="true"></div>
         <!-- Current Step -->
         <a href="#" class="group relative flex items-start" aria-current="step">
@@ -36,7 +36,7 @@
         </a>
       </li>
 
-      <li class="relative pb-10">
+      <li class="relative pb-6">
         <div class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-gray-300" aria-hidden="true"></div>
         <!-- Upcoming Step -->
         <a href="#" class="group relative flex items-start">
@@ -52,7 +52,7 @@
         </a>
       </li>
 
-      <li class="relative pb-10">
+      <li class="relative pb-6">
         <div class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-gray-300" aria-hidden="true"></div>
         <!-- Upcoming Step -->
         <a href="#" class="group relative flex items-start">
@@ -68,7 +68,7 @@
         </a>
       </li>
 
-      <li class="relative">
+      <li class="relative pb-6">
         <!-- Upcoming Step -->
         <a href="#" class="group relative flex items-start">
           <span class="flex h-9 items-center" aria-hidden="true">
@@ -84,7 +84,7 @@
         </a>
       </li>
 
-       <li class="relative">
+       <li class="relative pb-6">
         <!-- Upcoming Step -->
         <a href="#" class="group relative flex items-start">
           <span class="flex h-9 items-center" aria-hidden="true">
@@ -100,7 +100,7 @@
         </a>
       </li>
 
-      <li class="relative">
+      <li class="relative pb-6">
         <!-- Upcoming Step -->
         <a href="#" class="group relative flex items-start">
           <span class="flex h-9 items-center" aria-hidden="true">
@@ -116,7 +116,7 @@
         </a>
       </li>
 
-      <li class="relative">
+      <li class="relative pb-6">
         <!-- Upcoming Step -->
         <a href="#" class="group relative flex items-start">
           <span class="flex h-9 items-center" aria-hidden="true">
@@ -132,7 +132,7 @@
         </a>
       </li>
 
-      <li class="relative">
+      <li class="relative pb-6">
         <!-- Upcoming Step -->
         <a href="#" class="group relative flex items-start">
           <span class="flex h-9 items-center" aria-hidden="true">
@@ -148,7 +148,7 @@
         </a>
       </li>
 
-      <li class="relative">
+      <li class="relative pb-6">
         <!-- Upcoming Step -->
         <a href="#" class="group relative flex items-start">
           <span class="flex h-9 items-center" aria-hidden="true">
@@ -163,7 +163,7 @@
         </a>
       </li>
 
-      <li class="relative">
+      <li class="relative pb-6">
         <!-- Upcoming Step -->
         <a href="#" class="group relative flex items-start">
           <span class="flex h-9 items-center" aria-hidden="true">
