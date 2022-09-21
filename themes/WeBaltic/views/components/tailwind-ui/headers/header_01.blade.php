@@ -16,16 +16,9 @@
                   <div class="group relative -ml-2 rounded-md border-transparent bg-gray-900 focus-within:ring-2 focus-within:ring-white">
                     <select id="desktop-currency" name="currency" class="flex items-center rounded-md border-transparent bg-gray-900 bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100">
 
-                        <option>CAD</option>
+                        <option>LT</option>
 
-                        <option>USD</option>
-
-                        <option>AUD</option>
-
-                        <option>EUR</option>
-
-                        <option>GBP</option>
-
+                        <option>EN</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
                       <svg class="h-5 w-5 text-gray-300" x-description="Heroicon name: mini/chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -36,16 +29,22 @@
                 </div>
               </form>
 
-              <p class="flex-1 text-center text-sm font-medium text-white lg:flex-none">Get free delivery on orders over $100</p>
+              <p class="flex-1 text-center text-sm font-medium text-white lg:flex-none">
+                {{ translate(' ') }}
+              </p>
 
               <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <a href="#" class="text-sm font-medium text-white hover:text-gray-100">Create an account</a>
+                <a href="#" class="text-sm font-medium text-white hover:text-gray-100">
+                   Tel.: 8 (671) 81007
+                </a>
                 <span class="h-6 w-px bg-gray-600" aria-hidden="true"></span>
-                <a href="#" class="text-sm font-medium text-white hover:text-gray-100">Sign in</a>
+                <a href="#" class="text-sm font-medium text-white hover:text-gray-100">
+                    info@baltic-priekabos.lt
+                </a>
               </div>
             </div>
           </div>
-        <div class="max-w-6xl mx-auto px-4 sm:px-5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-5">
             <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <a href="{{ route('home') }}">
@@ -73,12 +72,12 @@
                     @guest
                     <div class="cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
                         @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
-                        {{ translate('Login') }}
+                        {{ translate('Klientams') }}
                     </div>
 
-                    <a href="{{ route('custom-pages.show_custom_page', ['pricing']) }}"
+                    <a href="{{ route('custom-pages.show_custom_page', ['contacts']) }}"
                         class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
-                        {{ translate('Try for free') }}
+                        {{ translate('Susisiekite') }}
                     </a>
                     @else
                     <button @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'});" type="button"
