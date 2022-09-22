@@ -19,14 +19,18 @@
         </x-slot>
     </x-dashboard.section-headers.section-header>
 
+    @if(auth()->user()?->hasLicenses())
+    <div class="col-span-12">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('My Licenses') }}</h3>
 
+        <livewire:dashboard.tables.licenses-table :user="auth()->user()" :show-search="false"
+            :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
+    </div>
+    @endif
 
 
     @if(auth()->user()?->isSubscribed() ?? false)
         <div class="w-full pb-5 mb-5 border-b border-gray-200">
-
-            @do_action('view.dashboard.plans-management.plans-table.end', auth()->user())
-
             <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
                 <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Subscriptions') }}</h4>
             </div>
