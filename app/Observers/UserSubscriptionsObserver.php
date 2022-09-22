@@ -29,7 +29,7 @@ class UserSubscriptionsObserver
      */
     public function created(UserSubscription $user_subscription)
     {
-        if ($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
+        if (!$user_subscription->is_temp && $user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
             // Trial has started, send notification
             try {
                 $user_subscription->user->notify(new TrialStarted($user_subscription));
@@ -39,7 +39,7 @@ class UserSubscriptionsObserver
                 Log::error($e);
             }
         }
-
+        
         try {
             do_action('observer.user_subscription.created', $user_subscription);
         } catch(\Exception $e) {
@@ -57,6 +57,21 @@ class UserSubscriptionsObserver
     {
         // TODO: Where in the code should we send UpdatedSubscription notification?
 
+        // Send email notification to admin if previous is_temp is true and new is_temp is false
+        if($user_subscription->getOriginal('is_temp') && !$user_subscription->is_temp) {
+            @send_admin_notification(translate('New user subscription on').' '.get_tenant_setting('site_name'), translate('User with following email just subscribed:').' '.$user_subscription->user->email); 
+        }
+
+        if (!$user_subscription->is_temp && $user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
+            // Trial has started, send notification
+            try {
+                $user_subscription->user->notify(new TrialStarted($user_subscription));
+                $user_subscription->setData('trial_started_email_sent', true);
+                $user_subscription->saveQuietly();
+            } catch(\Exception $e) {
+                Log::error($e);
+            }
+        }
     }
 
     /**
