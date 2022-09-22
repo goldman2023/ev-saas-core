@@ -353,19 +353,27 @@
     </div>
 
     {{-- Right/Sidebar --}}
-    <div class="col-span-4 bg-white p-3 rounded">
-        <div class="we-qr-code mb-3">
-            <h3>
-                {{ translate('Open in mobile') }}
-            </h3>
-            {!! QrCode::size(300)->generate(URL::current()) !!}
+    <div class="col-span-4">
+        <div class="card mb-3">
+            <div class="w-full pb-4 mb-4 border-b ">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status') }}</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Here you can see the current status of the order') }}</p>
+            </div>
+
+            <x-dashboard.orders.order-timeline>
+            </x-dashboard.orders.order-timeline>
         </div>
 
-        <div class="mb-6">
+        <div class="we-qr-code card mb-3">
+            <div class="w-full pb-4 mb-4 border-b ">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('QR Code') }}</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('By scanning this QA code you can open this page on mobile') }}</p>
+            </div>
 
-        <x-dashboard.orders.order-timeline>
-        </x-dashboard.orders.order-timeline>
+            {!! QrCode::size(200)->generate(URL::current()) !!}
         </div>
+
+        
 
         @livewire('dashboard.elements.activity-log',
         [

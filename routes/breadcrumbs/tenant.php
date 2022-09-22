@@ -35,3 +35,24 @@ Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category, $conte
         $trail->push($category->name, $category->getPermalink($content_type));
     }
 });
+
+// Category
+Breadcrumbs::for('product', function (BreadcrumbTrail $trail, $product, $content_type = null) {
+    $trail->push('All Products', route('products.all'));
+    /* TODO: Add product categories */
+    $trail->push($product->name, $product->getPermalink($content_type));
+
+    // $trail->parent('home');
+
+    // if (isset($category->ancestors)) {
+    //     $ancestors = $category->ancestors;
+
+    //     if (!empty($ancestors)) {
+    //         foreach ($ancestors as $ancestor) {
+    //             $trail->push($ancestor->name, $ancestor->getPermalink($content_type));
+    //         }
+    //     }
+
+    //     $trail->push($category->name, $category->getPermalink($content_type));
+    // }
+});

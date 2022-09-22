@@ -72,6 +72,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'dashboard',
                     'attributes.index',
                     'categories.index',
+                    'products.index',
+                    'tasks.index',
                     'orders.index',
                     'invoices.index',
                     'blog.posts.index',

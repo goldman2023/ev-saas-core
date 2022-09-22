@@ -72,7 +72,7 @@ class LicensesTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Cloud Services', 'data')
                 ->excludeFromSelectable(),
-            Column::make('Ofline Services', 'data')
+            Column::make('Offline Services', 'data')
                 ->excludeFromSelectable(),
             Column::make('Serial Number', 'serial_number')
                 ->excludeFromSelectable(),

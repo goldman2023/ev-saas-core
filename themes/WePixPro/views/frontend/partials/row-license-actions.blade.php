@@ -12,28 +12,23 @@
 
 @if(!empty($license?->data['hardware_id'] ?? null))
 
-{{-- <li class="border-t border-gray-200">
-    <button type="button" href="{{ route('my.plans.management') }}"
-        class="w-full flex items-center px-3 py-3 pr-4 text-gray-900 text-14 hover:bg-danger hover:text-white">
-        @svg('heroicon-o-x', ['class' => 'w-[18px] h-[18px] mr-2'])
-        <span class="ml-2">{{ translate('Upgrade') }}</span>
-    </button>
-</li> --}}
-<li class="border-t border-gray-200">
-    <button type="button" wire:click="downloadLicense({{ $license->id }})"
-        class="w-full flex items-center px-3 py-3 pr-4 text-gray-900 text-14 hover:bg-danger hover:text-white">
-        @svg('heroicon-o-document-download', ['class' => 'w-[18px] h-[18px] mr-2'])
-        <span class="ml-2">{{ translate('Download .DAT file') }}</span>
-    </button>
-</li>
+    @if(auth()->user()?->isAdmin() ?? false)
+        <li class="border-t border-gray-200">
+            <button type="button" wire:click="downloadLicense({{ $license->id }})"
+                class="w-full flex items-center px-3 py-3 pr-4 text-gray-900 text-14 hover:bg-danger hover:text-white">
+                @svg('heroicon-o-document-download', ['class' => 'w-[18px] h-[18px] mr-2'])
+                <span class="ml-2">{{ translate('Download .DAT file') }}</span>
+            </button>
+        </li>
 
-<li class="border-t border-gray-200">
-    <button type="button" wire:click="disconnect({{ $license->id }})"
-        class="w-full flex items-center px-3 py-3 pr-4 text-gray-900 text-14 hover:bg-danger hover:text-white">
-        @svg('heroicon-o-x', ['class' => 'w-[18px] h-[18px] mr-2'])
-        <span class="ml-2">{{ translate('Disconnect') }}</span>
-    </button>
-</li>
+        <li class="border-t border-gray-200">
+            <button type="button" wire:click="disconnect({{ $license->id }})"
+                class="w-full flex items-center px-3 py-3 pr-4 text-gray-900 text-14 hover:bg-danger hover:text-white">
+                @svg('heroicon-o-x', ['class' => 'w-[18px] h-[18px] mr-2'])
+                <span class="ml-2">{{ translate('Disconnect') }}</span>
+            </button>
+        </li>
+    @endif
 @endif
 
 @if(auth()->user()?->isAdmin() ?? false)

@@ -5,7 +5,7 @@
 <div class="bg-white">
 
 
-    <main class="container">
+    <div class="max-w-7xl mx-auto mt-8">
 
 
 
@@ -22,16 +22,18 @@
             </h1>
         </div>
 
-        <div class="w-full">
-            @isset($selected_category)
-            <div>
-                {{ Breadcrumbs::render('category', $selected_category) }}
-            </div>
-            @else
-            {{ Breadcrumbs::render('products') }}
-
-            @endisset
+    </div>
+    <div class="w-full mb-8">
+        @isset($selected_category)
+        <div>
+            {{ Breadcrumbs::render('category', $selected_category) }}
         </div>
+        @else
+        {{ Breadcrumbs::render('products') }}
+
+        @endisset
+    </div>
+    <main class="max-w-7xl mx-auto">
 
         <section aria-labelledby="products-heading" class="pt-6 pb-24">
             <h2 id="products-heading" class="sr-only">Products</h2>
