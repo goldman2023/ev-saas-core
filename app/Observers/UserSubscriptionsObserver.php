@@ -39,7 +39,7 @@ class UserSubscriptionsObserver
                 Log::error($e);
             }
         }
-        
+
         try {
             do_action('observer.user_subscription.created', $user_subscription);
         } catch(\Exception $e) {
@@ -59,7 +59,7 @@ class UserSubscriptionsObserver
 
         // Send email notification to admin if previous is_temp is true and new is_temp is false
         if($user_subscription->getOriginal('is_temp') && !$user_subscription->is_temp) {
-            @send_admin_notification(translate('New user subscription on').' '.get_tenant_setting('site_name'), translate('User with following email just subscribed:').' '.$user_subscription->user->email); 
+            @send_admin_notification(translate('New user subscription on').' '.get_tenant_setting('site_name'), translate('User with following email just subscribed:').' '.$user_subscription->user->email.' (<a href="'.route('user.details', $user_subscription->user->id).'">'.translate('View details').'</a>)'); 
         }
 
         if (!$user_subscription->is_temp && $user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
