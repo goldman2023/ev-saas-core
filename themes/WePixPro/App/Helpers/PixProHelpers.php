@@ -833,7 +833,7 @@ if (!function_exists('pix_pro_get_license_by_serial_number')) {
         if(empty($license)) {
             return false;
         }
-        $route = pix_pro_endpoint().'/licenses/get_license_by_serial_number';
+        $route = pix_pro_endpoint().'/licenses/get_license_by_serial_number/';
 
         $is_manual = empty($license->user_subscription->first());
 
