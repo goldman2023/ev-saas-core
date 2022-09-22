@@ -40,23 +40,25 @@
     @endif
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle static ">
-    <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        @do_action('view.dashboard.plans.row-license.actions.start', $row)
+@if(auth()->user()->isAdmin())
+    <x-livewire-tables::table.cell class="align-middle static ">
+        <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
+            @do_action('view.dashboard.plans.row-license.actions.start', $row)
 
-        <button
-            @click="isOpen = !isOpen"
-            @keydown.escape="isOpen = false"
-            class="flex items-center btn"
-        >
-            @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
-        </button>
-        <ul x-show="isOpen"
-            @click.away="isOpen = false"
-            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow overflow-hidden"
-        >
-            @do_action('view.dashboard.plans.row-license.actions.dropdown.start', $row)
+            <button
+                @click="isOpen = !isOpen"
+                @keydown.escape="isOpen = false"
+                class="flex items-center btn"
+            >
+                @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
+            </button>
+            <ul x-show="isOpen"
+                @click.away="isOpen = false"
+                class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow overflow-hidden"
+            >
+                @do_action('view.dashboard.plans.row-license.actions.dropdown.start', $row)
 
-        </ul>
-    </div>
-</x-livewire-tables::table.cell>
+            </ul>
+        </div>
+    </x-livewire-tables::table.cell>
+@endif

@@ -81,9 +81,15 @@ class LicensesTable extends DataTableComponent
         $columns = array_merge($columns, [
             Column::make('Valid', 'ending')
                 ->excludeFromSelectable(),
-            Column::make('Actions')
-                ->excludeFromSelectable(),
+
         ]);
+        if(auth()->user()->isAdmin()) {
+            $columns = array_merge($columns, [
+                Column::make('Actions')
+                    ->excludeFromSelectable(),
+            ]);
+        }
+
 
         return $columns;
     }
