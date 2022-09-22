@@ -318,7 +318,6 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Fetch all licenses for desired user and get the latest data about license from Pixpro DB. Update hardware_id if hardware_id is different!
             add_action('dashboard.table.licenses.mount.end', function ($user) {
-                // $subscriptions = $user->subscriptions()->with('licenses')->get();
                 
                 if ($user->hasLicenses()) {
                     foreach ($user->licenses as $license) {
