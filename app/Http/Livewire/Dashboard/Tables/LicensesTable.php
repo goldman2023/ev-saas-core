@@ -123,7 +123,11 @@ class LicensesTable extends DataTableComponent
 
     public function rowView(): string
     {
-        return 'frontend.dashboard.plans.row-license';
+        $view = 'frontend.dashboard.plans.row-license';
+        if(auth()->user()->isAdmin()) {
+            $view = 'frontend.dashboard.plans.row-license-admin';
+        }
+        return $view;
     }
 
     // Rest of code should be Pixpro specific!

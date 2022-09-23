@@ -336,7 +336,7 @@ class EVService
                             'class' => 'badge-info',
                             'content' => function () {
 
-                                return User::byDays(10)->count() . ' Today';
+                                return User::byDays(2)->count() . ' Today';
                             },
                         ],
                     ],

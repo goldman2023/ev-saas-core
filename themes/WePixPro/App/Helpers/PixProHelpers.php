@@ -154,7 +154,6 @@ if (!function_exists('pix_pro_disconnect_license')) {
             }
         } catch(\Exception $e) {
             Log::error($e->getMessage());
-            // dd($e);
         }
     }
 }
@@ -299,7 +298,7 @@ if(!function_exists('pix_pro_create_single_manual_license')) {
             $number_of_images = $new_license->getData('license_image_limit') ?? 150;
             $cloud_service_param = $new_license->getData('cloud_service') === true || $new_license->getData('cloud_service') == 1 ? 1 : 0;
             $offline_service_param = $new_license->getData('offline_service') === true || $new_license->getData('offline_service') == 1 ? 1 : 0;
-            $license_subscription_type = 'SOLO_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+            $license_subscription_type = $new_license->license_name . '_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
             $expiration_date = $new_license->getData('expiration_date');
 
             $body = pix_pro_add_auth_params([
@@ -636,7 +635,7 @@ if (!function_exists('pix_pro_update_single_license')) {
 
             $cloud_service_param = $license->getData('cloud_service') === true || $license->getData('cloud_service') == 1 ? 1 : 0;
             $offline_service_param = $license->getData('offline_service') === true || $license->getData('offline_service') == 1 ? 1 : 0;
-            $license_subscription_type = ($is_manual ? 'Manual' : $subscription->plan->name).'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+            $license_subscription_type = ($is_manual ? $license->license_name : $subscription->plan->name).'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
             $expiration_date = $license->getData('expiration_date');
 
             $body = pix_pro_add_auth_params([
