@@ -1,10 +1,14 @@
 <div x-data="{
   nullable: @js($nullable),
   required: @js($required),
-}" class="w-full {{ $class }}">
-  <input type="{{ $type }}" 
+}" class="w-full {{ $class }}"
+>
+  <input type="{{ $type }}"
           class="form-standard {{ $inputClass }} @error($x && !empty($errorField) ? $errorField : $field) is-invalid @enderror"
+          @if($placeholder)
           placeholder="{{ $placeholder }}"
+          @endif
+
           @if($type === 'number')
             @if(!empty($min) || $min == 0) min="{{ $min }}" @endif
             @if(!empty($max) || $max == 0) max="{{ $max }}" @endif

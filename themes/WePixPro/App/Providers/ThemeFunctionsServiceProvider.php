@@ -175,6 +175,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'blog.posts.index',
                     'pages.index',
                     'crm.all_customers',
+                    'crm.licenses',
                     'my.account.settings',
                     'my.plans.management',
                     'my.orders.all',
@@ -318,10 +319,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Fetch all licenses for desired user and get the latest data about license from Pixpro DB. Update hardware_id if hardware_id is different!
             add_action('dashboard.table.licenses.mount.end', function ($user) {
-                
+
                 if ($user->hasLicenses()) {
                     foreach ($user->licenses as $license) {
-                        
+
                         if (!empty($license) && method_exists($license, 'get_license')) {
                             // Dispatch license hardware ID update (if any)
                             $data = $license->get_license(); // gets the license from Pixpro DB

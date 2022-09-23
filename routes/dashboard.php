@@ -35,6 +35,7 @@ use App\Http\Controllers\Integrations\WooCommerceController;
 use App\Http\Controllers\Integrations\IntegrationsController;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
+use App\Http\Controllers\Integrations\PixProLicenseController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 
 Route::middleware([
@@ -123,7 +124,7 @@ Route::middleware([
         Route::post('/orders/details', [EVOrderController::class, 'order_details'])->name('orders.details');
         Route::post('/orders/update_delivery_status', [EVOrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
         Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
-        
+
         Route::get('/invoices', [WeInvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoice/{id}/download', [WeInvoiceController::class, 'download_invoice'])->name('invoice.download');
         Route::get('/order/{order_id}/upcoming-invoice/download', [WeInvoiceController::class, 'download_upcoming_invoice'])->name('invoice.upcoming.download');
@@ -146,6 +147,7 @@ Route::middleware([
 
         /* CRM */
         Route::get('/crm/customers', [CRMController::class, 'customers_index'])->name('crm.all_customers')->middleware('admin'); // TODO: THink about handling permissions a bit differently
+        Route::get('/crm/licenses', [PixProLicenseController::class, 'licenses_index'])->name('crm.licenses')->middleware('admin'); // TODO: THink about handling permissions a bit differently
 
         /* Settings pages*/
         Route::post('/ev-design-settings', [EVAccountController::class, 'design_settings_store'])->name('settings.design.store');

@@ -26,6 +26,7 @@ class LicensesTable extends DataTableComponent
     public bool $columnSelect = true;
     public int $perPage = 10;
     public array $perPageAccepted = [10, 25];
+    public $status = 'active';
 
     public array $filterNames = [
         // 'type' => 'License Type'
@@ -43,12 +44,15 @@ class LicensesTable extends DataTableComponent
     public bool $viewingModal = false;
     public $currentModal;
 
-    public function mount($user) {
+    public function mount($user = null, $status = 'active' , $for = 'me') {
         $this->user = $user;
+        $this->status = $status;
+        $this->for = $for;
 
         parent::mount();
-
-        do_action('dashboard.table.licenses.mount.end', $this->user);
+        if($this->user) {
+            do_action('dashboard.table.licenses.mount.end', $this->user);
+        }
     }
 
     public function filters(): array
@@ -80,7 +84,6 @@ class LicensesTable extends DataTableComponent
 
         $columns = array_merge($columns, [
             Column::make('Valid', 'ending')
-                ->excludeFromSelectable(),
 
         ]);
         if(auth()->user()->isAdmin()) {
@@ -94,12 +97,28 @@ class LicensesTable extends DataTableComponent
         return $columns;
     }
 
-    public function query(): Builder
+    public function query()
     {
-        return $this->user->licenses()->with('user_subscription')->getQuery()
-                    // ->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
-                    ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
-                    // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
+        if($this->user) {
+            $query = $this->user->licenses()->with('user_subscription')->getQuery()
+            // ->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
+            ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
+            // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
+
+        } else {
+            $start_date = date('Y-m-d H:i:s');
+            $end_date = date("Y-m-d 23:59:59", strtotime('-3 days', strtotime($start_date)));
+
+            $query = License::with('user_subscription')
+            ->whereDate('data->expiration_date', '<', $end_date)
+            ->orderBy('updated_at', 'DESC');
+            // ->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
+            // ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
+            // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
+        }
+
+
+        return $query;
       }
 
     public function rowView(): string

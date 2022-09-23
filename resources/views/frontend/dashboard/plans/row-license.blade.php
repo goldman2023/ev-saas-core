@@ -7,20 +7,25 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
+    @isset($row->data['cloud_service'])
     @if($row->data['cloud_service'] == 1)
         @svg('heroicon-o-check', ['class' => 'h-4 inline w-4 text-green-600'])
     @else
         @svg('heroicon-o-x', ['class' => 'h-4 inline w-4 text-red-600'])
     @endif
+    @endisset
 
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
+    @isset($row->data['offline_service'])
+
     @if($row->data['offline_service'] == 1)
         @svg('heroicon-o-check', ['class' => 'text-center inline h-4 w-4 text-green-600'])
     @else
         @svg('heroicon-o-x', ['class' => 'text-center inline h-4 w-4 text-red-600'])
     @endif
+    @endisset
 
 </x-livewire-tables::table.cell>
 
@@ -31,13 +36,30 @@
 @do_action('view.dashboard.row-license.columns', $row)
 
 <x-livewire-tables::table.cell class="align-middle  text-center">
+    @isset($row->user_subscription)
     @if(!empty($row->user_subscription->first()?->end_date ?? false))
+    @if($row->user_subscription->first()->end_date < now())
+    <span class="text-red-600">  Expired:
+    @endif
+
         {{ $row->user_subscription->first()->end_date->format('d. M Y, H:i') }}
+
+        @if($row->user_subscription->first()->end_date < now())
+    </span>
+    @endif
     @elseif(!empty($row->getData('expiration_date')))
+        @if($row->getData('expiration_date') < now())
+        <span class="text-red-600"> Expired:
+        @endif
         {{ \Carbon::createFromFormat('Y-m-d H:i:s', $row->getData('expiration_date'))->format('d. M Y, H:i') }}
+
+        @if($row->getData('expiration_date') < now())
+        </span>
+        @endif
     @else
         -
     @endif
+    @endisset
 </x-livewire-tables::table.cell>
 
 @if(auth()->user()->isAdmin())
