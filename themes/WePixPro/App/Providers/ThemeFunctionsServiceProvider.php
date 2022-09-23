@@ -175,6 +175,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'blog.posts.index',
                     'pages.index',
                     'crm.all_customers',
+                    'crm.licenses',
                     'my.account.settings',
                     'my.plans.management',
                     'my.orders.all',
@@ -318,27 +319,23 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Fetch all licenses for desired user and get the latest data about license from Pixpro DB. Update hardware_id if hardware_id is different!
             add_action('dashboard.table.licenses.mount.end', function ($user) {
-                $subscriptions = $user->subscriptions()->with('licenses')->get();
 
-                if (!empty($subscriptions)) {
-                    foreach ($subscriptions as $subscription) {
-                        $licenses = $subscription->licenses;
+                if ($user->hasLicenses()) {
+                    foreach ($user->licenses as $license) {
 
-                        foreach($licenses as $license) {
-                            if (!empty($license) && method_exists($license, 'get_license')) {
-                                // Dispatch license hardware ID update (if any)
-                                $data = $license->get_license(); // gets the license from Pixpro DB
+                        if (!empty($license) && method_exists($license, 'get_license')) {
+                            // Dispatch license hardware ID update (if any)
+                            $data = $license->get_license(); // gets the license from Pixpro DB
 
-                                // If hardware_id is missing on our end or is different than hwID on Pixpro end, update it on our end
-                                if (!empty($data) && $license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
-                                    $license->setData('hardware_id', $data['hardware_id'] ?? null);
-                                    $license->saveQuietly();
-                                }
-
-                                // dispatch(function () use ($license) {
-
-                                // });
+                            // If hardware_id is missing on our end or is different than hwID on Pixpro end, update it on our end
+                            if (!empty($data) && $license->getData('hardware_id') !== ($data['hardware_id'] ?? null)) {
+                                $license->setData('hardware_id', $data['hardware_id'] ?? null);
+                                $license->saveQuietly();
                             }
+
+                            // dispatch(function () use ($license) {
+
+                            // });
                         }
                     }
                 }

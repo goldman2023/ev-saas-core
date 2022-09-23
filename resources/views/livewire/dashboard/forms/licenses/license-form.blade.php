@@ -7,7 +7,7 @@
     license: @entangle('license').defer,
     license_data: @entangle('license_data').defer,
     form_type: @js($formType),
-}" 
+}"
 wire:loading.class="opacity-30 pointer-events-none"
 @display-modal.window="
     if($event.detail.id === id) {
@@ -21,11 +21,14 @@ wire:loading.class="opacity-30 pointer-events-none"
         <!-- License Name-->
         <div class="flex flex-col" x-data="{}">
             <label class="block text-sm font-medium text-gray-900 mb-2">
-                {{ translate('License Name') }}
+                {{ translate('License Name') }} <br>
+                <small class="font-normal"> {{ translate('This field will be visible in Pixpro application license info for customer') }} </small>
             </label>
 
-            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.input field="license.license_name" :x="true" />
+            <div class="mt-1 sm:mt-0 sm:col-span-2" x-data="{
+                license.license_name = 'labas'
+            }">
+                <x-dashboard.form.input value="Manual" field="license.license_name" :x="true" />
             </div>
         </div>
         <!-- END License Name -->
@@ -49,7 +52,7 @@ wire:loading.class="opacity-30 pointer-events-none"
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.input field="license.license_type" :x="true" />
+                <x-dashboard.form.input field="license.license_type" placeholder="Manual" disabled="true" value="manual" :x="true" />
             </div>
         </div>
         <!-- END License Type -->

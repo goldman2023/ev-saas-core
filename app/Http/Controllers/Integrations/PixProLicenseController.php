@@ -11,9 +11,11 @@ class PixProLicenseController extends Controller
 
     public function index()
     {
-        // Requires main config
-        require_once 'config.php';
-        $api          = new Pixpro_API();
-        dd("labas");
+
+    }
+
+    public function licenses_index() {
+        return view('frontend.dashboard.crm.licenses.index', );
+
     }
 }

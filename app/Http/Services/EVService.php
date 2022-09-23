@@ -340,6 +340,23 @@ class EVService
                             },
                         ],
                     ],
+                    [
+                        'label' => translate('License management'),
+                        'icon' => 'heroicon-o-database',
+                        'route' => route('crm.licenses'),
+                        'route_name' => 'crm.licenses',
+                        'is_active' => areActiveRoutes(['crm.licenses']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_licenses'],
+                        /* TODO: Add expiring licenses count */
+                        // 'badge' => [
+                        //     'class' => 'badge-info',
+                        //     'content' => function () {
+
+                        //         return User::byDays(10)->count() . ' Today';
+                        //     },
+                        // ],
+                    ],
 
                     /* TODO: Uncomment this once we have customers page */
                     /* [
