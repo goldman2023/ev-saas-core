@@ -2985,13 +2985,13 @@ class StripeService
                         // This means that Trial end_date was changed from Stripe
                         $invoice_id = $stripe_subscription->metadata->invoice_id;
                         $existing_invoice = Invoice::query()->withoutGlobalScopes()->find($invoice_id);
-
+                        
                         if(!empty($existing_invoice)) {
-                            $existing_invoice->end_date = $previous_attributes?->trial_end ?? $existing_invoice->end_date;
+                            $existing_invoice->end_date = $stripe_subscription?->trial_end ?? $existing_invoice->end_date;
                             $existing_invoice->saveQuietly();
                         }
 
-                        $subscription->end_date = $previous_attributes?->trial_end ?? $subscription->end_date;
+                        $subscription->end_date = $stripe_subscription?->trial_end ?? $subscription->end_date;
                     }
 
                 }
