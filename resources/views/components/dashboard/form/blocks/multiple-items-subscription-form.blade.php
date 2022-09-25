@@ -11,6 +11,7 @@
             current_plan_mode: '{{ auth()->user()->subscriptions?->first()?->order?->invoicing_period ?? '' }}',
             current_plan_id: {{ auth()->user()->subscriptions?->first()?->items->first()?->id ?? 'null' }},
             current_is_trial: @js(auth()->user()?->subscriptions?->first()?->isTrial()),
+            current_end_date: @js(auth()->user()?->subscriptions?->first()?->end_date->timestamp),
             addToSubscriptionCart(plan_id, plan_slug, qty, month_price, annual_price) {
                 if(this.plans_cart.hasOwnProperty(plan_slug)) {
                     // Add qty to existing plan in cart
@@ -320,7 +321,7 @@
                                     <th scope="row" colspan="3" class="hidden pl-6 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell md:pl-0">{{ translate('Total due today') }}</th>
                                     <th scope="row" class="pl-4 pr-3 pt-4 text-left text-sm font-semibold text-gray-900 sm:hidden">{{ translate('Total due today') }}</th>
                                     <td class="sm:hidden py-4 px-3 text-right text-sm text-gray-500 table-cell"></td>
-                                    <td class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0" x-text="FX.formatPrice(projected_invoice.amount_due / 100)"></td>
+                                    <td class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0" x-text="current_is_trial ? FX.formatPrice(0) : FX.formatPrice(projected_invoice.amount_due / 100)"></td>
                                 </tr>
                                 <tr>
                                     <th scope="row" colspan="3" class="hidden pl-6 pr-3 pt-4 text-right text-sm font-semibold text-gray-900 sm:table-cell md:pl-0"
@@ -331,8 +332,15 @@
                                     <td class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-gray-900 sm:pr-6 md:pr-0" x-text="FX.formatPrice(projected_invoice.total_price_without_prorations / 100)"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="100%" class="pl-3 pr-4 pt-1 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0" 
-                                        x-text="'{{ translate('What you will pay per') }}'+' '+(pricing_mode)+' {{ translate('starting from') }}'+' '+(DateTime.fromSeconds(projected_invoice.period_start).plus(pricing_mode === 'year' ? { year: 1 } : { month: 1 }).toFormat('DD'))"></td>
+                                    <template x-if="current_is_trial">
+                                        <td colspan="100%" class="pl-3 pr-4 pt-1 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0" 
+                                        x-text="'{{ translate('What you will pay per') }}'+' '+(pricing_mode)+' {{ translate('starting from') }}'+' '+(DateTime.fromSeconds(current_end_date).toFormat('DD'))"></td>
+                                    </template>
+
+                                    <template x-if="!current_is_trial">
+                                        <td colspan="100%" class="pl-3 pr-4 pt-1 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0" 
+                                            x-text="'{{ translate('What you will pay per') }}'+' '+(pricing_mode)+' {{ translate('starting from') }}'+' '+(DateTime.fromSeconds(projected_invoice.period_start).plus(pricing_mode === 'year' ? { year: 1 } : { month: 1 }).toFormat('DD'))"></td>
+                                    </template>
                                 </tr>
                             </tfoot>
                         </table>
