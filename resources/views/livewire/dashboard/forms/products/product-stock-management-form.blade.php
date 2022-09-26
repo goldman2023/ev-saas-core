@@ -17,7 +17,7 @@
             <div class="grid grid-cols-12 gap-8 mb-10">
 
                 {{-- Left panel --}}
-                <div class="col-span-12 xl:col-span-8  ">
+                <div class="col-span-12 md:col-span-8  ">
                     {{-- Main Stock Management--}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                         <div class="w-full">
@@ -35,14 +35,14 @@
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('SKU') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <input type="text" class="form-standard @error('product.sku') is-invalid @enderror"
                                             placeholder="{{ translate('Product SKU') }}"
                                             wire:model.defer="product.sku" />
 
                                     <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
-                                
+
                                     <x-system.invalid-msg field="product.sku"></x-system.invalid-msg>
                                 </div>
                             </div>
@@ -50,16 +50,16 @@
 
                             {{-- Barcode --}}
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                        
+
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Barcode') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <input type="text" class="form-standard @error('product.barcode') is-invalid @enderror"
                                             placeholder="{{ translate('Product barcode') }}"
                                             wire:model.defer="product.barcode" />
-                                
+
                                     <small class="text-muted">{{ translate('Leave empty if you want to add only Barcode of the variations.') }}</small>
 
                                     <x-system.invalid-msg field="product.barcode"></x-system.invalid-msg>
@@ -75,8 +75,8 @@
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                    <button type="button" @click="use_serial = !use_serial" 
-                                                :class="{'bg-primary':use_serial, 'bg-gray-200':!use_serial}" 
+                                    <button type="button" @click="use_serial = !use_serial"
+                                                :class="{'bg-primary':use_serial, 'bg-gray-200':!use_serial}"
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                             <span :class="{'translate-x-5':use_serial, 'translate-x-0':!use_serial}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
@@ -92,8 +92,8 @@
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                    <button type="button" @click="allow_out_of_stock_purchases = !allow_out_of_stock_purchases" 
-                                                :class="{'bg-primary':allow_out_of_stock_purchases, 'bg-gray-200':!allow_out_of_stock_purchases}" 
+                                    <button type="button" @click="allow_out_of_stock_purchases = !allow_out_of_stock_purchases"
+                                                :class="{'bg-primary':allow_out_of_stock_purchases, 'bg-gray-200':!allow_out_of_stock_purchases}"
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                             <span :class="{'translate-x-5':allow_out_of_stock_purchases, 'translate-x-0':!allow_out_of_stock_purchases}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
@@ -111,8 +111,8 @@
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <div class="grid grid-cols-10 gap-3">
                                             <div class="col-span-6">
-                                                <input type="number" 
-                                                        step="0.01" 
+                                                <input type="number"
+                                                        step="0.01"
                                                         class="form-standard @error('product.min_qty') is-invalid @enderror"
                                                         placeholder="{{ translate('0.00') }}"
                                                         wire:model.defer="product.min_qty" />
@@ -133,8 +133,8 @@
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <div class="grid grid-cols-10 gap-3">
                                             <div class="col-span-6">
-                                                <input type="number" 
-                                                        step="0.01" 
+                                                <input type="number"
+                                                        step="0.01"
                                                         class="form-standard @error('product.current_stock') is-invalid @enderror"
                                                         placeholder="{{ translate('0.00') }}"
                                                         wire:model.defer="product.current_stock" />
@@ -149,11 +149,11 @@
 
                             {{-- Unit --}}
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
-                            
+
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Unit') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <div class="grid grid-cols-10 gap-3">
                                         <div class="col-span-6">
@@ -173,7 +173,7 @@
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Stock visibility state') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col rounded-md shadow-sm ">
                                     <template x-for="(value, key) in @js(\App\Enums\StockVisibilityStateEnum::labels())">
                                         <div class="relative flex items-center mb-3">
@@ -195,7 +195,7 @@
                             {{-- END Stock Visibility State --}}
 
                         </div>
-                        
+
                     </div>
                     {{-- END Main Stock Management --}}
 
@@ -215,7 +215,7 @@
                                     {{-- @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2']) --}}
                                     <span>{{ translate('Add new') }}</span>
                                 </button>
-                            </div> 
+                            </div>
                         </div>
 
                         <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
@@ -292,7 +292,7 @@
 
     <livewire:dashboard.forms.serial-numbers.serial-number-form-modal :product="$product"></livewire:dashboard.forms.serial-numbers.serial-number-form-modal>
 
-    
+
     <!-- Product Variations CARD -->
     @if($product->useVariations() && $product->hasVariations())
     <div class="card container-fluid py-3 mt-3">

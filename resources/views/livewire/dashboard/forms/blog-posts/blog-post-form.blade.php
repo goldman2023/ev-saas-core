@@ -39,7 +39,7 @@
             <div class="grid grid-cols-12 gap-8 mb-10">
 
                 {{-- Left side --}}
-                <div class="col-span-12 xl:col-span-8">
+                <div class="col-span-12 md:col-span-8">
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                         <div>
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Blog post content') }}
@@ -358,7 +358,7 @@
                 {{-- END Left side --}}
 
                 {{-- Right side --}}
-                <div class="col-span-12 xl:col-span-4">
+                <div class="col-span-12 md:col-span-4">
 
                     {{-- Actions --}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">

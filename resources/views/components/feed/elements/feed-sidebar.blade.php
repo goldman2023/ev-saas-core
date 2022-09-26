@@ -5,17 +5,22 @@
         <!-- Profile -->
         <div class="flex items-center space-x-3 mb-3">
             <div class="flex-shrink-0 h-12 w-12">
+                <a href="{{ auth()->user()->getPermalink() }}">
                 <img class="h-12 w-12 rounded-full object-contain bg-white" src="{{ auth()->user()->getThumbnail() }}"
-                    alt="">
+                    alt="{{ translate('Profile picture') }}">
+                </a>
             </div>
             <div class="space-y-1">
                 <div class="text-sm font-medium text-gray-900">
+                <a href="{{ auth()->user()->getPermalink() }}">
+
                     {{ auth()->user()->name }}
+                </a>
                 </div>
                 <a href="{{ auth()->user()->getPermalink() }}" class="group flex items-center space-x-2.5">
 
                     <span class="text-sm text-gray-500 group-hover:text-gray-900 font-medium">
-                        @ {{auth()->user()->username }}
+                        @<span></span>{{auth()->user()->username }}
                     </span>
                 </a>
             </div>

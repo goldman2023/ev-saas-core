@@ -17,7 +17,7 @@
             <div class="grid grid-cols-12 gap-8 mb-10">
 
                 {{-- Left panel --}}
-                <div class="col-span-12 xl:col-span-8" x-cloak>
+                <div class="col-span-12 md:col-span-8" x-cloak>
                     @foreach($variations as $index => $row)
                         <div class="bg-white shadow rounded-lg divide-y divide-gray-200 mb-4" x-data="{
                             show: @js($index === $last_edited_index ? true : false),
@@ -29,7 +29,7 @@
 
                                 @if($this->attributes->isNotEmpty())
                                     @php $display_variation_atts = []; @endphp
-                                    @foreach($this->attributes as $key => $att) 
+                                    @foreach($this->attributes as $key => $att)
                                         @php
                                             $selected_key = array_search($att->id, array_column($row->variant, 'attribute_id'));
                                             $selected = $row->variant[$selected_key] ?? null;
@@ -45,7 +45,7 @@
                                     @endforeach
                                 @endif
 
-                                @if($row->id) 
+                                @if($row->id)
                                     <div class="badge-success">
                                         {{ translate('Active') }}
                                     </div>
@@ -55,7 +55,7 @@
                                     </div>
                                 @endif
 
-                                @if($row->current_stock > $row->low_stock_qty && $row->current_stock > 0) 
+                                @if($row->current_stock > $row->low_stock_qty && $row->current_stock > 0)
                                     <div class="badge-success ml-2">
                                         {{ translate('In stock') }}
                                     </div>
@@ -73,8 +73,8 @@
                             {{-- Variation Body --}}
                             <div class="px-4 py-5 sm:p-6" x-show="show" wire:ignore.self>
                                 <div class="grid grid-cols-12 gap-5 w-full">
-                                    <div class="col-span-2">     
-                                        <x-dashboard.form.image-selector field="variation.thumbnail" 
+                                    <div class="col-span-2">
+                                        <x-dashboard.form.image-selector field="variation.thumbnail"
                                             id="variation-{{ $index }}-thumbnail" template="avatar" />
                                     </div>
                                     <div class="col-span-4 flex flex-col gap-y-2">
@@ -127,7 +127,7 @@
                                     </div>
                                 </div>
 
-                                
+
                             </div>
 
                             {{-- Variation Footer --}}
@@ -147,7 +147,7 @@
                                 </button>
                             </div>
                         </div>
-  
+
                     @endforeach
                 </div>
             </div>

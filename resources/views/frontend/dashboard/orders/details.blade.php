@@ -22,7 +22,7 @@
 </x-dashboard.section-headers.section-header>
 
 <div class="bg-gray-50">
-    <div class="max-w-2xl mx-auto pt-16 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div class="max-w-2xl mx-auto pt-16 sm:py-16 sm:px-6 lg:max-w-7xl lg:px-8">
         <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 mb-3">
             <div class="flex items-center sm:space-x-4">
                 <h1 class="ftext-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{{ translate('Order') }}:
