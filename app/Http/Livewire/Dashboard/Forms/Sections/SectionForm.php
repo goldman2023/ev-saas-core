@@ -50,7 +50,7 @@ class SectionForm extends Component
             // $this->section->content = base64_encode($this->section->content);
         }
 
-        
+
 
         $this->section_uuid = \UUID::generate(4)->string;
     }
@@ -62,6 +62,7 @@ class SectionForm extends Component
             'section.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'section.type' => [Rule::in(SectionTypeEnum::toValues())],
             'section.content' => ['nullable'],
+            'section.html_blade' => ['nullable'],
         ];
 
         if($this->is_update) {
@@ -74,7 +75,7 @@ class SectionForm extends Component
     protected function messages()
     {
         return [
-            
+
         ];
     }
 
@@ -85,7 +86,7 @@ class SectionForm extends Component
 
     public function saveSection()
     {
-        $this->section->content = base64_decode($this->section->content);
+        $this->section->html_blade = base64_decode($this->section->html_blade);
 
         try {
             $this->validate();

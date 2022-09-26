@@ -34,7 +34,8 @@ class WeSectionController extends Controller
     public function preview(Request $request, $id)
     {
         $section = Section::findOrFail($id);
-        $section_content = \WeEngine::twig()->render(Section::class.'|'.$id, []);
+        // $section_content = \WeEngine::twig()->render(Section::class.'|'.$id, []);
+        $section_content = $section->html_blade;
 
         return view('frontend.dashboard.sections.preview', compact('section', 'section_content'));
     }
