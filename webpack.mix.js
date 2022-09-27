@@ -31,8 +31,6 @@ const { hideBin } = require('yargs/helpers');
 // That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
 let theme = 'EvTailwind';
 
-let childThemes = ['EvSaasFox', 'ev-saas-gun'];
-
 mix.setPublicPath(`public/themes/${theme}`)
     .webpackConfig({
         resolve: {

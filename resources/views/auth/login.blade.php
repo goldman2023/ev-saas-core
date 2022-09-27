@@ -58,7 +58,7 @@
                             class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ">
                             @endfor
                     </div>
-                    <div class="ml-4 font-medium text-gray-400 ">
+                    <div class="ml-6 font-medium text-gray-400 ">
                         {{ translate('More than') }} {{ get_public_user_count() }}
                         {{ translate('people joined us, it\'s your turn') }}</div>
                 </div>

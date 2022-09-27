@@ -12,10 +12,12 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
-    <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user_id]) }}">
-        <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
-         {{ $row->user->email }}
-     </a>
+    @isset($row->user)
+        <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user->id]) }}">
+            <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
+            {{ $row->user->email }}
+        </a>
+     @endisset
 
     {{-- <span class="text-14">{{ $row->billing_first_name.' '.$row->billing_last_name }}</span> --}}
 </x-livewire-tables::table.cell>

@@ -139,30 +139,14 @@ Route::middleware([
         return csrf_token();
     });
 
-    // Tracking
-    // Route::get('/aff{id}', [AffiliateBannerController::class, 'track'])->name('affiliate_banner.track');
-    // Route::get('/link{id}', [CompanyController::class, 'track_website_clicks'])->name('website_clicks.track');
-    // Tracking - END
-
     // Route::resource('shops', 'ShopController');
     Route::resource('ev-social-commerce', \App\Http\Controllers\SocialCommerceController::class);
-
-    // Auth routes + email verification + password reset
-
-    // Route::get('/email/resend', [VerificationController::class, 'resend'])->name('email.verification.resend');
-    // Route::get('/verification-confirmation/{code}', [VerificationController::class, 'verification_confirmation'])->name('email.verification.confirmation');
-    // Route::get('/email_change/callback', [HomeController::class, 'email_change_callback'])->name('email_change.callback');
-
-
-    // Route::post('/language', [LanguageController::class, 'changeLanguage'])->name('language.change');
-    // Route::post('/currency', [CurrencyController::class, 'changeCurrency'])->name('currency.change');
 
     Route::get('/social-login/redirect/{provider}', [SocialController::class, 'redirectLoginToProvider'])->name('social.login');
     Route::get('/social-login/{provider}/callback', [SocialController::class, 'handleProviderLoginCallback'])->name('social.login.callback');
     Route::get('/social-connect/redirect/{provider}', [SocialController::class, 'redirectConnectToProvider'])->name('social.connect');
     Route::get('/social-connect/{provider}/callback', [SocialController::class, 'handleProviderConnectCallback'])->name('social.connect.callback');
 
-    // Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 
@@ -192,8 +176,6 @@ Route::middleware([
     Route::get('/blog', [EVBlogPostController::class, 'blog_archive'])->name('blog.archive');
     Route::get('/blog/{category_slug}', [EVBlogPostController::class, 'blog_archive_by_category'])->name('blog.category.archive');
 
-    // Route::get('/news/{slug}', [BlogController::class, 'blog_details'])->name('news.details');
-    // Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
     Route::get('/shop/{shop_slug}/blog/post/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
     Route::get('/blog/post/{slug}', [EVBlogPostController::class, 'single'])->name('blog.post.single');
 
@@ -235,10 +217,7 @@ Route::middleware([
     /* TODO: Move some logic to brand, category, seller controllers as home controller holds too much logic*/
     Route::get('/brands', [HomeController::class, 'all_brands'])->name('brands.all');
     Route::get('/categories', [HomeController::class, 'all_categories'])->name('categories.all');
-    // Route::get('/sellers', [CompanyController::class, 'index'])->name('sellers');
 
-    // Route::resource('support_ticket', 'SupportTicketController');
-    // Route::post('support_ticket/reply', [App\Http\Controllers\SupportTicketController::class, 'seller_store'])->name('support_ticket.seller_store');
 
     //Blog Section
     Route::get('/news', [BlogController::class, 'all_blog'])->name('news');
@@ -247,9 +226,6 @@ Route::middleware([
 
     // Chat
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-
-    /* Customer Management - BY EIM */
-    // Route::resource('customers', 'CustomerController');
 
     // Tenant Management routes - added from SaaS Boilerplate
     Route::get('/impersonate/{token}', function ($token) {

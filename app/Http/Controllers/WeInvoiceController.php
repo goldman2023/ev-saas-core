@@ -85,8 +85,8 @@ class WeInvoiceController extends Controller
                 $upcoming_invoice->id = null;
                 $upcoming_invoice->invoice_number = 'invoice-draft';
                 $upcoming_invoice->payment_status = 'upcoming';
-                $upcoming_invoice->start_date = $stripe_upcoming_invoice['period_start'];
-                $upcoming_invoice->end_date = $stripe_upcoming_invoice['period_end'];
+                $upcoming_invoice->start_date = '';
+                $upcoming_invoice->end_date = '';
                 $upcoming_invoice->real_invoice_number = null;
                 $upcoming_invoice->real_invoice_prefix = 'AA';
                 $upcoming_invoice->created_at = \Carbon::createFromTimestamp($stripe_upcoming_invoice['created']);

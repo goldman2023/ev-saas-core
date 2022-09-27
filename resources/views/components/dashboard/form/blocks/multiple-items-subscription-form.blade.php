@@ -333,19 +333,19 @@
                                 </tr>
                                 <tr>
                                     <template x-if="current_is_trial">
-                                        <td colspan="100%" class="pl-3 pr-4 pt-1 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0" 
+                                        <td colspan="100%" class="pl-3 pr-4 pt-1 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0"
                                         x-text="'{{ translate('What you will pay per') }}'+' '+(pricing_mode)+' {{ translate('starting from') }}'+' '+(DateTime.fromSeconds(current_end_date).toFormat('DD'))"></td>
                                     </template>
 
                                     <template x-if="!current_is_trial">
-                                        <td colspan="100%" class="pl-3 pr-4 pt-1 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0" 
+                                        <td colspan="100%" class="pl-3 pr-4 pt-1 text-right text-sm font-norma; text-gray-500 sm:pr-6 md:pr-0"
                                             x-text="'{{ translate('What you will pay per') }}'+' '+(pricing_mode)+' {{ translate('starting from') }}'+' '+(DateTime.fromSeconds(projected_invoice.period_start).plus(pricing_mode === 'year' ? { year: 1 } : { month: 1 }).toFormat('DD'))"></td>
                                     </template>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
-                    
+
                     <template x-if="!selectedIsActive()">
                         <div class="w-full flex justify-center mt-4">
                             @if(\Payments::stripe()->stripe_prorations_enabled && !auth()->user()->isOnTrial() && auth()->user()->isSubscribed())
@@ -379,7 +379,7 @@
                             @endif
                         </div>
                     </template>
-                    
+
                 </div>
             </template>
 
@@ -399,14 +399,14 @@
 </x-system.form-modal>
 
 <x-system.form-modal id="confirm-subscription-update-modal" title="{{ translate('Are you sure you want to change subscription plan?') }}" :prevent-close="true" class="!max-w-2xl !pt-4" title-class="text-20 font-semibold">
-    <div class="w-full" 
+    <div class="w-full"
         x-data="{
             amount_due: null,
             total_price_without_prorations: null,
             starting_from: null,
             interval: null,
-        }"    
-        @display-modal.window="if($event.detail.id == 'confirm-subscription-update-modal') { 
+        }"
+        @display-modal.window="if($event.detail.id == 'confirm-subscription-update-modal') {
             amount_due = $event.detail.amount_due;
             total_price_without_prorations = $event.detail.total_price_without_prorations;
             starting_from = $event.detail.starting_from;
@@ -425,7 +425,7 @@
         <div class="w-full pb-5">
             <span class="text-12 text-gray-500">{{ translate('*Note: It may take some time for licenses to be properly updated.') }}</span>
         </div>
-        
+
         <div class="w-full flex gap-x-3 justify-center">
             <div class="btn-primary" @click="$dispatch('init-checkout'); show = false;">
                 {{ translate('Confirm') }}
@@ -443,7 +443,7 @@
     </div>
     <div class="w-full flex gap-x-3 justify-center">
         <a href="{{ route('stripe.portal_session') }}" class="btn-primary" target="_blank">
-            {{ translate('Go to Biling Portal') }}
+            {{ translate('Go to Billing Portal') }}
         </a>
         <div class="btn-danger-outline" @click="show = false;">
             {{ translate('Cancel') }}
