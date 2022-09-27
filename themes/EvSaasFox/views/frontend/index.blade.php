@@ -26,20 +26,20 @@
                         </p>
                         <ul>
                             <li class="mb-6 flex items-center">
-                                <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
+                                @svg('heroicon-o-check-circle', ['class' => 'text-green-400 h-6 h-6 mr-2'])
                                 <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
 
                                     {{ translate('Find and share best resources for knowledge') }}
                                 </p>
                             </li>
                             <li class="mb-6 flex items-center">
-                                <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
+                                @svg('heroicon-o-check-circle', ['class' => 'text-green-400 h-6 h-6 mr-2'])
                                 <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
                                     {{ translate('Get mentoring and consulting from FoxAsk Mentors') }}
                                 </p>
                             </li>
                             <li class="flex items-center">
-                                <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
+                                @svg('heroicon-o-check-circle', ['class' => 'text-green-400 h-6 h-6 mr-2'])
                                 <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
                                     {{ translate('Take part in online events and courses') }}
                                 </p>
