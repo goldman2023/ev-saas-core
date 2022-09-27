@@ -13,7 +13,7 @@
         <x-slot name="content">
             @if(auth()->user()?->isSubscribed() ?? false)
             <a href="{{ route('stripe.portal_session') }}" class="btn-primary">
-                {{ translate('Biling Portal') }}
+                {{ translate('Billing Portal') }}
             </a>
             @endif
         </x-slot>
