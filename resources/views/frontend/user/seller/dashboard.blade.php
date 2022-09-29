@@ -5,12 +5,9 @@
 <section>
     <div class="grid grid-cols-3">
         <div class="col-span-1">
-            {{-- <x-default.dashboard.widgets.onboarding-widget></x-default.dashboard.widgets.onboarding-widget> --}}
         </div>
 
         <div class="col-span-1">
-            {{-- <x-default.promo.shop-subscribe></x-default.promo.shop-subscribe> --}}
-
         </div>
     </div>
 </section>
