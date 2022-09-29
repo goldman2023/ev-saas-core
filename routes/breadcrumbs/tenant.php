@@ -56,3 +56,33 @@ Breadcrumbs::for('product', function (BreadcrumbTrail $trail, $product, $content
     //     $trail->push($category->name, $category->getPermalink($content_type));
     // }
 });
+
+
+Breadcrumbs::for('blog', function (BreadcrumbTrail $trail, $blog_post = null, $content_type = null) {
+
+    $trail->push('Blog', route('blog.archive'));
+
+    if($blog_post) {
+        $primary_category = $blog_post->categories()->first();
+
+        /* TODO: Add blog category */
+        $trail->push($primary_category->name , route('blog.category.archive', $primary_category->slug));
+
+        $trail->push($blog_post->name, $blog_post->getPermalink($content_type));
+    }
+
+
+    // $trail->parent('home');
+
+    // if (isset($category->ancestors)) {
+    //     $ancestors = $category->ancestors;
+
+    //     if (!empty($ancestors)) {
+    //         foreach ($ancestors as $ancestor) {
+    //             $trail->push($ancestor->name, $ancestor->getPermalink($content_type));
+    //         }
+    //     }
+
+    //     $trail->push($category->name, $category->getPermalink($content_type));
+    // }
+});

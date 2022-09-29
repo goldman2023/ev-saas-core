@@ -64,7 +64,10 @@
 @endpush
 
 @section('content')
+{{-- {{ Breadcrumbs::render('blog', $blog_post) }} --}}
+
 <section class="relative  lg:pt-[120px]  lg:pb-[120px]  sm:pt-[90px]  sm:pb-[90px]  pt-[50px]  pb-[50px]   bg-[#f5f5f5]   ">
+
     <div class="mx-auto max-w-4xl px-8 sm:px-4">
         <div class="text-center">
             <div we-slot="" name="title_slot" we-title="Section Title" class="w-full mb-6">
@@ -72,7 +75,7 @@
                     {{ $blog_post->name }}
                 </h1>
             </div>
-            
+
             <div class="w-full flex flex-col sm:flex-row justify-center items-center">
                 @if(!empty($authors?->first()))
                     <div class="flex items-center mb-3 sm:mb-0 mr-0 sm:mr-10">
@@ -91,7 +94,7 @@
 
 <section class="relative  lg:pt-[80px]  lg:pb-[80px]  sm:pt-[50px]  sm:pb-[50px]  pt-[30px]  pb-[30px]  bg-white   ">
     <div class="mx-auto max-w-6xl px-8 sm:px-4">
-        
+
         <div class="grid grid-cols-12 gap-8">
             <div class="col-span-12 flex flex-col">
                 <div class="w-full aspect-square inline-flex items-center justify-center rounded-md mb-10">
@@ -123,7 +126,7 @@
                         </div>
                     </div> --}}
                 @endif
-                
+
             </div>
             {{-- <div class="col-span-4">
                 <div class="w-full">
