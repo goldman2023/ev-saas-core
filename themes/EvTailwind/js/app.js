@@ -6,7 +6,7 @@
  * LOAD VENDOR SCRIPTS
  */
 
-// window._ = require('lodash');
+window._ = require('lodash');
 
 
 /**

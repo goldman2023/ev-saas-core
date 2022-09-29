@@ -128,7 +128,7 @@
                             </a>
                             <p class="mt-6 text-center text-base font-medium text-gray-500">
                                 {{ translate('Wanna try it out for free') }}?
-                                <a href="{{ route('user.login') }}" class="text-primary hover:text-primary-hover"> {{ translate('Get a Trial') }}
+                                <a href="{{ route('user.registration') }}" class="text-primary hover:text-primary-hover"> {{ translate('Get a Trial') }}
                                 </a>
                             </p>
                         @else
