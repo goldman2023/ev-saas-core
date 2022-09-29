@@ -155,4 +155,10 @@ class LicensesTable extends DataTableComponent
 
         $this->emit('refreshDatatable');
     }
+
+    public function removeLicense(License $license) {
+        do_action('license.remove', $license, $this->user, $this);
+
+        $this->emit('refreshDatatable');
+    }
 }

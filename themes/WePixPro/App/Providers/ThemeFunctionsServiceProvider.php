@@ -234,6 +234,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 pix_pro_disconnect_license($license, $user, $form);
             }, 20, 3);
 
+            // PixPro License removal
+            add_action('license.remove', function ($license, $user, $form) {
+                pix_pro_remove_license($license, $user, $form);
+            }, 20, 3);
+
 
             // Update User password
             add_action('user.password.updated', function ($user, $newPassword, $oldPassword) {
