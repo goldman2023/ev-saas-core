@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,24 +25,13 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
-
-
     @include('frontend.layouts.global-partials.all')
-
-
-
-
     @livewireStyles
-
-
-    {{-- <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script> --}}
 
     @stack('head_scripts')
 </head>
 
 <body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{
-    all_categories: @js(Categories::getAllFormatted(true)),
-    all_categories_flat: @js(Categories::getAllFormatted(true, true)),
 }"
     @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
 
@@ -69,30 +57,27 @@
     <livewire:cart.cart template="flyout-cart" />
     <!-- Wishlist -->
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
-    {{-- <x-panels.flyout-wishlist></x-panels.flyout-wishlist> --}}
     <livewire:flyout.wishlist />
 
-    {{-- <x-panels.flyout-categories></x-panels.flyout-categories> --}}
 
     @guest
-    <x-panels.flyout-auth></x-panels.flyout-auth>
+        <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
 
     @auth
-    <x-panels.flyout-profile></x-panels.flyout-profile>
-    <livewire:we-media-library />
+        <x-panels.flyout-profile></x-panels.flyout-profile>
+        <livewire:we-media-library />
     @endauth
 
     @if(get_tenant_setting('chat_feature', false))
-    @auth
-    <x-default.chat.widget-chat></x-default.chat.widget-chat>
-    @endauth
+        @auth
+            <x-default.chat.widget-chat></x-default.chat.widget-chat>
+        @endauth
     @endif
 
 
     <x-system.info-modal></x-system.info-modal>
     <x-system.validation-errors-toast timeout="5000"></x-system.validation-errors-toast>
-
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
 
@@ -108,12 +93,5 @@
     @stack('footer_scripts')
 
     <x-integrations.open-replay></x-integrations.open-replay>
-
-    {{-- TODO: Global Plausible Script --}}
-
-    @auth
-    @endauth
-
 </body>
-
 </html>

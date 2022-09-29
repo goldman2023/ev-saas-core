@@ -29,6 +29,7 @@
                         name="email"
                         class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md @error('email') input-invalid @enderror"
                         placeholder="you@example.com"
+                        autocomplete="current-password"
                         wire:model.defer="email"
                         data-test="we-login-email">
 
@@ -46,6 +47,7 @@
                         name="password"
                         class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md @error('password') input-invalid @enderror"
                         wire:model.defer="password"
+                        autocomplete="current-password"
                         data-test="we-login-password">
 
                         <x-system.invalid-icon field="password"/>
