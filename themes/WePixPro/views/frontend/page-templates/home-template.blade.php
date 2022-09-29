@@ -206,8 +206,7 @@
         </div>
         <div class="client-content pt-10 grid grid-cols-2 gap-10">
             <div class="col-span-2 md:col-span-1">
-                <div class="px-5 sm:px-8 py-5 bg-white shadow-2xl rounded-sm hover:shadow-4xl transition-all duration-300"
-                    style="background-image: url(assets/images/quate.png); background-repeat: no-repeat; background-position: top 20px center;">
+                <div class="px-5 sm:px-8 py-5 bg-white shadow-2xl rounded-sm hover:shadow-4xl transition-all duration-300">
                     <p class="py-7 text-center"> “Thanks to PixPro guys we were able to expand our service (we were not
                         aware before) for our customers by using the PixPro photogrammetry app.”</p>
                     <div class="flex gap-4 items-center justify-center pb-4 text-center">
@@ -219,8 +218,7 @@
                 </div>
             </div>
             <div class="col-span-2 md:col-span-1">
-                <div class="px-5 sm:px-8 py-5 bg-white shadow-2xl rounded-sm hover:shadow-4xl transition-all duration-300"
-                    style="background-image: url(assets/images/quate.png); background-repeat: no-repeat; background-position: top 20px center;">
+                <div class="px-5 sm:px-8 py-5 bg-white shadow-2xl rounded-sm hover:shadow-4xl transition-all duration-300">
                     <p class="py-7 text-center"> “Now it is easier than ever before – fast and accurate design of
                         solar panels on the roof.
                         And there is no need to
