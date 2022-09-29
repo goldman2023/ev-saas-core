@@ -6,7 +6,7 @@
         "watch": "npx mix watch --mix-config='themes/EvTailwind/webpack.mix.js'",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
-        "prod": "npm run production",
+        "prod": "npm run production --mix-config='themes/EvTailwind/webpack.mix.js",
         "production": "mix --production",
         "cypress:open": "cypress open"
     },
