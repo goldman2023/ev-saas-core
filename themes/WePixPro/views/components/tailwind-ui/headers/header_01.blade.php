@@ -11,7 +11,10 @@
             <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <a href="{{ route('home') }}">
-                        <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-8 w-auto sm:h-10"
+                        <x-tenant.system.image alt="{{ get_site_name() }} logo"
+                         height="32px"
+                         width="145px"
+                        class="h-8 w-auto sm:h-10"
                             :image="get_site_logo()">
                         </x-tenant.system.image>
                     </a>

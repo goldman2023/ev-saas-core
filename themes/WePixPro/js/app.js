@@ -1,0 +1,1 @@
+require('../../EvTailwind/js/app');
