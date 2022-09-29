@@ -6,16 +6,22 @@
 @section('panel_content')
 <section>
     <div class="grid grid-cols-12 gap-8">
-
-        <div class="col-span-12 sm:col-span-8">
-            <div class="w-full pb-5 mb-5 border-b border-gray-200">
-                <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
-                    <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Customer Details') }}: {{ $user->email
-                        }}</h4>
-                </div>
-
-                {{-- TODO: Add nova link here --}}
+        <div class="col-span-12 w-full pb-5 mb-0 border-b border-gray-200">
+            <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
+                <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Customer Details') }}: {{ $user->email
+                    }}</h4>
             </div>
+        </div>
+        @if($user->isSubscribed() ?? false)
+        <div class="col-span-12">
+            <x-dashboard.widgets.customer.dynamic-stats :user="$user">
+                </x-dashboard.widgets.business.dynamic-stats>
+        </div>
+        @endif
+        <div class="col-span-12 sm:col-span-8">
+            @if($user->licenses()->where('license_type', 'manual')->count() > 0)
+                <x-dashboard.alerts.user-details-alert></x-dashboard.alerts.user-details-alert>
+            @endif
             <div x-data="{  current_tab: 'subscriptions' }" class="we-tabs">
                 {{-- <x-dashboard.widgets.customers.data-tabs class="mb-3" :user="$user">
                 </x-dashboard.widgets.customers.data-tabs> --}}
