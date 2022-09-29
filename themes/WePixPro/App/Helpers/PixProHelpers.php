@@ -160,22 +160,41 @@ if (!function_exists('pix_pro_disconnect_license')) {
 }
 
 if (!function_exists('pix_pro_remove_license')) {
-    function pix_pro_remove_license($license, $pix_pro_user) {
+    function pix_pro_remove_license($license, $pix_pro_user, $form = null) {
         $route_paid = pix_pro_endpoint().'/paid/delete_specific_license/';
 
-        $body = pix_pro_add_auth_params([
-            "UserEmail" => $pix_pro_user['email'],
-            "UserPassword" => $license->user->getCoreMeta('password_md5'),
-            "LicenseId" => $license->getData('id'),
-        ]);
+        try {
+            $body = pix_pro_add_auth_params([
+                "UserEmail" => $pix_pro_user['email'],
+                "UserPassword" => $license->user->getCoreMeta('password_md5'),
+                "LicenseId" => $license->getData('id'),
+            ]);
 
-        $response = Http::withoutVerifying()->post($route_paid, $body);
-        $response_json = $response->json();
+            $response = Http::withoutVerifying()->post($route_paid, $body);
+            $response_json = $response->json();
 
-        if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
-            // If status is not success for any reason, log an error
-            Log::error(pix_pro_error($route_paid, 'There was an error while trying to remove a license(order) in pix-pro API DB, check the response below.', $response_json));
-        };
+            if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
+                // If status is not success for any reason, log an error
+                Log::error(pix_pro_error($route_paid, 'There was an error while trying to remove a license(order) in pix-pro API DB, check the response below.', $response_json));
+                
+                return false;
+            } else {
+                if(!empty($form)) {
+                    $form->inform(translate('You successfully removed your license!'), translate('Serial number: ').$license->serial_number, 'success');
+                }
+
+                $license->delete(); // Remove license
+                return true;
+            };
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+
+            if(!empty($form)) {
+                $form->inform(translate('There was an error while trying to remove a license.'), translate('Error: ').$e->getMessage(), 'success');
+            }
+
+            return false;
+        }
     }
 }
 
