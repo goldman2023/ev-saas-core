@@ -1,4 +1,4 @@
-<section class="relative z-[2]  mt-[-90px] lg:pt-[110px]  lg:pb-[60px]  sm:pt-[110px]  sm:pb-[40px]  pt-[60px]  pb-[30px]   bg-[#f5f5f5]   ">
+<section class="overflow-hidden relative z-[2]  mt-[-90px] lg:pt-[110px]  lg:pb-[60px]  sm:pt-[110px]  sm:pb-[40px]  pt-[120px]  pb-[40px]  bg-[#f5f5f5]">
     <div class="absolute z-[-1] top-0 bottom-0 left-0 right-0 flex justify-end overflow-y-hidden">
         @include('svg.bkgs.hero-shapes')
     </div>

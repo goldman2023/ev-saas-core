@@ -54,7 +54,7 @@ class EVBlogPostController extends Controller
                 ->published()->latest()->with(['authors'])
                 ->paginate(9)->withQueryString();
 
-                return view('frontend.blog.blog-archive', compact('blog_posts'));
+                return view('frontend.blog.blog-archive', compact('blog_posts', 'category'));
             }
 
         }
