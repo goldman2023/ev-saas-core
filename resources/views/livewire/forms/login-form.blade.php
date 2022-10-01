@@ -87,6 +87,8 @@
                 {{ translate('Sign Up') }}
             </a>
 
+
+
             {{-- <a class="text-12 font-semibold" href="{{ route('business.register') }}">
                 {{ translate('Business Sign Up') }}
             </a> --}}

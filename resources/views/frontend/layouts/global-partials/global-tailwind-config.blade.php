@@ -108,6 +108,16 @@ if($colors) {
             @apply hidden;
         }
 
+        /* Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+        display: none;
+        }
+
+        .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+        }
+
         *::-webkit-scrollbar { width: 0 !important }
 
         body::-webkit-scrollbar { width: 5px !important }
@@ -256,5 +266,15 @@ if($colors) {
             max-width: 16px !important;
         }
 
+        #blog_post_single_content table {
+            border: 1px solid black;
+        }
+
+        #blog_post_single_content table td {
+            border: 1px solid black;
+            padding: 3px;
+        }
+
     }
+
 </style>

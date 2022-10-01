@@ -78,7 +78,7 @@ $footer_3_menu_items = $footer_3_menu['menuItems'] ?? null;
                 </div>
 
             </div>
-            <div class="col-span-1 lg:col-span-2 mt-8 xl:mt-0">
+            <div class="col-span-1 lg:col-span-2 mt-8 md:mt-0">
                 <h3 class="text-sm font-semibold text-white tracking-wider uppercase">{{ translate('STAY UP TO DATE
                     WITH') }} {{ get_site_name() }}</h3>
                 <p class="mt-4 text-base text-gray-300">{{ translate('We promise, we will not use your contact

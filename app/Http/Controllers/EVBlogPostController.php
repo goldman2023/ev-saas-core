@@ -54,7 +54,7 @@ class EVBlogPostController extends Controller
                 ->published()->latest()->with(['authors'])
                 ->paginate(9)->withQueryString();
 
-                return view('frontend.blog.blog-archive', compact('blog_posts'));
+                return view('frontend.blog.blog-archive', compact('blog_posts', 'category'));
             }
 
         }
@@ -65,13 +65,9 @@ class EVBlogPostController extends Controller
 
     public function single(Request $request, $slug)
     {
-        if(\Auth::user()->isAdmin()) {
-            $blog_post = BlogPost::where('slug', $slug)->with(['authors', 'shop'])->first();
+        $blog_post = BlogPost::where('slug', $slug)->published()->with(['authors', 'shop'])->first();
 
-        } else {
-            $blog_post = BlogPost::where('slug', $slug)->published()->with(['authors', 'shop'])->first();
 
-        }
         if($blog_post) {
             $categories_idx = $blog_post->categories->pluck('id')->toArray();
             $related_blog_posts = BlogPost::whereHas('categories', function ($query) use($categories_idx) {

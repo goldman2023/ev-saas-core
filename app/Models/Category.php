@@ -141,7 +141,7 @@ class Category extends WeBaseModel
             // reason for this try/catch is actually EventServiceProvider which registers Observers before EVServiceProvider boot() method is loaded
             // Observers are loaded for Category class with method Category::observe() which has to run booted method of Category (current function), and this happens before Vendor facade is properly initated, hence the error!
         }
-        
+
     }
 
     /*
@@ -167,6 +167,11 @@ class Category extends WeBaseModel
         return $this->morphedByMany(Shop::class, 'subject', 'category_relationships');
     }
 
+    public function posts()
+    {
+        return $this->morphedByMany(BlogPost::class, 'subject', 'category_relationships');
+    }
+
     // TODO: Create Category groups. Each category group is related to specific content types.
     // TODO: Get rid of unnecessary categories tables in DB, like: blog_categories, home_categories.
     // TODO: Make sure in future we only use following tables: categories, category_translations, category_relationships, category_groups (not created), category_group_relationships (not created)
@@ -186,7 +191,7 @@ class Category extends WeBaseModel
     public function getTitlePathAttribute($value) {
         if(empty($this->slug_path))
             return '';
-            
+
         $title_path = explode(self::PATH_SEPARATOR, $this->slug_path);
 
         if(count($title_path) > 1) {
