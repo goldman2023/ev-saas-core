@@ -266,6 +266,15 @@ if($colors) {
             max-width: 16px !important;
         }
 
+        #blog_post_single_content table {
+            border: 1px solid black;
+        }
+
+        #blog_post_single_content table td {
+            border: 1px solid black;
+            padding: 3px;
+        }
+
     }
 
 </style>

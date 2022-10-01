@@ -13,7 +13,7 @@
         </h3>
         <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('All activities of this order are tracked here') }}</p>
     </div>
-    
+
     {{-- Live data badge end --}}
     <ul role="list" class="-mb-8">
         @if($acitivites?->isNotEmpty() ?? null)
@@ -45,7 +45,9 @@
                                             </a>
                                         </div>
                                         <p class="mt-0.5 text-sm text-gray-500">
-                                            {{ $item->description }} {{ translate('a') }} {{ class_basename($item->subject) }}
+                                            {{-- <a href="{{ $item->subject->getPermalink() }}"> --}}
+                                            {{ $item->description }} {{ translate('a') }} {{ class_basename($item->subject) }} #{{ $item->subject_id }}
+                                            {{-- </a> --}}
                                         </p>
                                     </div>
                                     <div class="mt-2 text-sm text-gray-700">
