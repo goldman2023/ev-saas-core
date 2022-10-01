@@ -27,7 +27,7 @@ class GrapeController extends Controller
 
 
 
-        $sections = apply_filters('theme-section-components', File::allFiles(public_path() . '/tailwindui/components/'));
+        $sections = [];
         $content = $page_html;
 
         // foreach($sections as $section) {
