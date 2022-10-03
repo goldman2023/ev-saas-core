@@ -54,7 +54,7 @@ class TenantSettingsService
         $data_types = $this->settingsDataTypes();
 
         $missing = array_diff_key($data_types, $settings);
-
+        
         if(!empty($missing)) {
             $this->clearCache();
 
@@ -294,6 +294,11 @@ class TenantSettingsService
 
             // Advanced
             'user_meta_fields_in_use' => 'array',
+            'include_phone_number_in_registration' => 'boolean',
+            'require_phone_number_in_registration' => 'boolean',
+            'enable_phone_number_login' => 'boolean',
+            'enable_2fa' => 'boolean',
+            
 
             // Notifications
             'system_notifications_list' => []

@@ -196,7 +196,7 @@ class Invoice extends WeBaseModel
 
         if($this->isFromStripe()) {
             $stripe_invoice = $this->getData(stripe_prefix('stripe_invoice_data'));
-            
+
             if(empty($stripe_invoice)) {
                 $stripe_invoice = \StripeService::stripe()->invoices->retrieve(
                     $this->getData(stripe_prefix('stripe_invoice_id')),
@@ -312,9 +312,13 @@ class Invoice extends WeBaseModel
                     $li_name = $item->name;
 
                     if($item->isSubscribable()) {
-                        $li_name = $item->name.' / '.$stripe_line_item['price']['recurring']['interval'].' ('.\Carbon::createFromTimestamp($this->start_date)->format('d M, Y').' - '.\Carbon::createFromTimestamp($this->end_date)->format('d M, Y').')';
+                        if($stripe_invoice['billing_reason'] === 'upcoming') {
+                            $li_name = $item->name.' / '.$stripe_line_item['price']['recurring']['interval'];
+                        } else {
+                            $li_name = $item->name.' / '.$stripe_line_item['price']['recurring']['interval'].' ('.\Carbon::createFromTimestamp($this->start_date)->format('d M, Y').' - '.\Carbon::createFromTimestamp($this->end_date)->format('d M, Y').')';
+                        }
                     }
-                    
+
                     if($stripe_line_item['proration']) {
                         $invoice_items[] = (new InvoiceItem())
                             ->title($stripe_line_item['description'])

@@ -1494,3 +1494,41 @@ function strip_comments($html)
     }
     return $html;
 }
+
+if (!function_exists('array_key_recursive_compare')) {
+    function array_key_recursive_compare($array, $compare) {
+        
+        $output = array();
+
+        foreach ($array as $key => $value){
+            if (!array_key_exists($key, $compare)) {
+                // Keys don't match, so add to output array
+                $output[$key] = $value;
+            } else if (is_array($value)){
+                // There is a sub array to search, and the keys match in the parent array
+                $match = array_key_recursive_compare($value, $compare[$key]);
+
+                if (count($match) > 0){
+                    //if $match is empty, then there wasn't actually a match to add to $output
+                    $output[$key] = $match;
+                }
+            }
+        }
+        // //Literally just renaiming $array to $compare and $compare to $array
+        // // Why? because I copy-pasted the first foreach loop
+        // $compareCopy = $compare;
+        // $compare = $array;
+        // $array = $compareCopy;
+        // foreach ($array as $key=>$value){
+        //     if (!array_key_exists($key,$compare)){
+        //         $output[$key] = $value;
+        //     } else if (is_array($value) && is_array($compare[$key])){
+        //         $match = array_key_recursive_compare($value,$compare[$key]);
+        //         if (count($match)>0){
+        //             $output[$key] = $match;
+        //         }
+        //     }
+        // }
+        return $output;
+    }
+}

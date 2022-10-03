@@ -163,6 +163,14 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
+            add_filter('dashboard.plan-form.meta', function ($meta) {
+                return array_merge($meta, [
+                    'model_core_meta.number_of_images' => 'nullable',
+                    'model_core_meta.includes_cloud' => 'nullable',
+                    'model_core_meta.includes_offline' => 'nullable',
+                ]);
+            });
+
             add_filter('dashboard.sidebar.menu', function ($menu) {
                 $included_items = [
                     'dashboard',
@@ -196,6 +204,12 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     }
                 }
                 return $menu;
+            }, 10, 1);
+
+            add_filter('nova.blog.actions', function($actions) {
+                return array_merge($actions, [
+                    (new \WeThemes\WePixPro\App\Nova\Actions\ImportWordPressUseCases(auth()->user()))->standalone()
+                ]);
             }, 10, 1);
         }
 
@@ -255,13 +269,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 js_wire_set('model_core_meta.includes_cloud', 'model_core_meta.includes_cloud');
                 js_wire_set('model_core_meta.includes_offline', 'model_core_meta.includes_offline');
             });
-            add_filter('dashboard.plan-form.meta', function ($meta) {
-                return array_merge($meta, [
-                    'model_core_meta.number_of_images' => 'nullable',
-                    'model_core_meta.includes_cloud' => 'nullable',
-                    'model_core_meta.includes_offline' => 'nullable',
-                ]);
-            });
+            
             // When new subscription is created, take the plans core_meta and add it to the subscription!
             add_action('observer.user_subscription.created', function ($user_subscription) {
 

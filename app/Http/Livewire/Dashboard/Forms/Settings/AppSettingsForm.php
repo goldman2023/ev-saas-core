@@ -93,6 +93,7 @@ class AppSettingsForm extends Component
                 'settings.plans_trial_mode' => ['boolean'],
                 'settings.plans_trial_duration' => ['exclude_if:settings.plans_trial_mode,false', 'required', 'numeric', 'gt:0'],
 
+                
             ]),
             'integrations.smtp_server' => [
                 'settings.smtp_mail_enabled' => ['boolean'],
@@ -177,6 +178,13 @@ class AppSettingsForm extends Component
             'system_notifications_list' => [
                 'settings.system_notifications_list' => ['']
             ],
+            'phone_number_registration' => [
+                // Registration
+                'settings.include_phone_number_in_registration' => ['boolean'],
+                'settings.require_phone_number_in_registration' => ['boolean'],
+                'settings.enable_phone_number_login' => ['boolean'],
+                'settings.enable_2fa' => ['boolean'],
+            ]
         ]);
 
         $rulesSets = apply_filters('app-settings-rules', $rulesSets);

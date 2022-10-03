@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Nova\Actions;
+namespace WeThemes\WePixPro\App\Nova\Actions;
 
 use App\Models\BlogPost;
 use App\Models\Category;
@@ -19,11 +19,11 @@ use MediaService;
 use Storage;
 use Log;
 
-class ImportWordPressBlogPosts extends Action 
+class ImportWordPressUseCases extends Action 
 {
     use InteractsWithQueue, Queueable;
 
-    public $name = 'Import From WordPress';
+    public $name = 'Import Use-Cases From WordPress';
     public $initiator;
     public $wp;
 
@@ -49,11 +49,10 @@ class ImportWordPressBlogPosts extends Action
 
             $self = $this;
             
-            
-            Log::info('---------- Starting WP Posts import ----------');
+            Log::info('---------- Starting WP Use-Cases Posts import ----------');
 
             do {
-                $res = $this->wp->getBlogPosts($page, 20);
+                $res = $this->wp->getCustomPostType('use-cases', $page, 20);
                 $total_pages = $res['total_pages'] ?? null;
 
                 Log::info('Page: '.$page);
@@ -74,10 +73,10 @@ class ImportWordPressBlogPosts extends Action
                 }
             } while ($page <= $total_pages);
     
-            Log::info('---------- Ending WP Posts import ----------');
+            Log::info('---------- Ending WP Use-Cases Posts import ----------');
 
 
-            do_action('import.wordpress.blog-posts.end', [$wp, $this]);
+            do_action('import.wordpress.use-cases.end', [$this->wp, $this]);
 
             // Log::info('---------- Starting WP Posts import ----------');
 
@@ -105,12 +104,13 @@ class ImportWordPressBlogPosts extends Action
     
             // Log::info('---------- Ending WP Posts import ----------');
 
-            return Action::message('Blog Posts imported successfully!');
+            return Action::message('Use-Case imported successfully!');
         }
     }
 
     public function importBlogPost($blogPost) {
         DB::beginTransaction();
+        
         try {
             $new_blog_post = BlogPost::updateOrCreate(
                 [
@@ -148,17 +148,26 @@ class ImportWordPressBlogPosts extends Action
                 ],
             ], ['subject_type', 'subject_id', 'blog_post_id'], ['subject_type', 'subject_id', 'blog_post_id', 'created_at', 'updated_at']);
 
+            $use_case_category = Category::where('slug', 'use-case')->first();
+
+            // Add use-case relationship
+            CategoryRelationship::updateOrCreate([
+                'subject_type' => $new_blog_post::class,
+                'subject_id' => $new_blog_post->id,
+                'category_id' => $use_case_category->id
+            ], []);
+
             // Add Categories
             $categories = $this->wp->getCategoriesByIDs($blogPost['categories'] ?? []);
             if(!empty($categories) && !empty($categories['data'] ?? null)) {
                 $categories_idx = collect($categories['data'])->map(fn($item) => Category::where('slug', $item['slug'])->first())->filter()->pluck('id')->toArray();
-                
+
                 foreach($categories_idx as $category_id) {
                     CategoryRelationship::updateOrCreate([
                         'subject_type' => $new_blog_post::class,
                         'subject_id' => $new_blog_post->id,
                         'category_id' => $category_id
-                    ],[]);
+                    ], []);
                 }
             }
 
@@ -211,6 +220,8 @@ class ImportWordPressBlogPosts extends Action
             Log::info('(#'.$new_blog_post->id.') '.$new_blog_post->name.' - successfully imported!');
         } catch(\Exception $e) {
             DB::rollBack();
+            Log::info('(#'.$new_blog_post->id.') '.$e->getMessage());
+
             dd($e);
             return Action::danger('Something went wrong!');
         }
