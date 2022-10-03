@@ -42,6 +42,7 @@ class RegisterForm extends Component
     public $name;
     public $surname;
     public $email;
+    public $phone;
     public $password;
     public $password_confirmation;
     public $terms_consent;
@@ -63,6 +64,16 @@ class RegisterForm extends Component
 
         if ($this->is_ghost) {
             $rules['email'] = ['required', 'unique:App\Models\User,email,' . $this->ghostUser->id];
+        }
+
+        if(get_tenant_setting('include_phone_number_in_registration')) {
+            if(get_tenant_setting('require_phone_number_in_registration')) {
+                $rules['phone'] = ['required'];
+            } else {
+                $rules['phone'] = ['nullable'];
+            }
+
+            $rules['phone'] = ['unique:App\Models\User,phone'];
         }
 
         if ($this->available_meta->count() > 0) {
@@ -109,6 +120,8 @@ class RegisterForm extends Component
             'password.min' => translate('Length of password must not be less than :min'),
             'password.regex' => translate('Password is not as per requirements - minimum 8 chars with at least one lowercase, one uppercase and one number!'),
             'password.confirmed' => translate('Password and confirmation must match.'),
+            'phone.required' => translate('Phone number is required'),
+            'phone.unique' => translate('Phone number already in use'),
             'terms_consent.required' => translate('Terms and conditions consent is required.'),
             'terms_consent.boolean' => translate('Terms and conditions consent is required.'),
             'terms_consent.is_true' => translate('Terms and conditions consent is required bool.'),
@@ -250,6 +263,7 @@ class RegisterForm extends Component
                 'name' => $this->name,
                 'surname' => $this->surname,
                 'email' => $this->email,
+                'phone' => $this->phone,
                 'user_type' => UserTypeEnum::customer()->value,
                 'password' => Hash::make($this->password),
                 'email_verified_at' => date('Y-m-d H:i:s') // must be added manually, cuz ghost user is already in DB
@@ -260,6 +274,7 @@ class RegisterForm extends Component
                 'name' => $this->name,
                 'surname' => $this->surname,
                 'email' => $this->email,
+                'phone' => $this->phone,
                 'user_type' => UserTypeEnum::customer()->value,
                 'password' => Hash::make($this->password),
             ]);

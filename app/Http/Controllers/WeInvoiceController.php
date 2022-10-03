@@ -91,7 +91,6 @@ class WeInvoiceController extends Controller
                 $upcoming_invoice->real_invoice_prefix = 'AA';
                 $upcoming_invoice->created_at = \Carbon::createFromTimestamp($stripe_upcoming_invoice['created']);
 
-
                 return $upcoming_invoice->generateInvoicePDF(custom_title: translate('UPCOMING VAT INVOICE'));
             }
         }

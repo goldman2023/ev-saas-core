@@ -123,8 +123,8 @@ class Blog extends Resource
      */
     public function actions(Request $request)
     {
-        return [
+        return apply_filters('nova.blog.actions', [
             (new \App\Nova\Actions\ImportWordPressBlogPosts(auth()->user()))->standalone()
-        ];
+        ]);
     }
 }

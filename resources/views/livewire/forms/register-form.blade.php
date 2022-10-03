@@ -97,6 +97,26 @@
         {{-- END Email --}}
 
 
+        {{-- Phone number --}}
+        @if(get_tenant_setting('include_phone_number_in_registration'))
+            <div class="mb-3">
+                <label class="block text-16 font-medium text-gray-700">
+                    {{ translate('Phone number') }}
+                    @if(get_tenant_setting('require_phone_number_in_registration'))
+                        <small class="text-danger">*</small>
+                    @endif
+                </label>
+
+                <div class="mt-1 relative rounded-md shadow-sm">
+                    <input type="text" name="phone" class="form-standard @error('phone') is-invalid @enderror" wire:model.defer="phone" data-test="we-register-phone-number">
+
+                    <x-system.invalid-icon field="phone" />
+                </div>
+
+                <x-system.invalid-msg field="phone" />
+            </div>
+        @endif
+        {{-- END Phone number --}}
         
         @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
             @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->sortByOrderProperty() as $key => $options)
