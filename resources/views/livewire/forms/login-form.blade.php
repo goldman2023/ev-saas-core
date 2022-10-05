@@ -19,6 +19,8 @@
                     </div>
                 </div>
             </x-system.social-login-buttons>
+
+            <x-system.login-notification></x-system.login-notification>
         </div>
 
         <div class="mb-4">

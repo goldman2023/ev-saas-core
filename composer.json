@@ -39,8 +39,6 @@
         "laravel/passport": "^10.4",
         "laravel/slack-notification-channel": "^2.4",
         "laravel/socialite": "^5.5",
-        "laravel/telescope": "^4.9",
-        "laravel/tinker": "^2.7",
         "laravel/ui": "^3.4",
         "laraveldaily/laravel-invoices": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.0",
