@@ -73,7 +73,7 @@ class RegisterForm extends Component
                 $rules['phone'] = ['nullable'];
             }
 
-            $rules['phone'] = ['unique:App\Models\User,phone'];
+            $rules['phone'] = ['nullable'];
         }
 
         if ($this->available_meta->count() > 0) {
@@ -84,7 +84,7 @@ class RegisterForm extends Component
                     $rules['user_meta.' . $key][] = 'exclude_if:entity,individual';
 
                     if($key === 'company_vat') {
-                        // TODO: Fix 
+                        // TODO: Fix
                         // continue;
                         $rules['user_meta.' . $key][] = 'sometimes';
                         $rules['user_meta.' . $key][] = 'check_eu_vat_number:address_country';
@@ -186,7 +186,7 @@ class RegisterForm extends Component
     public function register()
     {
         $this->validate();
- 
+
         DB::beginTransaction();
 
         try {
@@ -306,7 +306,7 @@ class RegisterForm extends Component
             try {
                 $selected_plan_id = request()->session()->get('selected_plan');
                 $selected_plan_interval = request()->session()->get('selected_plan_interval');
-                
+
                 if(!empty($selected_plan_id) && ($selected_plan_interval == 'month' || $selected_plan_interval == 'year' || $selected_plan_interval == 'annual')) {
                     $selected_plan = \App\Models\Plan::findOrFail($selected_plan_id);
 
