@@ -18,7 +18,7 @@
                     <div we-slot="" name="text_slot" we-title="Hero Subtitle" class="w-full">
                         <p we-name="hero_text" we-title="Subtitle"
                             class="mt-3 text-center lg:text-left text-base text-gray-500 sm:mt-5 sm:text-18 lg:text-24 leading-6 lg:leading-8 lg:pr-[3rem]">
-                            {{ translate('PixPro – professional photogrammetry for everyone. Measure easily in 3D.') }}
+                            {{ translate('Pixpro – professional photogrammetry for everyone. Measure easily in 3D.') }}
                         </p>
                     </div>
 
@@ -207,8 +207,8 @@
         <div class="client-content pt-10 grid grid-cols-2 gap-10">
             <div class="col-span-2 md:col-span-1">
                 <div class="px-5 sm:px-8 py-5 bg-white shadow-2xl rounded-sm hover:shadow-4xl transition-all duration-300">
-                    <p class="py-7 text-center"> “Thanks to PixPro guys we were able to expand our service (we were not
-                        aware before) for our customers by using the PixPro photogrammetry app.”</p>
+                    <p class="py-7 text-center"> “Thanks to Pixpro guys we were able to expand our service (we were not
+                        aware before) for our customers by using the Pixpro photogrammetry app.”</p>
                     <div class="flex gap-4 items-center justify-center pb-4 text-center">
                         <div>
                             <h5 class="text-16 text-gray-900 font-medium">Gediminas Mažeika</h5>
