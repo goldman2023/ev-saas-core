@@ -21,7 +21,7 @@
             }">
               <div class="relative flex flex-col justify-between px-4 py-4 border-gray-300 hover:border-primary border rounded transition-all duration-300 hover:shadow-green" style="height: 505px;">
                 {{-- <div class="" x-text="discount_percent">{{ }}</div>   --}}
-                
+
                 <div class="price-description">
                       <h3 class="font-bold text-18 text-gray-700 pb-2">{{ $model->name }}</h3>
                       @if($model->non_standard)
@@ -41,7 +41,7 @@
                       <p class=" text-sm text-lightDark py-6 mb-4">
                         {{ $model->excerpt }}
                       </p>
-                  
+
                       <div class="w-full space-y-3">
                         @if(!empty($model->features))
                           @foreach($model->features as $feature)
@@ -60,19 +60,19 @@
                         </div>
 
                         @auth
-                          <a href="{{ route('my.plans.management') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                          <a href="{{ route('my.plans.management') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
                               {{ translate('Try it free') }}
                           </a>
                         @endauth
 
                         @guest
-                          <a href="{{ route('user.registration') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                          <a href="{{ route('user.registration') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
                               {{ translate('Try it free') }}
                           </a>
                         @endguest
 
                       @else
-                        <a href="{{ $model->getCoreMeta('custom_redirect_url') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                        <a href="{{ $model->getCoreMeta('custom_redirect_url') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
                             {{ $model->getCoreMeta('custom_cta_label') }}
                         </a>
                       @endif
@@ -81,7 +81,7 @@
             </div>
           @endforeach
         @endif
-        
+
       </div>
 
       {{-- <div class="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-4">

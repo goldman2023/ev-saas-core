@@ -2267,6 +2267,57 @@
                                 </div>
                                 {{-- END User meta in use --}}
 
+                                <div class="w-full">
+                                    {{-- Include phone number in registration --}}
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
+                                        x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">
+                                                {{ translate('Include phone number in registration') }}
+                                            </span>
+                                            <p class="text-gray-500 text-sm">
+                                                {{ translate('Enable/Disable phone number in registration') }}
+                                            </p>
+                                        </div>
+
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.toggle field="settings.include_phone_number_in_registration" />
+                                        </div>
+                                    </div>
+                                    {{-- END Include phone number in registration --}}
+
+                                    {{-- Require phone number in registration --}}
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-4 pt-5"
+                                        x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">
+                                                {{ translate('Require phone number in registration') }}
+                                            </span>
+                                        </div>
+
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.toggle field="settings.require_phone_number_in_registration" />
+                                        </div>
+                                    </div>
+                                    {{-- END Require phone number in registration --}}
+
+                                    {{-- TODO: Add enable_phone_number_login and enable_2fa toggles --}}
+
+                                    {{-- Save Registration settings --}}
+                                    <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
+                                        x-data="{}">
+                                        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                            $wire.set('settings.include_phone_number_in_registration', settings.include_phone_number_in_registration, true);
+                                            $wire.set('settings.require_phone_number_in_registration', settings.require_phone_number_in_registration, true);
+                                            {{-- $wire.set('settings.enable_phone_number_login', settings.enable_phone_number_login, true);
+                                            $wire.set('settings.enable_2fa', settings.enable_2fa.code, true); --}}
+                                        " wire:click="saveAdvanced('phone_number_registration')">
+                                            {{ translate('Save') }}
+                                        </button>
+                                    </div>
+                                    {{-- END Save Registration settings --}}
+                                </div>
+                                
 
                             </div>
                             {{-- END Advanced --}}

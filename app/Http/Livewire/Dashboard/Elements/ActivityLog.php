@@ -29,7 +29,7 @@ class ActivityLog extends Component
         if($title) {
             $this->title = $title;
         } else {
-            $this->title = translate('Real-Time ') . get_site_name() . translate('Activity');
+            $this->title = translate('Real-Time') .' '. get_site_name() .' '. translate('Activity');
         }
 
         $this->acitivites = $this->query()->get();

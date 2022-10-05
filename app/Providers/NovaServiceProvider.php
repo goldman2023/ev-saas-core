@@ -17,6 +17,7 @@ use App\Nova\Tenant\Activity;
 use App\Nova\Tenant\Category;
 use App\Nova\Tenant\Invoice;
 use App\Nova\Tenant\License;
+use App\Nova\Tenant\Notification;
 use App\Nova\Tenant\OrderDetail;
 use App\Nova\Tenant\Page;
 use App\Nova\Tenant\PaymentMethodUniversal;
@@ -138,6 +139,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(WooImport::class),
                     MenuItem::resource(WeWorkflow::class),
                     MenuItem::resource(Translation::class),
+                    MenuItem::resource(Notification::class),
                     MenuItem::make('Logs')->path('/logs'),
 
 
@@ -266,6 +268,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 UserSubscription::class,
                 License::class,
                 Section::class,
+                Notification::class,
                 MenuBuilder::getMenuResource(),
             ]);
         } else {

@@ -16,7 +16,7 @@
         <div class="whitespace-nowrap text-center
         inline-flex items-center rounded-xl text-sm font-medium bg-indigo-700 text-white">
             <a class="px-3 py-2" href="{{ route('blog.category.archive', $category->slug) }}">
-                {{  $category->name }} ({{ $category->posts()->published()->count() }})
+                {{  $category->name }}
             </a>
         </div>
         @else
@@ -32,7 +32,7 @@
                 <div class="hover:bg-indigo-700 hover:text-white whitespace-nowrap text-center
                 inline-flex items-center rounded-xl text-sm font-medium bg-indigo-100 text-indigo-800">
                     <a class="px-3 py-2 " href="{{ route('blog.category.archive', $cat->slug) }}">
-                        {{ $cat->name }} ({{ $category->posts()->published()->count() }})
+                        {{ $cat->name }}
                     </a>
                 </div>
                 @endif

@@ -55,6 +55,16 @@ class MyAccountForm extends Component
             'me.cover' => ['if_id_exists:App\Models\Upload,id,true'],
         ];
 
+        if(get_tenant_setting('include_phone_number_in_registration')) {
+            if(get_tenant_setting('require_phone_number_in_registration')) {
+                $basic['me.phone'] = ['required'];
+            } else {
+                $basic['me.phone'] = ['nullable'];
+            }
+
+            $basic['me.phone'] = ['unique:App\Models\User,phone,' . $this->me->id];
+        }
+
         $meta = [];
 
         if($user_meta_fields_in_use->count() > 0) {
@@ -117,7 +127,8 @@ class MyAccountForm extends Component
             'me.cover.exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
             'me.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
             'me.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
-
+            'me.phone.required' => translate('Phone number is required'),
+            'me.phone.unique' => translate('Phone number already in use'),
             'me.name.required' => translate('Full name is required'),
             'me.name.min' => translate('Minimum full name length is :min'),
 

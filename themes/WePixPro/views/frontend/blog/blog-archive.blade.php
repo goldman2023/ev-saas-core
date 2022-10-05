@@ -15,7 +15,7 @@
                 {{ $category->name }}
 
                 @else
-                {{ translate('PixPro Blogs') }}
+                {{ translate('Pixpro Blog') }}
                 @endisset
             </h1>
 
@@ -30,11 +30,11 @@
         </div>
     </div>
 </section>
-        @empty($category)
-            @php
-                $category = null;
-            @endphp
-        @endempty
+@empty($category)
+    @php
+        $category = null;
+    @endphp
+@endempty
 <x-blog.categories-list :category="$category"></x-blog.categories-list>
 
 <section class="relative bg-white py-16  lg:pt-[80px]  lg:pb-[80px]  sm:pt-[60px]  sm:pb-[60px]  pt-[40px]  pb-[40px]">
