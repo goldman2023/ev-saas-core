@@ -35,6 +35,21 @@
                     <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
                 </div>
 
+                <div class="">
+                    <x-dashboard.section-headers.section-header title="{{ translate('Latest users') }}" text="">
+                        <x-slot name="content">
+                            <a href="{{ route('blog.post.create') }}" class="btn-primary">
+                                <span>{{ translate('All Customers') }}</span>
+                                @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 mr-2'])
+
+                            </a>
+                        </x-slot>
+                    </x-dashboard.section-headers.section-header>
+                    <div class="w-full">
+                        <livewire:dashboard.tables.users-table perPage="5" :showFilters="false" :showFilterDropdown="false" :showFilters="false" :showSearch="false" :showPagination="false" for="customer"></livewire:dashboard.tables.users-table>
+                    </div>
+                </div>
+
 
             </div>
 

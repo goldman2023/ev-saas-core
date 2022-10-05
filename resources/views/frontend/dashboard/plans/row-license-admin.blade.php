@@ -1,4 +1,5 @@
 <x-livewire-tables::table.cell class="align-middle text-center">
+    @isset($row->user)
 <a href="{{ route('user.details', $row->user->id) }}">
     {{ $row->user->email }} <br>
 
@@ -8,6 +9,9 @@
         {{ translate('No Plan') }}
     @endisset
 </a>
+@else
+{{ translate('No User') }}
+@endisset
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">

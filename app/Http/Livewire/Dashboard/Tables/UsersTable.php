@@ -25,7 +25,11 @@ class UsersTable extends DataTableComponent
     public string $defaultSortDirection = 'desc';
     public bool $columnSelect = true;
     public int $perPage = 10;
-    public array $perPageAccepted = [10, 25];
+    public bool $showPagination = true;
+    public bool $showSearch = true;
+    public bool $showFilters = true;
+    public bool $showFilterDropdown = true;
+    public array $perPageAccepted = [5, 10, 25];
 
     public array $filterNames = [
         // 'status' => 'Status'
@@ -36,9 +40,15 @@ class UsersTable extends DataTableComponent
     protected string $pageName = 'users';
     protected string $tableName = 'users';
 
-    public function mount($for = 'staff')
+    public function mount($for = 'staff', $perPage = 10, $showPagination = true, $showSearch = true, $showFilters = true, $showFilterDropdown = true)
     {
+        $this->perPage = $perPage;
         $this->for = $for;
+        $this->showPagination = $showPagination;
+        $this->showSearch = $showSearch;
+        $this->showFilters = $showFilters;
+        $this->showFilterDropdown = $showFilterDropdown;
+        $this->showFilters = $showFilters;
 
         if ($for === 'staff') {
             $this->filters = [
