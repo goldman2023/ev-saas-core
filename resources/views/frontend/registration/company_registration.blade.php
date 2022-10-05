@@ -90,7 +90,9 @@
                                 {{ translate(' Explore all features', true) }}
                             </a>
                             <div class="text-center mb-3 mt-3">
-                                <span class="divider divider-text">Or</span>
+                                <span class="divider divider-text">
+                                    {{ translate('Or') }}
+                                </span>
                             </div>
                             <a class="btn btn-info"
                             target="_blank"
