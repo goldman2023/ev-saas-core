@@ -75,8 +75,7 @@
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
     @if(!empty($row->end_date))
-        <span class="text-14">{{ $row->end_date->diffForHumans() }}</span>
-        {{-- <span class="text-14">{{ $row->end_date->format('d. M Y, H:i') }}</span> --}}
+        <span class="text-14">{{ translate('In ') . $row->end_date->diffInDays() . ' ' . translate('days') }}</span>
     @else
         -
     @endif
