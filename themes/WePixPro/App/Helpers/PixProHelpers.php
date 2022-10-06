@@ -783,9 +783,12 @@ if (!function_exists('pix_pro_update_licenses_status')) {
 
 
                 }
-            } else {
+            } else if(empty($pix_pro_user['user_id'] ?? null)) {
                 Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in Pixpro API DB. Could not get the user by email from Pixpro api', ''));
-            }
+            } 
+            // else if(!$stripe_invoice->paid) {
+            //     Log::info(pix_pro_error($route_paid, 'There was an error while trying to update a license(order) in Pixpro API DB. Could not get the user by email from Pixpro api', ''));
+            // }
 
         }
     }
