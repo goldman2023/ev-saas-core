@@ -63,11 +63,11 @@
         #blog_post_single_content iframe {
             max-width: 100%;
             height: auto;
+            min-height: 200px;
         }
         #blog_post_single_content img {
             max-width: 100%;
             height: auto;
-            min-height: 400px;
         }
     }
 </style>
