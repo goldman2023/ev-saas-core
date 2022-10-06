@@ -41,7 +41,7 @@
                             {{ translate('Login') }}
                         </div>
 
-                        <a href="{{ route('custom-pages.show_custom_page', ['plans-pricing']) }}"
+                        <a href="{{ route('custom-pages.show_custom_page', ['plans-and-pricing']) }}"
                             class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
                             {{ translate('Try for free') }}
                         </a>
