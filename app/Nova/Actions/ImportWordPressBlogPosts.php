@@ -77,7 +77,7 @@ class ImportWordPressBlogPosts extends Action
             Log::info('---------- Ending WP Posts import ----------');
 
 
-            do_action('import.wordpress.blog-posts.end', [$wp, $this]);
+            do_action('import.wordpress.blog-posts.end', [$this->wp, $this]);
 
             // Log::info('---------- Starting WP Posts import ----------');
 
