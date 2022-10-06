@@ -1032,6 +1032,7 @@ class StripeService
         }
     }
 
+    // DEPRECATED FUNCTION
     public function createCheckoutLink($model, $qty = 1, $interval = null, $preview = false, $abandoned_order_id = null)
     {
         // Check if Stripe Product actually exists
@@ -2534,13 +2535,23 @@ class StripeService
                     $subscription->payment_status = PaymentStatusEnum::paid()->value;
                 }
 
-                if(empty($subscription->getRawOriginal('start_date'))) {
+                if($stripe_billing_reason === 'subscription_cycle') {
+                    // IMPORTANT: Always update subscription start/end date to reflect current period from Stripe - WE ARE SURE INVOICE IS PAID HERE!
                     $subscription->start_date = $stripe_subscription->current_period_start;
+                    $subscription->end_date = $stripe_subscription->current_period_end;
+                } else {
+                    // Forgot why getRawOriginal() is needed -_-
+                    if(empty($subscription->getRawOriginal('start_date'))) {
+                        $subscription->start_date = $stripe_subscription->current_period_start;
+                    }
+
+                    // Forgot why getRawOriginal() is needed -_-
+                    if(empty($subscription->getRawOriginal('end_date'))) {
+                        $subscription->end_date = $stripe_subscription->current_period_end;
+                    }
                 }
 
-                if(empty($subscription->getRawOriginal('end_date'))) {
-                    $subscription->end_date = $stripe_subscription->current_period_end;
-                }
+                
 
                 $subscription->saveQuietly();
             }
@@ -2766,7 +2777,7 @@ class StripeService
                     die(print_r($e));
                 }
 
-                // 5. Update stripe subscription with metadata needed for further actions (cycle/updat etc.)
+                // 5. Update stripe subscription with metadata needed for further actions (cycle/update etc.)
                 // IMPORTANT - This fires subscription.update, but it'll have only metadata in previous_attributes property!!! We should do basically...nothing on this webhook...
                 $this->stripe->subscriptions->update(
                     $stripe_subscription->id,
@@ -2865,6 +2876,7 @@ class StripeService
                     $subscription->status = UserSubscriptionStatusEnum::active()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
 
                 } else {
+                    // Subscription start/end timestamps MUST NOT BE UPDATED HERE, cuz we don't know if invoice is really paid or not
                     $subscription->start_date = $stripe_subscription->current_period_start;
                     $subscription->end_date = $stripe_subscription->current_period_end;
 
@@ -2883,7 +2895,14 @@ class StripeService
                     $subscription->setData(stripe_prefix('stripe_latest_invoice_id'), $latest_invoice_id);
 
                     // Determine if subscription is cycled or upgraded/downgraded
-                    if($stripe_billing_reason === 'subscription_cycle') {
+                    if($stripe_billing_reason === 'subscription_cycle' && !empty($previous_attributes?->current_period_start ?? null) && !empty($previous_attributes?->current_period_end ?? null)) {
+                        // IMPORTANT: Check if latest stripe invoice is paid or not (it's usually DRAFT at this point when subscription cycling happens), and if it's not, use previous attributes for start/end!!!
+                        if(!$stripe_invoice->paid) {
+                            // Subscription start/end timestamps (on our end) MUST ONLY be updated on invoice.paid - otherwise, they stay as they are!!!
+                            $subscription->start_date = $previous_attributes->current_period_start;
+                            $subscription->end_date = $previous_attributes->current_period_end;
+                        }
+
                         // This means that subscription is cycled - just create a new invoice
                         $new_invoice = $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
 
@@ -2997,7 +3016,6 @@ class StripeService
                 }
 
                 $subscription->save();
-
             }
 
             do_action('stripe.webhook.subscriptions.updated', $subscription, null, $stripe_invoice, $previous_attributes);

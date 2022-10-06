@@ -62,7 +62,11 @@ class UserSubscriptionsObserver
             @send_admin_notification(translate('New user subscription on').' '.get_tenant_setting('site_name'), translate('User with following email just subscribed:').' '.$user_subscription->user->email.' (<a href="'.route('user.details', $user_subscription->user->id).'">'.translate('View details').'</a>)'); 
         }
 
-        if (!$user_subscription->is_temp && $user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time()) {
+        // Check if subscription is not temp, status is 'trial' and trial_started email is not sent
+        if (!$user_subscription->is_temp && $user_subscription->status === 'trial' && 
+            $user_subscription->end_date->timestamp > time() && 
+            $user_subscription->getData('trial_started_email_sent', false) === false) {
+
             // Trial has started, send notification
             try {
                 $user_subscription->user->notify(new TrialStarted($user_subscription));
