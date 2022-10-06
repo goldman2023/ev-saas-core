@@ -470,7 +470,7 @@ class EVCheckoutController extends Controller
         if($order_id != 'demo') {
             if(!Auth::check() && $order->user_id !== ($ghost_user?->id ?? null)) {
                 // Guest users - identify them by session_id and check if any user has that session_id, if not redirect!
-                return redirect()->route('user.registration');
+                return redirect()->route('user.login');
             } else if(Auth::check() && $order->user_id !== (auth()->user()?->id ?? null) && !auth()->user()->isAdmin()) {
                 return redirect()->route('home');
             }
