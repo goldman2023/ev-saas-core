@@ -83,7 +83,9 @@ class InvoicesObserver
 
         // Send ExtendedSubscription notification here
         if(!empty($invoice->order->user_subscription)) {
-            if(!$invoice->is_temp && $invoice->payment_status === 'paid' && $invoice->getData('subscription_extended_email_sent') !== true ) {
+
+            /* Send subscription extended notification for invoices that are paid and more than 0$ */
+            if(!$invoice->is_temp && $invoice->payment_status === 'paid' && $invoice->getData('subscription_extended_email_sent') !== true && $invoice->getRealTotalPrice(format: false) > 0) {
                 try {
                     $invoice->user->notify(new ExtendedSubscription($invoice->order->user_subscription));
                     $invoice->setData('subscription_extended_email_sent', true);
