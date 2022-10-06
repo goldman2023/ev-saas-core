@@ -59,6 +59,16 @@
             font-size: 16px;
             line-height: 26px;
         }
+
+        #blog_post_single_content iframe {
+            max-width: 100%;
+            height: auto;
+        }
+        #blog_post_single_content img {
+            max-width: 100%;
+            height: auto;
+            min-height: 400px;
+        }
     }
 </style>
 @endpush
@@ -95,7 +105,7 @@
 <section class="relative  lg:pt-[80px]  lg:pb-[80px]  sm:pt-[50px]  sm:pb-[50px]  pt-[30px]  pb-[30px]  bg-white   ">
     <div class="mx-auto max-w-6xl px-8 sm:px-4">
 
-        <div class="grid grid-cols-12 gap-8">
+        <div class="grid grid-cols-12 sm:gap-8">
             <div class="col-span-12 flex flex-col">
                 <div class="w-full aspect-square inline-flex items-center justify-center rounded-md mb-10">
                     <img src="{{ $blog_post->getThumbnail(['w' => 1000]) }}" alt="" class="w-full object-contain">
