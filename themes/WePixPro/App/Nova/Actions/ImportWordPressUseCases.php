@@ -67,7 +67,9 @@ class ImportWordPressUseCases extends Action
                 if(!empty($data)) {
                     foreach($data as $key => $blogPost) {
                         if(!empty($blogPost['slug'] ?? '')) {
-                            $this->importBlogPost($blogPost);
+                            dispatch(function () use ($blogPost) {
+                                $this->importBlogPost($blogPost);
+                            });
                         }
                     }
                 }
@@ -75,34 +77,7 @@ class ImportWordPressUseCases extends Action
     
             Log::info('---------- Ending WP Use-Cases Posts import ----------');
 
-
             do_action('import.wordpress.use-cases.end', [$this->wp, $this]);
-
-            // Log::info('---------- Starting WP Posts import ----------');
-
-            // do {
-            //     $res = $this->wp->getBlogPosts($page, 20);
-            //     $total_pages = $res['total_pages'] ?? null;
-
-            //     Log::info('Page: '.$page);
-            //     Log::info('Total pages: '.$total_pages);
-
-            //     $page++;
-
-            //     $data = $res['data'] ?? [];
-
-            //     Log::info(collect($data)->pluck('id')->toArray());
-                
-            //     if(!empty($data)) {
-            //         foreach($data as $key => $blogPost) {
-            //             if(!empty($blogPost['slug'] ?? '')) {
-            //                 $this->importBlogPost($blogPost);
-            //             }
-            //         }
-            //     }
-            // } while ($page <= $total_pages);
-    
-            // Log::info('---------- Ending WP Posts import ----------');
 
             return Action::message('Use-Case imported successfully!');
         }
