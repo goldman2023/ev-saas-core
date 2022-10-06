@@ -2862,8 +2862,8 @@ class StripeService
             if (!empty($subscription)) {
                 $subscription->is_temp = false;
 
-                $subscription->start_date = $stripe_subscription->current_period_start;
-                $subscription->end_date = $stripe_subscription->current_period_end;
+                // $subscription->start_date = $stripe_subscription->current_period_start;
+                // $subscription->end_date = $stripe_subscription->current_period_end;
 
                 if($stripe_subscription->cancel_at_period_end ?? false) {
                     // Cancel
@@ -2874,11 +2874,10 @@ class StripeService
                     // Renew
                     // Check if previous state was canceled subscription and new `cancel_at_period_end` is null - revive if true
                     $subscription->status = UserSubscriptionStatusEnum::active()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
-
                 } else {
                     // Subscription start/end timestamps MUST NOT BE UPDATED HERE, cuz we don't know if invoice is really paid or not
-                    $subscription->start_date = $stripe_subscription->current_period_start;
-                    $subscription->end_date = $stripe_subscription->current_period_end;
+                    // $subscription->start_date = $stripe_subscription->current_period_start;
+                    // $subscription->end_date = $stripe_subscription->current_period_end;
 
                     // In order to change status of subscription here, we need status of stripe subscription to NOT BE trailing and that invoice is paid
                     if($stripe_subscription->status === 'trialing') {
@@ -2897,11 +2896,11 @@ class StripeService
                     // Determine if subscription is cycled or upgraded/downgraded
                     if($stripe_billing_reason === 'subscription_cycle' && !empty($previous_attributes?->current_period_start ?? null) && !empty($previous_attributes?->current_period_end ?? null)) {
                         // IMPORTANT: Check if latest stripe invoice is paid or not (it's usually DRAFT at this point when subscription cycling happens), and if it's not, use previous attributes for start/end!!!
-                        if(!$stripe_invoice->paid) {
-                            // Subscription start/end timestamps (on our end) MUST ONLY be updated on invoice.paid - otherwise, they stay as they are!!!
-                            $subscription->start_date = $previous_attributes->current_period_start;
-                            $subscription->end_date = $previous_attributes->current_period_end;
-                        }
+                        // if(!$stripe_invoice->paid) {
+                        //     // Subscription start/end timestamps (on our end) MUST ONLY be updated on invoice.paid - otherwise, they stay as they are!!!
+                        //     $subscription->start_date = $previous_attributes->current_period_start;
+                        //     $subscription->end_date = $previous_attributes->current_period_end;
+                        // }
 
                         // This means that subscription is cycled - just create a new invoice
                         $new_invoice = $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
@@ -2910,6 +2909,9 @@ class StripeService
                         $new_metadata = $stripe_subscription->metadata;
                         $new_metadata->latest_invoice_id = $new_invoice->id;
                     } else if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($previous_attributes?->plan?->id ?? null)) {
+                        $subscription->start_date = $stripe_subscription->current_period_start;
+                        $subscription->end_date = $stripe_subscription->current_period_end;
+                        
                         // MAY HAPPEN THAT billing_reason is subscription_create!!!
 
                         // With condition `!empty($previous_attributes?->plan?->id ?? null)` we are preventing processing any subscription change which is NOT related to it's products/items changes, like metadata change and similar!
@@ -3001,6 +3003,8 @@ class StripeService
                         }
 
                     } else if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($previous_attributes?->current_period_end ?? null) && !empty($previous_attributes?->trial_end ?? null)) {
+                        $subscription->start_date = $stripe_subscription->current_period_start;
+                        
                         // This means that Trial end_date was changed from Stripe
                         $invoice_id = $stripe_subscription->metadata->invoice_id;
                         $existing_invoice = Invoice::query()->withoutGlobalScopes()->find($invoice_id);

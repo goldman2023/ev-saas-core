@@ -25,7 +25,7 @@
 
         <div class="grid sm:grid-cols-3 gap-8">
 
-            <div class="col-span-2">
+            <div class="sm:col-span-2">
                 <div class="mb-6">
                     <x-dashboard.widgets.business.quick-actions>
                     </x-dashboard.widgets.business.quick-actions>

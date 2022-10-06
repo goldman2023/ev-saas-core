@@ -491,6 +491,17 @@ class Invoice extends WeBaseModel
         return $this->keyExistsInData('test_stripe_invoice_id') || $this->keyExistsInData('live_stripe_invoice_id');
     }
 
+    public function getStripeInvoiceID() {
+        return $this->getData(stripe_prefix('stripe_invoice_id'));
+    }
+
+    public function getStripeInvoice() {
+        return \StripeService::stripe()->invoices->retrieve(
+            $this->getStripeInvoiceID(),
+            []
+        );
+    }
+
     // Check payment method
     public function getPaymentMethodGateway() {
         if(PaymentMethodUniversal::class === $this->payment_method_type) {

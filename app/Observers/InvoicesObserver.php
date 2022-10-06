@@ -2,13 +2,14 @@
 
 namespace App\Observers;
 
-use App\Models\Invoice;
-use App\Mail\InvoiceCreatedEmail;
-use App\Mail\InvoicePaidEmail;
-use Illuminate\Support\Facades\Mail;
-use App\Enums\PaymentStatusEnum;
-use App\Notifications\Invoice\InvoiceCreated;
 use Log;
+use App\Models\Invoice;
+use App\Mail\InvoicePaidEmail;
+use App\Enums\PaymentStatusEnum;
+use App\Mail\InvoiceCreatedEmail;
+use Illuminate\Support\Facades\Mail;
+use App\Notifications\Invoice\InvoiceCreated;
+use App\Notifications\UserSubscription\ExtendedSubscription;
 
 class InvoicesObserver
 {
@@ -42,13 +43,28 @@ class InvoicesObserver
      */
     public function updated(Invoice $invoice)
     {
-        if(!$invoice->is_temp && $invoice->getData('invoice_created_email_sent') !== true && $invoice->getRealTotalPrice(format: false) > 0) {
+        $invoice_paid = false;
+
+        if($invoice->isFromStripe()) {
+            $invoice_paid = $invoice->getStripeInvoice()?->paid ?? false;
+        } else {
+            $invoice_paid = $invoice->payment_status === 'paid';
+        }
+
+        if(!$invoice->is_temp && $invoice_paid && $invoice->getData('invoice_created_email_sent') !== true && $invoice->getRealTotalPrice(format: false) > 0) {
             try {
                 $invoice->user->notify(new InvoiceCreated($invoice));
                 $invoice->setData('invoice_created_email_sent', true);
                 $invoice->saveQuietly();
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
+            }
+
+            // Send ExtendedSubscription notification here
+            try {
+                $invoice->user->notify(new ExtendedSubscription($invoice->order->user_subscription));
+            } catch(\Exception $e) {
+                Log::error($e);
             }
         } 
     }
