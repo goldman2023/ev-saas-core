@@ -23,16 +23,7 @@ class InvoicesObserver
      */
     public function created(Invoice $invoice)
     {
-        // Fire only if Invoice is not temporary and price is bigger than 0!
-        if(!$invoice->is_temp && $invoice->getRealTotalPrice(format: false) > 0) {
-            try {
-                $invoice->user->notify(new InvoiceCreated($invoice));
-                $invoice->setData('invoice_created_email_sent', true);
-                $invoice->saveQuietly();
-            } catch(\Exception $e) {
-                Log::error($e->getMessage());
-            }
-        }
+        $this->sendNotifications($invoice);
     }
 
     /**
@@ -43,30 +34,7 @@ class InvoicesObserver
      */
     public function updated(Invoice $invoice)
     {
-        $invoice_paid = false;
-
-        if($invoice->isFromStripe()) {
-            $invoice_paid = $invoice->getStripeInvoice()?->paid ?? false;
-        } else {
-            $invoice_paid = $invoice->payment_status === 'paid';
-        }
-
-        if(!$invoice->is_temp && $invoice_paid && $invoice->getData('invoice_created_email_sent') !== true && $invoice->getRealTotalPrice(format: false) > 0) {
-            try {
-                $invoice->user->notify(new InvoiceCreated($invoice));
-                $invoice->setData('invoice_created_email_sent', true);
-                $invoice->saveQuietly();
-            } catch(\Exception $e) {
-                Log::error($e->getMessage());
-            }
-
-            // Send ExtendedSubscription notification here
-            try {
-                $invoice->user->notify(new ExtendedSubscription($invoice->order->user_subscription));
-            } catch(\Exception $e) {
-                Log::error($e);
-            }
-        } 
+        $this->sendNotifications($invoice);
     }
 
     /**
@@ -100,5 +68,30 @@ class InvoicesObserver
     public function forceDeleted(Invoice $invoice)
     {
         //
+    }
+
+    private function sendNotifications($invoice) {
+        if(!$invoice->is_temp && $invoice->payment_status === 'paid' && $invoice->getData('invoice_created_email_sent') !== true && $invoice->getRealTotalPrice(format: false) > 0) {
+            try {
+                $invoice->user->notify(new InvoiceCreated($invoice));
+                $invoice->setData('invoice_created_email_sent', true);
+                $invoice->saveQuietly();
+            } catch(\Exception $e) {
+                Log::error($e->getMessage());
+            }
+        }
+
+        // Send ExtendedSubscription notification here
+        if(!empty($invoice->order->user_subscription)) {
+            if(!$invoice->is_temp && $invoice->payment_status === 'paid' && $invoice->getData('subscription_extended_email_sent') !== true ) {
+                try {
+                    $invoice->user->notify(new ExtendedSubscription($invoice->order->user_subscription));
+                    $invoice->setData('subscription_extended_email_sent', true);
+                    $invoice->saveQuietly();
+                } catch(\Exception $e) {
+                    Log::error($e);
+                }
+            }
+        }
     }
 }
