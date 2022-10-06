@@ -115,21 +115,22 @@ class UserSubscriptionsObserver
             } catch(\Exception $e) {
                 Log::error($e);
             }
-        } else if ($user_subscription->isDirty('end_date') && !empty($uncasted_old_end_date) && $new_end_date > $casted_old_end_date) {
-            // This means that new end_date is about to be updated - should we send notification that subscription has been successfully extended?
-            try {
-                $user->notify(new ExtendedSubscription($user_subscription));
-            } catch(\Exception $e) {
-                Log::error($e);
-            }
-        } else if($user_subscription->isDirty('status') && $user_subscription->getRawOriginal('status') !== $user_subscription->status) {
-            // Send notification on subscription status update!
-            try {
-                $user->notify(new SubscriptionStatusChanged($user_subscription)); 
-            } catch(\Exception $e) {
-                Log::error($e);
-            }          
-        }
+        } 
+        // else if ($user_subscription->isDirty('end_date') && !empty($uncasted_old_end_date) && $new_end_date > $casted_old_end_date) {
+        //     // This means that new end_date is about to be updated - should we send notification that subscription has been successfully extended?
+        //     try {
+        //         $user->notify(new ExtendedSubscription($user_subscription));
+        //     } catch(\Exception $e) {
+        //         Log::error($e);
+        //     }
+        // } else if($user_subscription->isDirty('status') && $user_subscription->getRawOriginal('status') !== $user_subscription->status) {
+        //     // Send notification on subscription status update!
+        //     try {
+        //         $user->notify(new SubscriptionStatusChanged($user_subscription)); 
+        //     } catch(\Exception $e) {
+        //         Log::error($e);
+        //     }          
+        // }
     }
 
     /**
