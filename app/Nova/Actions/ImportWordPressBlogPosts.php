@@ -42,6 +42,7 @@ class ImportWordPressBlogPosts extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
+        set_time_limit(1000);
         if(get_tenant_setting('wordpress_api_enabled') && !empty(get_tenant_setting('wordpress_api_route'))) {
             $page = 1;
             $total_pages = 1;
@@ -68,7 +69,9 @@ class ImportWordPressBlogPosts extends Action
                 if(!empty($data)) {
                     foreach($data as $key => $blogPost) {
                         if(!empty($blogPost['slug'] ?? '')) {
-                            $this->importBlogPost($blogPost);
+                            dispatch(function () use ($blogPost) {
+                                $this->importBlogPost($blogPost);
+                            });
                         }
                     }
                 }
@@ -76,34 +79,7 @@ class ImportWordPressBlogPosts extends Action
     
             Log::info('---------- Ending WP Posts import ----------');
 
-
             do_action('import.wordpress.blog-posts.end', [$this->wp, $this]);
-
-            // Log::info('---------- Starting WP Posts import ----------');
-
-            // do {
-            //     $res = $this->wp->getBlogPosts($page, 20);
-            //     $total_pages = $res['total_pages'] ?? null;
-
-            //     Log::info('Page: '.$page);
-            //     Log::info('Total pages: '.$total_pages);
-
-            //     $page++;
-
-            //     $data = $res['data'] ?? [];
-
-            //     Log::info(collect($data)->pluck('id')->toArray());
-                
-            //     if(!empty($data)) {
-            //         foreach($data as $key => $blogPost) {
-            //             if(!empty($blogPost['slug'] ?? '')) {
-            //                 $this->importBlogPost($blogPost);
-            //             }
-            //         }
-            //     }
-            // } while ($page <= $total_pages);
-    
-            // Log::info('---------- Ending WP Posts import ----------');
 
             return Action::message('Blog Posts imported successfully!');
         }
