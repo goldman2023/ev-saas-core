@@ -2607,7 +2607,7 @@ class StripeService
 
         try {
             $order = Order::withoutGlobalScopes()->findOrFail($stripe_subscription->metadata->order_id);
-            $subscription = $order->user_subscription()->withoutGlobalScopes()->get();
+            $subscription = $order->user_subscription()->withoutGlobalScopes()->first();
 
             if($stripe_billing_reason === 'subscription_create') {
                 // This means that subscription is created for the first time
