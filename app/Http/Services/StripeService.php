@@ -67,7 +67,7 @@ class StripeService
                 $this->mode_prefix = 'test_';
             }
         }
-
+        
 
         // Set supported shipping countries
         $this->supported_shipping_countries = array_values(array_diff(['LT', 'RS', 'DE', 'GB', 'ES', 'FR', 'US'], $this->unsupported_shipping_countries));
@@ -541,40 +541,39 @@ class StripeService
 
     public function updateStripeCustomerTax($user = null, $update_tax_exempt_for_individual = false) {
         // Dispatch a job to update customer Tax data in stripe
-        $user = !empty($user) && $user instanceof \App\Models\User ? $user : auth()->user();
-
         dispatch(function () use ($user, $update_tax_exempt_for_individual) {
+            $user = !empty($user) && $user instanceof \App\Models\User ? $user : auth()->user();
 
             $stripe_customer_id_key = stripe_prefix('stripe_customer_id');
             $stripe_customer_id = $user->getCoreMeta($stripe_customer_id_key);
-
+    
             try {
                 $stripe_customer = $this->stripe->customers->retrieve(
                     $stripe_customer_id,
                     []
                 );
                 $stripe_customer_array = $stripe_customer->toArray();
-
+    
                 if ($stripe_customer->deleted ?? null) {
                     throw new \Exception();
                 }
-
+                
                 // If $customer is company, add TaxID if applicable
                 if($user->entity === 'company') {
                     $company_country = $user->getUserMeta('address_country');
                     $company_vat = $user->getUserMeta('company_vat');
                     $stripe_params = [];
-
+                    
                     if(!empty($company_country) && !empty(\Countries::get(code: $company_country))) {
                         $stripe_params['address'] = array_merge($stripe_customer_array['address'], [
                             'country' => $company_country
                         ]);
-
+                        
                         if(\Countries::isEU($company_country)) {
                             try {
                                 $validVAT = VatCalculator::isValidVATNumber($company_vat);
                                 $stripe_vat = $company_vat;
-
+        
                                 if($validVAT) {
                                     if($company_country === 'LT') {
                                         $stripe_params['tax_exempt'] = 'none';
@@ -582,7 +581,7 @@ class StripeService
                                         // Company which has a valid VAT number
                                         $stripe_params['tax_exempt'] = 'reverse';
                                     }
-
+                                    
                                     try {
                                         $this->stripe->customers->createTaxId(
                                             $stripe_customer->id,
@@ -603,31 +602,31 @@ class StripeService
                             // Company outside of EU - exempt of tax
                             $stripe_params['tax_exempt'] = 'exempt';
                         }
-
+                        
                         $this->stripe->customers->update(
                             $stripe_customer->id,
                             $stripe_params
                         );
                     }
                 } else {
-
+                    
                     // Individuals - Stripe checkout will decide it
                     $customer_country = $stripe_customer?->address?->country ?? null;
 
                     if($update_tax_exempt_for_individual && !empty($customer_country) && !empty(\Countries::get(code: $customer_country))) {
-
+                        
                         if(\Countries::isEU($customer_country)) {
                             $stripe_params['tax_exempt'] = 'none';
                         } else {
                             $stripe_params['tax_exempt'] = 'exempt';
                         }
-
+                        
                         // IMPORTANT: In order to take tax_exempt into consideration, we need to remove all previously added stripe TaxIDs for this user (if any)
                         $previous_tax_ids = $this->stripe->customers->allTaxIds(
                             $stripe_customer->id,
                             ['limit' => 100]
                         );
-
+    
                         if(!empty($previous_tax_ids->data)) {
                             foreach($previous_tax_ids->data as $tax_id) {
                                 // Remove previous taxIDs
@@ -643,12 +642,13 @@ class StripeService
                             $stripe_customer->id,
                             $stripe_params
                         );
-
+                        
                     }
                 }
             } catch (\Exception $e) {
-                $this->createStripeCustomer($user);
-            }
+                // Commenting out for fixing - duplicate customer acount in stripe
+                // $this->createStripeCustomer($user);
+            } 
         });
     }
 
@@ -854,7 +854,7 @@ class StripeService
         $order_line_items = [];
 
         $previous_subscription = !empty($previous_subscription_id) ? UserSubscription::find($previous_subscription_id) : null;
-
+        
         /**
          * Multi-items subscription logic:
          * 1. In subscription created/updated webhook, compare each previous subscription item quantity with corresponding qty of same item in
@@ -979,7 +979,7 @@ class StripeService
 
             // Stripe Prorations or not
             if(Payments::stripe()->stripe_prorations_enabled) {
-
+                
             } else {
                 // If there is a previous subscription, check if total price of current temp-subscription has lower or same price as previous subscription
                 $one_time_stripe_coupon_code = null;
@@ -1004,7 +1004,7 @@ class StripeService
 
                         unset($stripe_args['allow_promotion_codes']);
                     }
-
+                    
                 }
             }
 
@@ -1259,7 +1259,7 @@ class StripeService
         DB::beginTransaction();
 
         $model = null;
-
+        
         if($line_items instanceof WeBaseModel) {
             // Only one $model is provided as $line_items
             $model = $line_items;
@@ -1323,7 +1323,7 @@ class StripeService
                 $order->billing_zip = '';
             }
 
-
+            
             $order->phone_numbers = [];
             $order->shipping_method = '';
 
@@ -1398,7 +1398,7 @@ class StripeService
             if (Auth::check()) {
                 // If User is logged-in, add customer/user data to invoice
                 $user = auth()->user();
-
+                
                 if($user->entity === 'company') {
                     $invoice->billing_company = $user->getUserMeta('company_name');
 
@@ -1419,9 +1419,9 @@ class StripeService
                         ]
                     ]);
                 }
-
+                
             }
-
+            
 
             $invoice->saveQuietly(); // there could be memory leaks if we use just save()
 
@@ -1711,7 +1711,7 @@ class StripeService
                 $invoice->subtotal_price = 0;
                 $invoice->total_price = 0;
             }
-
+            
             // TODO: What happens when you downgrade???? Total/Subtotal are prorated BUT the proration is in user favor!
             // NOTE: When user downgrade, stripe invoice creates proration in user's favor, and the amount in invoice is the difference between two plans.
             // TODO: How to display this?
@@ -1798,7 +1798,7 @@ class StripeService
                 $invoice->setData(stripe_prefix('stripe_receipt_url'), $pi->charges->data[0]?->receipt_url ?? null, null);
             }
         }
-
+        
         $invoice->save();
 
         return $invoice;
@@ -1901,7 +1901,7 @@ class StripeService
         $stripe_customer_id = $customer->id;
 
         $user = get_user_by_stripe_customer_id($stripe_customer_id);
-
+        
         if(empty($user)) {
             DB::beginTransaction();
 
@@ -2024,7 +2024,7 @@ class StripeService
                 $order->billing_city = !empty($session->customer_details->address->city) ? $session->customer_details->address->city : '';
                 $order->billing_zip = !empty($session->customer_details->address->postal_code) ? $session->customer_details->address->postal_code : '';
             }
-
+            
             $order->phone_numbers = !empty($session->customer_details->phone) ? $session->customer_details->phone : [];
 
             $order->shipping_method = ''; // TODO: Should mimic shipping_method from tenant!!!
@@ -2212,7 +2212,7 @@ class StripeService
                     []
                 );
             }
-
+            
             // Take the info from stripe...
             $invoice->mergeData([
                 stripe_prefix('stripe_payment_mode') => $session->mode ?? null,
@@ -2403,13 +2403,13 @@ class StripeService
                 $invoice->billing_city = $order->billing_city;
                 $invoice->billing_zip = $order->billing_zip;
 
-
+                
                 $invoice->mergeData([
                     'customer' => [
                         'entity' => $user->entity,
                     ],
                 ]);
-
+    
                 if($user->entity === 'company') {
                     $invoice->mergeData([
                         'customer' => [
@@ -2429,7 +2429,7 @@ class StripeService
 
                 $invoice->saveQuietly();
             }
-
+            
         } catch (\Throwable $e) {
             Log::error($e);
             DB::rollBack();
@@ -2552,7 +2552,7 @@ class StripeService
                     }
                 }
 
-
+                
 
                 $subscription->saveQuietly();
             }
@@ -2799,9 +2799,9 @@ class StripeService
                 die();
             }
 
-            $order = Order::withoutGlobalScopes()->findOrFail($order_id);
-            $subscription = $order->user_subscription;
-
+            $order = Order::withoutGlobalScopes()->with(['user_subscription'])->findOrFail($order_id);
+            $subscription = !empty($order->user_subscription) ? $order->user_subscription : UserSubscription::withoutGlobalScopes()->findOrFail($stripe_subscription->metadata?->subscription_id ?? null);
+            
             if (!empty($subscription)) {
                 $subscription->is_temp = false;
 
@@ -2912,7 +2912,7 @@ class StripeService
                     } else if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($previous_attributes?->plan?->id ?? null)) {
                         $subscription->start_date = $stripe_subscription->current_period_start;
                         $subscription->end_date = $stripe_subscription->current_period_end;
-
+                        
                         // MAY HAPPEN THAT billing_reason is subscription_create!!!
 
                         // With condition `!empty($previous_attributes?->plan?->id ?? null)` we are preventing processing any subscription change which is NOT related to it's products/items changes, like metadata change and similar!
@@ -3005,11 +3005,11 @@ class StripeService
 
                     } else if(($stripe_billing_reason === 'subscription_update' || $stripe_billing_reason === 'subscription_create') && !empty($previous_attributes?->current_period_end ?? null) && !empty($previous_attributes?->trial_end ?? null)) {
                         $subscription->start_date = $stripe_subscription->current_period_start;
-
+                        
                         // This means that Trial end_date was changed from Stripe
                         $invoice_id = $stripe_subscription->metadata->invoice_id;
                         $existing_invoice = Invoice::query()->withoutGlobalScopes()->find($invoice_id);
-
+                        
                         if(!empty($existing_invoice)) {
                             $existing_invoice->end_date = $stripe_subscription?->trial_end ?? $existing_invoice->end_date;
                             $existing_invoice->saveQuietly();
