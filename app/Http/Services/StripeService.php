@@ -646,7 +646,8 @@ class StripeService
                     }
                 }
             } catch (\Exception $e) {
-                $this->createStripeCustomer($user);
+                // Commenting out for fixing - duplicate customer acount in stripe
+                // $this->createStripeCustomer($user);
             } 
         });
     }
@@ -2798,9 +2799,9 @@ class StripeService
                 die();
             }
 
-            $order = Order::withoutGlobalScopes()->findOrFail($order_id);
-            $subscription = $order->user_subscription;
-
+            $order = Order::withoutGlobalScopes()->with(['user_subscription'])->findOrFail($order_id);
+            $subscription = !empty($order->user_subscription) ? $order->user_subscription : UserSubscription::withoutGlobalScopes()->findOrFail($stripe_subscription->metadata?->subscription_id ?? null);
+            
             if (!empty($subscription)) {
                 $subscription->is_temp = false;
 
