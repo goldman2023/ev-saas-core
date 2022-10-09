@@ -270,6 +270,14 @@ if($colors) {
             border: 1px solid black;
         }
 
+        #blog_post_single_content a {
+            @apply text-indigo-600;
+        }
+
+        #blog_post_single_content a:hover {
+            text-decoration: underline;
+        }
+
         #blog_post_single_content table td {
             border: 1px solid black;
             padding: 3px;

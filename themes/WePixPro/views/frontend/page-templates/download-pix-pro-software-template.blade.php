@@ -30,7 +30,7 @@
                     </a>
                 </div>
                 <div class="w-auto py-1 md:py-0 flex justify-center">
-                    <a href="{{ '/page/plans-pricing' }}"
+                    <a href="{{ '/page/plans-and-pricing' }}"
                         class="btn-standard-outline h-[64px] text-center min-w-[180px] font-semibold justify-center px-7">
                         {{ translate('Pricing') }}
                     </a>

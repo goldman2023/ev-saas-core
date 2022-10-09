@@ -25,7 +25,7 @@
                     <div we-slot="" name="button_group_slot" we-title="Buttons" class="w-full">
                         <div class="mt-5 flex justify-center lg:justify-start lg:mt-8">
                             <div class="rounded-md shadow">
-                                <a href="/page/plans-pricing"
+                                <a href="/page/plans-and-pricing"
                                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary md:py-4 md:text-lg md:px-10">
                                     {{ translate('Get started free') }}
                                 </a>
@@ -233,7 +233,7 @@
             </div>
         </div>
         <div class="flex items-center justify-center mt-8 gap-3">
-            <a href="/page/plans-pricing" class="mb-0 text-lg2 font-bold text-primary-dark underline ">{{ translate('Start Free 1 Month Trial Now') }}</a>
+            <a href="/page/plans-and-pricing" class="mb-0 text-lg2 font-bold text-primary-dark underline ">{{ translate('Start Free 1 Month Trial Now') }}</a>
         </div>
     </div>
 </section>
