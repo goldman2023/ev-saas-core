@@ -272,6 +272,9 @@ if($colors) {
 
         #blog_post_single_content a {
             @apply text-indigo-600;
+        }
+
+        #blog_post_single_content a:hover {
             text-decoration: underline;
         }
 

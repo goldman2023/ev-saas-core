@@ -30,7 +30,7 @@ $models = \App\Models\Plan::published()->get();
         </div>
 
         <div
-            class="flex overflow-x-scroll md:overflow-x-hidden md:grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 pb-5 md:pb-0 pr-3 md:pr-0">
+            class="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 pb-5 md:pb-0 pr-3 md:pr-0">
             @if($models->isNotEmpty())
             @foreach($models as $model)
             <div class="w-full min-w-[250px] md:min-w-inherit" x-data="{
