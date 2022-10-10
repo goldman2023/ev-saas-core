@@ -25,6 +25,8 @@ class WeMediaLibrary extends Component
     protected $paginator;
 
     public $for_id = '';
+    
+    public $editorjs_media_wrapper_id = '';
 
     public $media = [];
 
@@ -79,9 +81,11 @@ class WeMediaLibrary extends Component
         return view('livewire.we-media-library');
     }
 
-    public function changeMediaLibrary($for_id, $media_type, $selected = null)
+    public function changeMediaLibrary($for_id, $media_type, $selected = null, $editorjs_media_wrapper_id = null)
     {
         $this->for_id = $for_id;
+
+        $this->editorjs_media_wrapper_id = $editorjs_media_wrapper_id;
 
         $this->populateMedia();
 

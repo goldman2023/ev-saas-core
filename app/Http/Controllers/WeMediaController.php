@@ -16,6 +16,17 @@ use Storage;
 
 class WeMediaController extends Controller
 {
+
+    public function upload()
+    {
+        dd(request()->file('image'));
+    }
+
+    public function fetch()
+    {
+        dd('fetch');
+    }
+    
     public function froalaLoadImages(Request $request)
     {
         try {

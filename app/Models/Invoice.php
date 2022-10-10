@@ -9,6 +9,7 @@ use App\Builders\BaseBuilder;
 use App\Enums\UserEntityEnum;
 use App\Traits\HasDataColumn;
 use Illuminate\Support\Carbon;
+use App\Enums\PaymentStatusEnum;
 use App\Models\PaymentMethodUniversal;
 use Illuminate\Database\Eloquent\Model;
 use LaravelDaily\Invoices\Classes\Party;
@@ -167,7 +168,7 @@ class Invoice extends WeBaseModel
     }
 
     public function setRealInvoiceNumber() {
-        if($this->is_temp === false && $this->total_price > 0) {
+        if($this->is_temp === false && $this->total_price > 0 && $this->payment_status === PaymentStatusEnum::paid()->value) {
             $this->real_invoice_prefix = get_tenant_setting('invoice_prefix');
 
             if($this->mode === 'live') {
