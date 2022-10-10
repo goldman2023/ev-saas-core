@@ -77,3 +77,9 @@ themes/features/we-edit/node_modules/*
 !public/images
 vendor-d/*
 public/vendor/nova/vendor.js.LICENSE.txt
+
+# EditorJS custom plugins
+themes/EvTailwind/js/editorjs/we-image-tool/node_modules/*
+themes/EvTailwind/js/editorjs/we-image-tool/npm-debug.log
+themes/EvTailwind/js/editorjs/we-image-tool/.idea/
+themes/EvTailwind/js/editorjs/we-image-tool/.DS_Store
