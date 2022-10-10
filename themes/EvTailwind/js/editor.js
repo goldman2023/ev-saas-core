@@ -4,7 +4,7 @@ import List from '@editorjs/list';
 import Checklist from '@editorjs/checklist';
 import Code from '@editorjs/code';
 import Embed from '@editorjs/embed';
-import WeImageTool from './editorjs/we-image/dist/bundle';
+import WeImageTool from './editorjs/we-image-tool/dist/bundle';
 import InlineCode from '@editorjs/inline-code';
 import Link from '@editorjs/link';
 import Marker from '@editorjs/marker';
