@@ -1,4 +1,4 @@
-<div class="w-full" x-data="{
+<div class="w-full livewire-form" x-data="{
     status: @js($blogPost->status ?? App\Enums\StatusEnum::draft()->value),
     type: @js($blogPost->type ?? App\Enums\BlogPostTypeEnum::blog()->value),
     thumbnail: @js(['id' => $blogPost->thumbnail->id ?? null, 'file_name' => $blogPost->thumbnail->file_name ?? '']),

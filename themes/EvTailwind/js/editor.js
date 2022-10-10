@@ -4,7 +4,7 @@ import List from '@editorjs/list';
 import Checklist from '@editorjs/checklist';
 import Code from '@editorjs/code';
 import Embed from '@editorjs/embed';
-import Image from '@editorjs/image';
+import WeImageTool from './editorjs/we-image/dist/bundle';
 import InlineCode from '@editorjs/inline-code';
 import Link from '@editorjs/link';
 import Marker from '@editorjs/marker';
@@ -27,10 +27,10 @@ import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 window.EditorJS = EditorJS;
 window.EditorJSUndoPlugin = Undo;
 window.edjsHTML = edjsHTML;
+
 window.getEditorJsDefaultConfig = function($id) {
     return { 
-        holder: $id, 
-        
+        holder: $id,
         /** 
          * Available Tools list. 
          * Pass Tool's class or Settings object for each Tool you want to use 
@@ -43,7 +43,12 @@ window.getEditorJsDefaultConfig = function($id) {
             }, 
             list: List,
             checklist: Checklist,
-            image:Image,
+            image: {
+                class: WeImageTool,
+                config: {
+                    
+                }
+            },
             link: Link,
             warning:Warning,
             table:Table,

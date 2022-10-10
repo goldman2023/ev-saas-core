@@ -17,6 +17,7 @@ use App\Http\Controllers\WeQuizController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\WeMediaController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\WEImagesController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVProductController;
@@ -33,9 +34,9 @@ use App\Http\Controllers\WeSubscriptionsController;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Http\Controllers\Integrations\WooCommerceController;
 use App\Http\Controllers\Integrations\IntegrationsController;
+use App\Http\Controllers\Integrations\PixProLicenseController;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
-use App\Http\Controllers\Integrations\PixProLicenseController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 
 Route::middleware([
@@ -275,4 +276,9 @@ Route::middleware([
     // Products
     Route::get('/products/search', [EVProductController::class, 'api_search_products'])->name('products.search');
     Route::get('/product/addons/search', [EVProductController::class, 'api_search_product_addons'])->name('products.addons.search');
+
+    // EditorJS endpoints
+    Route::post('/images/upload', [WeMediaController::class, 'upload'])->name('images.upload');
+    Route::post('/images/fetch', [WeMediaController::class, 'fetch'])->name('images.fetch');
+
 });
