@@ -1,6 +1,7 @@
 <div class="fixed z-[10000] inset-0 overflow-y-auto" x-data="{
     displayModal: false,
     for_id: @entangle('for_id'),
+    editorjs_media_wrapper_id: @entangle('editorjs_media_wrapper_id'),
     media: @entangle('media'),
     new_media: @entangle('new_media'),
     media_type: @entangle('media_type'),
@@ -44,6 +45,7 @@
       {{-- Send event to element with (for_id) with selected item(s) --}}
       $dispatch('we-media-selected-event', {
         for_id: this.for_id,
+        editorjs_media_wrapper_id: this.editorjs_media_wrapper_id,
         selected: this.selected
       });
     }

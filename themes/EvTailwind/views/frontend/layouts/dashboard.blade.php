@@ -12,6 +12,10 @@
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
+    {{-- EditorJS images routes --}}
+    <meta name="editorjs-image-upload" content="{{ route('api.dashboard.images.upload') }}">
+    <meta name="editorjs-image-fetch" content="{{ route('api.dashboard.images.fetch') }}">
+
     @yield('meta')
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
