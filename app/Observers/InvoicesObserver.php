@@ -35,6 +35,11 @@ class InvoicesObserver
     public function updated(Invoice $invoice)
     {
         $this->sendNotifications($invoice);
+
+        if($invoice->getOriginal('payment_status') !== PaymentStatusEnum::paid()->value && $invoice->payment_status === PaymentStatusEnum::paid()->value) {
+            $invoice->setRealInvoiceNumber();
+            $invoice->saveQuietly();
+        }
     }
 
     /**
