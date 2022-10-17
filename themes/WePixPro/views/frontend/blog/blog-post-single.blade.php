@@ -105,7 +105,7 @@
                 </h1>
             </div>
 
-            <div class="w-full flex flex-col sm:flex-row justify-center items-center">
+            <div class="w-full flex flex-col sm:flex-row justify-center items-center mb-6">
                 @if(!empty($authors?->first()))
                 <div class="flex items-center mb-3 sm:mb-0 mr-0 sm:mr-10">
                     <img src="{{ $authors?->first()?->getThumbnail(['w' => 100]) ?? '' }}"
@@ -118,6 +118,8 @@
                     @svg('heroicon-o-calendar', ['class' => 'w-4 h-4 mr-2'])
                     <span class="text-14">{{ $blog_post->created_at->format('M d, Y') }}</span>
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -135,6 +137,8 @@
                 <div id="blog_post_single_content" class="w-full block pb-5 mb-[15px]">
                     {!! $blog_post->content !!}
                 </div>
+
+                <x-blog.social-sharing-buttons> </x-blog.social-sharing-buttons>
 
                 @if(!empty($authors?->first()))
                 {{-- <div class="w-full block pb-5">

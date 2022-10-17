@@ -42,12 +42,12 @@
                         </div>
 
                         <a href="{{ route('custom-pages.show_custom_page', ['plans-and-pricing']) }}"
-                            class="bg-primary text-white rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
+                            class="btn-primary text-white rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
                             {{ translate('Try for free') }}
                         </a>
                     @else
                         <a href="{{ route('dashboard') }}"
-                            class="bg-primary text-white rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
+                            class="btn-primary text-white rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
                             {{ translate('Dashboard') }}
                         </a>
                     @endguest
