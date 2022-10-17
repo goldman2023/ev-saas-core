@@ -86,7 +86,7 @@ $models = \App\Models\Plan::published()->get();
 
                         @auth
                         <a href="{{ route('my.plans.management') }}"
-                            class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
+                            class="bg-transparent transition-all duration-300 mx-auto block text-center hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
                             {{ translate('Try it free') }}
                         </a>
                         @endauth
@@ -94,14 +94,14 @@ $models = \App\Models\Plan::published()->get();
                         @guest
                         <div x-cloack x-show="pricing_mode === 'annual'">
                             <a href="{{ route('user.registration', ['plan' => $model->id, 'interval' => 'annual']) }}"
-                                class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
+                                class="bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
                                 {{ translate('Try it free') }}
                             </a>
                         </div>
 
                         <div x-cloak x-show="pricing_mode === 'month'">
                             <a href="{{ route('user.registration', ['plan' => $model->id, 'interval' => 'month']) }}"
-                                class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
+                                class="bg-transparent transition-all duration-300 mx-auto block text-center   hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
                                 {{ translate('Try it free') }}
                             </a>
                         </div>
@@ -110,7 +110,7 @@ $models = \App\Models\Plan::published()->get();
 
                         @else
                         <a href="{{ $model->getCoreMeta('custom_redirect_url') }}"
-                            class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
+                            class="bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-3 rounded-lg">
                             {{ !empty($model->getCoreMeta('custom_cta_label')) ? $model->getCoreMeta('custom_cta_label')
                             : translate('Contact Us') }}
                         </a>
