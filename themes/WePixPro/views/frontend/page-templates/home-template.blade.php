@@ -80,7 +80,7 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-[80%] aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-1')
                             </div>
 
@@ -95,7 +95,7 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-[80%] aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-2')
                             </div>
 
@@ -110,7 +110,7 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-[80%] aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-3')
 
                             </div>
@@ -126,7 +126,7 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-[80%] aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-4')
 
                             </div>
@@ -142,7 +142,7 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-[80%] aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-5')
 
                             </div>
@@ -158,7 +158,7 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-[80%] aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-6')
                             </div>
 

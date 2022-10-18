@@ -172,7 +172,7 @@ $models = \App\Models\Plan::published()->get();
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="hidden md:block">
+                        <tr class="">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
@@ -639,7 +639,7 @@ $models = \App\Models\Plan::published()->get();
                             <td class="px-0 py-5 border-1 bg-white ">
                                 <div class="flex  items-center">
                                     <a href="{{ $model->getCoreMeta('custom_redirect_url') }}"
-                                        class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-16 font-medium py-2 px-4 rounded-lg">
+                                        class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-transparent  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-16 font-medium py-2 px-4 rounded-lg">
                                         {{ !empty($model->getCoreMeta('custom_cta_label')) ?
                                         $model->getCoreMeta('custom_cta_label') : translate('Contact Us') }}
                                     </a>
