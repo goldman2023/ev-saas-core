@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogPost;
 use App\Models\Page;
 use App\Models\PageTranslation;
 use Illuminate\Http\Request;
@@ -20,10 +21,11 @@ class PageController extends Controller
                 return view('frontend.custom-pages.'.$slug);
             }
         } catch (\Exception $e) {
-            $page = Page::where('slug', '=', $slug)->firstOrFail();
-            $sections = $page->content;
+            $page = Page::where('slug', '=', $slug)->first();
 
             if ($page != null) {
+                $sections = $page->content;
+
 
                 if(auth()->user()) {
                     activity()
@@ -40,6 +42,16 @@ class PageController extends Controller
                     'page' => $page,
                     'sections' => $sections,
                 ]);
+            } else {
+                /* Blog post redirect */
+                // dd($slug);
+                $blog_post = BlogPost::where('slug', $slug)->get();
+                if($blog_post) {
+                    return redirect()->route('blog.post.single', $slug);
+                } else {
+                    return abort(404);
+                }
+
             }
 
             return view('frontend.pages.'.$slug);

@@ -80,12 +80,12 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-1')
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     Detailed, quick, precise 2D, 3D measurements
                                 </h4>
                             </div>
@@ -95,12 +95,12 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-2')
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     Interactive digital elevation maps
                                 </h4>
                             </div>
@@ -110,13 +110,13 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-3')
 
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     True Orthophoto imagery
                                 </h4>
                             </div>
@@ -126,13 +126,13 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-4')
 
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     3D meshes for various applications
                                 </h4>
                             </div>
@@ -142,13 +142,13 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-5')
 
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     Realistic textures
                                 </h4>
                             </div>
@@ -158,12 +158,12 @@
                 <div class="pt-6">
                     <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                         <div class="-mt-6 h-full">
-                            <div class="w-[180px] sm:w-full aspect-square inline-flex items-center justify-center rounded-md">
+                            <div class="w-[180px] sm:w-[60%] aspect-square inline-flex items-center justify-center rounded-md">
                                 @include('svg.features.icon-6')
                             </div>
 
                             <div class="w-full">
-                                <h4 class="mt-0 sm:mt-8 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
+                                <h4 class="mt-0 text-16 sm:text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                                     Single and generated contour lines
                                 </h4>
                             </div>
