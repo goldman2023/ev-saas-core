@@ -16,7 +16,7 @@
 
                 <div we-slot="" name="text_slot" we-title="Section Text" class="w-full mb-8">
                     <p we-name="section_text" we-title="Text" class="text-16 md:text-20 font-medium text-white">
-                        {{ translate('Choose from our 3 different plans or ask for a custom solution where you can process as many photos as you can!') }}
+                        {{ translate('You can choose from our three different plans or ask for a custom solution where you can process as many photos as you can!') }}
                     </p>
                 </div>
 
@@ -24,7 +24,7 @@
                     <div class="mb-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8 ">
                         <div class="rounded-md shadow ">
                             <a href="/page/plans-and-pricing/"
-                                class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-gray-700  hover:bg-primary md:py-4 md:text-lg md:px-10 bg-white hover:bg-primary hover:text-white"
+                                class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-gray-700 md:py-4 md:text-lg md:px-10 bg-white hover:bg-[#657934] hover:text-white"
                                 target="_self">
                                 {{ translate('Get started free') }}
                             </a>

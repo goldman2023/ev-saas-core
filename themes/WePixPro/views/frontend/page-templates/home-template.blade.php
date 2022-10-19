@@ -11,7 +11,7 @@
                     <div we-slot="" name="title_slot" we-title="Hero Title" class="w-full">
                         <h1 we-name="hero_title" we-title="Title"
                             class="block text-center lg:text-left font-bold lg:font-black leading-none text-gray-900 text-28 sm:text-36 lg:text-[48px] xl:text-[50px] lg:pr-[3rem]">
-                            {{ translate('Convert photos to 3D models with pro-grade tools') }}
+                            {{ translate('Photos to 3D models') }}
                         </h1>
                     </div>
 
@@ -26,7 +26,7 @@
                         <div class="mt-5 flex justify-center lg:justify-start lg:mt-8">
                             <div class="rounded-md shadow">
                                 <a href="/page/plans-and-pricing"
-                                    class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary md:py-4 md:text-lg md:px-10">
+                                    class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-[#657934] md:py-4 md:text-lg md:px-10">
                                     {{ translate('Get started free') }}
                                 </a>
                             </div>
@@ -177,9 +177,9 @@
             <div class="w-full flex justify-center">
                 <div class="rounded-md shadow">
                     <a href="/page/features"
-                        class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary md:py-4 md:text-lg md:px-10"
+                        class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-[#657934] md:py-4 md:text-lg md:px-10"
                         target="_self">
-                        View more features
+                        {{ translate('View more features') }}
                     </a>
                 </div>
             </div>
@@ -233,7 +233,9 @@
             </div>
         </div>
         <div class="flex items-center justify-center mt-8 gap-3">
-            <a href="/page/plans-and-pricing" class="mb-0 text-lg2 font-bold text-primary-dark underline ">{{ translate('Start Free 1 Month Trial Now') }}</a>
+            <a href="/testimonials/" class="mb-0 text-lg2 font-bold text-primary-dark hover:text-black underline ">
+                {{ translate('Read more') }}
+            </a>
         </div>
     </div>
 </section>

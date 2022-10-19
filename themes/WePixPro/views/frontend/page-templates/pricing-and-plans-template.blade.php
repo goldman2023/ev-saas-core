@@ -151,7 +151,7 @@ $models = \App\Models\Plan::published()->get();
     <div>
         <div class="mb-5 md:mb-0 py-4 overflow-x-auto">
             <div class="inline-block min-w-full overflow-hidden">
-                <table class="min-w-[900px] w-full leading-normal">
+                <table class="min-w-[900px] w-full leading-normal divide-y divide-gray-300">
                     <thead>
                         <tr class=" bg-darkGray ">
                             <th class="px-5 py-3 border-1  bg-gray-100 text-left text-lg2 font-bold text-lightDark">
@@ -171,8 +171,8 @@ $models = \App\Models\Plan::published()->get();
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="">
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="divide-x divide-gray-200">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
@@ -223,7 +223,7 @@ $models = \App\Models\Plan::published()->get();
 
 
                         </tr>
-                        <tr>
+                        <tr class="divide-x divide-gray-200">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
@@ -274,7 +274,7 @@ $models = \App\Models\Plan::published()->get();
 
 
                         </tr>
-                        <tr>
+                        <tr class="divide-x divide-gray-200">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
@@ -325,7 +325,7 @@ $models = \App\Models\Plan::published()->get();
 
 
                         </tr>
-                        <tr>
+                        <tr class="divide-x divide-gray-200">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
@@ -376,7 +376,7 @@ $models = \App\Models\Plan::published()->get();
 
 
                         </tr>
-                        <tr>
+                        <tr class="divide-x divide-gray-200">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center ">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
@@ -427,7 +427,7 @@ $models = \App\Models\Plan::published()->get();
 
 
                         </tr>
-                        <tr>
+                        <tr class="divide-x divide-gray-200">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
@@ -479,7 +479,7 @@ $models = \App\Models\Plan::published()->get();
 
 
                         </tr>
-                        <tr>
+                        <tr class="divide-x divide-gray-200">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
@@ -511,7 +511,7 @@ $models = \App\Models\Plan::published()->get();
 
 
                         </tr>
-                        <tr>
+                        <tr class="divide-x divide-gray-200">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
@@ -563,7 +563,7 @@ $models = \App\Models\Plan::published()->get();
 
 
                         </tr>
-                        <tr>
+                        <tr class="divide-x divide-gray-200">
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">

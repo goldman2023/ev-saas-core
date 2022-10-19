@@ -94,7 +94,7 @@
 {{-- {{ Breadcrumbs::render('blog', $blog_post) }} --}}
 
 <section
-    class="relative  lg:pt-[120px]  lg:pb-[120px]  sm:pt-[90px]  sm:pb-[90px]  pt-[50px]  pb-[50px]   bg-[#f5f5f5]   ">
+    class="relative  lg:pt-[60px]  lg:pb-[30px]  sm:pt-[60px]  sm:pb-[60px]  pt-[40px]  pb-[40px]   bg-[#f5f5f5]   ">
 
     <div class="mx-auto max-w-4xl px-8 sm:px-4">
         <div class="text-center">
