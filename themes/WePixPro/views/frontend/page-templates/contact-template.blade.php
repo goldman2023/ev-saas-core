@@ -30,11 +30,7 @@
                             <span>{{ translate('Šiauliai, Lithuania') }}</span>
                         </div>
                         <dl class="mt-2 space-y-3">
-                            <dt><span class="sr-only">{{ translate('Phone number') }}</span></dt>
-                            <dd class="flex text-base text-typ-3">
-                                @svg('heroicon-o-phone', ['class' => 'flex-shrink-0 w-6 h-6 text-primary'])
-                                <span class="ml-3">{{ translate('+1 (555) 123-4567') }}</span>
-                            </dd>
+
                             <dt><span class="sr-only">{{ translate('Email') }}</span></dt>
                             <dd class="flex text-base text-typ-3">
                                 @svg('heroicon-o-mail', ['class' => 'flex-shrink-0 w-6 h-6 text-primary'])
