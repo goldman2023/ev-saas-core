@@ -83,7 +83,7 @@
         "webtopay/libwebtopay": "^1.8"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.6",
+        "barryvdh/laravel-debugbar": "^3.7",
         "fakerphp/faker": "^1.9.1",
         "filp/whoops": "^2.14",
         "laracasts/cypress": "^2.2",

@@ -893,10 +893,24 @@
                                         </div>
                                         {{-- END Trial duration --}}
 
+                                {{-- Tasks Enabled --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
+                                    x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Enable Tasks')
+                                            }}</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('Enable the tasks feature') }}
+                                        </p>
                                     </div>
 
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <x-dashboard.form.toggle field="settings.tasks_enabled" />
+                                    </div>
                                 </div>
-                                {{-- END Plans Trial Mode --}}
+                                {{-- END Tasks Enabled --}}
+                                    </div>
+
 
                                 {{-- Save Features --}}
                                 <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
@@ -918,6 +932,7 @@
                                         $wire.set('settings.wishlist_feature', settings.wishlist_feature, true);
                                         $wire.set('settings.vendor_mode_feature', settings.vendor_mode_feature, true);
                                         $wire.set('settings.plans_trial_mode', settings.plans_trial_mode, true);
+                                        $wire.set('settings.tasks_enabled', settings.tasks_enabled, true);
                                     " wire:click="saveFeatures()">
                                         {{ translate('Save') }}
                                     </button>

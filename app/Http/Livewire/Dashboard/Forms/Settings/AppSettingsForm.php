@@ -92,6 +92,7 @@ class AppSettingsForm extends Component
                 'settings.vendor_mode_feature' => ['boolean'],
                 'settings.plans_trial_mode' => ['boolean'],
                 'settings.plans_trial_duration' => ['exclude_if:settings.plans_trial_mode,false', 'required', 'numeric', 'gt:0'],
+                'settings.tasks_enabled' => ['boolean'],
 
                 
             ]),
