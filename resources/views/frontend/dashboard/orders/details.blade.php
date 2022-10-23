@@ -45,6 +45,7 @@
             </a>
         </div>
 
+
         {{-- Actions --}}
         <div class="px-4 py-2 space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0 mb-4">
             <div class="flex items-center">
