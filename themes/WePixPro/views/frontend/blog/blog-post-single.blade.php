@@ -98,10 +98,12 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+
+        const viewers = document.querySelectorAll(".icgb-compare-block");
+
         viewers.forEach((element) => {
         let view = new ImageCompare(element).mount();
 
-        const viewers = document.querySelectorAll(".icgb-compare-block");
 
     });
 }, false);
