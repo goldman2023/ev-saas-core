@@ -30,6 +30,7 @@ use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DocumentGalleryController;
+use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\WeSubscriptionsController;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Http\Controllers\Integrations\WooCommerceController;
