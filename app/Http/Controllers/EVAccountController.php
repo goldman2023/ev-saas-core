@@ -96,11 +96,6 @@ class EVAccountController extends Controller
         return view('frontend.dashboard.settings.app-settings', compact('settings_group', 'title'));
     }
 
-    public function business_profile()
-    {
-        return view('frontend.dashboard.settings.business-profile');
-    }
-
     public function design_settings_store(Request $request)
     {
         $domain = tenant()->domains()->first();
