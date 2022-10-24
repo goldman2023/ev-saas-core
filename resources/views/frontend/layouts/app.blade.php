@@ -37,8 +37,7 @@
 
     @stack('pre_head_scripts')
 
-    <script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
-    <!-- Vendor Scripts -->
+
 
     <x-default.system.tracking-pixels>
     </x-default.system.tracking-pixels>
@@ -106,13 +105,16 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
 
-@stack('footer_scripts')
 
 @include('frontend.layouts.partials.app-js')
 
 @php
     echo get_setting('footer_script');
 @endphp
+
+<script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
+<!-- Vendor Scripts -->
+@stack('footer_scripts')
 
     @livewireStyles
     @livewireScripts
