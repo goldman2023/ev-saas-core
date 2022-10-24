@@ -39,7 +39,7 @@
                       @endif
 
                       <p class=" text-sm text-lightDark py-6 mb-4">
-                        {{ $model->excerpt }}
+                        {!! $model->excerpt !!}
                       </p>
 
                       <div class="w-full space-y-3">
