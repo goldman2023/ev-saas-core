@@ -910,6 +910,7 @@
                                 </div>
                                 {{-- END Tasks Enabled --}}
                                     </div>
+                                </div>
 
 
                                 {{-- Save Features --}}
@@ -1368,7 +1369,7 @@
                                     </livewire:dashboard.forms.payment-methods.payment-method-card>
                                     @endforeach
                                 @endif
-                                
+
                             </div>
                             {{-- END Payments --}}
 
@@ -2332,7 +2333,7 @@
                                     </div>
                                     {{-- END Save Registration settings --}}
                                 </div>
-                                
+
 
                             </div>
                             {{-- END Advanced --}}
