@@ -5,8 +5,8 @@
     type: @js($task->type ?? App\Enums\TaskTypesEnum::issue()->value),
     status: @js($task->status ?? App\Enums\TaskStatusEnum::scoping()->value),
     assignee_id: @js($task->assignee_id ?? Auth::id()),
-    subject_type: @js($task->subject_type ?? App\Models\Product::find(1)),
-    subject_id: @js($task->subject_type->id ?? App\Models\Product::find(1)->id),
+    subject_type: @js($task->subject_type ?? App\Models\Product::first()),
+    subject_id: @js($task->subject_type->id ?? App\Models\Product::first()->id),
     content: @entangle('task.content').defer,
 }" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
     x-cloak>

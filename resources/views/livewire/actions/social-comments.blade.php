@@ -21,7 +21,7 @@
                 <x-system.invalid-msg field="comment_text" class="mb-2"></x-system.invalid-msg>
 
                 <button type="button" wire:click="save_comment()"
-                    class="ml-auto inline-flex items-center px-3 py-1 border border-transparent text-12 text-primary bg-primary-light rounded">
+                    class="ml-auto inline-flex items-center px-3 py-1 border border-transparent text-12 text-black bg-primary-light rounded">
                     {{ translate('Post') }}
                 </button>
             </div>

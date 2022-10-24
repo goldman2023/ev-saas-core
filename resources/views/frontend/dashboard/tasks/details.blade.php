@@ -51,12 +51,14 @@
                                 </div>
                                 <div>
                                    <p class="font-semibold text-gray-700"> {{ translate('Description') }}</p>
-                                    {!! $task->content !!} 
+                                    {!! $task->content !!}
                                 </div>
                             </div>
                         </div>
+                        <div class="card">
+                            <livewire:actions.social-comments :item="$task" />
 
-                        <livewire:actions.social-comments :reviews="true" :item="$task" />
+                        </div>
                     </div>
                     <!-- Right column -->
                     <div class="grid grid-cols-1 gap-4">

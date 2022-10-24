@@ -5,9 +5,9 @@
         @foreach($order_items as $item)
         <div class="bg-white border-t border-b border-gray-200 shadow-sm sm:border sm:rounded-lg">
             <div class="py-6 px-4 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
-                <div class="sm:flex lg:col-span-7">
+                <div class="sm:flex lg:col-span-12">
                     <div
-                        class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40 border border-gray-200 shadow">
+                        class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 border border-gray-200 shadow">
                         @if(!empty($item?->subject))
                         <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
                             class="w-full h-full object-center object-cover sm:w-full sm:h-full">

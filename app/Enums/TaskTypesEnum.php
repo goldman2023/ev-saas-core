@@ -25,11 +25,11 @@ class TaskTypesEnum extends EVBaseEnum
     public static function labels(): array
     {
         return [
-            'issue' => 'Issue',
-            'payment' => 'Payment',
-            'request' => 'Request',
-            'improvement' => 'Improvement',
-            'other' => 'Other',
+            'issue' => translate('Issue'),
+            'payment' => translate('Payment'),
+            'request' => translate('Request'),
+            'improvement' => translate('Improvement'),
+            'other' => translate('Other'),
         ];
     }
 }

@@ -21,7 +21,31 @@
         </a>
     </x-slot>
 </x-dashboard.section-headers.section-header>
-<div class="grid sm:grid-cols-12 gap-3">
+<div class="grid sm:grid-cols-12 gap-6">
+     {{-- Right/Sidebar --}}
+     <div class="sm:col-span-4">
+        <div class="card mb-3">
+            <div class="w-full pb-4 mb-4 border-b ">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status') }}</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Here you can see the current status of the order') }}</p>
+            </div>
+
+            <x-dashboard.orders.order-timeline>
+            </x-dashboard.orders.order-timeline>
+        </div>
+
+        <div class="we-qr-code card mb-3">
+            <div class="w-full pb-4 mb-4 border-b ">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('QR Code') }}</h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('By scanning this QA code you can open this page on mobile') }}</p>
+            </div>
+
+            {!! QrCode::size(200)->generate(URL::current()) !!}
+        </div>
+
+    </div>
+
+
     <div class="sm:col-span-8">
 
         <div class="bg-gray-50">
@@ -90,18 +114,18 @@
                     </ul>
                 </div>
                 <div id="myTabContent">
-                    <div class="p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <x-dashboard.orders.order-products-list :order="$order" :orderItems="$order_items"></x-dashboard.orders.order-products-list>
 
                     </div>
-                    <div class="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                    <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                         <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
                             <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
                         </div>
                         <livewire:dashboard.tables.recent-invoices-widget-table :order="$order" :per-page="10"
                             :show-per-page="false" :show-search="false" :column-select="false" />
                     </div>
-                    <div class="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                    <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                         @livewire('dashboard.elements.activity-log',
                         [
                             'subject' => $order,
@@ -212,28 +236,7 @@
 
     </div>
 
-    {{-- Right/Sidebar --}}
-    <div class="sm:col-span-4">
-        <div class="card mb-3">
-            <div class="w-full pb-4 mb-4 border-b ">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status') }}</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Here you can see the current status of the order') }}</p>
-            </div>
 
-            <x-dashboard.orders.order-timeline>
-            </x-dashboard.orders.order-timeline>
-        </div>
-
-        <div class="we-qr-code card mb-3">
-            <div class="w-full pb-4 mb-4 border-b ">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('QR Code') }}</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('By scanning this QA code you can open this page on mobile') }}</p>
-            </div>
-
-            {!! QrCode::size(200)->generate(URL::current()) !!}
-        </div>
-
-    </div>
 </div>
 
 
