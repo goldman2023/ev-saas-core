@@ -1,19 +1,24 @@
 <?php
 
-namespace App\View\Components\Dashboard\Widgets\Business;
+namespace App\View\Components\Dashboard\Orders;
 
 use Illuminate\View\Component;
 
-class QuickAccess extends Component
+class OrderProductsList extends Component
 {
+    public $order_items;
+    public $order;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($orderItems, $order)
     {
         //
+        $this->order = $order;
+        $this->order_items = $orderItems;
+
     }
 
     /**
@@ -23,6 +28,6 @@ class QuickAccess extends Component
      */
     public function render()
     {
-        return view('components.dashboard.widgets.business.quick-access');
+        return view('components.dashboard.orders.order-products-list');
     }
 }

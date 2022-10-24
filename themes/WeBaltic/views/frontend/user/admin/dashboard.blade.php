@@ -3,16 +3,6 @@
 @section('panel_content')
 
 <section>
-    <div class="grid grid-cols-3">
-        <div class="col-span-1">
-        </div>
-
-        <div class="col-span-1">
-        </div>
-    </div>
-</section>
-
-<section>
     <div class="row">
         <div class="grid">
             <div class="mb-6">
@@ -42,21 +32,14 @@
                     </div>
                 </div>
 
-                <div>
-                    <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
-                </div>
-
-
             </div>
 
             <div class="col-span-1">
-                {{-- <div class=" mb-6 bg-white p-6 rounded-xl shadow">
+                <div class=" mb-6 bg-white p-6 rounded-xl shadow">
                     <x-dashboard.widgets.business.calendar-summary></x-dashboard.widgets.business.calendar-summary>
-                </div> --}}
+                </div>
 
-                {{-- <div class=" mb-6 bg-white p-6 rounded-xl shadow">
-                    <x-dashboard.widgets.business.quick-access></x-dashboard.widgets.business.quick-accesss>
-                </div> --}}
+
 
                 <x-dashboard.orders.latest-orders></x-dashboard.orders.latest-orders>
 

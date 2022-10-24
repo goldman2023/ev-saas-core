@@ -20,16 +20,17 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\WEImagesController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EVAccountController;
-use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\WeInvoiceController;
 use App\Http\Controllers\WeSectionController;
 use App\Http\Controllers\EVBlogPostController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
+use App\Http\Controllers\EVTaskController;
 use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DocumentGalleryController;
+use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\WeSubscriptionsController;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Http\Controllers\Integrations\WooCommerceController;
@@ -130,6 +131,13 @@ Route::middleware([
         Route::get('/invoice/{id}/download', [WeInvoiceController::class, 'download_invoice'])->name('invoice.download');
         Route::get('/order/{order_id}/upcoming-invoice/download', [WeInvoiceController::class, 'download_upcoming_invoice'])->name('invoice.upcoming.download');
 
+        /* Tasks */
+        Route::get('/tasks', [EVTaskController::class, 'index'])->name('tasks.index');
+        Route::get('/task/create', [EVTaskController::class, 'create'])->name('task.create');
+        Route::get('/task/edit/{id}', [EVTaskController::class, 'edit'])->name('task.edit');
+        Route::get('/task/details/{id}', [EVTaskController::class, 'details'])->name('task.details');
+        Route::get('/tasks/destroy/{id}', [EVTaskController::class, 'destroy'])->name('task.destroy');
+        Route::get('/tasks/completed/{id}', [EVTaskController::class, 'completed'])->name('task.completed');
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.index');

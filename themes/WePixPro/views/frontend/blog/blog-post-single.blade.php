@@ -8,6 +8,17 @@
 @endsection
 
 @push('head_scripts')
+<script src="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.js"></script>
+
+<link href="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.css" rel="stylesheet" />
+
+<script>
+const viewers = document.querySelectorAll(".icgb-compare-block");
+
+  viewers.forEach((element) => {
+    let view = new ImageCompare(element).mount();
+  });
+</script>
 <style>
     #blog_post_single_content img {
         overflow-x: hidden;

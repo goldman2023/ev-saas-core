@@ -1,10 +1,10 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Dashboard\Orders;
 
 use Illuminate\View\Component;
 
-class B2BSearch extends Component
+class LatestOrders extends Component
 {
     /**
      * Create a new component instance.
@@ -23,6 +23,6 @@ class B2BSearch extends Component
      */
     public function render()
     {
-        return view('components.b2-b-search');
+        return view('components.dashboard.orders.latest-orders');
     }
 }

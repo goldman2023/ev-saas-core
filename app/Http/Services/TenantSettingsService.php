@@ -320,6 +320,11 @@ class TenantSettingsService
                 'via' => 'array',
             ];
         }
+        $tasks_enabled = [
+            'tasks_enabled' => 'boolean',
+        ];
+
+        $app_settings = array_merge($app_settings,$tasks_enabled);
 
         return apply_filters( 'app-settings-definition', $app_settings );
     }

@@ -269,7 +269,8 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.input type="number" min="0" max="100" field="settings.company_tax_rate" />
+                                        <x-dashboard.form.input type="number" min="0" max="100"
+                                            field="settings.company_tax_rate" />
                                     </div>
                                 </div>
                                 <!-- END Company tax rate  -->
@@ -616,7 +617,8 @@
                                         <span class="text-sm font-medium text-gray-900">{{ translate('Notifications')
                                             }}</span>
                                         <p class="text-gray-500 text-sm">
-                                            {{ translate('If you want to enable notifications for users inside website') }}
+                                            {{ translate('If you want to enable notifications for users inside website')
+                                            }}
                                         </p>
                                     </div>
 
@@ -646,9 +648,12 @@
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
                                     x-data="{}">
                                     <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                        <span class="text-sm font-medium text-gray-900">{{ translate('Enable multiple subscriptions') }}</span>
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Enable multiple
+                                            subscriptions') }}</span>
                                         <p class="text-gray-500 text-sm">
-                                            {{ translate('Allowing users to have multiple subscriptions (needed for multi-vendor apps AND if you want to allow users to buy different interval subscriptions') }}
+                                            {{ translate('Allowing users to have multiple subscriptions (needed for
+                                            multi-vendor apps AND if you want to allow users to buy different interval
+                                            subscriptions') }}
                                         </p>
                                     </div>
 
@@ -656,15 +661,17 @@
                                         <x-dashboard.form.toggle field="settings.multiple_subscriptions_enabled" />
                                     </div>
                                 </div>
-                                {{-- END Multiple Subscriptions Feature  --}}
+                                {{-- END Multiple Subscriptions Feature --}}
 
                                 {{-- Multi-item Subscription Feature --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
                                     x-data="{}">
                                     <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                        <span class="text-sm font-medium text-gray-900">{{ translate('Enable multi-item subscriptions') }}</span>
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Enable multi-item
+                                            subscriptions') }}</span>
                                         <p class="text-gray-500 text-sm">
-                                            {{ translate('If you want to enable buying multiple items (licenses/seats/whatever) under ONE subscription ') }}
+                                            {{ translate('If you want to enable buying multiple items
+                                            (licenses/seats/whatever) under ONE subscription ') }}
                                         </p>
                                     </div>
 
@@ -678,14 +685,17 @@
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
                                     x-data="{}">
                                     <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                        <span class="text-sm font-medium text-gray-900">{{ translate('Allow subscription items distribution') }}</span>
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Allow subscription
+                                            items distribution') }}</span>
                                         <p class="text-gray-500 text-sm">
-                                            {{ translate('If you want to enable distribution of subscription items to users/invitees by subscription owner') }}
+                                            {{ translate('If you want to enable distribution of subscription items to
+                                            users/invitees by subscription owner') }}
                                         </p>
                                     </div>
 
                                     <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                        <x-dashboard.form.toggle field="settings.subscription_items_distribution_enabled" />
+                                        <x-dashboard.form.toggle
+                                            field="settings.subscription_items_distribution_enabled" />
                                     </div>
                                 </div>
                                 {{-- END Allow subscription items distribution enabled --}}
@@ -698,9 +708,11 @@
                                     <div class="col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-3"
                                         x-data="{}">
                                         <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                            <span class="text-sm font-medium text-gray-900">{{ translate('Enable entity selection') }}:</span>
+                                            <span class="text-sm font-medium text-gray-900">{{ translate('Enable entity
+                                                selection') }}:</span>
                                             <p class="text-gray-500 text-sm">
-                                                {{ translate('Enable/Disable if users can choose their account type: individual/company') }}
+                                                {{ translate('Enable/Disable if users can choose their account type:
+                                                individual/company') }}
                                             </p>
                                         </div>
 
@@ -743,39 +755,41 @@
                                     {{-- END Force email verification --}}
 
                                     <div class="col-span-3">
-                                    {{-- Login Dynamic Redirect --}}
-                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
-                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                            <span class="text-sm font-medium text-gray-900">
-                                                {{ translate('Login Dynamic Redirect') }}:</span>
-                                            <p class="text-gray-500 text-sm">
-                                                {{ translate('If this is enabled user will go to previous page visited.') }}
-                                            </p>
-                                        </div>
+                                        {{-- Login Dynamic Redirect --}}
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                            <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                                <span class="text-sm font-medium text-gray-900">
+                                                    {{ translate('Login Dynamic Redirect') }}:</span>
+                                                <p class="text-gray-500 text-sm">
+                                                    {{ translate('If this is enabled user will go to previous page
+                                                    visited.') }}
+                                                </p>
+                                            </div>
 
-                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                            <x-dashboard.form.toggle field="settings.login_dynamic_redirect" />
+                                            <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                                <x-dashboard.form.toggle field="settings.login_dynamic_redirect" />
 
+                                            </div>
                                         </div>
-                                    </div>
                                     </div>
                                     {{-- END Login Redirect --}}
                                     <div class="col-span-3">
-                                     {{-- Register Dynamic Redirect --}}
-                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
-                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                            <span class="text-sm font-medium text-gray-900">
-                                                {{ translate('Registration Dynamic Redirect') }}:</span>
-                                            <p class="text-gray-500 text-sm">
-                                                {{ translate('If this is enabled user will go to previous page visited after registration') }}
-                                            </p>
-                                        </div>
+                                        {{-- Register Dynamic Redirect --}}
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                            <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                                <span class="text-sm font-medium text-gray-900">
+                                                    {{ translate('Registration Dynamic Redirect') }}:</span>
+                                                <p class="text-gray-500 text-sm">
+                                                    {{ translate('If this is enabled user will go to previous page
+                                                    visited after registration') }}
+                                                </p>
+                                            </div>
 
-                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                            <x-dashboard.form.toggle field="settings.register_dynamic_redirect" />
+                                            <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                                <x-dashboard.form.toggle field="settings.register_dynamic_redirect" />
 
+                                            </div>
                                         </div>
-                                    </div>
                                     </div>
                                     {{-- END Register Redirect URL --}}
 
@@ -893,10 +907,26 @@
                                         </div>
                                         {{-- END Trial duration --}}
 
-                                    </div>
+                                        {{-- Tasks Enabled --}}
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
+                                            x-data="{}">
+                                            <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                                <span class="text-sm font-medium text-gray-900">{{ translate('Enable
+                                                    Tasks')
+                                                    }}</span>
+                                                <p class="text-gray-500 text-sm">
+                                                    {{ translate('Enable the tasks feature') }}
+                                                </p>
+                                            </div>
 
+                                            <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                                <x-dashboard.form.toggle field="settings.tasks_enabled" />
+                                            </div>
+                                        </div>
+                                        {{-- END Tasks Enabled --}}
+                                    </div>
                                 </div>
-                                {{-- END Plans Trial Mode --}}
+
 
                                 {{-- Save Features --}}
                                 <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
@@ -918,6 +948,7 @@
                                         $wire.set('settings.wishlist_feature', settings.wishlist_feature, true);
                                         $wire.set('settings.vendor_mode_feature', settings.vendor_mode_feature, true);
                                         $wire.set('settings.plans_trial_mode', settings.plans_trial_mode, true);
+                                        $wire.set('settings.tasks_enabled', settings.tasks_enabled, true);
                                     " wire:click="saveFeatures()">
                                         {{ translate('Save') }}
                                     </button>
@@ -1347,13 +1378,13 @@
                                 </div>
 
                                 @if($universal_payment_methods->isNotEmpty())
-                                    @foreach($universal_payment_methods as $key => $payment_method)
-                                    <livewire:dashboard.forms.payment-methods.payment-method-card
-                                        :payment-method="$payment_method" type="universal" class="mb-2">
-                                    </livewire:dashboard.forms.payment-methods.payment-method-card>
-                                    @endforeach
+                                @foreach($universal_payment_methods as $key => $payment_method)
+                                <livewire:dashboard.forms.payment-methods.payment-method-card
+                                    :payment-method="$payment_method" type="universal" class="mb-2">
+                                </livewire:dashboard.forms.payment-methods.payment-method-card>
+                                @endforeach
                                 @endif
-                                
+
                             </div>
                             {{-- END Payments --}}
 
@@ -2244,7 +2275,9 @@
                                                                         </td>
                                                                         <td
                                                                             class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
-                                                                            <input type="number" step="1" min="0" class="form-standard max-w-[60px]" x-model="settings.user_meta_fields_in_use[key].order"/>
+                                                                            <input type="number" step="1" min="0"
+                                                                                class="form-standard max-w-[60px]"
+                                                                                x-model="settings.user_meta_fields_in_use[key].order" />
                                                                         </td>
                                                                     </tr>
                                                                 </template>
@@ -2281,7 +2314,8 @@
                                         </div>
 
                                         <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                            <x-dashboard.form.toggle field="settings.include_phone_number_in_registration" />
+                                            <x-dashboard.form.toggle
+                                                field="settings.include_phone_number_in_registration" />
                                         </div>
                                     </div>
                                     {{-- END Include phone number in registration --}}
@@ -2296,7 +2330,8 @@
                                         </div>
 
                                         <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                            <x-dashboard.form.toggle field="settings.require_phone_number_in_registration" />
+                                            <x-dashboard.form.toggle
+                                                field="settings.require_phone_number_in_registration" />
                                         </div>
                                     </div>
                                     {{-- END Require phone number in registration --}}
@@ -2317,7 +2352,7 @@
                                     </div>
                                     {{-- END Save Registration settings --}}
                                 </div>
-                                
+
 
                             </div>
                             {{-- END Advanced --}}

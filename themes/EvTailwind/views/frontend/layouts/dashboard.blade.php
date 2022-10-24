@@ -22,13 +22,14 @@
 
     <title>@yield('meta_title', get_site_name() .' | '.get_setting('site_motto'))</title>
 
-    <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
 
-    <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'themes/EvTailwind') }}" defer></script>
+
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
@@ -39,9 +40,6 @@
 
 
     @livewireStyles
-
-    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
-
     @stack('head_scripts')
 </head>
 
@@ -57,7 +55,8 @@
             @yield('content')
         </main>
 
-        {{-- <x-tailwind-ui.footers.footer></x-tailwind-ui.headers.header> --}}
+        {{-- <x-tailwind-ui.footers.footer>
+            </x-tailwind-ui.headers.header> --}}
     </div>
 
     <!-- Carts -->
@@ -70,11 +69,11 @@
     <x-panels.flyout-categories></x-panels.flyout-categories>
 
     @auth
-        <x-panels.flyout-profile></x-panels.flyout-profile>
+    <x-panels.flyout-profile></x-panels.flyout-profile>
     @endauth
 
     @guest
-        <x-panels.flyout-auth></x-panels.flyout-auth>
+    <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
 
     {{-- App bar --}}
@@ -82,11 +81,16 @@
 
     <x-system.info-modal></x-system.info-modal>
     <livewire:modals.delete-modal />
-    <x-system.validation-errors-toast timeout="5000" ></x-system.validation-errors-toast>
+    <x-system.validation-errors-toast timeout="5000"></x-system.validation-errors-toast>
 
     @stack('modal')
 
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
+
+    <!-- Scripts -->
+    <script src="{{ mix('js/app.js', 'themes/EvTailwind') }}" defer></script>
+    <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
     @livewireScripts
     @livewireChartsScripts

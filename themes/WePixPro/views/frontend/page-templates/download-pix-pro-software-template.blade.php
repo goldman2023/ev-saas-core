@@ -53,7 +53,7 @@ $datasets = get_tenant_setting('pix_pro_dataset_samples');
     <div class="container px-4 mx-auto">
         <div class="relative max-w-lg mx-auto lg:max-w-7xl">
             <div>
-                <h2 class="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">
+                <h2 class="text-center sm:text-left text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">
                     {{ translate('Sample datasets')}}
                 </h2>
                 {{-- <p class="mt-3 text-16 md:text-18 text-gray-500 sm:mt-4">Nullam risus blandit ac aliquam justo

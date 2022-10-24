@@ -104,6 +104,15 @@
                     </section>
 
                     <section>
+                        <div class="card">
+                            <h3 class="font-medium text-xl">
+                                {{ translate('Product speficiation') }}
+                            </h3>
+                        <x-default.products.single.product-specification-table :product="$product"></x-default.products.single.product-specification-table>
+                        </div>
+                    </section>
+
+                    <section>
                         {{-- TODO: Add all owners of this product --}}
                     </section>
                     <section>
@@ -112,6 +121,7 @@
                         null);
                         @endphp
                         {{-- Chapters --}}
+                        @if($product->type == 'course')
                         <div class="w-full bg-white rounded-xl shadow p-5 max-h-[500px] overflow-y-auto">
                             <div class="w-full pb-3 mb-3 flex justify-between items-center border-b border-gray-200">
                                 <h5 class="capitalize text-14 font-semibold">{{ translate('Course Chapters') }}</h5>
@@ -133,6 +143,7 @@
                             </div>
                         </div>
                         {{-- END chapters --}}
+                        @endif
                     </section>
 
                     <!-- Actions panel -->
