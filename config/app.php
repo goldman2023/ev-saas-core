@@ -222,10 +222,6 @@ return [
 
         // Overriden Vendor providers
         App\Providers\MailerSendServiceProvider::class,
-
-        //Debugging
-        Barryvdh\Debugbar\ServiceProvider::class,
-
     ],
 
     /*
