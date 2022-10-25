@@ -55,8 +55,8 @@ class PageForm extends Component
             $this->available_templates = collect($page_templates)->keyBy(fn($item) => str_replace(".blade.php", "", $item->getFilename()) )->map(fn($item) => str_replace(".blade.php", "", $item->getFilename()))->toArray();
         } catch(\Exception $e) {
             $this->available_templates = [];
-        }        
-        
+        }
+
     }
 
     protected function rules()
@@ -69,6 +69,7 @@ class PageForm extends Component
             'page.content' => [''],
             'page.meta_title' => [''],
             'page.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
+            'page.meta_description' => [''],
         ];
 
         if($this->is_update) {

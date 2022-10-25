@@ -1,24 +1,24 @@
 <div class="w-full livewire-form" x-data="{
-    status: @js($blogPost->status ?? App\Enums\StatusEnum::draft()->value),
-    type: @js($blogPost->type ?? App\Enums\BlogPostTypeEnum::blog()->value),
-    thumbnail: @js(['id' => $blogPost->thumbnail->id ?? null, 'file_name' => $blogPost->thumbnail->file_name ?? '']),
-    cover: @js(['id' => $blogPost->cover->id ?? null, 'file_name' => $blogPost->cover->file_name ?? '']),
-    meta_img: @js(['id' => $blogPost->meta_img->id ?? null, 'file_name' => $blogPost->meta_img->file_name ?? '']),
-    subscription_only: @js($blogPost->subscription_only === 'true' ? true : false),
+    status: @js($page->status ?? App\Enums\StatusEnum::draft()->value),
+    type: @js($page->type ?? App\Enums\BlogPostTypeEnum::blog()->value),
+    thumbnail: @js(['id' => $page->thumbnail->id ?? null, 'file_name' => $page->thumbnail->file_name ?? '']),
+    cover: @js(['id' => $page->cover->id ?? null, 'file_name' => $page->cover->file_name ?? '']),
+    meta_img: @js(['id' => $page->meta_img->id ?? null, 'file_name' => $page->meta_img->file_name ?? '']),
+    subscription_only: @js($page->subscription_only === 'true' ? true : false),
     selected_plans: @js($selectedPlans),
-    content: @entangle('blogPost.content').defer,
+    content: @entangle('page.content').defer,
     selected_categories: @js($selected_categories),
     core_meta: @js($core_meta),
     model_core_meta: @js($model_core_meta),
     onSave() {
-        $wire.set('blogPost.thumbnail', this.thumbnail.id, true);
-        $wire.set('blogPost.cover', this.cover.id, true);
-        $wire.set('blogPost.gallery', [], true);
-        $wire.set('blogPost.meta_img', this.meta_img.id, true);
-        $wire.set('blogPost.status', this.status, true);
-        $wire.set('blogPost.type', this.type, true);
-        $wire.set('blogPost.subscription_only', this.subscription_only, true);
-        $wire.set('blogPost.content', this.content, true);
+        $wire.set('page.thumbnail', this.thumbnail.id, true);
+        $wire.set('page.cover', this.cover.id, true);
+        $wire.set('page.gallery', [], true);
+        $wire.set('page.meta_img', this.meta_img.id, true);
+        $wire.set('page.status', this.status, true);
+        $wire.set('page.type', this.type, true);
+        $wire.set('page.subscription_only', this.subscription_only, true);
+        $wire.set('page.content', this.content, true);
         $wire.set('selected_categories', this.selected_categories, true);
         $wire.set('core_meta', this.core_meta, true);
 
@@ -59,11 +59,11 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <input type="text"
-                                        class="form-standard @error('blogPost.name') is-invalid @enderror"
+                                        class="form-standard @error('page.name') is-invalid @enderror"
                                         placeholder="{{ translate('') }}" {{-- @input="generateURL($($el).val())" --}}
-                                        wire:model.defer="blogPost.name" />
+                                        wire:model.defer="page.name" />
 
-                                    <x-system.invalid-msg field="blogPost.name"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="page.name"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Title -->
@@ -229,12 +229,12 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <textarea type="text"
-                                        class="form-standard h-[80px] @error('blogPost.excerpt') is-invalid @enderror"
+                                        class="form-standard h-[80px] @error('page.excerpt') is-invalid @enderror"
                                         placeholder="{{ translate('Write a short promo description for this article') }}"
-                                        wire:model.defer="blogPost.excerpt">
+                                        wire:model.defer="page.excerpt">
                                 </textarea>
 
-                                    <x-system.invalid-msg class="w-full" field="blogPost.excerpt">
+                                    <x-system.invalid-msg class="w-full" field="page.excerpt">
                                     </x-system.invalid-msg>
                                 </div>
                             </div>
@@ -250,10 +250,10 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
 
-                                    <x-dashboard.form.editor-js field="content" id="blogPost-content-wysiwyg" />
+                                    <x-dashboard.form.editor-js field="content" id="page-content-wysiwyg" />
 
 
-                                    <x-system.invalid-msg class="w-full" field="blogPost.content">
+                                    <x-system.invalid-msg class="w-full" field="page.content">
                                     </x-system.invalid-msg>
                                 </div>
                             </div>
@@ -262,98 +262,7 @@
                         </div>
                     </div>
 
-                    {{-- SEO --}}
-                    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
-                        open: false,
-                    }" :class="{'p-4': open}">
-                        <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open"
-                            :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('SEO') }}</h3>
-                            @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
-                        </div>
-
-                        <div class="w-full" x-show="open">
-                            <!-- Meta Title -->
-                            <div class="flex flex-col " x-data="{}">
-
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    {{ translate('Meta title') }}
-                                </label>
-
-                                <div class="mt-1 sm:mt-0">
-                                    <input type="text"
-                                        class="form-standard @error('blogPost.meta_title') is-invalid @enderror" {{--
-                                        placeholder="{{ translate('Write meta title...') }}" --}}
-                                        wire:model.defer="blogPost.meta_title" />
-
-                                    <x-system.invalid-msg field="blogPost.meta_title"></x-system.invalid-msg>
-                                </div>
-                            </div>
-                            <!-- END Meta Title -->
-
-                            <!-- Meta Description -->
-                            <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5" x-data="{}">
-
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    {{ translate('Meta Description') }}
-                                </label>
-
-                                <div class="mt-1 sm:mt-0">
-                                    <textarea type="text"
-                                        class="form-standard h-[80px] @error('blogPost.meta_description') is-invalid @enderror"
-                                        {{--
-                                        placeholder="{{ translate('Meta description which will be shown when link is shared on social network and') }}"
-                                        --}} wire:model.defer="blogPost.meta_description">
-                                </textarea>
-
-                                    <x-system.invalid-msg class="w-full" field="blogPost.meta_description">
-                                    </x-system.invalid-msg>
-                                </div>
-                            </div>
-                            <!-- END Meta Description -->
-
-                            <!-- Meta Keywords -->
-                            <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5" x-data="{}">
-
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    {{ translate('Meta Keywords') }}
-                                </label>
-
-                                <div class="mt-1 sm:mt-0 ">
-                                    <textarea type="text"
-                                        class="form-standard h-[80px] @error('blogPost.meta_keywords') is-invalid @enderror"
-                                        {{--
-                                        placeholder="{{ translate('Write a short promo description for this subscription plan') }}"
-                                        --}} wire:model.defer="blogPost.meta_keywords">
-                                </textarea>
-
-                                    <x-system.invalid-msg class="w-full" field="blogPost.meta_keywords">
-                                    </x-system.invalid-msg>
-                                </div>
-                            </div>
-                            <!-- END Meta Keywords -->
-
-                            {{-- Meta Image --}}
-                            <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
-                                <div class=s"flex flex-col " x-data=" {}">
-
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        {{ translate('Meta image') }}
-                                    </label>
-
-                                    <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="meta_img" id="blogPost-meta-image"
-                                            :selected-image="$blogPost->meta_img"></x-dashboard.form.image-selector>
-
-                                        <x-system.invalid-msg field="blogPost.meta_img"></x-system.invalid-msg>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- END Meta Image --}}
-
-                        </div>
-                    </div>
-                    {{-- END SEO --}}
+                   <x-dashboard.global.meta-fields :page="$page"></x-dashboard.global.meta-fields>
                 </div>
                 {{-- END Left side --}}
 
@@ -367,14 +276,14 @@
                             <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 <span class="mr-2">{{ translate('Status') }}</span>
 
-                                @if($blogPost->status === App\Enums\StatusEnum::published()->value)
-                                <span class="badge-success">{{ ucfirst($blogPost->status) }}</span>
-                                @elseif($blogPost->status === App\Enums\StatusEnum::draft()->value)
-                                <span class="badge-warning">{{ ucfirst($blogPost->status) }}</span>
-                                @elseif($blogPost->status === App\Enums\StatusEnum::pending()->value)
-                                <span class="badge-info">{{ ucfirst($blogPost->status) }}</span>
-                                @elseif($blogPost->status === App\Enums\StatusEnum::private()->value)
-                                <span class="badge-dark">{{ ucfirst($blogPost->status) }}</span>
+                                @if($page->status === App\Enums\StatusEnum::published()->value)
+                                <span class="badge-success">{{ ucfirst($page->status) }}</span>
+                                @elseif($page->status === App\Enums\StatusEnum::draft()->value)
+                                <span class="badge-warning">{{ ucfirst($page->status) }}</span>
+                                @elseif($page->status === App\Enums\StatusEnum::pending()->value)
+                                <span class="badge-info">{{ ucfirst($page->status) }}</span>
+                                @elseif($page->status === App\Enums\StatusEnum::private()->value)
+                                <span class="badge-dark">{{ ucfirst($page->status) }}</span>
                                 @endif
                             </label>
 
@@ -407,7 +316,7 @@
 
                             <div class="flex flex-row ml-auto">
                                 @if($is_update)
-                                    <a href="{{ $blogPost->getPermalink() }}" class="btn-info mr-2" target="_blank">
+                                    <a href="{{ $page->getPermalink() }}" class="btn-info mr-2" target="_blank">
                                         {{ translate('Preview') }}
                                     </a>
                                 @endif
@@ -456,10 +365,10 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="thumbnail" id="blogPost-thumbnail-image"
-                                            :selected-image="$blogPost->thumbnail"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.image-selector field="thumbnail" id="page-thumbnail-image"
+                                            :selected-image="$page->thumbnail"></x-dashboard.form.image-selector>
 
-                                        <x-system.invalid-msg field="blogPost.thumbnail"></x-system.invalid-msg>
+                                        <x-system.invalid-msg field="page.thumbnail"></x-system.invalid-msg>
                                     </div>
                                 </div>
                             </div>
@@ -475,10 +384,10 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="cover" id="blogPost-cover-image"
-                                            :selected-image="$blogPost->cover"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.image-selector field="cover" id="page-cover-image"
+                                            :selected-image="$page->cover"></x-dashboard.form.image-selector>
 
-                                        <x-system.invalid-msg field="blogPost.cover"></x-system.invalid-msg>
+                                        <x-system.invalid-msg field="page.cover"></x-system.invalid-msg>
                                     </div>
                                 </div>
                             </div>
