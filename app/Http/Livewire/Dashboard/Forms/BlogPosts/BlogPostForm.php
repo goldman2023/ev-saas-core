@@ -164,8 +164,6 @@ class BlogPostForm extends Component
 
             $this->saveModelCoreMeta();
 
-
-
             // Save Other Product Core Meta
             /* TODO: Fix Saving Core meta, core meta fields are missing in the form, so add those and uncoment */
             $this->setCoreMeta($this->page);

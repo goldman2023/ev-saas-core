@@ -68,8 +68,8 @@ class PageForm extends Component
             'page.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'page.content' => [''],
             'page.meta_title' => [''],
-            'page.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
             'page.meta_description' => [''],
+            'page.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
         ];
 
         if($this->is_update) {
@@ -103,6 +103,8 @@ class PageForm extends Component
 
         try {
             $this->page->save();
+
+            $this->page->syncUploads();
 
             $this->inform(translate('Page saved successfully!'), '', 'success');
             // $this->emit('refreshPagesAndOpenNewPage', $this->page->id); //
