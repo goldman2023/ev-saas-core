@@ -1,5 +1,19 @@
 @extends('frontend.layouts.app')
 
+@section('meta_title'){{ $page->getPageMeta()['title'] }} | {{ get_site_name() }}@stop
+
+@section('meta_description'){{ $page->getPageMeta()['description'] }}@stop
+@section('meta')
+<meta property="og:title" content="{{ $page->getPageMeta()['title'] }}" />
+<meta property="og:type" content="article" />
+<meta property="og:article:author" content="article" />
+<meta property="og:article:published_time" content="{{ $page->created_at }}" />
+<meta property="og:article:modified_time" content="{{ $page->updated_at }}" />
+<meta property="og:image" content="{{ $page->getPageMeta()['image'] }}" />
+<meta property="og:description" content="{{ $page->getPageMeta()['description'] }}" />
+<meta property="og:site_name" content="{{ get_site_name() }}" />
+@endsection
+
 @section('content')
 
 @if($page->type === 'wysiwyg')

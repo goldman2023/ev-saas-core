@@ -101,6 +101,20 @@ class Page extends WeBaseModel
         return [];
     }
 
+    public function getPageMeta() {
+        $meta = [
+            'title' => $this->name,
+            'description' => $this->meta_description,
+            'image' => $this->getCover()
+        ];
+
+        if($this->meta_title) {
+            $meta['title'] = $this->meta_title;
+        }
+
+        return $meta;
+    }
+
     // public function page_translations(){
     //   return $this->hasMany(PageTranslation::class);
     // }

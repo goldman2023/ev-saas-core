@@ -20,6 +20,7 @@
     <meta name="description" content="@yield('meta_description', get_setting('meta_description') )"/>
     <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
 
+
     @yield('meta')
 
     @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))

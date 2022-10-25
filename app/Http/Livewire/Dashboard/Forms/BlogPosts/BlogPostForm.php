@@ -32,7 +32,7 @@ class BlogPostForm extends Component
     use HasCategories;
     use HasCoreMeta;
 
-    public $blogPost;
+    public $page;
 
     public $selectedPlans;
 
@@ -45,21 +45,21 @@ class BlogPostForm extends Component
      *
      * @return void
      */
-    public function mount($blogPost = null)
+    public function mount($page = null)
     {
-        $this->blogPost = empty($blogPost) ? new BlogPost() : $blogPost;
-        $this->is_update = isset($this->blogPost->id) && ! empty($this->blogPost->id);
+        $this->page = empty($page) ? new BlogPost() : $page;
+        $this->is_update = isset($this->page->id) && ! empty($this->page->id);
 
         if (! $this->is_update) {
-            $this->blogPost->status = StatusEnum::draft()->value;
-            $this->blogPost->type = BlogPostTypeEnum::blog()->value;
+            $this->page->status = StatusEnum::draft()->value;
+            $this->page->type = BlogPostTypeEnum::blog()->value;
         }
 
-        $this->initCategories($this->blogPost);
+        $this->initCategories($this->page);
 
-        $this->selectedPlans = $this->blogPost->plans->keyBy('id')->map(fn ($item) => $item->title);
+        $this->selectedPlans = $this->page->plans->keyBy('id')->map(fn ($item) => $item->title);
 
-        $this->model_core_meta = CoreMeta::getMeta($blogPost?->core_meta ?? [], BLogPost::class, true);
+        $this->model_core_meta = CoreMeta::getMeta($page?->core_meta ?? [], BLogPost::class, true);
     }
 
     protected function getRuleSet($set = null)
@@ -80,40 +80,40 @@ class BlogPostForm extends Component
     {
         return [
             'selected_categories' => 'required',
-            'blogPost.type' => [Rule::in(BlogPostTypeEnum::toValues('archived'))],
-            'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
-            'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'blogPost.name' => 'required|min:10',
-            'blogPost.subscription_only' => [],
-            'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
-            'blogPost.excerpt' => 'required|min:10',
-            'blogPost.content' => 'required|min:10',
-            'blogPost.gallery' => [''],
-            'blogPost.meta_title' => [''],
-            'blogPost.meta_keywords' => [''],
-            'blogPost.meta_description' => [''],
-            'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
+            'page.type' => [Rule::in(BlogPostTypeEnum::toValues('archived'))],
+            'page.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
+            'page.cover' => ['if_id_exists:App\Models\Upload,id,true'],
+            'page.name' => 'required|min:10',
+            'page.subscription_only' => [],
+            'page.status' => [Rule::in(StatusEnum::toValues('archived'))],
+            'page.excerpt' => 'required|min:10',
+            'page.content' => 'required|min:10',
+            'page.gallery' => [''],
+            'page.meta_title' => [''],
+            'page.meta_keywords' => [''],
+            'page.meta_description' => [''],
+            'page.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
         ];
     }
 
     protected function messages()
     {
         return [
-            'blogPost.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
-            'blogPost.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
-            'blogPost.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
+            'page.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
+            'page.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
+            'page.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
 
-            'blogPost.name.required' => translate('Title is required'),
-            'blogPost.name.min' => translate('Minimum title length is :min'),
+            'page.name.required' => translate('Title is required'),
+            'page.name.min' => translate('Minimum title length is :min'),
 
-            'blogPost.excerpt.required' => translate('Excerpt is required'),
-            'blogPost.excerpt.min' => translate('Minimum excerpt length is :min'),
+            'page.excerpt.required' => translate('Excerpt is required'),
+            'page.excerpt.min' => translate('Minimum excerpt length is :min'),
 
-            'blogPost.content.required' => translate('Content is required'),
-            'blogPost.content.min' => translate('Minimum content length is :min'),
+            'page.content.required' => translate('Content is required'),
+            'page.content.min' => translate('Minimum content length is :min'),
 
-            'blogPost.status.in' => translate('Status must be one of the following:').' '.implode(', ', StatusEnum::toLabels('archived')),
-            'blogPost.subscription_only' => translate('Subscription only must be either true or false'),
+            'page.status.in' => translate('Status must be one of the following:').' '.implode(', ', StatusEnum::toLabels('archived')),
+            'page.subscription_only' => translate('Subscription only must be either true or false'),
         ];
     }
 
@@ -143,32 +143,30 @@ class BlogPostForm extends Component
 
         try {
             // Insert or Update BlogPost
-            $this->blogPost->subscription_only = (bool) $this->blogPost->subscription_only;
-            $this->blogPost->shop_id = MyShop::getShopID();
+            $this->page->subscription_only = (bool) $this->page->subscription_only;
+            $this->page->shop_id = MyShop::getShopID();
 
             // If user has no permissions to publish the post, change the status to Pending (all pending blog posts will be visible to users who can publish the Blog Post)
             if (! Permissions::canAccess(User::$non_customer_user_types, ['publish_post'], false)) {
-                $this->blogPost->status = StatusEnum::pending();
+                $this->page->status = StatusEnum::pending();
                 $msg = translate('Blog post status is set to '.(StatusEnum::pending()->value).' because you don\'t have enough Permissions to publish it right away.');
             }
 
 
 
-            $this->blogPost->save();
+            $this->page->save();
 
             // Sync gallery and uploads
-            $this->blogPost->syncUploads();
+            $this->page->syncUploads();
 
             // Sync authors
-            $this->blogPost->authors()->syncWithoutDetaching(auth()->user()); //
+            $this->page->authors()->syncWithoutDetaching(auth()->user()); //
 
             $this->saveModelCoreMeta();
 
-
-
             // Save Other Product Core Meta
             /* TODO: Fix Saving Core meta, core meta fields are missing in the form, so add those and uncoment */
-            $this->setCoreMeta($this->blogPost);
+            $this->setCoreMeta($this->page);
 
             // TODO: Make a function to relate blog post and plans in order to make posts subscription_only
 
@@ -188,7 +186,7 @@ class BlogPostForm extends Component
             }
 
             if (!$this->is_update) {
-                return redirect()->route('blog.post.edit', $this->blogPost->id);
+                return redirect()->route('blog.post.edit', $this->page->id);
             }
         } catch (\Exception $e) {
             DB::rollBack();

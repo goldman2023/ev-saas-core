@@ -125,7 +125,8 @@ class TenantSettingsService
 
             'company_tax_rate' => 'decimal',
 
-
+            // SEO
+            'seo_meta_image' => Upload::class,
 
             // Content Types
             'brands_ct_enabled' => 'boolean',

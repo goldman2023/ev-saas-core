@@ -76,11 +76,15 @@ class EVBlogPostController extends Controller
 
         }
 
+        if($blog_post) {
+            $latest_blog_posts = BlogPost::where('id', '!=', $blog_post->id)->published()->with(['authors'])->latest()->take(3)->get();
 
-        $latest_blog_posts = BlogPost::where('id', '!=', $blog_post->id)->published()->with(['authors'])->latest()->take(3)->get();
+            $authors = $blog_post->authors;
+            $shop = $blog_post->shop;
+        } else {
+            abort(404);
+        }
 
-        $authors = $blog_post->authors;
-        $shop = $blog_post->shop;
 
         if (! empty($blog_post)) {
             return view('frontend.blog.blog-post-single', compact('blog_post', 'authors', 'shop', 'related_blog_posts', 'latest_blog_posts'));

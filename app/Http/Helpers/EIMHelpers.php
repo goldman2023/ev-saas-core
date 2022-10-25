@@ -97,6 +97,13 @@ function get_favicon($mode = 'default', $options = null)
     return $favicon;
 }
 
+function get_seo_meta_image($options = null)
+{
+    $seo_meta_image = IMG::get(get_tenant_setting('seo_meta_image'), $options);
+
+    return $seo_meta_image;
+}
+
 function get_site_colors()
 {
     $colors = [
