@@ -46,6 +46,7 @@ class AppSettingsForm extends Component
                 'settings.site_logo' => ['required'],
                 'settings.site_logo_dark' => ['nullable'],
                 'settings.site_icon' => ['nullable'],
+                'settings.seo_meta_image' => ['nullable'],
                 'settings.site_name' => ['required'],
                 'settings.site_motto' => ['required'],
                 'settings.site_contact_email' => ['email:rfc,dns'],
