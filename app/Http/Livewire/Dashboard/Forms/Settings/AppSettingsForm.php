@@ -45,6 +45,7 @@ class AppSettingsForm extends Component
                 // 'settings.*' => [],
                 'settings.site_logo' => ['required'],
                 'settings.site_logo_dark' => ['nullable'],
+                'settings.site_icon' => ['nullable'],
                 'settings.site_name' => ['required'],
                 'settings.site_motto' => ['required'],
                 'settings.site_contact_email' => ['email:rfc,dns'],
@@ -93,8 +94,6 @@ class AppSettingsForm extends Component
                 'settings.plans_trial_mode' => ['boolean'],
                 'settings.plans_trial_duration' => ['exclude_if:settings.plans_trial_mode,false', 'required', 'numeric', 'gt:0'],
                 'settings.tasks_enabled' => ['boolean'],
-
-                
             ]),
             'integrations.smtp_server' => [
                 'settings.smtp_mail_enabled' => ['boolean'],

@@ -132,6 +132,21 @@
                                 </div>
                                 {{-- END Site logo Dark--}}
 
+                                {{-- Site logo --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-2" x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Site icon (favicon)') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.image-selector field="settings.site_icon" id="site-site_icon"
+                                            :selected-image="$settings['site_icon']"></x-dashboard.form.image-selector>
+
+                                        <x-system.invalid-msg field="settings.site_icon"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                                {{-- END Site logo --}}
+
                                 <!-- Site Name -->
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
                                     x-data="{}">
@@ -434,6 +449,7 @@
                                     <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
                                         $wire.set('settings.site_logo', settings.site_logo?.id, true);
                                         $wire.set('settings.site_logo_dark', settings.site_logo_dark?.id, true);
+                                        $wire.set('settings.site_icon', settings.site_icon?.id, true);
                                         $wire.set('settings.maintenance_mode', settings.maintenance_mode, true);
                                         $wire.set('settings.brands_ct_enabled', settings.brands_ct_enabled, true);
                                         @do_action('view.app-settings-form.general.wire_set')
