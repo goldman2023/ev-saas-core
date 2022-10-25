@@ -105,8 +105,12 @@ class Page extends WeBaseModel
         $meta = [
             'title' => $this->name,
             'description' => $this->meta_description,
-            'image' => $this->getCover()
+            'image' => get_tenant_setting('seo_meta_image')
         ];
+
+        if($this->getMetaImg()) {
+            $meta['image'] = $this->getMetaImg();
+        }
 
         if($this->meta_title) {
             $meta['title'] = $this->meta_title;
