@@ -77,14 +77,24 @@ function get_site_logo($mode = 'default', $options = null)
 {
     $logo = IMG::get(get_setting('site_logo'), $options);
 
-    // dd($logo);
-
     /* TODO: make this single/multi tenant aware */
     if (get_vendor_mode() === 'single') {
     } else {
     }
 
     return $logo;
+}
+
+function get_favicon($mode = 'default', $options = null)
+{
+    $favicon = IMG::get(get_tenant_setting('site_icon'), $options);
+
+    /* TODO: make this single/multi tenant aware */
+    if (get_vendor_mode() === 'single') {
+    } else {
+    }
+
+    return $favicon;
 }
 
 function get_site_colors()
