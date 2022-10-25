@@ -144,7 +144,6 @@
                 </div>
 
                 <!-- panels. Search -->
-                <x-b2-b-search></x-b2-b-search>
                 <!-- END panels. Search -->
 
                 <div class="d-none d-lg-none ml-3 mr-0">
