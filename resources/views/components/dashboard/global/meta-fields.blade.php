@@ -52,14 +52,14 @@
 
         {{-- Meta Image --}}
         <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
-            <div class=s"flex flex-col " x-data=" {}">
+            <div class="flex flex-col " x-data=" {}">
 
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     {{ translate('Meta image') }}
                 </label>
 
                 <div class="mt-1 sm:mt-0">
-                    <x-dashboard.form.image-selector field="meta_img" id="blogPost-meta-image"
+                    <x-dashboard.form.image-selector field="meta_img" id="page-meta-image"
                         :selected-image="$page->meta_img"></x-dashboard.form.image-selector>
 
                     <x-system.invalid-msg field="page.meta_img"></x-system.invalid-msg>
