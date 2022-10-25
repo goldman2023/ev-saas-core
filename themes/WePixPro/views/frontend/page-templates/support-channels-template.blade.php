@@ -87,7 +87,7 @@
                 {{ translate('Click here to play') }}
               </div>
               {{-- TODO: Change thumbnails --}}
-              <img src="https://i.ytimg.com/vi/8rXemRWyKMM/hqdefault.jpg" class="w-full h-full object-cover cursor-pointer rounded-lg border border-gray-200" />
+              <img src="http://i3.ytimg.com/vi/PXdJRm-d_b8/hqdefault.jpg" class="w-full h-full object-cover cursor-pointer rounded-lg border border-gray-200" />
             </div>
             <strong class="text-24">{{ translate('Cloud processing – Getting started ') }}</strong>
           </div>
