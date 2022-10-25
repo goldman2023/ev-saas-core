@@ -106,7 +106,7 @@
                                     <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                         {{ translate('Site logo') }}
                                     </label>
-
+                                    
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <x-dashboard.form.image-selector field="settings.site_logo" id="site-logo"
                                             :selected-image="$settings['site_logo']"></x-dashboard.form.image-selector>
