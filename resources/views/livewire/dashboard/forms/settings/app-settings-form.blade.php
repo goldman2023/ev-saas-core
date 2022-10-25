@@ -132,7 +132,7 @@
                                 </div>
                                 {{-- END Site logo Dark--}}
 
-                                {{-- Site logo --}}
+                                {{-- Favicon --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-2" x-data="{}">
                                     <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                         {{ translate('Site icon (favicon)') }}
@@ -145,7 +145,22 @@
                                         <x-system.invalid-msg field="settings.site_icon"></x-system.invalid-msg>
                                     </div>
                                 </div>
-                                {{-- END Site logo --}}
+                                {{-- END Favicon --}}
+
+                                {{-- SEO Meta Image --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-2" x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('SEO Meta Image') }}
+                                    </label>
+                                    
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.image-selector field="settings.seo_meta_image" id="site-seo_meta_image"
+                                            :selected-image="$settings['seo_meta_image']"></x-dashboard.form.image-selector>
+
+                                        <x-system.invalid-msg field="settings.seo_meta_image"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                                {{-- END SEO Meta Image --}}
 
                                 <!-- Site Name -->
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
@@ -442,7 +457,7 @@
                                 <!-- END Documentaion url -->
 
                                 @do_action('view.app-settings-form.general.end')
-
+                                
                                 {{-- Save general information --}}
                                 <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
                                     x-data="{}">
@@ -450,6 +465,7 @@
                                         $wire.set('settings.site_logo', settings.site_logo?.id, true);
                                         $wire.set('settings.site_logo_dark', settings.site_logo_dark?.id, true);
                                         $wire.set('settings.site_icon', settings.site_icon?.id, true);
+                                        $wire.set('settings.seo_meta_image', settings.seo_meta_image?.id, true);
                                         $wire.set('settings.maintenance_mode', settings.maintenance_mode, true);
                                         $wire.set('settings.brands_ct_enabled', settings.brands_ct_enabled, true);
                                         @do_action('view.app-settings-form.general.wire_set')
