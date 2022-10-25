@@ -129,4 +129,18 @@ class BlogPost extends WeBaseModel
     {
         return BlogPostTranslation::class;
     }
+
+    public function getPageMeta() {
+        $meta = [
+            'title' => $this->name,
+            'description' => $this->meta_description,
+            'image' => $this->getCover()
+        ];
+
+        if($this->meta_title) {
+            $meta['title'] = $this->meta_title;
+        }
+
+        return $meta;
+    }
 }

@@ -1,10 +1,18 @@
 @extends('frontend.layouts.' . $globalLayout)
 
-@section('meta_title', $blog_post->name)
+@section('meta_title'){{ $blog_post->getPageMeta()['title'] }} | {{ get_site_name() }}@stop
 
+@section('meta_description'){{ $blog_post->getPageMeta()['description'] }}@stop
 @section('meta')
-{{-- <x-default.products.single.head-meta-tags :product="$product"></x-default.products.single.head-meta-tags> --}}
-
+<meta property="og:title" content="{{ $blog_post->getPageMeta()['title'] }}" />
+<meta property="og:type" content="article" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:article:author" content="article" />
+<meta property="og:article:published_time" content="{{ $blog_post->created_at }}" />
+<meta property="og:article:modified_time" content="{{ $blog_post->updated_at }}" />
+<meta property="og:image" content="{{ $blog_post->getPageMeta()['image'] }}" />
+<meta property="og:description" content="{{ $blog_post->getPageMeta()['description'] }}" />
+<meta property="og:site_name" content="{{ get_site_name() }}" />
 @endsection
 
 @push('head_scripts')
@@ -93,7 +101,6 @@
 
 @push('footer_scripts')
 <script src="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.js"></script>
-
 <link href="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.css" rel="stylesheet" />
 
 <script>

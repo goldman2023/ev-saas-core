@@ -161,6 +161,9 @@
                     </div>
                     {{-- END Actions --}}
 
+                   <x-dashboard.global.meta-fields :page="$page"></x-dashboard.global.meta-fields>
+
+
                     {{-- SEO --}}
                     <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
                     open: false,

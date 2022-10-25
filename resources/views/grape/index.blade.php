@@ -59,6 +59,7 @@
                 storageManager: false,
                 canvas: {
                   scripts: [
+                    // 'http://pix.ev-saas.localhost:8000/themes/EvTailwind/js/alpine.js?id=848edc66a0d77f8d01979c6653c6708a',
                   'https://cdn.tailwindcss.com/3.0.24?plugins=forms@0.5.0,typography@0.5.2,aspect-ratio@0.4.0,line-clamp@0.3.1'
                   ],
                 },

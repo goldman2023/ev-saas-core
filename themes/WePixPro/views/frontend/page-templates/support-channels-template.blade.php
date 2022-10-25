@@ -23,7 +23,7 @@
 }" x-init="initPage();">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="sm:flex sm:flex-col sm:align-center mb-[40px]">
-        <div x-cloak class="relative self-center bg-gray-100 rounded-lg p-0.5 flex flex-col sm:flex-row justify-center items-center ">
+        <div x-cloak class="relative self-center bg-gray-100 rounded-lg p-0.5 flex flex-col sm:flex-row justify-center items-center gap-2">
             <button type="button" @click="tab = 'channels'" :class="{'bg-primary text-white':tab == 'channels', 'gray-900':tab == 'channels'}" class="min-w-[180px] relative w-full border border-transparent rounded-md shadow-sm py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8 bg-primary text-white gray-900">Support Channel</button>
             <button type="button" @click="tab = 'videos'" :class="{'bg-primary text-white':tab == 'videos', 'gray-900':tab == 'videos'}" class="min-w-[180px] ml-0.5 relative w-full border border-transparent rounded-md py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">Videos</button>
             <button type="button" @click="tab = 'faq'" :class="{'bg-primary text-white':tab == 'faq', 'gray-900':tab == 'faq'}" class="min-w-[180px] ml-0.5 relative w-full border border-transparent rounded-md py-2 text-sm font-medium whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-primary focus:z-10 sm:w-auto sm:px-8">FAQ</button>
