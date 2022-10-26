@@ -8,7 +8,7 @@
       </div>
       <div class="ml-3">
         <p class="text-sm text-yellow-700">
-          {{ translate('If you created an account before October 6th, 2022') }}
+          {{ translate('If you created an account before October 26th, 2022') }}
           <a href="https://legacy.pix-pro.com" target="_blank" class="font-medium text-yellow-700 underline hover:text-yellow-600">
             {{ translate('Login here') }}
         </a>
