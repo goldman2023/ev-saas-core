@@ -14,7 +14,7 @@
 
 <x-livewire-tables::table.cell class="align-middle text-center" style="min-width: 200px;">
     <a href="{{ route('product.details', $row->id) }}" class="">
-        {{ $row->getTranslation('name') }}
+        {{ $row->name }}
     </a>
 </x-livewire-tables::table.cell>
 
