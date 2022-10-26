@@ -11,7 +11,7 @@
 
 <x-livewire-tables::table.cell class="align-middle ">
     <a class="media items-center text-14" href="{{ route('plan.edit', ['id' => $row->id]) }}">
-        {{ $row->getTranslation('name') }}
+        {{ $row->name }}
     </a>
 
     @if($row->primary)

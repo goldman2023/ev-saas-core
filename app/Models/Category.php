@@ -33,7 +33,7 @@ class Category extends WeBaseModel
     use HasRecursiveRelationships;
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
-    // use TranslationTrait;
+    use TranslationTrait;
     use UploadTrait;
     use GalleryTrait;
     use SocialFollowingTrait;
