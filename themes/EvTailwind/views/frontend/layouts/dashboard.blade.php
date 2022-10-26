@@ -98,7 +98,7 @@
 
     @stack('footer_scripts')
 
-    <x-integrations.open-replay></x-integrations.open-replay>
+    {{-- <x-integrations.open-replay></x-integrations.open-replay> --}}
 
 </body>
 
