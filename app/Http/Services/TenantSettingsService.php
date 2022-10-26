@@ -26,7 +26,7 @@ class TenantSettingsService
     public function __construct($app) {
         $this->app = $app;
 
-        $this->setAll();
+        // $this->setAll();
         // dd($this->getAll()); // testing castValuesForGet
     }
 
@@ -54,7 +54,7 @@ class TenantSettingsService
         $data_types = $this->settingsDataTypes();
 
         $missing = array_diff_key($data_types, $settings);
-        
+
         if(!empty($missing)) {
             $this->clearCache();
 
@@ -112,7 +112,7 @@ class TenantSettingsService
             'site_contact_email' => 'string',
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
-            
+
 
             'company_name' => 'string',
             'company_address' => 'string',
@@ -230,7 +230,7 @@ class TenantSettingsService
             'login_dynamic_redirect' => 'boolean', //
             'register_dynamic_redirect' => 'boolean', //
             'user_entity_choice' => 'boolean', // enables individual or company radio buttons
-            
+
 
             // Integrations
             'mailerlite_api_token' => 'string',
@@ -299,7 +299,7 @@ class TenantSettingsService
             'require_phone_number_in_registration' => 'boolean',
             'enable_phone_number_login' => 'boolean',
             'enable_2fa' => 'boolean',
-            
+
 
             // Notifications
             'system_notifications_list' => []
