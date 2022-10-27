@@ -96,6 +96,21 @@
     .gallery-link {
         pointer-events: none;
     }
+
+    @media (min-width: 782px) {
+        .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column {
+            flex-basis: 0;
+            flex-grow: 1;
+        }
+
+        .wp-block-columns {
+            display: flex;
+            margin-bottom: 1.75em;
+            box-sizing: border-box;
+            flex-wrap: nowrap;
+            gap: 20px;
+        }
+    }
 </style>
 @endpush
 
