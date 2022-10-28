@@ -51,7 +51,7 @@
         </button>
         <ul x-show="isOpen"
             @click.away="isOpen = false"
-            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow overflow-hidden"
+            class="absolute bg-white z-10 right-0 list-none p-0 border rounded mt-10 shadow overflow-hidden"
         >
             @do_action('view.dashboard.plans.row-license.actions.dropdown.start', $row)
 

@@ -110,8 +110,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 1);
 
             // Download License Response
-            add_filter('license.download', function ($license) {
-                return pix_pro_download_license_logic($license);
+            add_filter('license.download', function ($license, $user) {
+                return pix_pro_download_license_logic($license, $user);
             }, 20, 1);
 
             // Set editable License data properties
@@ -270,7 +270,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 js_wire_set('model_core_meta.includes_cloud', 'model_core_meta.includes_cloud');
                 js_wire_set('model_core_meta.includes_offline', 'model_core_meta.includes_offline');
             });
-            
+
             // When new subscription is created, take the plans core_meta and add it to the subscription!
             add_action('observer.user_subscription.created', function ($user_subscription) {
 

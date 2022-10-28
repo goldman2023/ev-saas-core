@@ -134,7 +134,7 @@ class LicensesTable extends DataTableComponent
     // TODO: Create mechanism for extending any Livewire class (using Trait) - adding custom functions dynamically from the ThemeFunctions via hooks (add_filter)
     public function downloadLicense(License $license)
     {
-        $response = apply_filters('license.download', $license);
+        $response = apply_filters('license.download', $license, $this->user);
 
         if(!empty($response['file_name'] ?? null) && !empty($response['file_contents'] ?? null)) {
             // Save file name & contents in data col
