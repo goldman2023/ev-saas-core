@@ -37,11 +37,13 @@
                         <livewire:dashboard.tables.my-subscriptions-table :user="$user" :show-search="false"
                             :show-filters="false" :show-filter-dropdown="false" :show-per-page="false"
                             :column-select="false" />
+
                     </div>
 
                     @endif
-
+                    <div class="relative">
                     @do_action('view.dashboard.plans-management.plans-table.end', $user)
+                    </div>
                 </div>
 
                 {{-- User Invoices --}}
