@@ -26,7 +26,7 @@ class TenantSettingsService
     public function __construct($app) {
         $this->app = $app;
 
-        // $this->setAll();
+        $this->setAll();
         // dd($this->getAll()); // testing castValuesForGet
     }
 

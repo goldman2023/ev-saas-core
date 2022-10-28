@@ -65,7 +65,6 @@
                                     @if($items->isNotEmpty())
                                         @foreach ($items as $item)
                                             @php
-                                                var_dump($item);
                                                 $prices = $item->getTotalPrice(false, true);
                                             @endphp
                                             <li class="py-6 flex">
