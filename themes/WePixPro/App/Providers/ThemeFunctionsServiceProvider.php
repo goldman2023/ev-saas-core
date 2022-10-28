@@ -110,8 +110,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 1);
 
             // Download License Response
-            add_filter('license.download', function ($license, $user) {
-                return pix_pro_download_license_logic($license, $user);
+            add_filter('license.download', function ($license) {
+                return pix_pro_download_license_logic($license);
             }, 20, 1);
 
             // Set editable License data properties

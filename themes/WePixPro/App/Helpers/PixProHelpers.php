@@ -101,15 +101,15 @@ if (!function_exists('pix_pro_download_license')) {
 }
 
 if (!function_exists('pix_pro_download_license_logic')) {
-    function pix_pro_download_license_logic($license, $user = null) {
+    function pix_pro_download_license_logic($license) {
         try {
-            $response = pix_pro_download_license($license->data['id'] ?? -1, auth()->user());
+            $response = pix_pro_download_license($license->data['id'] ?? -1, $license->user);
 
             if(!empty($response)) {
                 return $response;
             }
 
-            $this->inform(translate('Error: Cannot download license .DAT file...'), translate('Serial number: ').$license->serial_number, 'fail');
+            // $this->inform(translate('Error: Cannot download license .DAT file...'), translate('Serial number: ').$license->serial_number, 'fail');
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
