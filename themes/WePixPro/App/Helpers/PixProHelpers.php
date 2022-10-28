@@ -109,7 +109,6 @@ if (!function_exists('pix_pro_download_license_logic')) {
                 return $response;
             }
 
-            // $this->inform(translate('Error: Cannot download license .DAT file...'), translate('Serial number: ').$license->serial_number, 'fail');
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
