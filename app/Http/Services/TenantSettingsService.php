@@ -26,7 +26,7 @@ class TenantSettingsService
     public function __construct($app) {
         $this->app = $app;
 
-        // $this->setAll();
+        $this->setAll();
         // dd($this->getAll()); // testing castValuesForGet
     }
 
@@ -250,6 +250,16 @@ class TenantSettingsService
             // Standard WP Blog Posts and categories
             'wordpress_api_enabled' => 'boolean',
             'wordpress_api_route' => 'string',
+
+            // WooCommerce Import Variables
+            'woo_import_enabled' => 'boolean',
+            'woo_import_api_key' => 'string',
+            'woo_import_rest_api_secret_key' => 'string',
+
+            // WooCommerce Export Variables
+            'woo_export_enabled' => 'boolean',
+            'woo_export_api_key' => 'string',
+            'woo_export_rest_api_secret_key' => 'string',
 
             // Mail
             'smtp_mail_enabled' => 'boolean',
