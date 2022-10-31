@@ -36,9 +36,11 @@ trait UploadTrait
                 $model->dynamicUploadPropertiesWalker(function ($property) use (&$model) {
                     if ($property['multiple'] ?? false) {
                         // Multiple Uploads
-                        $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
+                        $model->{$property['property_name']} = empty($model->uploads) ? new \Illuminate\Database\Eloquent\Collection() : $model->uploads->filter(function ($upload) use ($property) {
                             return $upload->pivot->relation_type === $property['relation_type'];
-                        })->sortBy('order')->values();
+                        })->sortBy(function ($upload, $key) {
+                            return $upload->pivot->order;
+                        })->values();
                     } else {
                         // Single Upload
                         $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
@@ -138,7 +140,7 @@ trait UploadTrait
     public function uploads()
     {
         return $this->morphToMany(Upload::class, 'subject', 'uploads_content_relationships', 'subject_id', 'upload_id')
-            ->withPivot('relation_type', 'group_id');
+            ->withPivot('relation_type', 'group_id', 'order');
     }
 
     /**
@@ -196,11 +198,25 @@ trait UploadTrait
                 if ($upload_keys) {
                     $upload_values = $upload_keys;
                     array_walk($upload_values, function (&$value, $key) use ($property) {
-                        $value = [
-                            'relation_type' => $property['relation_type'],
-                            'order' => $key,
-                        ];
+                        if($property['multiple']) {
+                            $value = [
+                                'relation_type' => $property['relation_type'],
+                                'order' => $value['order'],
+                            ];
+                        } else {
+                            $value = [
+                                'relation_type' => $property['relation_type'],
+                                'order' => $key,
+                            ];
+                        }
                     });
+
+                    if($property['multiple']) {
+                        // If property/field is multiple - $upload_keys must be array of IDs, not array of objects with IDs
+                        $upload_keys = array_map(function($item) {
+                            return isset($item['id']) ? $item['id'] : $item;
+                        }, $upload_keys);
+                    }
                 }
 
                 $sync_array = $upload_keys ? array_combine($upload_keys, $upload_values) : null;
@@ -209,10 +225,49 @@ trait UploadTrait
             }
         });
 
+        $this->convertDynamicUploadsToUploads($specific_property = null);
+
         // Sync Gallery uploads
         if (method_exists($this, 'syncGalleryUploads')) {
             $this->syncGalleryUploads($specific_property);
         }
+    }
+
+    /**
+     * Converts dynamic uploads from ID(s) to Uploads Models
+     *
+     * @return void
+     */
+    public function convertDynamicUploadsToUploads($specific_property = null)
+    {
+        $this->dynamicUploadPropertiesWalker(function ($property) use ($specific_property) {
+            if (empty($specific_property) || $specific_property === $property['property_name']) {
+
+                if($property['multiple']) {
+                    // Multiple files
+                    $file_uploads = new \Illuminate\Database\Eloquent\Collection();
+                    if (($this->{$property['property_name']} instanceof Collection && $this->{$property['property_name']}->isNotEmpty()) || (is_array($this->{$property['property_name']}) && ! empty($this->{$property['property_name']}))) {
+                        foreach ($this->{$property['property_name']} as $file) {
+            
+                            if($file instanceof Upload) {
+                                $file_uploads->push($file);
+                                continue;
+                            }
+                            
+                            if(is_array($file) && isset($file['id']) && !empty($file['id'])) {
+                                $file = Upload::find($file['id'] ?? null);
+                            }
+            
+                            $file_uploads->push($file);
+                        }
+                    }
+                    $this->{$property['property_name']} = $file_uploads;
+                } else {
+                    // Single file
+                    $this->{$property['property_name']} = ($this->{$property['property_name']} instanceof Upload) ? $this->{$property['property_name']} : Upload::find($this->{$property['property_name']} ?? null);
+                }
+            }
+        });
     }
 
     /**

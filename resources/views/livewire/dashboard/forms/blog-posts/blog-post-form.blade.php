@@ -1,34 +1,34 @@
+{{-- @dd($this->blogPost->gallery); --}}
+
 <div class="w-full livewire-form" x-data="{
-    status: @js($page->status ?? App\Enums\StatusEnum::draft()->value),
-    type: @js($page->type ?? App\Enums\BlogPostTypeEnum::blog()->value),
-    thumbnail: @js(['id' => $page->thumbnail->id ?? null, 'file_name' => $page->thumbnail->file_name ?? '']),
-    cover: @js(['id' => $page->cover->id ?? null, 'file_name' => $page->cover->file_name ?? '']),
-    meta_img: @js(['id' => $page->meta_img->id ?? null, 'file_name' => $page->meta_img->file_name ?? '']),
-    subscription_only: @js($page->subscription_only === 'true' ? true : false),
+    status: @js($blogPost->status ?? App\Enums\StatusEnum::draft()->value),
+    type: @js($blogPost->type ?? App\Enums\BlogPostTypeEnum::blog()->value),
+    thumbnail: @js(toJSONMedia($blogPost->thumbnail)),
+    cover: @js(toJSONMedia($blogPost->cover)),
+    meta_img: @js(toJSONMedia($blogPost?->meta_img ?? null)),
+    gallery: @js($blogPost->gallery->map(fn($item, $key) => toJSONMedia($item))),
+    subscription_only: @js($blogPost->subscription_only === 'true' ? true : false),
     selected_plans: @js($selectedPlans),
-    content: @entangle('page.content').defer,
+    content: @entangle('blogPost.content').defer,
     selected_categories: @js($selected_categories),
     core_meta: @js($core_meta),
     model_core_meta: @js($model_core_meta),
     onSave() {
-        $wire.set('page.thumbnail', this.thumbnail.id, true);
-        $wire.set('page.cover', this.cover.id, true);
-        $wire.set('page.gallery', [], true);
-        $wire.set('page.meta_img', this.meta_img.id, true);
-        $wire.set('page.status', this.status, true);
-        $wire.set('page.type', this.type, true);
-        $wire.set('page.subscription_only', this.subscription_only, true);
-        $wire.set('page.content', this.content, true);
+        $wire.set('blogPost.thumbnail', this.thumbnail.id, true);
+        $wire.set('blogPost.cover', this.cover.id, true);
+        $wire.set('blogPost.gallery', this.gallery, true);
+        $wire.set('blogPost.meta_img', this.meta_img.id, true);
+        $wire.set('blogPost.status', this.status, true);
+        $wire.set('blogPost.type', this.type, true);
+        $wire.set('blogPost.subscription_only', this.subscription_only, true);
+        $wire.set('blogPost.content', this.content, true);
         $wire.set('selected_categories', this.selected_categories, true);
         $wire.set('core_meta', this.core_meta, true);
-
         {{-- $wire.set('model_core_meta.portfolio_link', this.model_core_meta.portfolio_link, true); --}}
-
-
     }
 }" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" x-cloak>
 @push('head_scripts')
-<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+    <script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
 @endpush
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:target="saveBlogPost"
@@ -42,10 +42,9 @@
                 <div class="col-span-12 md:col-span-8">
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                         <div>
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Blog post content') }}
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                {{ translate('Blog post content') }}
                             </h3>
-                            <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly
-                                so be careful what you share.</p>
                         </div>
 
                         <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
@@ -59,11 +58,11 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <input type="text"
-                                        class="form-standard @error('page.name') is-invalid @enderror"
+                                        class="form-standard @error('blogPost.name') is-invalid @enderror"
                                         placeholder="{{ translate('') }}" {{-- @input="generateURL($($el).val())" --}}
-                                        wire:model.defer="page.name" />
+                                        wire:model.defer="blogPost.name" />
 
-                                    <x-system.invalid-msg field="page.name"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="blogPost.name"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Title -->
@@ -229,12 +228,12 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <textarea type="text"
-                                        class="form-standard h-[80px] @error('page.excerpt') is-invalid @enderror"
+                                        class="form-standard h-[80px] @error('blogPost.excerpt') is-invalid @enderror"
                                         placeholder="{{ translate('Write a short promo description for this article') }}"
-                                        wire:model.defer="page.excerpt">
+                                        wire:model.defer="blogPost.excerpt">
                                 </textarea>
 
-                                    <x-system.invalid-msg class="w-full" field="page.excerpt">
+                                    <x-system.invalid-msg class="w-full" field="blogPost.excerpt">
                                     </x-system.invalid-msg>
                                 </div>
                             </div>
@@ -250,10 +249,10 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
 
-                                    <x-dashboard.form.editor-js field="content" id="page-content-wysiwyg" />
+                                    <x-dashboard.form.editor-js field="content" id="blogPost-content-wysiwyg" />
 
 
-                                    <x-system.invalid-msg class="w-full" field="page.content">
+                                    <x-system.invalid-msg class="w-full" field="blogPost.content">
                                     </x-system.invalid-msg>
                                 </div>
                             </div>
@@ -262,7 +261,7 @@
                         </div>
                     </div>
 
-                   <x-dashboard.global.meta-fields :page="$page"></x-dashboard.global.meta-fields>
+                   <x-dashboard.global.meta-fields :page="$blogPost"></x-dashboard.global.meta-fields>
                 </div>
                 {{-- END Left side --}}
 
@@ -276,14 +275,14 @@
                             <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 <span class="mr-2">{{ translate('Status') }}</span>
 
-                                @if($page->status === App\Enums\StatusEnum::published()->value)
-                                <span class="badge-success">{{ ucfirst($page->status) }}</span>
-                                @elseif($page->status === App\Enums\StatusEnum::draft()->value)
-                                <span class="badge-warning">{{ ucfirst($page->status) }}</span>
-                                @elseif($page->status === App\Enums\StatusEnum::pending()->value)
-                                <span class="badge-info">{{ ucfirst($page->status) }}</span>
-                                @elseif($page->status === App\Enums\StatusEnum::private()->value)
-                                <span class="badge-dark">{{ ucfirst($page->status) }}</span>
+                                @if($blogPost->status === App\Enums\StatusEnum::published()->value)
+                                <span class="badge-success">{{ ucfirst($blogPost->status) }}</span>
+                                @elseif($blogPost->status === App\Enums\StatusEnum::draft()->value)
+                                <span class="badge-warning">{{ ucfirst($blogPost->status) }}</span>
+                                @elseif($blogPost->status === App\Enums\StatusEnum::pending()->value)
+                                <span class="badge-info">{{ ucfirst($blogPost->status) }}</span>
+                                @elseif($blogPost->status === App\Enums\StatusEnum::private()->value)
+                                <span class="badge-dark">{{ ucfirst($blogPost->status) }}</span>
                                 @endif
                             </label>
 
@@ -316,7 +315,7 @@
 
                             <div class="flex flex-row ml-auto">
                                 @if($is_update)
-                                    <a href="{{ $page->getPermalink() }}" class="btn-info mr-2" target="_blank">
+                                    <a href="{{ $blogPost->getPermalink() }}" class="btn-info mr-2" target="_blank">
                                         {{ translate('Preview') }}
                                     </a>
                                 @endif
@@ -365,10 +364,10 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="thumbnail" id="page-thumbnail-image"
-                                            :selected-image="$page->thumbnail"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.image-selector field="thumbnail" id="blogPost-thumbnail-image"
+                                            :selected-image="$blogPost->thumbnail"></x-dashboard.form.image-selector>
 
-                                        <x-system.invalid-msg field="page.thumbnail"></x-system.invalid-msg>
+                                        <x-system.invalid-msg field="blogPost.thumbnail"></x-system.invalid-msg>
                                     </div>
                                 </div>
                             </div>
@@ -384,14 +383,37 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="cover" id="page-cover-image"
-                                            :selected-image="$page->cover"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.image-selector field="cover" id="blogPost-cover-image"
+                                            :selected-image="$blogPost->cover"></x-dashboard.form.image-selector>
 
-                                        <x-system.invalid-msg field="page.cover"></x-system.invalid-msg>
+                                        <x-system.invalid-msg field="blogPost.cover"></x-system.invalid-msg>
                                     </div>
                                 </div>
                             </div>
                             {{-- END Cover --}}
+
+                            {{-- Gallery --}}
+                            <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                                <div class="flex flex-col " x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        {{ translate('Gallery') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0">
+                                        <x-dashboard.form.image-selector 
+                                            id="blogPost-gallery-image"
+                                            field="gallery"
+                                            :file-type="\App\Enums\FileTypesEnum::image()->value"
+                                            :selected-image="$blogPost->gallery"
+                                            :multiple="true"
+                                            add-new-item-label="{{ translate('Add new image') }}"></x-dashboard.form.image-selector>
+
+                                        <x-system.invalid-msg field="blogPost.gallery"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Gallery --}}
+
                         </div>
 
                     </div>
