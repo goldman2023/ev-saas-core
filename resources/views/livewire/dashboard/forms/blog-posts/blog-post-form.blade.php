@@ -413,9 +413,7 @@
                                 </div>
                             </div>
                             {{-- END Gallery --}}
-
                         </div>
-
                     </div>
                     {{-- END Media --}}
 

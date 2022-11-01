@@ -18,31 +18,36 @@
             {{ $field }}.id > 0;
         }
     },
-    removeImage(key = 0) {
+    removeFile(index = 0) {
         if(this.multiple) {
-            {{ $field }}[key].id = '';
-            {{ $field }}[key].file_name = '';
-            {{ $field }}[key].type = @js($fileType);
+            {{ $field }}.splice(index, 1);
+
+            $nextTick(() => {
+                this.reOrder();
+            });
         } else {
             {{ $field }}.id = '';
             {{ $field }}.file_name = '';
-            {{ $field }}[key].type = @js($fileType);
+            {{ $field }}.type = @js($fileType);
         }
+    },
+    reOrder() {
+        {{ $field }}.forEach((item, index) => {
+            {{ $field }}[index]['order'] = Array.from($el.querySelector('.file-selector__sortable-list').children).indexOf($el.querySelector('.file-selector__sortable-list [data-image-id=\''+item.id+'\']'));
+        });
     },
     makeSortable() {
         $nextTick(() => { 
             if(this.multiple) {
                 let args = {
                     onSort: (evt) => {
-                        {{ $field }}.forEach((item, index) => {
-                            {{ $field }}[index]['order'] = Array.from($el.querySelector('.file-selector__sortable-list').children).indexOf($el.querySelector('.file-selector__sortable-list [data-image-id=\''+item.id+'\']'));
-                        });
+                        this.reOrder();
                     },
                 };
-
+                {{-- TODO: Check https://github.com/SortableJS/Sortable#save - for fixing sorting/ordering UI/UX when items are added or removed! --}}
                 if(this.sortableList) {
-                    this.sortableList.destroy();
-                    this.sortableList = window.Sortable.create($el.querySelector('.file-selector__sortable-list'), args);
+                    {{-- this.sortableList.destroy(); --}}
+                    {{-- this.sortableList = window.Sortable.create($el.querySelector('.file-selector__sortable-list'), args); --}}
                 } else {
                     if($el.querySelector('.file-selector__sortable-list') !== null) {
                         this.sortableList = window.Sortable.create($el.querySelector('.file-selector__sortable-list'), args);
@@ -118,10 +123,14 @@ x-init="makeSortable()"
             <div class="w-full flex flex-col">
                 <template x-if="hasFiles()">
                     <ul class="file-selector__sortable-list w-full grid grid-cols-3 gap-3 ">
-                        <template x-for="item in {{ $field }}">
-                            <li class="flex flex-col border rounded-lg overflow-hidden cursor-grab" :data-image-id="item.id">
+                        <template x-for="(item, index) in {{ $field }}">
+                            <li class="flex flex-col border rounded-lg cursor-grab relative" :data-image-id="item.id">
+                                <button class="absolute top-[-5px] right-[-5px] p-1 bg-danger rounded-lg z-[1]" @click="removeFile(index);">
+                                    @svg('heroicon-o-x', ['class' => 'text-white w-[10px] h-[10px]'])
+                                </button>
+
                                 <template x-if="item.type === 'image'">
-                                    <img :src="window.WE.IMG.url(item.file_name)" class="w-full h-[100px] object-cover" />
+                                    <img :src="window.WE.IMG.url(item.file_name)" class="w-full h-[100px] object-cover rounded-lg" />
                                 </template>
 
                                 <template x-if="item.type === 'document'">
@@ -187,7 +196,7 @@ x-init="makeSortable()"
                             @svg('heroicon-s-paper-clip', ['class' => '-ml-1 h-5 w-5 mr-2 group-hover:text-gray-500'])
                             <span class="text-sm text-gray-500 group-hover:text-gray-600 italic">{{ translate('Attach a file') }}</span>
                         </button>
-                        <button @click="event.preventDefault(); event.stopPropagation(); removeImage()" x-cloak x-show="hasFiles()" type="button" class="relative z-10 -mr-3 -my-2 rounded-full px-3 py-2 inline-flex items-center text-left text-gray-400 group">
+                        <button @click="event.preventDefault(); event.stopPropagation(); removeFile()" x-cloak x-show="hasFiles()" type="button" class="relative z-10 -mr-3 -my-2 rounded-full px-3 py-2 inline-flex items-center text-left text-gray-400 group">
                             @svg('heroicon-o-x', ['class' => 'h-5 w-5 text-danger'])
                         </button>
                     </div>
