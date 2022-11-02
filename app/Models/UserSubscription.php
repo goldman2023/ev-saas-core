@@ -154,7 +154,7 @@ class UserSubscription extends WeBaseModel
         return 0;
     }
 
-    public function getTotalPrice($format = true) {
+    public function getTotalPrice($format = true, $no_discount = false) {
         $invoice = $this->getUpcomingInvoiceStats();
 
         if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
@@ -168,9 +168,15 @@ class UserSubscription extends WeBaseModel
     
                         $total_price += ($item['amount'] ?? 0) + ($item['tax_amounts'][0]['amount'] ?? 0);
                     }
+
+                    $total_price = $total_price / 100;
+
+                    if(!$no_discount && ($discount_amount = $this->getDiscountAmount(false)) > 0) {
+                        $total_price -= $discount_amount;
+                    }
                 }
                 
-                return $format ? \FX::formatPrice($total_price / 100) : $total_price / 100;
+                return $format ? \FX::formatPrice($total_price) : $total_price;
             } else if($invoice['invoice_source'] === 'we') {
                 return $format ? \FX::formatPrice($invoice['total_price'] ?? 0) : ($invoice['total_price'] ?? 0);
             }
@@ -200,6 +206,39 @@ class UserSubscription extends WeBaseModel
         }
 
         return 0;
+    }
+
+    public function getDiscountAmount($format = true) {
+        $invoice = $this->getUpcomingInvoiceStats();
+        
+        if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
+            if($invoice['invoice_source'] === 'stripe') {
+                if(!empty($invoice['total_discount_amounts'])) {
+                    $discount = array_reduce($invoice['total_discount_amounts'], function($carry, $item) {
+                        $carry += $item['amount'];
+                        return $carry;
+                    });
+
+                    return $format ?  \FX::formatPrice($discount / 100) : ($discount / 100);
+                }
+            } else if($invoice['invoice_source'] === 'we') {
+
+            }
+        }
+
+        return 0;
+    }
+
+    public function getDiscountDuration() {
+        $invoice = $this->getUpcomingInvoiceStats();
+        
+        if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
+            if($invoice['invoice_source'] === 'stripe') {
+                return $invoice['discount']['coupon']['duration'] ?? null;
+            } else if($invoice['invoice_source'] === 'we') {
+
+            }
+        }
     }
 
     public function hasSingleItem() {

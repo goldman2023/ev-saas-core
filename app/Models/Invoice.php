@@ -421,6 +421,7 @@ class Invoice extends WeBaseModel
         
         // Set custom data
         $custom_data = [
+            'total_discount' => $this->getDiscountAmount(false),
             'total_taxes_label' => $total_taxes_label,
             'via_payment_method' => function() {
                 return match ($this->getPaymentMethodGateway()) {
@@ -482,6 +483,21 @@ class Invoice extends WeBaseModel
         }
 
         return $format ? \FX::formatPrice($this->total_price) : $this->total_price;
+    }
+
+    public function getDiscountAmount($format = true) {
+        if(is_array($invoice = $this->getData(stripe_prefix('stripe_invoice_data')))) {
+            if(!empty($invoice['total_discount_amounts'])) {
+                $discount = array_reduce($invoice['total_discount_amounts'], function($carry, $item) {
+                    $carry += $item['amount'];
+                    return $carry;
+                });
+
+                return $format ?  \FX::formatPrice($discount / 100) : ($discount / 100);
+            }
+        }
+
+        return $format ? \FX::formatPrice($this->discount_amount) : $this->discount_amount;
     }
 
     public function isTestMode() {
