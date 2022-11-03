@@ -1,10 +1,16 @@
 <div class="bg-white shadow-lg shadow-gray-200 rounded-2xl p-4 mb-6">
     <div class="sm:flex xl:block sm:space-x-4 xl:space-x-0">
-        <img class="mb-2 w-20 h-20 rounded shadow-md shadow-gray-300"
+        <a href="{{ route('user.details', $user->id) }}">
+
+            <img class="mb-2 w-20 h-20 rounded shadow-md shadow-gray-300"
             src="{{ $user->getThumbnail() }}">
+        </a>
+
         <div>
             <h2 class="text-xl font-bold">
-                {{ $user->fullName }}
+                <a href="{{ route('user.details', $user->id) }}">
+                    {{ $user->fullName }}
+                </a>
             </h2>
             <ul class="mt-2 space-y-1">
                 <li class="flex items-center text-sm font-normal text-gray-500">
@@ -42,11 +48,7 @@
                 <a class="text-sm font-medium text-gray-900" href="mailto:webmaster@flowbite.com">
                     {{ $user->email }}
                 </a>
-                <div class="mt-4">Home adress</div>
-                <div class="mb-2 text-sm font-medium text-gray-900">
-                    92 Miles Drive, Newark, NJ 07103, California,
-                    <br>United States of America
-                </div>
+
                 <div class="mt-4">Phone number</div>
                 <div class="mb-2 text-sm font-medium text-gray-900">
                     @if($user->phone)

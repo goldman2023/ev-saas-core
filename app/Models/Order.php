@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
+use App\Traits\CoreMetaTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\HasDataColumn;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,8 @@ class Order extends WeBaseModel
     use PermalinkTrait;
     use HasDataColumn;
     use LogsActivity;
+    use CoreMetaTrait;
+
 
 
     protected $table = 'orders';

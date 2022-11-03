@@ -3,7 +3,8 @@
 @section('page_title', translate('Order #').($order->id??'').translate('details'))
 
 @push('head_scripts')
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/add-to-calendar-button@1.8/assets/css/atcb.min.css">
+<script src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@1.8" defer></script>
 @endpush
 
 @section('panel_content')
@@ -21,13 +22,13 @@
         </a>
     </x-slot>
 </x-dashboard.section-headers.section-header>
-<div class="grid sm:grid-cols-12 gap-6">
+<div class="grid sm:grid-cols-12 gap-9">
     {{-- Right/Sidebar --}}
     <div class="sm:col-span-4">
-        <div class="mb-6">
+        <div class="mb-9">
             <x-dashboard.customer.customer-card :user="$user"></x-dashboard.customer.customer-card>
         </div>
-        <div class="card mb-3">
+        <div class="card mb-9">
             <div class="w-full pb-4 mb-4 border-b ">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status') }}</h3>
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Here you can see the current status of the
@@ -53,7 +54,7 @@
 
     <div class="sm:col-span-8">
 
-        <div class="bg-gray-50">
+        <div class="bg-white rounded shadow">
             <div class="max-w-2xl mx-auto pt-8 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 mb-3">
                     <div class="flex items-center sm:space-x-4">
@@ -82,6 +83,32 @@
                         <time class="font-semibold text-gray-900">
                             {{ $order->created_at->format('M d, Y H:i') }}
                         </time>
+                    </div>
+                    <div>
+                        <div class="atcb" style="display:none;">
+                            {
+                            "name":"{{ translate('Order') }} {{ $order->id }}",
+                            "description":"{{ translate('Order notification') }}",
+                            "startDate":"{{ date('Y-m-d', $order->getCoreMeta('start_date')) }}",
+                            "endDate":"{{ date('Y-m-d', $order->getCoreMeta('start_date')) }}",
+                            "startTime":"{{ date('H:i', $order->getCoreMeta('start_date')) }}",
+                            "endTime":"{{ date('H:i', $order->getCoreMeta('end_date')) }}",
+                            "label":"{{ translate('Add to Calendar') }}",
+                            "options":[
+                            "Apple",
+                            "Google",
+                            "iCal",
+                            "Microsoft365",
+                            "MicrosoftTeams",
+                            "Outlook.com",
+                            "Yahoo"
+                            ],
+                            "timeZone":"{{ date_default_timezone_get() }}",
+                            {{-- "timeZoneOffset":"{{ date('P') }}", --}}
+                            "trigger":"click",
+                            "iCalFileName":"Order-{{ $order->id }}"
+                            }
+                        </div>
                     </div>
                     </p>
 
