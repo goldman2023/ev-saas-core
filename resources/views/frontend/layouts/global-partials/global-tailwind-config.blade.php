@@ -96,6 +96,15 @@ if($colors) {
                     'indigo-700': '{{ ($colors['indigo-700'] ?? null) ?: '#f40000' }}',
                     'indigo-800': '{{ ($colors['indigo-800'] ?? null) ?: '#f40000' }}',
                     'indigo-900': '{{ ($colors['indigo-900'] ?? null) ?: '#f40000' }}',
+                    'primary-100': '{{ ($colors['indigo-100'] ?? null) ?: '#f40000' }}',
+                    'primary-200': '{{( $colors['indigo-200'] ?? null) ?: '#f40000' }}',
+                    'primary-300': '{{ ($colors['indigo-300'] ?? null) ?: '#f40000' }}',
+                    'primary-400': '{{ ($colors['indigo-400'] ?? null) ?: '#f40000' }}',
+                    'primary-500': '{{ ($colors['indigo-500'] ?? null) ?: '#f40000' }}',
+                    'primary-600': '{{ ($colors['indigo-600'] ?? null) ?: '#f40000' }}',
+                    'primary-700': '{{ ($colors['indigo-700'] ?? null) ?: '#f40000' }}',
+                    'primary-800': '{{ ($colors['indigo-800'] ?? null) ?: '#f40000' }}',
+                    'primary-900': '{{ ($colors['indigo-900'] ?? null) ?: '#f40000' }}',
                 }
             }
           }
