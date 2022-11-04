@@ -81,9 +81,10 @@ class WeMediaLibrary extends Component
         return view('livewire.we-media-library');
     }
 
-    public function changeMediaLibrary($for_id, $media_type, $selected = null, $editorjs_media_wrapper_id = null)
+    public function changeMediaLibrary($for_id, $media_type, $selected = null, $editorjs_media_wrapper_id = null, $multiple = false)
     {
         $this->for_id = $for_id;
+        $this->multiple = $multiple;
 
         $this->editorjs_media_wrapper_id = $editorjs_media_wrapper_id;
 

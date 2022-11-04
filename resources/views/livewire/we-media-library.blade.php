@@ -6,36 +6,30 @@
     new_media: @entangle('new_media'),
     media_type: @entangle('media_type'),
     selected: @entangle('selected').defer,
-    multiple: @js($multiple),
+    multiple: @entangle('multiple'),
     sort_by: @entangle('sort_by'),
     search_string: @entangle('search_string'),
     page: @entangle('page'),
-    isMediaSelected(file_name, id) {
-      if(this.selected.filter((item) => { return Number(item['id']) === Number(id); }).length > 0) 
+    isMediaSelected(file) {
+      if(this.selected.filter((item) => { return Number(item['id']) === Number(file.id); }).length > 0) 
         return true;
       else 
         return false;
     },
-    selectMedia(file_name, id) {
+    selectMedia(file) {
       if(this.selected === null || this.selected === undefined) {
         this.selected = [];
       }
-      
-      if(!this.isMediaSelected(file_name)) {
+
+      if(!this.isMediaSelected(file)) {
         if(this.multiple) {
-          this.selected.push({
-            id: id,
-            file_name: file_name
-          });
+          this.selected.push(file);
         } else {
-          this.selected[0] = {
-            id: id,
-            file_name: file_name
-          };
+          this.selected[0] = file;
         }
       } else {
         if(this.multiple) {
-          this.selected = this.selected.filter((item) => { return Number(item['id']) !== Number(id); });
+          this.selected = this.selected.filter((item) => { return Number(item['id']) !== Number(file.id); });
         } else {
           this.selected = [];
         }
@@ -46,7 +40,8 @@
       $dispatch('we-media-selected-event', {
         for_id: this.for_id,
         editorjs_media_wrapper_id: this.editorjs_media_wrapper_id,
-        selected: this.selected
+        selected: this.selected,
+        multiple: this.multiple,
       });
     }
 }"
@@ -82,7 +77,6 @@ x-cloak>
     
           <div class="border-b border-gray-200 block">
             <nav class="flex space-x-4" aria-label="Tabs">
-              <!-- Current: "bg-indigo-100 text-indigo-700", Default: "text-gray-500 hover:text-gray-700" -->
               <a href="#" class="px-3 py-2 font-medium text-sm rounded-md"
                 :class="{'bg-white text-indigo-700': active_tab === 'select_file', 'text-gray-500 hover:text-gray-700': active_tab !== 'select_file'}"
                 @click="active_tab = 'select_file'"> {{ translate('Select file(s)') }} </a>
@@ -151,17 +145,16 @@ x-cloak>
 
             {{-- Select files(s) --}}
             <div class="w-full" x-show="active_tab === 'select_file'">
-                
-
+        
                 {{-- Selectable Files --}}
                 <div class="w-full mb-3"> 
 
                   <template x-if="media !== null && media.length > 0">
                     <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                       <template x-for="file in media">
-                        <li class="relative cursor-pointer" @click="selectMedia(file.file_name, file.id)">
+                        <li class="relative cursor-pointer" @click="selectMedia(file)">
                           <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden"
-                                :class="{'ring-2 ring-offset-2 ring-offset-gray-100 ring-indigo-500': isMediaSelected(file.file_name, file.id)}">
+                                :class="{'ring-2 ring-offset-2 ring-offset-gray-100 ring-indigo-500': isMediaSelected(file)}">
                             <img x-bind:src="window.WE.IMG.url(file.file_name)" class="object-contain pointer-events-none group-hover:opacity-75 p-2">
                             <button type="button" class="absolute inset-0 focus:outline-none"></button>
                           </div>

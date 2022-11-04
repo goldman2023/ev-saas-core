@@ -18,7 +18,7 @@
             </x-slot>
         </x-dashboard.section-headers.section-header>
 
-        <livewire:dashboard.forms.blog-posts.blog-post-form :page="$blog_post"></livewire:dashboard.forms.blog-posts.blog-post-form>
+        <livewire:dashboard.forms.blog-posts.blog-post-form :blog-post="$blog_post"></livewire:dashboard.forms.blog-posts.blog-post-form>
     </section>
 @endsection
 

@@ -92,4 +92,14 @@ class Upload extends WeBaseModel
     {
         return $query->orderBy('file_size', 'desc');
     }
+
+    public function toJSONMedia() {
+        return [
+            'id' => $this?->id ?? '',
+            'file_name' => $this?->file_name ?? '',
+            'extension' => $this?->extension ?? '',
+            'type' => $this?->type ?? null,
+            'file_original_name' => $this?->file_original_name ?? '',
+        ];
+    }
 }
