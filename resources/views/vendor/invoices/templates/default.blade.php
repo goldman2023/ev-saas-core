@@ -296,7 +296,7 @@
                     {{ $item->title }}
 
                     @if($item->description)
-                    <p class="cool-gray">{{ $item->description }}</p>
+                    <p class="cool-gray">{{ strip_tags($item->description) }}</p>
                     @endif
                 </td>
                 @if($invoice->hasItemUnits)
@@ -323,7 +323,7 @@
             </tr>
             @endforeach
             {{-- Summary --}}
-            @if($invoice->hasItemOrInvoiceDiscount())
+            {{-- @if($invoice->hasItemOrInvoiceDiscount())
             <tr>
                 <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
                 <td class="text-right pl-0">{{ __('invoices::invoice.total_discount') }}</td>
@@ -331,7 +331,17 @@
                     {{ $invoice->formatCurrency($invoice->total_discount) }}
                 </td>
             </tr>
+            @endif --}}
+            @if($invoice->getCustomData()['total_discount'] > 0)
+                <tr>
+                    <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
+                    <td class="text-right pl-0">{{ translate('Discount') }}</td>
+                    <td class="text-right pr-0">
+                        -{{ $invoice->formatCurrency($invoice->getCustomData()['total_discount']) }}
+                    </td>
+                </tr>
             @endif
+
             @if($invoice->taxable_amount)
             <tr>
                 <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
@@ -350,6 +360,9 @@
                 </td>
             </tr>
             @endif
+
+            
+
             @if($invoice->hasItemOrInvoiceTax())
             <tr>
                 <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>

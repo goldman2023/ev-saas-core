@@ -107,9 +107,11 @@ trait GalleryTrait
     public function getGalleryAttribute()
     {
         if (! isset($this->gallery)) {
-            $this->gallery = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
+            $this->gallery = empty($this->uploads) ? new \Illuminate\Database\Eloquent\Collection() : $this->uploads->filter(function ($upload) {
                 return $upload->pivot->relation_type === 'gallery';
-            })->sortBy('order');
+            })->sortBy(function ($upload, $key) {
+                return $upload->pivot->order;
+            })->values();
         }
 
         return $this->gallery;
@@ -216,14 +218,23 @@ trait GalleryTrait
 
                 $upload_values = $upload_keys;
                 array_walk($upload_values, function (&$value, $key) use ($property) {
-                    $value = [
-                        'relation_type' => $property,
-                        'order' => $property === 'gallery' ? $key : 0,
-                    ];
+                    if($property === 'gallery') {
+                        $value = [
+                            'relation_type' => $property,
+                            'order' => $value['order'],
+                        ];
+                    } else {
+                        $value = [
+                            'relation_type' => $property,
+                            'order' => $key,
+                        ];
+                    }
                 });
 
                 try {
-                    $sync_array = array_combine($upload_keys, $upload_values);
+                    $sync_array = array_combine( ($property === 'gallery' ? array_map(function($item) {
+                        return isset($item['id']) ? $item['id'] : $item;
+                    }, $upload_keys) : $upload_keys), $upload_values);
                 } catch (\Exception $e) {
                     continue;
                 }
@@ -231,8 +242,8 @@ trait GalleryTrait
                 $this->uploads()->wherePivot('relation_type', $property)->sync($sync_array);
             }
         }
-
-        // $this->convertGalleryToUploads();
+        
+        $this->convertGalleryToUploads();
     }
 
     /**
@@ -270,7 +281,17 @@ trait GalleryTrait
         $gallery_uploads = new \Illuminate\Database\Eloquent\Collection();
         if (($this->gallery instanceof Collection && $this->gallery->isNotEmpty()) || (is_array($this->gallery) && ! empty($this->gallery))) {
             foreach ($this->gallery as $img) {
-                $gallery_ids->push($img instanceof Upload ? $img : Upload::find($img ?? null));
+
+                if($img instanceof Upload) {
+                    $gallery_uploads->push($img);
+                    continue;
+                }
+
+                if(is_array($img) && isset($img['id']) && !empty($img['id'])) {
+                    $img = Upload::find($img['id'] ?? null);
+                }
+
+                $gallery_uploads->push($img);
             }
         }
         $this->gallery = $gallery_uploads;

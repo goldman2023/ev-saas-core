@@ -199,6 +199,30 @@ if (!function_exists('sendAdminNotification')) {
     }
 }
 
+if (!function_exists('toJSONMedia')) {
+    function toJSONMedia($upload = null) {
+        
+        if($upload instanceof Upload) {
+            return [
+                'id' => $upload?->id ?? '',
+                'file_name' => $upload?->file_name ?? '',
+                'extension' => $upload?->extension ?? '',
+                'type' => $upload?->type ?? null,
+                'file_original_name' => $upload?->file_original_name ?? '',
+                'order' => $upload?->pivot?->order ?? 0,
+            ];
+        }
+
+        return [
+            'id' => null,
+            'file_name' => '',
+            'extension' => '',
+            'type' => null,
+            'file_original_name' => '',
+            'order' => 0,
+        ];
+    }
+}
 
 /**
  * Redirect the user no matter what. No need to use a return

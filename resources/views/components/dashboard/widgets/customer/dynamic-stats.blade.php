@@ -1,5 +1,4 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
-<div>
+<div class="dynamic-stats">
     <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Plan details') }}</h3>
 
     <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -77,10 +76,18 @@
           <div class="absolute bg-indigo-500 rounded-md p-3">
             @svg('heroicon-o-currency-euro', ['class' => 'h-6 w-6 text-white'])
           </div>
-          <p class="ml-16 text-sm font-medium text-gray-500 truncate">{{ translate('Cost') }}</p>
+          <p class="flex items-center ml-16 text-sm font-medium text-gray-500 truncate">
+            {{ translate('Cost') }}
+            @if($user_subscription->getDiscountAmount(false) > 0)
+              <span class="badge-success text-12 ml-2">
+                {{ translate('Discounted') }}
+              </span>
+            @endif
+          </p>
         </dt>
         <dd class="ml-16 pb-6 flex items-baseline sm:pb-7">
           <p class="text-2xl font-semibold text-gray-900">
+            {{-- <del class="text-14 mr-2">{{ $user_subscription->getTotalPrice(no_discount: true) }}</del> --}}
             {{ $user_subscription->getTotalPrice() }} / 
             <span class="text-16">
             @if(($order?->invoicing_period ?? null) === 'year')

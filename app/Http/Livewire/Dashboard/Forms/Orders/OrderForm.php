@@ -31,12 +31,16 @@ class OrderForm extends Component
      *
      * @return void
      */
-    public function mount($order = null, $hideShipping = false)
+    public function mount($order = null, $hideShipping = false, $customer = null)
     {
         $this->order = empty($order) ? new Order() : $order;
 
         if(empty($this->order->id)) {
             $this->order->shop_id = 1;
+        }
+
+        if($customer) {
+            $this->order->user = $customer;
         }
 
         $this->is_update = !empty($this->order->id) ? true : false;
@@ -103,7 +107,7 @@ class OrderForm extends Component
     protected function messages()
     {
         return [
-            
+
         ];
     }
 
@@ -134,10 +138,10 @@ class OrderForm extends Component
             // Remove missing previous order_items (if any)
             $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')->filter();
             $previous_order_items_idx_from_db = $this->order->order_items?->pluck('id')?->filter() ?? [];
-            
+
             $order_items_idx_for_removal = $previous_order_items_idx_from_db->diff($current_order_items_idx_from_db);
 
-            // Remove missing order items 
+            // Remove missing order items
             if($order_items_idx_for_removal->isNotEmpty()) {
                 OrderItem::destroy($order_items_idx_for_removal->all());
             }
@@ -191,7 +195,7 @@ class OrderForm extends Component
             $invoice->payment_method_type = (Payments::wire_transfer())::class;
             $invoice->payment_method_id = Payments::wire_transfer()->id;
 
-            
+
             $invoice->order_id = $this->order->id;
             $invoice->shop_id = $this->order->shop_id;
             $invoice->user_id = $this->order->user_id;
@@ -249,7 +253,7 @@ class OrderForm extends Component
             $invoice->save();
 
             $this->inform(translate('Invoice successfully generated!'), '', 'success');
-            
+
             return redirect()->route('order.details', $this->order->id);
         }
 

@@ -14,6 +14,8 @@
                         <div class="w-full flex justify-between mb-2">
                             <strong class="text-16 font-semibold">{{ translate('Subscription') }}</strong>
                         </div>
+                        
+                        {{-- Order Items --}}
                         @foreach($subscription->order->order_items as $order_item)
                             <div class="w-full flex justify-between mb-1">
                                 <span class="text-14 text-gray-600 font-normal">
@@ -24,6 +26,22 @@
                             </div>
                         @endforeach
 
+                        {{-- Discount --}}
+                        @if($subscription->getDiscountAmount(false) > 0)
+                            <div class="w-full flex justify-between mt-3 pt-3 border-t border-gray-200">
+                                <span class="text-14 text-gray-500 font-normal">
+                                    {{ translate('Discount') }}: <strong></strong>
+                                </span>
+                                <span class="text-14 text-gray-500 font-normal">
+                                    -{{ $subscription->getDiscountAmount() }} 
+                                    @if($subscription->getDiscountDuration() === 'forever')
+                                        / {{ $subscription->order->invoicing_period }}
+                                    @endif
+                                </span>
+                            </div>
+                        @endif
+
+                        {{-- VAT --}}
                         @if($subscription->getTaxAmount(false) > 0)
                             <div class="w-full flex justify-between mt-3 pt-3 border-t border-gray-200">
                                 <span class="text-14 text-gray-500 font-normal">
@@ -34,7 +52,6 @@
                                 </span>
                             </div>
                         @endif
-                        
 
                         <div class="w-full flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
                             <span class="text-14 text-gray-600 font-normal">
