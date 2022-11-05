@@ -9,6 +9,24 @@
     </div>
 
     <div class="w-full" x-show="open">
+
+             {{-- Meta Image --}}
+        <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mb-5">
+            <div class="flex flex-col w-full" x-data=" {}">
+
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ translate('Meta image') }}
+                </label>
+
+                <div class="mt-1 sm:mt-0 w-full">
+                    <x-dashboard.form.image-selector field="meta_img" id="page-meta-image"
+                        :selected-image="$page->meta_img"></x-dashboard.form.image-selector>
+
+                    <x-system.invalid-msg field="page.meta_img"></x-system.invalid-msg>
+                </div>
+            </div>
+        </div>
+        {{-- END Meta Image --}}
         <!-- Meta Title -->
         <div class="flex flex-col " x-data="{}">
 
@@ -50,23 +68,7 @@
 
 
 
-        {{-- Meta Image --}}
-        <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
-            <div class=s"flex flex-col " x-data=" {}">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    {{ translate('Meta image') }}
-                </label>
-
-                <div class="mt-1 sm:mt-0">
-                    <x-dashboard.form.file-selector field="meta_img" id="blogPost-meta-image"
-                        :selected-image="$page->meta_img"></x-dashboard.form.file-selector>
-
-                    <x-system.invalid-msg field="page.meta_img"></x-system.invalid-msg>
-                </div>
-            </div>
-        </div>
-        {{-- END Meta Image --}}
 
     </div>
 </div>

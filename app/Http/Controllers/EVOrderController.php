@@ -21,9 +21,15 @@ class EVOrderController extends Controller
         return view('frontend.dashboard.orders.index', compact('orders_count'));
     }
 
-    public function create()
+    public function create($customerID = null)
     {
-        return view('frontend.dashboard.orders.create');
+        if($customerID) {
+            $customer = User::find($customerID);
+        } else {
+            $customer = null;
+        }
+
+        return view('frontend.dashboard.orders.create', compact('customer'));
     }
 
     public function edit(Request $request, $order_id)
@@ -63,5 +69,5 @@ class EVOrderController extends Controller
 
         return view('frontend.dashboard.my-orders.index', compact('orders', 'orders_count'));
     }
-    
+
 }

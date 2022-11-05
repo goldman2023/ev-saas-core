@@ -37,8 +37,8 @@
                 </div>
             </div>
             <div class="mt-3 text-sm">
-                {{ translate('Current version: 1.6.4') }} <br>
-                {{ translate('Release date: 2022-04-14') }} <br>
+                {{ translate('Current version: 1.6.7') }} <br>
+                {{ translate('Release date: 2022-10-18') }} <br>
                 {{ translate('File size: 176.3 MB') }} <br>
             </div>
         </div>

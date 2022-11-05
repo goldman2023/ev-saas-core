@@ -80,6 +80,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
      */
     public function routeNotificationForSlack($notification)
     {
+        /* TODO: Make this dynamic */
         return 'https://hooks.slack.com/services/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';
     }
 
@@ -307,6 +308,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function userTypeAttribute()
     {
         return $this->type;
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->name . ' ' . $this->surname;
     }
 
     // OLD

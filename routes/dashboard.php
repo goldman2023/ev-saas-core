@@ -119,7 +119,7 @@ Route::middleware([
 
         /* Orders & Invoices*/
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
-        Route::get('/order/create', [EVOrderController::class, 'create'])->name('order.create');
+        Route::get('/order/create/{customerID?}', [EVOrderController::class, 'create'])->name('order.create');
         Route::get('/order/edit/{id}', [EVOrderController::class, 'edit'])->name('order.edit');
         Route::get('/order/details/{id}', [EVOrderController::class, 'details'])->name('order.details');
         Route::get('/orders/destroy/{id}', [EVOrderController::class, 'destroy'])->name('orders.destroy');

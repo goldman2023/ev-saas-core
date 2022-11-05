@@ -1,12 +1,9 @@
 @extends('frontend.layouts.app')
 @section('meta_title')
 @isset($category)
-{{ $category->name }} | {{ get_site_name() }}@stop
-
+    {{ $category->name }} | {{ get_site_name() }}@stop
 @else
-{{ translate('Pixpro photogrammetry blog') }} | {{ get_site_name() }}@stop
-
-
+    {{ translate('Pixpro photogrammetry blog') }} | {{ get_site_name() }}@stop
 @endisset
 
 @section('meta_description')
@@ -16,7 +13,7 @@
 <meta property="og:title" content="{{ translate('Pixpro photogrammetry blog') }} | {{ get_site_name() }}" />
 <meta property="og:type" content="article" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:image" content="{{ get_tenant_setting('og_image') }}" />
+<meta property="og:image" content="{{ get_tenant_setting('seo_meta_image') }}" />
 <meta property="og:description" content="{{ translate('Our photogrammetry blog dives into photogrammetric 3D scanning techniques, photo capturing nuances, comparisons and explores new use cases') }}" />
 <meta property="og:site_name" content="{{ get_site_name() }}" />
 @endsection

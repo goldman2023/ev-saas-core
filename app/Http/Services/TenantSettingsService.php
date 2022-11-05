@@ -54,7 +54,7 @@ class TenantSettingsService
         $data_types = $this->settingsDataTypes();
 
         $missing = array_diff_key($data_types, $settings);
-        
+
         if(!empty($missing)) {
             $this->clearCache();
 
@@ -112,7 +112,7 @@ class TenantSettingsService
             'site_contact_email' => 'string',
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
-            
+
 
             'company_name' => 'string',
             'company_address' => 'string',
@@ -230,7 +230,7 @@ class TenantSettingsService
             'login_dynamic_redirect' => 'boolean', //
             'register_dynamic_redirect' => 'boolean', //
             'user_entity_choice' => 'boolean', // enables individual or company radio buttons
-            
+
 
             // Integrations
             'mailerlite_api_token' => 'string',
@@ -250,6 +250,16 @@ class TenantSettingsService
             // Standard WP Blog Posts and categories
             'wordpress_api_enabled' => 'boolean',
             'wordpress_api_route' => 'string',
+
+            // WooCommerce Import Variables
+            'woo_import_enabled' => 'boolean',
+            'woo_import_api_key' => 'string',
+            'woo_import_rest_api_secret_key' => 'string',
+
+            // WooCommerce Export Variables
+            'woo_export_enabled' => 'boolean',
+            'woo_export_api_key' => 'string',
+            'woo_export_rest_api_secret_key' => 'string',
 
             // Mail
             'smtp_mail_enabled' => 'boolean',
@@ -299,7 +309,7 @@ class TenantSettingsService
             'require_phone_number_in_registration' => 'boolean',
             'enable_phone_number_login' => 'boolean',
             'enable_2fa' => 'boolean',
-            
+
 
             // Notifications
             'system_notifications_list' => []

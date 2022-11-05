@@ -151,7 +151,9 @@ $models = \App\Models\Plan::published()->get();
     <div>
         <div class="mb-5 md:mb-0 py-4 overflow-x-auto">
             <div class="inline-block min-w-full overflow-hidden">
-                <table class="min-w-[900px] w-full leading-normal divide-y divide-gray-300">
+                <table
+                style="border: 1px solid #e5e7eb"
+                class="min-w-[900px] w-full leading-normal divide-y divide-gray-300 border-gray-300 border-1">
                     <thead>
                         <tr class=" bg-darkGray ">
                             <th class="px-5 py-3 border-1  bg-gray-100 text-left text-lg2 font-bold text-lightDark">

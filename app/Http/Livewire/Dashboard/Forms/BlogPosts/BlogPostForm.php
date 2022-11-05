@@ -169,7 +169,7 @@ class BlogPostForm extends Component
             // TODO: Make a function to relate blog post and plans in order to make posts subscription_only
 
             // Set Categories
-            $this->setCategories($this->blogPost);
+            $this->setCategories($this->page);
 
             // TODO: Determine which package to use for Translations! Set Translations...
 //
@@ -223,7 +223,7 @@ class BlogPostForm extends Component
 
                     try {
                         CoreMeta::updateOrCreate(
-                            ['subject_id' => $this->blogPost->id, 'subject_type' => $this->blogPost::class, 'key' => $core_meta_key],
+                            ['subject_id' => $this->page->id, 'subject_type' => $this->page::class, 'key' => $core_meta_key],
                             ['value' => $new_value]
                         );
                     } catch(\Exception $e) {

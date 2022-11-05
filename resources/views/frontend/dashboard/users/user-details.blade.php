@@ -6,6 +6,32 @@
 @section('panel_content')
 <section>
     <div class="grid grid-cols-12 gap-8">
+        <div class="col-span-12 sm:col-span-4">
+            <x-dashboard.customer.customer-card :user="$user"></x-dashboard.customer.customer-card>
+
+            @if(\Payments::isStripeEnabled())
+                <x-dashboard.widgets.customers.stripe-customer-card :user="$user">
+                </x-dashboard.widgets.customers.stripe-customer-card>
+            @endif
+
+            <div class="mb-6">
+            @if(\Payments::isStripeEnabled())
+                <x-dashboard.widgets.invoices.next-payment :user="$user">
+                </x-dashboard.widgets.invoices.next-payment>
+                @endif
+            </div>
+
+
+            <div class="mb-6">
+                @if(\Payments::isStripeEnabled())
+                    <x-dashboard.widgets.invoices.user-balance :user="$user">
+                    </x-dashboard.widgets.invoices.user-balance>
+                @endif
+            </div>
+
+            @livewire('dashboard.elements.activity-log', ['per_page' => 5,'causer' => $user])
+        </div>
+
 
         <div class="col-span-12 sm:col-span-8">
             <div class="w-full pb-5 mb-5 border-b border-gray-200">
@@ -55,33 +81,22 @@
                     <livewire:dashboard.tables.orders-table for="me" :per-page="6"
                         :show-per-page="false" :user="$user" :show-search="false" :column-select="false" />
                 </div>
+
+                {{-- User Orders --}}
+                <div class="w-full pb-5 mb-5 border-b border-gray-200">
+                    <div class="mb-3 flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
+                        <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Notes') }}</h4>
+                    </div>
+                    <livewire:actions.social-comments :item="$user">
+                    </livewire:actions.social-comments>
+                </div>
+
+
             </div>
         </div>
 
 
-        <div class="col-span-12 sm:col-span-4">
-            @if(\Payments::isStripeEnabled())
-                <x-dashboard.widgets.customers.stripe-customer-card :user="$user">
-                </x-dashboard.widgets.customers.stripe-customer-card>
-            @endif
 
-            <div class="mb-6">
-            @if(\Payments::isStripeEnabled())
-                <x-dashboard.widgets.invoices.next-payment :user="$user">
-                </x-dashboard.widgets.invoices.next-payment>
-                @endif
-            </div>
-
-
-            <div class="mb-6">
-                @if(\Payments::isStripeEnabled())
-                    <x-dashboard.widgets.invoices.user-balance :user="$user">
-                    </x-dashboard.widgets.invoices.user-balance>
-                @endif
-            </div>
-
-            @livewire('dashboard.elements.activity-log', ['causer' => $user])
-        </div>
     </div>
 
 </section>

@@ -10,6 +10,7 @@ synco
 /public/uploads
 /public/assets/css
 !/public/assets/img/*
+!/public/bp-assets/*
 /public/css
 /public/themes
 /public/themes/*

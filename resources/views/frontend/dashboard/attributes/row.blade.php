@@ -6,7 +6,7 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
-    {{ $row->getTranslation('name') }}
+    {{ $row->name }}
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
@@ -35,10 +35,10 @@
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>
 
-        <button 
-            @click="isOpen = !isOpen" 
-            @keydown.escape="isOpen = false" 
-            class="flex items-center btn" 
+        <button
+            @click="isOpen = !isOpen"
+            @keydown.escape="isOpen = false"
+            class="flex items-center btn"
         >
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>

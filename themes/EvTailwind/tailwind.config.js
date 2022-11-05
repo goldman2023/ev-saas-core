@@ -9,8 +9,6 @@ module.exports = {
         `./resources/views/livewire/**/*.blade.php`, // relative to root
         `./resources/views/layouts/**/*.blade.php`, // relative to root
         `./resources/views/we-edit/**/*.blade.php`, // relative to root
-        `${__dirname}/js/**/*.vue`, // absolute path
-        `${__dirname}/js/**/*.js` // absolute path
     ],
     theme: {
         screens: {

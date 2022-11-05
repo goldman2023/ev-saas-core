@@ -15,18 +15,18 @@
         <h1 class="text-sm font-semibold uppercase tracking-wide text-indigo-600">{{ translate('Order abandoned!') }}</h1>
         <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Sorry to see you abandon your order...') }}</p>
         <p class="mt-2 text-base text-gray-500">{{ str_replace('%d%', $order->id, 'Your order #%d% has been abandoned but you may still be able to continue if you revive your order by clicking here.') }}</p>
-  
+
         {{-- <dl class="mt-12 text-sm font-medium">
           <dt class="text-gray-900">Tracking number</dt>
           <dd class="text-indigo-600 mt-2">51547878755545848512</dd>
         </dl> --}}
       </div>
-  
+
       <div class="mt-10 border-t border-gray-200">
         <h2 class="sr-only">Your order</h2>
-  
+
         <h3 class="sr-only">Items</h3>
-  
+
         @if($order->order_items->isNotEmpty())
             @foreach($order->order_items as $item)
                 <div class="py-10 border-b border-gray-200 flex space-x-6">
@@ -36,7 +36,9 @@
                         <h4 class="font-semibold text-gray-900">
                             <span>{{ $item->name }}</span>
                         </h4>
-                        <p class="mt-2 text-sm text-gray-600 line-clamp-3">{{ $item->excerpt }}</p>
+                        <p class="mt-2 text-sm text-gray-600 line-clamp-3">
+                            {!! $item->excerpt !!}
+                        </p>
                     </div>
                     <div class="mt-6 flex-1 flex items-end">
                         <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6">
@@ -54,7 +56,7 @@
                 </div>
             @endforeach
         @endif
-        
+
         <div class="sm:ml-40 sm:pl-6">
           <dl class="space-y-6 border-t border-gray-200 text-sm pt-10">
             <div class="flex justify-between">
@@ -80,5 +82,5 @@
         </div>
       </div>
     </div>
-</section>  
+</section>
 @endsection

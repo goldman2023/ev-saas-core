@@ -134,8 +134,12 @@ class BlogPost extends WeBaseModel
         $meta = [
             'title' => $this->name,
             'description' => $this->meta_description,
-            'image' => $this->getCover()
+            'image' => $this->getThumbnail()
         ];
+
+        if($this->getMetaImg()) {
+            $meta['image'] = $this->getMetaImg();
+        }
 
         if($this->meta_title) {
             $meta['title'] = $this->meta_title;

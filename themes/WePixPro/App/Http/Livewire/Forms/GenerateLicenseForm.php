@@ -54,25 +54,25 @@ class GenerateLicenseForm extends Component
     }
 
     public function generate()
-    { 
+    {
         $this->validate();
-     
+
         $license = License::findOrFail($this->license_id);
-        
+
         try {
-            $response = pix_pro_activate_license(auth()->user(), $this->serial_number, $this->hw_id);
-            
+            $response = pix_pro_activate_license($license->user, $this->serial_number, $this->hw_id);
+
             if(!empty($response) && !empty($response['status'] ?? null) && $response['status'] === 'success') {
                 $license->data = array_merge($license->data, [
                     'file_name' => $response['license_file']['file_name'] ?? '',
                     'file_contents' => $response['license_file']['file_contents'] ?? ''
                 ]);
                 $license->save();
-                
+
                 $this->emit('refreshDatatable');
                 $this->inform(translate('You successfully activated your license!'), translate('Serial number: ').$this->serial_number, 'success');
 
-                return response()->streamDownload(function () { 
+                return response()->streamDownload(function () {
                     echo $response['license_file']['file_contents'] ?? '';
                 }, $response['license_file']['file_name'] ?? '');
             }
@@ -86,6 +86,6 @@ class GenerateLicenseForm extends Component
     }
 
     public function resetForm() {
-        
+
     }
 }
