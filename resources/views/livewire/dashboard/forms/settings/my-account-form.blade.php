@@ -129,15 +129,15 @@
                     {{-- Account Media --}}
                     <div class="p-0 border bg-white border-gray-200 rounded-lg shadow">
                         <div class="w-full border-b border-gray-200">
-                            <x-dashboard.form.image-selector field="cover" template="cover" id="my-account-cover-image"
-                                error-field="me.cover" :selected-image="$me->cover"></x-dashboard.form.image-selector>
+                            <x-dashboard.form.file-selector field="cover" template="cover" id="my-account-cover-image"
+                                error-field="me.cover" :selected-image="$me->cover"></x-dashboard.form.file-selector>
                         </div>
 
                         <div class="w-full pt-3 pb-5 pr-4 pl-[140px] relative">
                             <div class="bg-white rounded-lg absolute left-6 bottom-6 border border-gray-200">
-                                <x-dashboard.form.image-selector field="thumbnail" template="avatar"
+                                <x-dashboard.form.file-selector field="thumbnail" template="avatar"
                                     id="my-account-thumbnail-image" error-field="me.thumbnail"
-                                    :selected-image="$me->thumbnail"></x-dashboard.form.image-selector>
+                                    :selected-image="$me->thumbnail"></x-dashboard.form.file-selector>
                             </div>
 
                             <div class="w-full flex flex-col">

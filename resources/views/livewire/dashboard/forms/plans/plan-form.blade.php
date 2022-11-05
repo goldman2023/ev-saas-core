@@ -385,7 +385,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0">
-                                    <x-dashboard.form.image-selector field="thumbnail" id="plan-thumbnail-image" :selected-image="$plan->thumbnail"></x-dashboard.form.image-selector>
+                                    <x-dashboard.form.file-selector field="thumbnail" id="plan-thumbnail-image" :selected-image="$plan->thumbnail"></x-dashboard.form.file-selector>
 
                                     <x-system.invalid-msg field="plan.thumbnail"></x-system.invalid-msg>
                                 </div>
@@ -403,7 +403,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0">
-                                    <x-dashboard.form.image-selector field="cover" id="plan-cover-image" :selected-image="$plan->cover"></x-dashboard.form.image-selector>
+                                    <x-dashboard.form.file-selector field="cover" id="plan-cover-image" :selected-image="$plan->cover"></x-dashboard.form.file-selector>
 
                                     <x-system.invalid-msg field="plan.cover"></x-system.invalid-msg>
                                 </div>
@@ -508,7 +508,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0">
-                                    <x-dashboard.form.image-selector field="meta_img" id="plan-meta-image" :selected-image="$plan->meta_img"></x-dashboard.form.image-selector>
+                                    <x-dashboard.form.file-selector field="meta_img" id="plan-meta-image" :selected-image="$plan->meta_img"></x-dashboard.form.file-selector>
 
                                     <x-system.invalid-msg field="plan.meta_img"></x-system.invalid-msg>
                                 </div>

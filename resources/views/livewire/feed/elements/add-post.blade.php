@@ -2,7 +2,7 @@
     isModalOpen: false,
     thumbnail: @js(['id' => $post->thumbnail->id ?? null, 'file_name' => $post->thumbnail->file_name ?? '']),
 }"
-x-on:reset-image-selector.window="thumbnail = @js(['id' => null, 'file_name' => ''])"
+x-on:reset-file-selector.window="thumbnail = @js(['id' => null, 'file_name' => ''])"
 x-on:keydown.escape="isModalOpen=false">
     <div class="flex space-x-3">
         <div class="flex-shrink-0">
@@ -24,7 +24,7 @@ x-on:keydown.escape="isModalOpen=false">
                 </textarea>
 
                 <div class="text-14 px-2 py-2 flex justify-between items-center space-x-3 sm:px-3">
-                    <x-dashboard.form.image-selector field="thumbnail" id="feed-post-image" :selected-image="$post->thumbnail" template="simple"></x-dashboard.form.image-selector>
+                    <x-dashboard.form.file-selector field="thumbnail" id="feed-post-image" :selected-image="$post->thumbnail" template="simple"></x-dashboard.form.file-selector>
                 </div>
                 <div class="hidden">
                 {{-- TODO: @vukasin, make this work with current component --}}

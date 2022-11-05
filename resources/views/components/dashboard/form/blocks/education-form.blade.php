@@ -130,7 +130,7 @@
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.image-selector field="educations[current].certificates[0]" id="education-files" template="simple" selected-image="educations[current].certificates"></x-dashboard.form.image-selector>
+                <x-dashboard.form.file-selector field="educations[current].certificates[0]" id="education-files" template="simple" selected-image="educations[current].certificates"></x-dashboard.form.file-selector>
 
             </div>
         </div>

@@ -42,6 +42,17 @@ trait HasCoreProperties
         }, $this->core_properties);
     }
 
+    public function getDynamicUploadPropertiesMutators(): array
+    {
+        if(method_exists($this, 'getDynamicModelUploadProperties')) {
+            return array_map(function ($property) {
+                return $this->getPropertyMutatorName($property);
+            }, array_column($this->getDynamicModelUploadProperties(), 'property_name'));
+        }
+
+        return [];
+    }
+
     /*
      * Append core properties to Array along with attributes and relations properties!
      */

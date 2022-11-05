@@ -1521,9 +1521,9 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="thumbnail"
+                                        <x-dashboard.form.file-selector field="thumbnail"
                                             error-field="product.thumbnail" id="product-thumbnail-image"
-                                            :selected-image="$product->thumbnail"></x-dashboard.form.image-selector>
+                                            :selected-image="$product->thumbnail"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="product.thumbnail"></x-system.invalid-msg>
                                     </div>
@@ -1540,9 +1540,9 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="cover" error-field="product.cover"
+                                        <x-dashboard.form.file-selector field="cover" error-field="product.cover"
                                             id="product-cover-image" :selected-image="$product->cover">
-                                        </x-dashboard.form.image-selector>
+                                        </x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="product.cover"></x-system.invalid-msg>
                                     </div>
@@ -1640,8 +1640,8 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0">
-                                            <x-dashboard.form.image-selector field="pdf" id="product-document-pdf"
-                                                :selected-image="$product->pdf"></x-dashboard.form.image-selector>
+                                            <x-dashboard.form.file-selector field="pdf" id="product-document-pdf"
+                                                :selected-image="$product->pdf"></x-dashboard.form.file-selector>
 
                                             <x-system.invalid-msg field="product.pdf"></x-system.invalid-msg>
                                         </div>
@@ -1832,8 +1832,8 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="meta_img" id="product-meta-image"
-                                            :selected-image="$product->meta_img"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="meta_img" id="product-meta-image"
+                                            :selected-image="$product->meta_img"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="product.meta_img"></x-system.invalid-msg>
                                     </div>

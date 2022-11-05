@@ -108,8 +108,8 @@
                                     </label>
                                     
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.image-selector field="settings.site_logo" id="site-logo"
-                                            :selected-image="$settings['site_logo']"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="settings.site_logo" id="site-logo"
+                                            :selected-image="$settings['site_logo']"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="settings.site_logo"></x-system.invalid-msg>
                                     </div>
@@ -123,9 +123,9 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.image-selector field="settings.site_logo_dark"
+                                        <x-dashboard.form.file-selector field="settings.site_logo_dark"
                                             id="site-logo-dark" :selected-image="$settings['site_logo_dark']">
-                                        </x-dashboard.form.image-selector>
+                                        </x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="settings.site_logo_dark"></x-system.invalid-msg>
                                     </div>
@@ -139,8 +139,8 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.image-selector field="settings.site_icon" id="site-site_icon"
-                                            :selected-image="$settings['site_icon']"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="settings.site_icon" id="site-site_icon"
+                                            :selected-image="$settings['site_icon']"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="settings.site_icon"></x-system.invalid-msg>
                                     </div>
@@ -154,8 +154,8 @@
                                     </label>
                                     
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.image-selector field="settings.seo_meta_image" id="site-seo_meta_image"
-                                            :selected-image="$settings['seo_meta_image']"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="settings.seo_meta_image" id="site-seo_meta_image"
+                                            :selected-image="$settings['seo_meta_image']"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="settings.seo_meta_image"></x-system.invalid-msg>
                                     </div>

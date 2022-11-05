@@ -28,24 +28,19 @@ trait UploadTrait
             $builder->with(['uploads']);
         });
 
-        static::relationsRetrieved(function ($model): void {
+        static::relationsRetrieved(function ($model) {
             if ($model->relationLoaded('uploads')) {
-                // $model->load('uploads');
 
-                // Initiate dynamic properties values
+                // Walk through dynamic upload properties and init each of them by calling respective GET mutator
                 $model->dynamicUploadPropertiesWalker(function ($property) use (&$model) {
-                    if ($property['multiple'] ?? false) {
-                        // Multiple Uploads
-                        $model->{$property['property_name']} = empty($model->uploads) ? new \Illuminate\Database\Eloquent\Collection() : $model->uploads->filter(function ($upload) use ($property) {
-                            return $upload->pivot->relation_type === $property['relation_type'];
-                        })->sortBy(function ($upload, $key) {
-                            return $upload->pivot->order;
-                        })->values();
-                    } else {
-                        // Single Upload
-                        $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
-                            return $upload->pivot->relation_type === $property['relation_type'];
-                        })->first();
+                    // Create mutator function name based on property name
+                    $get_mutator_name = $model->getPropertyMutatorName($property['property_name']);
+                    
+                    // Run dynamic upload property mutator -> THIS WILL BE ROUTED THROUGH WeBaseModel->__call() magic function and will call $model->getDynamicUpload(...) function to init the property 
+                    try {
+                        $model->{$get_mutator_name}();
+                    } catch(\Throwable $e) {
+                        \Log::error($e->getMessage);
                     }
                 });
             }
@@ -268,6 +263,26 @@ trait UploadTrait
                 }
             }
         });
+    }
+
+    public function getDynamicUpload($property_name, $relation_type, $multiple) {
+        if (! isset($this->{$property_name})) {
+            if ($multiple ?? false) {
+                // Multiple Uploads
+                $this->{$property_name} = empty($this->uploads) ? new \Illuminate\Database\Eloquent\Collection() : $this->uploads->filter(function ($upload) use ($relation_type) {
+                    return $upload->pivot->relation_type === $relation_type;
+                })->sortBy(function ($upload, $key) {
+                    return $upload->pivot->order;
+                })->values();
+            } else {
+                // Single Upload
+                $this->{$property_name} = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) use ($relation_type) {
+                    return $upload->pivot->relation_type === $relation_type;
+                })->first();
+            }
+        }
+
+        return $this->{$property_name};
     }
 
     /**

@@ -74,7 +74,7 @@
                             <div class="px-4 py-5 sm:p-6" x-show="show" wire:ignore.self>
                                 <div class="grid grid-cols-12 gap-5 w-full">
                                     <div class="col-span-2">
-                                        <x-dashboard.form.image-selector field="variation.thumbnail"
+                                        <x-dashboard.form.file-selector field="variation.thumbnail"
                                             id="variation-{{ $index }}-thumbnail" template="avatar" />
                                     </div>
                                     <div class="col-span-4 flex flex-col gap-y-2">
