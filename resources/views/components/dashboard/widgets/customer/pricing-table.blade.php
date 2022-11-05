@@ -104,7 +104,7 @@
 
                         @if($plan->non_standard)
                             <a href="{{ $plan->getCoreMeta('custom_redirect_url') }}"
-                                class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2  rounded-lg">
+                                class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-800  text-gray-800 text-lg font-bold py-2  rounded-lg">
                                 {{ !empty($plan->getCoreMeta('custom_cta_label')) ? $plan->getCoreMeta('custom_cta_label') :
                                 translate('Contact Us') }}
                             </a>
@@ -155,7 +155,7 @@
                                                     'previous_subscription_id': null,
                                                 })"
                                         @endif
-                                        class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 rounded-lg">
+                                        class="flex-1 cursor-pointer bg-transparent transition-all duration-300 mx-auto block text-center  hover:bg-primary hover:text-white  border border-gray-800  text-gray-800 text-lg font-bold py-2 rounded-lg">
 
                                         {{-- We should support following scenarios:
                                         1. *If trial mode is disabled and no plan is purchased: Buy now

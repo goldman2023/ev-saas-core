@@ -10,13 +10,14 @@
         min-height: 100vh;
     }
 </style>
-<link rel="stylesheet" href="//unpkg.com/grapesjs/dist/css/grapes.min.css">
+
+<link rel="stylesheet" href="{{ static_asset('bp-assets/grape/grape.min.css') }}">
 {{--
 <link href="path/to/grapesjs-preset-webpage.min.css" rel="stylesheet" /> --}}
 
-<script src="//unpkg.com/grapesjs"></script>
+<script src="{{ static_asset('bp-assets/grape/grape.min.js') }}"></script>
 <script src="https://unpkg.com/grapesjs-component-code-editor"></script>
-{{-- <script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage@0.1.11/dist/grapesjs-preset-webpage.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage"></script>
 <script src="/bp-assets/grapesjs-custom-code.min.js">
 </script>
 
@@ -66,11 +67,12 @@
                 container: '#gjs',
                 height: '90%',
                 selectorManager: { escapeName },
-                plugins: ['gjs-blocks-basic'],
+                plugins: ['gjs-blocks-basic', 'grapesjs-preset-webpage'],
                 pluginsOpts: {
                     'grapesjs-custom-code': {
 
-                    }
+                    },
+
                 }
               });
 

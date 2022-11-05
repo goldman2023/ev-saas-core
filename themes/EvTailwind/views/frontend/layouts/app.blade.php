@@ -7,6 +7,11 @@
 
     @yield('meta')
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- Favicon --}}
+    <link rel="icon" href="{{ get_favicon() }}" sizes="32x32" />
+    <link rel="icon" href="{{ get_favicon() }}" sizes="192x192" />
+    <link rel="apple-touch-icon" href="{{ get_favicon() }}" />
+    <meta name="msapplication-TileImage" content="{{ get_favicon() }}" />
     {{ seo()->render() }}
 
     {{--
@@ -92,6 +97,6 @@
 
     @stack('footer_scripts')
 
-    <x-integrations.open-replay></x-integrations.open-replay>
+    {{-- <x-integrations.open-replay></x-integrations.open-replay> --}}
 </body>
 </html>

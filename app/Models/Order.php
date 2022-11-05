@@ -6,6 +6,8 @@ use App\Facades\MyShop;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 use App\Builders\BaseBuilder;
+use App\Traits\CoreMetaTrait;
+use App\Traits\PermalinkTrait;
 use App\Traits\HasDataColumn;
 use App\Traits\PermalinkTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +25,7 @@ class Order extends WeBaseModel
     use HasDataColumn;
     use LogsActivity;
     use UploadTrait;
+    use CoreMetaTrait;
 
     protected $table = 'orders';
 

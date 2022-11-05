@@ -270,7 +270,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 js_wire_set('model_core_meta.includes_cloud', 'model_core_meta.includes_cloud');
                 js_wire_set('model_core_meta.includes_offline', 'model_core_meta.includes_offline');
             });
-            
+
             // When new subscription is created, take the plans core_meta and add it to the subscription!
             add_action('observer.user_subscription.created', function ($user_subscription) {
 

@@ -116,7 +116,9 @@
                         <h4 class="font-semibold text-gray-900">
                             <span>{{ $item->name }}</span>
                         </h4>
-                        <p class="mt-2 text-sm text-gray-600 line-clamp-3">{{ $item->excerpt }}</p>
+                        <p class="mt-2 text-sm text-gray-600 line-clamp-3">
+                            {!! $item->excerpt !!}
+                        </p>
                     </div>
                     <div class="mt-6 flex-1 flex items-end">
                         <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6">
