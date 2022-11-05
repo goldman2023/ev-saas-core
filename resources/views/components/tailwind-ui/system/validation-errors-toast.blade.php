@@ -49,7 +49,7 @@
                     <ul role="list" class="list-disc pl-5 space-y-1">
                       <template x-for="field_errors in errors">
                         <template x-for="error in field_errors">
-                          <li x-text="error">Your password must be at least 8 characters</li>
+                          <li x-text="error"></li>
                         </template>
                       </template>
                     </ul>

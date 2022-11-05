@@ -43,7 +43,7 @@ class FileManager extends Component
     protected function rules()
     {
         return [
-            'subject.'.$this->field => ['nullable'],
+            'subject.'.$this->field => [''],
         ];
     }
 
