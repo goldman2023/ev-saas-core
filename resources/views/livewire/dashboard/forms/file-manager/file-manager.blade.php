@@ -4,14 +4,14 @@
         $wire.set('subject.{{ $field }}', this.{{ $field }}, true);
     }
 }">
-    <x-dashboard.form.image-selector
+    <x-dashboard.form.file-selector
         id="{{ $field.'-'.Uuid::generate(4)->string }}"
         field="{{ $field }}"
         file-type="{{ \App\Enums\FileTypesEnum::image()->value }}"
         :selected-image="$subject->{$field}"
         :multiple="$multiple"
         add-new-item-label="{{ $addNewItemLabel }}">
-    </x-dashboard.form.image-selector>
+    </x-dashboard.form.file-selector>
 
     <button type="button" class="btn-primary" @click="onSave()" wire:click="saveFiles">
         {{ translate('Save') }}

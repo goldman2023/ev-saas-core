@@ -91,16 +91,16 @@
                     {{-- Shop Media --}}
                     <div class="p-0 border bg-white border-gray-200 rounded-lg shadow">
                         <div class="w-full border-b border-gray-200">
-                            <x-dashboard.form.image-selector field="cover" template="cover" id="my-shop-cover-image"
+                            <x-dashboard.form.file-selector field="cover" template="cover" id="my-shop-cover-image"
                                 error-field="shop.cover" :selected-image="$shop->cover">
-                            </x-dashboard.form.image-selector>
+                            </x-dashboard.form.file-selector>
                         </div>
 
                         <div class="w-full pt-3 pb-5 pr-4 pl-[140px] relative">
                             <div class="bg-white rounded-lg absolute left-6 bottom-6 border border-gray-200">
-                                <x-dashboard.form.image-selector field="thumbnail" template="avatar"
+                                <x-dashboard.form.file-selector field="thumbnail" template="avatar"
                                     id="my-shop-thumbnail-image" error-field="shop.thumbnail"
-                                    :selected-image="$shop->thumbnail"></x-dashboard.form.image-selector>
+                                    :selected-image="$shop->thumbnail"></x-dashboard.form.file-selector>
                             </div>
 
                             <div class="w-full flex flex-col">

@@ -87,7 +87,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.image-selector field="icon" id="category-icon-image" :selected-image="$category->icon"></x-dashboard.form.image-selector>
+                                    <x-dashboard.form.file-selector field="icon" id="category-icon-image" :selected-image="$category->icon"></x-dashboard.form.file-selector>
 
                                     <x-system.invalid-msg field="category.icon"></x-system.invalid-msg>
                                 </div>
@@ -160,7 +160,7 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="thumbnail" id="category-thumbnail-image" :selected-image="$category->thumbnail"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="thumbnail" id="category-thumbnail-image" :selected-image="$category->thumbnail"></x-dashboard.form.file-selector>
                                         
                                         <x-system.invalid-msg field="category.thumbnail"></x-system.invalid-msg>
                                     </div>
@@ -178,7 +178,7 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="cover" id="category-cover-image" :selected-image="$category->cover"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="cover" id="category-cover-image" :selected-image="$category->cover"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="category.cover"></x-system.invalid-msg>
                                     </div>
@@ -245,7 +245,7 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="meta_img" id="category-meta-image" :selected-image="$category->meta_img"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="meta_img" id="category-meta-image" :selected-image="$category->meta_img"></x-dashboard.form.file-selector>
                                         
                                         <x-system.invalid-msg field="category.meta_img"></x-system.invalid-msg>
                                     </div>

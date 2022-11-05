@@ -72,7 +72,7 @@ class AddPost extends Component
             $this->emit('newSocialPostAdded', $this->post->id);
 
             $this->inform(translate('Shared sucesfully!'), '', 'success');
-            $this->dispatchBrowserEvent('reset-image-selector');
+            $this->dispatchBrowserEvent('reset-file-selector');
 
             $this->resetForm();
         } catch(\Exception $e) {
