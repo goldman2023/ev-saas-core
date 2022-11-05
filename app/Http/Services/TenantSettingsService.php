@@ -7,14 +7,15 @@ use Cache;
 use App\Models\Currency;
 use App\Models\Upload;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * We are getting all Tenant Settings from the cache, or DB.
  * This is a singleton service, which means it'll be loaded only once during one request lifecycle.
  * This reduces the number of calls to both Redis/cache and DB.
  * There will be only one request to get all business settings cuz this class instance is reused everywhere in app if accessed via:
- * 1. Facade: App\Facades\TenantSettings
- * 2. helper: get_setting('{name}')
+ * 1. Facade: App\Facades\TenantSettings (::get('{name}'))
+ * 2. helper: get_tenant_setting('{name}') or get_setting('{name}')
  *
  * All tenant settings are loaded into $settings variable and each of them can be accessed with get() function from this class OR using Facade - TenantSetting::get().
  */
@@ -43,27 +44,41 @@ class TenantSettingsService
     public function getAll() {
         return $this->settings;
     }
-
+    
+    /**
+     * createMissingSettings
+     * 
+     * This function compares tenant settings from redis (cached for current tenant) and list of hardcoded tenant settings from settingsDataTypes().
+     * If there are missing properties (existin $data_types, but not in redis cache or DB):
+     * 1. Clear tenant settings cache in Redis
+     * 2. Create or update missing tenant settings in DB
+     * 3. Run setAll() again in order to get all tenant settings (including previously missing ones) and store them in Redis cache
+     *
+     * @return void
+     */
     public function createMissingSettings() {
-        /* TODO: How to make this not trigger when creating tenancy */
+        /* TODO: How to make this not trigger when creating tenancy? */
 
         if(Request::getHost() == config('tenancy.primary_central_domain')) {
             return true;
         }
-        $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
-        $data_types = $this->settingsDataTypes();
 
-        $missing = array_diff_key($data_types, $settings);
+        $data_types = $this->settingsDataTypes();
+        $missing = array_diff_key($data_types, $this->getAll());
 
         if(!empty($missing)) {
-            $this->clearCache();
+            $this->clearCache(); // Clear tenant settings cache
 
+            // Add missing tenant settings to the DB
             foreach($missing as $key => $type) {
                 TenantSetting::updateOrCreate(
                     ['setting' => $key],
                     ['value' => $type === 'boolean' ? false : null]
                 );
             }
+
+            // Set tenant settings again with along with previously missing ones
+            $this->setAll();
         }
     }
 
@@ -71,19 +86,21 @@ class TenantSettingsService
         if(Request::getHost() == config('tenancy.primary_central_domain')) {
             return true;
         }
-        $this->createMissingSettings(); // it'll clear the cache and add missing settings if there are missing settings
 
         $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
-        $settings = Cache::get($cache_key.'a', null);
+        $settings = Cache::get($cache_key, null);
         $default = [];
         $data_types = $this->settingsDataTypes();
 
         if (empty($settings)) {
-            $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
+            $settings = collect(DB::connection()->getPdo()
+                ->query("SELECT `id`, `setting`, `value` FROM ".(!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->getTable())
+                ->fetchAll(\PDO::FETCH_ASSOC))
+                ->keyBy('setting')
+                ->toArray();
 
             castValuesForGet($settings, $data_types);
 
-            // dd($settings);
             // Cache the settings if they are found in DB
             if (!empty($settings)) {
                 Cache::forget($cache_key);
@@ -92,6 +109,9 @@ class TenantSettingsService
         }
 
         $this->settings = !empty($settings) ? $settings : $default;
+
+        // it'll clear the cache and add missing settings if there are missing settings and update the current settings
+        $this->createMissingSettings(); 
     }
 
 
@@ -105,6 +125,7 @@ class TenantSettingsService
         $app_settings = [
             // General
             'site_logo' => Upload::class,
+            'asdasdasdasdasdasd' => Upload::class,
             'site_logo_dark' => Upload::class,
             'site_icon' => Upload::class,
             'site_name' => 'string',
