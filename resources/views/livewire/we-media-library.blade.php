@@ -43,6 +43,10 @@
         selected: this.selected,
         multiple: this.multiple,
       });
+    },
+    closeLibrary() {
+      this.new_media = [];
+      this.displayModal = false;
     }
 }"
 @display-media-library-modal.window="displayModal = true;"
@@ -71,6 +75,11 @@ x-cloak>
           x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
           x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
       
+      {{-- Dismiss modal - x button --}}
+      <button type="button" class="absolute top-3 right-3" @click="closeLibrary()">
+        @svg('heroicon-o-x', ['class' => 'w-5 h-5 text-gray-500'])
+      </button>
+
       <div class="flex flex-col max-h-[85vh]" x-data="{
             active_tab: 'select_file',
         }" x-init="">
@@ -141,7 +150,7 @@ x-cloak>
               </div>
           </div>
 
-          <div class="w-full mt-3 grow-0 overflow-y-auto">
+          <div class="w-full relative mt-3 grow-0 overflow-y-auto">
 
             {{-- Select files(s) --}}
             <div class="w-full" x-show="active_tab === 'select_file'">
@@ -150,7 +159,7 @@ x-cloak>
                 <div class="w-full mb-3"> 
 
                   <template x-if="media !== null && media.length > 0">
-                    <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+                    <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-1">
                       <template x-for="file in media">
                         <li class="relative cursor-pointer" @click="selectMedia(file)">
                           <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden"
@@ -187,54 +196,67 @@ x-cloak>
             </div>
 
             {{-- Upload New --}}
-            <div class="w-full " x-show="active_tab === 'upload_new'">
+            <div class="w-full relative" x-show="active_tab === 'upload_new'">
 
-              <div class="w-full" :class="{ 'pb-5 mb-5 border-b pt-3': new_media !== null && new_media.length > 0 }">
-                <template x-if="new_media !== null && new_media.length > 0">
-                  <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-                    <template x-for="file in new_media">
-                      <li class="relative cursor-pointer" @click="selectMedia(file.file_name, file.id)">
-                        <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden"
-                              :class="{'ring-2 ring-offset-2 ring-offset-gray-100 ring-indigo-500': isMediaSelected(file.file_name, file.id)}">
-                          <img x-bind:src="window.WE.IMG.url(file.file_name)" class="object-cover pointer-events-none group-hover:opacity-75">
-                          <button type="button" class="absolute inset-0 focus:outline-none"></button>
-                        </div>
-                        <p class="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none" x-text="file.file_original_name"></p>
-                        <p class="block text-sm font-medium text-gray-500 pointer-events-none" x-text="window.WE.utils.formatSizeUnits(file.file_size)"></p>
-                      </li>
+              <x-tailwind-ui.system.spinner 
+                class="absolute-center z-10 hidden"
+                spinner-class="h-8 w-8 text-primary"
+                wire:loading.class.remove="hidden"></x-tailwind-ui.system.spinner>
+
+                <div class="w-full relative" wire:loading.class="opacity-0 pointer-events-none">
+
+                  <div class="w-full" :class="{ 'pb-5 mb-5 border-b pt-3': new_media !== null && new_media.length > 0 }" wire:loading.class="hidden">
+                    <template x-if="new_media !== null && new_media.length > 0">
+                      <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-1">
+                        <template x-for="file in new_media">
+                          <li class="relative cursor-pointer" @click="selectMedia(file)">
+                            <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden"
+                                  :class="{'ring-2 ring-offset-2 ring-offset-gray-100 ring-indigo-500': isMediaSelected(file)}">
+                              <img x-bind:src="window.WE.IMG.url(file.file_name)" class="object-cover pointer-events-none group-hover:opacity-75">
+                              <button type="button" class="absolute inset-0 focus:outline-none"></button>
+                            </div>
+                            <p class="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none" x-text="file.file_original_name"></p>
+                            <p class="block text-sm font-medium text-gray-500 pointer-events-none" x-text="window.WE.utils.formatSizeUnits(file.file_size)"></p>
+                          </li>
+                        </template>
+                      </ul>
                     </template>
-                  </ul>
-                </template>
-              </div>
-            
-              <input type="file" class="hidden" id="we-media-library__new-media-input" wire:model="new_media" multiple>
-
-              {{-- New image(s) --}}
-              <div class="w-full" x-data="{}">
-                <div class="mt-5 mb-5 cursor-pointer">
-                  <label for="we-media-library__new-media-input" class="mx-auto max-w-lg flex justify-center px-6 pt-5 pb-6 cursor-pointer border-2 border-gray-300 border-dashed rounded-md">
-                      <div class="space-y-1 text-center">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
-                        </svg>
-                        <div class="flex text-sm text-gray-600">
-                          <span class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                            {{ translate('Upload a file(s)') }}
-                          </span>
-                          <p class="pl-1">{{ translate('or drag and drop') }}</p>
-                        </div>
-                        <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 10MB') }}</p>
-                      </div>
-                  </label>
+                  </div>
+                  
+                  {{-- New image(s) --}}
+                  <div class="w-full relative" x-data="{}" >
+                    <div class="py-5 cursor-pointer">
+    
+                      <input type="file" class="absolute cursor-pointer inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0" 
+                        id="we-media-library__new-media-input" 
+                        wire:model="new_media" 
+                        multiple>
+    
+                      <label for="we-media-library__new-media-input" class="mx-auto max-w-lg flex justify-center px-6 pt-5 pb-6 cursor-pointer border-2 border-gray-300 border-dashed rounded-md">
+                          <div class="space-y-1 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
+                            </svg>
+                            <div class="flex text-sm text-gray-600">
+                              <span class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                {{ translate('Upload a file(s)') }}
+                              </span>
+                              <p class="pl-1">{{ translate('or drag and drop') }}</p>
+                            </div>
+                            <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 10MB') }}</p>
+                          </div>
+                      </label>
+                    </div>
+    
+                    <x-system.invalid-msg field="new_media.*" class="mt-2 mb-4 flex justify-center"></x-system.invalid-msg>
+                  </div>
                 </div>
-
-                <x-system.invalid-msg field="new_media.*" class="mt-2 mb-4 flex justify-center"></x-system.invalid-msg>
-              </div>
+              
             </div>
 
           </div>
 
-          <div class="w-full shrink-0 flex justify-between border-t border-gray-200 pt-3">
+          <div class="w-full shrink-0 flex justify-between border-t border-gray-200 pt-3" wire:loading.class="opacity-50 pointer-events-none">
             {{-- Pagination --}}
             <div class="w-full bg-white px-2 flex items-center justify-between sm:px-2">
                   
@@ -270,10 +292,10 @@ x-cloak>
             {{-- END Pagination --}}
 
             <div class="sm:flex sm:flex-row-reverse pt-2">
-              <button type="button" @click="saveSelection(); displayModal = false;" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm">
+              <button type="button" @click="saveSelection(); closeLibrary();" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm">
                 {{ translate('Save') }}
               </button>
-              <button type="button" @click="displayModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:primary sm:mt-0 sm:w-auto sm:text-sm">
+              <button type="button" @click="closeLibrary()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:primary sm:mt-0 sm:w-auto sm:text-sm">
                 {{ translate('Cancel') }}
               </button>
             </div>

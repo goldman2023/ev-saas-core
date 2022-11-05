@@ -16,6 +16,7 @@ use Livewire\WithFileUploads;
 use MediaService;
 use MyShop;
 use WeBuilder;
+use Illuminate\Support\Facades\Validator;
 
 class WeMediaLibrary extends Component
 {
@@ -112,71 +113,117 @@ class WeMediaLibrary extends Component
 
     public function updatedNewMedia($value)
     {
-        try {
-            $this->validate([
-                'new_media.*' => 'file|max:10240', // 10MB Max; TODO: Store  WeMediaLibrary max file size somewhere in tenant settings
-            ]);
-        } catch (\Exception $e) {
-            if ($e instanceof \Illuminate\Validation\ValidationException) {
-                $title = collect($e->validator->errors()->messages())->first()[0] ?? '';
-            } elseif ($e instanceof \Exception) {
-                $title = $e->getMessage();
+        if (! empty($this->new_media)) {
+            $failed_uploads = [];
+            $count_uploads = count($this->new_media);
+
+            foreach ($this->new_media as $key => $media) {
+                $validator = Validator::make(
+                    ['file' => $media], 
+                    ['file' => 'file|max:12500'],
+                    [
+                        'file' => translate('Uploaded item is not a file.'),
+                        'max' => translate('Maximum file size to upload is 12MB (12500 KB).'),
+                    ]    
+                );
+
+                try {
+                    if($validator->passes()) {
+                        $upload = new Upload();
+
+                        $extension = $media->guessExtension();
+
+                        if (isset(MediaService::getPermittedExtensions()[$extension])) {
+                            $upload->file_original_name = null;
+    
+                            $arr = explode('.', $media->getClientOriginalName());
+                            for ($i = 0; $i < count($arr) - 1; $i++) {
+                                if ($i == 0) {
+                                    $upload->file_original_name .= $arr[$i];
+                                } else {
+                                    $upload->file_original_name .= '.'.$arr[$i];
+                                }
+                            }
+    
+                            $tenant_path = 'uploads/all';
+    
+                            if (tenant('id')) {
+                                $tenant_path = 'uploads/'.tenant('id');
+                            }
+    
+                            // Check if tenant uploads folder exists an create it if not
+                            if (! Storage::disk(config('filesystems.default'))->exists($tenant_path)) { 
+                                // Create Tenant folder on DO if it doesn't exist
+                                Storage::makeDirectory($tenant_path, 0775, true, true);
+                            }
+    
+                            try {
+                                Storage::makeDirectory($tenant_path, 0775, true, true);
+                            } catch(\Exception $e) {
+    
+                            }
+    
+                            $new_filename = time().'_'.preg_replace("/\s+/", "", $media->getClientOriginalName());
+    
+                            // Store Media to current Storage disk!
+                            $media->storeAs($tenant_path, $new_filename, config('filesystems.default'));
+                            
+                            $upload->extension = $extension;
+                            $upload->file_name = $tenant_path.'/'.$new_filename;
+                            $upload->user_id = auth()->user()->id;
+                            $upload->shop_id = empty(MyShop::getShopID()) ? null : MyShop::getShopID();
+                            $upload->type = MediaService::getPermittedExtensions()[$extension];
+                            $upload->file_size = $media->getSize();
+                            $upload->save();
+    
+                            $this->new_media[$key] = $upload->toArray();
+                        }
+                    } else {
+                        $failed_uploads[] = [
+                            'media' => $media,
+                            'errors' => $validator->errors()->messages()
+                        ];
+                        unset($this->new_media[$key]);
+                        continue;
+                    }
+                } catch(\Exception $e) {
+                    if ($e instanceof \Illuminate\Validation\ValidationException) {
+                        $title = collect($e->validator->errors()->messages())->first()[0] ?? '';
+                    } elseif ($e instanceof \Exception) {
+                        $title = $e->getMessage();
+                    }
+
+                    // Just skip the file
+                    $failed_uploads[] = [
+                        'media' => $media,
+                        'errors' => [
+                            [
+                                'file' => [
+                                    translate('Try renaming the file. It may happen that\'s the issue with uploading.')
+                                ]
+                            ]
+                        ]
+                    ];
+                    unset($this->new_media[$key]);
+                    continue;
+                }
             }
 
-            $this->inform($title, '', 'fail');
-            $this->new_media = []; // reset new_media (basically, get rid of the livewire temp files added to $new_media)
+            $this->new_media = array_values($this->new_media);
 
-            return;
-        }
+            if(!empty($failed_uploads)) {
+                $this->inform(
+                    sprintf(translate('%d files out of %d could not be uploaded.'), count($failed_uploads), $count_uploads), 
+                    '', 
+                    'fail'
+                );
 
-        if (! empty($this->new_media)) {
-            foreach ($this->new_media as $key => $media) {
-                $upload = new Upload();
+                // TODO: Display errors for failed uploads correctly!
+                // $this->dispatchValidationErrors();
 
-                $extension = $media->guessExtension();
-
-                if (isset(MediaService::getPermittedExtensions()[$extension])) {
-                    $upload->file_original_name = null;
-
-                    $arr = explode('.', $media->getClientOriginalName());
-                    for ($i = 0; $i < count($arr) - 1; $i++) {
-                        if ($i == 0) {
-                            $upload->file_original_name .= $arr[$i];
-                        } else {
-                            $upload->file_original_name .= '.'.$arr[$i];
-                        }
-                    }
-
-                    $tenant_path = 'uploads/all';
-
-                    if (tenant('id')) {
-                        $tenant_path = 'uploads/'.tenant('id');
-                    }
-
-                    // Check if tenant uploads folder exists an create it if not
-                    if (! Storage::disk(config('filesystems.default'))->exists($tenant_path)) { 
-                        // Create Tenant folder on DO if it doesn't exist
-                        Storage::makeDirectory($tenant_path, 0775, true, true);
-                    }
-
-                    try {
-                        Storage::makeDirectory($tenant_path, 0775, true, true);
-                    } catch(\Exception $e) {
-
-                    }
-
-                    $new_filename = time().'_'.preg_replace("/\s+/", "", $media->getClientOriginalName());
-
-                    $wtf = $media->storeAs($tenant_path, $new_filename, 'do');
-                    $upload->extension = $extension;
-                    $upload->file_name = $tenant_path.'/'.$new_filename;
-                    $upload->user_id = auth()->user()->id;
-                    $upload->shop_id = empty(MyShop::getShopID()) ? null : MyShop::getShopID();
-                    $upload->type = MediaService::getPermittedExtensions()[$extension];
-                    $upload->file_size = $media->getSize();
-                    $upload->save();
-
-                    $this->new_media[$key] = $upload;
+                // Reset new_media ONLY if number of failed_uploads is same as $this->new_media
+                if($count_uploads === count($failed_uploads)) {
+                    $this->new_media = [];
                 }
             }
         }
