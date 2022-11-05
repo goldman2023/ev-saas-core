@@ -130,6 +130,7 @@ class WeBaseModel extends Model
      * Handle dynamic method calls into the model.
      *
      * Differs from default Laravel __call() by:
+     * - If called property mutator is for one the properties in the $this->getDynamicUploadPropertiesMutators(), run GET mutator for that Dynamic Upload property!
      * - If called property mutator is for one the properties in the $core_properties, just return the core_property!
      * - get{CoreProperty}Attribute() are not defined because core_properties do not have mutators yet (if not explicitely added in some Model),
      * and calling mutators like that will throw an error instead of returning the desired core_property
@@ -142,8 +143,20 @@ class WeBaseModel extends Model
      */
     public function __call($method, $parameters)
     {
-        if (in_array($method, $this->getCorePropertiesMutators(), true)) {
-            return $this->{$this->getPropertyMutatorName($method, true)};
+        if(in_array($method, $this->getDynamicUploadPropertiesMutators(), true) && method_exists($this, 'getDynamicUpload')) {
+            // Check if property name falls under Dynamic Upload Properties - cuz then, mutator functions have to go through ONE SPECIFIC getter function
+            $property_name = $this->getPropertyMutatorName(name: $method, inverse: true);
+
+            if(!empty($this->getDynamicModelUploadProperties())) {
+                // Loop through dynamic upload properties and when property name matches property for which mutator is called, run `getDynamicUpload()`
+                foreach($this->getDynamicModelUploadProperties() as $property) {
+                    if($property['property_name'] == $property_name) {
+                        return $this->getDynamicUpload($property['property_name'], $property['relation_type'], $property['multiple']);
+                    }
+                }
+            }
+        } else if (in_array($method, $this->getCorePropertiesMutators(), true)) {
+            return $this->{$this->getPropertyMutatorName(name: $method, inverse: true)};
         }
 
         return parent::__call($method, $parameters);

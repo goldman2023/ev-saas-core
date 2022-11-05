@@ -1,5 +1,3 @@
-{{-- @dd($this->blogPost->gallery); --}}
-
 <div class="w-full livewire-form" x-data="{
     status: @js($blogPost->status ?? App\Enums\StatusEnum::draft()->value),
     type: @js($blogPost->type ?? App\Enums\BlogPostTypeEnum::blog()->value),
