@@ -9,7 +9,6 @@ use App\Builders\BaseBuilder;
 use App\Traits\CoreMetaTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\HasDataColumn;
-use App\Traits\PermalinkTrait;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
