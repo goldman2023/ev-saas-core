@@ -50,7 +50,7 @@ class PlanForm extends Component
      */
     public function mount($plan = null)
     {
-        $this->plan = empty($plan) ? new Plan() : $plan;
+        $this->plan = empty($plan) ? (new Plan())->load(['uploads']) : $plan;
         $this->is_update = isset($this->plan->id) && ! empty($this->plan->id);
 
         if (! $this->is_update) {
@@ -117,7 +117,7 @@ class PlanForm extends Component
             'plan.yearly_discount_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
             'plan.tax' => 'nullable|numeric',
             'plan.tax_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
-            'plan.gallery' => [''],
+            'plan.gallery' => ['nullable'],
             'plan.meta_title' => [''],
             'plan.meta_keywords' => [''],
             'plan.meta_description' => [''],

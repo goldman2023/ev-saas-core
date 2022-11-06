@@ -61,12 +61,6 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         if (function_exists('add_filter')) {
             // Filter
 
-
-
-
-
-
-
             add_filter('dashboard.sidebar.menu', function ($menu) {
                 $included_items = [
                     'dashboard',
@@ -78,6 +72,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'invoices.index',
                     'blog.posts.index',
                     'pages.index',
+                    'sections.index',
                     'crm.all_customers',
                     'my.account.settings',
                     'my.orders.all',

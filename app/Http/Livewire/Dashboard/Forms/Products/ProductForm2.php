@@ -87,7 +87,7 @@ class ProductForm2 extends Component
             'media' => [
                 'product.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
                 'product.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-                'product.gallery' => [], // 'if_id_exists:App\Models\Upload,id,true'
+                'product.gallery' => ['nullable'], // 'if_id_exists:App\Models\Upload,id,true'
                 'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
                 'product.video_link' => 'nullable|active_url',
                 'product.pdf' => ['nullable', 'if_id_exists:App\Models\Upload,id,true'],
@@ -197,7 +197,7 @@ class ProductForm2 extends Component
                 return redirect()->route('onboarding.step4');
             }
 
-            $this->product = new Product();
+            $this->product = (new Product())->load(['uploads']);
 
             $this->product->slug = '';
             $this->product->status = StatusEnum::draft()->value;

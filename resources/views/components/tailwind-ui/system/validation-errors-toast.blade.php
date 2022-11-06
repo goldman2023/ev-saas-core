@@ -21,7 +21,7 @@
     @validation-errors.window="
         if($event.detail.id === id && $event.detail.hasOwnProperty('errors') && $event.detail.errors !== null && Object.keys($event.detail.errors).length > 0) {
             errors = $event.detail.errors;
-            console.log($event.detail.errors);
+            //console.log($event.detail.errors);
             show = true;
         }"
     @click.outside="show = false"

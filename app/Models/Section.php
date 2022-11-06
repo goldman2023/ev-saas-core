@@ -16,7 +16,7 @@ class Section extends Model
 
     protected $table = 'sections';
 
-    protected $fillable = ['section_id', 'type', 'title', 'slug', 'thumbnail', 'order', 'content', 'settings', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
+    protected $fillable = ['type', 'title', 'slug', 'order', 'content', 'settings', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
 
     public function getSlugOptions(): SlugOptions
     {

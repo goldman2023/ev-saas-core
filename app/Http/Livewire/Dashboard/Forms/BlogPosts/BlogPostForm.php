@@ -47,7 +47,7 @@ class BlogPostForm extends Component
      */
     public function mount($blogPost = null)
     {
-        $this->blogPost = empty($blogPost) ? new BlogPost() : $blogPost;
+        $this->blogPost = empty($blogPost) ? (new BlogPost())->load(['uploads']) : $blogPost;
         $this->is_update = isset($this->blogPost->id) && ! empty($this->blogPost->id);
 
         if (! $this->is_update) {
@@ -60,6 +60,7 @@ class BlogPostForm extends Component
         $this->selectedPlans = $this->blogPost->plans->keyBy('id')->map(fn ($item) => $item->title);
 
         $this->model_core_meta = CoreMeta::getMeta($blogPost?->core_meta ?? [], BlogPost::class, true);
+
     }
 
     protected function getRuleSet($set = null)
@@ -99,6 +100,8 @@ class BlogPostForm extends Component
     protected function messages()
     {
         return [
+            'selected_categories.required' => translate('At least one category is required.'),
+
             'blogPost.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
             'blogPost.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
             'blogPost.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),

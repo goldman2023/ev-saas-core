@@ -30,7 +30,6 @@ trait UploadTrait
 
         static::relationsRetrieved(function ($model) {
             if ($model->relationLoaded('uploads')) {
-
                 // Walk through dynamic upload properties and init each of them by calling respective GET mutator
                 $model->dynamicUploadPropertiesWalker(function ($property) use (&$model) {
                     // Create mutator function name based on property name

@@ -42,7 +42,7 @@ class PageForm extends Component
      */
     public function mount($page = null)
     {
-        $this->page = empty($page) ? new Page() : $page;
+        $this->page = empty($page) ? (new Page())->load(['uploads']) : $page;
         $this->is_update = isset($this->page->id) && ! empty($this->page->id);
 
         if (! $this->is_update) {
