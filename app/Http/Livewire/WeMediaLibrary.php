@@ -119,7 +119,7 @@ class WeMediaLibrary extends Component
 
             foreach ($this->new_media as $key => $media) {
                 $validator = Validator::make(
-                    ['file' => $media], 
+                    ['file' => $media],
                     ['file' => 'file|max:12500'],
                     [
                         'file' => translate('Uploaded item is not a file.'),

@@ -39,7 +39,7 @@ class SectionForm extends Component
      */
     public function mount($section = null)
     {
-        $this->section = empty($section) ? new Section() : $section;
+        $this->section = empty($section) ? (new Section())->load(['uploads']) : $section;
         $this->is_update = isset($this->section->id) && ! empty($this->section->id);
 
         if (!$this->is_update) {

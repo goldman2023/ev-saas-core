@@ -33,7 +33,7 @@ class OrderForm extends Component
      */
     public function mount($order = null, $hideShipping = false, $customer = null)
     {
-        $this->order = empty($order) ? new Order() : $order;
+        $this->order = empty($order) ? (new Order())->load(['uploads']) : $order;
 
         if(empty($this->order->id)) {
             $this->order->shop_id = 1;

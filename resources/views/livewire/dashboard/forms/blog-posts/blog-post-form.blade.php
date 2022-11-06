@@ -4,7 +4,7 @@
     thumbnail: @js(toJSONMedia($blogPost->thumbnail)),
     cover: @js(toJSONMedia($blogPost->cover)),
     meta_img: @js(toJSONMedia($blogPost?->meta_img ?? null)),
-    gallery: @js($blogPost->gallery->map(fn($item, $key) => toJSONMedia($item))),
+    gallery: @js(collect($blogPost->gallery)->map(fn($item, $key) => toJSONMedia($item))),
     subscription_only: @js($blogPost->subscription_only === 'true' ? true : false),
     selected_plans: @js($selectedPlans),
     content: @entangle('blogPost.content').defer,
