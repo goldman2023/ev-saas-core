@@ -1,12 +1,10 @@
-{{-- @dd($this->blogPost->gallery); --}}
-
 <div class="w-full livewire-form" x-data="{
     status: @js($blogPost->status ?? App\Enums\StatusEnum::draft()->value),
     type: @js($blogPost->type ?? App\Enums\BlogPostTypeEnum::blog()->value),
     thumbnail: @js(toJSONMedia($blogPost->thumbnail)),
     cover: @js(toJSONMedia($blogPost->cover)),
     meta_img: @js(toJSONMedia($blogPost?->meta_img ?? null)),
-    gallery: @js($blogPost->gallery->map(fn($item, $key) => toJSONMedia($item))),
+    gallery: @js(collect($blogPost->gallery)->map(fn($item, $key) => toJSONMedia($item))),
     subscription_only: @js($blogPost->subscription_only === 'true' ? true : false),
     selected_plans: @js($selectedPlans),
     content: @entangle('blogPost.content').defer,
@@ -364,8 +362,8 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="thumbnail" id="blogPost-thumbnail-image"
-                                            :selected-image="$blogPost->thumbnail"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="thumbnail" id="blogPost-thumbnail-image"
+                                            :selected-image="$blogPost->thumbnail"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="blogPost.thumbnail"></x-system.invalid-msg>
                                     </div>
@@ -383,8 +381,8 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="cover" id="blogPost-cover-image"
-                                            :selected-image="$blogPost->cover"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="cover" id="blogPost-cover-image"
+                                            :selected-image="$blogPost->cover"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="blogPost.cover"></x-system.invalid-msg>
                                     </div>
@@ -400,13 +398,13 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector 
+                                        <x-dashboard.form.file-selector 
                                             id="blogPost-gallery-image"
                                             field="gallery"
                                             :file-type="\App\Enums\FileTypesEnum::image()->value"
                                             :selected-image="$blogPost->gallery"
                                             :multiple="true"
-                                            add-new-item-label="{{ translate('Add new image') }}"></x-dashboard.form.image-selector>
+                                            add-new-item-label="{{ translate('Add new image') }}"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="blogPost.gallery"></x-system.invalid-msg>
                                     </div>

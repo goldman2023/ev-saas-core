@@ -5,6 +5,7 @@ namespace WeThemes\WeBaltic\App\Providers;
 // Because this file service provider is loaded after tenant is initated and has no namespace, it cannot use Aliases from `app.php`, like: use Log or use File; Instead full namespaces must be used!
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\View;
 use Livewire;
 use TenantSettings;
@@ -61,12 +62,6 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         if (function_exists('add_filter')) {
             // Filter
 
-
-
-
-
-
-
             add_filter('dashboard.sidebar.menu', function ($menu) {
                 $included_items = [
                     'dashboard',
@@ -78,6 +73,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'invoices.index',
                     'blog.posts.index',
                     'pages.index',
+                    'sections.index',
                     'crm.all_customers',
                     'my.account.settings',
                     'my.orders.all',
@@ -102,6 +98,12 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return $menu;
             }, 10, 1);
         }
+
+        add_action('order.change-status', function($order) {
+            if($order->status == 1) {
+                $this->generate_contract($order);
+            }
+        });
     }
 
     /**
@@ -112,5 +114,19 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     public function register()
     {
         parent::register();
+    }
+
+
+
+    public function generate_contract($order) {
+        // Get order attributes and generate the document
+        $data = ['test' => 'pdf is here', 'order' => $order];
+        $pdf = Pdf::loadView('documents_templates.contract', $data );
+
+        $pdf->save(storage_path() . '/contract-order-'. $order->id .'.pdf');
+        /* TODO: Implement attaching a document */
+        // $order->attachDocument($something);
+
+        return redirect()->back();
     }
 }

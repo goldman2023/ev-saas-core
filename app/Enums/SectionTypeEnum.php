@@ -4,8 +4,8 @@ namespace App\Enums;
 
 /**
  * @method static self twig()
- * @method static self blade()
- * @method static self builder()
+ * @method static self blade_component()
+ * @method static self block()
  * @method static self wysiwyg()
  */
 class SectionTypeEnum extends EVBaseEnum
@@ -14,8 +14,8 @@ class SectionTypeEnum extends EVBaseEnum
     {
         return [
             'twig' => 'twig',
-            'blade' => 'blade',
-            'builder' => 'builder',
+            'blade_component' => 'blade_component',
+            'block' => 'block',
             'wysiwyg' => 'wysiwyg',
         ];
     }
@@ -24,8 +24,8 @@ class SectionTypeEnum extends EVBaseEnum
     {
         return [
             'twig' => 'Twig',
-            'blade' => 'Blade',
-            'builder' => 'Builder',
+            'blade_component' => 'Blade Component',
+            'block' => 'Block',
             'wysiwyg' => 'Wysiwyg',
         ];
     }

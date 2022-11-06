@@ -211,6 +211,15 @@ if (!function_exists('toJSONMedia')) {
                 'file_original_name' => $upload?->file_original_name ?? '',
                 'order' => $upload?->pivot?->order ?? 0,
             ];
+        } else if(is_array($upload)) {
+            return [
+                'id' => $upload['id'] ?? '',
+                'file_name' => $upload['file_name'] ?? '',
+                'extension' => $upload['extension'] ?? '',
+                'type' => $upload['type'] ?? null,
+                'file_original_name' => $upload['file_original_name'] ?? '',
+                'order' => $upload['order'] ?? 0,
+            ];
         }
 
         return [

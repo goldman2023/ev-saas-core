@@ -30,7 +30,7 @@ class CategoryForm extends Component
      */
     public function mount($category = null)
     {
-        $this->category = empty($category) ? new Category() : $category;
+        $this->category = empty($category) ? (new Category())->load(['uploads']) : $category;
 
         $this->is_update = isset($this->category->id) && ! empty($this->category->id);
 

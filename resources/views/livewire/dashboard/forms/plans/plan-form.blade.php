@@ -1,8 +1,9 @@
 <div class="w-full" x-data="{
     status: @js($plan->status ?? \App\Enums\StatusEnum::draft()->value),
-    thumbnail: @js(['id' => $plan->thumbnail->id ?? null, 'file_name' => $plan->thumbnail->file_name ?? '']),
-    cover: @js(['id' => $plan->cover->id ?? null, 'file_name' => $plan->cover->file_name ?? '']),
-    meta_img: @js(['id' => $plan->meta_img->id ?? null, 'file_name' => $plan->meta_img->file_name ?? '']),
+    thumbnail: @js(toJSONMedia($plan->thumbnail)),
+    cover: @js(toJSONMedia($plan->cover)),
+    meta_img: @js(toJSONMedia($plan->meta_img)),
+    gallery: @js(collect($plan->gallery)->map(fn($item, $key) => toJSONMedia($item))),
     base_currency: @js($plan->base_currency),
     primary: @js($plan->primary ?? false),
     featured: @js($plan->featured ?? false),
@@ -17,6 +18,29 @@
     selected_attribute_values: @js($selected_predefined_attribute_values),
     core_meta: @js($core_meta),
     model_core_meta: @js($model_core_meta),
+    onSave() {
+        $wire.set('plan.content', this.content, true);
+        $wire.set('plan.status', this.status, true);
+        $wire.set('plan.base_currency', this.base_currency, true);
+        $wire.set('plan.discount_type', this.discount_type, true);
+        $wire.set('plan.yearly_discount_type', this.yearly_discount_type, true);
+        $wire.set('plan.tax_type', this.tax_type, true);
+        $wire.set('plan.thumbnail', this.thumbnail.id, true);
+        $wire.set('plan.gallery', this.gallery, true);
+        $wire.set('plan.cover', this.cover.id, true);
+        $wire.set('plan.meta_img', this.meta_img.id, true);
+        $wire.set('plan.features', this.features, true);
+        $wire.set('plan.primary', this.primary, true);
+        $wire.set('plan.featured', this.featured, true);
+        $wire.set('plan.non_standard', this.non_standard, true);
+
+        $wire.set('core_meta', this.core_meta, true);
+        $wire.set('selected_categories', this.selected_categories, true);
+        $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
+        $wire.set('custom_attributes', this.attributes, true);
+
+        @do_action('view.plan-form.wire_set')
+    }
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      @init-form.window="features = features.filter(x => x).filter(x => true);"
@@ -341,26 +365,7 @@
                     <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
 
                         <button type="button" class="btn btn-primary ml-auto btn-sm"
-                            @click="
-                                $wire.set('core_meta', core_meta, true);
-                                $wire.set('selected_categories', selected_categories, true);
-                                $wire.set('plan.content', content, true);
-                                $wire.set('plan.status', status, true);
-                                $wire.set('plan.base_currency', base_currency, true);
-                                $wire.set('plan.discount_type', discount_type, true);
-                                $wire.set('plan.yearly_discount_type', yearly_discount_type, true);
-                                $wire.set('plan.tax_type', tax_type, true);
-                                $wire.set('plan.thumbnail', thumbnail.id, true);
-                                $wire.set('plan.cover', cover.id, true);
-                                $wire.set('plan.meta_img', meta_img.id, true);
-                                $wire.set('plan.features', features, true);
-                                $wire.set('plan.primary', primary, true);
-                                $wire.set('plan.featured', featured, true);
-                                $wire.set('plan.non_standard', non_standard, true);
-                                $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
-                                $wire.set('custom_attributes', this.attributes, true);
-                                @do_action('view.plan-form.wire_set')
-                            "
+                            @click="onSave()"
                             wire:click="savePlan()"
                             >
                         {{ translate('Save') }}
@@ -385,7 +390,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0">
-                                    <x-dashboard.form.image-selector field="thumbnail" id="plan-thumbnail-image" :selected-image="$plan->thumbnail"></x-dashboard.form.image-selector>
+                                    <x-dashboard.form.file-selector field="thumbnail" id="plan-thumbnail-image" :selected-image="$plan->thumbnail"></x-dashboard.form.file-selector>
 
                                     <x-system.invalid-msg field="plan.thumbnail"></x-system.invalid-msg>
                                 </div>
@@ -403,7 +408,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0">
-                                    <x-dashboard.form.image-selector field="cover" id="plan-cover-image" :selected-image="$plan->cover"></x-dashboard.form.image-selector>
+                                    <x-dashboard.form.file-selector field="cover" id="plan-cover-image" :selected-image="$plan->cover"></x-dashboard.form.file-selector>
 
                                     <x-system.invalid-msg field="plan.cover"></x-system.invalid-msg>
                                 </div>
@@ -411,6 +416,28 @@
                         </div>
                         {{-- END Cover --}}
                     </div>
+
+                    {{-- Gallery --}}
+                    <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                        <div class="flex flex-col " x-data="{}">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ translate('Gallery') }}
+                            </label>
+
+                            <div class="mt-1 sm:mt-0">
+                                <x-dashboard.form.file-selector 
+                                    id="plan-gallery"
+                                    field="gallery"
+                                    :file-type="\App\Enums\FileTypesEnum::image()->value"
+                                    :selected-image="$plan->gallery"
+                                    :multiple="true"
+                                    add-new-item-label="{{ translate('Add new image') }}"></x-dashboard.form.file-selector>
+
+                                <x-system.invalid-msg field="plan.gallery"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- END Gallery --}}
 
                 </div>
                 {{-- END Media --}}
@@ -508,7 +535,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0">
-                                    <x-dashboard.form.image-selector field="meta_img" id="plan-meta-image" :selected-image="$plan->meta_img"></x-dashboard.form.image-selector>
+                                    <x-dashboard.form.file-selector field="meta_img" id="plan-meta-image" :selected-image="$plan->meta_img"></x-dashboard.form.file-selector>
 
                                     <x-system.invalid-msg field="plan.meta_img"></x-system.invalid-msg>
                                 </div>

@@ -5,7 +5,7 @@ namespace App\View\Components\Dashboard\Form;
 use App\Models\Upload;
 use Illuminate\View\Component;
 
-class ImageSelector extends Component
+class FileSelector extends Component
 {
     public $field;
 
@@ -85,6 +85,6 @@ class ImageSelector extends Component
             return view('components.dashboard.form.avatar-selector');
         }
 
-        return view('components.dashboard.form.image-selector');
+        return view('components.dashboard.form.file-selector');
     }
 }

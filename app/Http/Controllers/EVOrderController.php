@@ -6,6 +6,7 @@ use App\Facades\MyShop;
 use App\Models\Order;
 use App\Models\Invoice;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class EVOrderController extends Controller
@@ -69,5 +70,15 @@ class EVOrderController extends Controller
 
         return view('frontend.dashboard.my-orders.index', compact('orders', 'orders_count'));
     }
+
+    public function change_status($order_id) {
+        $order = Order::findOrFail($order_id);
+
+        do_action('order.change-status', $order);
+
+        return redirect()->back();
+    }
+
+
 
 }

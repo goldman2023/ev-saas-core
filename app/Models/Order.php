@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
+use App\Traits\UploadTrait;
+use App\Traits\GalleryTrait;
+use App\Builders\BaseBuilder;
 use App\Traits\CoreMetaTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\HasDataColumn;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 /**
@@ -21,9 +23,8 @@ class Order extends WeBaseModel
     use PermalinkTrait;
     use HasDataColumn;
     use LogsActivity;
+    use UploadTrait;
     use CoreMetaTrait;
-
-
 
     protected $table = 'orders';
 
@@ -125,7 +126,8 @@ class Order extends WeBaseModel
                 $order->fillable(array_unique(array_merge($order->fillable, $sums_properties)));
             }
 
-            $order->initCoreProperties();
+            $order->initCoreProperties(only: $sums_properties); // init ONLY 'sums' core properties (cuz otherwise, other core properties from traits will be overriden)
+
 
             if(!empty($order->user_subscription)) {
                 foreach ($sums_properties as $property) {
@@ -224,6 +226,17 @@ class Order extends WeBaseModel
         }
 
         return '#';
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            [
+                'property_name' => 'documents',
+                'relation_type' => 'documents',
+                'multiple' => true,
+            ],
+        ];
     }
 
 //    TODO: ORDER TRACKING NUMBER!!!

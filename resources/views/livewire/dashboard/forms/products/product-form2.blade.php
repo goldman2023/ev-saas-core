@@ -8,11 +8,11 @@
 @endpush
 
 <div x-data="{
-        thumbnail: @js(['id' => $product->thumbnail->id ?? null, 'file_name' => $product->thumbnail->file_name ?? '']),
-        cover: @js(['id' => $product->cover->id ?? null, 'file_name' => $product->cover->file_name ?? '']),
-        meta_img: @js(['id' => $product->meta_img->id ?? null, 'file_name' => $product->meta_img->file_name ?? '']),
-        pdf: @js(['id' => $product->pdf->id ?? null, 'file_name' => $product->pdf->file_name ?? '']),
-        gallery: @js(collect($product->gallery)?->map(fn($item) => ['id' => $item->id ?? null, 'file_name' => $item->file_name ?? '']) ?? []),
+        thumbnail: @js(toJSONMedia($product->thumbnail)),
+        cover: @js(toJSONMedia($product->cover)),
+        meta_img: @js(toJSONMedia($product->meta_img)),
+        gallery: @js(collect($product->gallery)->map(fn($item, $key) => toJSONMedia($item))),
+        pdf: @js(toJSONMedia($product->pdf)),
         video_provider: @js($product->video_provider),
         base_currency: @js($product->base_currency),
         brand_id: @js($product->brand_id),
@@ -37,10 +37,13 @@
 
         onSave() {
             $wire.set('product.description', this.description, true);
+            
             $wire.set('product.thumbnail', this.thumbnail.id, true);
             $wire.set('product.cover', this.cover.id, true);
-            $wire.set('product.gallery', [], true);
+            $wire.set('product.meta_img', this.meta_img.id, true);
+            $wire.set('product.gallery', this.gallery, true);
             $wire.set('product.pdf', this.pdf.id, true);
+
             $wire.set('product.video_provider', this.video_provider, true);
             $wire.set('product.base_currency', this.base_currency, true);
             $wire.set('product.discount_type', this.discount_type, true);
@@ -49,7 +52,7 @@
             $wire.set('product.use_serial', this.use_serial, true);
             $wire.set('product.allow_out_of_stock_purchases', this.allow_out_of_stock_purchases, true);
             $wire.set('product.digital', this.is_digital, true);
-            $wire.set('product.meta_img', this.meta_img.id, true);
+            
             $wire.set('product.status', this.status, true);
             $wire.set('product.type', this.type, true);
             $wire.set('product.tags', this.tags, true);
@@ -1521,9 +1524,9 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="thumbnail"
+                                        <x-dashboard.form.file-selector field="thumbnail"
                                             error-field="product.thumbnail" id="product-thumbnail-image"
-                                            :selected-image="$product->thumbnail"></x-dashboard.form.image-selector>
+                                            :selected-image="$product->thumbnail"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="product.thumbnail"></x-system.invalid-msg>
                                     </div>
@@ -1540,15 +1543,37 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="cover" error-field="product.cover"
+                                        <x-dashboard.form.file-selector field="cover" error-field="product.cover"
                                             id="product-cover-image" :selected-image="$product->cover">
-                                        </x-dashboard.form.image-selector>
+                                        </x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="product.cover"></x-system.invalid-msg>
                                     </div>
                                 </div>
                             </div>
                             {{-- END Cover --}}
+
+                            {{-- Gallery --}}
+                            <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                                <div class="flex flex-col " x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        {{ translate('Gallery') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0">
+                                        <x-dashboard.form.file-selector 
+                                            id="product-gallery"
+                                            field="gallery"
+                                            :file-type="\App\Enums\FileTypesEnum::image()->value"
+                                            :selected-image="$product->gallery"
+                                            :multiple="true"
+                                            add-new-item-label="{{ translate('Add new image') }}"></x-dashboard.form.file-selector>
+
+                                        <x-system.invalid-msg field="product.gallery"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Gallery --}}
 
                             {{-- Video & Document --}}
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
@@ -1640,8 +1665,8 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0">
-                                            <x-dashboard.form.image-selector field="pdf" id="product-document-pdf"
-                                                :selected-image="$product->pdf"></x-dashboard.form.image-selector>
+                                            <x-dashboard.form.file-selector field="pdf" id="product-document-pdf"
+                                                :selected-image="$product->pdf"></x-dashboard.form.file-selector>
 
                                             <x-system.invalid-msg field="product.pdf"></x-system.invalid-msg>
                                         </div>
@@ -1832,8 +1857,8 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="meta_img" id="product-meta-image"
-                                            :selected-image="$product->meta_img"></x-dashboard.form.image-selector>
+                                        <x-dashboard.form.file-selector field="meta_img" id="product-meta-image"
+                                            :selected-image="$product->meta_img"></x-dashboard.form.file-selector>
 
                                         <x-system.invalid-msg field="product.meta_img"></x-system.invalid-msg>
                                     </div>

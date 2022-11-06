@@ -31,7 +31,6 @@
                     </x-dashboard.widgets.charts.pie-chart> --}}
                     </div>
                 </div>
-
             </div>
 
             <div class="col-span-1">
@@ -41,9 +40,9 @@
 
 
 
-                <x-dashboard.orders.latest-orders></x-dashboard.orders.latest-orders>
+                {{-- <x-dashboard.orders.latest-orders></x-dashboard.orders.latest-orders> --}}
 
-                @livewire('dashboard.elements.activity-log')
+                {{-- @livewire('dashboard.elements.activity-log') --}}
 
             </div>
         </div>
