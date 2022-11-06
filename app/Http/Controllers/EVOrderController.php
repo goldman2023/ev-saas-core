@@ -6,6 +6,7 @@ use App\Facades\MyShop;
 use App\Models\Order;
 use App\Models\Invoice;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class EVOrderController extends Controller
@@ -68,6 +69,22 @@ class EVOrderController extends Controller
         $orders_count = auth()->user()->orders()->count();
 
         return view('frontend.dashboard.my-orders.index', compact('orders', 'orders_count'));
+    }
+
+    public function change_status($order_id) {
+        $order = Order::findOrFail($order_id);
+        $this->generate_contract($order);
+    }
+
+    public function generate_contract($order) {
+        // Get order attributes and generate the document
+        $data = ['test' => 'pdf is here', 'order' => $order];
+        $pdf = Pdf::loadView('documents_templates.contract', $data );
+
+        $pdf->save(storage_path() . '/contract-order-'. $order->id .'.pdf');
+        // $order->attachDocument($something);
+
+        return redirect()->back();
     }
 
 }

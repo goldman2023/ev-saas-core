@@ -34,7 +34,9 @@
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Here you can see the current status of the
                     order') }}</p>
             </div>
-
+            <a class="btn btn-primary" href="{{ route('order.change-status', $order->id) }}">
+                Next status
+            </a>
             <x-dashboard.orders.order-timeline>
             </x-dashboard.orders.order-timeline>
         </div>

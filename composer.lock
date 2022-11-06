@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db02f642224bbd3b93105fdcea8a7771",
+    "content-hash": "eb510266ca6ef263fd72d85efa44a017",
     "packages": [
         {
             "name": "ammardev/laravel-wp-hash-driver",
