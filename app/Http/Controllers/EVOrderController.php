@@ -73,18 +73,12 @@ class EVOrderController extends Controller
 
     public function change_status($order_id) {
         $order = Order::findOrFail($order_id);
-        $this->generate_contract($order);
-    }
 
-    public function generate_contract($order) {
-        // Get order attributes and generate the document
-        $data = ['test' => 'pdf is here', 'order' => $order];
-        $pdf = Pdf::loadView('documents_templates.contract', $data );
-
-        $pdf->save(storage_path() . '/contract-order-'. $order->id .'.pdf');
-        // $order->attachDocument($something);
+        do_action('order.change-status', $order);
 
         return redirect()->back();
     }
+
+
 
 }
