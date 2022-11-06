@@ -382,7 +382,7 @@ $models = \App\Models\Plan::published()->get();
                             <td class="px-5 py-5 border-1 bg-white ">
                                 <div class="flex items-center ">
                                     <p class="text-md font-medium text-dark2 whitespace-no-wrap">
-                                        Cloud proc essing
+                                        Cloud processing
                                     </p>
                                 </div>
                             </td>

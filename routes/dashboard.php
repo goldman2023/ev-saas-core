@@ -127,6 +127,9 @@ Route::middleware([
         Route::post('/orders/update_delivery_status', [EVOrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
         Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
 
+        /* Custom Order Statuses and Document generation  */
+        Route::get('/order/{order_id}/change_status', [EVOrderController::class, 'change_status'])->name('order.change-status');
+
         Route::get('/invoices', [WeInvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoice/{id}/download', [WeInvoiceController::class, 'download_invoice'])->name('invoice.download');
         Route::get('/order/{order_id}/upcoming-invoice/download', [WeInvoiceController::class, 'download_upcoming_invoice'])->name('invoice.upcoming.download');
