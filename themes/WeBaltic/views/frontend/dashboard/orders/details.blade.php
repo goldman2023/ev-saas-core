@@ -15,10 +15,13 @@
             @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
             <span>{{ translate('All orders') }}</span>
         </a>
-
+        {{ route('order.change-status', $order->id) }}
         <a href="{{ route('order.edit', $order->id) }}" class="btn-primary ml-3">
             @svg('heroicon-o-pencil', ['class' => 'h-4 h-4 mr-2'])
-            <span>{{ translate('Edit Order') }}</span>
+
+            <span>
+                {{ translate('Next status') }}
+            </span>
         </a>
     </x-slot>
 </x-dashboard.section-headers.section-header>
@@ -33,11 +36,12 @@
                 <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status') }}</h3>
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Here you can see the current status of the
                     order') }}</p>
+                <p>
+                    Current status: {{ $order->status }}
+                </p>
             </div>
-            <a class="btn btn-primary" href="{{ route('order.change-status', $order->id) }}">
-                Next status
-            </a>
-            <x-dashboard.orders.order-timeline>
+
+            <x-dashboard.orders.order-timeline :order="$order">
             </x-dashboard.orders.order-timeline>
         </div>
 
@@ -169,18 +173,15 @@
                     </div>
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel"
                         aria-labelledby="dashboard-tab">
-                    <div class="card mb-6">
-                        <div
-                        class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
-                        <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Order Documents') }}</h4>
-                    </div>
-                        <livewire:dashboard.forms.file-manager.file-manager
-                        :subject="$order"
-                        field="documents"
-                        :file-type="\App\Enums\FileTypesEnum::image()->value"
-                        :multiple="true"
-                        add-new-item-label="{{ translate('Add new document') }}" />
-                    </div>
+                        <div class="card mb-6">
+                            <div
+                                class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
+                                <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Order Documents') }}</h4>
+                            </div>
+                            <livewire:dashboard.forms.file-manager.file-manager :subject="$order" field="documents"
+                                :file-type="\App\Enums\FileTypesEnum::image()->value" :multiple="true"
+                                add-new-item-label="{{ translate('Add new document') }}" />
+                        </div>
 
 
                         <div
@@ -203,6 +204,30 @@
                         aria-labelledby="contacts-tab">
                         <ul role="list" class="-my-4 divide-y divide-gray-200">
 
+
+
+                            <li class="flex items-center space-x-3 py-4">
+                                    <div class="flex-shrink-0">
+                                        <img class="h-8 w-8 rounded-full"
+                                            src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                                            alt="">
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-sm font-medium text-gray-900">
+                                            {{ translate('Edit order') }}
+                                        </p>
+
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <a href="{{ route('order.edit', $order->id) }}" type="button"
+                                            class="inline-flex items-center rounded-full bg-rose-50 px-3 py-0.5 text-sm font-medium text-rose-700 hover:bg-rose-100">
+                                            @svg('heroicon-o-pencil', ['class' => 'h-4 h-4 mr-2'])
+
+                                            <span>{{ translate('Edit') }}</span>
+                                        </a>
+                                    </div>
+
+                            </li>
                             <li class="flex items-center space-x-3 py-4">
                                 <div class="flex-shrink-0">
                                     <img class="h-8 w-8 rounded-full"
@@ -318,11 +343,8 @@
         </div>
 
         <div class="card mb-3 mt-3">
-            <livewire:dashboard.forms.file-manager.file-manager
-                :subject="$order"
-                field="documents"
-                :file-type="\App\Enums\FileTypesEnum::image()->value"
-                :multiple="true"
+            <livewire:dashboard.forms.file-manager.file-manager :subject="$order" field="documents"
+                :file-type="\App\Enums\FileTypesEnum::image()->value" :multiple="true"
                 add-new-item-label="{{ translate('Add new document') }}" />
             {{-- <x-dashboard.general.files-manager>
             </x-dashboard.general.files-manager> --}}

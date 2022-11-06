@@ -21,7 +21,7 @@ return new class extends Migration
             if (Schema::hasColumn('sections', 'section_id')) {
                 $table->dropColumn('section_id');
             }
-            
+
             if (!Schema::hasColumn('sections', 'content')) {
                 $table->json('data')->nullable()->after('content');
             }
@@ -29,9 +29,9 @@ return new class extends Migration
             $sm = Schema::getConnection()->getDoctrineSchemaManager();
             $doctrineTable = $sm->listTableDetails('sections');
 
-            if (! $doctrineTable->hasIndex('sections_slug_unique')) {
-                $table->unique('slug');
-            }
+            // if (!$doctrineTable->hasIndex('sections_slug_unique')) {
+            //     $table->unique('slug');
+            // }
         });
     }
 
