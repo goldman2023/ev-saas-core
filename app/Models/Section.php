@@ -13,6 +13,7 @@ class Section extends Model
     use HasSlug;
     use HasFactory;
     use HasStatus;
+    
 
     protected $table = 'sections';
 
