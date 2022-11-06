@@ -4,17 +4,17 @@
     sortableList: null,
     hasFiles() {
         if(this.multiple) {
-            return {{ $field }} !== undefined && 
+            return {{ $field }} !== undefined &&
             {{ $field }} !== null &&
             {{ $field }}.length > 0 &&
-            {{ $field }}[0].id !== undefined && 
-            {{ $field }}[0].id !== null && 
+            {{ $field }}[0].id !== undefined &&
+            {{ $field }}[0].id !== null &&
             {{ $field }}[0].id > 0;
         } else {
-            return {{ $field }} !== undefined && 
-            {{ $field }} !== null && 
-            {{ $field }}.id !== undefined && 
-            {{ $field }}.id !== null && 
+            return {{ $field }} !== undefined &&
+            {{ $field }} !== null &&
+            {{ $field }}.id !== undefined &&
+            {{ $field }}.id !== null &&
             {{ $field }}.id > 0;
         }
     },
@@ -37,7 +37,7 @@
         });
     },
     makeSortable() {
-        $nextTick(() => { 
+        $nextTick(() => {
             if(this.multiple) {
                 let args = {
                     onSort: (evt) => {
@@ -56,7 +56,7 @@
             }
         });
     }
-}" 
+}"
 x-init="makeSortable()"
 @we-media-selected-event.window="
     if($event.detail.for_id === id) {
@@ -70,11 +70,11 @@ x-init="makeSortable()"
 
         if(multiple) {
             let selected = _.get($event, 'detail.selected', []);
-            
+
             if(selected.length > 0) {
                 // Remove empty values (just in case)
                 {{ $field }} = {{ $field }}.filter(item => !_.isEmpty(item) && _.get(item, 'id', null) !== null);
-                
+
                 selected.forEach((item, index) => {
                     let existingItem = {{ $field }}.filter(fieldItem => Number(fieldItem.id) === Number(item.id));
 
@@ -88,7 +88,7 @@ x-init="makeSortable()"
                                 if(lastOrder) {
                                     lastOrder += 1;
                                 }
-                                
+
                             } else {
                                 lastOrder = 1;
                             }
@@ -100,7 +100,7 @@ x-init="makeSortable()"
 
                     }
                 });
-                
+
                 // Remove empty values (just in case)
                 {{ $field }} = {{ $field }}.filter(item => !_.isEmpty(item) && _.get(item, 'id', null) !== null);
 
@@ -113,7 +113,7 @@ x-init="makeSortable()"
 ">
     <div :id="'file-selector-'+id" class="@if($template != 'simple') max-w-lg flex justify-center @if(!$multiple) border-2 border-gray-300 border-dashed rounded-md cursor-pointer @endif @endif  @error($errorField) !border-danger @enderror  "
         @if($template != 'simple' && !$multiple):class="{'px-6 pt-5 pb-6': hasFiles() }" @endif
-        
+
         @if(!$multiple)
             @click="$wire.emit('showMediaLibrary', id, 'image', [{{ $field }}])"
         @endif
@@ -143,18 +143,29 @@ x-init="makeSortable()"
                         </template>
                     </ul>
                 </template>
-        
+
                 <template x-if="!hasFiles()">
                     <div class="w-full flex justify-center border-2 border-gray-300 border-dashed rounded-md p-6">
                         <p>{{ translate('No items selected...') }}</p>
                     </div>
                 </template>
 
-                <div class="w-full flex mt-4">
-                    <button type="button" class="btn-primary ml-auto"
+                <div class="flex mt-4">
+                    <div type="button" class=" max-w-lg flex justify-center  border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
                         @click="$wire.emit('showMediaLibrary', id, 'image', {{ $field }}.map((item) => { return {id: item?.id || '', file_name: item?.file_name || '', type: item?.type || @js($fileType) }; }), null, true)">
-                        {{ $addNewItemLabel }}
-                    </button>
+                        <div class="space-y-1 text-center py-7">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"></path>
+                            </svg>
+                            <div class="flex justify-center text-sm text-gray-600">
+                                <label class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                    <span>{{ $addNewItemLabel }}</span>
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500">PNG, JPG, GIF</p>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         @else
@@ -184,7 +195,7 @@ x-init="makeSortable()"
                     <template x-if="hasFiles()">
                         <div class="w-full cursor-default mb-4 flex justify-between items-center">
                             <p class="font-semibold truncate pr-3" x-text="{{ $field }}.file_name.split(/[\\/]/).pop()"></p>
-                            
+
                             <a class="p-1 rounded border border-gray-200" @click="event.stopPropagation();" :href="'{{ Storage::url('') }}'+{{ $field }}.file_name" target="_blank">
                                 @svg('heroicon-o-eye', ['class' => 'h-4 w-4 text-gray-700'])
                             </a>
@@ -202,7 +213,7 @@ x-init="makeSortable()"
                 </div>
             @endif
         @endif
-            
+
         {{-- <x-system.invalid-msg field="{{  }}"></x-system.invalid-msg> --}}
     </div>
 </div>

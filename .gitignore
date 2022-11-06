@@ -78,3 +78,4 @@ themes/features/we-edit/node_modules/*
 !public/images
 vendor-d/*
 public/vendor/nova/vendor.js.LICENSE.txt
+.phpunit.result.cache

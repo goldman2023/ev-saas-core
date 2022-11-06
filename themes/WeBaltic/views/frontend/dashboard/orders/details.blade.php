@@ -167,6 +167,20 @@
                     </div>
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel"
                         aria-labelledby="dashboard-tab">
+                    <div class="card mb-6">
+                        <div
+                        class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
+                        <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Order Documents') }}</h4>
+                    </div>
+                        <livewire:dashboard.forms.file-manager.file-manager
+                        :subject="$order"
+                        field="documents"
+                        :file-type="\App\Enums\FileTypesEnum::image()->value"
+                        :multiple="true"
+                        add-new-item-label="{{ translate('Add new document') }}" />
+                    </div>
+
+
                         <div
                             class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
                             <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
@@ -302,8 +316,14 @@
         </div>
 
         <div class="card mb-3 mt-3">
-            <x-dashboard.general.files-manager>
-            </x-dashboard.general.files-manager>
+            <livewire:dashboard.forms.file-manager.file-manager
+                :subject="$order"
+                field="documents"
+                :file-type="\App\Enums\FileTypesEnum::image()->value"
+                :multiple="true"
+                add-new-item-label="{{ translate('Add new document') }}" />
+            {{-- <x-dashboard.general.files-manager>
+            </x-dashboard.general.files-manager> --}}
         </div>
 
         <div class="card mb-3">
