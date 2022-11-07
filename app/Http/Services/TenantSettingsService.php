@@ -56,7 +56,7 @@ class TenantSettingsService
      *
      * @return void
      */
-    public function createMissingSettings() {
+    public function createMissingSettings($re_evaluate = false) {
         /* TODO: How to make this not trigger when creating tenancy? */
 
         if(Request::getHost() == config('tenancy.primary_central_domain')) {
@@ -78,11 +78,11 @@ class TenantSettingsService
             }
 
             // Set tenant settings again with along with previously missing ones
-            $this->setAll();
+            $this->setAll($re_evaluate);
         }
     }
 
-    public function setAll($test = false) {
+    public function setAll($re_evaluate = false) {
         if(Request::getHost() == config('tenancy.primary_central_domain')) {
             return true;
         }
@@ -92,7 +92,9 @@ class TenantSettingsService
         $default = [];
         $data_types = $this->settingsDataTypes();
 
-        if (empty($settings)) {
+        // TODO: Find a proper way to integrate ThemeFunctions settings injection through add_filter() by using setting
+
+        if (empty($settings) || $re_evaluate) {
             $settings = collect(DB::connection()->getPdo()
                 ->query("SELECT `id`, `setting`, `value` FROM ".(!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->getTable())
                 ->fetchAll(\PDO::FETCH_ASSOC))
@@ -111,9 +113,8 @@ class TenantSettingsService
         $this->settings = !empty($settings) ? $settings : $default;
 
         // it'll clear the cache and add missing settings if there are missing settings and update the current settings
-        $this->createMissingSettings(); 
+        $this->createMissingSettings($re_evaluate); 
     }
-
 
 
     public function clearCache() {
@@ -125,7 +126,6 @@ class TenantSettingsService
         $app_settings = [
             // General
             'site_logo' => Upload::class,
-            'asdasdasdasdasdasd' => Upload::class,
             'site_logo_dark' => Upload::class,
             'site_icon' => Upload::class,
             'site_name' => 'string',
