@@ -38,7 +38,7 @@
                 <div class="">
                     <x-dashboard.section-headers.section-header title="{{ translate('Latest users') }}" text="">
                         <x-slot name="content">
-                            <a href="{{ route('blog.post.create') }}" class="btn-primary">
+                            <a href="{{ route('crm.all_customers') }}" class="btn-primary">
                                 <span>{{ translate('All Customers') }}</span>
                                 @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 mr-2'])
 

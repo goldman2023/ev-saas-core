@@ -32,7 +32,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
         }
         
         // Create Missing Tenant Settings
-        TenantSettings::setAll(true);
+        TenantSettings::setAll(re_evaluate: true);
     }
 
     /**
