@@ -74,7 +74,38 @@ class EVOrderController extends Controller
     public function change_status($order_id) {
         $order = Order::findOrFail($order_id);
 
+        if(is_integer($order->status)) {
+            // dd($order->status);
+            $order->status = $order->status + 1;
+        } else {
+            $order->status = 1;
+        }
+
+
+        $reason = '';
+        if($order->status == 1) {
+            $reason = translate('Order Created');
+        } else if($order->status == 2) {
+            $reason = translate('Contract Signed');
+        } else if($order->status == 3) {
+            $reason = translate('Approved for manufacturing');
+        }
+        // $order->setStatus('status-' .  $order->status, $reason);
+
+        $order->save();
+
         do_action('order.change-status', $order);
+
+        activity()
+        ->performedOn($order)
+        ->causedBy(auth()->user())
+        ->withProperties([
+            'action' => 'changed_status',
+            'action_title' => 'Changed status to: ' . $order->status,
+        ])
+        ->log('order_status');
+
+
 
         return redirect()->back();
     }

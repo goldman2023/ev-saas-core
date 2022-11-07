@@ -9,6 +9,7 @@ use App\Builders\BaseBuilder;
 use App\Traits\CoreMetaTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\HasDataColumn;
+use Spatie\ModelStatus\HasStatuses;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,6 +26,8 @@ class Order extends WeBaseModel
     use LogsActivity;
     use UploadTrait;
     use CoreMetaTrait;
+    // use HasStatuses;
+
 
     protected $table = 'orders';
 

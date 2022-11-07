@@ -7,13 +7,15 @@ use Illuminate\View\Component;
 class OrderTimeline extends Component
 {
     public $statuses = [];
+    public $order;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($order)
     {
+        $this->order = $order;
         //
         $this->statuses[] = [
             "title" => translate('Contract'),
