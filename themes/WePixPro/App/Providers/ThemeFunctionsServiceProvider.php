@@ -129,6 +129,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'hardware_id' => [
                         'type' => 'string',
                     ],
+                    'license_subscription_type' => [
+                        'type' => 'string',
+                    ],
                     'expiration_date' => [
                         'default' => 'now',
                         'type' => 'datetime',
