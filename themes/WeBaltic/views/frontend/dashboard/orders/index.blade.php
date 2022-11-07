@@ -28,7 +28,8 @@
                 <button
                     class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"
                     id="order-nav-{{ $key }}" data-tabs-target="#orders-tab-{{ $key }}" type="button" role="tab" aria-controls="order-nav-{{ $status }}"
-                    aria-selected="true">
+                    @if($key == 0) aria-selected="true" @endif
+                    >
                     {{ App\Enums\OrderStatusEnum::labels()[$key] }} ({{ \App\Models\Order::where('status', $key+1)->count() }})
                 </button>
             </li>
