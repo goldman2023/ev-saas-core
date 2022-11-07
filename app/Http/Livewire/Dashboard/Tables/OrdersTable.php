@@ -42,6 +42,7 @@ class OrdersTable extends DataTableComponent
     public array $filterNames = [
         'payment_status' => 'Payment Status',
         'shipping_status' => 'Shipping Status',
+        'status' => 'Order Status',
     ];
 
     public array $bulkActions = [
@@ -52,10 +53,11 @@ class OrdersTable extends DataTableComponent
 
     protected string $tableName = 'orders';
 
-    public function mount($for = 'me', $user = null)
+    public function mount($for = 'me', $user = null, $filter = null)
     {
         $this->for = $for;
         $this->user = $user;
+        $this->filter = $filter;
         parent::mount();
     }
 
@@ -147,6 +149,7 @@ class OrdersTable extends DataTableComponent
             ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
             ->when($this->getFilter('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))
             ->when($this->getFilter('shipping_status'), fn ($query, $status) => $query->where('shipping_status', $status))
+            ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status))
             ->when($this->getFilter('viewed'), function ($query, $status) {
                 if ($status === 'new') {
                     return $query->where('viewed', 0);

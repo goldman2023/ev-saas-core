@@ -9,8 +9,8 @@
             this.editor = new window.EditorJS(_.merge(window.getEditorJsDefaultConfig(this.id), {
                     data: {{ $field }},
                     minHeight: 100,
-                    
-                    onChange: _.debounce((ed) => { 
+
+                    onChange: _.debounce((ed) => {
                         ed.saver.save().then((outputData) => {
                             {{ $field }} = (window.edjsHTML()).parse(outputData).join('');
                         });
@@ -21,7 +21,7 @@
             if({{ $field }} !== null && {{ $field }} != '' && {{ $field }}.length > 0) {
                 this.setEditorContent();
             }
-                
+
             {{-- {
                 {{-- heightMin: 200,
                 heightMax: 800,
@@ -37,9 +37,9 @@
                     }
                 } -
             } --}}
-        }); 
+        });
     }
-}" 
+}"
 x-init="$nextTick(() => { initEditor() });"
 x-on:init-form.window="$nextTick(() => { setEditorContent() })"
 wire:ignore>

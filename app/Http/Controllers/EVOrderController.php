@@ -87,7 +87,7 @@ class EVOrderController extends Controller
             $reason = translate('Order Created');
         } else if($order->status == 2) {
             $reason = translate('Contract Signed');
-        } else if($order->status = 3) {
+        } else if($order->status == 3) {
             $reason = translate('Approved for manufacturing');
         }
         // $order->setStatus('status-' .  $order->status, $reason);
