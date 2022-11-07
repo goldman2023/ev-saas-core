@@ -22,109 +22,32 @@
     <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent"
             role="tablist">
+
+            @foreach(App\Enums\OrderStatusEnum::values() as $key => $status)
             <li class="mr-2" role="presentation">
                 <button
                     class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"
-                    id="new-orders" data-tabs-target="#new-orders-tab" type="button" role="tab" aria-controls="new-orders"
+                    id="order-nav-{{ $key }}" data-tabs-target="#orders-tab-{{ $key }}" type="button" role="tab" aria-controls="order-nav-{{ $status }}"
                     aria-selected="true">
-                    {{ translate('New') }} ({{ \App\Models\Order::where('status', 1)->count() }})
+                  {{ $status }} ({{ \App\Models\Order::where('status', $key+1)->count() }})
                 </button>
             </li>
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-blue-100 dark:border-gray-700"
-                    id="status-2" data-tabs-target="#order-status-2" type="button" role="tab" aria-controls="status-2"
-                    aria-selected="false">
-                    {{ translate('Welding') }} ({{ \App\Models\Order::where('status', 2)->count() }})
-                </button>
-            </li>
-
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                    id="status-3" data-tabs-target="#order-status-3" type="button" role="tab" aria-controls="status-3"
-                    aria-selected="false">
-                    {{ translate('QA') }} ({{ \App\Models\Order::where('status', 3)->count() }})
-                </button>
-            </li>
-
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                    id="status-4" data-tabs-target="#order-status-4" type="button" role="tab" aria-controls="status-4"
-                    aria-selected="false">
-                    {{ translate('Zincification') }} ({{ \App\Models\Order::where('status', 4)->count() }})
-                </button>
-            </li>
-
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                    id="status-5" data-tabs-target="#order-status-5" type="button" role="tab" aria-controls="status-5"
-                    aria-selected="false">
-                    {{ translate('Delivery') }} ({{ \App\Models\Order::count() }})
-                </button>
-            </li>
-
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                    id="status-6" data-tabs-target="#order-status-6" type="button" role="tab" aria-controls="status-5"
-                    aria-selected="false">
-                    {{ translate('Completed') }} ({{ \App\Models\Order::count() }})
-                </button>
-            </li>
-
+            @endforeach
 
         </ul>
     </div>
     <div id="myTabContent">
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="new-orders-tab" role="tabpanel"
-            aria-labelledby="new-orders">
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
+        @foreach(App\Enums\OrderStatusEnum::values() as $key => $status)
+
+        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="orders-tab-{{ $key }}" role="tabpanel"
+            aria-labelledby="order-nav-{{ $key }}">
+            <livewire:dashboard.tables.orders-table :status="$key+1" for="shop"></livewire:dashboard.tables.orders-table>
 
 
         </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-2" role="tabpanel"
-            aria-labelledby="order-status-2">
-            Other orders
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
+        @endforeach
 
 
-        </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-3" role="tabpanel"
-            aria-labelledby="order-status-3">
-           Status 3
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
-
-
-        </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-4" role="tabpanel"
-            aria-labelledby="order-status-4">
-            Status 4
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
-
-
-        </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-5" role="tabpanel"
-            aria-labelledby="order-status-5">
-            Status 5
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
-
-
-        </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-6" role="tabpanel"
-            aria-labelledby="order-status-6">
-            Status 6
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
-
-
-        </div>
     </div>
     @else
 
