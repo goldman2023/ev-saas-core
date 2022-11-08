@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 class EditorJs extends Component
 {
     public $field;
-
+    public $structureField;
     public $id;
 
     /**
@@ -15,9 +15,10 @@ class EditorJs extends Component
      *
      * @return void
      */
-    public function __construct($field = '', $id = '')
+    public function __construct($field = '', $structureField = '', $id = '')
     {
         $this->field = $field;
+        $this->structureField = $structureField;
         $this->id = $id;
     }
 

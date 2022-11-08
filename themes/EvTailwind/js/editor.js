@@ -21,15 +21,15 @@ import Hyperlink from 'editorjs-hyperlink';
 import Underline from '@editorjs/underline';
 import AttachesTool from '@editorjs/attaches';
 import edjsHTML from 'editorjs-html';
-
+import edjsCustomParsers from './edjs-parsers';
 import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
 
 window.EditorJS = EditorJS;
 window.EditorJSUndoPlugin = Undo;
-window.edjsHTML = edjsHTML;
+window.edjsHTML = edjsHTML(edjsCustomParsers());
 
 window.getEditorJsDefaultConfig = function($id) {
-    return { 
+    return {
         holder: $id,
         /** 
          * Available Tools list. 

@@ -1,42 +1,37 @@
 <div class="w-full border border-gray-200 pt-5" x-data="{
     id: '{{ $id }}',
     editor: null,
-    setEditorContent() {
-        this.editor.blocks.renderFromHTML({{ $field }});
+    getDataField() {
+        if({{ $structureField }} !== null && {{ $structureField }} != '' && {{ $structureField }}.hasOwnProperty('blocks')) {
+            return {{ $structureField }};
+        } else if({{ $field }} !== null && {{ $field }} != '' && {{ $field }}.length > 0) {
+            return {{ $field }};
+        }
+    },
+    setEditorContent() {        
+        if({{ $structureField }} !== null && {{ $structureField }} != '' && {{ $structureField }}.hasOwnProperty('blocks')) {
+            this.editor.blocks.render({{ $structureField }});
+        } else if({{ $field }} !== null && {{ $field }} != '' && {{ $field }}.length > 0) {
+            this.editor.blocks.renderFromHTML({{ $field }});
+        }
     },
     initEditor() {
         $nextTick(async () => {
             this.editor = new window.EditorJS(_.merge(window.getEditorJsDefaultConfig(this.id), {
-                    data: {{ $field }},
+                    data: this.getDataField(),
                     minHeight: 100,
 
                     onChange: _.debounce((ed) => {
                         ed.saver.save().then((outputData) => {
-                            {{ $field }} = (window.edjsHTML()).parse(outputData).join('');
+                            {{ $field }} = window.edjsHTML.parse(outputData).join('');
+                            {{ $structureField }} = outputData;
                         });
-                    }, 400)
+                    }, 500)
                 })
             );
             await this.editor.isReady;
-            if({{ $field }} !== null && {{ $field }} != '' && {{ $field }}.length > 0) {
-                this.setEditorContent();
-            }
 
-            {{-- {
-                {{-- heightMin: 200,
-                heightMax: 800,
-                imageUploadURL: '{{ route('we-media-library.froala.upload-image') }}',
-                imageManagerLoadURL: '{{ route('we-media-library.froala.load-images') }}', --}}
-                {{-- events: {
-                    'initialized': function () {
-                        console.log({{ $field }});
-                        this.html.insert({{ $field }}, true);
-                    },
-                    'contentChanged': function () {
-                        {{ $field }} = this.html.get(true);
-                    }
-                } -
-            } --}}
+            this.setEditorContent();
         });
     }
 }"

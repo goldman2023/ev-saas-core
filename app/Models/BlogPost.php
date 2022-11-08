@@ -43,10 +43,11 @@ class BlogPost extends WeBaseModel
 
     protected $table = 'blog_posts';
 
-    protected $fillable = ['shop_id', 'type', 'name', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords', 'created_at', 'updated_at'];
+    protected $fillable = ['shop_id', 'type', 'name', 'excerpt', 'content', 'content_structure', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords', 'created_at', 'updated_at'];
 
     protected $casts = [
         'subscription_only' => 'boolean',
+        'content_structure' => 'array',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
     ];
