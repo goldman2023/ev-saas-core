@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Cookie;
+use MyShop;
+use Session;
+use Categories;
+use Permissions;
+use App\Models\Shop;
+use App\Models\User;
+use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
 use App\Models\PaymentMethodUniversal;
-use App\Models\User;
-use Categories;
-use Cookie;
-use Illuminate\Http\Request;
-use MyShop;
-use Permissions;
-use Session;
 
 class EVCategoryController extends Controller
 {
@@ -39,9 +41,15 @@ class EVCategoryController extends Controller
     {
         $selected_category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
 
-        // TODO: Get content types based on page builder sections added here
-        $products = $selected_category->products()->orderBy('created_at', 'DESC')->paginate(10);
-        $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
+        if(!empty($selected_category)) {
+            // TODO: Get content types based on page builder sections added here
+            $products = $selected_category->products()->orderBy('created_at', 'DESC')->paginate(10);
+            $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
+        } else {
+            $products = Product::orderBy('created_at', 'DESC')->paginate(10);
+            $shops = Shop::orderBy('created_at', 'DESC')->paginate(10);
+        }
+        
 
         return view('frontend.products.archive', compact('selected_category', 'products', 'shops'));
     }
