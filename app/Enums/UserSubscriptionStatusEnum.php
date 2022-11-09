@@ -5,6 +5,7 @@ namespace App\Enums;
 /**
  * @method static self active()
  * @method static self inactive()
+ * @method static self canceled()
  * @method static self active_until_end()
  * @method static self trial()
  */
@@ -14,9 +15,10 @@ class UserSubscriptionStatusEnum extends EVBaseEnum
     {
         return [
             'active' => 'active',
-            'inactive' => 'inactive',
             'active_until_end' => 'active_until_end',
             'trial' => 'trial',
+            'inactive' => 'inactive',
+            'canceled' => 'canceled',
         ];
     }
 
@@ -24,9 +26,10 @@ class UserSubscriptionStatusEnum extends EVBaseEnum
     {
         return [
             'active' => 'Active',
-            'inactive' => 'Inactive',
             'active_until_end' => 'Active until end period',
             'trial' => 'Trial',
+            'inactive' => 'Inactive',
+            'canceled' => 'Canceled',
         ];
     }
 }

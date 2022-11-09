@@ -966,15 +966,8 @@ class StripeService
                         Log::error($e->getMessage());
                     }
                 } else {
-                    // This user DID NOT start trial for the given shop before
+                    // This user DID NOT start trial for the given shop before - USE FULL trial duration from app settings
                     $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration');
-
-                    $started_trials[] = [
-                        'shop_id' => $order->shop_id,
-                        'started_on' => time(),
-                    ];
-
-                    auth()->user()->saveUserMeta('started_trials_on', $started_trials);
                 }
             }
 
@@ -2343,8 +2336,6 @@ class StripeService
                     $invoice->subtotal_price = $stripe_invoice->subtotal / 100; // take from stripe and divide by 100
                     $invoice->total_price = $stripe_invoice->total / 100; // take from stripe and divide by 100
 
-                    $invoice->setRealInvoiceNumber();
-
                     $invoice->mergeData([
                         stripe_prefix('stripe_invoice_id') => $stripe_invoice->id ?? '',
                         stripe_prefix('stripe_hosted_invoice_url') => $stripe_invoice->hosted_invoice_url ?? '',
@@ -2490,6 +2481,8 @@ class StripeService
                     if(!empty($stripe_invoice->number ?? null)) {
                         $invoice->invoice_number = $stripe_invoice->number;
                     }
+
+                    $invoice->setRealInvoiceNumber();
 
                     $invoice->mergeData([
                         stripe_prefix('stripe_invoice_paid') => $stripe_invoice->paid ?? true,
@@ -2820,6 +2813,15 @@ class StripeService
 
                 $subscription->save();
 
+                // Save date of first trial for a given user!
+                if($stripe_subscription->status === 'trialing') {
+                    $started_trials[] = [
+                        'shop_id' => $order->shop_id,
+                        'started_on' => time(),
+                    ];
+    
+                    $subscription->user()->saveUserMeta('started_trials_on', $started_trials);
+                }
 
                 // Deal with previous subscription if there's any
                 $previous_subscription = UserSubscription::find($previous_subscription_id);
@@ -3057,7 +3059,9 @@ class StripeService
             // This means that subscription is finally canceled (no revive is possible and it's final, so we should disable subscription on our end!)
             if (!empty($subscription)) {
                 // Delete subscription on our end! User will have to go through standard process again!
-                $subscription->forceDelete();
+                $subscription->status = UserSubscriptionStatusEnum::canceled()->value;
+                // $subscription->forceDelete();
+                $subscription->save();
             }
         } catch (\Exception $e) {
             http_response_code(400);

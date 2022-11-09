@@ -8,6 +8,7 @@ use App\Facades\Payments;
 use App\Builders\BaseBuilder;
 use App\Enums\UserEntityEnum;
 use App\Traits\HasDataColumn;
+use App\Traits\TemporaryTrait;
 use Illuminate\Support\Carbon;
 use App\Enums\PaymentStatusEnum;
 use App\Models\PaymentMethodUniversal;
@@ -24,6 +25,7 @@ class Invoice extends WeBaseModel
 {
     use SoftDeletes;
     use HasDataColumn;
+    use TemporaryTrait;
 
     protected $table = 'invoices';
 
@@ -37,7 +39,6 @@ class Invoice extends WeBaseModel
 
     protected $casts = [
         'viewed_by_customer' => 'boolean',
-        'is_temp' => 'boolean',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
         'deleted_at' => 'datetime:d.m.Y H:i',
