@@ -183,17 +183,17 @@ return [
         'production' => [
             'supervisor-1' => [
                 'minProcesses' => 1,
-                'maxProcesses' => 4,
+                'maxProcesses' => env('HORIZON_MAX_PROCESSES', 1),
                 'balanceMaxShift' => 1,
-                'balanceCooldown' => 3,
+                'balanceCooldown' => env('HORIZON_BALANCE_COOLDOWN', 1),
                 'tries' => 3,
-                'memory' => 128,
+                'memory' => env('HORIZON_MEMORY', 64),
             ],
         ],
 
         'local' => [
             'supervisor-1' => [
-                'maxProcesses' => 3,
+                'maxProcesses' => env('HORIZON_MAX_PROCESSES', 1),
             ],
         ],
     ],
