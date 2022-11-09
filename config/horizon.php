@@ -151,7 +151,7 @@ return [
     |
     */
 
-    'memory_limit' => 256,
+    'memory_limit' => 128,
 
     /*
     |--------------------------------------------------------------------------
@@ -183,7 +183,7 @@ return [
         'production' => [
             'supervisor-1' => [
                 'minProcesses' => 1,
-                'maxProcesses' => 10,
+                'maxProcesses' => 4,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
                 'tries' => 3,
