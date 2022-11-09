@@ -3059,7 +3059,9 @@ class StripeService
             // This means that subscription is finally canceled (no revive is possible and it's final, so we should disable subscription on our end!)
             if (!empty($subscription)) {
                 // Delete subscription on our end! User will have to go through standard process again!
-                $subscription->forceDelete();
+                $subscription->status = UserSubscriptionStatusEnum::canceled()->value;
+                // $subscription->forceDelete();
+                $subscription->save();
             }
         } catch (\Exception $e) {
             http_response_code(400);
