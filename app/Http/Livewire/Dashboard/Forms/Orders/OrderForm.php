@@ -13,6 +13,7 @@ use App\Enums\ShippingStatusEnum;
 use App\Traits\Livewire\RulesSets;
 use Illuminate\Support\Facades\DB;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\HasCoreMeta;
 use Uuid;
 use Payments;
 
@@ -20,6 +21,8 @@ class OrderForm extends Component
 {
     use RulesSets;
     use DispatchSupport;
+    use HasCoreMeta;
+
 
     public $order;
     public $order_items = [];
@@ -38,6 +41,9 @@ class OrderForm extends Component
         if(empty($this->order->id)) {
             $this->order->shop_id = 1;
         }
+
+        /* Enable Core Meta  */
+        $this->initCoreMeta($this->order);
 
         if($customer) {
             $this->order->user = $customer;
@@ -99,6 +105,7 @@ class OrderForm extends Component
             'order.tracking_number' => ['nullable'],
             'order.note' => ['nullable'],
             'order.terms' => ['nullable'],
+            'order.core_meta' => ['nullable'],
         ];
 
         return $rules;
@@ -133,7 +140,10 @@ class OrderForm extends Component
 
         try {
             $this->invoicing_period = null;
+            $this->setCoreMeta($this->order);
+
             $this->order->save();
+            /* Save all meta attributes */
 
             // Remove missing previous order_items (if any)
             $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')->filter();
@@ -260,5 +270,28 @@ class OrderForm extends Component
         $this->dispatchGeneralError(translate('Invoice for this order is already generated.'));
         $this->inform(translate('Invoice for this order is already generated.'), '', 'fail');
 
+    }
+
+    protected function saveModelCoreMeta()
+    {
+        foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {
+            $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
+
+            if (! empty($core_meta_key) && $core_meta_key !== '*') {
+                if(array_key_exists($core_meta_key, $this->model_core_meta->toArray())) {
+                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaProductDataTypes());
+                    try {
+                        CoreMeta::updateOrCreate(
+                            ['subject_id' => $this->product->id, 'subject_type' => $this->product::class, 'key' => $core_meta_key],
+                            ['value' => $new_value]
+                        );
+                    } catch(\Exception $e) {
+                        Log::error($e->getMessage());
+                        dd($e);
+                        // dd($this->model_core_meta[$core_meta_key]);
+                    }
+                }
+            }
+        }
     }
 }

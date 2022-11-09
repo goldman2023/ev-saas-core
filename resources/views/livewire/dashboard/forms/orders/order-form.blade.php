@@ -11,7 +11,7 @@
     tax: @js($order->tax ?? 0),
     shipping_cost: @js($hideShipping ? 0 : ($order->shipping_cost ?? 0)),
     email: @js($order->email),
-    core_meta: @js($order->meta),
+    core_meta: @js($core_meta),
 
     subtotal: 0,
     total: 0,
@@ -48,6 +48,7 @@
         $wire.set('order.shipping_cost', this.shipping_cost, true);
         $wire.set('order.tax', this.tax, true);
         $wire.set('order_items', this.order_items, true);
+        $wire.set('core_meta', this.core_meta, true);
 
         @do_action('view.order-form.wire_set');
     },
