@@ -92,16 +92,6 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
         ],
-
-        'redis-sessions' => [
-            'driver' => 'redis',
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'port' => env('REDIS_PORT', 6379),
-            'database' => 4,
-            'username' => '',
-            'password' => env('REDIS_PASSWORD', null),
-            'prefix' => ':ses',
-        ],
     ],
 
     /*
@@ -126,17 +116,23 @@ return [
     | provides a richer set of commands than a typical key-value systems
     | such as APC or Memcached. Laravel makes it easy to dig right in.
     |
-    | Redis DBs can be anything from 1 to 15, except 0 (or what is set in default)
+    | Important: When we change this configuration we will make all connections use database 0 because Redis clusters do not support more than one database.
+    |
+    | Redis DBs can be anything from 1 to 15, except 0 (or what is set in default) - ONLY FOR NON-CLUSTER SETUP! OTHERWISE ALL MUST BE 0!
     | 1. Default - 0
     | 2. Cache - 1
     | 3. Queue - 2
     | 4. Visits - 3
     | 5. Sessions - 4
+    | 6. Horizon - 5
     */
 
     'redis' => [
 
-        'client' => 'predis',
+        'client' => 'phpredis', // It php's native redis module, way better and faster than predis (which is old unmaintained composer package)
+
+        // IMPORTANT: phpredis client allows prefix per connection! While old 'predis' client DOES NOT!
+        // IMPORTANT: Database property must be 0 for all connections if we consider using redis cluster in the future!
 
         'default' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -150,6 +146,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 1,
+            'prefix' => 'c:'
         ],
 
         'queue' => [
@@ -174,6 +171,14 @@ return [
             'port' => env('REDIS_PORT', 6379),
             'database' => 4, // anything from 1 to 15, except 0 (or what is set in default)
             'prefix' => 'ses:'
+        ],
+
+        'horizon' => [
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', 6379),
+            'database' => 5,
+            'prefix' => 'horizon:'
         ],
 
     ],

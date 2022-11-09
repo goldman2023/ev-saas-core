@@ -35,6 +35,7 @@
         "laravel-validation-rules/credit-card": "^1.7",
         "laravel/cashier": "^13.8",
         "laravel/framework": "^9.9",
+        "laravel/horizon": "^5.10",
         "laravel/nova": "^4.0",
         "laravel/nova-log-viewer": "^0.1.2",
         "laravel/passport": "^10.4",

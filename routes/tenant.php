@@ -76,7 +76,7 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->group(function () {
-
+    
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard/we-analytics', [WeAnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('/we-menu', [WeMenuController::class, 'index'])->name('menu.index');

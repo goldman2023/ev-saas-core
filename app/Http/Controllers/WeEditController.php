@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Page;
 use Illuminate\Http\Request;
+use ZRedis;
+use Session;
+use Cache;
 
 class WeEditController extends Controller
 {

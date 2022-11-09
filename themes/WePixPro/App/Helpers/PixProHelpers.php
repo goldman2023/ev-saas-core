@@ -265,6 +265,8 @@ if (!function_exists('pix_pro_create_licenses_action')) {
             dispatch(function () use ($route_paid, $body, $plan, $subscription) {
                 $response = Http::withoutVerifying()->post($route_paid, $body);
                 $response_json = $response->json();
+                
+                Log::debug($response_json);
 
                 if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                     // If status is not success for any reason, log an error
