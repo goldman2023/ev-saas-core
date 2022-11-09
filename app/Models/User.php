@@ -2,31 +2,32 @@
 
 namespace App\Models;
 
-use App\Models\Auth\User as Authenticatable;
-use App\Notifications\EmailVerificationNotification;
-use App\Traits\CoreMetaTrait;
+use DB;
+use Log;
+use Carbon;
+use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
-use App\Traits\SocialReactionsTrait;
+use App\Traits\CoreMetaTrait;
+use Laravel\Cashier\Billable;
+use App\Traits\OwnershipTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
-use App\Traits\UploadTrait;
-use App\Traits\SocialFollowingTrait;
-use App\Traits\OwnershipTrait;
-use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Interfaces\WalletFloat;
-use Bavix\Wallet\Traits\HasWalletFloat;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Cashier\Billable;
+use Bavix\Wallet\Interfaces\Wallet;
+use App\Traits\SocialFollowingTrait;
+use App\Traits\SocialReactionsTrait;
 use Laravel\Nova\Auth\Impersonatable;
-use DB;
-use Carbon;
-use Log;
+use Spatie\Permission\Traits\HasRoles;
+use Bavix\Wallet\Traits\HasWalletFloat;
+use Spatie\Activitylog\Models\Activity;
+use Bavix\Wallet\Interfaces\WalletFloat;
+use Illuminate\Notifications\Notifiable;
+use App\Enums\UserSubscriptionStatusEnum;
+use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\EmailVerificationNotification;
 
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
