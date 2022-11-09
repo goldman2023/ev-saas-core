@@ -271,27 +271,4 @@ class OrderForm extends Component
         $this->inform(translate('Invoice for this order is already generated.'), '', 'fail');
 
     }
-
-    protected function saveModelCoreMeta()
-    {
-        foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {
-            $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
-
-            if (! empty($core_meta_key) && $core_meta_key !== '*') {
-                if(array_key_exists($core_meta_key, $this->model_core_meta->toArray())) {
-                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaProductDataTypes());
-                    try {
-                        CoreMeta::updateOrCreate(
-                            ['subject_id' => $this->product->id, 'subject_type' => $this->product::class, 'key' => $core_meta_key],
-                            ['value' => $new_value]
-                        );
-                    } catch(\Exception $e) {
-                        Log::error($e->getMessage());
-                        dd($e);
-                        // dd($this->model_core_meta[$core_meta_key]);
-                    }
-                }
-            }
-        }
-    }
 }
