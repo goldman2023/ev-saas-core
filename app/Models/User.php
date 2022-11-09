@@ -278,7 +278,22 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function isSubscribed()
     {
         // TODO: Think about introducing shop_id into this check because we may want to check if user is subscribed to any plan from different vendors!
-        return $this->subscriptions->count() > 0;
+        return $this->subscriptions()
+            ->where('status', UserSubscriptionStatusEnum::active()->value)
+            ->orWhere('status', UserSubscriptionStatusEnum::active_until_end()->value)
+            ->orWhere('status', UserSubscriptionStatusEnum::trial()->value) 
+            ->count() > 0;
+    }
+
+    public function isCanceled() {
+        return $this->subscriptions->count() > 0 &&
+                $this->subscriptions->count() === $this->subscriptions()->where('status', UserSubscriptionStatusEnum::canceled()->value)->count();
+    }
+
+    public function isInactive() {
+        // Inactive means that subscription expired!
+        return $this->subscriptions->count() > 0 &&
+                $this->subscriptions->count() === $this->subscriptions()->where('status', UserSubscriptionStatusEnum::inactive()->value)->count();
     }
 
     public function isOnTrial()
