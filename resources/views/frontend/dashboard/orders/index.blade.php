@@ -27,7 +27,7 @@
                     class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"
                     id="new-orders" data-tabs-target="#new-orders-tab" type="button" role="tab" aria-controls="new-orders"
                     aria-selected="true">
-                    {{ translate('All orders') }} ({{ \App\Models\Order::count() }})
+                    {{ translate('New') }} ({{ \App\Models\Order::count() }})
                 </button>
             </li>
         </ul>

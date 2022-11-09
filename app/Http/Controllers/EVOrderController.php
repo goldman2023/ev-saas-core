@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatusEnum;
 use App\Facades\MyShop;
 use App\Models\Order;
 use App\Models\Invoice;
@@ -103,7 +104,10 @@ class EVOrderController extends Controller
             'action' => 'changed_status',
             'action_title' => 'Changed status to: ' . $order->status,
         ])
-        ->log('order_status');
+        ->log('Updated order status to: ' . OrderStatusEnum::labels()[$order->status]);
+
+        session()->flash('message', translate('Order status updated'));
+
 
 
 
