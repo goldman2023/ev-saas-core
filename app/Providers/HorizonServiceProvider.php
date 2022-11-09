@@ -24,12 +24,12 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
         // Horizon::night();
     }
 
-    // protected function authorization()
-    // {
-    //     Horizon::auth(function () {
-    //         return true;
-    //     });
-    // }
+    protected function authorization()
+    {
+        Horizon::auth(function () {
+            return true;
+        });
+    }
 
     /**
      * Register the Horizon gate.
@@ -41,10 +41,11 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     protected function gate()
     {
         // TODO: Fix this to allow only central app users to access Horizon!
-        Gate::define('viewHorizon', function ($user) {
-            return in_array($user->user_type, [
-                'admin'
-            ]);
-        });
+        // Gate::define('viewHorizon', function ($user) {
+        //     // return in_array($user->user_type, [
+        //     //     'admin'
+        //     // ]);
+        //     return true;
+        // });
     }
 }
