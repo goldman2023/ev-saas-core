@@ -30,97 +30,11 @@
                     {{ translate('New') }} ({{ \App\Models\Order::count() }})
                 </button>
             </li>
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-blue-100 dark:border-gray-700"
-                    id="status-2" data-tabs-target="#order-status-2" type="button" role="tab" aria-controls="status-2"
-                    aria-selected="false">
-                    {{ translate('Welding') }} ({{ \App\Models\Order::count() }})
-                </button>
-            </li>
-
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                    id="status-3" data-tabs-target="#order-status-3" type="button" role="tab" aria-controls="status-3"
-                    aria-selected="false">
-                    {{ translate('QA') }} ({{ \App\Models\Order::count() }})
-                </button>
-            </li>
-
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                    id="status-4" data-tabs-target="#order-status-4" type="button" role="tab" aria-controls="status-4"
-                    aria-selected="false">
-                    {{ translate('Zincification') }} ({{ \App\Models\Order::count() }})
-                </button>
-            </li>
-
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                    id="status-5" data-tabs-target="#order-status-5" type="button" role="tab" aria-controls="status-5"
-                    aria-selected="false">
-                    {{ translate('Delivery') }} ({{ \App\Models\Order::count() }})
-                </button>
-            </li>
-
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                    id="status-6" data-tabs-target="#order-status-6" type="button" role="tab" aria-controls="status-5"
-                    aria-selected="false">
-                    {{ translate('Completed') }} ({{ \App\Models\Order::count() }})
-                </button>
-            </li>
-
-
         </ul>
     </div>
     <div id="myTabContent">
         <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="new-orders-tab" role="tabpanel"
             aria-labelledby="new-orders">
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
-
-
-        </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-2" role="tabpanel"
-            aria-labelledby="order-status-2">
-            Other orders
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
-
-
-        </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-3" role="tabpanel"
-            aria-labelledby="order-status-3">
-           Status 3
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
-
-
-        </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-4" role="tabpanel"
-            aria-labelledby="order-status-4">
-            Status 4
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
-
-
-        </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-5" role="tabpanel"
-            aria-labelledby="order-status-5">
-            Status 5
-            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
-
-
-        </div>
-
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="order-status-6" role="tabpanel"
-            aria-labelledby="order-status-6">
-            Status 6
             <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
 
 

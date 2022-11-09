@@ -100,9 +100,29 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         }
 
         add_action('order.change-status', function($order) {
+
+            try {
+                mkdir( storage_path() . '/documents/');
+            } catch (\Exception $e) {
+
+            }
+
+            try {
+                mkdir( storage_path() . '/documents/' . $order->id);
+            } catch (\Exception $e) {
+
+            }
+
             if($order->status == 1) {
                 $this->generate_contract($order);
+            } else if($order->status == 2) {
+
             }
+            /* Generate those always
+            TODO: Make conditional logic based on status change
+            */
+            $this->generate_certificate($order);
+            $this->generate_transportation_card($order);
         });
     }
 
@@ -120,10 +140,34 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
     public function generate_contract($order) {
         // Get order attributes and generate the document
-        $data = ['test' => 'pdf is here', 'order' => $order];
+        $data = ['order' => $order];
         $pdf = Pdf::loadView('documents_templates.contract', $data );
 
-        $pdf->save(storage_path() . '/contract-order-'. $order->id .'.pdf');
+        $pdf->save(storage_path() . '/documents/'. $order->id . '/contract-'. $order->id .'.pdf');
+        /* TODO: Implement attaching a document */
+        // $order->attachDocument($something);
+
+        return redirect()->back();
+    }
+
+    public function generate_transportation_card($order) {
+        // Get order attributes and generate the document
+        $data = ['order' => $order];
+        $pdf = Pdf::loadView('documents_templates.transportation_card', $data );
+
+        $pdf->save(storage_path() . '/documents/'. $order->id . '/transportation-card-'. $order->id .'.pdf');
+        /* TODO: Implement attaching a document */
+        // $order->attachDocument($something);
+
+        return redirect()->back();
+    }
+
+    public function generate_certificate($order) {
+        // Get order attributes and generate the document
+        $data = ['order' => $order];
+        $pdf = Pdf::loadView('documents_templates.certificate', $data );
+
+        $pdf->save(storage_path() . '/documents/' . $order->id . '/certificate-'. $order->id .'.pdf');
         /* TODO: Implement attaching a document */
         // $order->attachDocument($something);
 

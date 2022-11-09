@@ -37,7 +37,7 @@
 
         onSave() {
             $wire.set('product.description', this.description, true);
-            
+
             $wire.set('product.thumbnail', this.thumbnail.id, true);
             $wire.set('product.cover', this.cover.id, true);
             $wire.set('product.meta_img', this.meta_img.id, true);
@@ -52,7 +52,7 @@
             $wire.set('product.use_serial', this.use_serial, true);
             $wire.set('product.allow_out_of_stock_purchases', this.allow_out_of_stock_purchases, true);
             $wire.set('product.digital', this.is_digital, true);
-            
+
             $wire.set('product.status', this.status, true);
             $wire.set('product.type', this.type, true);
             $wire.set('product.tags', this.tags, true);
@@ -1561,7 +1561,7 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.file-selector 
+                                        <x-dashboard.form.file-selector
                                             id="product-gallery"
                                             field="gallery"
                                             :file-type="\App\Enums\FileTypesEnum::image()->value"

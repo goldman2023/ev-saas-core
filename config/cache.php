@@ -76,7 +76,7 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'cache',
-            'ttl_redis_cache' => 60 * 60 * 24,
+            'ttl_redis_cache' => 60 * 60 * 24, // 24h
             'lock_connection' => 'default',
         ],
 
@@ -106,6 +106,7 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache_'),
+    // This prefix setting is not used with the redis driver so it is safe to set it to empty string or whatever if driver is redis
+    'prefix' => '',
 
 ];

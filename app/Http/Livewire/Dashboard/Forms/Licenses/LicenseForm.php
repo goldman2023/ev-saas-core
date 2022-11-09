@@ -84,7 +84,7 @@ class LicenseForm extends Component
             }
 
             $this->license = $license->toArray();
-            
+
             $this->license_data = $license->getEditableData();
         } catch(\Exception $e) {
             $this->inform(translate('Error: Cannot edit selected license...Please refresh and try again.'), $e->getMessage(), 'fail');
@@ -116,17 +116,17 @@ class LicenseForm extends Component
                 $old_license = License::findOrFail($this->license['id'] ?? null);
                 $license = clone $old_license;
             }
-            
+
             $license->forceFill($this->license);
             $license->setEditableData($this->license_data);
-            
+
             $license->save();
-            
+
             do_action('license.saved', $license, $old_license);
-            
+
             $this->license = $license->toArray();
             $this->license_data = $license->getEditableData();
-            
+
             DB::commit();
 
             $this->emit('refreshDatatable');

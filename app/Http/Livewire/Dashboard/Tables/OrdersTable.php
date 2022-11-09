@@ -22,6 +22,8 @@ class OrdersTable extends DataTableComponent
 
     public $user;
 
+    public $status;
+
     public ?int $searchFilterDebounce = 800;
 
     public string $defaultSortColumn = 'created_at';
@@ -42,6 +44,7 @@ class OrdersTable extends DataTableComponent
     public array $filterNames = [
         'payment_status' => 'Payment Status',
         'shipping_status' => 'Shipping Status',
+        'status' => 'Order Status',
     ];
 
     public array $bulkActions = [
@@ -52,9 +55,10 @@ class OrdersTable extends DataTableComponent
 
     protected string $tableName = 'orders';
 
-    public function mount($for = 'me', $user = null)
+    public function mount($for = 'me', $user = null, $status = null)
     {
         $this->for = $for;
+        $this->status = $status;
         $this->user = $user;
         parent::mount();
     }
@@ -141,12 +145,15 @@ class OrdersTable extends DataTableComponent
     public function query(): Builder
     {
         return Order::query()->where('is_temp', 0)
+            ->when($this->status != null, fn ($query, $value) => $query->where('status', $this->status ?? null))
+
             ->when($this->for === 'me', fn ($query, $value) => $query->where('user_id', $this->user->id ?? null))
             // ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
             ->when($this->getFilter('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))
             ->when($this->getFilter('shipping_status'), fn ($query, $status) => $query->where('shipping_status', $status))
+            ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status))
             ->when($this->getFilter('viewed'), function ($query, $status) {
                 if ($status === 'new') {
                     return $query->where('viewed', 0);

@@ -265,6 +265,8 @@ if (!function_exists('pix_pro_create_licenses_action')) {
             dispatch(function () use ($route_paid, $body, $plan, $subscription) {
                 $response = Http::withoutVerifying()->post($route_paid, $body);
                 $response_json = $response->json();
+                
+                Log::debug($response_json);
 
                 if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                     // If status is not success for any reason, log an error
@@ -636,6 +638,7 @@ if (!function_exists('pix_pro_update_single_license')) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
 
         $subscription = $license->user_subscription->first();
+        // dd($subscription->plan);
         $is_manual = empty($subscription);
 
         $user = $is_manual ? $license->user : $subscription->user;
@@ -652,7 +655,9 @@ if (!function_exists('pix_pro_update_single_license')) {
             }
             $cloud_service_param = $license->getData('cloud_service') === true || $license->getData('cloud_service') == 1 ? 1 : 0;
             $offline_service_param = $license->getData('offline_service') === true || $license->getData('offline_service') == 1 ? 1 : 0;
-            $license_subscription_type = ($is_manual ? $license->license_name :  $license->getData('license_subscription_type'));
+
+            $license_subscription_type = ($is_manual ? $license->license_name : $license->license_name).'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+
             $expiration_date = $license->getData('expiration_date');
 
             $body = pix_pro_add_auth_params([

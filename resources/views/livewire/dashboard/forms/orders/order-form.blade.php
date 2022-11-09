@@ -11,7 +11,8 @@
     tax: @js($order->tax ?? 0),
     shipping_cost: @js($hideShipping ? 0 : ($order->shipping_cost ?? 0)),
     email: @js($order->email),
-    
+    core_meta: @js($order->meta),
+
     subtotal: 0,
     total: 0,
     calculateTotals() {
@@ -26,7 +27,7 @@
         } else {
             this.subtotal = 0;
         }
-        
+
         if(this.tax < 0 || this.tax > 100) {
             this.tax = 0;
         }
@@ -177,7 +178,7 @@ x-cloak>
                                                         </ul>
                                                     </div>
                                                 </template>
-                                                
+
                                             </div>
                                         </x-system.form-modal>
                                     </div>
@@ -276,7 +277,7 @@ x-cloak>
                                                         </ul>
                                                     </div>
                                                 </template>
-                                                
+
                                             </div>
                                         </x-system.form-modal>
                                     </div>
@@ -304,19 +305,19 @@ x-cloak>
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                 {{ translate('Billing First Name') }}
                                             </label>
-    
+
                                             <x-dashboard.form.input field="order.billing_first_name" />
                                         </div>
-    
+
                                         <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                 {{ translate('Billing Last Name') }}
                                             </label>
-    
+
                                             <x-dashboard.form.input field="order.billing_last_name" />
                                         </div>
                                     </div>
-                                    
+
                                     <div class="w-full flex flex-col gap-y-2">
                                         <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                             {{ translate('Billing Address') }}
@@ -338,7 +339,7 @@ x-cloak>
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                 {{ translate('Billing State') }}
                                             </label>
-    
+
                                             <x-dashboard.form.input field="order.billing_state" />
                                         </div>
                                     </div>
@@ -348,19 +349,19 @@ x-cloak>
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                 {{ translate('Billing City') }}
                                             </label>
-    
+
                                             <x-dashboard.form.input field="order.billing_city" />
                                         </div>
-    
+
                                         <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                 {{ translate('Billing ZIP') }}
                                             </label>
-    
+
                                             <x-dashboard.form.input field="order.billing_zip" />
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 {{-- END Billing Info --}}
 
@@ -373,19 +374,19 @@ x-cloak>
                                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                     {{ translate('Shipping First Name') }}
                                                 </label>
-        
+
                                                 <x-dashboard.form.input field="order.shipping_first_name" />
                                             </div>
-        
+
                                             <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
                                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                     {{ translate('Shipping Last Name') }}
                                                 </label>
-        
+
                                                 <x-dashboard.form.input field="order.shipping_last_name" />
                                             </div>
                                         </div>
-                                        
+
                                         <div class="w-full flex flex-col gap-y-2">
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                 {{ translate('Shipping Address') }}
@@ -407,7 +408,7 @@ x-cloak>
                                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                     {{ translate('Shipping State') }}
                                                 </label>
-        
+
                                                 <x-dashboard.form.input field="order.shipping_state" />
                                             </div>
                                         </div>
@@ -417,19 +418,19 @@ x-cloak>
                                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                     {{ translate('Shipping City') }}
                                                 </label>
-        
+
                                                 <x-dashboard.form.input field="order.shipping_city" />
                                             </div>
-        
+
                                             <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
                                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                     {{ translate('Shipping ZIP') }}
                                                 </label>
-        
+
                                                 <x-dashboard.form.input field="order.shipping_zip" />
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                 @endif
                                 {{-- END Shipping Info --}}
@@ -482,7 +483,7 @@ x-cloak>
                                     </template>
                                 </ul>
                             </template>
-                            
+
                             <div class="w-full flex pt-4 mt-4 border-t">
                                 <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal' })" >
                                     {{ translate('Add new item') }}
@@ -531,7 +532,7 @@ x-cloak>
                                         } else if(this.content_type === 'product_addons') {
                                             fetch_route = '{{ route('api.dashboard.products.addons.search') }}';
                                         }
-                                        
+
                                         if(fetch_route) {
                                             wetch.get(fetch_route+'?q='+this.q)
                                             .then(data => {
@@ -612,7 +613,7 @@ x-cloak>
                                                         <svg class="h-5 w-5 text-success" :class="{'hidden': content_type !== type.slug}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                                                         </svg>
-    {{-- 
+    {{--
                                                         <span class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"
                                                             :class="{'border-success': content_type === type.slug, 'border-transparent': content_type !== type.slug}"></span> --}}
                                                     </div>
@@ -636,7 +637,7 @@ x-cloak>
                                                     </div>
                                                 </div>
                                             </div>
-        
+
                                             <template x-if="results">
                                                 <div class="w-full mt-3">
                                                     <ul role="list" class="-my-1 divide-y divide-gray-200 max-h-[545px] overflow-y-auto overflow-x-hidden">
@@ -675,7 +676,7 @@ x-cloak>
                                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                         {{ translate('Name') }}
                                                     </label>
-            
+
                                                     <div class="w-full ">
                                                         <input type="text" class="form-standard  " x-model="custom_order_item.name">
                                                     </div>
@@ -685,7 +686,7 @@ x-cloak>
                                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                         {{ translate('Description') }}
                                                     </label>
-            
+
                                                     <div class="w-full ">
                                                         <input type="text" class="form-standard  " x-model="custom_order_item.excerpt">
                                                     </div>
@@ -695,7 +696,7 @@ x-cloak>
                                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                         {{ translate('Unit Price') }}
                                                     </label>
-            
+
                                                     <div class="w-full ">
                                                         <input type="number" class="form-standard  " x-model="custom_order_item.unit_price">
                                                     </div>
@@ -705,7 +706,7 @@ x-cloak>
                                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                                         {{ translate('Quantity') }}
                                                     </label>
-            
+
                                                     <div class="w-full ">
                                                         <input type="number" class="form-standard  " x-model="custom_order_item.qty">
                                                     </div>
@@ -719,7 +720,7 @@ x-cloak>
                                             </div>
                                         </div>
                                     </template>
-                                    
+
                                 </div>
                             </x-system.form-modal>
                         </div>
@@ -823,7 +824,10 @@ x-cloak>
                                 </button>
                             </div>
                         </div>
-                        
+
+                    <x-dashboard.form.blocks.core-meta-form></x-dashboard.form.blocks.core-meta-form>
+
+
                     </div>
 
                     {{-- Order Summary --}}
@@ -876,19 +880,19 @@ x-cloak>
                                       <dt>{{ translate('Subtotal') }}</dt>
                                       <dd class="text-gray-900" x-text="FX.formatPrice(subtotal)"></dd>
                                     </div>
-                          
+
                                     @if(!$hideShipping)
                                         <div class="flex justify-between">
                                             <dt>{{ translate('Shipping') }}</dt>
                                             <dd class="text-gray-900" x-text="FX.formatPrice(shipping_cost)"></dd>
                                         </div>
                                     @endif
-                          
+
                                     <div class="flex justify-between">
                                       <dt x-text="'{{ translate('Tax') }} ('+tax+'%)'"></dt>
                                       <dd class="text-gray-900" x-text="FX.formatPrice((subtotal + shipping_cost) * tax / 100)"></dd>
                                     </div>
-                          
+
                                     <div class="flex items-center justify-between border-t border-gray-200 pt-4 text-gray-900">
                                       <dt class="text-base">{{ translate('Total') }}</dt>
                                       <dd class="text-base" x-text="FX.formatPrice(total)"></dd>

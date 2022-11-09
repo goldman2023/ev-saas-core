@@ -8,6 +8,7 @@
     subscription_only: @js($blogPost->subscription_only === 'true' ? true : false),
     selected_plans: @js($selectedPlans),
     content: @entangle('blogPost.content').defer,
+    content_structure: @entangle('blogPost.content_structure').defer,
     selected_categories: @js($selected_categories),
     core_meta: @js($core_meta),
     model_core_meta: @js($model_core_meta),
@@ -20,6 +21,7 @@
         $wire.set('blogPost.type', this.type, true);
         $wire.set('blogPost.subscription_only', this.subscription_only, true);
         $wire.set('blogPost.content', this.content, true);
+        $wire.set('blogPost.content_structure', this.content_structure, true);
         $wire.set('selected_categories', this.selected_categories, true);
         $wire.set('core_meta', this.core_meta, true);
         {{-- $wire.set('model_core_meta.portfolio_link', this.model_core_meta.portfolio_link, true); --}}
@@ -246,9 +248,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
-
-                                    <x-dashboard.form.editor-js field="content" id="blogPost-content-wysiwyg" />
-
+                                    <x-dashboard.form.editor-js field="content" structure-field="content_structure" id="blogPost-content-wysiwyg" />
 
                                     <x-system.invalid-msg class="w-full" field="blogPost.content">
                                     </x-system.invalid-msg>
@@ -398,7 +398,7 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.file-selector 
+                                        <x-dashboard.form.file-selector
                                             id="blogPost-gallery-image"
                                             field="gallery"
                                             :file-type="\App\Enums\FileTypesEnum::image()->value"
