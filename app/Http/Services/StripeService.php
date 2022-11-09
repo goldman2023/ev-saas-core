@@ -541,9 +541,10 @@ class StripeService
 
     public function updateStripeCustomerTax($user = null, $update_tax_exempt_for_individual = false) {
         // Dispatch a job to update customer Tax data in stripe
-        dispatch(function () use ($user, $update_tax_exempt_for_individual) {
-            $user = !empty($user) && $user instanceof \App\Models\User ? $user : auth()->user();
 
+        $user = !empty($user) && $user instanceof \App\Models\User ? $user : auth()->user();
+
+        dispatch(function () use ($user, $update_tax_exempt_for_individual) {
             $stripe_customer_id_key = stripe_prefix('stripe_customer_id');
             $stripe_customer_id = $user->getCoreMeta($stripe_customer_id_key);
     

@@ -139,6 +139,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 0,
+            'prefix' => 'def:'.env('APP_SLUG').':'
         ],
 
         'cache' => [
@@ -146,7 +147,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 1,
-            'prefix' => 'c:'
+            'prefix' => 'c:'.env('APP_SLUG').':'
         ],
 
         'queue' => [
@@ -154,7 +155,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 2,
-            'prefix' => 'q:'
+            'prefix' => 'q:'.env('APP_SLUG').':'
         ],
 
         'laravel-visits' => [
@@ -162,7 +163,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 3,
-            'prefix' => 'visit:'
+            'prefix' => 'visit:'.env('APP_SLUG').':'
         ],
 
         'sessions' => [
@@ -170,7 +171,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 4, // anything from 1 to 15, except 0 (or what is set in default)
-            'prefix' => 'ses:'
+            'prefix' => 'ses:'.env('APP_SLUG').':'
         ],
 
         'horizon' => [
@@ -178,7 +179,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 5,
-            'prefix' => 'horizon:'
+            'prefix' => 'horizon:'.env('APP_SLUG').':',
         ],
 
     ],
