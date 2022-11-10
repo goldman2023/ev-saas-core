@@ -38,7 +38,7 @@
     @endif
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle static ">
+{{-- <x-livewire-tables::table.cell class="align-middle static ">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
         @do_action('view.dashboard.plans.row-license.actions.start', $row)
 
@@ -57,4 +57,4 @@
 
         </ul>
     </div>
-</x-livewire-tables::table.cell>
+</x-livewire-tables::table.cell> --}}

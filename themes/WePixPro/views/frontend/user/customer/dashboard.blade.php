@@ -21,7 +21,7 @@
             @endif
 
             @if(auth()->user()?->hasLicenses())
-            <div class="col-span-12">
+            <div class="col-span-12 mb-6">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('My Licenses') }}</h3>
 
                 <livewire:dashboard.tables.licenses-table :user="auth()->user()" :show-search="false"
