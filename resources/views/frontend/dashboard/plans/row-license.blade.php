@@ -1,12 +1,14 @@
 <x-livewire-tables::table.cell class="align-middle text-center">
+    <div class="flex items-center h-[38px]">
     @isset($row->plan)
         {{ $row->plan->name }}
     @else
         {{ translate('No Plan') }}
     @endisset
+    </div>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle text-center">
+<x-livewire-tables::table.cell class="align-middle text-center h-8">
     @if(($row->data['cloud_service'] ?? 0) == 1)
         @svg('heroicon-o-check', ['class' => 'h-4 inline w-4 text-green-600'])
     @else
@@ -36,6 +38,8 @@
     @else
         -
     @endif
+
+
 </x-livewire-tables::table.cell>
 
 {{-- <x-livewire-tables::table.cell class="align-middle static ">
