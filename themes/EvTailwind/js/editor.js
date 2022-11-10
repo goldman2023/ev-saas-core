@@ -1,5 +1,5 @@
 import EditorJS from '@editorjs/editorjs';
-import Header from '@editorjs/header'; 
+import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import Checklist from '@editorjs/checklist';
 import Code from '@editorjs/code';
@@ -31,22 +31,22 @@ window.edjsHTML = edjsHTML(edjsCustomParsers());
 window.getEditorJsDefaultConfig = function($id) {
     return {
         holder: $id,
-        /** 
-         * Available Tools list. 
-         * Pass Tool's class or Settings object for each Tool you want to use 
-         */ 
-        tools: { 
+        /**
+         * Available Tools list.
+         * Pass Tool's class or Settings object for each Tool you want to use
+         */
+        tools: {
             header: {
                 class: Header,
                 inlineToolbar : true,
                 tunes: ['alignmentTune'],
-            }, 
+            },
             list: List,
             checklist: Checklist,
             image: {
                 class: WeImageTool,
                 config: {
-                    
+
                 }
             },
             link: Link,
@@ -61,18 +61,18 @@ window.getEditorJsDefaultConfig = function($id) {
             },
             nestedList:NestedList,
             marker: {
-                class: ColorPlugin, 
+                class: ColorPlugin,
                 config: {
                    defaultColor: '#FFBF00',
                    type: 'marker',
                    customPicker: true,
-                }       
+                }
               },
             inlineCode:InlineCode,
-            // embed:{
-            //     class: Embed,
-            //     inlineToolbar: true
-            // },
+            embed:{
+                class: Embed,
+                inlineToolbar: true
+            },
             code:Code,
             Color: {
                 class: ColorPlugin,
@@ -81,7 +81,7 @@ window.getEditorJsDefaultConfig = function($id) {
                    defaultColor: '#FF1300',
                    type: 'text',
                    customPicker: true,
-                }     
+                }
             },
             toggle: {
                 class: ToggleBlock,
@@ -116,6 +116,6 @@ window.getEditorJsDefaultConfig = function($id) {
                   }
                 },
             }
-        }, 
+        },
     };
 };
