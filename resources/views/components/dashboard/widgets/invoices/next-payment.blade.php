@@ -55,9 +55,9 @@
                     @endif
                 @endforeach
             </div>
-            <a href="{{ route('invoice.upcoming.download', ['order_id' => $subscription->order->id]) }}" class="w-full btn-primary mt-5 text-center justify-center" target="_blank">
+            {{-- <a href="{{ route('invoice.upcoming.download', ['order_id' => $subscription->order->id]) }}" class="w-full btn-primary mt-5 text-center justify-center" target="_blank">
                 {{ translate('View next invoice') }}
-            </a>
+            </a> --}}
         @else
             <li class="flow-root">
                 <a href="{{ route('my.plans.management') }}" class="relative -m-2 p-2 flex items-center space-x-4 rounded-xl hover:bg-gray-50">
