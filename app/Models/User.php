@@ -2,32 +2,32 @@
 
 namespace App\Models;
 
-use DB;
-use Log;
-use Carbon;
-use App\Traits\UploadTrait;
-use App\Traits\GalleryTrait;
+use App\Enums\UserSubscriptionStatusEnum;
+use App\Models\Auth\User as Authenticatable;
+use App\Notifications\EmailVerificationNotification;
 use App\Traits\CoreMetaTrait;
-use Laravel\Cashier\Billable;
-use App\Traits\OwnershipTrait;
+use App\Traits\GalleryTrait;
+use App\Traits\SocialReactionsTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
-use Laravel\Passport\HasApiTokens;
-use Bavix\Wallet\Interfaces\Wallet;
+use App\Traits\UploadTrait;
 use App\Traits\SocialFollowingTrait;
-use App\Traits\SocialReactionsTrait;
-use Laravel\Nova\Auth\Impersonatable;
-use Spatie\Permission\Traits\HasRoles;
-use Bavix\Wallet\Traits\HasWalletFloat;
-use Spatie\Activitylog\Models\Activity;
+use App\Traits\OwnershipTrait;
+use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\WalletFloat;
-use Illuminate\Notifications\Notifiable;
-use App\Enums\UserSubscriptionStatusEnum;
-use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Bavix\Wallet\Traits\HasWalletFloat;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Notifications\EmailVerificationNotification;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Cashier\Billable;
+use Laravel\Nova\Auth\Impersonatable;
+use DB;
+use Carbon;
+use Log;
 
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
@@ -280,21 +280,25 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     {
         // TODO: Think about introducing shop_id into this check because we may want to check if user is subscribed to any plan from different vendors!
         return $this->subscriptions()
-            ->where('status', UserSubscriptionStatusEnum::active()->value)
-            ->orWhere('status', UserSubscriptionStatusEnum::active_until_end()->value)
-            ->orWhere('status', UserSubscriptionStatusEnum::trial()->value) 
+            ->whereIn('status', [
+                UserSubscriptionStatusEnum::active()->value,
+                UserSubscriptionStatusEnum::active_until_end()->value,
+                UserSubscriptionStatusEnum::trial()->value
+            ])
             ->count() > 0;
     }
 
-    public function isCanceled() {
+    public function isCanceled()
+    {
         return $this->subscriptions->count() > 0 &&
-                $this->subscriptions->count() === $this->subscriptions()->where('status', UserSubscriptionStatusEnum::canceled()->value)->count();
+            $this->subscriptions->count() === $this->subscriptions()->where('status', UserSubscriptionStatusEnum::canceled()->value)->count();
     }
 
-    public function isInactive() {
+    public function isInactive()
+    {
         // Inactive means that subscription expired!
         return $this->subscriptions->count() > 0 &&
-                $this->subscriptions->count() === $this->subscriptions()->where('status', UserSubscriptionStatusEnum::inactive()->value)->count();
+            $this->subscriptions->count() === $this->subscriptions()->where('status', UserSubscriptionStatusEnum::inactive()->value)->count();
     }
 
     public function isOnTrial()
@@ -430,6 +434,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         //one month / 30 days
         $date = Carbon::now()->subDays($days);
 
-        return $query->where('created_at', '>' , $date);
+        return $query->where('created_at', '>', $date);
     }
 }
