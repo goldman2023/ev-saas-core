@@ -16,7 +16,7 @@ class PlanSubscriptionsList extends Component
      */
     public function __construct($class = '')
     {
-        $this->plan_subscriptions = auth()->user()->subscriptions;
+        $this->plan_subscriptions = auth()->user()->active_subscriptions;
         $this->class = $class;
     }
 

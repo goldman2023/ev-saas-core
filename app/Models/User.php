@@ -236,11 +236,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(Address::class);
     }
 
-    public function affiliate_log()
-    {
-        return $this->hasMany(AffiliateLog::class);
-    }
-
     public function events()
     {
         return $this->hasMany(Event::class);
@@ -249,6 +244,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function subscriptions()
     {
         return $this->hasMany(UserSubscription::class);
+    }
+
+    public function active_subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class)->whereIn('status', ['active', 'trial']);
     }
 
     public function licenses()
