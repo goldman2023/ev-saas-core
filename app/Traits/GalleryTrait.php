@@ -161,7 +161,11 @@ trait GalleryTrait
      */
     public function getMetaImg(array $options = [], $proxify = true) : mixed
     {
-        return IMG::get($this->meta_img, IMG::mergeWithDefaultOptions($options, 'meta_img'), $proxify);
+        if($this->meta_img) {
+            return IMG::get($this->meta_img, IMG::mergeWithDefaultOptions($options, 'meta_img'), $proxify);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -238,11 +242,11 @@ trait GalleryTrait
                 } catch (\Exception $e) {
                     continue;
                 }
-                
+
                 $this->uploads()->wherePivot('relation_type', $property)->sync($sync_array);
             }
         }
-        
+
         $this->convertGalleryToUploads();
     }
 
