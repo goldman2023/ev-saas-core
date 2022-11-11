@@ -83,7 +83,7 @@ class Attribute extends WeBaseModel
     }
 
     /**
-     * Checks if attribute has one or multiple values
+     * Checks if attribute has predefined attribute values - only dropdown/checkbox/radio can have predefined value
      *
      * @return bool
      */
