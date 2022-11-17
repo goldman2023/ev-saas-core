@@ -129,7 +129,7 @@ return [
 
     'redis' => [
 
-        'client' => 'phpredis', // It php's native redis module, way better and faster than predis (which is old unmaintained composer package)
+        'client' => 'predis', // It php's native redis module, way better and faster than predis (which is old unmaintained composer package)
 
         // IMPORTANT: phpredis client allows prefix per connection! While old 'predis' client DOES NOT!
         // IMPORTANT: Database property must be 0 for all connections if we consider using redis cluster in the future!

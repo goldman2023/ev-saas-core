@@ -36,6 +36,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\WeEditController;
 use App\Http\Controllers\WeAnalyticsController;
@@ -76,10 +77,11 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->group(function () {
-    
+
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard/we-analytics', [WeAnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('/we-menu', [WeMenuController::class, 'index'])->name('menu.index');
+        Route::get('/sitemap/generate', [SitemapController::class, 'generate'])->name('sitemap.generate');
 
         Route::get('/we-edit', [WeEditController::class, 'index'])->name('we-edit.index');
         Route::get('/we-edit/flow', [WeEditController::class, 'flow'])->name('we-edit.flow.pages');
