@@ -2820,7 +2820,7 @@ class StripeService
                         'started_on' => time(),
                     ];
     
-                    $subscription->user()->saveUserMeta('started_trials_on', $started_trials);
+                    $subscription->user->saveUserMeta('started_trials_on', $started_trials);
                 }
 
                 // Deal with previous subscription if there's any
