@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Dashboard\Orders;
 
+use App\Enums\OrderStatusEnum;
 use Illuminate\View\Component;
 
 class OrderTimeline extends Component
@@ -16,6 +17,7 @@ class OrderTimeline extends Component
     public function __construct($order)
     {
         $this->order = $order;
+
         //
         $this->statuses[] = [
             "title" => translate('Contract'),
@@ -30,6 +32,9 @@ class OrderTimeline extends Component
             "action" => 'generate_invoice',
             "description_completed" => translate('Signed'),
         ];
+
+        $this->statuses = OrderStatusEnum::labels();
+
 
 
     }

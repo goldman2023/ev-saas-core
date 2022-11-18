@@ -38,8 +38,16 @@ class Order extends WeBaseModel
         'same_billing_shipping' => 'boolean',
         'viewed' => 'boolean',
         'is_temp' => 'boolean',
-        'created_at' => 'datetime:d.m.Y H:i',
-        'updated_at' => 'datetime:d.m.Y H:i',
+        // 'created_at' => 'datetime:d.m.Y H:i',
+        // 'updated_at' => 'datetime:d.m.Y H:i',
+    ];
+
+    protected $fillable = ['shop_id', 'user_id', 'type', 'is_temp', 'email', 
+        'billing_first_name', 'billing_last_name', 'billing_company', 'billing_address', 'billing_country', 'billing_state', 'billing_city', 'billing_zip',
+        'phone_numbers', 'same_billing_shipping',
+        'shipping_first_name', 'shipping_last_name', 'shipping_company', 'shipping_address', 'shipping_country', 'shipping_state', 'shipping_city', 'shipping_zip',
+        'note', 'terms', 'number_of_invoices', 'invoicing_period', 'invoice_grace_period', 'invoicing_start_date',
+        'shipping_method', 'shipping_cost', 'tax', 'payment_status', 'shipping_status', 'tracking_number', 'viewed', 'buyers_consent'
     ];
 
     public mixed $base_price;

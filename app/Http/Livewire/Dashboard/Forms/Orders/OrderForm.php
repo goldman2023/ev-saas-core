@@ -74,7 +74,7 @@ class OrderForm extends Component
 
     protected function rules()
     {
-        $rules =  [
+        $rules =  apply_filters('livewire-form-rules', [
             'order.shop_id' => [ 'required' ], //  Rule::in(PageTypeEnum::implodedValues())
             'order.user_id' => [ 'nullable' ],
             'order.type' => ['required', Rule::in(OrderTypeEnum::toValues())],
@@ -105,8 +105,8 @@ class OrderForm extends Component
             'order.tracking_number' => ['nullable'],
             'order.note' => ['nullable'],
             'order.terms' => ['nullable'],
-            'order.core_meta' => ['nullable'],
-        ];
+            'core_meta' => ['nullable']
+        ]);
 
         return $rules;
     }
@@ -114,7 +114,12 @@ class OrderForm extends Component
     protected function messages()
     {
         return [
-
+            'order.shop_id.required' => translate('Vendor must be selected'),
+            'order.email.required' => translate('Customer must be selected'),
+            'order.billing_first_name.required' => translate('Billing First Name is required'),
+            'order.billing_last_name.required' => translate('Billing First Name is required'),
+            'order.payment_status.required' => translate('Payment status is required'),
+            'order.shipping_status.required' => translate('Shipping status is required'),
         ];
     }
 
@@ -140,10 +145,12 @@ class OrderForm extends Component
 
         try {
             $this->invoicing_period = null;
-            $this->setCoreMeta($this->order);
 
-            $this->order->save();
             /* Save all meta attributes */
+            $this->setCoreMeta($this->order);
+            $this->order->phone_numbers = [];
+            $this->order->is_temp = false;
+            $this->order->save();
 
             // Remove missing previous order_items (if any)
             $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')->filter();

@@ -57,17 +57,7 @@ class AttributeForm extends Component
             $this->content_type = $content_type;
             $this->attribute->setDefault($content_type);
 
-            $blank_att_value = new AttributeValue();
-            $blank_att_value->id = null;
-            $blank_att_value->attribute_id = null;
-            $blank_att_value->values = null;
-
-            $this->attribute_values = new \Illuminate\Database\Eloquent\Collection([$blank_att_value]);
-        } else {
-            $this->content_type = $this->attribute->content_type;
-            $this->attribute_values = $attribute->attribute_values;
-
-            if ($this->attribute_values->isEmpty()) {
+            if($this->attribute->is_predefined) {
                 $blank_att_value = new AttributeValue();
                 $blank_att_value->id = null;
                 $blank_att_value->attribute_id = null;
@@ -75,11 +65,24 @@ class AttributeForm extends Component
 
                 $this->attribute_values = new \Illuminate\Database\Eloquent\Collection([$blank_att_value]);
             }
+        } else {
+            $this->content_type = $this->attribute->content_type;
+
+            if($this->attribute->is_predefined) {
+                $this->attribute_values = $attribute->attribute_predefined_values;
+
+                if ($this->attribute_values->isEmpty()) {
+                    $blank_att_value = new AttributeValue();
+                    $blank_att_value->id = null;
+                    $blank_att_value->attribute_id = null;
+                    $blank_att_value->values = null;
+    
+                    $this->attribute_values = new \Illuminate\Database\Eloquent\Collection([$blank_att_value]);
+                }
+            }
         }
 
         $this->content_type_label = collect(\App\Enums\ContentTypeEnum::labels())->get(collect(\App\Enums\ContentTypeEnum::values())->search($this->content_type));
-
-        // $this->initCategories($this->plan);
     }
 
     protected function rules()
@@ -229,7 +232,7 @@ class AttributeForm extends Component
 
                 $this->inform(translate('Attribute values successfully updated!'), '', 'success');
 
-                $this->attribute_values = $this->attribute->attribute_values()->get(); // query attribute values again - reset!
+                $this->attribute_values = $this->attribute->attribute_predefined_values()->get(); // query attribute values again - reset!
             } catch (\Exception $e) {
                 DB::rollBack();
 
@@ -250,7 +253,7 @@ class AttributeForm extends Component
         DB::beginTransaction();
 
         try {
-            // remove the attribute -> this will remove attribute value translations and relationships too!
+            // Remove the attribute -> this will remove attribute value translations and relationships too!
             AttributeValue::destroy($id);
 
             DB::commit();

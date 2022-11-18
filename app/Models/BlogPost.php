@@ -18,12 +18,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Shetabit\Visitor\Traits\Visitable;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Sitemap\Contracts\Sitemapable;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 // use GetStream\StreamLaravel\Eloquent\ActivityTrait;
 
-class BlogPost extends WeBaseModel
+class BlogPost extends WeBaseModel implements Sitemapable
 {
     use HasSlug;
     use SoftDeletes;
@@ -69,6 +70,11 @@ class BlogPost extends WeBaseModel
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug')
             ->doNotGenerateSlugsOnUpdate();
+    }
+
+    public function toSitemapTag()
+    {
+        return route('blog.post.show', $this);
     }
 
     public function getRouteKeyName()

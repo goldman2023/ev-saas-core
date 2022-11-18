@@ -22,7 +22,7 @@
             @if(!empty($blogPost->authors?->first() ?? null))
                 <div class="w-full grid grid-cols-2">
                     <div class="flex items-center">
-                        <img src="{{ $blogPost->authors->first()->getThumbnail(['w' => 100]) }}" class="rounded-full object-cover w-8 h-8 mr-2.5" />
+                        <img src="{{ $blogPost->authors->first()->getThumbnail(['w' => 100]) }}" alt="Pixpro author avatar" class="rounded-full object-cover w-8 h-8 mr-2.5" />
                         <span class="text-14 text-gray-500 line-clamp-1">{{ $blogPost->authors->first()->name.' '.$blogPost->authors->first()->surname }}</span>
                     </div>
                     <div class="flex items-center justify-end md:justify-center text-gray-500">

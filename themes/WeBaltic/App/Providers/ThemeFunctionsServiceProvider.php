@@ -3,6 +3,9 @@
 namespace WeThemes\WeBaltic\App\Providers;
 
 // Because this file service provider is loaded after tenant is initated and has no namespace, it cannot use Aliases from `app.php`, like: use Log or use File; Instead full namespaces must be used!
+
+use App\Models\CoreMeta;
+use App\Models\Order;
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -15,7 +18,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
     protected function getTenantAppSettings(): array
     {
-        return [];
+        return [
+            'wmi_code' => 'string',
+            'wmi_code_2' => 'string',
+            'factory_location' => 'string',
+        ];
     }
 
     protected function getMenuLocations(): array
@@ -97,10 +104,18 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
                 return $menu;
             }, 10, 1);
+
+            // Add baltic general rules
+            add_filter('app-settings-general-rules', function ($rules_array) {
+                return array_merge($rules_array, [
+                    'settings.pix_pro_software_download_url' => 'nullable',
+                    'settings.pix_pro_downloads' => 'nullable',
+                    'settings.pix_pro_dataset_samples' => 'nullable',
+                ]);
+            }, 10, 1);
         }
 
         add_action('order.change-status', function($order) {
-
             try {
                 mkdir( storage_path() . '/documents/');
             } catch (\Exception $e) {
@@ -172,5 +187,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         // $order->attachDocument($something);
 
         return redirect()->back();
+    }
+
+    public function generate_vin_code($order) {
+
     }
 }

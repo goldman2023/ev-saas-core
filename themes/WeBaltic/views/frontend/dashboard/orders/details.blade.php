@@ -35,15 +35,21 @@
         <div class="mb-9">
             <x-dashboard.customer.customer-card :user="$user"></x-dashboard.customer.customer-card>
         </div>
+
+        <div class="card mb-9 !pb-0">
+            <div class="scale-75" style="margin-bottom: -20px; width: 125%; transform-origin: top left;">
+                <x-dashboard.orders.order-details-card :order="$order">
+                </x-dashboard.orders.order-details-card>
+            </div>
+        </div>
         <div class="card mb-9">
             <div class="w-full pb-4 mb-4 border-b ">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status') }}</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Here you can see the current status of the
-                    order') }}</p>
-                <p>
-                    Current status: {{ $order->status }}
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    {{ translate('Here you can see the current status of the order') }}
                 </p>
             </div>
+
 
             <x-dashboard.orders.order-timeline :order="$order">
             </x-dashboard.orders.order-timeline>
@@ -51,9 +57,12 @@
 
         <div class="we-qr-code card mb-3">
             <div class="w-full pb-4 mb-4 border-b ">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('QR Code') }}</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('By scanning this QA code you can open this
-                    page on mobile') }}</p>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    {{ translate('QR Code') }}
+                </h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    {{ translate('By scanning this QA code you can open this page on mobile') }}
+                </p>
             </div>
 
             {!! QrCode::size(200)->generate(URL::current()) !!}
@@ -64,13 +73,13 @@
 
     <div class="sm:col-span-8">
 
-        <div class="bg-white rounded shadow">
+        <div class="bg-white rounded shadow mb-3">
             <div class="max-w-2xl mx-auto pt-8 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 mb-3">
 
                     {{-- <span class="badge-dark ml-2">
-                            {{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}
-                        </span> --}}
+                        {{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}
+                    </span> --}}
 
                     <p class="text-sm text-gray-600">
                     <div>
@@ -167,10 +176,16 @@
                     </ul>
                 </div>
                 <div id="myTabContent">
-                    <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="profile" role="tabpanel"
-                        aria-labelledby="profile-tab">
-                        <x-dashboard.orders.order-products-list :order="$order" :orderItems="$order_items">
-                        </x-dashboard.orders.order-products-list>
+                    <div class="rounded-lg dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="mb-6">
+                            <x-dashboard.orders.order-products-list :order="$order" :orderItems="$order_items">
+                            </x-dashboard.orders.order-products-list>
+                        </div>
+
+                        <div class="card mb-9">
+                            <x-dashboard.orders.order-details-card :order="$order">
+                            </x-dashboard.orders.order-details-card>
+                        </div>
 
                     </div>
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel"
@@ -197,10 +212,10 @@
                     </div>
 
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="manufacturing" role="tabpanel"
-                    aria-labelledby="manufacturing-tab">
-                    <x-dashboard.orders.manufacturing-details></x-dashboard.orders.manufacturing-details>
+                        aria-labelledby="manufacturing-tab">
+                        <x-dashboard.orders.manufacturing-details></x-dashboard.orders.manufacturing-details>
 
-                </div>
+                    </div>
 
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="settings" role="tabpanel"
                         aria-labelledby="settings-tab">
@@ -214,29 +229,24 @@
                     <div class="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="contacts" role="tabpanel"
                         aria-labelledby="contacts-tab">
                         <ul role="list" class="-my-4 divide-y divide-gray-200">
-
-
-
                             <li class="flex items-center space-x-3 py-4">
-                                    <div class="flex-shrink-0">
-                                        <img class="h-8 w-8 rounded-full"
-                                            src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="">
-                                    </div>
-                                    <div class="min-w-0 flex-1">
-                                        <p class="text-sm font-medium text-gray-900">
-                                            {{ translate('Edit order') }}
-                                        </p>
+                                <div class="flex-shrink-0">
 
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <a href="{{ route('order.edit', $order->id) }}" type="button"
-                                            class="inline-flex items-center rounded-full bg-rose-50 px-3 py-0.5 text-sm font-medium text-rose-700 hover:bg-rose-100">
-                                            @svg('heroicon-o-pencil', ['class' => 'h-4 h-4 mr-2'])
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-medium text-gray-900">
+                                        {{ translate('Edit order') }}
+                                    </p>
 
-                                            <span>{{ translate('Edit') }}</span>
-                                        </a>
-                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="{{ route('order.edit', $order->id) }}" type="button"
+                                        class="inline-flex items-center rounded-full bg-rose-50 px-3 py-0.5 text-sm font-medium text-rose-700 hover:bg-rose-100">
+                                        @svg('heroicon-o-pencil', ['class' => 'h-4 h-4 mr-2'])
+
+                                        <span>{{ translate('Edit') }}</span>
+                                    </a>
+                                </div>
 
                             </li>
                             <li class="flex items-center space-x-3 py-4">
@@ -343,17 +353,15 @@
                         </ul> --}}
                     </div>
                 </div>
-
-
-                <div class="mt-6">
-
-                </div>
-
-
             </div>
+        </div>
+        <div class="card mb-3">
+            <x-dashboard.orders.order-documents-list :order="$order"></x-dashboard.orders.order-documents-list>
+
         </div>
 
         <div class="card mb-3 mt-3">
+
             <livewire:dashboard.forms.file-manager.file-manager :subject="$order" field="documents"
                 :file-type="\App\Enums\FileTypesEnum::image()->value" :multiple="true"
                 add-new-item-label="{{ translate('Add new document') }}" />

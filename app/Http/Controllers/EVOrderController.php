@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\OrderStatusEnum;
 use App\Facades\MyShop;
+use App\Models\CoreMeta;
 use App\Models\Order;
 use App\Models\Invoice;
 use App\Models\User;
@@ -14,7 +15,7 @@ class EVOrderController extends Controller
 {
     public function index()
     {
-        if(!\Permissions::canAccess(User::$non_customer_user_types, ['all_orders', 'browse_orders'], false)) {
+        if (!\Permissions::canAccess(User::$non_customer_user_types, ['all_orders', 'browse_orders'], false)) {
             return redirect()->route('my.orders.all');
         }
 
@@ -25,7 +26,7 @@ class EVOrderController extends Controller
 
     public function create($customerID = null)
     {
-        if($customerID) {
+        if ($customerID) {
             $customer = User::find($customerID);
         } else {
             $customer = null;
@@ -48,7 +49,7 @@ class EVOrderController extends Controller
         $user = $order->user;
 
         // If order was not viewed, mark it as viewed!
-        if (! $order->viewed) {
+        if (!$order->viewed) {
             $order->viewed = true;
             $order->save();
         }
@@ -72,10 +73,11 @@ class EVOrderController extends Controller
         return view('frontend.dashboard.my-orders.index', compact('orders', 'orders_count'));
     }
 
-    public function change_status($order_id) {
+    public function change_status($order_id)
+    {
         $order = Order::findOrFail($order_id);
 
-        if(is_integer($order->status)) {
+        if (is_integer($order->status)) {
             // dd($order->status);
             $order->status = $order->status + 1;
         } else {
@@ -84,11 +86,11 @@ class EVOrderController extends Controller
 
 
         $reason = '';
-        if($order->status == 1) {
+        if ($order->status == 1) {
             $reason = translate('Order Created');
-        } else if($order->status == 2) {
+        } else if ($order->status == 2) {
             $reason = translate('Contract Signed');
-        } else if($order->status == 3) {
+        } else if ($order->status == 3) {
             $reason = translate('Approved for manufacturing');
         }
         // $order->setStatus('status-' .  $order->status, $reason);
@@ -97,14 +99,21 @@ class EVOrderController extends Controller
 
         do_action('order.change-status', $order);
 
+        $meta_row = new CoreMeta();
+        $meta_row->key = 'date_order_status_' . $order->status;
+        $meta_row->value = time();
+        $meta_row->subject_id = $order->id;
+        $meta_row->subject_type = Order::class;
+        $meta_row->save();
+
         activity()
-        ->performedOn($order)
-        ->causedBy(auth()->user())
-        ->withProperties([
-            'action' => 'changed_status',
-            'action_title' => 'Changed status to: ' . $order->status,
-        ])
-        ->log('Updated order status to: ' . OrderStatusEnum::labels()[$order->status]);
+            ->performedOn($order)
+            ->causedBy(auth()->user())
+            ->withProperties([
+                'action' => 'changed_status',
+                'action_title' => 'Changed status to: ' . $order->status,
+            ])
+            ->log('Updated order status to: ' . OrderStatusEnum::labels()[$order->status]);
 
         session()->flash('message', translate('Order status updated'));
 
@@ -113,7 +122,4 @@ class EVOrderController extends Controller
 
         return redirect()->back();
     }
-
-
-
 }

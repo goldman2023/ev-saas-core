@@ -459,7 +459,7 @@ x-cloak>
                         </div>
 
                         <div class="w-full flex flex-col">
-                            <template x-if="order_items">
+                            <template x-if="_.get(order_items, 'length', 0) > 0">
                                 <ul class="w-full flex flex-col gap-y-4">
                                     <template x-for="item,index in order_items">
                                         <li class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm "
@@ -483,6 +483,14 @@ x-cloak>
                                         </li>
                                     </template>
                                 </ul>
+                            </template>
+
+                            <template x-if="_.get(order_items, 'length', 0) <= 0">
+                                <div class="text-center py-2">
+                                    @svg('heroicon-o-plus-circle', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900">{{ translate('No order items') }}</h3>
+                                    <p class="mt-1 text-sm text-gray-500">{{ translate('Start by adding new item to the order') }}</p>
+                                </div>
                             </template>
 
                             <div class="w-full flex pt-4 mt-4 border-t">
