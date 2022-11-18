@@ -48,7 +48,6 @@
 @php
 $datasets = get_tenant_setting('pix_pro_dataset_samples');
 @endphp
-@if(false)
 <section class="pt-10 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8 border-t border-gray-200">
     <div class="container px-4 mx-auto">
         <div class="relative max-w-lg mx-auto lg:max-w-7xl">
@@ -102,6 +101,5 @@ $datasets = get_tenant_setting('pix_pro_dataset_samples');
         </div>
     </div>
 </section>
-@endif
 
 @include('components.custom.full-width-cta')
