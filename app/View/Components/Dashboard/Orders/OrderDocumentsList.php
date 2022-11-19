@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Dashboard\Orders;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Component;
 
 class OrderDocumentsList extends Component
@@ -19,24 +20,30 @@ class OrderDocumentsList extends Component
         $this->order = $order;
 
         $this->documents['contract'] = [
-            'url' => '#',
+            'id' => 1,
+            'url' => Storage::disk('local')->url('/documents/' . $order->id . '/contract-'. $order->id . '.pdf'),
             'title' => 'Contract',
         ];
 
         $this->documents['certificate'] = [
-            'url' => '#',
+            'id' => 2,
+            'url' => storage_path() . '/documents/' . $order->id . '/certificate-'. $order->id .'.pdf',
             'title' => 'Certificate',
         ];
 
         $this->documents['warrant'] = [
-            'url' => '#',
+            'id' => 3,
+            'url' => storage_path() . '/documents/' . $order->id . '/warrant-'. $order->id .'.pdf',
             'title' => 'Warrant',
         ];
 
         $this->documents['cash_check'] = [
-            'url' => '#',
+            'id' => 4,
+            'url' => storage_path() . '/documents/' . $order->id . '/cash-check-'. $order->id .'.pdf',
             'title' => 'Cash Check',
         ];
+
+
 
     }
 

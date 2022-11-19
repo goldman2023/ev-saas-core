@@ -486,7 +486,7 @@ x-cloak>
                             </template>
 
                             <template x-if="_.get(order_items, 'length', 0) <= 0">
-                                <div class="text-center py-2">
+                                <div class="text-center py-2 cursor-pointer" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal' })">
                                     @svg('heroicon-o-plus-circle', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
                                     <h3 class="mt-2 text-sm font-medium text-gray-900">{{ translate('No order items') }}</h3>
                                     <p class="mt-1 text-sm text-gray-500">{{ translate('Start by adding new item to the order') }}</p>
@@ -877,7 +877,8 @@ x-cloak>
                                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 pt-2">
                                     <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">{{ translate('Tax(percent)') }}</label>
                                     <div class="mt-1 sm:col-span-2 sm:mt-0">
-                                        <x-dashboard.form.input type="number" field="tax" :x="true" min="0" max="100" />
+                                        {{ get_tenant_setting('company_tax_rate') }}
+                                        <x-dashboard.form.input type="number" value="21" field="tax" :x="get_tenant_setting('company_tax_rate')" min="0" max="100" />
                                     </div>
                                 </div>
                                 {{-- END TAX --}}
