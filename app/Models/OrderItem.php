@@ -3,17 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\AttributeTrait;
 
 /**
  * App\Models\OrderItem
  */
 class OrderItem extends WeBaseModel
 {
+    use AttributeTrait;
+
     protected $table = 'order_items';
 
-    protected $fillable = ['subject_id', 'subject_type', 'name', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'quantity', 'serial_numbers', 'variant', 'created_at', 'updated_at'];
+    protected $fillable = ['subject_id', 'subject_type', 'name', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'quantity', 'ordering', 'serial_numbers', 'variant', 'created_at', 'updated_at'];
 
-    protected $visible = ['id', 'subject_id', 'subject_type', 'name', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'quantity', 'serial_numbers', 'variant', 'created_at', 'updated_at'];
+    protected $visible = ['id', 'subject_id', 'subject_type', 'name', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'quantity', 'ordering', 'serial_numbers', 'variant', 'created_at', 'updated_at'];
 
     protected $guarded = [];
 

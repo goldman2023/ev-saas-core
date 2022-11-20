@@ -25,7 +25,6 @@
         discount_type: @js($product->discount_type),
         tax_type: @js($product->tax_type),
         description: @entangle('product.description').defer,
-        {{--  TODO:  Attributes - `for_variations` is not being saved!!! --}}
         attributes: @js($custom_attributes),
         selected_attribute_values: @js($selected_predefined_attribute_values),
         selected_categories: @js($selected_categories),

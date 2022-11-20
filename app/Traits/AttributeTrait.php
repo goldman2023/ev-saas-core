@@ -120,6 +120,36 @@ trait AttributeTrait
         //         ->withOnly(['attribute_value', 'attribute']);
     }
 
+    /**
+     * deleteCustomAttributes
+     *
+     * This function goes through model's custom attributes and removes all relationships to the $model 
+     * and attribute values if attribute is not predefined.
+     * 
+     * Logic is based on attribute `is_predefined` condition:
+     * 1. Attribute is predefined - since attribute values for such attribute are shared between many relationships, we are removing ONLY RELATIONSHIPS, and NOT the VALUES
+     * 2. Attribute is NOT predefined - we are removing both RELATIONSHIPS and VALUES (because attribute values in this case are exclusive to relationship and $model)
+     * 
+     * IMPORTANT: attribute_relationships inside custom_attributes are PIVOT dynamic models which means that they lack id's (primary key)
+     * @return void
+     */
+    public function deleteCustomAttributes() {
+        foreach($this->custom_attributes as $attribute) {
+            if($attribute->is_predefined) {
+                AttributeRelationship::where([
+                    ['subject_id', $this->id],
+                    ['subject_type', $this::class],
+                ])->delete();
+            } else {
+                AttributeValue::destroy($attribute->attribute_values->pluck('id'));
+                AttributeRelationship::where([
+                    ['subject_id', $this->id],
+                    ['subject_type', $this::class],
+                ])->delete();
+            }
+        }
+    }
+
     public function seo_attributes()
     {
         return $this->custom_attributes->filter(function ($att, $index) {
@@ -174,11 +204,11 @@ trait AttributeTrait
      * @param bool $return_object
      * @return mixed
      */
-    public function getMappedAttributes(bool $return_object = true)
+    public function getMappedAttributes(bool $return_object = true, $custom_content_type = null)
     {
         // Get mapped attributes to display them in form select element for specific content type
         $attrs = null;
-
+        
         if (! empty($this->id)) {
             // For existing content type:
             // 1. Get attributes for that content type
@@ -188,8 +218,17 @@ trait AttributeTrait
                     ['subject_type', '=', $this::class],
                     ['subject_id', '=', $this->id],
                 ])->select('id', 'subject_type', 'subject_id', 'attribute_id', 'attribute_value_id', 'for_variations');
-            })->select('id', 'name', 'type', 'custom_properties')->where('content_type', $this::class)->get()->toArray();
+            })->select('id', 'name', 'type', 'custom_properties');
 
+            // Select Attributes of provided custom_content_type, otherwise use current model type
+            if(!empty($custom_content_type)) {
+                $attrs = $attrs->where('content_type', $custom_content_type);
+            } else {
+                $attrs = $attrs->where('content_type', $this::class);
+            }
+
+            $attrs = $attrs->get()->toArray();
+            
             // 3. GET attribute values ids based on all attribute relationships
             $attrs_values_idx = [];
             foreach ($attrs as $key => $att) {
@@ -257,16 +296,18 @@ trait AttributeTrait
                 if ($return_object) {
                     $att_object->selected = true; // All attributes are selected by default
                     $att_object->for_variations = ! empty($this->id) ? ($att_object->for_variations ?? false) : false; // false if create, stays the same as previously defined on edit
-                    $mapped[$att_object->id] = $att_object;
+                    $mapped['attribute.'.$att_object->id] = $att_object;
                 } else {
-                    $mapped[$att->id] = (object) array_merge($att_object, [
+                    $mapped['attribute.'.$att->id] = (object) array_merge($att_object, [
                         'selected' => true, // All attributes are selected by default
                         'for_variations' => ! empty($this->id) ? ($att_object['for_variations'] ?? false) : false,  // false if create, stays the same as previously defined on edit
                     ]);
                 }
             }
         }
-
+        // if($this instanceof \App\Models\OrderItem) {
+        //     dd($mapped);
+        // }
         return $mapped;
     }
 
