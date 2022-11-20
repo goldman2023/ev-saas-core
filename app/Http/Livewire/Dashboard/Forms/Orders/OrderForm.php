@@ -196,7 +196,8 @@ class OrderForm extends Component
                 OrderItem::destroy($order_items_idx_for_removal->all());
             }
 
-            foreach($this->order_items as $item) {
+            foreach($this->order_items as $index => $item) {
+
                 // If subject_type is empty - custom OrderItem
                 if(empty($item['subject_type'] ?? null)) {
                     $item_attributes = $item['custom_attributes'];
@@ -228,10 +229,11 @@ class OrderForm extends Component
                 // Order Item Attributes
                 if(empty($item['subject_type'] ?? null)) {
                     $this->setAttributes($order_item, $item_attributes, $selected_attribute_values); // set attributes to OrderItem
-
+                    
                     $item['custom_attributes'] = $item_attributes;
                     $item['selected_attribute_values'] = $selected_attribute_values;
                 }
+
             }
 
             DB::commit();

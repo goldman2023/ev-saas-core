@@ -15,6 +15,7 @@
             resetAttributesForm() {
                 for(const attribute_key in {{ $attributesField }}) {
                     if(!{{ $attribute }}.is_predefined) {
+                        {{ $attribute }}.attribute_values[0].id = null;
                         {{ $attribute }}.attribute_values[0].values = '';
                     } else {
                         for(let i = 0; i < {{ $attribute }}.attribute_values.length; i++ ) {

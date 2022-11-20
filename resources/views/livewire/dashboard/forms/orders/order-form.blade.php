@@ -472,7 +472,7 @@ x-cloak>
                                         :key="'order-items-'+index">
                                         
                                         <li class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm "
-                                            x-data="{}">
+                                            >
                                             <div class="flex-shrink-0" x-show="item?.thumbnail">
                                                 <img class="h-10 w-10 rounded-full" :src="window.WE.IMG.url(item?.thumbnail)" alt="">
                                             </div>
