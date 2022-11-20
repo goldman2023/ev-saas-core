@@ -23,6 +23,9 @@ class OrderDocumentsList extends Component
             'id' => 1,
             'url' => storage_path() . '/documents/' . $order->id . '/certificate-'. $order->id .'.pdf',
             'title' => 'Contract',
+            'meta' => [
+                'signed' => true,
+            ]
         ];
 
         $this->documents['certificate'] = [

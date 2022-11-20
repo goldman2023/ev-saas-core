@@ -14,9 +14,9 @@
             <div>
                 750 kg
                 {{-- Current way of getting an attribute value --}}
-                Width: {{ json_encode($order->order_items[0]->subject->get_attribute_value_by_id(6)[0]['values']) }}
+                Width: {{ json_encode($order->get_primary_order_item()->subject->get_attribute_value_by_id(6)[0]['values']) }}
 
-                Unit: {{ json_encode($order->order_items[0]->subject->get_attribute_value_by_id(6)[0]) }}
+                Unit: {{ json_encode($order->get_primary_order_item()->subject->get_attribute_value_by_id(6)[0]) }}
                 {{-- {{ json_encode($order->order_items[0]->get_attribute_value_by_id[9]) }} --}}
                 <br>
                 0 - 100 kg <br>

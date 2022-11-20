@@ -297,6 +297,10 @@ class Order extends WeBaseModel
         return $query->where('created_at', '>' , $date);
     }
 
+    public function get_primary_order_item() {
+        return $this->order_items()->first();
+    }
+
     public function comments() {
         return $this->morphMany(SocialComment::class, 'subject');
     }
