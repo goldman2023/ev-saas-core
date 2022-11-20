@@ -30,16 +30,6 @@ class Attribute extends WeBaseModel
 
     protected $appends = ['is_predefined'];
 
-    public static function boot()
-    {
-        parent::boot();
-
-        // TODO: Move this to AttributeObserver
-        static::deleting(function ($attribute) {
-            
-        });
-    }
-
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()

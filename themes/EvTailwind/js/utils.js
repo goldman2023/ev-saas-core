@@ -17,3 +17,7 @@ window.WE.utils = {
         return $bytes;
     },
 };
+
+window.deep_copy = function(target) {
+    return JSON.parse(JSON.stringify(target));
+};

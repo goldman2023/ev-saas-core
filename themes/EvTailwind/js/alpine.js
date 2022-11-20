@@ -1,13 +1,22 @@
 import Alpine from 'alpinejs';
 import persist from '@alpinejs/persist';
 import intersect from '@alpinejs/intersect';
-import collapse from '@alpinejs/collapse'
+import collapse from '@alpinejs/collapse';
+import { scope, refreshScope } from 'alpinejs/src/scope';
+// import { evaluateLater } from 'alpinejs/src/evaluator';
 
 try {
     /* eXtend Alpine and start it */
     Alpine.plugin(persist);
     Alpine.plugin(intersect);
     Alpine.plugin(collapse);
+
+    // $refresh
+    Alpine.magic('refresh', ($el, key) => {
+        return (component = $el) => {
+            refreshScope(component, scope(component));
+        }
+    });
 
     // Custom Magic Functions
     Alpine.magic('scrollToErrors', () => {
@@ -39,7 +48,6 @@ try {
             });
         };
     });
-
 
     window.Alpine = Alpine;
     Alpine.start();
