@@ -1,5 +1,5 @@
-<div class="fixed z-[10000] inset-0 overflow-y-auto" x-data="{
-    displayModal: false,
+<div class="{{ $containerClass }}" x-data="{
+    displayModal: {{ $displayModal }},
     for_id: @entangle('for_id'),
     editorjs_media_wrapper_id: @entangle('editorjs_media_wrapper_id'),
     media: @entangle('media'),
@@ -11,9 +11,9 @@
     search_string: @entangle('search_string'),
     page: @entangle('page'),
     isMediaSelected(file) {
-      if(this.selected.filter((item) => { return Number(item['id']) === Number(file.id); }).length > 0) 
+      if(this.selected.filter((item) => { return Number(item['id']) === Number(file.id); }).length > 0)
         return true;
-      else 
+      else
         return false;
     },
     selectMedia(file) {
@@ -53,7 +53,7 @@
 x-show="displayModal"
 x-cloak>
   <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" 
+    <div class="{{ $wrapperClass }}"
           x-show="displayModal"
           x-transition:enter="ease-out duration-300"
           x-transition:enter-start="opacity-0"
@@ -66,7 +66,7 @@ x-cloak>
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
 
-    <div class="max-w-[90%] lg:max-w-[1150px]  overflow-hidden relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left  shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full sm:p-6"
+    <div class="max-w-[90%] lg:max-w-[1150px]  overflow-hidden relative inline-block bg-white rounded-lg px-4 pt-5 pb-4 text-left  shadow-xl transform transition-all sm:my-8 sm:w-full sm:p-6"
           x-show="displayModal"
           x-transition:enter="ease-out duration-300"
           x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -74,7 +74,7 @@ x-cloak>
           x-transition:leave="ease-out duration-200"
           x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
           x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-      
+
       {{-- Dismiss modal - x button --}}
       <button type="button" class="absolute top-3 right-3" @click="closeLibrary()">
         @svg('heroicon-o-x', ['class' => 'w-5 h-5 text-gray-500'])
@@ -83,14 +83,14 @@ x-cloak>
       <div class="flex flex-col max-h-[85vh]" x-data="{
             active_tab: 'select_file',
         }" x-init="">
-    
+
           <div class="border-b border-gray-200 block">
             <nav class="flex space-x-4" aria-label="Tabs">
               <a href="#" class="px-3 py-2 font-medium text-sm rounded-md"
                 :class="{'bg-white text-indigo-700': active_tab === 'select_file', 'text-gray-500 hover:text-gray-700': active_tab !== 'select_file'}"
                 @click="active_tab = 'select_file'"> {{ translate('Select file(s)') }} </a>
-        
-              <a href="#" class="px-3 py-2 font-medium text-sm rounded-md" 
+
+              <a href="#" class="px-3 py-2 font-medium text-sm rounded-md"
                 :class="{'bg-white text-indigo-700': active_tab === 'upload_new', 'text-gray-500 hover:text-gray-700': active_tab !== 'upload_new'}"
                 @click="active_tab = 'upload_new'"> {{ translate('Upload new') }} </a>
             </nav>
@@ -98,7 +98,7 @@ x-cloak>
 
           <div class="w-full mt-3" x-show="active_tab === 'select_file'">
               {{-- Sort and Search bar --}}
-              <div class="w-full pb-3 mb-3 border-b border-gray-200 flex items-center justify-between"> 
+              <div class="w-full pb-3 mb-3 border-b border-gray-200 flex items-center justify-between">
                   <div x-data="{
                           sort_types: @js(\App\Enums\SortMediaLibraryEnum::labels()),
                           show_sort_dropdown: false,
@@ -110,7 +110,7 @@ x-cloak>
                                 @svg('heroicon-s-selector', ['class' => 'h-5 w-5 text-gray-400']);
                               </span>
                           </button>
-    
+
                           <ul class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
                               x-show="show_sort_dropdown"
                               x-transition:leave="transition ease-in duration-100"
@@ -121,11 +121,11 @@ x-cloak>
                               <template x-for="(type, key) in sort_types">
                                   <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer" @click="sort_by = key; show_sort_dropdown= false;">
                                     <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
-                                    <span class="font-normal block truncate" 
+                                    <span class="font-normal block truncate"
                                           :class="{'font-semibold': key === sort_by, 'font-normal': key !== sort_by }"
                                           x-text="type">
                                     </span>
-          
+
                                     <span class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4" x-show="key === sort_by">
                                         @svg('heroicon-o-check', ['class' => 'h-5 w-5'])
                                     </span>
@@ -154,9 +154,9 @@ x-cloak>
 
             {{-- Select files(s) --}}
             <div class="w-full" x-show="active_tab === 'select_file'">
-        
+
                 {{-- Selectable Files --}}
-                <div class="w-full mb-3"> 
+                <div class="w-full mb-3">
 
                   <template x-if="media !== null && media.length > 0">
                     <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-1">
@@ -173,8 +173,8 @@ x-cloak>
                       </template>
                     </ul>
                   </template>
-                    
-                    
+
+
                   {{-- Empty State --}}
                   <template x-if="media === null || media.length <= 0">
                       <div class="text-center py-6">
@@ -191,14 +191,14 @@ x-cloak>
                           </div>
                       </div>
                   </template>
-                    
+
                 </div>
             </div>
 
             {{-- Upload New --}}
             <div class="w-full relative" x-show="active_tab === 'upload_new'">
 
-              <x-tailwind-ui.system.spinner 
+              <x-tailwind-ui.system.spinner
                 class="absolute-center z-10 hidden"
                 spinner-class="h-8 w-8 text-primary"
                 wire:loading.class.remove="hidden"></x-tailwind-ui.system.spinner>
@@ -222,16 +222,16 @@ x-cloak>
                       </ul>
                     </template>
                   </div>
-                  
+
                   {{-- New image(s) --}}
                   <div class="w-full relative" x-data="{}" >
                     <div class="py-5 cursor-pointer">
-    
-                      <input type="file" class="absolute cursor-pointer inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0" 
-                        id="we-media-library__new-media-input" 
-                        wire:model="new_media" 
+
+                      <input type="file" class="absolute cursor-pointer inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0"
+                        id="we-media-library__new-media-input"
+                        wire:model="new_media"
                         multiple>
-    
+
                       <label for="we-media-library__new-media-input" class="mx-auto max-w-lg flex justify-center px-6 pt-5 pb-6 cursor-pointer border-2 border-gray-300 border-dashed rounded-md">
                           <div class="space-y-1 text-center">
                             <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -247,11 +247,11 @@ x-cloak>
                           </div>
                       </label>
                     </div>
-    
+
                     <x-system.invalid-msg field="new_media.*" class="mt-2 mb-4 flex justify-center"></x-system.invalid-msg>
                   </div>
                 </div>
-              
+
             </div>
 
           </div>
@@ -259,7 +259,7 @@ x-cloak>
           <div class="w-full shrink-0 flex justify-between border-t border-gray-200 pt-3" wire:loading.class="opacity-50 pointer-events-none">
             {{-- Pagination --}}
             <div class="w-full bg-white px-2 flex items-center justify-between sm:px-2">
-                  
+
               <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-start">
                 <div class="mr-3">
                   <p class="text-sm text-gray-700">
@@ -279,7 +279,7 @@ x-cloak>
                     @else
                       <div @click="page -= 1" class="mr-2 cursor-pointer relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Previous </div>
                     @endif
-    
+
                     @if ($page == $lastPageNumber)
                       <div class="mr-2 opacity-50 rml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Next </div>
                     @else

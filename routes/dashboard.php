@@ -31,6 +31,7 @@ use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DocumentGalleryController;
 use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\WeSubscriptionsController;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Http\Controllers\Integrations\WooCommerceController;
@@ -133,6 +134,9 @@ Route::middleware([
         Route::get('/invoices', [WeInvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoice/{id}/download', [WeInvoiceController::class, 'download_invoice'])->name('invoice.download');
         Route::get('/order/{order_id}/upcoming-invoice/download', [WeInvoiceController::class, 'download_upcoming_invoice'])->name('invoice.upcoming.download');
+
+
+        Route::get('/file-manager', [FileManagerController::class, 'index'])->name('file-manager.index');
 
         /* Tasks */
         Route::get('/tasks', [EVTaskController::class, 'index'])->name('tasks.index');

@@ -21,7 +21,7 @@ class OrderDocumentsList extends Component
 
         $this->documents['contract'] = [
             'id' => 1,
-            'url' => Storage::disk('local')->url('/documents/' . $order->id . '/contract-'. $order->id . '.pdf'),
+            'url' => storage_path() . '/documents/' . $order->id . '/certificate-'. $order->id .'.pdf',
             'title' => 'Contract',
         ];
 
