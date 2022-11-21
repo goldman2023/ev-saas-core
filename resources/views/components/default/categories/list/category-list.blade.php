@@ -15,7 +15,7 @@
             <div class="-my-2">
                 <div class="relative box-content overflow-x-auto py-2 xl:overflow-visible">
                     <div
-                        class="min-w-screen-xl flex  gap-8 px-4 sm:px-6 lg:px-8 xl:relative xl:grid xl:grid-cols-4 xl:gap-x-8 xl:space-x-0 xl:px-0">
+                        class="min-w-screen-xl flex  gap-8 px-4 sm:px-6 lg:px-8 xl:relative xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-x-0 xl:px-0">
                         @foreach ($categories as $category)
 
                         <a href="{{ $category->getPermalink() }}"
