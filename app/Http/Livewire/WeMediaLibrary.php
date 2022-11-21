@@ -26,7 +26,7 @@ class WeMediaLibrary extends Component
     protected $paginator;
 
     public $for_id = '';
-    
+
     public $editorjs_media_wrapper_id = '';
 
     public $media = [];
@@ -51,6 +51,12 @@ class WeMediaLibrary extends Component
 
     public $new_media = [];
 
+    public $display = 'modal'; // modal, inline
+    public $displayModal = false;
+    public $containerClass;
+    public $wrapperClass;
+    public $prePopulateMedia = false;
+
     protected $listeners = [
         'showMediaLibrary' => 'changeMediaLibrary',
     ];
@@ -73,8 +79,25 @@ class WeMediaLibrary extends Component
         return [];
     }
 
-    public function mount()
+    public function mount($display = 'modal', $prePopulateMedia = false)
     {
+        $this->display = $display;
+        $this->prePopulateMedia = $prePopulateMedia;
+        if($this->display == 'modal') {
+            $this->displayModal = 'false';
+            $this->containerClass = 'fixed z-[10000] inset-0 overflow-y-auto';
+            $this->wrapperClass = 'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity';
+        } else {
+            $this->prePopulateMedia = true;
+            $this->displayModal = 'true';
+            $this->containerClass = 'block z-[10000] inset-0 overflow-y-auto';
+            $this->wrapperClass = 'block inset-0 bg-gray-500 bg-opacity-75 transition-opacity';
+
+        }
+
+        if($this->prePopulateMedia) {
+            $this->populateMedia();
+        }
     }
 
     public function render()
@@ -124,7 +147,7 @@ class WeMediaLibrary extends Component
                     [
                         'file' => translate('Uploaded item is not a file.'),
                         'max' => translate('Maximum file size to upload is 12MB (12500 KB).'),
-                    ]    
+                    ]
                 );
 
                 try {
@@ -135,7 +158,7 @@ class WeMediaLibrary extends Component
 
                         if (isset(MediaService::getPermittedExtensions()[$extension])) {
                             $upload->file_original_name = null;
-    
+
                             $arr = explode('.', $media->getClientOriginalName());
                             for ($i = 0; $i < count($arr) - 1; $i++) {
                                 if ($i == 0) {
@@ -144,9 +167,9 @@ class WeMediaLibrary extends Component
                                     $upload->file_original_name .= '.'.$arr[$i];
                                 }
                             }
-    
+
                             $tenant_path = 'uploads/all';
-    
+
                             if (tenant('id')) {
                                 $tenant_path = 'uploads/'.tenant('id');
                             }
@@ -156,18 +179,18 @@ class WeMediaLibrary extends Component
                                 // Create Tenant folder on DO if it doesn't exist
                                 Storage::makeDirectory($tenant_path, 0775, true, true);
                             }
-    
+
                             try {
                                 Storage::makeDirectory($tenant_path, 0775, true, true);
                             } catch(\Exception $e) {
-    
+
                             }
-    
+
                             $new_filename = time().'_'.preg_replace("/\s+/", "", $media->getClientOriginalName());
-    
+
                             // Store Media to current Storage disk!
                             $media->storeAs($tenant_path, $new_filename, config('filesystems.default'));
-                            
+
                             $upload->extension = $extension;
                             $upload->file_name = $tenant_path.'/'.$new_filename;
                             $upload->user_id = auth()->user()->id;
@@ -175,7 +198,7 @@ class WeMediaLibrary extends Component
                             $upload->type = MediaService::getPermittedExtensions()[$extension];
                             $upload->file_size = $media->getSize();
                             $upload->save();
-    
+
                             $this->new_media[$key] = $upload->toArray();
                         }
                     } else {
@@ -213,8 +236,8 @@ class WeMediaLibrary extends Component
 
             if(!empty($failed_uploads)) {
                 $this->inform(
-                    sprintf(translate('%d files out of %d could not be uploaded.'), count($failed_uploads), $count_uploads), 
-                    '', 
+                    sprintf(translate('%d files out of %d could not be uploaded.'), count($failed_uploads), $count_uploads),
+                    '',
                     'fail'
                 );
 

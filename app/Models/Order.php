@@ -43,7 +43,7 @@ class Order extends WeBaseModel
         // 'updated_at' => 'datetime:d.m.Y H:i',
     ];
 
-    protected $fillable = ['shop_id', 'user_id', 'type', 'is_temp', 'email', 
+    protected $fillable = ['shop_id', 'user_id', 'type', 'is_temp', 'email',
         'billing_first_name', 'billing_last_name', 'billing_company', 'billing_address', 'billing_country', 'billing_state', 'billing_city', 'billing_zip',
         'phone_numbers', 'same_billing_shipping',
         'shipping_first_name', 'shipping_last_name', 'shipping_company', 'shipping_address', 'shipping_country', 'shipping_state', 'shipping_city', 'shipping_zip',
@@ -296,5 +296,13 @@ class Order extends WeBaseModel
         $date = \Carbon::now()->subDays($days);
 
         return $query->where('created_at', '>' , $date);
+    }
+
+    public function get_primary_order_item() {
+        return $this->order_items()->first();
+    }
+
+    public function comments() {
+        return $this->morphMany(SocialComment::class, 'subject');
     }
 }

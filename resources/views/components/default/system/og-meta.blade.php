@@ -12,6 +12,7 @@
 <meta name="twitter:image" content="{{ uploaded_asset(get_setting('meta_image')) }}">
 
 <!-- Open Graph data -->
+<meta property="og:url" content="{{  url()->current() }}"/>
 <meta property="og:title" content="{{ get_setting('meta_title') }}"/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="{{ route('home') }}"/>

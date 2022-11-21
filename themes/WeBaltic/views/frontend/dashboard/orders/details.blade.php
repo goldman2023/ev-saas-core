@@ -176,6 +176,11 @@
                     </ul>
                 </div>
                 <div id="myTabContent">
+                    <div class="card mb-3">
+                        <x-dashboard.orders.order-documents-list :order="$order"></x-dashboard.orders.order-documents-list>
+
+                    </div>
+
                     <div class="rounded-lg dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="mb-6">
                             <x-dashboard.orders.order-products-list :order="$order" :orderItems="$order_items">
@@ -355,10 +360,7 @@
                 </div>
             </div>
         </div>
-        <div class="card mb-3">
-            <x-dashboard.orders.order-documents-list :order="$order"></x-dashboard.orders.order-documents-list>
 
-        </div>
 
         <div class="card mb-3 mt-3">
 

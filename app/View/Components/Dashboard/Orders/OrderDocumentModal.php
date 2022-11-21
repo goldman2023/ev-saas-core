@@ -1,21 +1,22 @@
 <?php
 
-namespace App\View\Components\Default\Categories\List;
+namespace App\View\Components\Dashboard\Orders;
 
 use Illuminate\View\Component;
 
-class CategoryListSmall extends Component
+class OrderDocumentModal extends Component
 {
+    public $documentType;
+    public $document;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($document)
     {
         //
-
-        dd("11");
+        $this->document = $document;
     }
 
     /**
@@ -25,6 +26,6 @@ class CategoryListSmall extends Component
      */
     public function render()
     {
-        return view('components.default.categories.list.category-list-small');
+        return view('components.dashboard.orders.order-document-modal');
     }
 }

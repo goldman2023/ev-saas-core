@@ -1,7 +1,7 @@
-<div class="text-5xl font-bold leading-none text-gray-100 ">
+<h1 class="text-5xl font-bold leading-none text-gray-100 ">
     <div class="">{{ translate('Welcome to') }} </div>
     <div class="">{{ translate('our community') }}</div>
-</div>
+</h1>
 <div class="mt-6 text-lg leading-6 text-gray-400 ">
     {{ translate('Join the global community of likeminded people') }}
 </div>
