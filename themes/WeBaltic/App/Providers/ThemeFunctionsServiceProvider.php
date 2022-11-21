@@ -6,6 +6,7 @@ namespace WeThemes\WeBaltic\App\Providers;
 
 use App\Models\CoreMeta;
 use App\Models\Order;
+use App\Models\Upload;
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Barryvdh\DomPDF\Facade\Pdf;

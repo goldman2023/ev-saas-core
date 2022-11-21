@@ -14,6 +14,8 @@ class CategoryListSmall extends Component
     public function __construct()
     {
         //
+
+        dd("11");
     }
 
     /**

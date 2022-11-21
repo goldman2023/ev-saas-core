@@ -46,6 +46,11 @@
                         <span class="font-medium text-gray-900 dark:text-white">California, USA</span>
                     </dd>
 
+                    <x-dashboard.forms.core-meta-field :subject="$document" field="notes"></x-dashboard.forms.core-meta-field>
+
+                    <x-dashboard.forms.core-meta-field field="assembler"></x-dashboard.forms.core-meta-field>
+
+
                     <dt class="mb-2 leading-none text-gray-500 dark:text-gray-400">
                         {{ translate('Notes') }}
                     </dt>
