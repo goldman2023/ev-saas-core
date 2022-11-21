@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App;
-use App\Models\AttributeGroup;
-use App\Models\AttributeTranslation;
-use App\Traits\TranslationTrait;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
+use App\Models\AttributeGroup;
+use App\Enums\AttributeTypeEnum;
+use App\Traits\TranslationTrait;
 use Spatie\Sluggable\SlugOptions;
+use App\Models\AttributeTranslation;
+use Illuminate\Database\Eloquent\Model;
 
 class Attribute extends WeBaseModel
 {
@@ -28,7 +29,7 @@ class Attribute extends WeBaseModel
         'is_default' => 'boolean',
     ];
 
-    protected $appends = ['is_predefined'];
+    protected $appends = ['identificator', 'is_predefined'];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -77,6 +78,15 @@ class Attribute extends WeBaseModel
      *
      * @return bool
      */
+    public function getIdentificatorAttribute()
+    {
+        return sprintf('%s|%s', $this->slug, $this->content_type);
+    }
+    /**
+     * Checks if attribute has predefined attribute values - only dropdown/checkbox/radio can have predefined value
+     *
+     * @return bool
+     */
     public function getIsPredefinedAttribute()
     {
         return $this->type === 'dropdown' || $this->type === 'checkbox' || $this->type === 'radio';
@@ -105,6 +115,21 @@ class Attribute extends WeBaseModel
     public function group()
     {
         return $this->belongsTo(AttributeGroup::class, 'group_id');
+    }
+    
+    /**
+     * getAttrVal
+     *
+     * Gets the value of the attribute
+     * 
+     * @return void
+     */
+    public function getAttrVal() {
+        if(in_array($this->type, AttributeTypeEnum::getSingles())) {
+            return $this->attribute_values->first()?->values ?? null;
+        }
+
+        return $this->attribute_values->pluck('values');
     }
 
     public function get_group()
