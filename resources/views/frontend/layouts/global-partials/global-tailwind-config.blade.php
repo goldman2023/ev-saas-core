@@ -245,7 +245,7 @@ if($colors) {
 
 
         .container {
-            @apply w-[1140px] max-w-[100%] px-5 lg:px-0 my-0 mx-auto;
+            @apply w-[1280px] max-w-[100%] px-5 lg:px-0 my-0 mx-auto;
         }
 
         [data-f-id] {

@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\Upload;
+use App\Models\UploadsContentRelationship;
 use App\Models\WeWooImport;
 use Codexshaper\WooCommerce\Facades\Category as WooCategory;
 use Codexshaper\WooCommerce\Facades\Coupon as WooCoupon;
@@ -89,7 +90,7 @@ class WooCommerceController extends Controller
             if (tenant('id')) {
                 $tenant_path = 'uploads/'.tenant('id');
             }
-
+            /* Save Thumbnail */
             try {
                 $featured_image = Storage::disk(config('filesystems.default'))->put($tenant_path.'/'.$product->images[0]->name, file_get_contents($product->images[0]->src), 'public');
                 $upload = new Upload();
@@ -112,6 +113,33 @@ class WooCommerceController extends Controller
             }
 
             $new_product->save();
+
+            /* Save gallery images */
+            foreach($product->images as $image) {
+                $featured_image = Storage::disk(config('filesystems.default'))->put($tenant_path.'/'.$image->name, file_get_contents($image->src), 'public');
+                $upload = new Upload();
+
+                $upload->file_original_name = $image->name;
+
+                $upload->extension = '.png';
+                /* TODO: Fix extension */
+                $upload->file_name = $tenant_path.'/'.$image->name;
+                $upload->user_id = auth()->user()->id;
+                $upload->shop_id = empty(MyShop::getShopID()) ? null : MyShop::getShopID();
+                $upload->type = 'image';
+                $upload->file_size = '99'; // TODO : get file size
+                $upload->save();
+
+                $upload_relationship = new UploadsContentRelationship();
+                $upload_relationship->subject_type = Product::class;
+                $upload_relationship->subject_id = $new_product->id;
+                $upload_relationship->relation_type = 'gallery';
+                $upload_relationship->upload_id = $upload->id;
+                $upload_relationship->order = 1;
+                $upload_relationship->save();
+            }
+
+
 
             /* Add import meta  */
             try {

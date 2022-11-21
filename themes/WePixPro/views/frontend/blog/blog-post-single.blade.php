@@ -7,6 +7,7 @@
 <meta property="og:title" content="{{ $blog_post->getPageMeta()['title'] }}" />
 <meta property="og:type" content="article" />
 <meta property="og:locale" content="en_US" />
+<meta property="og:url" content="{{  url()->current() }}"/>
 <meta property="og:article:author" content="article" />
 <meta property="og:article:published_time" content="{{ $blog_post->created_at }}" />
 <meta property="og:article:modified_time" content="{{ $blog_post->updated_at }}" />

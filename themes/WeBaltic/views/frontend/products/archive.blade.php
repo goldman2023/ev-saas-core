@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="bg-white">
+<div class="bg-gray-100 pt-8">
 
 
     <div class="max-w-7xl mx-auto mt-8">

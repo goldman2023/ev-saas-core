@@ -292,6 +292,17 @@ class EVService
                         ],
                     ],
                     [
+                        'label' => translate('File Manager'),
+                        'icon' => 'heroicon-o-paper-clip',
+                        'route' => route('file-manager.index'),
+                        'route_name' => 'file-manager.index',
+
+                        'is_active' => areActiveRoutes(['file-manager.index', 'page.create']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => [], // TODO: Add App Pages Permissions
+                        'enabled' => true,
+                    ],
+                    [
                         'label' => translate('Sections'),
                         'icon' => 'heroicon-o-collection',
                         'route' => route('sections.index'),
