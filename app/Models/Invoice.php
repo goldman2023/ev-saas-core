@@ -131,12 +131,6 @@ class Invoice extends WeBaseModel
                 'folder' => 'invoices/',
                 'multiple' => true,
             ],
-            [
-                'property_name' => 'documents',
-                'relation_type' => 'documents',
-                'folder' => 'invoices/documents/',
-                'multiple' => true,
-            ],
         ];
     }
 
