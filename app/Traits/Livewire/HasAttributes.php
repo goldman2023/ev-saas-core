@@ -4,9 +4,9 @@ namespace App\Traits\Livewire;
 
 use Categories;
 use App\Models\Attribute;
-use App\Models\AttributeValueTranslation;
 use App\Models\AttributeValue;
 use App\Models\AttributeRelationship;
+use App\Models\AttributeValueTranslation;
 
 trait HasAttributes
 {
@@ -18,66 +18,80 @@ trait HasAttributes
         
     }
 
-    protected function setPredefinedAttributeValues(&$model)
-    {
-        // Set predefined attribute values AND select specific values if it's necessary
-        foreach ($this->custom_attributes as $attribute) {
-            if ($attribute->is_predefined) {
-                if (isset($model->id) && ! empty($model->id)) {
-                    // edit product
-                    $product_attribute = $model->custom_attributes->firstWhere('id', $attribute->id);
-
-                    if ($product_attribute instanceof \App\Models\Attribute) {
-                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck('id');
-                    } else {
-                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
-                    }
-                } else {
-                    // insert product
-                    $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
-                }
-            }
-        }
-    }
-
-    public function refreshAttributes(&$model)
-    {
-        $this->custom_attributes = $model->getMappedAttributes();
+    public static function initAttributes(&$model, &$custom_attributes, &$selected_predefined_attribute_values, $custom_content_type = null) {
+        $custom_attributes = $model->getMappedAttributes(custom_content_type: $custom_content_type);
+        $selected_predefined_attribute_values = [];
         
         // Set default attributes
-        foreach ($this->custom_attributes as $key => $attribute) {
+        foreach ($custom_attributes as $key => $attribute) {
             if ($attribute->is_predefined) {
                 $attribute->selcted_values = '';
             }
 
-            if (empty($this->custom_attributes[$key]->attribute_values)) {
+            if (empty($custom_attributes[$key]->attribute_values)) {
                 if (! $attribute->is_predefined) {
-                    $this->custom_attributes[$key]->attribute_values[] = [
+                    $custom_attributes[$key]->attribute_values[] = [
                         'id' => null,
                         'attribute_id' => $attribute->id,
                         'values' => '',
                         'selected' => true,
                     ];
                 } else {
-                    $this->custom_attributes[$key]->attribute_values = [];
+                    $custom_attributes[$key]->attribute_values = [];
                 }
             }
         }
         
-        $this->setPredefinedAttributeValues($model);
+        self::initPredefinedAttributeValues($model, $custom_attributes, $selected_predefined_attribute_values);
     }
+
+    public static function initPredefinedAttributeValues(&$model, &$custom_attributes, &$selected_predefined_attribute_values)
+    {
+        // Set predefined attribute values AND select specific values if it's necessary
+        foreach ($custom_attributes as $attribute) {
+            if ($attribute->is_predefined) {
+                if (isset($model->id) && ! empty($model->id)) {
+                    // edit product
+                    $product_attribute = $model->custom_attributes->firstWhere('id', $attribute->id);
+                    
+                    if ($product_attribute instanceof \App\Models\Attribute) {
+                        $selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck('id')->toArray();
+                    } else if(is_array($product_attribute) && !empty($product_attribute) && !empty($product_attribute?->custom_attributes ?? [])) {
+
+                        $selected_predefined_attribute_values['attribute.'.$attribute->id] = collect($product_attribute->attribute_values)->pluck('id')->toArray();
+                    } else {
+                        $selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
+                    }
+                } else {
+                    // insert product
+                    $selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
+                }
+            }
+        }
+
+    }
+
+    public function refreshAttributes(&$model)
+    {
+        self::initAttributes($model, $this->custom_attributes, $this->selected_predefined_attribute_values);
+    }
+
 
     /**
      * @throws \Exception
      */
-    protected function setAttributes(&$model)
+    protected function setAttributes(&$model, $custom_attributes = null, $selected_predefined_attribute_values = null)
     {
-        $selected_attributes = collect($this->custom_attributes)->filter(function ($att, $key) {
+        if(empty($custom_attributes)) {
+            $custom_attributes = $this->custom_attributes;
+        }
+
+        $selected_attributes = collect($custom_attributes)->filter(function ($att, $key) {
             $att = (object) $att;
 
             return $att->selected === true;
         });
-        
+
         if ($selected_attributes) {
             foreach ($selected_attributes as $att) {
                 $attribute = new Attribute();
@@ -90,7 +104,7 @@ trait HasAttributes
                     // Is-predefined attributes are dropdown/radio/checkbox and they have predefined values
                     // while other types have only one item in values array - with an ID (existing value) or without ID (not yet added value, just default template)
                     if (! $att->is_predefined) {
-                        // Predefined attributes
+                        // Freestyle attributes
 
                         foreach ($att_values as $key => $att_value) {
                             if (empty($att_value['values'] ?? null)) {
@@ -115,8 +129,13 @@ trait HasAttributes
                             $att_values[$key] = $attribute_value_row;
                         }
                     } else {
-                        // Freestyle attributes
-                        $selected_attribute_values = $this->selected_predefined_attribute_values['attribute.'.$att->id] ?? [];
+                        // Predefined attributes
+
+                        if(!empty($selected_predefined_attribute_values)) {
+                            $selected_attribute_values = $selected_predefined_attribute_values['attribute.'.$att->id] ?? [];
+                        } else {
+                            $selected_attribute_values = $this->selected_predefined_attribute_values['attribute.'.$att->id] ?? [];
+                        }
 
                         foreach ($att_values as $key => $att_value) {
                             $attribute_value_row = AttributeValue::find($att_value['id']);

@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <title>@yield('meta_title', get_site_name() .' | '.get_tenant_setting('site_motto'))</title>
+    <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
+    {{-- <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )"> --}}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
+    <link rel='canonical' href='@yield('canonical_link',  url()->current() )' />
+
 
     @yield('meta')
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -18,7 +23,8 @@
     SITE NAME:
     To Use Site name globaly, use helper function get_site_name() - it's an alias fo get_setting('site_name')
     --}}
-    <title>@yield('meta_title', get_site_name() .' | '.get_tenant_setting('site_motto'))</title>
+
+
     <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">

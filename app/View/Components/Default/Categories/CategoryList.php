@@ -21,7 +21,7 @@ class CategoryList extends Component
      *
      * @return void
      */
-    public function __construct($selectedCategory = null, $slider = false, $style = 'category-list-small')
+    public function __construct($selectedCategory = null, $slider = false, $style = 'category-list')
     {
         $this->categories = Categories::getAll();
         $this->selectedCategory = $selectedCategory;

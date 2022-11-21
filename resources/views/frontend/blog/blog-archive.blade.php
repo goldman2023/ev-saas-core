@@ -13,6 +13,7 @@
 @section('meta')
 <meta property="og:title" content="{{ get_site_name() }} {{ translate('Blog') }}" />
 <meta property="og:type" content="article" />
+<meta property="og:url" content="{{  url()->current() }}"/>
 <meta property="og:locale" content="en_US" />
 <meta property="og:image" content="{{ get_tenant_setting('seo_meta_image') }}" />
 <meta property="og:site_name" content="{{ get_site_name() }}" />

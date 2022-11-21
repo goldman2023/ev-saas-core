@@ -2,8 +2,11 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Orders;
 
+use Uuid;
+use Payments;
 use App\Models\Order;
 use App\Models\Invoice;
+use App\Models\Product;
 use Livewire\Component;
 use App\Models\OrderItem;
 use App\Enums\OrderTypeEnum;
@@ -12,22 +15,23 @@ use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusEnum;
 use App\Traits\Livewire\RulesSets;
 use Illuminate\Support\Facades\DB;
-use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\HasCoreMeta;
-use Uuid;
-use Payments;
+use App\Traits\Livewire\HasAttributes;
+use App\Traits\Livewire\DispatchSupport;
 
 class OrderForm extends Component
 {
     use RulesSets;
     use DispatchSupport;
     use HasCoreMeta;
-
+    use HasAttributes;
 
     public $order;
     public $order_items = [];
     public $is_update;
     public $hideShipping;
+
+    protected $listeners = ['refreshComponent' => '$refresh'];
 
     /**
      * Create a new component instance.
@@ -52,29 +56,57 @@ class OrderForm extends Component
         $this->is_update = !empty($this->order->id) ? true : false;
         $this->hideShipping = $hideShipping;
 
+        $fake_product = new Product();
+        $this->refreshAttributes($fake_product);
+
         if(!empty($this->order->order_items)) {
             foreach($this->order->order_items as $item) {
-                $this->order_items[] = [
-                    'id' => $item->id,
-                    'subject_type' => base64_encode($item->subject_type ?? ''),
-                    'subject_id' => $item->subject_id ?? null,
-                    'name' => $item->name,
-                    'excerpt' => $item->excerpt,
-                    'qty' => $item->quantity,
-                    'unit_price' => $item->base_price,
-                    'base_price' => $item->base_price,
-                    'subtotal_price' => $item->subtotal_price,
-                    'total_price' => $item->total_price,
-                    'tax' => $item->tax,
-                    'thumbnail' => !empty($item->subject) ? ($item->subject?->thumbnail->file_name ?? null) : '',
-                ];
+                
+                if(!empty($item->subject_type)) {
+                    $this->order_items[] = [
+                        'id' => $item->id,
+                        'subject_type' => base64_encode($item->subject_type ?? ''),
+                        'subject_id' => $item->subject_id ?? null,
+                        'name' => $item->name,
+                        'excerpt' => $item->excerpt,
+                        'qty' => $item->quantity,
+                        'unit_price' => $item->base_price,
+                        'base_price' => $item->base_price,
+                        'subtotal_price' => $item->subtotal_price,
+                        'total_price' => $item->total_price,
+                        'tax' => $item->tax,
+                        'thumbnail' => !empty($item->subject) ? ($item->subject?->thumbnail->file_name ?? null) : '',
+                    ];
+                } else {
+                    $custom_attributes = [];
+                    $selected_predefined_attribute_values = [];
+                    self::initAttributes($item, $custom_attributes, $selected_predefined_attribute_values, \App\Models\Product::class);
+                    
+                    $this->order_items[] = [
+                        'id' => $item->id,
+                        'subject_type' => null,
+                        'subject_id' => null,
+                        'name' => $item->name,
+                        'excerpt' => $item->excerpt,
+                        'qty' => $item->quantity,
+                        'unit_price' => $item->base_price,
+                        'base_price' => $item->base_price,
+                        'subtotal_price' => $item->subtotal_price,
+                        'total_price' => $item->total_price,
+                        'tax' => 0,
+                        'thumbnail' => '',
+                        'custom_attributes' => $custom_attributes,
+                        'selected_attribute_values' => $selected_predefined_attribute_values,
+                    ];
+                }
+                
             }
         }
     }
 
     protected function rules()
     {
-        $rules =  apply_filters('livewire-form-rules', [
+        $rules =  apply_filters('livewire-order-form-rules', [
             'order.shop_id' => [ 'required' ], //  Rule::in(PageTypeEnum::implodedValues())
             'order.user_id' => [ 'nullable' ],
             'order.type' => ['required', Rule::in(OrderTypeEnum::toValues())],
@@ -105,7 +137,8 @@ class OrderForm extends Component
             'order.tracking_number' => ['nullable'],
             'order.note' => ['nullable'],
             'order.terms' => ['nullable'],
-            'core_meta' => ['nullable']
+            'core_meta' => ['nullable'],
+            'order_items' => ['nullable'],
         ]);
 
         return $rules;
@@ -153,17 +186,27 @@ class OrderForm extends Component
             $this->order->save();
 
             // Remove missing previous order_items (if any)
-            $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')->filter();
+            $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')?->filter() ?? [];
             $previous_order_items_idx_from_db = $this->order->order_items?->pluck('id')?->filter() ?? [];
 
-            $order_items_idx_for_removal = $previous_order_items_idx_from_db->diff($current_order_items_idx_from_db);
+            $order_items_idx_for_removal = $previous_order_items_idx_from_db->diff($current_order_items_idx_from_db)->values();
 
             // Remove missing order items
             if($order_items_idx_for_removal->isNotEmpty()) {
                 OrderItem::destroy($order_items_idx_for_removal->all());
             }
 
-            foreach($this->order_items as $item) {
+            foreach($this->order_items as $index => $item) {
+
+                // If subject_type is empty - custom OrderItem
+                if(empty($item['subject_type'] ?? null)) {
+                    $item_attributes = $item['custom_attributes'];
+                    $selected_attribute_values = $item['selected_attribute_values'];
+
+                    unset($item['custom_attributes']);
+                    unset($item['selected_attribute_values']);
+                }
+
                 if(!empty($item['id'])) {
                     $order_item = OrderItem::find($item['id'])->fill($item);
                 } else {
@@ -172,7 +215,7 @@ class OrderForm extends Component
 
                 $order_item->order_id = $this->order->id;
 
-                if(!empty($item['subject_type'] ?? '')) {
+                if(!empty($item['subject_type'] ?? null)) {
                     $order_item->subject_type = base64_decode($item['subject_type']);
                 } else {
                     $order_item->subject_id = null;
@@ -180,19 +223,31 @@ class OrderForm extends Component
                 }
 
                 $order_item->quantity = (float) $item['qty'];
+
                 $order_item->save();
+
+                // Order Item Attributes
+                if(empty($item['subject_type'] ?? null)) {
+                    $this->setAttributes($order_item, $item_attributes, $selected_attribute_values); // set attributes to OrderItem
+                    
+                    $item['custom_attributes'] = $item_attributes;
+                    $item['selected_attribute_values'] = $selected_attribute_values;
+                }
+
             }
 
             DB::commit();
 
             $this->inform(translate('Order successfully saved!'), '', 'success');
+            
+            $this->emitSelf('refreshComponent');
 
             if (!$this->is_update) {
                 return redirect()->route('order.edit', $this->order->id);
             }
         } catch (\Exception $e) {
             DB::rollBack();
-
+            dd($e);
             if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating an order...Please try again.'));
                 $this->inform(translate('There was an error while updating an order...Please try again.'), '', 'fail');

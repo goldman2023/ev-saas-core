@@ -6,7 +6,7 @@
     show_mobile_menu: false,
 }">
     {{-- Header settings should include Background among other things + Sticky behavior (yes/no) --}}
-    <div class="relative bg-transparent">
+    <div class="relative bg-white">
         <div class="bg-gray-900">
             <div class="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
               <!-- Currency selector -->
@@ -34,11 +34,13 @@
               </p>
 
               <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <a href="#" class="text-sm font-medium text-white hover:text-gray-100">
-                   Tel.: 8 (671) 81007
+                <a href="#" class="flex items-center	 text-sm font-medium text-white hover:text-gray-100">
+                   @svg('heroicon-o-phone-incoming', ['class' => 'h-4 h-4 mr-2'])
+                    Tel.: 8 (671) 81007
                 </a>
                 <span class="h-6 w-px bg-gray-600" aria-hidden="true"></span>
-                <a href="#" class="text-sm font-medium text-white hover:text-gray-100">
+                <a href="#" class="flex items-center	 text-sm font-medium text-white hover:text-gray-100">
+                    @svg('heroicon-o-mail', ['class' => 'h-4 h-4 mr-2'])
                     info@baltic-priekabos.lt
                 </a>
               </div>

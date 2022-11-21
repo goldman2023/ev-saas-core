@@ -56,11 +56,14 @@
 @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
 @init-form.window=""
 x-init="$watch('order_items', order_items => {
-    order_items.forEach((item, index) => {
-        order_items[index].base_price = Number(order_items[index].unit_price);
-        order_items[index].subtotal_price = Number(order_items[index].qty) * order_items[index].unit_price;
-        order_items[index].total_price = Number(order_items[index].qty) * order_items[index].unit_price;
-    });
+    if(order_items) {
+        for(index in order_items) {
+            order_items[index].base_price = Number(order_items[index].unit_price);
+            order_items[index].subtotal_price = Number(order_items[index].qty) * order_items[index].unit_price;
+            order_items[index].total_price = Number(order_items[index].qty) * order_items[index].unit_price;
+        }
+    }
+    
     calculateTotals();
 });
 $watch('tax', order_items => calculateTotals());
@@ -449,7 +452,11 @@ x-cloak>
                     {{-- END Order Information --}}
 
                     {{-- Order Items --}}
-                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
+                    {{-- TODO: Implement ordering of order_items! (draggable sorting) --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow"
+                        :key="'order-items-form'"
+                        wire:ignore>
+
                         <div class="w-full pb-4 mb-4 border-b ">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">
                                 {{ translate('Order Items') }}
@@ -461,9 +468,11 @@ x-cloak>
                         <div class="w-full flex flex-col">
                             <template x-if="_.get(order_items, 'length', 0) > 0">
                                 <ul class="w-full flex flex-col gap-y-4">
-                                    <template x-for="item,index in order_items">
+                                    <template x-for="(item, index) in order_items"
+                                        :key="'order-items-'+index">
+                                        
                                         <li class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm "
-                                            x-data="{}">
+                                            >
                                             <div class="flex-shrink-0" x-show="item?.thumbnail">
                                                 <img class="h-10 w-10 rounded-full" :src="window.WE.IMG.url(item?.thumbnail)" alt="">
                                             </div>
@@ -477,6 +486,13 @@ x-cloak>
                                                 <span x-text="FX.formatPrice(item.total_price)"></span>
                                                 <input type="number" min="0" x-model="item.qty" class="form-standard max-w-[90px]" />
                                             </div>
+
+                                            <template x-if="_.get(item, 'subject_id', null) === null && _.get(item, 'subject_type', null) === null">
+                                                <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal', 'order_item_index': index })" >
+                                                    {{ translate('Edit') }}
+                                                </button>
+                                            </template>
+                                            
                                             <div class="flex-shrink-0 flex items-center " @click="order_items.splice(index, 1);">
                                                 @svg('heroicon-s-x', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
                                             </div>
@@ -485,79 +501,48 @@ x-cloak>
                                 </ul>
                             </template>
 
+                            {{-- Empty state --}}
                             <template x-if="_.get(order_items, 'length', 0) <= 0">
-                                <div class="text-center py-2">
+                                <div class="text-center py-2 cursor-pointer" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal' })">
                                     @svg('heroicon-o-plus-circle', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
                                     <h3 class="mt-2 text-sm font-medium text-gray-900">{{ translate('No order items') }}</h3>
                                     <p class="mt-1 text-sm text-gray-500">{{ translate('Start by adding new item to the order') }}</p>
                                 </div>
                             </template>
 
+                            {{-- Add new item --}}
                             <div class="w-full flex pt-4 mt-4 border-t">
                                 <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal' })" >
                                     {{ translate('Add new item') }}
                                 </button>
                             </div>
 
-                            <x-system.form-modal id="order-item-selector-modal" title="Add New Order Item" class="!max-w-xl">
+                            <x-system.form-modal id="order-item-selector-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
                                 <div class="w-full flex flex-col" x-data="{
-                                    q: '',
-                                    results: [],
-                                    content_type: null,
-                                    available_content_types: [
-                                        {
-                                            title: '{{ translate('Product') }}',
-                                            slug: 'product',
-                                            model_class: @js(base64_encode(\App\Models\Product::class)),
-                                        },
-                                        {
-                                            title: '{{ translate('Product Addon') }}',
-                                            slug: 'product_addon',
-                                            model_class: @js(base64_encode(\App\Models\ProductAddon::class)),
-                                        },
-                                        {
-                                            title: '{{ translate('Custom') }}',
-                                            slug: 'custom',
-                                            model_class: '',
-                                        }
-                                    ],
-                                    custom_order_item: {
-                                        name: '',
-                                        excerpt: '',
-                                        qty: 1,
-                                        unit_price: 0,
-                                        base_price: 0,
-                                        subtotal_price: 0,
-                                        total_price: 0,
-                                    },
-                                    getCurrentContentTypeOptions() {
-                                        return this.available_content_types.find(item => item.slug === this.content_type);
-                                    },
-                                    search() {
-                                        let fetch_route = null;
-
-                                        if(this.content_type === 'product') {
-                                            fetch_route = '{{ route('api.dashboard.products.search') }}';
-                                        } else if(this.content_type === 'product_addons') {
-                                            fetch_route = '{{ route('api.dashboard.products.addons.search') }}';
-                                        }
-
-                                        if(fetch_route) {
-                                            wetch.get(fetch_route+'?q='+this.q)
-                                            .then(data => {
-                                                if(data.status === 'success' && data.results) {
-                                                    this.results = data.results;
-                                                }
-                                            })
-                                            .catch(error => {
-                                                alert(error);
-                                            });
-                                        }
-                                    },
-                                    reset() {
-                                        this.q = '';
-                                        this.results = null;
-                                        this.custom_order_item = {
+                                        q: '',
+                                        results: [],
+                                        content_type: null,
+                                        available_content_types: [
+                                            {
+                                                title: '{{ translate('Product') }}',
+                                                slug: 'product',
+                                                model_class: @js(base64_encode(\App\Models\Product::class)),
+                                            },
+                                            {
+                                                title: '{{ translate('Product Addon') }}',
+                                                slug: 'product_addon',
+                                                model_class: @js(base64_encode(\App\Models\ProductAddon::class)),
+                                            },
+                                            {
+                                                title: '{{ translate('Custom') }}',
+                                                slug: 'custom',
+                                                model_class: '',
+                                            }
+                                        ],
+                                        hide_content_selector: false,
+                                        order_item_index: null,
+                                        custom_order_item: {
+                                            id: null,
                                             name: '',
                                             excerpt: '',
                                             qty: 1,
@@ -565,48 +550,121 @@ x-cloak>
                                             base_price: 0,
                                             subtotal_price: 0,
                                             total_price: 0,
-                                        };
-                                    },
-                                    select(item) {
-                                        let existing_item_index = order_items.findIndex(order_item => {
-                                            return order_item.subject_type == this.getCurrentContentTypeOptions().model_class && order_item.subject_id == item.id;
-                                        });
+                                            custom_attributes: @js($custom_attributes),
+                                            selected_attribute_values: @js($selected_predefined_attribute_values),
+                                        },
+                                        getCurrentContentTypeOptions() {
+                                            return this.available_content_types.find(item => item.slug === this.content_type);
+                                        },
+                                        search() {
+                                            let fetch_route = null;
 
-                                        if(existing_item_index !== -1) {
-                                            order_items[existing_item_index].qty = Number(order_items[existing_item_index].qty) + 1;
-                                            order_items[existing_item_index].base_price = Number(order_items[existing_item_index].unit_price);
-                                            order_items[existing_item_index].subtotal_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
-                                            order_items[existing_item_index].total_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
-                                        } else {
-                                            order_items.push({
-                                                id: null,
-                                                subject_type: this.getCurrentContentTypeOptions().model_class,
-                                                subject_id: item.id,
-                                                name: item.name,
-                                                excerpt: item.excerpt,
-                                                qty: 1,
-                                                unit_price: item.unit_price,
-                                                base_price: item.unit_price,
-                                                subtotal_price: item.unit_price * 1,
-                                                total_price: item.unit_price * 1,
-                                                tax: 0,
-                                                thumbnail: item.thumbnail?.file_name,
+                                            if(this.content_type === 'product') {
+                                                fetch_route = '{{ route('api.dashboard.products.search') }}';
+                                            } else if(this.content_type === 'product_addons') {
+                                                fetch_route = '{{ route('api.dashboard.products.addons.search') }}';
+                                            }
+
+                                            if(fetch_route) {
+                                                wetch.get(fetch_route+'?q='+this.q)
+                                                .then(data => {
+                                                    if(data.status === 'success' && data.results) {
+                                                        this.results = data.results;
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    alert(error);
+                                                });
+                                            }
+                                        },
+                                        reset() {
+                                            this.q = '';
+                                            this.results = null;
+
+                                            this.order_item_index = null;
+                                            this.hide_content_selector = false;
+
+                                            this.custom_order_item.id = null;
+                                            this.custom_order_item.name = '';
+                                            this.custom_order_item.excerpt = '';
+                                            this.custom_order_item.qty = 1;
+                                            this.custom_order_item.unit_price = 0;
+                                            this.custom_order_item.base_price = 0;
+                                            this.custom_order_item.subtotal_price = 0;
+                                            this.custom_order_item.total_price = 0;
+                                            
+                                            {{-- Send event to reset attributes form --}}
+                                            $dispatch('reset-attributes-form', {form_id: 'custom-order-item-form'});
+                                        },
+                                        select(item) {
+                                            let existing_item_index = order_items.findIndex(order_item => {
+                                                return order_item.subject_type == this.getCurrentContentTypeOptions().model_class && order_item.subject_id == item.id;
                                             });
-                                        }
-                                    },
-                                    selectContentType(content_type) {
-                                        this.content_type = content_type;
-                                    },
-                                    insertCustomOrderItem() {
-                                        this.custom_order_item.base_price = Number(this.custom_order_item.unit_price);
-                                        this.custom_order_item.subtotal_price = Number(this.custom_order_item.qty) * this.custom_order_item.unit_price;
-                                        this.custom_order_item.total_price = Number(this.custom_order_item.qty) * this.custom_order_item.unit_price;
 
-                                        order_items.push(this.custom_order_item);
-                                        this.reset();
-                                    }
-                                }">
-                                    <div class="w-full">
+                                            if(existing_item_index !== -1) {
+                                                order_items[existing_item_index].qty = Number(order_items[existing_item_index].qty) + 1;
+                                                order_items[existing_item_index].base_price = Number(order_items[existing_item_index].unit_price);
+                                                order_items[existing_item_index].subtotal_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
+                                                order_items[existing_item_index].total_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
+                                            } else {
+                                                order_items.push({
+                                                    id: null,
+                                                    subject_type: this.getCurrentContentTypeOptions().model_class,
+                                                    subject_id: item.id,
+                                                    name: item.name,
+                                                    excerpt: item.excerpt,
+                                                    qty: 1,
+                                                    unit_price: item.unit_price,
+                                                    base_price: item.unit_price,
+                                                    subtotal_price: item.unit_price * 1,
+                                                    total_price: item.unit_price * 1,
+                                                    tax: 0,
+                                                    thumbnail: item.thumbnail?.file_name,
+                                                });
+                                            }
+                                        },
+                                        selectContentType(content_type) {
+                                            this.content_type = content_type;
+                                        },
+                                        saveCustomOrderItem(order_item_index = null) {
+                                            this.custom_order_item.base_price = Number(this.custom_order_item.unit_price);
+                                            this.custom_order_item.subtotal_price = Number(this.custom_order_item.qty) * this.custom_order_item.unit_price;
+                                            this.custom_order_item.total_price = Number(this.custom_order_item.qty) * this.custom_order_item.unit_price;
+
+                                            {{-- Cuz order_item_index can be 0 -_- --}}
+                                            if(order_item_index !== null) {
+                                                order_items[order_item_index] = deep_copy(this.custom_order_item);
+                                            } else {
+                                                order_items.push(deep_copy(this.custom_order_item));
+                                            }
+
+                                            this.reset();
+                                            show = false;
+                                        },
+                                        setCustomOrderItem(order_item_index) {
+                                            this.selectContentType('custom');
+                                            this.order_item_index = order_item_index;
+                                            this.hide_content_selector = true;
+
+                                            modal_title = '{{ translate('Edit Order item') }}';
+                                            
+                                            let order_item = order_items[order_item_index];
+                                            
+                                            if(order_item !== undefined) {
+                                                this.custom_order_item = deep_copy(order_item);
+                                            }
+                                        }
+                                    }"
+                                    @display-modal.window="
+                                        if($event.detail.id === id && _.get($event, 'detail.order_item_index', null) !== null ) {
+                                            setCustomOrderItem(Number($event.detail.order_item_index));
+                                        } else if($event.detail.id === id) {
+                                            reset();
+                                        }
+                                    "
+                                    wire:ignore
+                                >
+                                    <div class="w-full" x-show="!hide_content_selector">
                                         <fieldset>
                                             <legend class="text-base font-medium text-gray-900">{{ translate('Select a content type') }}</legend>
 
@@ -629,7 +687,6 @@ x-cloak>
                                                 </template>
                                             </div>
                                         </fieldset>
-
                                     </div>
 
                                     <template x-if="content_type == 'product' || content_type == 'product_addon'">
@@ -679,7 +736,7 @@ x-cloak>
                                     </template>
 
                                     <template x-if="content_type == 'custom'">
-                                        <div class="w-full pt-3 mt-5 border-t">
+                                        <div class="w-full " :class="{hide_content_selector: 'pt-3 mt-5 border-t'}">
                                             <div class="grid grid-cols-12 gap-x-3">
                                                 <div class="col-span-12 flex-col gap-y-2">
                                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
@@ -687,7 +744,7 @@ x-cloak>
                                                     </label>
 
                                                     <div class="w-full ">
-                                                        <input type="text" class="form-standard  " x-model="custom_order_item.name">
+                                                        <input type="text" class="form-standard" x-model="custom_order_item.name">
                                                     </div>
                                                 </div>
 
@@ -721,9 +778,31 @@ x-cloak>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-span-12 flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
-                                                    <button type="button" class="btn btn-primary ml-auto btn-sm" @click="insertCustomOrderItem()" >
-                                                        {{ translate('Add Custom Item') }}
+                                                {{-- Attributes Divider --}}
+                                                <div class="col-span-12 relative py-5">
+                                                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                                      <div class="w-full border-t border-gray-300"></div>
+                                                    </div>
+                                                    <div class="relative flex justify-center">
+                                                      <button type="button" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                        <span>{{ translate('Attributes') }}</span>
+                                                      </button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-span-12 ">
+                                                    <x-dashboard.form.blocks.attributes-selection-form
+                                                        form-id="custom-order-item-form"
+                                                        attributes-field="custom_order_item.custom_attributes" 
+                                                        selected-attributes-field="custom_order_item.selected_attribute_values"
+                                                        :no-variations="true">
+
+                                                    </x-dashboard.form.blocks.attributes-selection-form>
+                                                </div>
+
+                                                <div class="col-span-12 flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2">
+                                                    <button type="button" class="btn btn-primary ml-auto btn-sm" @click="saveCustomOrderItem(order_item_index)" >
+                                                        {{ translate('Save Custom Item') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -840,15 +919,15 @@ x-cloak>
                     </div>
 
                     {{-- Order Summary --}}
-                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-7">
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-7" wire:ignore>
                         <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-3">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order Summary') }}</h3>
                         </div>
 
                         <div class="w-full flex flex-col">
-                            <template x-if="order_items">
+                            <template x-if="_.get(order_items, 'length', 0) > 0">
                                 <ul class="w-full flex flex-col gap-y-2">
-                                    <template x-for="item in order_items">
+                                    <template x-for="(item, index) in order_items" :key="'summary-order-item-'+index">
                                         <li class="relative flex items-center">
                                             <div class="min-w-0 flex-1 pr-7">
                                                 <p class="text-sm font-medium text-gray-900" x-text="item.qty+' x '+item.name"></p>
@@ -859,6 +938,13 @@ x-cloak>
                                         </li>
                                     </template>
                                 </ul>
+                            </template>
+
+                            {{-- Empty state --}}
+                            <template x-if="_.get(order_items, 'length', 0) <= 0">
+                                <div class="text-center py-2">
+                                    <h3 class="text-sm font-medium text-gray-900">{{ translate('No order items') }}</h3>
+                                </div>
                             </template>
 
                             <div class="w-full pt-3 mt-3 border-t flex flex-col">
@@ -877,7 +963,8 @@ x-cloak>
                                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 pt-2">
                                     <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">{{ translate('Tax(percent)') }}</label>
                                     <div class="mt-1 sm:col-span-2 sm:mt-0">
-                                        <x-dashboard.form.input type="number" field="tax" :x="true" min="0" max="100" />
+                                        {{ get_tenant_setting('company_tax_rate') }}
+                                        <x-dashboard.form.input type="number" value="21" field="tax" :x="get_tenant_setting('company_tax_rate')" min="0" max="100" />
                                     </div>
                                 </div>
                                 {{-- END TAX --}}

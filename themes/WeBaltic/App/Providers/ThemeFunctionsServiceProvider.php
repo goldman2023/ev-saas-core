@@ -6,9 +6,11 @@ namespace WeThemes\WeBaltic\App\Providers;
 
 use App\Models\CoreMeta;
 use App\Models\Order;
+use App\Models\Upload;
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Livewire;
 use TenantSettings;
@@ -76,6 +78,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'categories.index',
                     'products.index',
                     'tasks.index',
+                    'file-manager.index',
                     'orders.index',
                     'invoices.index',
                     'blog.posts.index',
@@ -117,13 +120,18 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
         add_action('order.change-status', function($order) {
             try {
-                mkdir( storage_path() . '/documents/');
+                mkdir( storage_path() . '/app/public/');
+            } catch (\Exception $e) {
+            }
+
+            try {
+                mkdir( storage_path() . '/app/public/documents/');
             } catch (\Exception $e) {
 
             }
 
             try {
-                mkdir( storage_path() . '/documents/' . $order->id);
+                mkdir( storage_path() . '/app/public/documents/' . $order->id);
             } catch (\Exception $e) {
 
             }
@@ -136,6 +144,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             /* Generate those always
             TODO: Make conditional logic based on status change
             */
+            $this->generate_contract($order);
             $this->generate_certificate($order);
             $this->generate_transportation_card($order);
         });
@@ -158,7 +167,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         $data = ['order' => $order];
         $pdf = Pdf::loadView('documents_templates.contract', $data );
 
-        $pdf->save(storage_path() . '/documents/'. $order->id . '/contract-'. $order->id .'.pdf');
+        $pdf->save(storage_path() . '/app/public/documents/'. $order->id . '/contract-'. $order->id .'.pdf');
         /* TODO: Implement attaching a document */
         // $order->attachDocument($something);
 
@@ -169,8 +178,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         // Get order attributes and generate the document
         $data = ['order' => $order];
         $pdf = Pdf::loadView('documents_templates.transportation_card', $data );
-
-        $pdf->save(storage_path() . '/documents/'. $order->id . '/transportation-card-'. $order->id .'.pdf');
+    //    $myFile =  Storage::disk('public')->put('/documents/'. $order->id, $pdf);
+        // dd($myFile);
+        $pdf->save(storage_path() . '/app/public/documents/'. $order->id . '/transportation-card-'. $order->id .'.pdf');
         /* TODO: Implement attaching a document */
         // $order->attachDocument($something);
 
@@ -182,7 +192,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         $data = ['order' => $order];
         $pdf = Pdf::loadView('documents_templates.certificate', $data );
 
-        $pdf->save(storage_path() . '/documents/' . $order->id . '/certificate-'. $order->id .'.pdf');
+        $pdf->save(storage_path() . '/app/public/documents/' . $order->id . '/certificate-'. $order->id .'.pdf');
         /* TODO: Implement attaching a document */
         // $order->attachDocument($something);
 
@@ -191,5 +201,12 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
     public function generate_vin_code($order) {
 
+    }
+
+    public function nice_attribute_names() {
+        $data = [
+            'width' => 9,
+            'height' => 10
+        ];
     }
 }

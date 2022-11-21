@@ -1,6 +1,6 @@
 <div class="fixed z-[100] inset-0 overflow-y-auto" x-data="{
         show: false,
-        title: @js($title),
+        modal_title: @js($title),
         id: @js($id),
     }"
     @display-modal.window="
@@ -38,9 +38,7 @@
         </div>
 
         <div class="w-full">  
-          @if(!empty($title))
-            <h4 class="w-full text-18 pb-1 mb-3 border-b border-gray-200 {{ $titleClass }}">{{ $title }}</h4>
-          @endif
+          <h4 class="w-full text-18 pb-1 mb-3 border-b border-gray-200 {{ $titleClass }}" x-show="modal_title" x-text="modal_title"></h4>
 
           {{ $slot }}
           

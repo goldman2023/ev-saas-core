@@ -2,47 +2,49 @@
 
 namespace App\Providers;
 
-use App\Events\Eloquent\ItemsQueried;
-use App\Listeners\Eloquent\CustomAttributesEagerLoad;
-use App\Models\CategoryRelationship;
-use App\Models\Product;
-use App\Models\ProductStock;
-use App\Models\ProductVariation;
-use App\Models\Attribute;
-use App\Models\AttributeValue;
-use App\Models\SerialNumber;
-use App\Models\TenantSetting;
+use App\Models\Plan;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Invoice;
-use App\Models\User;
-use App\Models\Plan;
+use App\Models\Product;
 use App\Models\Category;
+use App\Models\Attribute;
+use App\Models\OrderItem;
+use App\Models\ProductStock;
+use App\Models\SerialNumber;
+use App\Models\TenantSetting;
+use App\Models\AttributeValue;
+use App\Observers\UserObserver;
+use App\Models\ProductVariation;
 use App\Models\UserSubscription;
-use App\Observers\CategoriesObserver;
-use App\Observers\CategoryRelationshipsObserver;
-use App\Observers\ProductsObserver;
-use App\Observers\ProductStocksObserver;
-use App\Observers\ProductVariationsObserver;
-use App\Observers\SerialNumbersObserver;
-use App\Observers\TenantSettingsObserver;
-use App\Observers\AttributeObserver;
-use App\Observers\AttributeValuesObserver;
+use App\Observers\PlansObserver;
 use App\Observers\OrdersObserver;
 use App\Observers\InvoicesObserver;
-use App\Observers\UserObserver;
-use App\Observers\PlansObserver;
-use App\Observers\UserSubscriptionsObserver;
+use App\Observers\ProductsObserver;
+use App\Models\CategoryRelationship;
+use App\Observers\AttributeObserver;
+use App\Observers\OrderItemObserver;
+use App\Events\Eloquent\ItemsQueried;
+use App\Observers\CategoriesObserver;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Observers\ProductStocksObserver;
+use App\Observers\SerialNumbersObserver;
+use App\Observers\TenantSettingsObserver;
+use App\Observers\AttributeValuesObserver;
+use App\Events\Plans\PlanSubscriptionCancel;
+use App\Events\Plans\PlanSubscriptionRevive;
+use App\Observers\ProductVariationsObserver;
+use App\Observers\UserSubscriptionsObserver;
+use App\Observers\CategoryRelationshipsObserver;
 use App\Traits\ServiceProviders\RegisterObservers;
 
 
-use App\Events\Plans\PlanSubscriptionCancel;
+use App\Listeners\Eloquent\CustomAttributesEagerLoad;
 use App\Listeners\Plans\CancelStripePlanSubscription;
 
-use App\Events\Plans\PlanSubscriptionRevive;
 use App\Listeners\Plans\ReviveStripePlanSubscription;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -93,6 +95,7 @@ class EventServiceProvider extends ServiceProvider
             Attribute::class => [AttributeObserver::class],
             AttributeValue::class => [AttributeValuesObserver::class],
             Order::class => [OrdersObserver::class],
+            OrderItem::class => [OrderItemObserver::class],
             Invoice::class => [InvoicesObserver::class],
             User::class => [UserObserver::class],
         ];

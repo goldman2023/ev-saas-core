@@ -195,8 +195,11 @@ class EVProductController extends Controller
             $template = 'product-single-1';
             $data = [
                 'product' => $product,
+                'relatedProducts' => [],
             ];
         }
+
+
 
 
         return view('frontend.product.single.' . $template, $data);
