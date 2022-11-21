@@ -195,7 +195,7 @@ trait UploadTrait
                         if($property['multiple']) {
                             $value = [
                                 'relation_type' => $property['relation_type'],
-                                'order' => $value['order'],
+                                'order' => $value['order'] ?? $key,
                             ];
                         } else {
                             $value = [
@@ -285,6 +285,8 @@ trait UploadTrait
     }
 
     /**
+     * getDynamicModelUploadProperties
+     * 
      * An abstract function which defines dynamic model upload-related properties.
      *
      * IMPORTANT: For property_name always use snake-case with underscore!!!
@@ -295,6 +297,7 @@ trait UploadTrait
      *          'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
      *          'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
      *          'is_image' => false, // This value determines if Upload URL will be proxified using IMGProxy. If true, URL will be proxified; If false, standard URL will be returned! Default: false!
+     *          'folder' => null, // This value specifies if provided path to file should be prefixed
      *          'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
      *       ],
      *       ...
@@ -303,4 +306,23 @@ trait UploadTrait
      * @return array
      */
     abstract public function getDynamicModelUploadProperties() : array;
+
+        
+    /**
+     * getUploadPropertyDefinition
+     * 
+     * Gets the dynamic upload property definition based on provided $property_name
+     *
+     * @param  mixed $property_name
+     * @return void
+     */
+    public function getUploadPropertyDefinition($property_name) {
+        foreach($this->getDynamicModelUploadProperties() as $property_definition) {
+            if($property_definition['property_name'] === $property_name) {
+                return $property_definition;
+            }
+        }
+
+        return null;
+    }
 }

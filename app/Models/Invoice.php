@@ -4,7 +4,9 @@ namespace App\Models;
 
 use MyShop;
 use StripeService;
+use App\Facades\Media;
 use App\Facades\Payments;
+use App\Traits\UploadTrait;
 use App\Builders\BaseBuilder;
 use App\Enums\UserEntityEnum;
 use App\Traits\HasDataColumn;
@@ -13,6 +15,7 @@ use Illuminate\Support\Carbon;
 use App\Enums\PaymentStatusEnum;
 use App\Models\PaymentMethodUniversal;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use LaravelDaily\Invoices\Classes\Party;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
@@ -26,6 +29,8 @@ class Invoice extends WeBaseModel
     use SoftDeletes;
     use HasDataColumn;
     use TemporaryTrait;
+    use UploadTrait;
+
 
     protected $table = 'invoices';
 
@@ -117,6 +122,24 @@ class Invoice extends WeBaseModel
         );
     }
 
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            [
+                'property_name' => 'invoice_document',
+                'relation_type' => 'invoice',
+                'folder' => 'invoices/',
+                'multiple' => true,
+            ],
+            [
+                'property_name' => 'documents',
+                'relation_type' => 'documents',
+                'folder' => 'invoices/documents/',
+                'multiple' => true,
+            ],
+        ];
+    }
+
     /*
      * This functions determines if current Invoice is actually the last invoice of an Order this invoice is related to.
      *
@@ -180,7 +203,7 @@ class Invoice extends WeBaseModel
         }
     }
 
-    public function generateInvoicePDF($custom_title = null) {
+    public function generateInvoicePDF($custom_title = null, $save = false) {
         $shop = $this->shop;
         $user = $this->user;
 
@@ -433,7 +456,7 @@ class Invoice extends WeBaseModel
                 };
             }
         ];
-        
+
         $invoice = LaravelInvoice::make(!empty($custom_title) ? $custom_title : translate('VAT Invoice'))
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             // ->sequence()
@@ -451,29 +474,35 @@ class Invoice extends WeBaseModel
             ->currencyFormat('{SYMBOL}{VALUE}')
             ->currencyThousandsSeparator('.')
             ->currencyDecimalPoint(',')
-            ->filename(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             ->addItems($invoice_items)
             ->setCustomData($custom_data)
             ->notes($notes);
 
-            if($this->isFromStripe()) {
-                if($stripe_invoice['tax'] / 100 > 0) {
-                    $invoice->totalTaxes($stripe_invoice['tax'] / 100);
-                }
+            if($save) {
+                $invoice_path = Media::getTenantPath('invoices').'/'.(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number);
 
                 $invoice
-                    // ->totalDiscount( ($stripe_invoice['subtotal_excluding_tax'] / 100) - ($stripe_invoice['total_excluding_tax'] / 100) )
-                    ->taxableAmount($stripe_invoice['total_excluding_tax'] / 100)
-                    ->totalAmount($stripe_invoice['amount_due'] / 100);
-            } else {
-                if($this->tax > 0) {
-                    $invoice->totalTaxes($this->tax);
-                }
+                    ->filename($invoice_path)
+                    ->save(config('filesystems.default'));
+
+                return $invoice_path.'.pdf';
+            }
+            
+
+        if($this->isFromStripe()) {
+            if($stripe_invoice['tax'] / 100 > 0) {
+                $invoice->totalTaxes($stripe_invoice['tax'] / 100);
             }
 
-            // ->logo(public_path('vendor/invoices/sample-logo.png'))
-            // You can additionally save generated invoice to configured disk
-            // ->save('public');
+            $invoice
+                // ->totalDiscount( ($stripe_invoice['subtotal_excluding_tax'] / 100) - ($stripe_invoice['total_excluding_tax'] / 100) )
+                ->taxableAmount($stripe_invoice['total_excluding_tax'] / 100)
+                ->totalAmount($stripe_invoice['amount_due'] / 100);
+        } else {
+            if($this->tax > 0) {
+                $invoice->totalTaxes($this->tax);
+            }
+        }
 
         return $invoice->stream();
     }

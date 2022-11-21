@@ -151,7 +151,7 @@ class WeMediaLibrary extends Component
                                 $tenant_path = 'uploads/'.tenant('id');
                             }
     
-                            // Check if tenant uploads folder exists an create it if not
+                            // Check if tenant uploads folder exists and create it if not
                             if (! Storage::disk(config('filesystems.default'))->exists($tenant_path)) { 
                                 // Create Tenant folder on DO if it doesn't exist
                                 Storage::makeDirectory($tenant_path, 0775, true, true);
