@@ -7,6 +7,9 @@
             @foreach($wishlists as $key => $item)
                 @php
                     $item = $item->subject;
+                    if(empty($item)) {
+                        continue;
+                    }
                 @endphp
                 <a href="{{ $item->getPermalink() }}" class="flyout-wishlist__item border rounded-lg shadow-lg p-3 flex flex-row items-start mb-3" x-data="{
                     processing: false,
