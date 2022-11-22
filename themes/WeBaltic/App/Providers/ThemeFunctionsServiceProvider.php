@@ -27,6 +27,18 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         ];
     }
 
+    public function tenantCustomOptions() {
+        $options = [
+            'make' => 'TERO',
+            'type' => 'TERO1',
+            'variant' => 'S',
+            'commercial_name' => 'Spec',
+            'vehicle_category' => 'O1',
+            'bodywork' => 'DC99',
+            'bodywork' => 'DC99',
+        ];
+    }
+
     protected function getMenuLocations(): array
     {
         return [

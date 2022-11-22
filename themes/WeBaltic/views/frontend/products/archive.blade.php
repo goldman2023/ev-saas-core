@@ -82,8 +82,11 @@
                     @endif
                     @endforeach
 
-                    {{ $products->links() }}
-
+                    @if($products->hasPages())
+                    <div class="w-full">
+                        {{ $products->onEachSide(3)->links('pagination::tailwind') }}
+                    </div>
+                @endif
 
 
 

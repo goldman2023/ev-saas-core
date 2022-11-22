@@ -21,22 +21,30 @@
         <div class="grid grid-cols-2 gap-8 xl:col-span-4">
           <div class="md:grid md:grid-cols-2 md:gap-8">
             <div>
-              <h3 class="text-base font-medium text-white">Solutions</h3>
-              <ul role="list" class="mt-4 space-y-4">
+              <h3 class="text-base font-medium text-white">
+                <img class="w-32" src="{{ get_site_logo() }}" />
+              </h3>
+              <ul role="list" class="mt-4 space-y-2">
                 <li>
-                  <a href="#" class="text-base text-gray-300 hover:text-white">Marketing</a>
+                  <a href="#" class="text-lg font-bold text-gray-300 hover:text-white">UAB Domantas</a>
                 </li>
 
                 <li>
-                  <a href="#" class="text-base text-gray-300 hover:text-white">Analytics</a>
+                  <a href="#" class="text-base text-gray-300 hover:text-white">Pakalnės g. 5e, Domeikava, Kauno raj. 🇱🇹
+                </a>
                 </li>
 
                 <li>
-                  <a href="#" class="text-base text-gray-300 hover:text-white">Commerce</a>
+                  <a href="#" class="text-base text-gray-300 hover:text-white">
+                    Tel.: 8 (671) 81007
+
+                  </a>
                 </li>
 
                 <li>
-                  <a href="#" class="text-base text-gray-300 hover:text-white">Insights</a>
+                  <a href="#" class="text-base text-gray-300 hover:text-white">
+                    info@baltic-priekabos.lt
+                  </a>
                 </li>
               </ul>
             </div>
@@ -105,10 +113,9 @@
           </div>
         </div>
         <div class="mt-12 xl:mt-0">
-          <h3 class="text-base font-medium text-white">Language &amp; Currency</h3>
+          <h3 class="text-base font-medium text-white"></h3>
           <form class="mt-4 sm:max-w-xs">
             <fieldset class="w-full mb-6">
-              <label for="language" class="sr-only">Language</label>
               <div class="relative">
                 <img src="https://baltic-priekabos.lt/wp-content/uploads/2022/03/Screenshot-2022-03-07-at-15.36.58.png" />
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
@@ -119,20 +126,6 @@
                 </div>
               </div>
             </fieldset>
-
-            <fieldset class="w-full">
-              <label for="language" class="sr-only">Language</label>
-              <div class="relative">
-                <img src="https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://businesspress.fra1.digitaloceanspaces.com/uploads/cc772c23-0100-43fc-92c2-13eb0ec7507b/1663719817_iso-sertifikatas.png@webp" />
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-                  <!-- Heroicon name: mini/chevron-down -->
-                  <svg class="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-            </fieldset>
-
           </form>
         </div>
       </div>
