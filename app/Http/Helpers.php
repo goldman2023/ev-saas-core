@@ -36,7 +36,7 @@ if (!function_exists('we_query')) {
             return null;
 
         $we_query = app(ContentTypeEnum::values()[$args['content_type']]);
-        
+
     }
 }
 
@@ -68,21 +68,21 @@ if (!function_exists('castValueForSave')) {
 if (!function_exists('castValuesForGet')) {
     function castValuesForGet(&$settings, $data_types) {
         if(!empty($settings) && is_array($settings)) {
-            
+
             foreach($settings as $key => &$setting) {
-        
+
                 $data_type = $data_types[$key] ?? null;
                 $value = $settings[$key]['value'] ?? null;
 
                 if(is_array($setting) && array_key_exists('value', $setting)) {
                     $setting = $setting['value'];
-                } 
-                
+                }
+
                 try {
-                    
+
                     // This means that there are more sub items inside
                     if(is_array($data_type)) {
-                        
+
                         // If data type is ARRAY, it means that JSON is stored in setting value!
                         // In order to recursively go through it's properties and cast data types, we need to decode it with json_decode first!
                         if(empty($setting)) {
@@ -90,15 +90,15 @@ if (!function_exists('castValuesForGet')) {
                             // ^^^ This actually must stay null, and we need to initialize object in JS if empty setting is null. Reason is checksum error if we put fallback to be [] or {}! ^^^
                             continue;
                         }
-                        
+
                         // Check if $setting is NOT already an array (it means that json_decode was already done in previous recursion cycle - we pass $settings as reference (&))
                         if(! is_array($setting)) {
                             $setting = json_decode($setting, true);
                         }
-                        
+
                         // Check if there are missing sub fields and create them
                         $missing_sub_fields = array_diff_key($data_type, !empty($setting) ? $setting : []);
-                        
+
                         if(!empty($missing_sub_fields)) {
                             foreach($missing_sub_fields as $subkey => $subvalue) {
                                 $missing_sub_fields[$subkey] = '';
@@ -109,11 +109,11 @@ if (!function_exists('castValuesForGet')) {
                         $setting = array_merge(!empty($setting) ? $setting : [], $missing_sub_fields);
 
                         // Convert Sub Fields values to proper data type
-                        
+
                         castValuesForGet($setting, $data_type);
                         continue;
                     }
-                    
+
                     if(empty($setting)) {
                         if($data_type === 'boolean') {
                             $setting = false;
@@ -124,7 +124,7 @@ if (!function_exists('castValuesForGet')) {
                         }
                         continue;
                     }
-                    
+
                     if(isset($settings[$key]) && !empty($setting)) {
                         if($data_type === Upload::class) {
                             $setting = Upload::find($setting);
@@ -190,7 +190,7 @@ if (!function_exists('sendAdminNotification')) {
     function send_admin_notification($subject, $text) {
         try {
             Notification::send(
-                \App\Models\User::where('user_type', 'admin')->get(), 
+                \App\Models\User::where('user_type', 'admin')->where('verified', 1)->get(),
                 new GeneralTransactionalNotification($subject, $text)
             );
         } catch(\Exception $e) {
@@ -201,7 +201,7 @@ if (!function_exists('sendAdminNotification')) {
 
 if (!function_exists('toJSONMedia')) {
     function toJSONMedia($upload = null) {
-        
+
         if($upload instanceof Upload) {
             return [
                 'id' => $upload?->id ?? '',
@@ -965,7 +965,7 @@ function translate($key, $lang = null)
      * TODO: Refactor this function to get translation for the $key from assoc array in singleton
      * TODO: If there's none, create it in the DB and regenerate whole assoc array in Cache
      */
-    
+
     $translation_def = Cache::remember('translation_'.$key .'_'. $lang, 60, function () use ($key) {
         return Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
     });
@@ -1530,7 +1530,7 @@ function strip_comments($html)
 
 if (!function_exists('array_key_recursive_compare')) {
     function array_key_recursive_compare($array, $compare) {
-        
+
         $output = array();
 
         foreach ($array as $key => $value){
