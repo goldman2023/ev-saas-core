@@ -69,7 +69,7 @@ class ProductForm2 extends Component
             ],
             'basic' => [
                 'product.name' => 'required|min:6',
-                'product.description' => 'required|min:20',
+                'product.description' => 'nullable',
                 'product.excerpt' => 'nullable',
                 // 'product.status' => [Rule::in(StatusEnum::toValues())],
                 'product.type' => [Rule::in(ProductTypeEnum::toValues())],

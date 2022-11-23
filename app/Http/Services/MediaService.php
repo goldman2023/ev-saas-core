@@ -2,20 +2,24 @@
 
 namespace App\Http\Services;
 
-use App\Models\Attribute;
-use App\Models\AttributeValue;
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\CategoryRelationship;
-use App\Models\Currency;
-use App\Models\Product;
-use App\Models\Shop;
-use App\Models\ShopDomain;
-use Cache;
 use EVS;
-use Illuminate\Support\Facades\Request;
-use Illuminate\View\ComponentAttributeBag;
+use Cache;
 use Session;
+use SplFileInfo;
+use Illuminate\Http\File;
+use App\Models\Shop;
+use App\Models\Brand;
+use App\Models\Upload;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Currency;
+use App\Models\Attribute;
+use App\Models\ShopDomain;
+use App\Models\AttributeValue;
+use App\Models\CategoryRelationship;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\ComponentAttributeBag;
 
 class MediaService
 {
@@ -229,5 +233,71 @@ class MediaService
 
    public function mime2ext($mime) {
         return array_flip($this->extension2mime)[$mime] ?? null;
+   }
+
+   public function getTenantPath($folder = null) {
+       if(!empty($folder)) {
+            return 'uploads/'.tenant('id').'/'.trim($folder, '/');
+       }
+
+       return 'uploads/'.tenant('id');
+   }
+
+   public function storeAsUploadFromFile(&$model, $file, $property_name) {
+
+        if(is_string($file)) {
+            $file_path = $file;
+            $file = new SplFileInfo(Storage::url($file_path));
+        }
+
+        if($file instanceof SplFileInfo) {
+            $extension = $file->getExtension();
+            $new_file_original_name = $file->getFilename();
+            $new_filename = $file->getFilename();
+            $new_file_size = Storage::size($file_path);
+        } else if($file instanceof File) {
+            $extension = $file->guessExtension();
+            $new_file_original_name = $file->getClientOriginalName();
+            $new_filename = time().'_'.preg_replace("/\s+/", "", $new_file_original_name);
+            $new_file_size = $file->getSize();
+        }
+
+        // Save Upload to DB
+        $upload = new Upload();
+
+        $upload->extension = $extension;
+        $upload->file_name = $file_path;
+        $upload->user_id = $model->user_id;
+        $upload->shop_id = $model->shop_id;
+        $upload->type = MediaService::getPermittedExtensions()[$extension];
+        $upload->file_size = $new_file_size;
+
+        $upload->file_original_name = null;
+        $arr = explode('.', $new_file_original_name);
+        for ($i = 0; $i < count($arr) - 1; $i++) {
+            if ($i == 0) {
+                $upload->file_original_name .= $arr[$i];
+            } else {
+                $upload->file_original_name .= '.'.$arr[$i];
+            }
+        }
+
+        $upload->save();
+
+        // Save Relationship between $model and $upload to DB 
+        if(!empty($property_name)) {
+
+            // Differentiate logic between properties with multiple files and one file
+            if($model->getUploadPropertyDefinition($property_name)['multiple'] ?? false) {
+                // Multiple uploads in property - get the current uploads ids from property, push the new upload ID, filter unique values, and reset keys
+                $model->{$property_name} = collect($model->{$property_name})->pluck('id')?->push($upload->id)?->unique()?->values() ?? [$upload->id];
+            } else {
+                // Single upload in property
+                $model->{$property_name} = $upload;
+            }
+            
+            $model->syncUploads($property_name);
+
+        }
    }
 }

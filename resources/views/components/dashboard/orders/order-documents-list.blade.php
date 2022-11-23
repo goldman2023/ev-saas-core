@@ -3,9 +3,7 @@
     <div class="text-center rounded-lg border-2 border-dashed border-gray-300 px-3 py-6"
     data-modal-toggle="order-document-modal-{{ $document['id'] }}"
     >
-                @svg('heroicon-o-document', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
-
-
+        @svg('heroicon-o-document', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
         <h3 class="mt-2 text-sm font-medium text-gray-900">{{ $document['title'] }}</h3>
         <div class="mt-6">
             <button type="button"

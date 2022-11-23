@@ -12,8 +12,11 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App\Traits\HasStatus;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 
-class Page extends WeBaseModel
+
+class Page extends WeBaseModel implements Sitemapable
 {
     use HasSlug;
     use PermalinkTrait;
@@ -38,6 +41,11 @@ class Page extends WeBaseModel
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug')
             ->doNotGenerateSlugsOnUpdate();
+    }
+
+    public function toSitemapTag(): Url | string | array
+    {
+        return route('custom-pages.show_custom_page', $this->slug);
     }
 
     public function getRouteKeyName()

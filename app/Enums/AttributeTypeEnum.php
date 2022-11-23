@@ -46,8 +46,8 @@ class AttributeTypeEnum extends EVBaseEnum
             'country' => 'Country',
             'number' => 'Number',
             'date' => 'Date',
-            'image' => 'Image',
-            'gallery' => 'Gallery',
+            'image' => 'Image', // TODO: This should be an Upload
+            'gallery' => 'Gallery', // This should be n Uploads Collection
             'text_list' => 'Text list',
             'wysiwyg' => 'Wysiwyg',
         ];
@@ -56,5 +56,17 @@ class AttributeTypeEnum extends EVBaseEnum
     public static function getPredefined()
     {
         return ['checkbox', 'dropdown', 'radio'];
+    }
+
+        
+    /**
+     * getSingles
+     *
+     * Gets all the types which can have only one attribute value
+     * 
+     * @return void
+     */
+    public static function getSingles() {
+        return ['toggle', 'plain_text', 'number', 'date', 'radio', 'image', 'wysiwyg'];
     }
 }

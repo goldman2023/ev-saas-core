@@ -120,6 +120,17 @@ trait AttributeTrait
         //         ->withOnly(['attribute_value', 'attribute']);
     }
 
+    public function getAttr($slug_or_id = null, $content_type = null) {
+        if(empty($slug_or_id)) return null;
+        if(empty($content_type)) $content_type =  $this::class;
+
+        if(is_int($slug_or_id) || ctype_digit($slug_or_id)) {
+            return $this->custom_attributes->firstWhere('id', (int) $slug_or_id);
+        }
+
+        return $this->custom_attributes->firstWhere('identificator', $slug_or_id.'|'.$content_type);
+    }
+
     /**
      * deleteCustomAttributes
      *

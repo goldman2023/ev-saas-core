@@ -323,4 +323,10 @@ class Product extends WeBaseModel
         return $this->morphMany(SocialComment::class, 'subject');
     }
 
+    public function relatedProducts($count = 4) {
+       $products = Product::take($count)->get();
+
+       return $products;
+    }
+
 }

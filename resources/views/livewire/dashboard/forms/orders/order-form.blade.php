@@ -902,7 +902,7 @@ x-cloak>
 
                             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                                 @if(!empty($order->id) && $order->invoices->isEmpty())
-                                    <button type="button" class="btn btn-warning btn-sm" wire:click="generateOrder()" >
+                                    <button type="button" class="btn btn-warning btn-sm" wire:click="generateInvoice()" >
                                         {{ translate('Generate Invoice') }}
                                     </button>
                                 @endif
