@@ -47,7 +47,7 @@ class PageController extends Controller
                 // dd($slug);
                 $blog_post = BlogPost::where('slug', $slug)->get();
                 if($blog_post) {
-                    return redirect()->route('blog.post.single', $slug);
+                    return redirect(route('blog.post.single', $slug), 301);
                 } else {
                     return abort(404);
                 }
