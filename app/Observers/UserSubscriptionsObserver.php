@@ -45,6 +45,11 @@ class UserSubscriptionsObserver
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
+
+
+        if($user_subscription->wasChanged('status') && $user_subscription->status === 'canceled') {
+            @send_admin_notification(translate('Canceled subscription').' - '.get_tenant_setting('site_name'), translate('User with following email just canceled their subscription:').' '.$user_subscription->user->email.' (<a href="'.route('user.details', $user_subscription->user->id).'">'.translate('View details').'</a>)');
+        }
     }
 
     /**
@@ -59,12 +64,12 @@ class UserSubscriptionsObserver
 
         // Send email notification to admin if previous is_temp is true and new is_temp is false
         if($user_subscription->getOriginal('is_temp') && !$user_subscription->is_temp) {
-            @send_admin_notification(translate('New user subscription on').' '.get_tenant_setting('site_name'), translate('User with following email just subscribed:').' '.$user_subscription->user->email.' (<a href="'.route('user.details', $user_subscription->user->id).'">'.translate('View details').'</a>)'); 
+            @send_admin_notification(translate('New user subscription on').' '.get_tenant_setting('site_name'), translate('User with following email just subscribed:').' '.$user_subscription->user->email.' (<a href="'.route('user.details', $user_subscription->user->id).'">'.translate('View details').'</a>)');
         }
-            
+
         // Check if subscription is not temp, status is 'trial' and trial_started email is not sent
-        if (!$user_subscription->is_temp && $user_subscription->status === 'trial' && 
-            $user_subscription->end_date->timestamp > time() && 
+        if (!$user_subscription->is_temp && $user_subscription->status === 'trial' &&
+            $user_subscription->end_date->timestamp > time() &&
             !$user_subscription->getData('trial_started_email_sent', false)) {
 
             // Trial has started, send notification
@@ -88,7 +93,7 @@ class UserSubscriptionsObserver
     {
         // TODO: Where in the code should we send UpdatedSubscription notification?
         $user = $user_subscription->user;
-        
+
         /**
          * There are few possible scenarios happening when subscription is updating:
          * 1. Status changes (trial -> active, active -> inactive, active -> active_until_end)
@@ -106,7 +111,9 @@ class UserSubscriptionsObserver
             } catch(\Exception $e) {
                 Log::error($e);
             }
-        } 
+        }
+
+
         // else if($user_subscription->status === 'trial' && $user_subscription->end_date->timestamp > time() && !$user_subscription->getData('trial_started_email_sent', false)) {
         //     // Trial has started, send notification
         //     try {
@@ -116,7 +123,7 @@ class UserSubscriptionsObserver
         //     } catch(\Exception $e) {
         //         Log::error($e);
         //     }
-        // } 
+        // }
         // else if ($user_subscription->isDirty('end_date') && !empty($uncasted_old_end_date) && $new_end_date > $casted_old_end_date) {
         //     // This means that new end_date is about to be updated - should we send notification that subscription has been successfully extended?
         //     try {
@@ -127,10 +134,10 @@ class UserSubscriptionsObserver
         // } else if($user_subscription->isDirty('status') && $user_subscription->getRawOriginal('status') !== $user_subscription->status) {
         //     // Send notification on subscription status update!
         //     try {
-        //         $user->notify(new SubscriptionStatusChanged($user_subscription)); 
+        //         $user->notify(new SubscriptionStatusChanged($user_subscription));
         //     } catch(\Exception $e) {
         //         Log::error($e);
-        //     }          
+        //     }
         // }
     }
 
