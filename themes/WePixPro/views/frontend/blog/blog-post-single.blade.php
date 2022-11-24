@@ -116,8 +116,8 @@
 @endpush
 
 @push('footer_scripts')
-<script src="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.js"></script>
-<link href="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.css" rel="stylesheet" />
+<script src="{{ static_asset('/bp-assets/vendor/image-compare-viewer.min.js') }}" defer></script>
+<link href="{{ static_asset('/bp-assets/vendor/image-compare-viewer.min.css') }}" rel="stylesheet" />
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
