@@ -152,6 +152,7 @@
                 @if(!empty($authors?->first()))
                 <div class="flex items-center mb-3 sm:mb-0 mr-0 sm:mr-10">
                     <img src="{{ $authors?->first()?->getThumbnail(['w' => 100]) ?? '' }}"
+                    alt="{{ get_site_name() }} Team"
                         class="border-full border-gray-200 rounded-full object-cover w-8 h-8 mr-2.5" />
                     <span class="text-14 text-700 line-clamp-1 text-typ-2">{{ ($authors?->first()?->name ?? '').'
                         '.($authors->first()?->surname ?? '') }}</span>
