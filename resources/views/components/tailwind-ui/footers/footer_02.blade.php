@@ -48,7 +48,7 @@ $footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
                     {{ translate('Features') }}
                 </h2>
                 <nav class="">
-                    @if(!empty($footer_menu_2) && $footer_menu_2->isNotEmpty())
+                    @if(($footer_menu_2) && $footer_menu_2->isNotEmpty())
                     @foreach($footer_menu_2 as $menu_item)
                     @if($menu_item['enabled'])
                     <div class="py-2">
@@ -97,22 +97,10 @@ $footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
                     @endif
                     @endforeach
                     @else
-                    @auth
-                    @if(auth()->user()->isAdmin())
-                    <a href="/we/admin/menus" target="_blank" type="button"
-                        class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                            stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6" />
-                        </svg>
-                        <span class="mt-2 block text-sm font-medium text-gray-900">
-                            {{ translate('Create Footer Menu') }}
-                        </span>
-                    </a>
+                    <div class="w-full">
+                        <x-system.empty-state></x-system.empty-state>
 
-                    @endif
-                    @endauth
+                    </div>
                     @endif
                 </nav>
             </div>

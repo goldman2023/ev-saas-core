@@ -22,7 +22,13 @@
     {!! $page->content !!}
 </div>
 @elseif($page->type === 'html')
-<div class="w-full">
+<div class="w-full relative">
+    @if( $page->id )
+    <a target="_blank" href="{{ route('grape.index', [ $page->id]) }}"
+        class="absolute top-0 right-0 btn-primary">
+        {{ translate('Edit Page') }}
+    </a>
+    @endif
     {!! $page->content !!}
 </div>
 @elseif($page->type === 'system')

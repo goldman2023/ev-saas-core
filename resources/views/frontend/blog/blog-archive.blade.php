@@ -122,7 +122,20 @@ URL: https://flowbite.com/docs/components/typography/
                 <x-tailwind-ui.blog.blog-post-card :blog-post="$blog_post" />
 
                 @endif
+
+                @if($loop->last)
+                <div class="col-span-2">
+                    <x-system.empty-state :url="route('blog.post.create')" title="{{ translate('Add new post') }}">
+                    </x-system.empty-state>
+                </div>
+                @endif
                 @endforeach
+                @else
+                <div class="col-span-2">
+                    <x-system.empty-state title="{{ translate('Add new post') }}"></x-system.empty-state>
+
+                </div>
+
                 @endif
             </div>
 
