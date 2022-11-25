@@ -95,7 +95,7 @@
     }
 
     .gallery-link {
-        pointer-events: none;
+        /* pointer-events: none; */
     }
 
     @media (min-width: 782px) {
@@ -119,6 +119,17 @@
 <script src="{{ static_asset('/bp-assets/vendor/image-compare-viewer.min.js') }}" defer></script>
 <link href="{{ static_asset('/bp-assets/vendor/image-compare-viewer.min.css') }}" rel="stylesheet" />
 
+<link href="{{ static_asset('/bp-assets/vendor/fancybox/fancybox.css') }}" rel="stylesheet" />
+<script src="{{ static_asset('/bp-assets/vendor/fancybox/fancybox.js') }}"></script>
+<script>
+    Fancybox.bind("a.gallery-link", {
+      groupAll : true, // Group all items
+      on : {
+        ready : (fancybox) => {
+        }
+      }
+    });
+  </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
