@@ -32,14 +32,6 @@
 
             </x-dashboard.empty-states.no-items-in-collection>
         @endif
-
-        {{-- <div class="col-6">
-            <x-default.dashboard.widgets.create-card></x-default.dashboard.widgets.create-card>
-        </div>
-
-        <div class="col-6">
-            <x-default.dashboard.widgets.create-card title="Create a subscription product" description="Create a recurring digital product"></x-default.dashboard.widgets.create-card>
-        </div> --}}
     </div>
 </section>
 @endsection
