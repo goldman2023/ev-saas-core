@@ -1,9 +1,10 @@
-<section class="bg-white dark:bg-gray-900" style="box-sizing: border-box;">
+<section class="bg-white dark:bg-gray-900 container" style="box-sizing: border-box;">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6" style="box-sizing: border-box;">
         <div class="px-4 mx-auto max-w-screen-sm text-center lg:px-6 mb-8 lg:mb-16" style="box-sizing: border-box;">
             <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
-                style="box-sizing: border-box;">Kontaktai</h2>
-            <p class="font-light text-gray-600 dark:text-gray-400 sm:text-xl" style="box-sizing: border-box;">Turite
+                style="box-sizing: border-box;">{{ translate('Contact Us') }}</h2>
+            <p class="font-light text-gray-600 dark:text-gray-400 sm:text-xl" style="box-sizing: border-box;">
+                Turite
                 klausimą? Susisiekite su mumis.</p>
         </div>
         <div class="grid grid-cols-1 lg:gap-8 lg:grid-cols-3" style="box-sizing: border-box;">
@@ -65,9 +66,11 @@
                         </svg></div>
                     <p class="mb-2 text-xl font-bold text-gray-900 dark:text-white" style="box-sizing: border-box;">
                         Address:</p>
-                    <p class="text-gray-500 dark:text-gray-400" style="box-sizing: border-box;">SILVER LAKE, United
-                        States 1941 Late Avenue <br style="box-sizing: border-box;"> Zip Code/Postal code:03875</p>
-                </div>
+                    <p class="text-gray-500 dark:text-gray-400" style="box-sizing: border-box;">
+                        {{ translate('Kaunas') }}, {{ translate('Lithuania') }} <br>
+                        States 1941 Late Avenue
+                    </p>
+                    </div>
                 <div style="box-sizing: border-box;">
                     <div class="flex justify-center items-center mx-auto mb-4 w-10 h-10 bg-gray-100 rounded-lg dark:bg-gray-800 lg:h-16 lg:w-16"
                         style="box-sizing: border-box;"><svg fill="currentColor" viewBox="0 0 20 20"
@@ -79,8 +82,11 @@
                                 clip-rule="evenodd" style="box-sizing: border-box;"></path>
                         </svg></div>
                     <p class="mb-2 text-xl font-bold text-gray-900 dark:text-white" style="box-sizing: border-box;">
-                        Įmonė</p>
-                    <p class="text-gray-500 dark:text-gray-400" style="box-sizing: border-box;">UAB Domantas<br
+                       {{ translate('Business Details') }}
+                    </p>
+                    <p class="text-gray-500 dark:text-gray-400" style="box-sizing: border-box;">
+                        {{ get_site_name() }}
+                        <br
                             style="box-sizing: border-box;">Tax id: USXXXXXX</p>
                 </div>
                 <div style="box-sizing: border-box;">

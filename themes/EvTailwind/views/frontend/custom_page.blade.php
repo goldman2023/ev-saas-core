@@ -15,7 +15,9 @@
 @endsection
 
 @section('content')
+@if($page->slug != 'home')
 {{ Breadcrumbs::render('home', $page) }}
+@endif
 
 @if($page->type === 'wysiwyg')
 <div class="container py-10">
@@ -25,7 +27,7 @@
 <div class="w-full relative">
     @if( $page->id )
     <a target="_blank" href="{{ route('grape.index', [ $page->id]) }}"
-        class="absolute top-0 right-0 btn-primary">
+        class="absolute top-0 right-0 btn-primary" style="z-index: 99999;">
         {{ translate('Edit Page') }}
     </a>
     @endif
