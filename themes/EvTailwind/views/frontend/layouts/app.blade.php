@@ -32,7 +32,8 @@
     <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
 
     {{-- TailwindCSS --}}
-    <script async src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    {{-- <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script> --}}
+    <script src="{{ static_asset('/bp-assets/tailwind-play/tailwind.js') }}"></script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
