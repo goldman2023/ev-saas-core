@@ -25,12 +25,18 @@
 </div>
 @elseif($page->type === 'html')
 <div class="w-full relative">
+    @auth
+    @if (auth()->user()->isAdmin())
     @if( $page->id )
+
     <a target="_blank" href="{{ route('grape.index', [ $page->id]) }}"
         class="absolute top-0 right-0 btn-primary" style="z-index: 99999;">
         {{ translate('Edit Page') }}
     </a>
     @endif
+    @endif
+    @endauth
+
     {!! $page->content !!}
 </div>
 @elseif($page->type === 'system')
