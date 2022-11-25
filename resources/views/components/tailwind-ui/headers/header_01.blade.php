@@ -95,23 +95,8 @@
                     </div>
 
                     <div class="mt-6">
-                        <nav class="grid gap-y-8">
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900">{{ translate('Features') }}</span>
-                            </a>
+                        <x-system.render-menu :menu="$header_menu_items"></x-system.render-menu>
 
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900"> {{ translate('Pricing') }} </span>
-                            </a>
-
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900"> {{ translate('Blog') }} </span>
-                            </a>
-
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900"> {{ translate('Contact') }} </span>
-                            </a>
-                        </nav>
                     </div>
                 </div>
 
