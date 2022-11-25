@@ -90,17 +90,7 @@
                     </div>
 
                     <div class="mt-6">
-                        <nav class="grid gap-y-8">
-                            @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
-                                @foreach($header_menu_items as $menu_item)
-                                    @if($menu_item['enabled'])
-                                        <a href="{{ $menu_item['value'] ?? '#' }}" target="{{ $menu_item['target'] ?? '_self' }}" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                            {{ $menu_item['name'] ?? '' }}
-                                        </a>
-                                    @endif
-                                @endforeach
-                            @endif
-                        </nav>
+                        <x-system.render-menu :menu="$header_menu_items"></x-system.render-menu>
                     </div>
                 </div>
 
