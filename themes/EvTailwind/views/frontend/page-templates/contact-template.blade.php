@@ -6,56 +6,12 @@
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white"
                     style="box-sizing: border-box;">{{ translate('Contact Us') }}</h2>
                 <p class="font-light text-gray-600 dark:text-gray-400 sm:text-xl" style="box-sizing: border-box;">
-                    Turite
-                    klausimą? Susisiekite su mumis.</p>
+                    {{ translate('Have questions? We will respond to you with pleasure') }}
+                </p>
             </div>
             <div class="grid grid-cols-1 lg:gap-8 lg:grid-cols-3" style="box-sizing: border-box;">
                 <div class="col-span-2 mb-8 lg:mb-0" style="box-sizing: border-box;">
-                    <form action="#" class="grid grid-cols-1 gap-8 mx-auto max-w-screen-md sm:grid-cols-2"
-                        style="box-sizing: border-box;">
-                        <div style="box-sizing: border-box;"><label for="first-name"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                style="box-sizing: border-box;">First Name</label><input type="text" id="first-name"
-                                placeholder="Bonnie" required=""
-                                class="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                                style="box-sizing: border-box;"></div>
-                        <div style="box-sizing: border-box;"><label for="last-name"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                style="box-sizing: border-box;">Last Name</label><input type="text" id="last-name"
-                                placeholder="Green" required=""
-                                class="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                                style="box-sizing: border-box;"></div>
-                        <div style="box-sizing: border-box;"><label for="email"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                style="box-sizing: border-box;">Your email</label><input type="email" id="email"
-                                placeholder="name@flowbite.com" required=""
-                                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                                style="box-sizing: border-box;"></div>
-                        <div style="box-sizing: border-box;"><label for="phone-number"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                style="box-sizing: border-box;">Phone Number</label><input type="number"
-                                id="phone-number" placeholder="+12 345 6789" required=""
-                                class="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                                style="box-sizing: border-box;"></div>
-                        <div class="sm:col-span-2" style="box-sizing: border-box;"><label for="message"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
-                                style="box-sizing: border-box;">Your message</label><textarea id="message" rows="6"
-                                placeholder="Leave a comment..."
-                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                style="box-sizing: border-box;"></textarea>
-                            <p class="mt-4 text-sm text-gray-500" style="box-sizing: border-box;">By submitting this
-                                form
-                                you agree to our <a href="#"
-                                    class="text-primary-600 hover:underline dark:text-primary-500"
-                                    style="box-sizing: border-box;">terms and conditions</a> and our <a href="#"
-                                    class="text-primary-600 hover:underline dark:text-primary-500"
-                                    style="box-sizing: border-box;">privacy policy</a> which explains how we may
-                                collect,
-                                use and disclose your personal information including to third parties.</p>
-                        </div><button type="submit"
-                            class="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-primary-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                            style="box-sizing: border-box;">Send message</button>
-                    </form>
+                    <livewire:forms.contact-form />
                 </div>
                 <div class="grid grid-cols-1 col-span-1 gap-8 text-center sm:grid-cols-2 lg:grid-cols-1"
                     style="box-sizing: border-box;">
