@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 @section('meta_title')
 @isset($category)
-    {{ $category->name }} | {{ get_site_name() }}@stop
+    {{ $category->name }} | {{ get_site_name() }}
 @else
     {{ get_site_name() }} {{ translate('Blog') }}
 
@@ -19,6 +19,7 @@
 <meta property="og:site_name" content="{{ get_site_name() }}" />
 @endsection
 @section('content')
+{{ Breadcrumbs::render('blog') }}
 
 <section class="overflow-hidden relative z-[2]  mt-[-90px] lg:pt-[110px]  lg:pb-[60px]  sm:pt-[110px]  sm:pb-[40px]  pt-[120px]  pb-[40px]  bg-[#f5f5f5]">
 

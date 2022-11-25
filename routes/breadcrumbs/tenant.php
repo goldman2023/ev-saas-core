@@ -9,8 +9,11 @@ use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
 // Home
-Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('home', function (BreadcrumbTrail $trail, $page = null) {
     $trail->push('Home', route('home'));
+    if($page) {
+        $trail->push($page->name, route('custom-pages.show_custom_page', $page->slug));
+    }
 });
 
 Breadcrumbs::for('products', function (BreadcrumbTrail $trail) {
@@ -70,19 +73,14 @@ Breadcrumbs::for('blog', function (BreadcrumbTrail $trail, $blog_post = null, $c
 
         $trail->push($blog_post->name, $blog_post->getPermalink($content_type));
     }
+});
+
+Breadcrumbs::for('page', function (BreadcrumbTrail $trail, $page = null, $content_type = null) {
+
+    $trail->push('Page', route('blog.archive'));
 
 
-    // $trail->parent('home');
+        /* TODO: Add blog category */
 
-    // if (isset($category->ancestors)) {
-    //     $ancestors = $category->ancestors;
-
-    //     if (!empty($ancestors)) {
-    //         foreach ($ancestors as $ancestor) {
-    //             $trail->push($ancestor->name, $ancestor->getPermalink($content_type));
-    //         }
-    //     }
-
-    //     $trail->push($category->name, $category->getPermalink($content_type));
-    // }
+        // $trail->push($blog_post->name, $blog_post->getPermalink($content_type));
 });

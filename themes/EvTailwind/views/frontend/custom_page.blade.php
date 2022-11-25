@@ -15,6 +15,7 @@
 @endsection
 
 @section('content')
+{{ Breadcrumbs::render('home', $page) }}
 
 @if($page->type === 'wysiwyg')
 <div class="container py-10">

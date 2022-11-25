@@ -949,7 +949,7 @@ if (!function_exists('convertPrice')) {
 }
 
 
-function translate($key, $lang = null)
+function translate($key = null, $lang = null)
 {
     if ($lang == null) {
         $lang = App::getLocale();

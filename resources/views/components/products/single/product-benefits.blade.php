@@ -1,5 +1,4 @@
-<section aria-labelledby="policies-heading" class="mt-10">
-    <h2 id="policies-heading" class="sr-only">Our Policies</h2>
+<section aria-labelledby="policies-heading" class="mt-8">
 
     <dl class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
 

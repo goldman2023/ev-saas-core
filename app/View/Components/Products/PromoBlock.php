@@ -1,22 +1,19 @@
 <?php
 
-namespace App\View\Components\Dashboard\Orders;
+namespace App\View\Components\Products;
 
-use App\Models\Order;
 use Illuminate\View\Component;
 
-class LatestOrders extends Component
+class PromoBlock extends Component
 {
-    public $orders;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($orders = null)
+    public function __construct()
     {
         //
-        $this->orders = Order::take(5)->orderBy('updated_at', 'desc')->get();
     }
 
     /**
@@ -26,6 +23,6 @@ class LatestOrders extends Component
      */
     public function render()
     {
-        return view('components.dashboard.orders.latest-orders');
+        return view('components.products.promo-block');
     }
 }
