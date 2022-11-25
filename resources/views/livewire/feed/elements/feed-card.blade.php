@@ -46,7 +46,7 @@
 
             @if(!empty($item->subject->hasThumbnail()))
                 <a class="block w-full mb-3 mt-3" href="{{ $item->subject?->getPermalink() ?? '#' }}">
-                    <img src="{{ $item->subject->getThumbnail(['w' => 800]) }}" class="border w-full max-h-[400px] object-contain rounded-xl"/>
+                    <img loading="lazy" src="{{ $item->subject->getThumbnail(['w' => 800]) }}" class="border w-full max-h-[400px] object-contain rounded-xl"/>
                 </a>
             @endif
 
