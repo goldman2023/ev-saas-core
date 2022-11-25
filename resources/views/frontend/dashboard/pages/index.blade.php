@@ -20,8 +20,8 @@
         @if($pages->count() > 0)
             <livewire:dashboard.tables.pages-table></livewire:dashboard.tables.pages-table>
         @else
-            <x-dashboard.empty-states.no-items-in-collection 
-                icon="heroicon-o-document" 
+            <x-dashboard.empty-states.no-items-in-collection
+                icon="heroicon-o-document"
                 title="{{ translate('No pages yet') }}"
                 text="{{ translate('Create your first page!') }}"
                 link-href-route="page.create"
@@ -29,14 +29,6 @@
 
             </x-dashboard.empty-states.no-items-in-collection>
         @endif
-        
-        {{-- <div class="col-6">
-            <x-default.dashboard.widgets.create-card></x-default.dashboard.widgets.create-card>
-        </div>
-    
-        <div class="col-6">
-            <x-default.dashboard.widgets.create-card title="Create a subscription product" description="Create a recurring digital product"></x-default.dashboard.widgets.create-card>
-        </div> --}}
     </div>
 @endsection
 
