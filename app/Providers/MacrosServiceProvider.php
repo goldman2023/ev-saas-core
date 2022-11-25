@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+
 
 class MacrosServiceProvider extends ServiceProvider
 {
@@ -157,7 +159,7 @@ class MacrosServiceProvider extends ServiceProvider
                 if (!isset($item['order']) || empty($item['order'] ?? null) || (isset($item['order']) && $item['order'] == 0)) {
                     return PHP_INT_MAX;
                 }
-            
+
                 return $item['order'];
             });
         });
@@ -192,6 +194,13 @@ class MacrosServiceProvider extends ServiceProvider
             }
 
             return $this;
+        });
+
+        Str::macro('readDuration', function(...$text) {
+            $totalWords = str_word_count(implode(" ", $text));
+            $minutesToRead = round($totalWords / 200);
+
+            return (int)max(1, $minutesToRead);
         });
     }
 

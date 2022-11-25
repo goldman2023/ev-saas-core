@@ -20,7 +20,7 @@ URL: https://flowbite.com/docs/components/typography/
                         {{ $blog_post->name }}
                     </h1>
                     <p class="text-lg font-normal text-gray-300">
-                        Before going digital, you might scribbling down some ideas in a sketchbook.
+                        {{ $blog_post->excerpt }}
                     </p>
                 </div>
                 <div class="col-span-4 text-right">
@@ -128,132 +128,15 @@ URL: https://flowbite.com/docs/components/typography/
 
         </article>
         <aside class="hidden sm:block" aria-labelledby="sidebar-label">
-            <div class="xl:w-[336px] sticky top-6">
-                <h3 id="sidebar-label" class="sr-only">Sidebar</h3>
-                <div class="mb-8">
-                    <h4 class="mb-2 text-sm font-bold text-gray-900 dark:text-white uppercase">
-                        {{ get_site_name() }} {{ translate(' Newsletter in your inbox 📧') }}
-                    </h4>
-                    <p class="mb-4 text-sm font-light text-gray-500 dark:text-gray-400">
-                       {{ translate('Information about our company.') }}
-                    </p>
-                    <button type="button" data-modal-toggle="newsletter-modal" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 text-center w-full">Subscribe</button>
-                </div>
-                <div class="mb-12">
-                    <h4 class="mb-4 text-sm font-bold text-gray-900 dark:text-white uppercase">Latest news</h4>
-                    <div class="mb-6 flex items-center">
-                        <a href="#" class="shrink-0">
-                            <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/image-1.png" class="mr-4 max-w-full w-24 h-24 rounded-lg" alt="Image 1">
-                        </a>
-                        <div>
-                            <h5 class="mb-2 text-lg font-bold leading-tight dark:text-white text-gray-900">Our first office</h5>
-                            <p class="mb-2 font-light text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone changes.</p>
-                            <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                                Read in 9 minutes
-                            </a>
-                        </div>
-                    </div>
-                    <div class="mb-6 flex items-center">
-                        <a href="#" class="shrink-0">
-                            <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/image-2.png" class="mr-4 max-w-full w-24 h-24 rounded-lg" alt="Image 2">
-                        </a>
-                        <div>
-                            <h5 class="mb-2 text-lg font-bold leading-tight dark:text-white text-gray-900">Enterprise Design tips</h5>
-                            <p class="mb-2 font-light text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone changes.</p>
-                            <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                                Read in 14 minutes
-                            </a>
-                        </div>
-                    </div>
-                    <div class="mb-6 flex items-center">
-                        <a href="#" class="shrink-0">
-                            <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/image-3.png" class="mr-4 max-w-full w-24 h-24 rounded-lg" alt="Image 3">
-                        </a>
-                        <div>
-                            <h5 class="mb-2 text-lg font-bold leading-tight dark:text-white text-gray-900">Partnered up with Google</h5>
-                            <p class="mb-2 font-light text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone changes.</p>
-                            <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                                Read in 9 minutes
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <a href="#" class="flex justify-center items-center mb-3 w-full h-48 bg-gray-100 rounded-lg dark:bg-gray-700">
-                        <svg aria-hidden="true" class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg>
-                    </a>
-                    <p class="mb-2 text-sm font-light text-gray-500 dark:text-gray-400">Students and Teachers, save up to 60% on Flowbite Creative Cloud.</p>
-                    <p class="text-xs font-light text-gray-400 uppercase dark:text-gray-500">Ads placeholder</p>
-                </div>
-            </div>
+            <x-blog.newsletter-form></x-blog.newsletter-form>
         </aside>
     </div>
   </main>
 
-  <aside aria-label="Related articles" class="py-8 lg:py-24 bg-white dark:bg-gray-900">
-    <div class="px-4 mx-auto max-w-screen-xl">
-        <h2 class="mb-6 lg:mb-8 text-2xl font-bold text-gray-900 dark:text-white">Related articles</h2>
-        <div class="grid gap-6 lg:gap-12 md:grid-cols-2">
-            @if($related_blog_posts->isNotEmpty())
-            @foreach($related_blog_posts as $blog_post)
-            <article class="flex flex-col xl:flex-row">
-                <a href="#" class="mb-2 xl:mb-0">
-                    <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png" class="mr-5 max-w-sm" alt="Image 1">
-                </a>
-                <div class="flex flex-col justify-center">
-                    <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-                        <a href="#">Our first office</a>
-                    </h2>
-                    <p class="mb-4 font-light text-gray-500 dark:text-gray-400 max-w-sm">Over the past year, Volosoft has undergone many changes! After months of preparation.</p>
-                    <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                        Read in 2 minutes
-                    </a>
-                </div>
-            </article>
-            @endforeach
-            @endif
-
-
-        </div>
-    </div>
-  </aside>
+  <x-blog.trending-articles></x-blog.trending-articles>
 
 
 
-  <div id="newsletter-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-2xl h-full rounded-lg md:h-auto">
-        <!-- Modal content -->
-        <div class="flex relative items-center bg-white rounded-lg shadow dark:bg-gray-800">
-            <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/newsletter/people-at-office.png" class="hidden h-64 rounded-l-lg md:flex" alt="office">
-            <div>
-                <button type="button" data-modal-toggle="newsletter-modal" class="text-gray-400 absolute top-3 right-3 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                </button>
-                <!-- Modal body -->
-                <div class="p-6 pt-4">
-                    <h3 class="mb-2 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                        Join our Newsletter
-                    </h3>
-                    <p class="mb-4 text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                        Get started with our monthly newsletter for helpful tips on how to run your business smoothly.
-                    </p>
-                    <form action="#">
-                        <div class="items-center mx-auto space-y-4 max-w-screen-sm sm:flex sm:space-y-0">
-                            <div class="relative mr-3 w-full">
-                                <label for="email" class="hidden mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Email address</label>
-                                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
-                                </div>
-                                <input class="block p-3 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Your email" type="email" id="email" required="">
-                            </div>
-                            <div>
-                                <button type="submit" class="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg cursor-pointer bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Subscribe</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
+
+
 @endsection

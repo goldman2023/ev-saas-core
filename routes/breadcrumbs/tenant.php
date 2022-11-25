@@ -43,6 +43,13 @@ Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category, $conte
 Breadcrumbs::for('product', function (BreadcrumbTrail $trail, $product, $content_type = null) {
     $trail->push('All Products', route('products.all'));
     /* TODO: Add product categories */
+
+
+    $primary_category = $product->categories()->first();
+    if($primary_category){
+        $trail->push($primary_category->name , route('blog.category.archive', $primary_category->slug));
+    }
+
     $trail->push($product->name, $product->getPermalink($content_type));
 
     // $trail->parent('home');
@@ -69,7 +76,9 @@ Breadcrumbs::for('blog', function (BreadcrumbTrail $trail, $blog_post = null, $c
         $primary_category = $blog_post->categories()->first();
 
         /* TODO: Add blog category */
-        $trail->push($primary_category->name , route('blog.category.archive', $primary_category->slug));
+        if($primary_category){
+            $trail->push($primary_category->name , route('blog.category.archive', $primary_category->slug));
+        }
 
         $trail->push($blog_post->name, $blog_post->getPermalink($content_type));
     }

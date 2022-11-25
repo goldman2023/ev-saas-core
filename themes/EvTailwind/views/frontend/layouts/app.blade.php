@@ -104,6 +104,7 @@
 
     @stack('footer_scripts')
 
+    <x-integrations.mix-panel></x-integrations.mix-panel>
     {{-- <x-integrations.open-replay></x-integrations.open-replay> --}}
 </body>
 </html>
