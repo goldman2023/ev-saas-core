@@ -1,54 +1,90 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-<div class="min-h-full bg-gray-200">
 
-    <!--
-      When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars
+<div class="bg-gray-100 pt-8">
 
-      Menu open: "fixed inset-0 z-40 overflow-y-auto", Menu closed: ""
-    -->
-    @isset($selected_category)
-        <div>
-            {{-- {{ Breadcrumbs::render('category', $selected_category) }} --}}
+
+    <div class="max-w-7xl mx-auto mt-8">
+
+
+
+        <div class="flex items-baseline justify-between border-b border-gray-200 pb-6">
+
+
+            <h1 class="text-4xl font-bold tracking-tight text-gray-900">
+                @isset($selected_category->name)
+                {{ $selected_category->name }}
+                @else
+                {{ translate('All products') }}
+
+                @endisset
+            </h1>
         </div>
-    @endisset
-    <div class="py-10">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8">
-            <div class="hidden lg:block lg:col-span-2 xl:col-span-2">
-                @foreach(Categories::getAll() as $category)
-                <div class="-m-1 flex flex-wrap items-center">
-                    <a
-                    href="{{ route('category.index', [$category->slug]) }}"
-                        class="cursor-pointer whitespace-nowrap min-w-[50px] nowrap m-1 inline-flex rounded-full border border-gray-200 items-center py-1.5 pl-3 pr-2 text-sm font-medium "
-                        :class="{'bg-info text-white':selected_categories.indexOf({{ $category->id }}) !== -1, 'bg-white text-gray-900':selected_categories.indexOf({{ $category->id }}) === -1}">
-                        <span>{{ $category->name }}</span>
-                        <button type="button"
-                            class="flex-shrink-0 ml-1 h-4 w-4 p-1 rounded-full inline-flex text-gray-400 hover:bg-gray-200 hover:text-gray-500">
-                            <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-                                <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
-                            </svg>
-                        </button>
-                    </a>
 
-                </div>
-
-                @endforeach
-            </div>
-            <main class="lg:col-span-9 xl:col-span-10">
-                <div class="mt-4">
-                    <div class="mb-5">
-                        <livewire:feed.elements.shop.shop-archive-filters></livewire:feed.elements.shop.shop-archive-filters>
-                    </div>
-
-                    <livewire:feed.archive :model_class="\App\Models\Product::class" :show-filters="true"></livewire:feed.archive>
-                </div>
-            </main>
-            <aside class="xl:block col-span-4 xl:col-span-3">
-
-            </aside>
-        </div>
     </div>
+    <div class="w-full mb-8">
+        @isset($selected_category)
+        <div>
+            {{ Breadcrumbs::render('category', $selected_category) }}
+        </div>
+        @else
+        {{ Breadcrumbs::render('products') }}
+
+        @endisset
+    </div>
+    <main class="max-w-7xl mx-auto">
+
+        <section aria-labelledby="products-heading" class="pt-6 pb-24">
+            <h2 id="products-heading" class="sr-only">Products</h2>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+                <!-- Filters -->
+                <div>
+                    <form class="hidden lg:block">
+                        <h3 class="sr-only">Categories</h3>
+                        <ul role="list"
+                            class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+
+                            @foreach(Categories::getAll() as $category)
+                            <li>
+                                <a href="{{ $category->getPermalink() }}">
+                                    {{ $category->name }}
+                                </a>
+                            </li>
+
+                            @endforeach
+
+                        </ul>
+                    </form>
+
+                    <div>
+                        <x-products.promo-block></x-products.promo-block>
+                    </div>
+                </div>
+
+
+
+                <!-- Product grid -->
+                <div class="grid sm:grid-cols-4 gap-y-10 gap-x-6 sm:grid-cols-3 lg:col-span-3 lg:gap-x-8">
+                    @foreach ($products as $item)
+                    @if($item instanceof \App\Models\Product)
+                    <x-default.products.product-card :product="$item"></x-default.products.product-card>
+                    {{-- <x-feed.elements.product-card :product="$item"></x-feed.elements.product-card> --}}
+                    @endif
+                    @endforeach
+
+                    @if($products->hasPages())
+                    <div class="w-full">
+                        {{ $products->onEachSide(3)->links('pagination::tailwind') }}
+                    </div>
+                    @endif
+                    <!-- More products... -->
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
 </div>
 
 @endsection

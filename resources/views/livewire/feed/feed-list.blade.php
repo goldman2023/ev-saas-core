@@ -81,7 +81,7 @@
             @if($hasMorePages)
 
             <div class="mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg w-full">
-                {{ translate('Loading Your Knowledge Feed...') }}
+                {{ translate('Loading More Posts...') }}
 
             </div>
             @else

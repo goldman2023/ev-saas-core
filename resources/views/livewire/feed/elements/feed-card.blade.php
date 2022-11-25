@@ -2,7 +2,7 @@
         id: 'feed-activity-{{ $item->id }}',
         comment_count: {{ $item->comments_count ?? 0 }},
         'isModalOpen': false,
-    }" x-on:keydown.escape="isModalOpen=false" 
+    }" x-on:keydown.escape="isModalOpen=false"
     @change-activity-comment-count.window="
         if(id == 'feed-activity-'+$event.detail.item_id) {
             comment_count = Number(comment_count) + 1;
@@ -14,11 +14,7 @@
         </x-feed.elements.card-header-user-info>
 
         <div class="w-full flex flex-col">
-            @if(!empty($item->subject->hasThumbnail()))
-                <a class="block w-full mb-5" href="{{ $item->subject?->getPermalink() ?? '#' }}">
-                    <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" class="w-full h-[205px] object-cover rounded-xl"/>
-                </a>
-            @endif
+
 
             @if($item->subject::class !== \App\Models\SocialPost::class)
                 <div class="w-full mb-3 flex">
@@ -40,13 +36,19 @@
                 </a>
             @endif
 
-            <p class="text-14 text-typ-3 font-normal line-clamp-10 ">
+            <p class="text-16 text-gray-900 font-normal line-clamp-10 ">
                 @if(!empty($item->subject?->excerpt ?? null))
                     {{ empty(trim($item->subject->excerpt)) ? strip_tags($item->subject->content) : $item->subject->excerpt }}
                 @else
                     {{ $item->subject->content }}
                 @endif
             </p>
+
+            @if(!empty($item->subject->hasThumbnail()))
+                <a class="block w-full mb-3 mt-3" href="{{ $item->subject?->getPermalink() ?? '#' }}">
+                    <img loading="lazy" src="{{ $item->subject->getThumbnail(['w' => 800]) }}" class="border w-full max-h-[400px] object-contain rounded-xl"/>
+                </a>
+            @endif
 
             @if(!empty($item->subject?->tags ?? null))
                 <div class="w-full mt-3 flex flex-wrap space-x-2">

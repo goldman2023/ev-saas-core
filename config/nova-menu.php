@@ -57,6 +57,19 @@ return [
             'max_depth' => 2,
             'menu_item_types' => []
         ],
+        'footer-2' => [
+            'name' => 'Footer 2',
+            'unique' => true,
+            'max_depth' => 2,
+            'menu_item_types' => []
+        ],
+
+        'footer-3' => [
+            'name' => 'Footer 3',
+            'unique' => true,
+            'max_depth' => 2,
+            'menu_item_types' => []
+        ],
         'custom_dashboard_elements' => [
             'name' => 'Custom Dashboard Menu Items',
             'unique' => true,

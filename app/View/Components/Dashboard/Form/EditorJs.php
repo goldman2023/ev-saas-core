@@ -15,7 +15,7 @@ class EditorJs extends Component
      *
      * @return void
      */
-    public function __construct($field = '', $structureField = 'description', $id = '')
+    public function __construct($field = 'description', $structureField = 'description', $id = '')
     {
         $this->field = $field;
         $this->structureField = $structureField;

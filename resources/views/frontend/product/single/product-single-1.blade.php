@@ -5,235 +5,182 @@
 @endsection
 
 @section('content')
-<div class="bg-white">
-    <div class="mx-auto py-8 px-4 sm:py-18 sm:px-6 lg:max-w-7xl lg:px-4">
-        <!-- Product -->
-        <div class="lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-3 xl:gap-x-16">
-            <!-- Product Gallery -->
-            <div class="lg:row-end-1 lg:col-span-4">
-                <x-galleries.main-gallery template="product-gallery" :model="$product" class="">
-                </x-galleries.main-gallery>
-            </div>
-
-            <!-- Product details -->
-            <div class="w-full mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-4">
+{{ Breadcrumbs::render('product', $product) }}
+<div class="bg-gray-100">
+    <main class="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
+        <div class="mx-auto max-w-2xl lg:max-w-none">
+            <!-- Product -->
+            <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+                <!-- Image gallery -->
                 <div class="flex flex-col">
-                    <div class="w-full flex space-x-3">
-                        @foreach($product->categories as $category)
-                        @if(empty($category->parent_id))
-                        <div class="badge-info !text-14 !py-1">{{ $category->name }}</div>
-                        @endif
-                        @endforeach
-                    </div>
-                    <div class="w-full mt-3">
-                        <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-                            {{ $product->getTranslation('name') }}
-                        </h1>
 
-                        {{-- <h2 id="information-heading" class="sr-only">Product information</h2>
-                        <p class="text-sm text-gray-500 mt-2"> {{ translate('Views: ') }} {{
-                            $product->public_view_count() }} (Updated <time datetime="2021-06-05">{{
-                                $product->updated_at->diffForHumans() }}</time>)</p> --}}
+
+                    <div class="w-full">
+                        <!-- Tab panel, show/hide based on tab state. -->
+                        <div id="tabs-2-panel-1" aria-labelledby="tabs-2-tab-1" role="tabpanel" tabindex="0">
+                            <img src="{{ $product->getThumbnail() }}"
+                                alt="Angled front view with bag zipped and handles upright."
+                                class="w-full object-contain object-center sm:rounded-lg">
+                        </div>
+
+                        <!-- More images... -->
                     </div>
 
-                    <div class="w-full mt-3">
-                        <div class="flex items-center">
-                            {{-- TODO: FIX THIS TO USE REAL RATING --}}
-                            @for($i = 0; $i < 4; $i++) @svg('heroicon-s-star', ['class'=> 'text-warning h-5 w-5
-                                flex-shrink-0'])
-                                @endfor
+                     <!-- Image selector -->
+                     <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
+                        <div class="grid grid-cols-4 gap-6" aria-orientation="horizontal" role="tablist">
+                            @foreach($product->gallery as $image)
+                            <button id="tabs-2-tab-1"
+                                class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+                                aria-controls="tabs-2-panel-1" role="tab" type="button">
+                                <span class="sr-only"> Angled view </span>
+                                <span class="absolute inset-0 overflow-hidden rounded-md">
+                                    <img loading="lazy" :src="window.WE.IMG.url('{{$image->file_name}}')" alt=""
+                                        class="w-full object-contain object-center">
+                                </span>
+                                <!-- Selected: "ring-indigo-500", Not Selected: "ring-transparent" -->
+                                <span
+                                    class="ring-transparent pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2"
+                                    aria-hidden="true"></span>
+                            </button>
+                            @endforeach
 
-                                @svg('heroicon-s-star', ['class' => 'text-gray-300 h-5 w-5 flex-shrink-0'])
-
-                                <span class="ml-2 text-gray-500">{{ $product->rating }}</span>
-                                <span class="ml-3 text-gray-500">{{ '(67 reviews)' }}</span>
+                            <!-- More images... -->
                         </div>
                     </div>
+
+                    <x-products.single.product-benefits></x-products.single.product-benefits>
+
                 </div>
 
-                <p class="text-gray-500 mt-4">
-                    {!! $product->getTranslation('excerpt') !!}
-                </p>
-                <div class="w-full">
+                <!-- Product info -->
+                <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+                    <h1 class="text-4xl font-bold tracking-tight text-gray-900">
+                        {{ $product->name }}
+                    </h1>
+
+                    <div class="mt-3">
+                        <h2 class="sr-only">Product information</h2>
+                        <p class="text-3xl tracking-tight text-gray-900">{{ FX::formatPrice($product->getBasePrice()) }}
+                        </p>
+                    </div>
+
+                    <!-- Reviews -->
+                    <div class="mt-3">
+                        <h3 class="sr-only">Stock</h3>
+                        <div class="flex items-center">
+                            <div class="flex items-center">
+                                <div class="mt-6 flex items-center">
+                                    <svg class="h-5 w-5 flex-shrink-0 text-green-500"
+                                        x-description="Heroicon name: mini/check" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd"
+                                            d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    <p class="ml-2 text-sm text-gray-500">
+                                        {{ translate('Available in warehouse') }}
+                                    </p>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <h3 class="sr-only">Description</h3>
+
+                        <div class="space-y-6 text-base text-gray-700">
+                            <p>
+                                {!! $product->description !!}
+                            </p>
+                        </div>
+                    </div>
                     <x-default.products.single.product-checkout-card :product="$product">
                     </x-default.products.single.product-checkout-card>
-                </div>
+                    <form class="hidden mt-6">
+                        <div class="mt-10 flex">
+                            <button type="submit"
+                                class="flex max-w-xs flex-1 items-center justify-center rounded border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full">
+                                {{ translate('Add to order') }}
+                            </button>
 
-                <div class="w-full flex flex-col mt-4">
-                    <div class="flex items-center">
-                        <div class="grow flex items-center">
-                            <span class="mr-2 text-gray-900 font-semibold">{{ translate('Sold by') }}:</span>
-                            <span class="mr-1">
-                                <a href="{{ $product->shop->getPermalink() }}">
-                                    <img src="{{ $product->shop->getThumbnail(['w' => '100']) }}"
-                                        class="w-7 h-7 rounded" />
-                                </a>
-                            </span>
-                            <a href="{{ $product->shop->getPermalink() }}" class="text-gray-800">{{ $product->shop->name
-                                }}</a>
-                        </div>
-                        <div class="shrink-0">
-                            <button type="button" class="btn-primary">
-                                @svg('heroicon-o-chat-alt-2', ['class' => 'w-4 h-4 mr-2'])
-                                {{ translate('Message seller') }}
+                            <button type="button"
+                                class="ml-4 flex items-center justify-center rounded-md py-3 px-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500">
+                                <!-- Heroicon name: outline/heart -->
+                                <svg class="h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                </svg>
+                                <span class="sr-only">Add to favorites</span>
                             </button>
                         </div>
-                    </div>
+                    </form>
 
-                    <div class="flex items-center mt-2">
-                        <div class="grow flex items-center" x-data="{
-                            shareFB(){
-                                url = 'https://www.facebook.com/sharer/sharer.php?display=popup&u=' + window.location.href;
-                                options = 'toolbar=0,status=0,resizable=1,width=626,height=436';
-                                window.open(url,'sharer',options);
-                            },
-                            tweetit() {
-                                url = 'https://twitter.com/intent/tweet?text={{ urlencode($product->name. '! Check it out here: ' . $product->getPermalink()) }}',
-                                window.open(url,'sharer', '');
-                            }
-                        }">
-                            <span class="mr-2 text-gray-900 font-semibold">{{ translate('Share') }}:</span>
+                    <section aria-labelledby="details-heading" class="mt-8">
+                        <h2 id="details-heading" class="sr-only">Additional details</h2>
 
-                            {{-- Social share --}}
-                            <div class="mr-2">
-                                <div @click="shareFB()"
-                                    class="flex items-center justify-center w-6 h-6 text-gray-400 hover:text-gray-500 cursor-pointer">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                        <path fill-rule="evenodd"
-                                            d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z"
-                                            clip-rule="evenodd" />
-                                    </svg>
+                        <div class="divide-y divide-gray-200">
+                            <div>
+                                <h3>
+                                    <!-- Expand/collapse question button -->
+                                    <button type="button"
+                                        class="group relative flex w-full items-center justify-between py-6 text-left"
+                                        aria-controls="disclosure-1" aria-expanded="false">
+                                        <!-- Open: "text-indigo-600", Closed: "text-gray-900" -->
+                                        <span class="text-gray-900 text-lg font-medium">
+                                            {{ translate('Product specification') }}
+                                        </span>
+                                        <span class="ml-6 flex items-center">
+                                            <!--
+                                                Heroicon name: outline/plus
+
+                                                Open: "hidden", Closed: "block"
+                                                -->
+                                            <svg class="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 4.5v15m7.5-7.5h-15" />
+                                            </svg>
+                                            <!--
+                                                Heroicon name: outline/minus
+
+                                                Open: "block", Closed: "hidden"
+                                                -->
+                                            <svg class="hidden h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </h3>
+                                <div class="prose prose-sm pb-6" id="disclosure-1">
+
+                                    <x-default.products.single.product-specification-table :product="$product">
+                                    </x-default.products.single.product-specification-table>
                                 </div>
                             </div>
-                            <div class="mr-2">
-                                <div @click="tweetit()"
-                                    class="flex items-center justify-center w-6 h-6 text-gray-400 hover:text-gray-500 cursor-pointer">
-                                    <span class="sr-only">Share on Twitter</span>
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                        <path
-                                            d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
-                                    </svg>
-                                </div>
-                            </div>
-                            {{-- END Social share --}}
 
+                            <!-- More sections... -->
                         </div>
-                    </div>
+                    </section>
+
+
                 </div>
-
-                {{-- <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-                    <button type="button"
-                        class="w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">Pay
-                        $220</button>
-                    <button type="button"
-                        class="w-full bg-indigo-50 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">Preview</button>
-
-                </div> --}}
-
-                {{-- <div class="hidden border-t border-gray-200 mt-10 pt-10">
-                    <h3 class="text-sm font-medium text-gray-900">Highlights</h3>
-                    <div class="mt-4 prose prose-sm text-gray-500">
-                        <ul role="list">
-                            <li>200+ SVG icons in 3 unique styles</li>
-                            <li>Compatible with Figma, Sketch, and Adobe XD</li>
-                            <li>Drawn on 24 x 24 pixel grid</li>
-                        </ul>
-                    </div>
-                </div> --}}
-
-                {{-- <div class="hiddenborder-t border-gray-200 mt-10 pt-10">
-                    <h3 class="text-sm font-medium text-gray-900">{{ translate('Sold by:') }}</h3>
-                    <livewire:feed.elements.shop-card :shop="$product->shop"></livewire:feed.elements.shop-card>
-                </div> --}}
-
-
-            </div>
-
-            <div class="w-full mt-16 lg:max-w-none lg:mt-0 lg:col-span-8 mb-10">
-                {{-- <x-tailwind-ui.sections.ecommerce.incentives-sections.incentives-section08>
-                </x-tailwind-ui.sections.ecommerce.incentives-sections.incentives-section08> --}}
-                {{-- <div>
-                    <div class="border-b border-gray-200">
-                        <div class="-mb-px flex space-x-8" aria-orientation="horizontal" role="tablist">
-                            <!-- Selected: "border-indigo-600 text-indigo-600", Not Selected: "border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300" -->
-                            <button id="tab-reviews"
-                                class="border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300 whitespace-nowrap py-6 border-b-2 font-medium text-sm"
-                                aria-controls="tab-panel-reviews" role="tab" type="button">
-                                {{ translate('Product Description') }} </button>
-
-                        </div>
-                    </div>
-
-                    <!-- 'Customer Reviews' panel, show/hide based on tab state -->
-                    <div id="tab-panel-reviews" class="-mb-10" aria-labelledby="tab-reviews" role="tabpanel"
-                        tabindex="0">
-
-                        {!! $product->description !!}
-
-                        <x-default.products.single.product-specification-table :product="$product">
-                        </x-default.products.single.product-specification-table>
-                    </div>
-                    <!-- 'FAQ' panel, show/hide based on tab state -->
-                </div> --}}
-
-                <div x-data="{
-                        current: 'description'
-                    }">
-                    <div class="sm:hidden">
-                        <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-                        <select id="tabs" name="tabs"
-                            class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                            <option>My Account</option>
-                            <option>Company</option>
-                            <option>Team Members</option>
-                            <option>Billing</option>
-                        </select>
-                    </div>
-                    <div class="hidden sm:block">
-                        <div class="border-b border-gray-200">
-                            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                                <div @click="current = 'description';"
-                                    :class="{'text-primary border-primary ': current == 'description'}"
-                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
-                                    {{ translate('Description') }} </div>
-                                <div @click="current = 'specification';"
-                                    :class="{'text-primary border-primary ': current == 'specification'}"
-                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
-                                    {{ translate('Specification') }} </div>
-                                <div @click="current = 'shipping';"
-                                    :class="{'text-primary border-primary ': current == 'shipping'}"
-                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer"
-                                    aria-current="page"> {{ translate('Shipping') }} </div>
-                                <div @click="current = 'returns';"
-                                    :class="{'text-primary border-primary ': current == 'returns'}"
-                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
-                                    {{ translate('Returns and buyers protections') }} </div>
-                            </nav>
-                        </div>
-                    </div>
-
-                    <div class="w-full mt-5" x-cloak>
-                        <div class="" x-show="current == 'description'">
-                            {!! $product->description !!}
-                        </div>
-
-                        <div class="" x-show="current == 'specification'">
-                            <x-default.products.single.product-specification-table :product="$product">
-                            </x-default.products.single.product-specification-table>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
-    </div>
+
+        {{-- <x-products.single.technical-specification-section :product="$product">
+        </x-products.single.technical-specification-section> --}}
+
+
+        <x-products.single.related-products :products="$product->relatedProducts()">
+        </x-products.single.related-products>
 </div>
-<div class="bg-gray-100">
-    <div class="container  mt-[200px]">
-        <x-default.products.recently-viewed-products class="p-3"></x-default.products.recently-viewed-products>
-    </div>
+</main>
 </div>
-
-
-
 @endsection

@@ -1,13 +1,13 @@
 @extends('frontend.layouts.feed')
 
 @section('feed_content')
-    <div class="lg:px-16 col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8 flex flex-col">
-        <div class="mb-3">
-            {{-- <x-feed.elements.stories-global>
-            </x-feed.elements.stories-global> --}}
-        </div>
+    <div class="mt-8 lg:px-16 col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8 flex flex-col">
+        {{-- <div class="mb-8">
+            <x-feed.elements.stories-global>
+            </x-feed.elements.stories-global>
+        </div> --}}
 
-        <div class="grid grid-cols-12 gap-5 mt-4">
+        <div class="grid grid-cols-12 gap-5">
             <div class="col-span-12 space-y-4 px-0">
                {{-- <livewire:feed.elements.welcome-panel></livewire:feed.elements.welcome-panel> --}}
                <livewire:feed.elements.add-post class="mb-4" />
@@ -16,8 +16,8 @@
         </div>
     </div>
 
-    <aside class="hidden sm:block sm:col-span-4 md:col-span-4">
-        <div class="sticky top-4 space-y-4">
+    <aside class="hidden sm:block sm:col-span-4 md:col-span-4 mt-8">
+        <div class="sticky top-8 space-y-4">
 
             {{-- Upcoming Events --}}
             <livewire:feed.blocks.upcoming-events />

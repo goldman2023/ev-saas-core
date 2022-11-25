@@ -106,7 +106,7 @@
                                     <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                         {{ translate('Site logo') }}
                                     </label>
-                                    
+
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <x-dashboard.form.file-selector field="settings.site_logo" id="site-logo"
                                             :selected-image="$settings['site_logo']"></x-dashboard.form.file-selector>
@@ -152,7 +152,7 @@
                                     <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                         {{ translate('SEO Meta Image') }}
                                     </label>
-                                    
+
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <x-dashboard.form.file-selector field="settings.seo_meta_image" id="site-seo_meta_image"
                                             :selected-image="$settings['seo_meta_image']"></x-dashboard.form.file-selector>
@@ -457,7 +457,7 @@
                                 <!-- END Documentaion url -->
 
                                 @do_action('view.app-settings-form.general.end')
-                                
+
                                 {{-- Save general information --}}
                                 <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
                                     x-data="{}">
@@ -2307,9 +2307,9 @@
                                                                         </td>
                                                                         <td
                                                                             class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
-                                                                            <input type="number" step="1" min="0"
+                                                                            {{-- <input type="number" step="1" min="0"
                                                                                 class="form-standard max-w-[60px]"
-                                                                                x-model="settings.user_meta_fields_in_use[key].order" />
+                                                                                x-model="settings.user_meta_fields_in_use[key].order" /> --}}
                                                                         </td>
                                                                     </tr>
                                                                 </template>

@@ -1,22 +1,22 @@
 <?php
 
-namespace App\View\Components\Dashboard\Orders;
+namespace App\View\Components\Blog;
 
-use App\Models\Order;
+use App\Models\BlogPost;
 use Illuminate\View\Component;
 
-class LatestOrders extends Component
+class TrendingArticles extends Component
 {
-    public $orders;
+    public $posts;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($orders = null)
+    public function __construct($posts = null)
     {
         //
-        $this->orders = Order::take(5)->orderBy('updated_at', 'desc')->get();
+        $this->posts = BlogPost::take(4)->get();
     }
 
     /**
@@ -26,6 +26,6 @@ class LatestOrders extends Component
      */
     public function render()
     {
-        return view('components.dashboard.orders.latest-orders');
+        return view('components.blog.trending-articles');
     }
 }

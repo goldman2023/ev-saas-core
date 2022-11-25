@@ -7,7 +7,7 @@
 }">
     {{-- Header settings should include Background among other things + Sticky behavior (yes/no) --}}
     <div class="relative bg-transparent">
-        <div class="max-w-6xl mx-auto px-4 sm:px-5">
+        <div class="container mx-auto px-4 sm:px-5">
             <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <a href="{{ route('home') }}">

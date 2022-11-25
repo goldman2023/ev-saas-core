@@ -18,9 +18,7 @@
         return false;
     },
     selectMedia(file) {
-      if(this.selected === null || this.selected === undefined) {
         this.selected = [];
-      }
 
       if(!this.isMediaSelected(file)) {
         if(this.multiple) {
