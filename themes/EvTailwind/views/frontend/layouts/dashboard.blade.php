@@ -28,17 +28,16 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
+    {{-- TailwindCSS --}}
+    {{-- <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script> --}}
+    <script src="{{ static_asset('/bp-assets/tailwind-play/tailwind.js') }}"></script>
+    <script defer async src="{{ static_asset('/bp-assets/vendor/flowbite/flowbite.js') }}"></script>
 
-
-
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
-
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
     @include('frontend.layouts.global-partials.all')
 
     {{ seo()->render() }}
-
-
-
     @livewireStyles
     @stack('head_scripts')
 </head>
@@ -89,11 +88,8 @@
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js', 'themes/EvTailwind') }}" defer></script>
-    <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
-
     @livewireScripts
-    @livewireChartsScripts
     @yield('script')
 
     @stack('footer_scripts')
