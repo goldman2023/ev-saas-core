@@ -30,6 +30,45 @@ use Illuminate\Support\Facades\Log;
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
 include('Helpers/EIMHelpers.php');
 
+if (!function_exists('class_has_trait')) {
+    function class_has_trait($class, $trait) {
+        return in_array($trait, class_uses_recursive($class));
+    }
+}
+
+if (!function_exists('array_deep_merge')) {
+    function array_deep_merge(array $array1, array $array2, array ...$arrays): array {
+        // where is the array spread operator when you need it?
+        array_unshift($arrays, $array2);
+        array_unshift($arrays, $array1);
+
+        $merged = [];
+        while ($arrays) {
+            $array = array_shift($arrays);
+            assert(is_array($array));
+            
+            if (!$array) {
+                continue;
+            }
+
+            foreach ($array as $key => $value) {
+                if (is_string($key)) {
+                    if (is_array($value) && array_key_exists($key, $merged) && is_array($merged[$key])) {
+                        $merged[$key] = array_deep_merge($merged[$key], $value);
+                    } else {
+                        $merged[$key] = $value;
+                    }
+                } else {
+                    $merged[] = $value;
+                }
+            }
+        }
+
+        return $merged;
+    }
+}
+
+
 if (!function_exists('we_query')) {
     function we_query($args) {
         if(empty($args['content_type'] ?? null) || !empty(ContentTypeEnum::values()[$args['content_type']] ?? null))

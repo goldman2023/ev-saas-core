@@ -2,6 +2,10 @@
 
 namespace App\Traits\Livewire;
 
+use Illuminate\Support\Arr;
+use App\Traits\HasContentColumn;
+use Illuminate\Support\Collection;
+
 trait RulesSets
 {
     /**
@@ -41,5 +45,36 @@ trait RulesSets
         }
 
         return $rule_set;
+    }
+
+    protected function getMetaRuleSet($model, $set_name = null, $custom_rules = null) {
+        $defaultMetaRuleSets = [
+            'wef_meta' => [
+                
+            ],
+            'core_meta' => [
+                'core_meta' => '',
+            ]
+        ];
+        $metaRuleSets = [];
+
+        // Set Meta Defaults
+        if(class_has_trait($model::class, HasContentColumn::class)) {
+            $defaultMetaRuleSets['wef_meta']['wef.'.$model->getContentStructureCoreMetaName()] = 'nullable';
+        }
+        // END Set meta defaults
+        if(!empty($custom_rules) && (is_array($custom_rules) || $custom_rules instanceof Collection)) {
+            if($custom_rules instanceof Collection) {
+                $custom_rules = $custom_rules->toArray(); // turn collection to array!
+            }
+
+            if(empty($set_name) || $set_name === 'all') {
+                $metaRuleSets = array_deep_merge($defaultMetaRuleSets, $custom_rules);
+            } else {
+                $metaRuleSets = array_deep_merge($defaultMetaRuleSets[$set_name], $custom_rules);
+            }
+        }
+
+        return $metaRuleSets;
     }
 }

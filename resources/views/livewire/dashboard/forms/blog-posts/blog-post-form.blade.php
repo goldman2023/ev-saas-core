@@ -8,10 +8,10 @@
     subscription_only: @js($blogPost->subscription_only === 'true' ? true : false),
     selected_plans: @js($selectedPlans),
     content: @entangle('blogPost.content').defer,
-    content_structure: @entangle('blogPost.content_structure').defer,
+    content_structure: @entangle('wef.content_structure').defer,
     selected_categories: @js($selected_categories),
     core_meta: @js($core_meta),
-    model_core_meta: @js($model_core_meta),
+    wef: @js($wef),
     onSave() {
         $wire.set('blogPost.thumbnail', this.thumbnail.id, true);
         $wire.set('blogPost.cover', this.cover.id, true);
@@ -21,10 +21,10 @@
         $wire.set('blogPost.type', this.type, true);
         $wire.set('blogPost.subscription_only', this.subscription_only, true);
         $wire.set('blogPost.content', this.content, true);
-        $wire.set('blogPost.content_structure', this.content_structure, true);
         $wire.set('selected_categories', this.selected_categories, true);
         $wire.set('core_meta', this.core_meta, true);
-        {{-- $wire.set('model_core_meta.portfolio_link', this.model_core_meta.portfolio_link, true); --}}
+        $wire.set('wef.content_structure', this.content_structure, true);
+        $wire.set('wef.portfolio_link', wef.portfolio_link, true);
     }
 }" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" x-cloak>
 @push('head_scripts')
@@ -337,7 +337,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="model_core_meta.portfolio_link"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="wef.portfolio_link"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END Portfolio link -->

@@ -92,10 +92,6 @@
 
             {{-- Comments --}}
             <div class="flex flex-col px-5 py-4 mt-4 border-t border-gray-200">
-                <h3 class="text-lg font-bold mb-3">
-                    {{ translate('Discussion') }} ({{ $social_post->comments->count() }})
-                </h3>
-
                 <livewire:actions.social-comments :item="$social_post">
                 </livewire:actions.social-comments>
             </div>

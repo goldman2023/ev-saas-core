@@ -55,7 +55,9 @@
                 x-transition:leave-end="opacity-0"></div>
 
             <!-- This element is to trick the browser into centering the modal contents. -->
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+                &#8203;
+            </span>
 
 
             <div class="max-w-[90%] lg:max-w-[1150px]  overflow-hidden relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left  shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full sm:p-6"
@@ -72,8 +74,8 @@
                 </button>
 
                 <div class="flex flex-col max-h-[85vh]" x-data="{
-            active_tab: 'select_file',
-        }" x-init="">
+                        active_tab: 'select_file',
+                    }" x-init="">
 
                     <div class="border-b border-gray-200 block">
                         <nav class="flex space-x-4" aria-label="Tabs">
@@ -91,9 +93,9 @@
                         {{-- Sort and Search bar --}}
                         <div class="w-full pb-3 mb-3 border-b border-gray-200 flex items-center justify-between">
                             <div x-data="{
-                          sort_types: @js(\App\Enums\SortMediaLibraryEnum::labels()),
-                          show_sort_dropdown: false,
-                      }">
+                                sort_types: @js(\App\Enums\SortMediaLibraryEnum::labels()),
+                                show_sort_dropdown: false,
+                                }">
                                 <div class="mt-1 relative">
                                     <button type="button" @click="show_sort_dropdown = !show_sort_dropdown"
                                         class="bg-white relative w-[200px] border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -334,4 +336,5 @@
             </div>
         </div>
     </div>
+</div>
 </div>

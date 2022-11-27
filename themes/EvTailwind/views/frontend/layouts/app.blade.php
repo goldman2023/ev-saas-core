@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <title>@yield('meta_title', get_site_name() .' | '.get_tenant_setting('site_motto'))</title>
     <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
-    {{-- <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )"> --}}
+    {{--
+    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )"> --}}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
-    <link rel='canonical' href='@yield('canonical_link',  url()->current() )' />
+    <link rel='canonical' href='@yield(' canonical_link', url()->current() )' />
 
 
     @yield('meta')
@@ -29,7 +31,9 @@
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
-    <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
 
     {{-- TailwindCSS --}}
     {{-- <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script> --}}
@@ -44,12 +48,14 @@
 </head>
 
 <body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{
-}"
-    @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
+}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
 
     @include('frontend.layouts.global-partials.global-integrations-body')
 
     <div class="min-h-screen">
+        {{-- <x-system.promo-banner></x-system.promo-banner> --}}
+        {{-- <x-system.promo-banner-bottom></x-system.promo-banner-bottom> --}}
+
         <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
 
         <!-- Page Content -->
@@ -73,18 +79,20 @@
 
 
     @guest
-        <x-panels.flyout-auth></x-panels.flyout-auth>
+    <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
 
     @auth
-        <x-panels.flyout-profile></x-panels.flyout-profile>
+    <x-panels.flyout-profile></x-panels.flyout-profile>
+    <div>
         <livewire:we-media-library />
+    </div>
     @endauth
 
     @if(get_tenant_setting('chat_feature', false))
-        @auth
-            <x-default.chat.widget-chat></x-default.chat.widget-chat>
-        @endauth
+    @auth
+    <x-default.chat.widget-chat></x-default.chat.widget-chat>
+    @endauth
     @endif
 
 
@@ -104,7 +112,8 @@
 
     @stack('footer_scripts')
 
-    <x-integrations.mix-panel></x-integrations.mix-panel>
+    {{-- <x-integrations.mix-panel></x-integrations.mix-panel> --}}
     {{-- <x-integrations.open-replay></x-integrations.open-replay> --}}
 </body>
+
 </html>

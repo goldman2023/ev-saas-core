@@ -295,3 +295,4 @@ if($colors) {
     }
 
 </style>
+

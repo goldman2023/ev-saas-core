@@ -1,7 +1,7 @@
 @extends('frontend.layouts.feed')
 
 @section('feed_content')
-    <div class="mt-8 lg:px-16 col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8 flex flex-col">
+    <div class="mt-8 lg:px-6 col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8 flex flex-col">
         {{-- <div class="mb-8">
             <x-feed.elements.stories-global>
             </x-feed.elements.stories-global>

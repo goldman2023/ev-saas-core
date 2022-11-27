@@ -180,7 +180,7 @@ class OrderForm extends Component
             $this->invoicing_period = null;
 
             /* Save all meta attributes */
-            $this->setCoreMeta($this->order);
+            $this->saveCoreMeta($this->order);
             $this->order->phone_numbers = [];
             $this->order->is_temp = false;
             $this->order->save();

@@ -17,109 +17,14 @@
 @endsection
 
 @push('head_scripts')
-<style>
-    #blog_post_single_content img {
-        overflow-x: hidden;
-    }
 
-    #blog_post_single_content h2,
-    #blog_post_single_content h3,
-    #blog_post_single_content h4 {
-        font-size: 36px;
-        line-height: 46px;
-        margin-bottom: 40px;
-        font-weight: 600;
-    }
-
-    #blog_post_single_content p {
-        font-size: 18px;
-        line-height: 28px;
-        margin-bottom: 40px;
-    }
-
-    #blog_post_single_content figure {
-        margin-bottom: 40px;
-    }
-
-    #blog_post_single_content ol {
-        overflow-wrap: break-word;
-        padding-left: 20px;
-        margin-top: 0;
-        margin-bottom: 40px;
-        list-style-type: none;
-        counter-reset: item;
-        list-style: decimal;
-    }
-
-    #blog_post_single_content ul {
-        overflow-wrap: break-word;
-        padding-left: 20px;
-        margin-top: 0;
-        margin-bottom: 40px;
-        list-style-type: none;
-        counter-reset: item;
-        list-style: disc;
-    }
-
-    #blog_post_single_content .wp-block-separator {
-        height: 2px !important;
-        color: #ccc !important;
-        margin-top: 0 !important;
-        margin-bottom: 40px !important;
-    }
-
-    @media(max-width: 1200px) {
-
-        #blog_post_single_content h2,
-        #blog_post_single_content h3,
-        #blog_post_single_content h4 {
-            font-size: 28px;
-            line-height: 38px;
-        }
-
-        #blog_post_single_content p {
-            font-size: 16px;
-            line-height: 26px;
-        }
-
-        #blog_post_single_content iframe {
-            max-width: 100%;
-            height: auto;
-            min-height: 200px;
-        }
-
-        #blog_post_single_content img {
-            max-width: 100%;
-            height: auto;
-        }
-    }
-
-    .gallery-link {
-        /* pointer-events: none; */
-    }
-
-    @media (min-width: 782px) {
-        .wp-block-columns:not(.is-not-stacked-on-mobile)>.wp-block-column {
-            flex-basis: 0;
-            flex-grow: 1;
-        }
-
-        .wp-block-columns {
-            display: flex;
-            margin-bottom: 1.75em;
-            box-sizing: border-box;
-            flex-wrap: nowrap;
-            gap: 20px;
-        }
-    }
-</style>
 @endpush
 
 @push('footer_scripts')
-<script src="{{ static_asset('/bp-assets/vendor/image-compare-viewer.min.js') }}" defer></script>
 <link href="{{ static_asset('/bp-assets/vendor/image-compare-viewer.min.css') }}" rel="stylesheet" />
 
 <link href="{{ static_asset('/bp-assets/vendor/fancybox/fancybox.css') }}" rel="stylesheet" />
+<script src="{{ static_asset('/bp-assets/vendor/image-compare-viewer.min.js') }}" defer></script>
 <script src="{{ static_asset('/bp-assets/vendor/fancybox/fancybox.js') }}" defer async></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

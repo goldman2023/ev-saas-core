@@ -2,23 +2,24 @@
 
 namespace App\Models;
 
-use App\Builders\BaseBuilder;
+use MyShop;
 use App\Enums\StatusEnum;
-use App\Traits\AttributeTrait;
-use App\Traits\Caching\RegeneratesCache;
-use App\Traits\CategoryTrait;
-use App\Traits\CoreMetaTrait;
-use App\Traits\GalleryTrait;
 use App\Traits\HasStatus;
-use App\Traits\PermalinkTrait;
 use App\Traits\PriceTrait;
 use App\Traits\Purchasable;
-use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use MyShop;
+use App\Traits\GalleryTrait;
+use App\Builders\BaseBuilder;
+use App\Traits\CategoryTrait;
+use App\Traits\CoreMetaTrait;
 use Spatie\Sluggable\HasSlug;
+use App\Traits\AttributeTrait;
+use App\Traits\PermalinkTrait;
+use App\Traits\HasContentColumn;
+use App\Traits\TranslationTrait;
 use Spatie\Sluggable\SlugOptions;
+use App\Traits\Caching\RegeneratesCache;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Plan extends WeBaseModel
 {
@@ -34,11 +35,12 @@ class Plan extends WeBaseModel
     use GalleryTrait;
     use TranslationTrait;
     use CoreMetaTrait;
+    use HasContentColumn;
     use HasStatus;
 
     protected $table = 'plans';
 
-    protected $fillable = ['name', 'featured', 'primary', 'non_standard', 'excerpt', 'content', 'status', 'features', 'price', 'discount', 'discount_type', 'yearly_discount', 'yearly_discount_type', 'tax', 'tax_type', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['name', 'featured', 'primary', 'non_standard', 'excerpt', 'status', 'features', 'price', 'discount', 'discount_type', 'yearly_discount', 'yearly_discount_type', 'tax', 'tax_type', 'meta_title', 'meta_description', 'meta_keywords'];
     // protected $cloneable_relations = ['translations', 'variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals', 'core_meta'];
 
     protected $casts = [
@@ -107,7 +109,7 @@ class Plan extends WeBaseModel
             fn ($query) =>  $query->where('id', 'like', '%'.$term.'%')
                 ->orWhere('name', 'like', '%'.$term.'%')
                 ->orWhere('excerpt', 'like', '%'.$term.'%')
-                ->orWhere('content', 'like', '%'.$term.'%')
+                ->orWhere($this->getContentColumnName(), 'like', '%'.$term.'%')
         );
     }
 

@@ -1,9 +1,9 @@
-@extends('frontend.layouts.' . $globalLayout)
+@extends('frontend.layouts.feed')
 
 @section('meta')
 @endsection
 
-@section('content')
+@section('feed_content')
 
 <div class="col-span-12">
     <section class="grid grid-cols-12 gap-6 max-w-2xl md:max-w-full mx-auto">

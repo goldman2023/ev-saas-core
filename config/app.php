@@ -286,6 +286,7 @@ return [
         'Vendor' => App\Facades\Vendor::class,
         'MediaService' => App\Facades\Media::class,
         'EVS' => App\Facades\EVS::class,
+        'WEF' => App\Facades\WEF::class,
         'CartService' => App\Facades\CartService::class,
         'TenantSettings' => App\Facades\TenantSettings::class,
         'Payments' => App\Facades\Payments::class,

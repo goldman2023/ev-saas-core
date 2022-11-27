@@ -13,7 +13,7 @@ trait CanDelete
 
     public function deleteModel($model_id, $modelClass)
     {
-        dd(app($modelClass)->find($model_id));
+        // dd(app($modelClass)->find($model_id));
 
         $this->emit('refreshDatatable');
     }

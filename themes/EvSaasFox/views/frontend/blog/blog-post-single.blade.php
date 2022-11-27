@@ -58,10 +58,6 @@
 
             {{-- Comments --}}
             <div class="flex flex-col px-5 py-4 mt-4 border-t border-gray-200">
-                <h3 class="text-lg font-bold mb-3">
-                    {{ translate('Discussion') }} ({{ $blog_post->comments->count() }})
-                </h3>
-
                 <livewire:actions.social-comments :item="$blog_post">
                 </livewire:actions.social-comments>
             </div>
@@ -79,7 +75,7 @@
                 <div class="w-full px-5 py-4 mb-5 flex justify-between border-b border-gray-200">
                     <h5 class="text-14 font-semibold">{{ translate('Related Posts') }}</h5>
                 </div>
-            
+
                 <div class="px-5 pb-4 flex flex-col">
                     @foreach($related_blog_posts as $blog_post)
                         <x-tailwind-ui.blog.blog-post-card :blog-post="$blog_post" template="row" />
@@ -94,7 +90,7 @@
             </div>
             @endif
 
-            
+
         </div>
     </section>
 </div>

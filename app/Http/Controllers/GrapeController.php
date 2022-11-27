@@ -25,18 +25,8 @@ class GrapeController extends Controller
             $page_html = json_encode($page_html);
         }
 
-
-
         $sections = [];
         $content = $page_html;
-
-        // foreach($sections as $section) {
-        //     // dd(file_get_contents($section->getPathName()));
-        //     // dd($section);
-        // }
-
-        // Remove unwanted HTML comments
-
 
         return view('grape.index', [
             'pageID' => $pageID,
@@ -98,6 +88,11 @@ class GrapeController extends Controller
 
 
         return redirect()->back();
+
+    }
+
+
+    public function pageBuilder() {
 
     }
 }
