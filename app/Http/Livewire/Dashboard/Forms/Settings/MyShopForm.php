@@ -273,7 +273,6 @@ class MyShopForm extends Component
                     );
                 } catch(\Exception $e) {
                     Log::error($e->getMessage());
-                    // dd($this->model_core_meta[$core_meta_key]);
                 }
             }
         }

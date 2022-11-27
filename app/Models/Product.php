@@ -2,42 +2,43 @@
 
 namespace App\Models;
 
-use App\Enums\ProductTypeEnum;
-use App\Traits\BrandTrait;
-use App\Traits\CategoryTrait;
-use App\Traits\GalleryTrait;
-use App\Traits\Purchasable;
-use App\Traits\TranslationTrait;
-use App\Traits\UploadTrait;
-use App\Traits\VariationTrait;
+use DB;
+use FX;
+use App;
+use IMG;
+use Auth;
 use Cache;
-use App\Builders\ProductsBuilder;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
-use App\Models\FlashDealProduct;
-use App\Models\ProductTax;
+use Vendor;
 use App\Models\User;
 use App\Models\Wishlist;
-use App\Traits\AttributeTrait;
-use Auth;
-use DB;
-use IMG;
-use Vendor;
-use FX;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\ReviewTrait;
-use App;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use App\Traits\PermalinkTrait;
-use App\Traits\PriceTrait;
-use App\Traits\StockManagementTrait;
-use App\Traits\Caching\RegeneratesCache;
 use App\Traits\HasStatus;
+use App\Models\ProductTax;
+use App\Traits\BrandTrait;
+use App\Traits\PriceTrait;
+use App\Traits\Purchasable;
+use App\Traits\ReviewTrait;
+use App\Traits\UploadTrait;
+use App\Traits\GalleryTrait;
+use App\Traits\CategoryTrait;
 use App\Traits\CoreMetaTrait;
+use Spatie\Sluggable\HasSlug;
+use App\Enums\ProductTypeEnum;
+use App\Traits\AttributeTrait;
+use App\Traits\PermalinkTrait;
+use App\Traits\VariationTrait;
+use App\Models\FlashDealProduct;
+use App\Traits\HasContentColumn;
+use App\Traits\TranslationTrait;
+use App\Builders\ProductsBuilder;
+use Spatie\Sluggable\SlugOptions;
 use App\Traits\SocialReactionsTrait;
+use App\Traits\StockManagementTrait;
+use Illuminate\Database\Eloquent\Model;
+use App\Traits\Caching\RegeneratesCache;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 /**
  * App\Models\Product
@@ -56,6 +57,7 @@ class Product extends WeBaseModel
     use LogsActivity;
     use SocialReactionsTrait;
     use CoreMetaTrait;
+    use HasContentColumn;
 
     use TranslationTrait;
 
@@ -81,7 +83,7 @@ class Product extends WeBaseModel
     //public static $defaultEagerLoads = ['variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
     protected $fillable = [
-        'name', 'description', 'excerpt', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
+        'name', 'excerpt', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
         'purchase_price', 'base_currency', 'unit', 'slug', 'num_of_sales', 'meta_title', 'meta_description', 'shop_id'
     ];
 
@@ -144,6 +146,11 @@ class Product extends WeBaseModel
         return 'slug';
     }
 
+    public function getContentColumnName()
+    {
+        return 'description';
+    }
+
     /*
      * Scope searchable parameters
      */
@@ -153,7 +160,7 @@ class Product extends WeBaseModel
             fn ($query) =>  $query
                 ->where('name', 'like', '%' . $term . '%')
                 ->orWhere('excerpt', 'like', '%' . $term . '%')
-                ->orWhere('description', 'like', '%' . $term . '%')
+                ->orWhere($this->getContentColumnName(), 'like', '%' . $term . '%')
         );
     }
 

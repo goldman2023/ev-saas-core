@@ -242,7 +242,18 @@ class MediaService
 
        return 'uploads/'.tenant('id');
    }
-
+   
+   /**
+    * storeAsUploadFromFile
+    *
+    * This functions creates Upload from the stored file (external or from storage) and
+    * creates UploadRelationship between $model and newly created Upload
+    * 
+    * @param  mixed $model
+    * @param  mixed $file
+    * @param  mixed $property_name
+    * @return void
+    */
    public function storeAsUploadFromFile(&$model, $file, $property_name) {
 
         if(is_string($file)) {

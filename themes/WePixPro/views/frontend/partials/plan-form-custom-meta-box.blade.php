@@ -14,7 +14,7 @@
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.input type="number" field="model_core_meta.number_of_images" />
+                <x-dashboard.form.input type="number" field="wef.number_of_images" />
             </div>
         </div>
         <!-- END Number of images -->
@@ -28,7 +28,7 @@
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.toggle field="model_core_meta.includes_offline" />
+                <x-dashboard.form.toggle field="wef.includes_offline" />
             </div>
         </div>
         <!-- END Includes offline processing -->
@@ -42,7 +42,7 @@
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.toggle field="model_core_meta.includes_cloud" />
+                <x-dashboard.form.toggle field="wef.includes_cloud" />
             </div>
         </div>
         <!-- END Includes cloud processing -->

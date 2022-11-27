@@ -2,26 +2,27 @@
 
 namespace App\Models;
 
-use App\Enums\BlogPostTypeEnum;
-use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
-use App\Traits\CategoryTrait;
-use App\Traits\GalleryTrait;
 use App\Traits\HasStatus;
-use App\Traits\SocialReactionsTrait;
-use App\Traits\SocialCommentsTrait;
-use App\Traits\PermalinkTrait;
-use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
-use App\Traits\CoreMetaTrait;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Shetabit\Visitor\Traits\Visitable;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
-use Spatie\Sitemap\Contracts\Sitemapable;
+use App\Traits\GalleryTrait;
 use Spatie\Sitemap\Tags\Url;
+use App\Builders\BaseBuilder;
+use App\Traits\CategoryTrait;
+use App\Traits\CoreMetaTrait;
+use Spatie\Sluggable\HasSlug;
+use App\Traits\PermalinkTrait;
+use App\Enums\BlogPostTypeEnum;
+use App\Traits\HasContentColumn;
+use App\Traits\TranslationTrait;
+use Spatie\Sluggable\SlugOptions;
+use App\Traits\SocialCommentsTrait;
+use App\Traits\SocialReactionsTrait;
+use Shetabit\Visitor\Traits\Visitable;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 // use GetStream\StreamLaravel\Eloquent\ActivityTrait;
@@ -31,6 +32,11 @@ class BlogPost extends WeBaseModel  implements Sitemapable
     use HasSlug;
     use SoftDeletes;
     use LogsActivity;
+    use CoreMetaTrait;
+
+    use HasContentColumn;
+    use HasStatus;
+
     use UploadTrait;
     use GalleryTrait;
     use TranslationTrait;
@@ -41,16 +47,13 @@ class BlogPost extends WeBaseModel  implements Sitemapable
     use PermalinkTrait;
     use SocialCommentsTrait;
     use SocialReactionsTrait;
-    use CoreMetaTrait;
-    use HasStatus;
 
     protected $table = 'blog_posts';
 
-    protected $fillable = ['shop_id', 'type', 'name', 'excerpt', 'content', 'content_structure', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords', 'created_at', 'updated_at'];
+    protected $fillable = ['shop_id', 'type', 'name', 'excerpt', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords', 'created_at', 'updated_at'];
 
     protected $casts = [
         'subscription_only' => 'boolean',
-        'content_structure' => 'array',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
     ];
@@ -94,11 +97,12 @@ class BlogPost extends WeBaseModel  implements Sitemapable
      */
     public function scopeSearch($query, $term)
     {
+        // TODO: Move content and excerpt to HasContentColumn trait
         return $query->where(
             fn ($query) =>  $query->where('id', 'like', '%'.$term.'%')
                 ->orWhere('name', 'like', '%'.$term.'%')
                 ->orWhere('excerpt', 'like', '%'.$term.'%')
-                ->orWhere('content', 'like', '%'.$term.'%')
+                ->orWhere($this->getContentColumnName(), 'like', '%'.$term.'%')
         );
     }
 

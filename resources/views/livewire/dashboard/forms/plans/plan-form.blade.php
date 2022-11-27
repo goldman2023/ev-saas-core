@@ -1,3 +1,10 @@
+@push('head_scripts')
+<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush
+
 <div class="w-full" x-data="{
     status: @js($plan->status ?? \App\Enums\StatusEnum::draft()->value),
     thumbnail: @js(toJSONMedia($plan->thumbnail)),
@@ -13,13 +20,16 @@
     tax_type: @js($plan->tax_type),
     features: @js(array_values($plan->features)),
     content: @entangle('plan.content').defer,
+    content_structure: @entangle('wef.content_structure').defer,
     selected_categories: @js($selected_categories),
     attributes: @js($custom_attributes),
     selected_attribute_values: @js($selected_predefined_attribute_values),
     core_meta: @js($core_meta),
-    model_core_meta: @js($model_core_meta),
+    wef: @js($wef),
     onSave() {
         $wire.set('plan.content', this.content, true);
+        $wire.set('wef.content_structure', this.content_structure, true);
+
         $wire.set('plan.status', this.status, true);
         $wire.set('plan.base_currency', this.base_currency, true);
         $wire.set('plan.discount_type', this.discount_type, true);
@@ -111,7 +121,7 @@
                             </label>
 
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <x-dashboard.form.input field="model_core_meta.custom_redirect_url" />
+                                <x-dashboard.form.input field="wef.custom_redirect_url" />
                             </div>
                         </div>
                         <!-- END Redirect URL Meta -->
@@ -123,7 +133,7 @@
                             </label>
 
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <x-dashboard.form.input field="model_core_meta.custom_cta_label" />
+                                <x-dashboard.form.input field="wef.custom_cta_label" />
                             </div>
                         </div>
                         <!-- END Custom CTA Label Meta -->
@@ -136,7 +146,7 @@
                             </div>
 
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <x-dashboard.form.input field="model_core_meta.custom_pricing_label" />
+                                <x-dashboard.form.input field="wef.custom_pricing_label" />
                             </div>
                         </div>
                         <!-- END Custom CTA Label Meta -->
@@ -298,7 +308,7 @@
                             </label>
 
                             <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                <x-dashboard.form.froala field="content" id="plan-content-wysiwyg"></x-dashboard.form.froala>
+                                <x-dashboard.form.editor-js field="content" structure-field="content_structure" id="plan-content-wysiwyg"></x-dashboard.form.editor-js>
 
                                 <x-system.invalid-msg class="w-full" field="plan.content"></x-system.invalid-msg>
                             </div>

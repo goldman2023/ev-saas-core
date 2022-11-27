@@ -166,11 +166,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
-            add_filter('dashboard.plan-form.meta', function ($meta) {
+            add_filter('dashboard.plan-form.wef', function ($meta) {
                 return array_merge($meta, [
-                    'model_core_meta.number_of_images' => 'nullable',
-                    'model_core_meta.includes_cloud' => 'nullable',
-                    'model_core_meta.includes_offline' => 'nullable',
+                    'wef.number_of_images' => 'nullable',
+                    'wef.includes_cloud' => 'nullable',
+                    'wef.includes_offline' => 'nullable',
                 ]);
             });
 
@@ -270,8 +270,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             });
             add_action('view.plan-form.wire_set', function () {
-                js_wire_set('model_core_meta.includes_cloud', 'model_core_meta.includes_cloud');
-                js_wire_set('model_core_meta.includes_offline', 'model_core_meta.includes_offline');
+                js_wire_set('wef.includes_cloud', 'wef.includes_cloud');
+                js_wire_set('wef.includes_offline', 'wef.includes_offline');
             });
 
             // When new subscription is created, take the plans core_meta and add it to the subscription!

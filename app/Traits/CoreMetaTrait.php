@@ -2,11 +2,12 @@
 
 namespace App\Traits;
 
-use App\Models\CoreMeta;
-use App\Enums\ProductTypeEnum;
+use Log;
 use Route;
 use StripeService;
-use Log;
+use WEF;
+use App\Models\CoreMeta;
+use App\Enums\ProductTypeEnum;
 
 trait CoreMetaTrait
 {
@@ -32,20 +33,7 @@ trait CoreMetaTrait
     {
         // TODO: Implement castValuesForGet($core_meta, $data_types); here
         $setting = $fresh ? $this->core_meta()->where('key', $key)->get()->keyBy('key')->toArray() : $this->core_meta->where('key', $key)->keyBy('key')->toArray();
-        $data_types = [];
-
-        if($this->isProduct()) {
-            $data_types = CoreMeta::metaProductDataTypes();
-        }
-
-        if($this->isPlan()) {
-            $data_types = CoreMeta::metaPlanDataTypes();
-        }
-
-        if($this->isUserSubscription()) {
-            $data_types = CoreMeta::metaUserSubscriptionDataTypes();
-            
-        }
+        $data_types = WEF::getWEFDataTypes($this);
         
         if(!empty($data_types)) {
             return castValuesForGet($setting, $data_types)[$key] ?? null;
@@ -60,19 +48,7 @@ trait CoreMetaTrait
 
     public function saveCoreMeta($key, $value)
     {
-        $data_types = [];
-
-        if($this->isProduct()) {
-            $data_types = CoreMeta::metaProductDataTypes();
-        }
-
-        if($this->isPlan()) {
-            $data_types = CoreMeta::metaPlanDataTypes();
-        }
-
-        if($this->isUserSubscription()) {
-            $data_types = CoreMeta::metaUserSubscriptionDataTypes();    
-        }
+        $data_types = WEF::getWEFDataTypes($this);
 
         try {
             CoreMeta::updateOrCreate(

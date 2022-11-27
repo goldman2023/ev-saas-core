@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Listeners\Tenancy\StorageToConfigMapping;
-use App\Listeners\Tenancy\BootstrapThemeFunctions;
-use App\Listeners\Tenancy\BootstrapMailService;
 use App\Models\Shop;
-use App\Models\SocialAccount;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\ServiceProvider;
-use Stancl\JobPipeline\JobPipeline;
-use Stancl\Tenancy\Events;
-use Stancl\Tenancy\Features\TenantConfig;
 use Stancl\Tenancy\Jobs;
+use Stancl\Tenancy\Events;
+use App\Models\SocialAccount;
 use Stancl\Tenancy\Listeners;
 use Stancl\Tenancy\Middleware;
+use Stancl\JobPipeline\JobPipeline;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Route;
+use App\Listeners\Tenancy\BootstrapWEF;
+use Illuminate\Support\ServiceProvider;
+use Stancl\Tenancy\Features\TenantConfig;
+use App\Listeners\Tenancy\BootstrapMailService;
+use App\Listeners\Tenancy\StorageToConfigMapping;
+use App\Listeners\Tenancy\BootstrapThemeFunctions;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
 class TenancyServiceProvider extends ServiceProvider
@@ -94,6 +95,8 @@ class TenancyServiceProvider extends ServiceProvider
                 StorageToConfigMapping::class,
                 BootstrapThemeFunctions::class,
                 BootstrapMailService::class,
+
+                BootstrapWEF::class, // should be last!
             ],
             Events\RevertingToCentralContext::class => [],
             Events\RevertedToCentralContext::class => [],

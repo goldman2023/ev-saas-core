@@ -2,8 +2,6 @@
 <script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
-{{--
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush
 
@@ -25,17 +23,20 @@
         discount_type: @js($product->discount_type),
         tax_type: @js($product->tax_type),
         description: @entangle('product.description').defer,
+        description_structure: @entangle('wef.content_structure').defer,
+
         attributes: @js($custom_attributes),
         selected_attribute_values: @js($selected_predefined_attribute_values),
         selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
-        core_meta: @js($core_meta),
-        model_core_meta: @js($model_core_meta),
-
         track_inventory: @js($product->track_inventory),
+
+        core_meta: @js($core_meta),
+        wef: @js($wef),
 
         onSave() {
             $wire.set('product.description', this.description, true);
+            $wire.set('wef.content_structure', this.description_structure, true);
 
             $wire.set('product.thumbnail', this.thumbnail.id, true);
             $wire.set('product.cover', this.cover.id, true);
@@ -63,18 +64,19 @@
             $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
             $wire.set('custom_attributes', this.attributes, true);
 
-            // CoreMeta
-            $wire.set('model_core_meta.date_type', this.model_core_meta.date_type, true);
-            $wire.set('model_core_meta.start_date', this.model_core_meta.start_date, true);
-            $wire.set('model_core_meta.end_date', this.model_core_meta.end_date, true);
-            $wire.set('model_core_meta.location_type', this.model_core_meta.location_type, true);
-            $wire.set('model_core_meta.unlockables', this.model_core_meta.unlockables, true);
+            // CoreMeta and WEFs
+            $wire.set('wef.date_type', this.wef.date_type, true);
+            $wire.set('wef.start_date', this.wef.start_date, true);
+            $wire.set('wef.end_date', this.wef.end_date, true);
+            $wire.set('wef.location_type', this.wef.location_type, true);
+            $wire.set('wef.unlockables', this.wef.unlockables, true);
+            $wire.set('wef.unlockables_structure', this.wef.unlockables_structure, true);
 
-            $wire.set('model_core_meta.course_what_you_will_learn', this.model_core_meta.course_what_you_will_learn, true);
-            $wire.set('model_core_meta.course_requirements', this.model_core_meta.course_requirements, true);
-            $wire.set('model_core_meta.course_target_audience', this.model_core_meta.course_target_audience, true);
-            $wire.set('model_core_meta.course_includes', this.model_core_meta.course_includes, true);
-            $wire.set('model_core_meta.course_intro_video_url', this.model_core_meta.course_intro_video_url, true);
+            $wire.set('wef.course_what_you_will_learn', this.wef.course_what_you_will_learn, true);
+            $wire.set('wef.course_requirements', this.wef.course_requirements, true);
+            $wire.set('wef.course_target_audience', this.wef.course_target_audience, true);
+            $wire.set('wef.course_includes', this.wef.course_includes, true);
+            $wire.set('wef.course_intro_video_url', this.wef.course_intro_video_url, true);
 
         }
     }" class="lw-form container-fluid" @init-product-form.window=""
@@ -169,7 +171,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                    <x-dashboard.form.editor-js field="description" id="product-description-wysiwyg" />
+                                    <x-dashboard.form.editor-js field="description" structure-field="description_structure" id="product-description-wysiwyg" />
 
                                     <x-system.invalid-msg class="w-full" field="product.description" />
                                 </div>
@@ -195,7 +197,7 @@
                                 </div>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.text-repeater field="model_core_meta.course_requirements" placeholder="{{ translate('Requirement') }}"></x-dashboard.form.text-repeater>
+                                    <x-dashboard.form.text-repeater field="wef.course_requirements" placeholder="{{ translate('Requirement') }}"></x-dashboard.form.text-repeater>
                                 </div>
                             </div>
                             <!-- END Course Requirements -->
@@ -208,7 +210,7 @@
                                 </div>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.text-repeater field="model_core_meta.course_includes" placeholder="{{ translate('Includes') }}"></x-dashboard.form.text-repeater>
+                                    <x-dashboard.form.text-repeater field="wef.course_includes" placeholder="{{ translate('Includes') }}"></x-dashboard.form.text-repeater>
                                 </div>
                             </div>
                             <!-- END Course Includes -->
@@ -221,7 +223,7 @@
                                 </div>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.text-repeater field="model_core_meta.course_what_you_will_learn" placeholder="{{ translate('Skill') }}"></x-dashboard.form.text-repeater>
+                                    <x-dashboard.form.text-repeater field="wef.course_what_you_will_learn" placeholder="{{ translate('Skill') }}"></x-dashboard.form.text-repeater>
                                 </div>
                             </div>
                             <!-- END WHat users will learn -->
@@ -234,7 +236,7 @@
                                 </div>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.text-repeater field="model_core_meta.course_target_audience" placeholder="{{ translate('Describe target audience') }}"></x-dashboard.form.text-repeater>
+                                    <x-dashboard.form.text-repeater field="wef.course_target_audience" placeholder="{{ translate('Describe target audience') }}"></x-dashboard.form.text-repeater>
                                 </div>
                             </div>
                             <!-- END Course Target Audience -->
@@ -254,8 +256,8 @@
 
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
                             <template
-                                x-if="model_core_meta.unlocakbles != null && model_core_meta.unlocakbles.length > 0">
-                                <template x-for="item in model_core_meta.unlocakbles">
+                                x-if="wef.unlocakbles != null && wef.unlocakbles.length > 0">
+                                <template x-for="item in wef.unlocakbles">
                                     <!-- Title -->
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
                                         x-data="{}">
@@ -1232,10 +1234,12 @@
                                 x-data="{}" wire:ignore>
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                        <x-dashboard.form.editor-js field="model_core_meta.unlockables"
+                                        <x-dashboard.form.editor-js 
+                                            field="wef.unlockables" 
+                                            structure-field="wef.unlockables_structure"
                                             id="product-unlockables-wysiwyg" />
 
-                                        <x-system.invalid-msg class="w-full" field="model_core_meta.unlockables">
+                                        <x-system.invalid-msg class="w-full" field="wef.unlockables">
                                         </x-system.invalid-msg>
                                     </div>
                                 </div>
@@ -1315,22 +1319,22 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <x-dashboard.form.select :items="['remote' => 'Remote', 'offline' => 'Offline']"
-                                        selected="model_core_meta.location_type"></x-dashboard.form.select>
+                                        selected="wef.location_type"></x-dashboard.form.select>
 
-                                    <x-system.invalid-msg field="model_core_meta.location_type"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="wef.location_type"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Location Type -->
 
                             <!-- Location Address-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
-                                x-data="{}" x-show="model_core_meta.location_type === 'offline'">
+                                x-data="{}" x-show="wef.location_type === 'offline'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('Location Address') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="model_core_meta.location_address">
+                                    <x-dashboard.form.input field="wef.location_address">
                                     </x-dashboard.form.input>
                                 </div>
                             </div>
@@ -1338,13 +1342,13 @@
 
                             <!-- Location Address-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
-                                x-data="{}" x-show="model_core_meta.location_type === 'offline'">
+                                x-data="{}" x-show="wef.location_type === 'offline'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('Location Address Map (URL)') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="model_core_meta.location_address_map_link">
+                                    <x-dashboard.form.input field="wef.location_address_map_link">
                                     </x-dashboard.form.input>
                                 </div>
                             </div>
@@ -1352,13 +1356,13 @@
 
                             <!-- Location Link-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
-                                x-data="{}" x-show="model_core_meta.location_type === 'remote'">
+                                x-data="{}" x-show="wef.location_type === 'remote'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('Meet Link') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="model_core_meta.location_link">
+                                    <x-dashboard.form.input field="wef.location_link">
                                     </x-dashboard.form.input>
                                 </div>
                             </div>
@@ -1374,7 +1378,7 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']"
-                                        selected="model_core_meta.date_type"></x-dashboard.form.select>
+                                        selected="wef.date_type"></x-dashboard.form.select>
                                 </div>
                             </div>
                             <!-- END Date Type -->
@@ -1387,7 +1391,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.date field="model_core_meta.start_date" :enable-time="true"
+                                    <x-dashboard.form.date field="wef.start_date" :enable-time="true"
                                         date-format="d.m.Y H:i"></x-dashboard.form.date>
                                 </div>
                             </div>
@@ -1395,13 +1399,13 @@
 
                             <!-- Date End-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
-                                x-data="{}" x-show="model_core_meta.date_type === 'range'">
+                                x-data="{}" x-show="wef.date_type === 'range'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('End') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.date field="model_core_meta.end_date" :enable-time="true"
+                                    <x-dashboard.form.date field="wef.end_date" :enable-time="true"
                                         date-format="d.m.Y H:i"></x-dashboard.form.date>
                                 </div>
                             </div>
@@ -1421,7 +1425,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="model_core_meta.calendly_link">
+                                    <x-dashboard.form.input field="wef.calendly_link">
                                     </x-dashboard.form.input>
                                 </div>
                             </div>
@@ -1455,7 +1459,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="model_core_meta.thank_you_cta_custom_title">
+                                    <x-dashboard.form.input field="wef.thank_you_cta_custom_title">
                                     </x-dashboard.form.input>
                                 </div>
                             </div>
@@ -1468,7 +1472,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="model_core_meta.thank_you_cta_custom_text">
+                                    <x-dashboard.form.input field="wef.thank_you_cta_custom_text">
                                     </x-dashboard.form.input>
                                 </div>
                             </div>
@@ -1481,7 +1485,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="model_core_meta.thank_you_cta_custom_url">
+                                    <x-dashboard.form.input field="wef.thank_you_cta_custom_url">
                                     </x-dashboard.form.input>
                                 </div>
                             </div>
@@ -1494,7 +1498,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="model_core_meta.thank_you_cta_custom_button_title">
+                                    <x-dashboard.form.input field="wef.thank_you_cta_custom_button_title">
                                     </x-dashboard.form.input>
                                 </div>
                             </div>
