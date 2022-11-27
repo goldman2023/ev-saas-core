@@ -45,7 +45,7 @@ URL: https://flowbite.com/docs/components/typography/
                 </div>
                 <x-blog.share-buttons :item="$blog_post"></x-blog.share-buttons>
             </div>
-           <div id="content">
+           <div id="blog_post_single_content">
             {!! $blog_post->content !!}
            </div>
            <footer>
@@ -59,9 +59,7 @@ URL: https://flowbite.com/docs/components/typography/
         </article>
         <aside class="hidden sm:block" aria-labelledby="sidebar-label">
             <x-blog.newsletter-form></x-blog.newsletter-form>
-            <div>
-            <livewire:actions.social-comments :item="$blog_post" />
-            </div>
+
 
         </aside>
     </div>
