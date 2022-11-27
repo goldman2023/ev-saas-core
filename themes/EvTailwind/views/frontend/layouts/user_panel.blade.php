@@ -8,7 +8,7 @@
 
     <div class="lg:pl-64 flex flex-col">
         @include('frontend.dashboard.navigation.topbar')
-        <x-system.promo-banner></x-system.promo-banner>
+        {{-- <x-system.promo-banner></x-system.promo-banner> --}}
 
         <main class="flex-1 we-user-panel__wrapper">
             <div class="py-6 px-4 sm:px-6 md:px-8 we-user-panel__container">
