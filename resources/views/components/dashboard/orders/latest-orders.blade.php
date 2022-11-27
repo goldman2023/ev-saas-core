@@ -12,6 +12,9 @@
    <div class="flow-root">
         <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
             @foreach($orders as $order)
+            @if(empty($order->user))
+            @continue;
+            @endif
             <li class="py-3 sm:py-4">
                 <a href="{{ $order->getPermalink() }}">
 

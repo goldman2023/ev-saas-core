@@ -124,7 +124,7 @@ URL: https://flowbite.com/docs/components/typography/
                 @endif
 
                 @if($loop->last)
-                <div class="col-span-2">
+                <div class="col-span-1">
                     <x-system.empty-state :url="route('blog.post.create')" title="{{ translate('Add new post') }}">
                     </x-system.empty-state>
                 </div>
@@ -133,7 +133,6 @@ URL: https://flowbite.com/docs/components/typography/
                 @else
                 <div class="col-span-2">
                     <x-system.empty-state title="{{ translate('Add new post') }}"></x-system.empty-state>
-
                 </div>
 
                 @endif
@@ -178,6 +177,12 @@ URL: https://flowbite.com/docs/components/typography/
                             class="bg-primary-100 text-primary-800 text-sm font-medium mr-3 px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800 mb-3">Art</a>
                     </div>
                 </div>
+                <div
+                    class="mb-8">
+                    <x-blog.promo-block></x-blog.promo-block>
+
+                </div>
+
                 <div
                     class="p-6 font-medium text-gray-500 bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
                     <x-blog.newsletter-form></x-blog.newsletter-form>

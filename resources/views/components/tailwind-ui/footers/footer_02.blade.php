@@ -3,7 +3,7 @@ $footer_menu = nova_get_menu_by_slug('footer')['menuItems'] ?? null;
 $footer_menu_2 = nova_get_menu_by_slug('footer-2')['menuItems'] ?? null;
 $footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
 @endphp
-<footer class="bg-gray-50 dark:bg-gray-800">
+<footer class="bg-white dark:bg-gray-800">
     <div class="p-4 py-6 mx-auto max-w-screen-xl md:p-8 lg:p-10">
         <div class="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
             <div>

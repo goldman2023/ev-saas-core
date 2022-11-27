@@ -47,6 +47,7 @@
     all_categories_flat: @js(Categories::getAllFormatted(true, true)),
 }" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">
+
         {{-- <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header> --}}
 
         <!-- Page Content -->

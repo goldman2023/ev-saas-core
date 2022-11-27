@@ -50,6 +50,9 @@
     @include('frontend.layouts.global-partials.global-integrations-body')
 
     <div class="min-h-screen">
+        <x-system.promo-banner></x-system.promo-banner>
+        {{-- <x-system.promo-banner-bottom></x-system.promo-banner-bottom> --}}
+
         <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
 
         <!-- Page Content -->

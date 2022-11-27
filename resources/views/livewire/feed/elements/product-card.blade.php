@@ -1,53 +1,22 @@
-<div class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 relative">
-    <div class="absolute top-3 left-3">
+<a href="{{ $product->getPermalink() }}" class="group text-sm">
+    <div class="aspect-w-1 aspect-h-1 cover w-full overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+      <img loading="lazy" class="object-contain" src="{{ $product->getThumbnail() }}" alt="{{ $product->name }}">
     </div>
-    <div class="flex-1 flex flex-col p-3">
-        <a href="{{  $product->getPermalink() }}">
-            <img class="w-32 h-32 flex-shrink-0 mx-auto rounded object-contain" src="{{ $product->getThumbnail() }}" alt="">
-        </a>
-        <h3 class="mt-6 text-gray-900 text-md font-semibold">
-            <a href="{{  $product->getPermalink() }}">
-                {{ $product->name }}
-            </a>
-        </h3>
-        <dl class="mt-1 flex-grow flex flex-col justify-between">
-            <dt class="sr-only">Title</dt>
-            <dd class="text-gray-500 text-sm"></dd>
-            <dt class="sr-only">Role</dt>
-            <dd class="mt-3">
-                <span class="px-2 py-1 text-green-800 text-sm font-medium bg-green-100 rounded-full">
-                    {{ translate('Price') }} {{ $product->getTotalPrice(true) }}
-                </span>
-                @if(!$product->isInStock())
-                <span class="absolute top-[-10px] right-[-10px] px-2 py-1 text-gray-100 text-xs font-medium bg-red-700 rounded-full">
-                    {{ translate('Out of stock') }}
-                </span>
-                @endif
-            </dd>
-        </dl>
-    </div>
-    <div>
-        <div class="-mt-px flex divide-x divide-gray-200">
-            <div class="w-0 flex-1 flex">
-                <a href="{{  $product->getPermalink() }}"
-                    class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
-                    <!-- Heroicon name: solid/mail -->
-                    {{ svg('heroicon-s-eye', ['class'=> 'max-w-[20px] text-gray-900']) }}
-
-                    <span class="ml-3">
-                        {{ translate('View') }}
-                    </span>
-                </a>
+    <h3 class="mt-4 font-medium text-gray-900">
+        {{ $product->name }}
+    </h3>
+    <p class="italic text-gray-500">
+        @if(!$product->isInStock())
+            <span class="text-red-600 text-sm">
+                {{ translate('Out of stock') }}
+            </span>
+            @else
+            <div class="text-sm">
+                {{ translate('In stock') }}
             </div>
-            <div class="-ml-px w-0 flex-1 flex">
-                <div
-                    class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
-                    <span class="ml-3">
-                        {{ $product->public_view_count() }} {{ translate('views') }}
-                    </span>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
+            @endif
+    </p>
+    <p class="mt-2 font-medium text-gray-900">
+        {{ $product->getTotalPrice(true) }}
+    </p>
+  </a>
