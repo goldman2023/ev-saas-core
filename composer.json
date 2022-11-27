@@ -55,6 +55,7 @@
         "nerdroid23/blade-icomoon": "^1.0",
         "outl1ne/nova-menu-builder": "^7.0",
         "owen-it/laravel-auditing": "^13.0",
+        "owenvoke/blade-fontawesome": "^2.1",
         "predis/predis": "^1.1",
         "qirolab/laravel-themer": "^1.5",
         "rappasoft/laravel-livewire-tables": "^1.2",

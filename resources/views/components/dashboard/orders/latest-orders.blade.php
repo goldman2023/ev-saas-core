@@ -2,10 +2,10 @@
 <div class="p-4 mb-6 w-full max-w-md bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
     <div class="flex justify-between items-center mb-4">
         <h5 class="text-lg font-medium leading-none text-gray-900 dark:text-white">
-           {{ translate('Latest') }}
+           {{ translate('Latest Orders') }}
         </h5>
         <a href="{{ route('crm.all_customers') }}" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
-            {{ translate('View latest orders') }}
+            {{ translate('View all') }}
             {{-- TODO: Add a count of unseen orders for this user --}}
         </a>
    </div>
