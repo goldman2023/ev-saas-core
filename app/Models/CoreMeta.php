@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use WEF;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,9 +19,15 @@ class CoreMeta extends Model
         return $this->morphTo('subject');
     }
 
+    public static function metaGlobalDataTypes() {
+        return [
+            'content_structure' => 'array',
+        ];
+    }
+
     public static function metaProductDataTypes()
     {
-        return [
+        return array_merge(self::metaGlobalDataTypes(), [
             'date_type' => 'string',
             'start_date' => 'date',
             'end_date' => 'date',
@@ -29,6 +36,7 @@ class CoreMeta extends Model
             'location_address_map_link' => 'string',
             'location_link' => 'string',
             'unlockables' => 'string', // for now it's a string/wysiwyg
+            'unlockables_structure' => 'array',
             'calendly_link' => 'string',
 
             // Course core_meta
@@ -45,30 +53,30 @@ class CoreMeta extends Model
             'thank_you_cta_custom_url' => 'string',
             'thank_you_cta_custom_button_title' => 'string',
             
-        ];
+        ]);
     }
 
     public static function metaBlogPostDataTypes()
     {
-        return [
+        return array_merge(self::metaGlobalDataTypes(), [
             'portfolio_link' => 'string',
-        ];
+        ]);
     }
 
     public static function metaPlanDataTypes()
     {
-        return apply_filters('plan.meta.data-types', [
+        return array_merge(self::metaGlobalDataTypes(), apply_filters('plan.meta.data-types', [
             'custom_redirect_url' => 'string',
             'custom_cta_label' => 'string',
             'custom_pricing_label' => 'string',
-        ]);
+        ]));
     }
 
     public static function metaUserSubscriptionDataTypes()
     {
-        return apply_filters('user-subscription.meta.data-types', [
+        return array_merge(self::metaGlobalDataTypes(), apply_filters('user-subscription.meta.data-types', [
             
-        ]);
+        ]));
     }
 
     public static function getMeta($core_meta, $content_type, $strict = false)
@@ -83,13 +91,7 @@ class CoreMeta extends Model
             $core_meta = $core_meta->keyBy('key')->toArray();
         }
 
-        if($content_type === Product::class) {
-            $data_types = self::metaProductDataTypes();
-        } else if($content_type === BlogPost::class) {
-            $data_types = self::metaBlogPostDataTypes();
-        } else if($content_type === Plan::class) {
-            $data_types = self::metaPlanDataTypes();
-        }
+        $data_types = WEF::getWEFDataTypes($content_type);
 
         castValuesForGet($core_meta, $data_types);
         

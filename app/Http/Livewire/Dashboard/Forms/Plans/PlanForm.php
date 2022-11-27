@@ -40,9 +40,6 @@ class PlanForm extends Component
 
     public $is_update;
 
-    public $model_core_meta;
-
-
     /**
      * Create a new component instance.
      *
@@ -70,24 +67,6 @@ class PlanForm extends Component
         $this->refreshAttributes($this->plan);
 
         $this->initCoreMeta($this->plan);
-
-        $this->model_core_meta = CoreMeta::getMeta($this->plan?->core_meta ?? [], Plan::class, true);
-    }
-
-    protected function getRuleSet($set = null)
-    {
-        $rulesSets = collect([
-            'meta' => apply_filters('dashboard.plan-form.meta', [
-                'model_core_meta.custom_redirect_url' => 'nullable',
-                'model_core_meta.custom_cta_label' => 'nullable',
-                'model_core_meta.custom_pricing_label' => 'nullable',
-            ]),
-            'core_meta' => [
-                'core_meta' => '',
-            ]
-        ]);
-
-        return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
     }
 
     protected function rules()
@@ -159,6 +138,18 @@ class PlanForm extends Component
         ];
     }
 
+    public function getWEFRules() {
+        return apply_filters('dashboard.plan-form.wef', [
+            'wef.custom_redirect_url' => 'nullable',
+            'wef.custom_cta_label' => 'nullable',
+            'wef.custom_pricing_label' => 'nullable',
+        ]);
+    }
+    
+    public function getWEFMessages() {
+        return [];
+    }
+
     public function dehydrate()
     {
         //$this->dispatchBrowserEvent('initSlugGeneration');
@@ -205,9 +196,12 @@ class PlanForm extends Component
 
             // Set Categories
             $this->setCategories($this->plan);
+            
+            // Refresh attributes
             $this->refreshAttributes($this->plan);
-            $this->setCoreMeta($this->plan);
-            $this->saveModelCoreMeta();
+            
+            // Save all core meta
+            $this->saveAllCoreMeta($this->plan);
 
             // TODO: Determine which package to use for Translations! Set Translations...
 
@@ -240,28 +234,5 @@ class PlanForm extends Component
     public function render()
     {
         return view('livewire.dashboard.forms.plans.plan-form');
-    }
-
-    protected function saveModelCoreMeta()
-    {
-        foreach (collect($this->getRuleSet('meta') ?? [])->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {
-            $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
-
-            if (! empty($core_meta_key) && $core_meta_key !== '*') {
-                if(array_key_exists($core_meta_key, is_array($this->model_core_meta) ? $this->model_core_meta : $this->model_core_meta->toArray())) {
-                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaPlanDataTypes());
-
-                    try {
-                        CoreMeta::updateOrCreate(
-                            ['subject_id' => $this->plan->id, 'subject_type' => $this->plan::class, 'key' => $core_meta_key],
-                            ['value' => $new_value]
-                        );
-                    } catch(\Exception $e) {
-                        Log::error($e->getMessage());
-                        // dd($this->model_core_meta[$core_meta_key]);
-                    }
-                }
-            }
-        }
     }
 }

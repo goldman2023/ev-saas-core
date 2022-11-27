@@ -2,27 +2,28 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\BlogPosts;
 
-use App\Enums\StatusEnum;
-use App\Enums\BlogPostTypeEnum;
-use App\Facades\MyShop;
-use App\Models\Address;
-use App\Models\BlogPost;
-use App\Models\Category;
-use App\Models\Plan;
-use App\Models\ShopAddress;
-use App\Models\User;
-use App\Models\CoreMeta;
-use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\HasCategories;
-use App\Traits\Livewire\HasCoreMeta;
-use App\Traits\Livewire\RulesSets;
-use Categories;
 use DB;
 use EVS;
-use Illuminate\Validation\Rule;
-use Livewire\Component;
-use Permissions;
+use WEF;
 use Purifier;
+use Categories;
+use Permissions;
+use App\Models\Plan;
+use App\Models\User;
+use App\Facades\MyShop;
+use App\Models\Address;
+use Livewire\Component;
+use App\Models\BlogPost;
+use App\Models\Category;
+use App\Models\CoreMeta;
+use App\Enums\StatusEnum;
+use App\Models\ShopAddress;
+use App\Enums\BlogPostTypeEnum;
+use Illuminate\Validation\Rule;
+use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\HasCoreMeta;
+use App\Traits\Livewire\HasCategories;
+use App\Traits\Livewire\DispatchSupport;
 use Spatie\ValidationRules\Rules\ModelsExist;
 
 class BlogPostForm extends Component
@@ -35,8 +36,6 @@ class BlogPostForm extends Component
     public $blogPost;
 
     public $selectedPlans;
-
-    public $model_core_meta;
 
     public $is_update;
 
@@ -56,25 +55,9 @@ class BlogPostForm extends Component
         }
 
         $this->initCategories($this->blogPost);
+        $this->initCoreMeta($this->blogPost);
 
         $this->selectedPlans = $this->blogPost->plans->keyBy('id')->map(fn ($item) => $item->title);
-
-        $this->model_core_meta = CoreMeta::getMeta($blogPost?->core_meta ?? [], BlogPost::class, true);
-
-    }
-
-    protected function getRuleSet($set = null)
-    {
-        $rulesSets = collect([
-            'meta' => [
-                'model_core_meta.portfolio_link' => 'nullable',
-            ],
-            'core_meta' => [
-                'core_meta' => '',
-            ]
-        ]);
-
-        return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
     }
 
     protected function rules()
@@ -89,7 +72,6 @@ class BlogPostForm extends Component
             'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'blogPost.excerpt' => 'required|min:10',
             'blogPost.content' => 'required|min:10',
-            'blogPost.content_structure' => 'required',
             'blogPost.gallery' => [''],
             'blogPost.meta_title' => [''],
             'blogPost.meta_keywords' => [''],
@@ -121,15 +103,22 @@ class BlogPostForm extends Component
         ];
     }
 
-    public function dehydrate()
-    {
-        $this->dispatchBrowserEvent('initSlugGeneration');
-        $this->dispatchBrowserEvent('init-form');
+    public function getWEFRules() {
+        return [
+            'wef.content_structure' => 'required',
+            'wef.portfolio_link' => 'nullable'
+        ];
+    }
+    
+    public function getWEFMessages() {
+        return [];
     }
 
-    // public function hydrate() {
-    //     dd($this->blogPost);
-    // }
+    public function dehydrate()
+    {
+        // $this->dispatchBrowserEvent('initSlugGeneration');
+        $this->dispatchBrowserEvent('init-form');
+    }
 
     public function saveBlogPost()
     {
@@ -164,11 +153,9 @@ class BlogPostForm extends Component
             // Sync authors
             $this->blogPost->authors()->syncWithoutDetaching(auth()->user()); //
 
-            $this->saveModelCoreMeta();
-
             // Save Other Product Core Meta
             /* TODO: Fix Saving Core meta, core meta fields are missing in the form, so add those and uncoment */
-            $this->setCoreMeta($this->blogPost);
+            $this->saveAllCoreMeta($this->blogPost);
 
             // TODO: Make a function to relate blog post and plans in order to make posts subscription_only
 
@@ -178,7 +165,6 @@ class BlogPostForm extends Component
             // TODO: Determine which package to use for Translations! Set Translations...
 //
             DB::commit();
-
 
 
             if ($this->is_update) {
@@ -215,27 +201,5 @@ class BlogPostForm extends Component
     }
 
     // TODO: Move this to Trait and replace this function in PlanForm and in ProductForm
-    protected function saveModelCoreMeta()
-    {
-        return true;
-        foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {
-            $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
-
-            if (! empty($core_meta_key) && $core_meta_key !== '*') {
-                if(array_key_exists($core_meta_key, is_array($this->model_core_meta) ? $this->model_core_meta : $this->model_core_meta->toArray())) {
-                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaBlogPostDataTypes());
-
-                    try {
-                        CoreMeta::updateOrCreate(
-                            ['subject_id' => $this->blogPost->id, 'subject_type' => $this->blogPost::class, 'key' => $core_meta_key],
-                            ['value' => $new_value]
-                        );
-                    } catch(\Exception $e) {
-                        Log::error($e->getMessage());
-                        // dd($this->model_core_meta[$core_meta_key]);
-                    }
-                }
-            }
-        }
-    }
+    
 }

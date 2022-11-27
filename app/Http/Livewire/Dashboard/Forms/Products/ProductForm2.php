@@ -51,8 +51,6 @@ class ProductForm2 extends Component
 
     public $product;
 
-    public $model_core_meta;
-
     public $is_update;
 
     protected $listeners = [
@@ -126,28 +124,6 @@ class ProductForm2 extends Component
                 'product.meta_description' => 'nullable',
                 'product.meta_img' => 'nullable',
             ],
-            'meta' => [
-                // TODO: Add proper conditional validation!
-                'model_core_meta.date_type' => ['exclude_unless:product.type,event', Rule::in(['range', 'specific'])], // range, specific
-                'model_core_meta.start_date' => ['exclude_unless:product.type,event', 'required_if:product.type,event'], //'required_if:product.type,event|date',
-                'model_core_meta.end_date' => 'nullable',
-                'model_core_meta.location_type' => ['exclude_unless:product.type,event', Rule::in(['remote', 'offline'])], // remote, location
-                'model_core_meta.location_address' => 'nullable',
-                'model_core_meta.location_address_map_link' => 'nullable',
-                'model_core_meta.location_link' => 'nullable',
-                'model_core_meta.unlockables' => 'nullable',
-                'model_core_meta.calendly_link' => ['exclude_unless:product.type,bookable_service', 'required_if:product.type,bookable_service', 'url'], // should be required if product type is bookable_service or bookable_subscription_service
-                'model_core_meta.thank_you_cta_custom_title' => 'nullable',
-                'model_core_meta.thank_you_cta_custom_text' => 'nullable',
-                'model_core_meta.thank_you_cta_custom_url' => 'nullable',
-                'model_core_meta.thank_you_cta_custom_button_title' => 'nullable',
-
-                  // Course
-                  'model_core_meta.course_what_you_will_learn' => ['exclude_unless:product.type,course', 'nullable', 'array'],
-                  'model_core_meta.course_requirements' => ['exclude_unless:product.type,course', 'nullable', 'array'],
-                  'model_core_meta.course_target_audience' => ['exclude_unless:product.type,course', 'nullable', 'array'],
-                  'model_core_meta.course_includes' => ['exclude_unless:product.type,course', 'nullable', 'array'],
-            ],
             'core_meta' => [
                 'core_meta' => '',
             ]
@@ -174,6 +150,36 @@ class ProductForm2 extends Component
             'product.pdf.if_id_exists' => translate('Please select a valid specification document from the media library'),
             'selected_categories.required' => translate('You must select at least 1 category'),
         ];
+    }
+
+    public function getWEFRules() {
+        return [
+            'wef.content_structure' => 'required',
+            'wef.date_type' => ['exclude_unless:product.type,event', Rule::in(['range', 'specific'])], // range, specific
+            'wef.start_date' => ['exclude_unless:product.type,event', 'required_if:product.type,event'], //'required_if:product.type,event|date',
+            'wef.end_date' => 'nullable',
+            'wef.location_type' => ['exclude_unless:product.type,event', Rule::in(['remote', 'offline'])], // remote, location
+            'wef.location_address' => 'nullable',
+            'wef.location_address_map_link' => 'nullable',
+            'wef.location_link' => 'nullable',
+            'wef.unlockables' => 'nullable',
+            'wef.unlockables_structure' => 'nullable',
+            'wef.calendly_link' => ['exclude_unless:product.type,bookable_service', 'required_if:product.type,bookable_service', 'url'], // should be required if product type is bookable_service or bookable_subscription_service
+            'wef.thank_you_cta_custom_title' => 'nullable',
+            'wef.thank_you_cta_custom_text' => 'nullable',
+            'wef.thank_you_cta_custom_url' => 'nullable',
+            'wef.thank_you_cta_custom_button_title' => 'nullable',
+    
+            // Course
+            'wef.course_what_you_will_learn' => ['exclude_unless:product.type,course', 'nullable', 'array'],
+            'wef.course_requirements' => ['exclude_unless:product.type,course', 'nullable', 'array'],
+            'wef.course_target_audience' => ['exclude_unless:product.type,course', 'nullable', 'array'],
+            'wef.course_includes' => ['exclude_unless:product.type,course', 'nullable', 'array'],
+        ];
+    }
+
+    public function getWEFMessages() {
+        return [];
     }
 
     /**
@@ -226,10 +232,6 @@ class ProductForm2 extends Component
         $this->initCategories($this->product);
 
         $this->initCoreMeta($this->product);
-
-        /* Check if product object exits, if it doesn't exit do not try to fetch meta */
-        $this->model_core_meta = CoreMeta::getMeta($product?->core_meta ?? [], Product::class, true);
-        // dd($this->model_core_meta);
     }
 
     public function dehydrate()
@@ -347,11 +349,8 @@ class ProductForm2 extends Component
             // Set Attributes
             $this->setAttributes($this->product);
 
-            // Save ProductCoreMeta
-            $this->saveModelCoreMeta();
-
-            // Save Other Product Core Meta
-            $this->setCoreMeta($this->product);
+            // Save core meta and WEFs
+            $this->saveAllCoreMeta($this->product);
 
             DB::commit();
 
@@ -370,31 +369,6 @@ class ProductForm2 extends Component
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
             $this->inform(translate('There was an error while saving a product.'), $e->getMessage(), 'fail');
-        }
-    }
-
-
-    protected function saveModelCoreMeta()
-    {
-        foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {
-            $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
-
-            if (! empty($core_meta_key) && $core_meta_key !== '*') {
-                if(array_key_exists($core_meta_key, $this->model_core_meta->toArray())) {
-                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaProductDataTypes());
-
-                    try {
-                        CoreMeta::updateOrCreate(
-                            ['subject_id' => $this->product->id, 'subject_type' => $this->product::class, 'key' => $core_meta_key],
-                            ['value' => $new_value]
-                        );
-                    } catch(\Exception $e) {
-                        Log::error($e->getMessage());
-                        dd($e);
-                        // dd($this->model_core_meta[$core_meta_key]);
-                    }
-                }
-            }
         }
     }
 
