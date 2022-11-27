@@ -358,7 +358,7 @@ class EVService
                         'route_name' => 'crm.licenses',
                         'is_active' => areActiveRoutes(['crm.licenses']),
                         'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['browse_licenses'],
+                        'permissions' => [],
                         /* TODO: Add expiring licenses count */
                         // 'badge' => [
                         //     'class' => 'badge-info',

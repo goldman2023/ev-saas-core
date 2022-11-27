@@ -77,7 +77,7 @@
 
         <div class="mb-3">
             <button type="submit"
-                    class="btn bg-primary text-white w-full mt-2"
+                    class="btn bg-primary text-lg font-bold text-white w-full mt-2"
                     data-test="we-login-submit">
                 {{ translate('Login')}}
             </button>
