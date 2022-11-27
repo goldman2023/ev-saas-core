@@ -29,15 +29,17 @@ URL: https://flowbite.com/docs/components/typography/
 
 
 <main class="pt-8 pb-16 lg:pt-8 lg:pb-24 bg-white dark:bg-gray-900">
-    <div class="flex justify-between px-4 mx-auto max-w-screen-xl mb-12">
+    <div class="flex justify-between px-4 mx-auto container max-w-screen-xl mb-12">
         <div>
-            <h1 class="text-4xl text-indigo-900 font-bold mb-4">{{ get_site_name() }} {{ translate('News') }} </h1>
-            <p class="text-gray-800 max-w-3xl">
+            <h1 class="text-4xl text-indigo-900 font-bold mb-3">
+                {{ get_site_name() }} {{ translate('News') }}
+            </h1>
+            <p class="text-gray-700 max-w-3xl mb-8">
                 {{ translate('Read latest news and updates from our team') }}
             </p>
         </div>
     </div>
-    <div class="flex gap-10 justify-between px-4 mx-auto max-w-screen-xl ">
+    <div class="flex gap-10 justify-between px-4 mx-auto container max-w-screen-xl ">
 
         <div class="mb-6 xl:block lg:w-52">
             <div class="sticky top-6">
