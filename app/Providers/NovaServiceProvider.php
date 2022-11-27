@@ -223,7 +223,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         if (tenancy()->initialized) {
             return [
                 MenuBuilder::make(),
-                \Laravel\Nova\LogViewer\LogViewer::make(),
                 Novaspatiepermissions::make()
             ];
         } else {

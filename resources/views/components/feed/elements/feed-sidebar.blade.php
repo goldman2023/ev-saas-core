@@ -10,9 +10,10 @@
                     alt="{{ translate('Profile picture') }}">
                 </a>
             </div>
-            <div class="space-y-1">
+            <div class="">
                 <div class="text-sm font-medium text-gray-900">
                 <a href="{{ auth()->user()->getPermalink() }}">
+
                     {{ auth()->user()->name }}
                 </a>
                 </div>
