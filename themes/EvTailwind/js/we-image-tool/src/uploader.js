@@ -68,7 +68,7 @@ export default class Uploader {
       //   },
       //   fieldName: this.config.field,
       // }).then((response) => response.body);
-      let livewire_form_id = document.querySelector('.livewire-form').getAttribute('wire:id');
+      let livewire_form_id = document.querySelector('.lw-form').getAttribute('wire:id');
 
       Livewire.find(livewire_form_id).emit('showMediaLibrary', 'editor-js-promise', 'image', [{}], this.image_id)
 

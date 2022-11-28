@@ -13,7 +13,7 @@ module.exports = {
               presets: [ '@babel/preset-env' ],
             },
           },
-          'eslint-loader'
+          // 'eslint-loader'
         ]
       },
       {
@@ -42,7 +42,7 @@ module.exports = {
     path: path.join(__dirname, '/dist'),
     publicPath: '/',
     filename: 'bundle.js',
-    library: 'ImageTool',
+    library: 'WeImageTool',
     libraryTarget: 'umd',
     libraryExport: 'default'
   }
