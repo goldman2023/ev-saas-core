@@ -1,4 +1,7 @@
-<div class="w-full livewire-form" x-data="{
+@push('head_scripts')
+
+@endpush
+<div class="w-full lw-form" x-data="{
     status: @js($blogPost->status ?? App\Enums\StatusEnum::draft()->value),
     type: @js($blogPost->type ?? App\Enums\BlogPostTypeEnum::blog()->value),
     thumbnail: @js(toJSONMedia($blogPost->thumbnail)),

@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush
 
-<div x-data="{
+<div class="lw-form container-fluid" x-data="{
         thumbnail: @js(toJSONMedia($product->thumbnail)),
         cover: @js(toJSONMedia($product->cover)),
         meta_img: @js(toJSONMedia($product->meta_img)),
@@ -79,7 +79,8 @@
             $wire.set('wef.course_intro_video_url', this.wef.course_intro_video_url, true);
 
         }
-    }" class="lw-form container-fluid" @init-product-form.window=""
+    }" 
+    @init-product-form.window=""
     @validation-errors.window="console.log($event.detail.errors);" x-cloak>
 
 
