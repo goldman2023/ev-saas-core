@@ -156,6 +156,7 @@ export default class Ui {
 
     const attributes = {
       src: url,
+      referrerpolicy: 'no-referrer',
     };
 
     /**
@@ -269,7 +270,8 @@ export const make = function make(tagName, classNames = null, attributes = {}) {
   }
 
   for (const attrName in attributes) {
-    el[attrName] = attributes[attrName];
+    // el[attrName] = attributes[attrName];
+    el.setAttribute(attrName, attributes[attrName]); // more reliable way of adding attributes to html node element
   }
 
   return el;
