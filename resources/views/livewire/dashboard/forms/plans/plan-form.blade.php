@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush
 
-<div class="w-full" x-data="{
+<div class="w-full lw-form" x-data="{
     status: @js($plan->status ?? \App\Enums\StatusEnum::draft()->value),
     thumbnail: @js(toJSONMedia($plan->thumbnail)),
     cover: @js(toJSONMedia($plan->cover)),
