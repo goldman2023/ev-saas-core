@@ -21,7 +21,7 @@
     </x-slot>
 </x-dashboard.section-headers.section-header>
 
-<div class="bg-gray-50">
+<div class="bg-gray-50 mb-8">
     <div class="max-w-2xl mx-auto pt-16 sm:py-16 sm:px-6 lg:max-w-7xl lg:px-8">
         <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 mb-3">
 
@@ -74,19 +74,19 @@
 
                 {{-- Shipping status (only for Standard Products) --}}
                 @if($order_items->filter(fn($item) => ($item->subject?->isProduct() ?? false) &&
-                    ($item->subject?->isShippable() ?? false))->count() > 0)
-                    @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
-                        <span class="badge-success !py-1 !px-3 mr-2">
-                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                        </span>
-                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
-                        <span class="badge-warning !py-1 !px-3 mr-2">
-                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                        </span>
-                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
-                        <span class="badge-danger !py-1 !px-3 mr-2">
-                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                        </span>
+                ($item->subject?->isShippable() ?? false))->count() > 0)
+                @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
+                <span class="badge-success !py-1 !px-3 mr-2">
+                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                </span>
+                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
+                <span class="badge-warning !py-1 !px-3 mr-2">
+                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                </span>
+                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
+                <span class="badge-danger !py-1 !px-3 mr-2">
+                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                </span>
                 @endif
 
                 {{-- Tracking number (only for Standard Products) --}}
@@ -131,8 +131,8 @@
                             <div
                                 class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 border border-gray-200 shadow">
                                 @if(!empty($item?->subject))
-                                    <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
-                                        class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+                                <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
+                                    class="w-full h-full object-center object-cover sm:w-full sm:h-full">
                                 @endif
                             </div>
 
@@ -151,7 +151,8 @@
                                     <div class="pl-4 flex sm:pl-6">
                                         <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
                                         <dd class="ml-2 text-gray-700">
-                                            {{ FX::formatPrice($item->total_price) }} {{ $order->type !== 'standard' ? ' / '.$order->invoicing_period : '' }}
+                                            {{ FX::formatPrice($item->total_price) }} {{ $order->type !== 'standard' ? '
+                                            / '.$order->invoicing_period : '' }}
                                         </dd>
                                     </div>
                                 </dl>
@@ -301,7 +302,8 @@
                     </div>
                     <div class="py-4 flex items-center justify-between">
                         <dt class="text-gray-600">{{ translate('Tax') }} ({{ $order->tax }}%)</dt>
-                        <dd class="font-medium text-gray-900">{{ \FX::formatPrice(($order->subtotal_price + (float) $order->shipping_cost) * $order->tax / 100) }}</dd>
+                        <dd class="font-medium text-gray-900">{{ \FX::formatPrice(($order->subtotal_price + (float)
+                            $order->shipping_cost) * $order->tax / 100) }}</dd>
                     </div>
                     <div class="pt-4 flex items-center justify-between">
                         <dt class="font-medium text-gray-900">{{ translate('Order total') }}</dt>
@@ -311,8 +313,42 @@
             </div>
         </div>
     </div>
-</div>
 
+
+
+</div>
+{{-- Advanced Details - admin only --}}
+@if(auth()->user()->isAdmin())
+<div class="">
+    <div class="card mb-6 !pb-6">
+        <div class="border-b border-gray-200 bg-white pb-3 mb-4">
+            <h3 class="text-xl font-medium leading-6 text-gray-900">{{ translate('Order documents')
+                }}</h3>
+            <p class="mt-1 text-sm text-gray-500">{{ translate('Here you can find all uploaded
+                documents related to the current order') }}</p>
+        </div>
+
+        <livewire:dashboard.forms.file-manager.file-manager :subject="$order" field="documents"
+            :file-type="\App\Enums\FileTypesEnum::image()->value" :multiple="true"
+            add-new-item-label="{{ translate('Add new document') }}" wrapper-class="!max-w-full" />
+    </div>
+
+
+    <div class="card mb-6">
+        <h3 class="text-2xl max-w-7xl font-bold tracking-tight text-gray-900 mb-6">
+            {{ translate('Order notes') }}
+        </h3>
+        <livewire:actions.social-comments :item="$order">
+        </livewire:actions.social-comments>
+    </div>
+
+    @livewire('dashboard.elements.activity-log',
+    [
+    'subject' => $order,
+    'title' => translate('Order Activity')
+    ])
+</div>
+@endif
 @endsection
 
 @push('footer_scripts')
