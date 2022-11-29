@@ -71,6 +71,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
     protected function registerLivewireComponents()
     {
+        Livewire::component('dashboard.tables.orders-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\OrdersTable::class);
     }
 
     /**
@@ -136,23 +137,23 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     mkdir( storage_path() . '/app/public/');
                 } catch (\Exception $e) {
                 }
-    
+
                 try {
                     mkdir( storage_path() . '/app/public/documents/');
                 } catch (\Exception $e) {
-    
+
                 }
-    
+
                 try {
                     mkdir( storage_path() . '/app/public/documents/' . $order->id);
                 } catch (\Exception $e) {
-    
+
                 }
-    
+
                 if($order->status == 1) {
                     $this->generate_contract($order);
                 } else if($order->status == 2) {
-    
+
                 }
                 /* Generate those always
                 TODO: Make conditional logic based on status change
@@ -169,7 +170,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             }, 10, 2);
         }
-        
+
     }
 
     /**
@@ -189,6 +190,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         $data = ['order' => $order];
         $pdf = Pdf::loadView('documents_templates.contract', $data );
 
+        /* TODO: Fix where it's saved */
         $pdf->save(storage_path() . '/app/public/documents/'. $order->id . '/contract-'. $order->id .'.pdf');
         /* TODO: Implement attaching a document */
         // $order->attachDocument($something);
