@@ -1,7 +1,5 @@
 @push('head_scripts')
 <script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush
 
 <div class="w-full" x-data="{
