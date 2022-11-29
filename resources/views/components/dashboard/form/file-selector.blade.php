@@ -110,7 +110,7 @@ x-init="makeSortable()"
         }
     }
 ">
-    <div :id="'file-selector-'+id" class="@if($template != 'simple') max-w-lg flex justify-center @if(!$multiple) border-2 border-gray-300 border-dashed rounded-md cursor-pointer @endif @endif  @error($errorField) !border-danger @enderror  "
+    <div :id="'file-selector-'+id" class="@if($template != 'simple') max-w-lg flex justify-center @if(!$multiple) border-2 border-gray-300 border-dashed rounded-md cursor-pointer @endif @endif  @error($errorField) !border-danger @enderror  {{ $wrapperClass }}"
         @if($template != 'simple' && !$multiple):class="{'px-6 pt-5 pb-6': hasFiles() }" @endif
 
         @if(!$multiple)
@@ -121,7 +121,7 @@ x-init="makeSortable()"
         @if($multiple)
             <div class="w-full flex flex-col">
                 <template x-if="hasFiles()">
-                    <ul class="file-selector__sortable-list w-full grid grid-cols-3 gap-3 ">
+                    <ul class="file-selector__sortable-list w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-3 ">
                         <template x-for="(item, index) in {{ $field }}">
                             <li class="flex flex-col border rounded-lg cursor-grab relative" :data-image-id="item.id">
                                 <button class="absolute top-[-5px] right-[-5px] p-1 bg-danger rounded-lg z-[1]" @click="removeFile(index);">
@@ -133,10 +133,17 @@ x-init="makeSortable()"
                                 </template>
 
                                 <template x-if="item.type === 'document'">
-                                    <div class="w-full px-2 py-3 flex flex-col">
-                                        <strong class="text-12" x-text="item.file_original_name"></strong>
-                                        <p class="pt-2 text-10" x-text="window.WE.utils.formatSizeUnits(item.file_size)"></p>
+                                    <div class="w-full flex flex-col grow">
+                                        <div class="w-full px-2 py-3 flex flex-col grow">
+                                            <strong class="text-12" x-text="item.file_original_name"></strong>
+                                            <p class="pt-2 text-10" x-text="window.WE.utils.formatSizeUnits(item.file_size)"></p>
+                                        </div>
+                                        <div class="w-full lx-2 py-1 text-center color-gray-700 border-t border-gray-200 text-12 cursor-pointer relative z-10"
+                                            @click="$wire.emit('showMediaEditor', id, {{ $subject->id }}, '{{ base64_encode($subject::class) }}', item.id)">
+                                            <span>{{ translate('Edit file') }}</span>
+                                        </div>
                                     </div>
+                                    
                                 </template>
                             </li>
                         </template>
@@ -145,12 +152,12 @@ x-init="makeSortable()"
 
                 <template x-if="!hasFiles()">
                     <div class="w-full flex justify-center border-2 border-gray-300 border-dashed rounded-md p-6">
-                        <p>{{ translate('No items selected...') }}</p>
+                        <p class="text-gray-600">{{ translate('No files to display...') }}</p>
                     </div>
                 </template>
 
                 <div class="w-full flex mt-4">
-                    <button type="button" class="btn-primary ml-auto"
+                    <button type="button" class="btn-standard-outline ml-auto"
                         @click="$wire.emit('showMediaLibrary', id, 'image', {{ $field }}.map((item) => { return {id: item?.id || '', file_name: item?.file_name || '', type: item?.type || @js($fileType) }; }), null, true)">
                         {{ $addNewItemLabel }}
                     </button>

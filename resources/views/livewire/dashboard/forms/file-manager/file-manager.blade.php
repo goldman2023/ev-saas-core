@@ -10,7 +10,9 @@
         file-type="{{ \App\Enums\FileTypesEnum::image()->value }}"
         :selected-image="$subject->{$field}"
         :multiple="$multiple"
-        add-new-item-label="{{ $addNewItemLabel }}">
+        :subject="$subject"
+        add-new-item-label="{{ $addNewItemLabel }}"
+        wrapper-class="{{ $wrapperClass }}">
     </x-dashboard.form.file-selector>
 
     <button type="button" class="btn-primary" @click="onSave()" wire:click="saveFiles">

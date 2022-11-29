@@ -81,21 +81,20 @@
                         {{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}
                     </span> --}}
 
-                    <p class="text-sm text-gray-600">
-                    <div>
-                        {{ translate('Order placed on:') }} <br>
-                        <time datetime="2021-03-22" class="font-semibold text-gray-900">
-                            {{ $order->created_at->format('M d, Y H:i') }}
+                    <div class="flex flex-col">
+                        <span>{{ translate('Order placed on:') }}</span>
+                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="font-semibold text-gray-900">
+                            {{ $order->created_at->format('M d, Y - H:i') }}
                         </time>
                     </div>
                     {{-- TODO: Create order delivery deadline mechanics --}}
-                    <div>
-                        {{ translate('Order delivery deadline:') }} <br>
-                        <time class="font-semibold text-gray-900">
-                            {{ $order->created_at->format('M d, Y H:i') }}
+                    <div class="flex flex-col">
+                        <span>{{ translate('Order delivery deadline:') }}</span>
+                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="font-semibold text-red-600">
+                            {{ $order->created_at->format('M d, Y - H:i') }}
                         </time>
                     </div>
-                    <div>
+                    {{-- <div>
                         <div class="atcb" style="display:none;">
                             {
                             "name":"{{ translate('Order') }} {{ $order->id }}",
@@ -112,13 +111,12 @@
                             "Microsoft365",
                             ],
                             "timeZone":"{{ date_default_timezone_get() }}",
-                            {{-- "timeZoneOffset":"{{ date('P') }}", --}}
+                            "timeZoneOffset":"{{ date('P') }}",
                             "trigger":"click",
                             "iCalFileName":"Order-{{ $order->id }}"
                             }
                         </div>
-                    </div>
-                    </p>
+                    </div> --}}
 
                     <div class="hidden">
                         {{-- TODO: Make invoice generation posible --}}
@@ -176,10 +174,9 @@
                     </ul>
                 </div>
                 <div id="myTabContent">
-                    <div class="card mb-3">
+                    {{-- <div class="card mb-3">
                         <x-dashboard.orders.order-documents-list :order="$order"></x-dashboard.orders.order-documents-list>
-
-                    </div>
+                    </div> --}}
 
                     <div class="rounded-lg dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="mb-6">
@@ -196,15 +193,16 @@
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel"
                         aria-labelledby="dashboard-tab">
 
-                        <div class="card mb-6">
-                            <div
-                                class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
-                                <h4 class="text-18 text-gray-900 font-semibold">
-                                    {{ translate('Order Documents') }}</h4>
-                            </div>
+                        <div class="card mb-6 !pb-6">
+                            <div class="border-b border-gray-200 bg-white pb-3 mb-4">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ translate('Order documents') }}</h3>
+                                <p class="mt-1 text-sm text-gray-500">{{ translate('Here you can find all uploaded documents related to the current order') }}</p>
+                              </div>
+
                             <livewire:dashboard.forms.file-manager.file-manager :subject="$order" field="documents"
                                 :file-type="\App\Enums\FileTypesEnum::image()->value" :multiple="true"
-                                add-new-item-label="{{ translate('Add new document') }}" />
+                                add-new-item-label="{{ translate('Add new document') }}"
+                                wrapper-class="!max-w-full" />
                         </div>
 
 
@@ -359,16 +357,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-
-        <div class="card mb-3 mt-3">
-
-            <livewire:dashboard.forms.file-manager.file-manager :subject="$order" field="documents"
-                :file-type="\App\Enums\FileTypesEnum::image()->value" :multiple="true"
-                add-new-item-label="{{ translate('Add new document') }}" />
-            {{-- <x-dashboard.general.files-manager>
-            </x-dashboard.general.files-manager> --}}
         </div>
 
         <div class="card mb-3">

@@ -156,6 +156,14 @@ class OrderForm extends Component
         ];
     }
 
+    public function getWEFRules() {
+        return [];
+    }
+
+    public function getWEFMessages() {
+        return [];
+    }
+
     public function dehydrate()
     {
         $this->dispatchBrowserEvent('init-form');

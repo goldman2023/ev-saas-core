@@ -1,0 +1,1 @@
+<livewire:dashboard.forms.wef.single-wef-form :subject="$upload" wef="notes" data-type="string" key="{{ 'wef-notes-'.($upload?->id ?? 0).'-'.now() }}" />
