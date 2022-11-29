@@ -15,7 +15,9 @@
         </a>
     </x-slot>
 </x-dashboard.section-headers.section-header>
-
+<div class="-mt-6 mb-6">
+    {{ Breadcrumbs::render('dashboard.orders') }}
+    </div>
 <div class="w-full">
 
     @if($orders_count > 0)

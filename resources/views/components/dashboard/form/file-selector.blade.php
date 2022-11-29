@@ -138,12 +138,14 @@ x-init="makeSortable()"
                                             <strong class="text-12" x-text="item.file_original_name"></strong>
                                             <p class="pt-2 text-10" x-text="window.WE.utils.formatSizeUnits(item.file_size)"></p>
                                         </div>
+                                        @if($subject)
                                         <div class="w-full lx-2 py-1 text-center color-gray-700 border-t border-gray-200 text-12 cursor-pointer relative z-10"
                                             @click="$wire.emit('showMediaEditor', id, {{ $subject->id }}, '{{ base64_encode($subject::class) }}', item.id)">
                                             <span>{{ translate('Edit file') }}</span>
                                         </div>
+                                        @endif
                                     </div>
-                                    
+
                                 </template>
                             </li>
                         </template>

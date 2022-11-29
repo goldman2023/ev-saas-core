@@ -8,85 +8,90 @@
 @endpush
 
 @section('panel_content')
+
 <x-dashboard.section-headers.section-header title="{{ translate('Order') }}:
                             #{{ $order->id }}" text="">
     <x-slot name="content">
         <div class="items-center flex content-center align-center">
-        {{-- <a href="{{ route('orders.index') }}" class="btn-warning">
-            @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
-            <span>{{ translate('All orders') }}</span>
-        </a> --}}
-        {{-- Actions --}}
-        <div class="px-4 py-2 h-full space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0 mb-4">
-            <div class="flex items-center">
-                @php
-                $last_invoice = $order->invoices->first(); // it's already sorted by created_at DESC
-                @endphp
+            {{-- <a href="{{ route('orders.index') }}" class="btn-warning">
+                @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
+                <span>{{ translate('All orders') }}</span>
+            </a> --}}
+            {{-- Actions --}}
+            <div class="px-4 py-2 h-full space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0 mb-4">
+                <div class="flex items-center">
+                    @php
+                    $last_invoice = $order->invoices->first(); // it's already sorted by created_at DESC
+                    @endphp
 
-                @if($last_invoice)
-                @if($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
-                <span class="badge-success !py-1 !px-3 mr-3">
-                    {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
-                </span>
-                @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
-                <span class="badge-warning  !py-1 !px-3 mr-3">
-                    {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
-                </span>
-                @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
-                <span class="badge-danger  !py-1 !px-3 mr-3">
-                    {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
-                </span>
-                @endif
-                @endif
+                    @if($last_invoice)
+                    @if($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
+                    <span class="badge-success !py-1 !px-3 mr-3">
+                        {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
+                    </span>
+                    @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
+                    <span class="badge-warning  !py-1 !px-3 mr-3">
+                        {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
+                    </span>
+                    @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
+                    <span class="badge-danger  !py-1 !px-3 mr-3">
+                        {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
+                    </span>
+                    @endif
+                    @endif
 
-                {{-- Shipping status (only for Standard Products) --}}
-                @if($order_items->filter(fn($item) => ($item->subject?->isProduct() ?? false) &&
-                ($item->subject?->isShippable() ?? false))->count() > 0)
-                @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
-                <span class="badge-success !py-1 !px-3 mr-2">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                </span>
-                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
-                <span class="badge-warning !py-1 !px-3 mr-2">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                </span>
-                @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
-                <span class="badge-danger !py-1 !px-3 mr-2">
-                    {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                </span>
-                @endif
+                    {{-- Shipping status (only for Standard Products) --}}
+                    @if($order_items->filter(fn($item) => ($item->subject?->isProduct() ?? false) &&
+                    ($item->subject?->isShippable() ?? false))->count() > 0)
+                    @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
+                    <span class="badge-success !py-1 !px-3 mr-2">
+                        {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                    </span>
+                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
+                    <span class="badge-warning !py-1 !px-3 mr-2">
+                        {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                    </span>
+                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
+                    <span class="badge-danger !py-1 !px-3 mr-2">
+                        {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                    </span>
+                    @endif
 
-                {{-- Tracking number (only for Standard Products) --}}
-                @if(empty($order->tracking_number))
-                <span class="badge-danger !py-1 !px-3 mr-2">
-                    {{ translate('Tracking number not added') }}
-                </span>
-                @endif
-                @endif
+                    {{-- Tracking number (only for Standard Products) --}}
+                    @if(empty($order->tracking_number))
+                    <span class="badge-danger !py-1 !px-3 mr-2">
+                        {{ translate('Tracking number not added') }}
+                    </span>
+                    @endif
+                    @endif
+                </div>
+
+                <div class="flex items-center relative" x-data="{ isOpen: false }" x-cloak>
+                    <a class="flex items-center text-gray-900 mr-3" href="javascript:;"
+                        onclick="window.print(); return false;">
+                        @svg('heroicon-o-printer', ['class' => 'w-[18px] h-[18px] mr-2'])
+                        {{ translate('Print order') }}
+                    </a>
+
+
+                </div>
             </div>
+            <a href="{{ route('order.change-status', $order->id) }}" class="btn-primary !px-10 text-center !py-3 ml-3">
 
-            <div class="flex items-center relative" x-data="{ isOpen: false }" x-cloak>
-                <a class="flex items-center text-gray-900 mr-3" href="javascript:;"
-                    onclick="window.print(); return false;">
-                    @svg('heroicon-o-printer', ['class' => 'w-[18px] h-[18px] mr-2'])
-                    {{ translate('Print order') }}
-                </a>
+                <span>
+                    {{ translate('Next status') }}
+                </span>
 
+                @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 ml-3'])
 
-            </div>
+            </a>
         </div>
-        <a href="{{ route('order.change-status', $order->id) }}" class="btn-primary !px-10 text-center !py-3 ml-3">
 
-            <span>
-                {{ translate('Next status') }}
-            </span>
-
-            @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 ml-3'])
-
-        </a>
-    </div>
     </x-slot>
 </x-dashboard.section-headers.section-header>
+<div class="-mt-6 mb-6">
+    {{ Breadcrumbs::render('dashboard.orders', $order) }}
+</div>
 
 <x-dashboard.orders.order-steps :order="$order"></x-dashboard.orders.order-steps>
 <div class="grid sm:grid-cols-12 gap-9">
@@ -102,18 +107,7 @@
                 </x-dashboard.orders.order-details-card>
             </div>
         </div>
-        <div class="card mb-9">
-            <div class="w-full pb-4 mb-4 border-b ">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status') }}</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                    {{ translate('Here you can see the current status of the order') }}
-                </p>
-            </div>
 
-
-            <x-dashboard.orders.order-timeline :order="$order">
-            </x-dashboard.orders.order-timeline>
-        </div>
 
         <div class="we-qr-code card mb-3">
             <div class="w-full pb-4 mb-4 border-b ">
@@ -283,13 +277,31 @@
 
                     </div>
 
-                    <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="settings" role="tabpanel"
+                    <div class="hidden dark:bg-gray-800" id="settings" role="tabpanel"
                         aria-labelledby="settings-tab">
-                        @livewire('dashboard.elements.activity-log',
-                        [
-                        'subject' => $order,
-                        'title' => translate('Order Activity')
-                        ])
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="card mb-9">
+                                <div class="w-full pb-4 mb-4 border-b ">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status')
+                                        }}</h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                        {{ translate('Here you can see the current status of the order') }}
+                                    </p>
+                                </div>
+
+
+                                <x-dashboard.orders.order-timeline :order="$order">
+                                </x-dashboard.orders.order-timeline>
+                            </div>
+
+                            @livewire('dashboard.elements.activity-log',
+                            [
+                            'subject' => $order,
+                            'title' => translate('Order Activity')
+                            ])
+                        </div>
+
 
                     </div>
                     <div class="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="contacts" role="tabpanel"
