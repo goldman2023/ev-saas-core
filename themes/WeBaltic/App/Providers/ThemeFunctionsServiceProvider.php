@@ -130,36 +130,46 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 1);
         }
 
-        add_action('order.change-status', function($order) {
-            try {
-                mkdir( storage_path() . '/app/public/');
-            } catch (\Exception $e) {
-            }
-
-            try {
-                mkdir( storage_path() . '/app/public/documents/');
-            } catch (\Exception $e) {
-
-            }
-
-            try {
-                mkdir( storage_path() . '/app/public/documents/' . $order->id);
-            } catch (\Exception $e) {
-
-            }
-
-            if($order->status == 1) {
+        if (function_exists('add_action')) {
+            add_action('order.change-status', function($order) {
+                try {
+                    mkdir( storage_path() . '/app/public/');
+                } catch (\Exception $e) {
+                }
+    
+                try {
+                    mkdir( storage_path() . '/app/public/documents/');
+                } catch (\Exception $e) {
+    
+                }
+    
+                try {
+                    mkdir( storage_path() . '/app/public/documents/' . $order->id);
+                } catch (\Exception $e) {
+    
+                }
+    
+                if($order->status == 1) {
+                    $this->generate_contract($order);
+                } else if($order->status == 2) {
+    
+                }
+                /* Generate those always
+                TODO: Make conditional logic based on status change
+                */
                 $this->generate_contract($order);
-            } else if($order->status == 2) {
+                $this->generate_certificate($order);
+                $this->generate_transportation_card($order);
+            });
 
-            }
-            /* Generate those always
-            TODO: Make conditional logic based on status change
-            */
-            $this->generate_contract($order);
-            $this->generate_certificate($order);
-            $this->generate_transportation_card($order);
-        });
+            // View actions
+            add_action('view.dashboard.we-media-editor.other-information', function ($upload, $subject) {
+                if (\View::exists('frontend.partials.we-media-editor-other-information')) {
+                    echo view('frontend.partials.we-media-editor-other-information', compact('upload', 'subject'));
+                }
+            }, 10, 2);
+        }
+        
     }
 
     /**

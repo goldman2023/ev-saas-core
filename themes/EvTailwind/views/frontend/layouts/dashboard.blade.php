@@ -62,6 +62,7 @@
     <!-- Carts -->
     <livewire:cart.cart template="flyout-cart" />
     <livewire:we-media-library />
+    <livewire:we-media-editor />
 
     <!-- Wishlist -->
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}

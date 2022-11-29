@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use IMG;
 use MyShop;
 use Storage;
+use App\Traits\CoreMetaTrait;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Upload extends WeBaseModel
 {
     use SoftDeletes;
+    use CoreMetaTrait;
     // use Cachable;
 
     /**
@@ -98,6 +100,7 @@ class Upload extends WeBaseModel
             'id' => $this?->id ?? '',
             'file_name' => $this?->file_name ?? '',
             'extension' => $this?->extension ?? '',
+            'file_size' => $this?->file_size ?? 0,
             'type' => $this?->type ?? null,
             'file_original_name' => $this?->file_original_name ?? '',
         ];

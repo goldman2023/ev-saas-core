@@ -23,12 +23,16 @@ class FileSelector extends Component
 
     public $addNewItemLabel;
 
+    public $wrapperClass;
+
+    public $subject; // needed for we-file-editor (for editing upload)
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($field = '', $id = '', $template = 'image', $fileType = 'image', $selectedImage = null, $errorField = '', $multiple = false, $addNewItemLabel = 'Add')
+    public function __construct($field = '', $id = '', $template = 'image', $fileType = 'image', $selectedImage = null, $errorField = '', $multiple = false, $addNewItemLabel = 'Add', $wrapperClass = '', $subject = null)
     {
         $this->field = $field;
         $this->errorField = $errorField;
@@ -37,6 +41,8 @@ class FileSelector extends Component
         $this->multiple = $multiple;
         $this->fileType = $fileType;
         $this->addNewItemLabel = $addNewItemLabel;
+        $this->wrapperClass = $wrapperClass;
+        $this->subject = $subject;
 
         if($this->multiple) {
             $this->selectedImage = [];

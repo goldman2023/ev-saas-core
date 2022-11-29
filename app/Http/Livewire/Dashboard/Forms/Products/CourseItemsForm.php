@@ -2,30 +2,30 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Products;
 
-use App\Enums\CourseItemTypes;
-use App\Enums\StatusEnum;
-use App\Models\CoreMeta;
-use App\Models\Product;
-use App\Models\CourseItem;
-use App\Models\WeQuiz;
-use App\Traits\Livewire\CanDelete;
-use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\HasCategories;
-use App\Traits\Livewire\RulesSets;
-use App\Traits\Livewire\HasCoreMeta;
-use App\Traits\Livewire\HasAttributes;
-use Categories;
 use DB;
-use EVS;
 use FX;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\Rule;
-use Livewire\Component;
+use EVS;
+use Str;
 use MyShop;
 use Purifier;
+use Categories;
+use App\Models\WeQuiz;
+use App\Models\Product;
+use Livewire\Component;
+use App\Models\CoreMeta;
+use App\Enums\StatusEnum;
+use App\Models\CourseItem;
+use App\Enums\CourseItemTypes;
+use Illuminate\Validation\Rule;
+use App\Traits\Livewire\CanDelete;
+use App\Traits\Livewire\RulesSets;
+use Illuminate\Support\Collection;
+use App\Traits\Livewire\HasCoreMeta;
+use App\Traits\Livewire\HasAttributes;
+use App\Traits\Livewire\HasCategories;
+use App\Traits\Livewire\DispatchSupport;
+use Illuminate\Contracts\Support\Arrayable;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Str;
 use Spatie\Activitylog\Facades\CauserResolver;
 
 class CourseItemsForm extends Component
@@ -77,6 +77,14 @@ class CourseItemsForm extends Component
             'current_item.pdf.if_id_exists' => translate('Please select a valid specification document from the media library'),
             'current_item.name.required' => translate('Course item name is required'),
         ];
+    }
+
+    public function getWEFRules() {
+        return [];
+    }
+
+    public function getWEFMessages() {
+        return [];
     }
 
     public function mount($product)

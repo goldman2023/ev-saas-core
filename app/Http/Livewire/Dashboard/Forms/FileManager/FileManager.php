@@ -23,13 +23,14 @@ class FileManager extends Component
     public $template;
     public $multiple;
     public $addNewItemLabel;
+    public $wrapperClass;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function mount($subject = null, $field = '', $template = 'image', $fileType = 'image', $errorField = '', $multiple = false, $addNewItemLabel = 'Add')
+    public function mount($subject = null, $field = '', $template = 'image', $fileType = 'image', $errorField = '', $multiple = false, $addNewItemLabel = 'Add', $wrapperClass = '')
     {
         $this->subject = $subject;
         $this->field = $field;
@@ -38,6 +39,7 @@ class FileManager extends Component
         $this->multiple = $multiple;
         $this->fileType = $fileType;
         $this->addNewItemLabel = $addNewItemLabel;
+        $this->wrapperClass = $wrapperClass;
     }
 
     protected function rules()
