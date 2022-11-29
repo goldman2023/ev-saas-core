@@ -1,8 +1,3 @@
-@push('head_scripts')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-@endpush
-
 @php
     $attribute = $attributesField."[attribute_key]";
     $selected_items = $selectedAttributesField."[attribute_key]";
@@ -35,6 +30,8 @@
             hasCustomProperty(field, name) {
                 return field.custom_properties !== null &&
                         field.custom_properties !== undefined &&
+                        typeof field.custom_properties === 'object' &&
+                        !Array.isArray(field.custom_properties) &&
                         field.custom_properties.hasOwnProperty(name);
             },
             getMinValue(field) {

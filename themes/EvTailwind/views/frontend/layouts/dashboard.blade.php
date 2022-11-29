@@ -39,6 +39,10 @@
 
     {{ seo()->render() }}
     @livewireStyles
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     @stack('head_scripts')
 </head>
 
