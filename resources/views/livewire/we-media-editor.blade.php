@@ -157,9 +157,9 @@
                         {{-- WeMediaEditor Actions --}}
                         <div class="flex items-center justify-end">
                             <div class="flex items-center space-x-3 sm:space-x-4">
-                                <button type="button" class="btn-primary">
+                                {{-- <button type="button" class="btn-primary">
                                     {{ translate('Save') }}
-                                </button>
+                                </button> --}}
                                 <button type="button" class="btn-standard-outline" @click="closeEditor()">
                                     {{ translate('Close') }}
                                 </button>
