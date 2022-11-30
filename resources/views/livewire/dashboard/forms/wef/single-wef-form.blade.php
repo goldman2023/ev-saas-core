@@ -125,6 +125,7 @@
     </template>
     {{-- END Date --}}
 
+    
     <div class="w-full flex justify-end pt-2 pr-1" x-show="show_form">
         <button class="text-underline ml-2 text-green-500 hover:text-green-800 text-12 mt-0.5" @click="save()" >
             {{ translate('Save') }}

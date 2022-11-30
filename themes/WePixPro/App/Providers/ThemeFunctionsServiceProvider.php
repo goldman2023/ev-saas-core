@@ -3,12 +3,13 @@
 namespace WeThemes\WePixPro\App\Providers;
 
 // Because this file service provider is loaded after tenant is initated and has no namespace, it cannot use Aliases from `app.php`, like: use Log or use File; Instead full namespaces must be used!
+
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
-use Livewire;
-use TenantSettings;
-use Log;
+use Livewire\Livewire;
+use App\Http\Services\TenantSettings;
+use Illuminate\Support\Facades\Log;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {

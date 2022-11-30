@@ -5,7 +5,7 @@ namespace WeThemes\EvSaasFox\App\Providers;
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
-use Livewire;
+use Livewire\Livewire;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
