@@ -20,6 +20,8 @@
             <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
                 <!-- Image gallery -->
                 <div class="flex flex-col-reverse">
+                    <x-product.single.support-box></x-product.single.support-box>
+
                     <x-products.single.product-benefits></x-products.single.product-benefits>
                     <!-- Image selector -->
                     <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
@@ -47,7 +49,7 @@
                     <div class="w-full">
                         <!-- Tab panel, show/hide based on tab state. -->
                         <div id="tabs-2-panel-1" aria-labelledby="tabs-2-tab-1" role="tabpanel" tabindex="0">
-                            <img src="{{ $product->getThumbnail() }}"
+                            <img src="{{ $product->getThumbnail(['w' => 1200]) }}"
                                 alt="Angled front view with bag zipped and handles upright."
                                 class="w-full object-contain object-center sm:rounded-lg">
                         </div>
@@ -68,13 +70,27 @@
                         </p>
                     </div>
 
-                    <!-- Reviews -->
-                    <div class="mt-3">
-                        <h3 class="sr-only">Stock</h3>
+
+
+                    <div class="mt-6">
+                        <h3 class="sr-only">Description</h3>
+
+                        <div class="space-y-6 text-base text-gray-700">
+                            <p>
+                                {!! $product->description !!}
+                            </p>
+                        </div>
+                    </div>
+                    <x-default.products.single.product-checkout-card :product="$product">
+                    </x-default.products.single.product-checkout-card>
+
+                     <!-- Reviews -->
+                     <div class="mt-3">
+                        <h3 class="sr-only">{{ translate('Stock details') }}</h3>
                         <div class="flex items-center">
                             <div class="flex items-center">
                                 <div class="mt-6 flex items-center">
-                                    <svg class="h-5 w-5 flex-shrink-0 text-green-500"
+                                    <svg class="h-6 w-6 flex-shrink-0 text-green-500"
                                         x-description="Heroicon name: mini/check" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd"
@@ -88,20 +104,23 @@
 
 
                             </div>
+
+                            <div class="flex items-center">
+                                <a class="ml-6 mt-6 flex items-center text-underline">
+
+
+                                    @svg('heroicon-o-document-text', ['class' => 'h-6 w-6 flex-shrink-0 text-primary-600'])
+
+                                    <div class="ml-2 text-sm text-gray-500">
+                                        {{ translate('Download User Guide') }} (.pdf)
+                                    </div>
+                                </a>
+
+
+                            </div>
                         </div>
                     </div>
 
-                    <div class="mt-6">
-                        <h3 class="sr-only">Description</h3>
-
-                        <div class="space-y-6 text-base text-gray-700">
-                            <p>
-                                {!! $product->description !!}
-                            </p>
-                        </div>
-                    </div>
-                    <x-default.products.single.product-checkout-card :product="$product">
-                    </x-default.products.single.product-checkout-card>
                     <form class="hidden mt-6">
                         <div class="mt-10 flex">
                             <button type="submit"

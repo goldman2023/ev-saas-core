@@ -13,12 +13,15 @@
             <div class="w-full col-span-8">
 
                 <div class="mb-8">
-                    <div class="text-18 text-gray-900 font-semibold mb-3">
+                    <div class="text-4xl text-gray-900 font-bold mb-3">
                         {{ translate('Your orders') }}
                     </div>
-                    <livewire:dashboard.tables.my-orders-table :show-filters="auth()->user()->isCustomer() ? false : true"
+                    <div class="mb-8">
+                        <x-dashboard.orders.customer-orders-table> </x-dashboard.orders.customer-orders-table>
+                    </div>
+                    {{-- <livewire:dashboard.tables.my-orders-table :show-filters="auth()->user()->isCustomer() ? false : true"
                         :show-filter-dropdown="auth()->user()->isCustomer() ? false : true">
-                    </livewire:dashboard.tables.my-orders-table>
+                    </livewire:dashboard.tables.my-orders-table> --}}
                 </div>
 
                 <div>
