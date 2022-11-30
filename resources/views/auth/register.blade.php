@@ -118,8 +118,8 @@
                 </p>
             </form>
         </div>
-        <div class="pb-12 flex justify-center items-center py-6 px-4 bg-primary-600 lg:py-0 sm:px-0">
-            <div class="max-w-md xl:max-w-xl">
+        <div class="pb-12 flex justify-center items-top py-6 px-4 bg-primary-600 lg:py-0 sm:px-0">
+            <div class="max-w-md xl:max-w-xl pt-8">
                 <a href="#" class="flex items-center mb-4 text-2xl font-semibold text-white">
                     <img src="{{ get_site_logo() }}" alt="{{ get_site_name() }}" class="max-h-[150px]" loading="lazy" />
                 </a>
