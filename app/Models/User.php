@@ -13,6 +13,7 @@ use App\Traits\SocialAccounts;
 use App\Traits\UploadTrait;
 use App\Traits\SocialFollowingTrait;
 use App\Traits\OwnershipTrait;
+use App\Traits\SocialCommentsTrait;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\HasWalletFloat;
@@ -49,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SocialFollowingTrait;
     use Impersonatable;
     use Billable;
+    use SocialCommentsTrait;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',

@@ -1,5 +1,5 @@
 <x-livewire-tables::table.cell class="align-middle ">
-    <input type="checkbox" value="{{ $order->id }}" />
+    <input type="checkbox" class="rounded p-2" value="{{ $row->id }}" />
     <a class="media items-center text-14" href="{{ route('user.details', $row->id) }}">
         #{{ $row->id }}
     </a>
