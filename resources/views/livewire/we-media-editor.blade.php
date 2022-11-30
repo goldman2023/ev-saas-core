@@ -98,6 +98,19 @@
                                         <dd class="mt-1 text-sm text-gray-900">{{ $upload?->created_at?->format('d M, Y H:i') ?? '' }}</dd>
                                     </div>
 
+                                    <div class="sm:col-span-2">
+                                      <dt class="text-sm font-medium text-gray-500">{{ translate('Upload Tag') }}</dt>
+                                      <dd class="mt-1 text-sm text-gray-900">
+                                        <livewire:dashboard.forms.wef.single-wef-form 
+                                        :subject="$upload" 
+                                        wef-key="upload_tag" 
+                                        wef-label="{{ translate('Tag') }}" 
+                                        data-type="string"
+                                        form-type="plain_text" 
+                                        key="{{ 'wef-tag-'.($upload?->id ?? 0).'-'.now() }}" />
+                                      </dd>
+                                    </div>
+
                                     {{-- <div class="sm:col-span-2">
                                       <dt class="text-sm font-medium text-gray-500">About</dt>
                                       <dd class="mt-1 text-sm text-gray-900">Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing reprehenderit deserunt qui eu.</dd>

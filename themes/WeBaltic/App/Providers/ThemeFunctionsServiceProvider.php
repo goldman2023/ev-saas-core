@@ -12,9 +12,10 @@ use App\Support\Hooks;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
-use Livewire;
-use TenantSettings;
-use Log;
+use Livewire\Livewire;
+use App\Http\Services\TenantSettings;
+use Illuminate\Support\Facades\Log;
+use MediaService;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
@@ -132,34 +133,19 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
         if (function_exists('add_action')) {
             add_action('order.change-status', function($order) {
-                try {
-                    mkdir( storage_path() . '/app/public/');
-                } catch (\Exception $e) {
-                }
-    
-                try {
-                    mkdir( storage_path() . '/app/public/documents/');
-                } catch (\Exception $e) {
-    
-                }
-    
-                try {
-                    mkdir( storage_path() . '/app/public/documents/' . $order->id);
-                } catch (\Exception $e) {
-    
-                }
-    
-                if($order->status == 1) {
-                    $this->generate_contract($order);
-                } else if($order->status == 2) {
-    
-                }
-                /* Generate those always
-                TODO: Make conditional logic based on status change
-                */
                 $this->generate_contract($order);
-                $this->generate_certificate($order);
-                $this->generate_transportation_card($order);
+                
+                // if($order->status == 1) {
+                //     $this->generate_contract($order);
+                // } else if($order->status == 2) {
+    
+                // }
+                // /* Generate those always
+                // TODO: Make conditional logic based on status change
+                // */
+                // $this->generate_contract($order);
+                // $this->generate_certificate($order);
+                // $this->generate_transportation_card($order);
             });
 
             // View actions
@@ -189,11 +175,19 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         $data = ['order' => $order];
         $pdf = Pdf::loadView('documents_templates.contract', $data );
 
-        $pdf->save(storage_path() . '/app/public/documents/'. $order->id . '/contract-'. $order->id .'.pdf');
-        /* TODO: Implement attaching a document */
-        // $order->attachDocument($something);
+        $upload_tag = 'contract';
+        
+        $file_path = MediaService::uploadToStorage($pdf->output(), 'orders/'.$order->id, $upload_tag.'-'.$order->id, 'pdf');
 
-        return redirect()->back();
+        if (!$file_path) {
+            // The file could not be written to disk...
+            return;
+        }
+
+        $upload = MediaService::storeAsUploadFromFile($order, $file_path, 'documents', file_display_name: translate('Contract for Order ').$order->id);
+        $upload->setWEF('upload_tag', $upload_tag);
+        
+        return true;
     }
 
     public function generate_transportation_card($order) {
