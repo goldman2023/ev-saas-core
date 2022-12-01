@@ -44,3 +44,25 @@ window.WEF.getMinRows = function(custom_properties) {
 window.WEF.getMaxRows = function(custom_properties) {
     return window.objectHasProperty(custom_properties, 'max_rows') ? custom_properties.max_rows : 999;
 }
+window.WEF.getDateOptions = function(custom_properties) {
+    let options = {
+        mode: 'single',
+        enableTime: false,
+    };
+
+    if(objectHasProperty(custom_properties, 'with_time') && custom_properties.with_time) {
+        options.enableTime = true;
+        options.dateFormat = 'd.m.Y H:i';
+    } else {
+        options.dateFormat = 'd.m.Y';
+    }
+
+    if(objectHasProperty(custom_properties, 'range') && custom_properties.range) {
+        options.mode = 'range';
+    }
+    
+    return options;
+}
+window.WEF.getTextareaRows = function(custom_properties) {
+    return window.objectHasProperty(custom_properties, 'rows') ? custom_properties.rows : 4;
+}

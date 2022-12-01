@@ -72,7 +72,7 @@
 
                         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-3"
                            href="{{ route('product.edit.stocks', $product->id) }}">
-                            @svg('heroicon-o-archive', ['class' => 'square-16 mr-2'])
+                            @svg('heroicon-o-archive-box', ['class' => 'square-16 mr-2'])
                             {{ translate('Stock Management') }}
                         </a>
                     @endif

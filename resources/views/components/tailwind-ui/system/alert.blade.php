@@ -26,9 +26,9 @@
     <div class="flex">
       <div class="flex-shrink-0">
             @if($type === 'warning')
-                @svg('heroicon-s-exclamation', ['class' => 'w-5 h-5 text-yellow-400'])
+                @svg('heroicon-s-exclamation-circle', ['class' => 'w-5 h-5 text-yellow-400'])
             @elseif($type === 'danger')
-                @svg('heroicon-s-x-circle', ['class' => 'w-5 h-5 text-red-400'])
+                @svg('heroicon-o-x-mark-circle', ['class' => 'w-5 h-5 text-red-400'])
             @elseif($type === 'info')
                 @svg('heroicon-s-information-circle', ['class' => 'w-5 h-5 text-blue-400'])
             @elseif($type === 'success')

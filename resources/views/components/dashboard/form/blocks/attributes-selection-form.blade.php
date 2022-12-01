@@ -51,7 +51,6 @@
     <template x-for="(attribute, attribute_key) in {{ $attributesField }}">
         
         <div class="w-full mb-3" x-data="{}" x-cloak>
-    
             {{-- Dropdown --}}
             <template x-if="{{ $attribute }}.type === 'dropdown'">
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 "
@@ -190,8 +189,7 @@
                 </div>
             </template>
             {{-- END Dropdown --}}
-    
-    
+
             {{-- Plain Text --}}
             <template x-if="{{ $attribute }}.type === 'plain_text'">
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
@@ -208,7 +206,7 @@
                 </div>
             </template>
             {{-- END Plain Text --}}
-    
+
             {{-- Number --}}
             <template x-if="{{ $attribute }}.type === 'number'">
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
@@ -232,8 +230,7 @@
                 </div>
             </template>
             {{-- END Number --}}
-    
-    
+            
             {{-- Date --}}
             <template x-if="{{ $attribute }}.type === 'date'">
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
@@ -271,8 +268,7 @@
                 </div>
             </template>
             {{-- END Date --}}
-    
-    
+
             {{-- Checkbox --}}
             <template x-if="{{ $attribute }}.type === 'checkbox'">
                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"

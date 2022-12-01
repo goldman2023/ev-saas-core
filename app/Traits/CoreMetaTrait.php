@@ -71,7 +71,7 @@ trait CoreMetaTrait
                     'key' => $key,
                 ],
                 [
-                    'value' => castValueForSave($key, $value, $data_types),
+                    'value' => $value === null ? $value : castValueForSave($key, $value, $data_types),
                 ]
             );
 

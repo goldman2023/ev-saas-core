@@ -7,6 +7,7 @@ namespace App\Enums;
  * @method static self dropdown()
  * @method static self radio()
  * @method static self plain_text()
+ * @method static self textarea()
  * @method static self country()
  * @method static self number()
  * @method static self date()
@@ -25,6 +26,7 @@ class AttributeTypeEnum extends EVBaseEnum
             'toggle' => 'toggle',
             'radio' => 'radio',
             'plain_text' => 'plain_text',
+            'textarea' => 'textarea',
             'country' => 'country',
             'number' => 'number',
             'date' => 'date',
@@ -43,6 +45,7 @@ class AttributeTypeEnum extends EVBaseEnum
             'toggle' => 'Toggle',
             'radio' => 'Radio',
             'plain_text' => 'Plain text',
+            'textarea' => 'Textarea',
             'country' => 'Country',
             'number' => 'Number',
             'date' => 'Date',
@@ -67,6 +70,6 @@ class AttributeTypeEnum extends EVBaseEnum
      * @return void
      */
     public static function getSingles() {
-        return ['toggle', 'plain_text', 'number', 'date', 'radio', 'image', 'wysiwyg'];
+        return ['toggle', 'plain_text', 'textarea', 'number', 'date', 'radio', 'image', 'wysiwyg'];
     }
 }

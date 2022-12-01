@@ -125,7 +125,7 @@ x-init="makeSortable()"
                         <template x-for="(item, index) in {{ $field }}">
                             <li class="flex flex-col border rounded-lg cursor-grab relative" :data-image-id="item.id">
                                 <button class="absolute top-[-5px] right-[-5px] p-1 bg-danger rounded-lg z-[1]" @click="removeFile(index);">
-                                    @svg('heroicon-o-x', ['class' => 'text-white w-[10px] h-[10px]'])
+                                    @svg('heroicon-o-x-mark', ['class' => 'text-white w-[10px] h-[10px]'])
                                 </button>
 
                                 <template x-if="item.type === 'image'">
@@ -204,7 +204,7 @@ x-init="makeSortable()"
                             <span class="text-sm text-gray-500 group-hover:text-gray-600 italic">{{ translate('Attach a file') }}</span>
                         </button>
                         <button @click="event.preventDefault(); event.stopPropagation(); removeFile()" x-cloak x-show="hasFiles()" type="button" class="relative z-10 -mr-3 -my-2 rounded-full px-3 py-2 inline-flex items-center text-left text-gray-400 group">
-                            @svg('heroicon-o-x', ['class' => 'h-5 w-5 text-danger'])
+                            @svg('heroicon-o-x-mark', ['class' => 'h-5 w-5 text-danger'])
                         </button>
                     </div>
                 </div>

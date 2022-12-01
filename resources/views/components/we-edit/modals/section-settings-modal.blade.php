@@ -361,7 +361,7 @@
                     <button type="button" @click="show_responsive_visibility_dropdown = !show_responsive_visibility_dropdown" class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
                       <span class="block truncate" x-text="responsive_visibility[section.settings.responsive_visibility]"></span>
                       <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                        @svg('heroicon-s-selector', ['class' => 'w-5 h-5'])
+                        @svg('heroicon-s-chevron-up-down', ['class' => 'w-5 h-5'])
                       </span>
                     </button>
 
@@ -401,7 +401,7 @@
                     <button type="button" @click="show_user_visibility_dropdown = !show_user_visibility_dropdown" class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                       <span class="block truncate" x-text="user_visibility[section.settings.user_visibility]"></span>
                       <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                        @svg('heroicon-s-selector', ['class' => 'w-5 h-5'])
+                        @svg('heroicon-s-chevron-up-down', ['class' => 'w-5 h-5'])
                       </span>
                     </button>
 

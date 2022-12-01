@@ -41,7 +41,7 @@
             <div class="w-full">
               <div class="flex">
                 <div class="flex-shrink-0">
-                  @svg('heroicon-s-x', ['class' => 'h-5 w-5 text-red-400'])
+                  @svg('heroicon-o-x-mark', ['class' => 'h-5 w-5 text-red-400'])
                 </div>
                 <div class="ml-3">
                   <h3 class="text-sm font-medium text-red-800">There were <strong x-text="countErrors()"></strong> errors with your submission</h3>

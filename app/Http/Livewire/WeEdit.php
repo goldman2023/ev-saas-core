@@ -39,7 +39,7 @@ class WeEdit extends Component
             [
                 'title' => translate('Templates'),
                 'slug' => 'templates',
-                'icon' => 'heroicon-o-archive',
+                'icon' => 'heroicon-o-archive-box',
                 'template' => 'we-edit.pages.templates',
             ],
             [

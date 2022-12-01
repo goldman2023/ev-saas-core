@@ -106,7 +106,7 @@
 
                                     <div class="bg-danger mr-auto w-[18px] h-[18px] rounded flex items-center justify-center cursor-pointer mt-auto mb-1"
                                          @click="$wire.removeFromCart(model_id, model_type)">
-                                        @svg('heroicon-o-x', ['class' => 'w-[12px] h-[12px] text-white'])
+                                        @svg('heroicon-o-x-mark', ['class' => 'w-[12px] h-[12px] text-white'])
                                     </div>
                                 </div>
 

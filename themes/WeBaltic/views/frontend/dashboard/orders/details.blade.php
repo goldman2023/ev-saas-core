@@ -142,13 +142,29 @@
                         </time>
                     </div>
 
-                    {{-- TODO: Create order delivery deadline mechanics --}}
                     <div class="flex flex-col">
                         <span>{{ translate('Order delivery deadline:') }}</span>
-                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="font-semibold text-red-600">
-                            {{ $order->created_at->format('M d, Y - H:i') }}
+
+                        @php
+                            $wef_id = 'wef-order-'.$order->id.'-order_delivery_deadline';
+                        @endphp
+                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="flex items-center font-semibold text-red-600"
+                            id="{{ $wef_id }}"
+                            @click="$dispatch('display-wef-editor-modal', {
+                                'target': '{{ $wef_id }}',
+                                'subject_id': {{ $order->id }},
+                                'subject_type': '{{ base64_encode($order::class) }}',
+                                'wef_key': 'order_delivery_deadline',
+                                'wef_label': '{{ translate('Order delivery deadline') }}',
+                                'data_type': 'date',
+                                'form_type': 'date',
+                                'custom_properties': {'range': false, 'with_time': false},
+                            })" >
+                            {{ $order->getWEF('order_delivery_deadline', false, 'date') }}
+                            @svg('heroicon-s-pencil-square', ['class' => 'ml-2 h-5 w-5 cursor-pointer'])
                         </time>
                     </div>
+
                     {{-- <div>
                         <div class="atcb" style="display:none;">
                             {
