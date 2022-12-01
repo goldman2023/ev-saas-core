@@ -64,7 +64,7 @@
                                         <a href="#" @click="current_tab = 'language'"
                                             :class="{'border-primary text-primary':current_tab === 'language', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'language'}"
                                             class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
-                                            @svg('heroicon-o-chat-alt-2', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
+                                            @svg('heroicon-o-chat-bubble-left-right', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
                                             <span>{{ translate('Language') }}</span>
                                         </a>
 

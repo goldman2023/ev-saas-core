@@ -160,7 +160,7 @@
                         </div>
                         <div class="shrink-0">
                             <button type="button" class="btn-primary">
-                                @svg('heroicon-o-chat-alt-2', ['class' => 'w-4 h-4 mr-2'])
+                                @svg('heroicon-o-chat-bubble-left-right', ['class' => 'w-4 h-4 mr-2'])
                                 {{ translate('Message seller') }}
                             </button>
                         </div>
