@@ -1,14 +1,6 @@
-<style>
-    .strong {
-        font-weight: 700;
-    }
+@extends('documents_templates.global-pdf-layout.pdf-layout')
 
-    .center {
-        text-align: center
-    }
-</style>
-
-
+@section('content')
 <div class="strong">
     SUTARTIS Nr. 2022-11-3
 </div>
@@ -173,40 +165,9 @@ UAB „Domantas“ (Į/k 302635282) veikiantis, toliau vadinama "Gamintojas” i
         </tr>
     </table>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Užsakovas
 Direktorius
 
-
 Eduard Terechov
-
-
-
-
-
-
 A.V.
+@endsection

@@ -138,6 +138,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
                 $this->generate_contract($order);
 
+                $this->generate_certificate($order);
+
                 // if($order->status == 1) {
                 //     $this->generate_contract($order);
                 // } else if($order->status == 2) {
@@ -147,7 +149,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 // TODO: Make conditional logic based on status change
                 // */
                 // $this->generate_contract($order);
-                // $this->generate_certificate($order);
+                //
                 // $this->generate_transportation_card($order);
             });
 
