@@ -49,7 +49,7 @@
 {{--                    </p>--}}
 {{--                    <span class="text-link d-flex align-items-center mt-auto">--}}
 {{--                        {{ translate('Get Started') }}--}}
-{{--                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'square-16 ml-2'])--}}
+{{--                        @svg('heroicon-s-arrow-long-right', ['class' => 'square-16 ml-2'])--}}
 {{--                    </span>--}}
 {{--                </a>--}}
 {{--            </div>--}}
@@ -68,7 +68,7 @@
 {{--                    </p>--}}
 {{--                    <span class="text-link d-flex align-items-center mt-auto">--}}
 {{--                        {{ translate('Get Started') }}--}}
-{{--                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'square-16 ml-2'])--}}
+{{--                        @svg('heroicon-s-arrow-long-right', ['class' => 'square-16 ml-2'])--}}
 {{--                    </span>--}}
 {{--                </a>--}}
 {{--            </div>--}}
@@ -87,7 +87,7 @@
 {{--                    </p>--}}
 {{--                    <span class="text-link d-flex align-items-center mt-auto">--}}
 {{--                        {{ translate('Get Started') }}--}}
-{{--                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'square-16 ml-2'])--}}
+{{--                        @svg('heroicon-s-arrow-long-right', ['class' => 'square-16 ml-2'])--}}
 {{--                    </span>--}}
 {{--                </a>--}}
 {{--            </div>--}}

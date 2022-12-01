@@ -100,7 +100,7 @@
             <li>
                 <div wire:click="duplicateProduct({{ $row->id }})"
                     class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14 cursor-pointer">
-                    @svg('heroicon-o-duplicate', ['class' => 'w-[18px] h-[18px]'])
+                    @svg('heroicon-o-document-duplicate', ['class' => 'w-[18px] h-[18px]'])
                     <span class="ml-2">{{ translate('Duplicate product') }}</span>
                 </div>
             </li>

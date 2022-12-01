@@ -65,7 +65,7 @@
                 </p>
                 <span class="text-link flex items-center mt-auto">
                     {{ translate('Get Started') }}
-                    @svg('heroicon-o-arrow-narrow-right', ['class' => 'w-[16px] h-[16px] ml-2'])
+                    @svg('heroicon-s-arrow-long-right', ['class' => 'w-[16px] h-[16px] ml-2'])
                 </span>
             </a>
         </div>
@@ -84,7 +84,7 @@
                 </p>
                 <span class="text-link flex items-center mt-auto">
                     {{ translate('Get Started') }}
-                    @svg('heroicon-o-arrow-narrow-right', ['class' => 'w-[16px] h-[16px] ml-2'])
+                    @svg('heroicon-s-arrow-long-right', ['class' => 'w-[16px] h-[16px] ml-2'])
                 </span>
             </a>
         </div>

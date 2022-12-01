@@ -31,7 +31,7 @@
 
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
             href="{{ route('product.edit', $product->id) }}">
-            {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;', 'class' => 'ml-2'])
+            {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height: 16px;', 'class' => 'ml-2'])
         </a>
         <a class="btn btn-soft-danger btn-circle btn-xs d-inline-flex align-items-center confirm-delete "
             href="javascript:void(0)">

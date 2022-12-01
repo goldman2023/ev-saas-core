@@ -31,7 +31,7 @@ class SocialActionButton extends Component
         'reaction' => [
             'action' => 'Reaction',
             'action_success' => 'Reacted',
-            'icon' => 'heroicon-o-thumb-up',
+            'icon' => 'heroicon-o-hand-thumb-up',
             'icon_success' => 'heroicon-s-thumb-up',
             'view' => 'livewire.actions.social-buttons.like-button',
             'class' => SocialReaction::class,
