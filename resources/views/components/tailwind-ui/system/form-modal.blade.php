@@ -34,7 +34,7 @@
             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 
         <div class="w-5 h-5 absolute top-4 right-4 cursor-pointer" @click="show = false">
-          @svg('heroicon-s-x', ['class' => 'w-5 h-5 text-gray-500'])
+          @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-gray-500'])
         </div>
 
         <div class="w-full">  

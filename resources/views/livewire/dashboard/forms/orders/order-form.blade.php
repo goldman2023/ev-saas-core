@@ -494,7 +494,7 @@ x-cloak>
                                             </template>
                                             
                                             <div class="flex-shrink-0 flex items-center " @click="order_items.splice(index, 1);">
-                                                @svg('heroicon-s-x', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
+                                                @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
                                             </div>
                                         </li>
                                     </template>

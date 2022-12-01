@@ -1743,7 +1743,7 @@
                                                 <span x-text="tag"></span>
                                                 <button @click="remove(index)" type="button"
                                                     class="flex-shrink-0 ml-0.5 h-4 w-4 rounded-full inline-flex items-center justify-center  focus:outline-none ">
-                                                    @svg('heroicon-o-x', ['class' => 'h-3 w-3'])
+                                                    @svg('heroicon-o-x-mark', ['class' => 'h-3 w-3'])
                                                 </button>
                                             </span>
                                         </template>

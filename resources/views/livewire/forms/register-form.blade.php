@@ -200,7 +200,7 @@
 
                                 <div x-show="valid_vat === false"
                                     class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                    @svg('heroicon-s-exclamation-circle', ['class' => 'h-5 w-5 text-red-500'])
+                                    @svg('heroicon-s-exclamation-circle-circle', ['class' => 'h-5 w-5 text-red-500'])
                                 </div>
 
                                 <div x-show="valid_vat === true"

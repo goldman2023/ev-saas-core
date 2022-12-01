@@ -15,7 +15,7 @@
 
             @if($close)
                 <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
-                    @svg('heroicon-o-x', ['class' => 'w-[18px] h-[18px]'])
+                    @svg('heroicon-o-x-mark', ['class' => 'w-[18px] h-[18px]'])
                 </button>
             @endif
         </div>

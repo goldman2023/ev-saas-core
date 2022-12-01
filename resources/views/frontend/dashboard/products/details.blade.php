@@ -207,7 +207,7 @@
                                 @if($product->type === \App\Enums\ProductTypeEnum::course()->value)
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.course', $product->id) }}">
-                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Course Details') }}
                                 </a>
                                 @endif
@@ -215,7 +215,7 @@
                                 @if($product->type === \App\Enums\ProductTypeEnum::course()->value)
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.course', $product->id) }}">
-                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Course Material') }}
                                 </a>
                                 @endif
@@ -231,11 +231,9 @@
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.stocks', $product->id) }}">
-                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Stock Management') }}
                                 </a>
-
-
 
 
                                 @if($product->useVariations())

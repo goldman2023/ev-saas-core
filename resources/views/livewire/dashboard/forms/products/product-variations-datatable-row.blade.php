@@ -68,6 +68,6 @@ if($this->attributes->isNotEmpty()) {
 
 <x-livewire-tables::bs4.table.cell>
     <button type="button" class="btn btn-danger px-2 pt-2 pb-1 mt-2" wire:click="setRemoveFlag('{{ $index }}')" style="line-height: 1;">
-        @svg('heroicon-o-x', ['style' => 'width: 16px; height: 16px;'])
+        @svg('heroicon-o-x-mark', ['style' => 'width: 16px; height: 16px;'])
     </button>
 </x-livewire-tables::bs4.table.cell>

@@ -18,7 +18,7 @@
             <h2 class="text-lg font-medium text-white" x-text="page.name || ''"></h2>
             <div class="ml-3 flex h-7 items-center">
               <button type="button" @click="show = false" class="rounded-md bg-transparent text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
-                @svg('heroicon-o-x', ['class' => 'h-6 w-6'])
+                @svg('heroicon-o-x-mark', ['class' => 'h-6 w-6'])
               </button>
             </div>
           </div>

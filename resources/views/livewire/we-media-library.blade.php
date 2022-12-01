@@ -1,5 +1,5 @@
-<div class="{{ $containerClass }}" x-data="{
-    displayModal: {{ $displayModal }},
+<div class="we-media-library {{ $containerClass }}" x-data="{
+    displayModal: @js($displayModal),
     for_id: @entangle('for_id'),
     editorjs_media_wrapper_id: @entangle('editorjs_media_wrapper_id'),
     media: @entangle('media'),
@@ -74,7 +74,7 @@
 
                 {{-- Dismiss modal - x button --}}
                 <button type="button" class="absolute top-3 right-3" @click="closeLibrary()">
-                    @svg('heroicon-o-x', ['class' => 'w-5 h-5 text-gray-500'])
+                    @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-gray-500'])
                 </button>
 
                 <div class="flex flex-col max-h-[85vh]" x-data="{
@@ -107,7 +107,7 @@
                                         <span class="block truncate" x-text="sort_types[sort_by]"></span>
                                         <span
                                             class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                            @svg('heroicon-s-selector', ['class' => 'h-5 w-5 text-gray-400']);
+                                            @svg('heroicon-s-chevron-up-down', ['class' => 'h-5 w-5 text-gray-400']);
                                         </span>
                                     </button>
 

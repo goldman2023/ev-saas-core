@@ -84,7 +84,7 @@
     @endif
 
     <span @click="$dispatch('display-flyout-panel', {'id' : 'categories-panel'})" class="hidden nav-link text-dark">
-        @svg('heroicon-s-menu', ['class' => 'icon', 'style' => 'width: 24px;'])
+        @svg('heroicon-s-bars-3', ['class' => 'icon', 'style' => 'width: 24px;'])
         <span class="text">{{ translate('Menu') }}</span>
     </span>
 

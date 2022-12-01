@@ -51,11 +51,9 @@ class WeMediaEditor extends Component
     {
         $this->display = $display;
         
-        if($this->display == 'modal') {
-            $this->displayModal = 'false';
-            $this->containerClass = 'fixed z-[10000] inset-0 overflow-y-auto';
-            $this->wrapperClass = 'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity';
-        }
+        $this->displayModal = false;
+        $this->containerClass = 'fixed z-[10000] inset-0 overflow-y-auto';
+        $this->wrapperClass = 'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity';
     }
 
     public function render()

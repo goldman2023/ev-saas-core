@@ -84,12 +84,12 @@ class WeMediaLibrary extends Component
         $this->display = $display;
         $this->prePopulateMedia = $prePopulateMedia;
         if($this->display == 'modal') {
-            $this->displayModal = 'false';
+            $this->displayModal = false;
             $this->containerClass = 'fixed z-[10000] inset-0 overflow-y-auto';
             $this->wrapperClass = 'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity';
         } else {
             $this->prePopulateMedia = true;
-            $this->displayModal = 'true';
+            $this->displayModal = true;
             $this->containerClass = 'block z-[10000] inset-0 overflow-y-auto';
             $this->wrapperClass = 'block inset-0 bg-gray-500 bg-opacity-75 transition-opacity';
 
