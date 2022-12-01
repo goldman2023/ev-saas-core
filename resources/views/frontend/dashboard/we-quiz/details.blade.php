@@ -98,13 +98,13 @@
 
                             <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center mr-2 mb-2 bg-white"
                                 href="{{ route('dashboard.we-quiz.edit', $quiz->id) }}">
-                                {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;',
+                                {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height: 16px;',
                                 'class' => 'ml-2'])
                             </a>
 
                             <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center mr-2 mb-2 bg-white"
                                 href="{{ route('dashboard.we-quiz.results', $quiz->id) }}">
-                                {{ translate('Results') }} @svg('heroicon-o-pencil-alt', ['style' => 'height:
+                                {{ translate('Results') }} @svg('heroicon-o-pencil-square', ['style' => 'height:
                                 16px;', 'class' => 'ml-2'])
                             </a>
 

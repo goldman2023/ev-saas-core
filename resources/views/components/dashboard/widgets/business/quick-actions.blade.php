@@ -6,7 +6,7 @@
         <x-dashboard.widgets.business.quick-action
         route="orders.index"
         title="{{ translate('Process orders') }}"
-        icon="arrow-circle-right"
+        icon="arrow-right-circle"
         description="{{ translate('Stay on top of all new orders') }}"
         > </x-dashboard.widgets.business.quick-action>
 
@@ -15,7 +15,7 @@
         <x-dashboard.widgets.business.quick-action
         route="orders.index"
         title="{{ translate('Create new invoice') }}"
-        icon="arrow-circle-right"
+        icon="arrow-right-circle"
         description="{{ translate('Create and send invoice in 1 minute.') }}"
         > </x-dashboard.widgets.business.quick-action>
         @endif

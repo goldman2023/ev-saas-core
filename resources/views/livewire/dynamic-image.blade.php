@@ -6,7 +6,7 @@
         <button wire:click.prevent="editLabel()"
             class="ev-edit-inline  js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary card-unfold rounded-circle"
             href="javascript:;">
-            @svg('heroicon-o-pencil-alt')
+            @svg('heroicon-o-pencil-square')
             {{ translate('edit') }}
         </button>
     </div>

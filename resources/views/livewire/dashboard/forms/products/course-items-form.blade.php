@@ -258,7 +258,7 @@
             <div class="">
                 <button type="button" class="btn"
                     @click="$dispatch('display-modal', {'id': 'add-course-item-modal', 'current_item_id': {{ $course_item->id }}})">
-                    @svg('heroicon-o-pencil-alt', ['class' => 'w-4 h-4'])
+                    @svg('heroicon-o-pencil-square', ['class' => 'w-4 h-4'])
                 </button>
             </div>
         </div>
