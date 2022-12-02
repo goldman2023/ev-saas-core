@@ -141,7 +141,7 @@
                                     <a href="#">{{ $item->name }}</a>
                                 </h3>
 
-                                <p class="mt-3 text-sm text-gray-500">{{ $item->excerpt }}</p>
+                                <p class="mt-3 text-sm text-gray-500">{!! $item->excerpt !!}</p>
 
                                 <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6 mt-5">
                                     <div class="flex">
