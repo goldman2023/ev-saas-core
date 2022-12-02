@@ -574,7 +574,7 @@ class EVService
 
                     // [
                     //     'label' => translate('Company settings'),
-                    //     'icon' => 'heroicon-o-office-building',
+                    //     'icon' => 'heroicon-o-building-office',
                     //     'route' => route('attributes'),
                     //     'is_active' => areActiveRoutes(['attributes']),
                     //     'user_types' => ['admin','seller'],
