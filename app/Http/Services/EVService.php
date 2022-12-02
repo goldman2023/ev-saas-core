@@ -104,7 +104,7 @@ class EVService
 
                     [
                         'label' => translate('Chat'),
-                        'icon' => 'heroicon-o-chat',
+                        'icon' => 'heroicon-o-chat-bubble-left-right',
                         'route' => route('chat.index'),
                         'route_name' => 'chat.index',
                         'is_active' => areActiveRoutes(['chat']),

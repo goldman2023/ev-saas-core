@@ -21,7 +21,7 @@
             <livewire:dashboard.tables.we-quiz-results-table :we-quiz="$quiz"/>
         @else
             <x-dashboard.empty-states.no-items-in-collection
-                icon="heroicon-o-chat"
+                icon="heroicon-o-chat-bubble-left-right"
                 title="{{ translate('No quiz results yet') }}"
                 text="{{ translate('Engage your customers with interesting questions!') }}"
                 link-href-route="dashboard.we-quiz.edit"
