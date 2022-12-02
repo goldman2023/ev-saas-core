@@ -2,33 +2,34 @@
 
 namespace App\Models;
 
-use App\Enums\UserSubscriptionStatusEnum;
-use App\Models\Auth\User as Authenticatable;
-use App\Notifications\EmailVerificationNotification;
-use App\Traits\CoreMetaTrait;
+use DB;
+use Log;
+use Carbon;
+use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
-use App\Traits\SocialReactionsTrait;
+use App\Traits\CoreMetaTrait;
+use Laravel\Cashier\Billable;
+use App\Traits\OwnershipTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
-use App\Traits\UploadTrait;
-use App\Traits\SocialFollowingTrait;
-use App\Traits\OwnershipTrait;
-use App\Traits\SocialCommentsTrait;
-use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Interfaces\WalletFloat;
-use Bavix\Wallet\Traits\HasWalletFloat;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Cashier\Billable;
+use Bavix\Wallet\Interfaces\Wallet;
+use App\Traits\SocialFollowingTrait;
+use App\Traits\SocialReactionsTrait;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Nova\Auth\Impersonatable;
-use DB;
-use Carbon;
-use Log;
+use Spatie\Permission\Traits\HasRoles;
+use Bavix\Wallet\Traits\HasWalletFloat;
+use Spatie\Activitylog\Models\Activity;
+use Bavix\Wallet\Interfaces\WalletFloat;
+use Illuminate\Notifications\Notifiable;
+use App\Enums\UserSubscriptionStatusEnum;
+use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\EmailVerificationNotification;
+use App\Notifications\UserPasswordChangedNotification;
 
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
@@ -50,7 +51,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SocialFollowingTrait;
     use Impersonatable;
     use Billable;
-    use SocialCommentsTrait;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -415,6 +415,37 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
+    }
+
+    public function resetPassword($new_password) {
+        // Get old password first (standard and password_md5)
+        $oldPassword = [
+            'standard' => $this->password,
+            'wp_md5' => $this->getCoreMeta('password_md5', true)
+        ];
+
+        // Create new standard password and create password_md5 (hashed like in WP)
+        $this->password = Hash::make($new_password);
+        $this->save();
+        $this->saveCoreMeta('password_md5', Hash::driver('wp')->make($new_password));
+
+        $newPassword = [
+            'standard' => $this->password,
+            'wp_md5' => $this->getCoreMeta('password_md5', true)
+        ];
+
+        activity()
+            ->performedOn($this)
+            ->causedBy($this)
+            ->withProperties([
+                'action' => 'password_updated',
+                'action_title' => 'User password updated',
+            ])
+            ->log('password_updated');
+
+        do_action('user.password.updated', $this, $newPassword, $oldPassword);
+
+        $this->notify(new UserPasswordChangedNotification());
     }
 
     /**

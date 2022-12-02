@@ -294,26 +294,9 @@ class MyAccountForm extends Component
         DB::beginTransaction();
 
         try {
-            $oldPassword = [
-                'standard' => $this->currentPassword,
-                'wp_md5' => $this->me->getCoreMeta('password_md5', true)
-            ];
-
-            // Update password
-            $this->me->password = Hash::make($this->newPassword);
-            $this->me->save();
-
-            // Save WPmd5 password version too
-            $this->me->saveCoreMeta('password_md5', Hash::driver('wp')->make($this->newPassword));
+            $this->me->resetPassword($this->newPassword);
 
             DB::commit();
-
-            $newPassword = [
-                'standard' => $this->me->password,
-                'wp_md5' => $this->me->getCoreMeta('password_md5', true)
-            ];
-
-            $this->me->notify(new UserPasswordChangedNotification());
 
             $this->inform(translate('Your password is successfully updated. You will be logged out.'), 'You will be logged-out in 2 seconds', 'success');
 
@@ -322,8 +305,6 @@ class MyAccountForm extends Component
             DB::rollback();
             $this->inform(translate('Could not change your password.'), $e->getMessage(), 'fail');
         }
-
-        do_action('user.password.updated', $this->me, $newPassword, $oldPassword);
     }
 
     /*
