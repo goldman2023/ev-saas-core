@@ -2483,7 +2483,7 @@ class StripeService
                     if(!empty($stripe_invoice->number ?? null)) {
                         $invoice->invoice_number = $stripe_invoice->number;
                     }
-
+                    
                     $invoice->setRealInvoiceNumber();
 
                     $invoice->mergeData([
