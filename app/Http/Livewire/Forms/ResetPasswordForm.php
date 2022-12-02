@@ -2,29 +2,24 @@
 
 namespace App\Http\Livewire\Forms;
 
+use DB;
+use Log;
+use MailerService;
+use App\Models\User;
+use App\Models\Order;
 use App\Models\Address;
 use App\Models\Invoice;
-use App\Models\Order;
+use Livewire\Component;
 use App\Models\OrderItem;
-use App\Models\User;
-use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\RulesSets;
-use Auth;
-use Carbon;
-use Categories;
-use DB;
-use EVS;
-use MailerService;
+use Illuminate\Validation\Rule;
+use App\Mail\PasswordResetEmail;
 use App\Enums\WeMailingListsEnum;
-use Illuminate\Contracts\Support\Arrayable;
+use App\Traits\Livewire\RulesSets;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Livewire\Component;
+use App\Traits\Livewire\DispatchSupport;
+use Illuminate\Contracts\Support\Arrayable;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Str;
-use Log;
-use App\Mail\PasswordResetEmail;
 
 class ResetPasswordForm extends Component
 {
@@ -75,12 +70,7 @@ class ResetPasswordForm extends Component
 
         try {
             if(!empty($this->user)) {
-                $this->user->password = Hash::make($this->new_password);
-                $this->user->save();
-    
-                $this->user->saveCoreMeta('password_md5', md5($this->new_password));
-
-                do_action('user.password.changed', $this->user);
+                $this->user->resetPassword($this->new_password);
 
                 DB::commit();
 

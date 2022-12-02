@@ -948,6 +948,15 @@ if (!function_exists('pix_pro_update_user_password')) {
                 Log::error(pix_pro_error($route, 'There was an error while trying to change password.', $response_json));
                 return false;
             } else {
+                activity()
+                    ->performedOn($user)
+                    ->causedBy($user)
+                    ->withProperties([
+                        'action' => 'password_updated_on_pix_pro_license_server',
+                        'action_title' => 'User password updated on PixPro license server',
+                    ])
+                    ->log('password_updated_on_pix_pro_license_server');
+
                 return true;
             }
         }

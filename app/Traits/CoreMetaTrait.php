@@ -31,7 +31,6 @@ trait CoreMetaTrait
 
     public function getCoreMeta($key, $fresh = false)
     {
-        // TODO: Implement castValuesForGet($core_meta, $data_types); here
         $setting = $fresh ? $this->core_meta()->where('key', $key)->get()->keyBy('key')->toArray() : $this->core_meta->where('key', $key)->keyBy('key')->toArray();
         $data_types = WEF::getWEFDataTypes($this);
         
