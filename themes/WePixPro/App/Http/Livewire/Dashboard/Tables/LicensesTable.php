@@ -117,13 +117,10 @@ class LicensesTable extends DataTableComponent
             $query = License::with('user_subscription');
 
             if($this->only_expired) {
-                $query = $query->whereDate('data->expiration_date', '<', $end_date)
-                ->orderBy('created_at', 'DESC');
+                $query = $query->whereDate('data->expiration_date', '<', $end_date);
             }
             
-            // ->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
-            // ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
-            // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
+            $query = $query->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))->orderBy('created_at', 'DESC');
         }
 
 
