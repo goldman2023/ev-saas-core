@@ -25,9 +25,7 @@ wire:loading.class="opacity-30 pointer-events-none"
                 <small class="font-normal"> {{ translate('This field will be visible in Pixpro application license info for customer') }} </small>
             </label>
 
-            <div class="mt-1 sm:mt-0 sm:col-span-2" x-data="{
-                license.license_name = 'labas'
-            }">
+            <div class="mt-1 sm:mt-0 sm:col-span-2">
                 <x-dashboard.form.input value="Manual" field="license.license_name" :x="true" />
             </div>
         </div>
@@ -71,7 +69,10 @@ wire:loading.class="opacity-30 pointer-events-none"
     </div>
 
     <div class="w-full flex justify-end mt-4" x-data="{}">
-        <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="save()">
+        <button type="button" class="btn btn-standard-outline mr-3 btn-sm" @click="show = false">
+            {{ translate('Close') }}
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" wire:click="save()">
             @if(!empty($license['id'] ?? null))
                 {{ translate('Save') }}
             @else
