@@ -80,8 +80,17 @@ class UserSubscriptionsObserver
             }
         }
 
-        if($user_subscription->wasChanged('status') && $user_subscription->status === '§ed') {
+        if($user_subscription->wasChanged('status') && $user_subscription->status === 'canceled') {
             @send_admin_notification(translate('Canceled subscription').' - '.get_tenant_setting('site_name'), translate('User with following email just canceled their subscription:').' '.$user_subscription->user->email.' (<a href="'.route('user.details', $user_subscription->user->id).'">'.translate('View details').'</a>)');
+
+            activity()
+            ->performedOn($user_subscription)
+            ->causedBy($user_subscription->user)
+            ->withProperties([
+                'action' => 'canceled',
+                'action_title' => 'canceled subscription',
+            ])
+            ->log('canceled');
         }
     }
 
