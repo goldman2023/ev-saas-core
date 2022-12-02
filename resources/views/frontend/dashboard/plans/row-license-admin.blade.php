@@ -16,11 +16,11 @@
 
 <x-livewire-tables::table.cell class="align-middle text-center">
     @isset($row->data['cloud_service'])
-    @if($row->data['cloud_service'] == 1)
-        @svg('heroicon-o-check', ['class' => 'h-4 inline w-4 text-green-600'])
-    @else
-        @svg('heroicon-o-x-mark', ['class' => 'h-4 inline w-4 text-red-600'])
-    @endif
+        @if($row->data['cloud_service'] == 1)
+            @svg('heroicon-o-check', ['class' => 'h-4 inline w-4 text-green-600'])
+        @else
+            @svg('heroicon-o-x-mark', ['class' => 'h-4 inline w-4 text-red-600'])
+        @endif
     @endisset
 
 </x-livewire-tables::table.cell>
@@ -28,17 +28,19 @@
 <x-livewire-tables::table.cell class="align-middle text-center">
     @isset($row->data['offline_service'])
 
-    @if($row->data['offline_service'] == 1)
-        @svg('heroicon-o-check', ['class' => 'text-center inline h-4 w-4 text-green-600'])
-    @else
-        @svg('heroicon-o-x-mark', ['class' => 'text-center inline h-4 w-4 text-red-600'])
-    @endif
+        @if($row->data['offline_service'] == 1)
+            @svg('heroicon-o-check', ['class' => 'text-center inline h-4 w-4 text-green-600'])
+        @else
+            @svg('heroicon-o-x-mark', ['class' => 'text-center inline h-4 w-4 text-red-600'])
+        @endif
     @endisset
 
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle  text-center">
-    {{ ($row->data['hardware_id'])}}
+    @isset($row->data['hardware_id'])
+        {{ ($row->data['hardware_id'])}}
+    @endisset
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle  text-center">

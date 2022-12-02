@@ -11,25 +11,13 @@
      </div>
     {{-- <h2 class="text-32 text-gray-700 font-semibold mb-1">{{ translate('Licenses')}}</h2> --}}
      @php
-        if(empty($data)) {
-            $data = \Auth::user();
+        if(empty($user)) {
+            $user = \Auth::user();
         }
      @endphp
-    <livewire:dashboard.tables.licenses-table :user="$data" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
+    <livewire:dashboard.tables.licenses-table :user="$user" :show-search="false" :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false"/>
 </div>
 
 @push('modal')
-    <x-system.form-modal id="pix-pro-generate-license" title="Online License Activation" class="!max-w-3xl">
-        <livewire:forms.generate-license-form />
-    </x-system.form-modal>
-
-    @if(auth()->user()?->isAdmin() ?? false)
-        <x-system.form-modal id="pix-pro-edit-license" title="Edit License" class="!max-w-3xl">
-            <livewire:dashboard.forms.licenses.license-form :user="$data" component-id="edit_license_form" />
-        </x-system.form-modal>
-
-        <x-system.form-modal id="pix-pro-create-manual-license" title="Create Manual License" class="!max-w-3xl">
-            <livewire:dashboard.forms.licenses.license-form :user="$data" form-type="create" component-id="create_license_form" />
-        </x-system.form-modal>
-    @endif
+    @include('frontend.partials.pix-pro-license-modals', ['user' => $user])
 @endpush

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard\Tables;
+namespace WeThemes\WePixPro\App\Http\Livewire\Dashboard\Tables;
 
 use Log;
 use Carbon;
@@ -21,7 +21,6 @@ class LicensesTable extends DataTableComponent
 {
     use DispatchSupport;
 
-    public $for = 'me';
     public ?int $searchFilterDebounce = 800;
     public string $defaultSortDirection = 'desc';
     public bool $columnSelect = true;
@@ -46,13 +45,13 @@ class LicensesTable extends DataTableComponent
     public bool $viewingModal = false;
     public $currentModal;
 
-    public function mount($user = null, $status = 'active' , $for = 'me', $only_expired = false) {
+    public function mount($user = null, $status = 'active' , $only_expired = false) {
         $this->user = $user;
         $this->status = $status;
-        $this->for = $for;
         $this->only_expired = $only_expired;
 
         parent::mount();
+
         if($this->user) {
             do_action('dashboard.table.licenses.mount.end', $this->user);
         }
@@ -73,7 +72,7 @@ class LicensesTable extends DataTableComponent
     }
 
     public function columns(): array
-    {
+    { 
         $columns = apply_filters('dashboard.table.licenses.columns', [
             Column::make('Type', 'license_id')
                 ->excludeFromSelectable(),
@@ -81,23 +80,23 @@ class LicensesTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Offline Services', 'data')
                 ->excludeFromSelectable(),
-            Column::make('Hardware ID', 'had')
+            Column::make('Image Limit', 'license_image_limit')
+                ->excludeFromSelectable(),
+            Column::make('Hardware ID', 'hardware_id')
                 ->excludeFromSelectable(),
             Column::make('Serial Number', 'serial_number')
                 ->excludeFromSelectable(),
-        ]);
-
-        $columns = array_merge($columns, [
             Column::make('Valid', 'ending')
-
         ]);
+
+
         if(auth()->user()->isAdmin()) {
             $columns = array_merge($columns, [
+                // Column::make('Type', 'license_subscription_type'),
                 Column::make('Actions')
                     ->excludeFromSelectable(),
             ]);
         }
-
 
         return $columns;
     }
@@ -111,10 +110,7 @@ class LicensesTable extends DataTableComponent
             // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
 
         } else {
-
-            if($this->only_expired) {
-
-            }
+            // TODO: Better way to query by expiration date...maybe putting expiration_date into core_meta, on license creation/editting???
             $start_date = date('Y-m-d H:i:s');
             $end_date = date("Y-m-d 23:59:59", strtotime('-3 days', strtotime($start_date)));
 
@@ -122,9 +118,9 @@ class LicensesTable extends DataTableComponent
 
             if($this->only_expired) {
                 $query = $query->whereDate('data->expiration_date', '<', $end_date)
-                ->orderBy('updated_at', 'DESC');
+                ->orderBy('created_at', 'DESC');
             }
-
+            
             // ->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
             // ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
             // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
@@ -137,9 +133,11 @@ class LicensesTable extends DataTableComponent
     public function rowView(): string
     {
         $view = 'frontend.dashboard.plans.row-license';
+
         if(auth()->user()->isAdmin()) {
             $view = 'frontend.dashboard.plans.row-license-admin';
         }
+
         return $view;
     }
 
