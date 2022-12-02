@@ -187,12 +187,13 @@ class Invoice extends WeBaseModel
 
     public function setRealInvoiceNumber() {
         if($this->is_temp === false && $this->total_price > 0 && $this->payment_status === PaymentStatusEnum::paid()->value) {
+            
             $this->real_invoice_prefix = get_tenant_setting('invoice_prefix');
 
             if($this->mode === 'live') {
-                $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'live')->where('is_temp', 0)->latest()->first()?->real_invoice_number ?? 0) + 1;
+                $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'live')->where('is_temp', 0)->where('id', '!=', $this->id)->latest()->first()?->real_invoice_number ?? 0) + 1;
             } else {
-                $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'test')->where('is_temp', 0)->latest()->first()?->real_invoice_number ?? 0) + 1;
+                $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'test')->where('is_temp', 0)->where('id', '!=', $this->id)->latest()->first()?->real_invoice_number ?? 0) + 1;
             }
         }
     }
