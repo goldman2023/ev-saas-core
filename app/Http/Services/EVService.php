@@ -485,7 +485,7 @@ class EVService
                     ],
                     [
                         'label' => translate('Shop settings'),
-                        'icon' => 'heroicon-o-office-building',
+                        'icon' => 'heroicon-o-building-office',
                         'route' => route('settings.shop_settings'),
                         'route_name' => 'settings.shop_settings',
                         'is_active' => areActiveRoutes(['settings.shop_settings']),
@@ -574,7 +574,7 @@ class EVService
 
                     // [
                     //     'label' => translate('Company settings'),
-                    //     'icon' => 'heroicon-o-office-building',
+                    //     'icon' => 'heroicon-o-building-office',
                     //     'route' => route('attributes'),
                     //     'is_active' => areActiveRoutes(['attributes']),
                     //     'user_types' => ['admin','seller'],

@@ -51,7 +51,7 @@
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
                             @click="current = 'companyInfoSection'">
 
-                            @svg('heroicon-o-office-building', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                            @svg('heroicon-o-building-office', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
                             <span class="truncate">{{ translate('Company information') }}</span>
                         </a>
 
