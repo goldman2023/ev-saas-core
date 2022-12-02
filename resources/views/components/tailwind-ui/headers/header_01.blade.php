@@ -1,6 +1,6 @@
 @php
-    $header_menu = nova_get_menu_by_slug('header');
-    $header_menu_items = $header_menu['menuItems'] ?? null;
+$header_menu = nova_get_menu_by_slug('header');
+$header_menu_items = $header_menu['menuItems'] ?? null;
 @endphp
 <header class="relative z-50" x-data="{
     show_mobile_menu: false,
@@ -44,7 +44,7 @@
                     </a>
                     @else
                     <button @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'});" type="button"
-                        class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        class="p-1 rounded-full text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         @svg('heroicon-o-shopping-cart', ['class' => 'h-6 w-6'])
                     </button>
 
@@ -52,6 +52,10 @@
                         class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
                         {{ translate('Dashboard') }}
                     </a>
+                    <div>
+                        <livewire:global.user-top-bar></livewire:global.user-top-bar>
+                    </div>
+
                     @endguest
                 </div>
 
@@ -69,8 +73,7 @@
         To: "opacity-0 scale-95"
     -->
         <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
-            x-show="show_mobile_menu" x-transition:enter="ease-out duration-200"
-            x-cloak
+            x-show="show_mobile_menu" x-transition:enter="ease-out duration-200" x-cloak
             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
             x-transition:leave="ease-in duration-100" x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95">
