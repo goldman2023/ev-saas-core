@@ -1,6 +1,5 @@
-<div>
-    <div class="{{ $containerClass }}" x-data="{
-    displayModal: {{ $displayModal }},
+<div class="we-media-library {{ $containerClass }}" x-data="{
+    displayModal: @js($displayModal),
     for_id: @entangle('for_id'),
     editorjs_media_wrapper_id: @entangle('editorjs_media_wrapper_id'),
     media: @entangle('media'),
@@ -12,42 +11,47 @@
     search_string: @entangle('search_string'),
     page: @entangle('page'),
     isMediaSelected(file) {
-      if(this.selected.filter((item) => { return Number(item['id']) === Number(file.id); }).length > 0)
-        return true;
-      else
-        return false;
+        if(this.selected.filter((item) => {
+            return !_.get(item, 'id', false) ? false : Number(item['id']) === Number(file.id); 
+        }).length > 0)
+            return true;
+        else
+            return false;
     },
     selectMedia(file) {
-        this.selected = [];
+        if(this.selected === null || this.selected === undefined) {
+            this.selected = [];
+        }
 
-      if(!this.isMediaSelected(file)) {
-        if(this.multiple) {
-          this.selected.push(file);
+        if(!this.isMediaSelected(file)) {
+            if(this.multiple) {
+                this.selected.push(file);
+            } else {
+                this.selected[0] = file;
+            }
         } else {
-          this.selected[0] = file;
+            if(this.multiple) {
+                this.selected = this.selected.filter((item) => { return Number(item['id']) !== Number(file.id); });
+            } else {
+                this.selected = [];
+            }
         }
-      } else {
-        if(this.multiple) {
-          this.selected = this.selected.filter((item) => { return Number(item['id']) !== Number(file.id); });
-        } else {
-          this.selected = [];
-        }
-      }
     },
     saveSelection() {
-      {{-- Send event to element with (for_id) with selected item(s) --}}
-      $dispatch('we-media-selected-event', {
-        for_id: this.for_id,
-        editorjs_media_wrapper_id: this.editorjs_media_wrapper_id,
-        selected: this.selected,
-        multiple: this.multiple,
-      });
+        {{-- Send event to element with (for_id) with selected item(s) --}}
+        $dispatch('we-media-selected-event', {
+            for_id: this.for_id,
+            editorjs_media_wrapper_id: this.editorjs_media_wrapper_id,
+            selected: this.selected,
+            multiple: this.multiple,
+        });
     },
     closeLibrary() {
-      this.new_media = [];
-      this.displayModal = false;
+        this.new_media = [];
+        this.displayModal = false;
     }
-}" @display-media-library-modal.window="displayModal = true;" x-show="displayModal" x-cloak>
+}" 
+@display-media-library-modal.window="displayModal = true;" x-show="displayModal" x-cloak>
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="{{ $wrapperClass }}" x-show="displayModal" x-transition:enter="ease-out duration-300"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="oapcity-100"
@@ -70,7 +74,7 @@
 
                 {{-- Dismiss modal - x button --}}
                 <button type="button" class="absolute top-3 right-3" @click="closeLibrary()">
-                    @svg('heroicon-o-x', ['class' => 'w-5 h-5 text-gray-500'])
+                    @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-gray-500'])
                 </button>
 
                 <div class="flex flex-col max-h-[85vh]" x-data="{
@@ -103,7 +107,7 @@
                                         <span class="block truncate" x-text="sort_types[sort_by]"></span>
                                         <span
                                             class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                            @svg('heroicon-s-selector', ['class' => 'h-5 w-5 text-gray-400']);
+                                            @svg('heroicon-s-chevron-up-down', ['class' => 'h-5 w-5 text-gray-400']);
                                         </span>
                                     </button>
 
@@ -165,8 +169,18 @@
                                             <li class="relative cursor-pointer" @click="selectMedia(file)">
                                                 <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden"
                                                     :class="{'ring-2 ring-offset-2 ring-offset-gray-100 ring-indigo-500': isMediaSelected(file)}">
-                                                    <img x-bind:src="window.WE.IMG.url(file.file_name)"
-                                                        class="object-contain pointer-events-none group-hover:opacity-75 p-2">
+
+                                                    <template x-if="file.type === 'image'">
+                                                        <img x-bind:src="window.WE.IMG.url(file.file_name)"
+                                                            class="object-contain pointer-events-none group-hover:opacity-75 p-2">
+                                                    </template>
+
+                                                    <template x-if="file.type === 'document'">
+                                                        <div class="w-full flex items-center justify-center pointer-events-none group-hover:opacity-75 ">
+                                                            @svg('heroicon-s-document', ['class' => 'w-[60px] h-[60px] text-gray-700'])
+                                                        </div>
+                                                    </template>
+                                                    
                                                     <button type="button"
                                                         class="absolute inset-0 focus:outline-none"></button>
                                                 </div>
@@ -336,5 +350,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>

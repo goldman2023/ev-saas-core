@@ -12,7 +12,7 @@
     @if(($row->data['cloud_service'] ?? 0) == 1)
         @svg('heroicon-o-check', ['class' => 'h-4 inline w-4 text-green-600'])
     @else
-        @svg('heroicon-o-x', ['class' => 'h-4 inline w-4 text-red-600'])
+        @svg('heroicon-o-x-mark', ['class' => 'h-4 inline w-4 text-red-600'])
     @endif
 </x-livewire-tables::table.cell>
 
@@ -20,7 +20,7 @@
     @if(($row->data['offline_service'] ?? 0)  == 1)
         @svg('heroicon-o-check', ['class' => 'text-center inline h-4 w-4 text-green-600'])
     @else
-        @svg('heroicon-o-x', ['class' => 'text-center inline h-4 w-4 text-red-600'])
+        @svg('heroicon-o-x-mark', ['class' => 'text-center inline h-4 w-4 text-red-600'])
     @endif
 </x-livewire-tables::table.cell>
 

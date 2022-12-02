@@ -3,7 +3,7 @@
 @section('content')
 <section class="bg-white dark:bg-gray-900">
     <div class="grid  lg:grid-cols-2">
-        <div class="flex justify-center items-center py-6 px-4 lg:py-0 sm:px-0">
+        <div class="!pb-12 flex justify-center items-center py-6 px-4 lg:py-0 sm:px-0">
             <div>
 
 
@@ -118,10 +118,10 @@
                 </p>
             </form>
         </div>
-        <div class="flex justify-center items-center py-6 px-4 bg-primary-600 lg:py-0 sm:px-0">
-            <div class="max-w-md xl:max-w-xl">
+        <div class="pb-12 flex justify-center items-top py-6 px-4 bg-primary-600 lg:py-0 sm:px-0">
+            <div class="max-w-md xl:max-w-xl pt-8">
                 <a href="#" class="flex items-center mb-4 text-2xl font-semibold text-white">
-                    <img src="{{ get_site_logo() }}" alt="{{ get_site_name() }}" loading="lazy" />
+                    <img src="{{ get_site_logo() }}" alt="{{ get_site_name() }}" class="max-h-[150px]" loading="lazy" />
                 </a>
                 <h1 class="mb-4 text-3xl font-bold  leading-none text-white xl:text-5xl">
                     {{ translate('Create an account and access customer zone') }}

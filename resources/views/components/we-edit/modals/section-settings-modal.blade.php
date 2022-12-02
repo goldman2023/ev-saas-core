@@ -76,11 +76,11 @@
               {{-- Spacing --}}
               <div class="w-full grid grid-cols-3 gap-4" x-show="active_tab === 'spacing'">
                 <div>
-                  <label class="flex items-center text-sm font-medium text-gray-700">{{ translate('Mobile padding') }} @svg('heroicon-o-device-mobile', ['class' => 'w-4 h-4'])</label>
+                  <label class="flex items-center text-sm font-medium text-gray-700">{{ translate('Mobile padding') }} @svg('heroicon-o-device-phone-mobile', ['class' => 'w-4 h-4'])</label>
                   {{-- Top --}}
                   <div class="mt-1 relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-up', ['class' => 'h-4 w-4']) </span>
+                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-long-up', ['class' => 'h-4 w-4']) </span>
                     </div>
                     <input type="number" x-model.lazy="section.settings.spacing.mobile.top" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -90,7 +90,7 @@
                   {{-- Bottom --}}
                   <div class="mt-1 relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-down', ['class' => 'h-4 w-4']) </span>
+                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-long-down', ['class' => 'h-4 w-4']) </span>
                     </div>
                     <input type="number" x-model.lazy="section.settings.spacing.mobile.bottom" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -105,7 +105,7 @@
                   {{-- Top --}}
                   <div class="mt-1 relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-up', ['class' => 'h-4 w-4']) </span>
+                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-long-up', ['class' => 'h-4 w-4']) </span>
                     </div>
                     <input type="number" x-model.lazy="section.settings.spacing.tablet.top" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -115,7 +115,7 @@
                   {{-- Bottom --}}
                   <div class="mt-1 relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-down', ['class' => 'h-4 w-4']) </span>
+                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-long-down', ['class' => 'h-4 w-4']) </span>
                     </div>
                     <input type="number" x-model.lazy="section.settings.spacing.tablet.bottom" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -125,11 +125,11 @@
                 </div>
 
                 <div>
-                  <label class="flex items-center text-sm font-medium text-gray-700">{{ translate('Desktop padding') }} @svg('heroicon-o-desktop-computer', ['class' => 'w-4 h-4'])</label>
+                  <label class="flex items-center text-sm font-medium text-gray-700">{{ translate('Desktop padding') }} @svg('heroicon-o-computer-desktop', ['class' => 'w-4 h-4'])</label>
                   {{-- Top --}}
                   <div class="mt-1 relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-up', ['class' => 'h-4 w-4']) </span>
+                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-long-up', ['class' => 'h-4 w-4']) </span>
                     </div>
                     <input type="number" x-model.lazy="section.settings.spacing.desktop.top" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -139,7 +139,7 @@
                   {{-- Bottom --}}
                   <div class="mt-1 relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-down', ['class' => 'h-4 w-4']) </span>
+                      <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-long-down', ['class' => 'h-4 w-4']) </span>
                     </div>
                     <input type="number" x-model.lazy="section.settings.spacing.desktop.bottom" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -361,7 +361,7 @@
                     <button type="button" @click="show_responsive_visibility_dropdown = !show_responsive_visibility_dropdown" class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
                       <span class="block truncate" x-text="responsive_visibility[section.settings.responsive_visibility]"></span>
                       <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                        @svg('heroicon-s-selector', ['class' => 'w-5 h-5'])
+                        @svg('heroicon-s-chevron-up-down', ['class' => 'w-5 h-5'])
                       </span>
                     </button>
 
@@ -401,7 +401,7 @@
                     <button type="button" @click="show_user_visibility_dropdown = !show_user_visibility_dropdown" class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                       <span class="block truncate" x-text="user_visibility[section.settings.user_visibility]"></span>
                       <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                        @svg('heroicon-s-selector', ['class' => 'w-5 h-5'])
+                        @svg('heroicon-s-chevron-up-down', ['class' => 'w-5 h-5'])
                       </span>
                     </button>
 

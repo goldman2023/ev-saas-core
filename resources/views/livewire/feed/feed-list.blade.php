@@ -40,7 +40,7 @@
                     class="relative opacity-50 text-gray-500 col-span-4 bg-white rounded-xl shadow p-4 flex items-center justify-center">
 
                     <div class="rounded-full mr-2">
-                        @svg('heroicon-o-chat-alt-2', ['class' => 'w-5 h-5'])
+                        @svg('heroicon-o-chat-bubble-left-right', ['class' => 'w-5 h-5'])
                     </div>
 
                     <span class="text-14">{{ translate('Most Answers') }}</span>

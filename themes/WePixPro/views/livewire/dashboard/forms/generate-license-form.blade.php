@@ -48,7 +48,10 @@ wire:loading.class="opacity-30 pointer-events-none"
 
 
     <div class="w-full flex justify-end mt-4" x-data="{}">
-        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+        <button type="button" class="btn btn-standard-outline mr-3 btn-sm" @click="show = false">
+            {{ translate('Close') }}
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" @click="
             $wire.set('serial_number', serial_number, true);
             $wire.set('hw_id', hw_id, true);
             $wire.set('license_id', license_id, true);

@@ -39,7 +39,7 @@ x-cloak>
       <div x-data="{}">
 
           <div class="absolute top-[15px] right-[15px] cursor-pointer" @click="show = false">
-            @svg('heroicon-o-x', ['class' => 'w-4 h-4 text-gray-500'])
+            @svg('heroicon-o-x-mark', ['class' => 'w-4 h-4 text-gray-500'])
           </div>
 
           <div class="w-full flex flex-col">

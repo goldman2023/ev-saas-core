@@ -1,8 +1,5 @@
 @push('head_scripts')
 <script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush
 
 <div class="lw-form container-fluid" x-data="{
@@ -1746,7 +1743,7 @@
                                                 <span x-text="tag"></span>
                                                 <button @click="remove(index)" type="button"
                                                     class="flex-shrink-0 ml-0.5 h-4 w-4 rounded-full inline-flex items-center justify-center  focus:outline-none ">
-                                                    @svg('heroicon-o-x', ['class' => 'h-3 w-3'])
+                                                    @svg('heroicon-o-x-mark', ['class' => 'h-3 w-3'])
                                                 </button>
                                             </span>
                                         </template>

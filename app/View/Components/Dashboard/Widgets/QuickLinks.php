@@ -41,7 +41,7 @@ class QuickLinks extends Component
 
         $this->links[] = [
             'title' => 'Mailerlite',
-            'icon' => 'heroicon-o-mail-open',
+            'icon' => 'heroicon-o-envelope-open',
             'link' => ''
         ];
 

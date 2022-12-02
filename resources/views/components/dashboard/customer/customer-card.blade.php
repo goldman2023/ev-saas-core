@@ -1,9 +1,9 @@
 <div class="bg-white shadow-lg shadow-gray-200 rounded-2xl p-4 mb-6">
-    <div class="grid grid-cols-4">
+    <div class="grid grid-cols-4 gap-3">
         <div class="col-span-1">
         <a href="{{ route('user.details', $user->id) }}">
 
-            <img class="mb-2 w-20 h-20 rounded shadow-md shadow-gray-300"
+            <img class="mb-2 w-20 rounded shadow-md shadow-gray-300"
             src="{{ $user->getThumbnail() }}">
         </a>
         </div>

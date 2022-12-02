@@ -86,6 +86,7 @@
     <x-panels.flyout-profile></x-panels.flyout-profile>
     <div>
         <livewire:we-media-library />
+        <livewire:we-media-editor />
     </div>
     @endauth
 

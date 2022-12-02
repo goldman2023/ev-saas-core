@@ -29,26 +29,38 @@ trait CoreMetaTrait
         return false;
     }
 
-    public function getCoreMeta($key, $fresh = false)
+    public function getCoreMeta($key, $fresh = false, $ad_hoc_data_type = null)
     {
-        // TODO: Implement castValuesForGet($core_meta, $data_types); here
         $setting = $fresh ? $this->core_meta()->where('key', $key)->get()->keyBy('key')->toArray() : $this->core_meta->where('key', $key)->keyBy('key')->toArray();
-        $data_types = WEF::getWEFDataTypes($this);
+        
+        if(empty($ad_hoc_data_type)) {
+            $data_types = WEF::getWEFDataTypes($this);
+        } else {
+            $data_types = [$key => $ad_hoc_data_type];
+        }
         
         if(!empty($data_types)) {
             return castValuesForGet($setting, $data_types)[$key] ?? null;
         } else {
             if($fresh) {
-                return $this->core_meta()->where('key', $key)?->first()?->value;
+                return $this->core_meta()->where('key', $key)?->first()?->value ?? null;
             } else {
                 return $this->core_meta->where('key', $key)?->first()?->value ?? null;
             }
         }
     }
 
-    public function saveCoreMeta($key, $value)
+    public function getWEF($key, $fresh = false, $ad_hoc_data_type = null) {
+        return $this->getCoreMeta($key, $fresh, $ad_hoc_data_type);
+    }
+
+    public function saveCoreMeta($key, $value, $ad_hoc_data_type = null)
     {
-        $data_types = WEF::getWEFDataTypes($this);
+        if(empty($ad_hoc_data_type)) {
+            $data_types = WEF::getWEFDataTypes($this);
+        } else {
+            $data_types = [$key => $ad_hoc_data_type];
+        }
 
         try {
             CoreMeta::updateOrCreate(
@@ -58,7 +70,7 @@ trait CoreMetaTrait
                     'key' => $key,
                 ],
                 [
-                    'value' => castValueForSave($key, $value, $data_types),
+                    'value' => $value === null ? $value : castValueForSave($key, $value, $data_types),
                 ]
             );
 
@@ -66,6 +78,10 @@ trait CoreMetaTrait
         } catch (\Exception $e) {
             Log::error($e->getMessage);
         }
+    }
+
+    public function setWEF($key, $value, $ad_hoc_data_type = null) {
+        return $this->saveCoreMeta($key, $value, $ad_hoc_data_type);
     }
 
     // Specific CoreMeta

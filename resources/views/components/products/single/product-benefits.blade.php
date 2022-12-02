@@ -4,7 +4,7 @@
 
         <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center">
             <dt>
-                @svg('heroicon-o-clipboard-check', ['class' => 'mx-auto h-6 w-6 flex-shrink-0
+                @svg('heroicon-o-clipboard-document-check', ['class' => 'mx-auto h-6 w-6 flex-shrink-0
                 text-gray-400'])
 
                 <span class="mt-4 text-sm font-medium text-gray-900">

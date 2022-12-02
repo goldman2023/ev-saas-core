@@ -13,7 +13,7 @@
                 <p class="text-2xl font-semibold text-gray-900">{{ \App\Models\User::count() }}</p>
                 <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
                     <!-- Heroicon name: solid/arrow-sm-up -->
-                    @svg('heroicon-s-arrow-sm-up', ['class' => 'h-6 w-6 text-white'])
+                    @svg('heroicon-o-arrow-up', ['class' => 'h-6 w-6 text-white'])
 
                     <span class="sr-only"> Increased by </span>
                     {{ App\Models\User::ByDays(1)->count();
@@ -34,7 +34,7 @@
             <dt>
                 <div class="absolute bg-indigo-500 rounded-md p-3">
                     <!-- Heroicon name: outline/mail-open -->
-                    @svg('heroicon-s-mail-open', ['class' => 'h-6 w-6 text-white'])
+                    @svg('heroicon-s-envelope-open', ['class' => 'h-6 w-6 text-white'])
 
                 </div>
                 <p class="ml-16 text-sm font-medium text-gray-500 truncate">
@@ -45,7 +45,7 @@
                 <p class="text-2xl font-semibold text-gray-900">{{ \App\Models\Order::count() }}</p>
                 <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
                     <!-- Heroicon name: solid/arrow-sm-up -->
-                    @svg('heroicon-s-arrow-sm-up', ['class' => 'h-6 w-6 text-white'])
+                    @svg('heroicon-o-arrow-up', ['class' => 'h-6 w-6 text-white'])
 
                     <span class="sr-only"> Increased by </span>
                     {{ App\Models\Order::ByDays(1)->count() }} {{ translate('New') }}

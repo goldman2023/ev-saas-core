@@ -1763,6 +1763,9 @@ class StripeService
 
 
         if($user->entity === 'company') {
+            // Update billing_company with current user's company_name meta
+            $invoice->billing_company = $user->getUserMeta('company_name');
+
             $invoice->mergeData([
                 'customer' => [
                     'entity' => $user->entity,
@@ -2394,7 +2397,6 @@ class StripeService
                 $invoice->billing_state = $order->billing_state;
                 $invoice->billing_city = $order->billing_city;
                 $invoice->billing_zip = $order->billing_zip;
-
                 
                 $invoice->mergeData([
                     'customer' => [
@@ -2481,7 +2483,7 @@ class StripeService
                     if(!empty($stripe_invoice->number ?? null)) {
                         $invoice->invoice_number = $stripe_invoice->number;
                     }
-
+                    
                     $invoice->setRealInvoiceNumber();
 
                     $invoice->mergeData([

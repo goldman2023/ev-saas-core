@@ -6,7 +6,6 @@ use EVS;
 use Cache;
 use Session;
 use SplFileInfo;
-use Illuminate\Http\File;
 use App\Models\Shop;
 use App\Models\Brand;
 use App\Models\Upload;
@@ -14,7 +13,9 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Currency;
 use App\Models\Attribute;
+use Illuminate\Http\File;
 use App\Models\ShopDomain;
+use Illuminate\Support\Str;
 use App\Models\AttributeValue;
 use App\Models\CategoryRelationship;
 use Illuminate\Support\Facades\Request;
@@ -252,9 +253,9 @@ class MediaService
     * @param  mixed $model
     * @param  mixed $file
     * @param  mixed $property_name
-    * @return void
+    * @return Upload
     */
-   public function storeAsUploadFromFile(&$model, $file, $property_name) {
+   public function storeAsUploadFromFile(&$model, $file, $property_name, $file_display_name = null) {
 
         if(is_string($file)) {
             $file_path = $file;
@@ -263,12 +264,12 @@ class MediaService
 
         if($file instanceof SplFileInfo) {
             $extension = $file->getExtension();
-            $new_file_original_name = $file->getFilename();
+            $new_file_original_name = !empty($file_display_name) ? $file_display_name : $file->getFilename();
             $new_filename = $file->getFilename();
             $new_file_size = Storage::size($file_path);
         } else if($file instanceof File) {
             $extension = $file->guessExtension();
-            $new_file_original_name = $file->getClientOriginalName();
+            $new_file_original_name = !empty($file_display_name) ? $file_display_name : $file->getClientOriginalName();
             $new_filename = time().'_'.preg_replace("/\s+/", "", $new_file_original_name);
             $new_file_size = $file->getSize();
         }
@@ -283,16 +284,19 @@ class MediaService
         $upload->type = MediaService::getPermittedExtensions()[$extension];
         $upload->file_size = $new_file_size;
 
-        $upload->file_original_name = null;
-        $arr = explode('.', $new_file_original_name);
-        for ($i = 0; $i < count($arr) - 1; $i++) {
-            if ($i == 0) {
-                $upload->file_original_name .= $arr[$i];
-            } else {
-                $upload->file_original_name .= '.'.$arr[$i];
+        $upload->file_original_name = $new_file_original_name;
+
+        if(empty($file_display_name)) {
+            $arr = explode('.', $new_file_original_name);
+            for ($i = 0; $i < count($arr) - 1; $i++) {
+                if ($i == 0) {
+                    $upload->file_original_name .= $arr[$i];
+                } else {
+                    $upload->file_original_name .= '.'.$arr[$i];
+                }
             }
         }
-
+        
         $upload->save();
 
         // Save Relationship between $model and $upload to DB 
@@ -308,7 +312,19 @@ class MediaService
             }
             
             $model->syncUploads($property_name);
-
         }
+
+        return $upload;
+   }
+
+   public function uploadToStorage($contents, $path, $name, $extension) {
+        $file_path = $this->getTenantPath($path). '/' . Str::slug($name, '-') . '-' . substr(bin2hex(openssl_random_pseudo_bytes(ceil(20 / 2)) ), 0, 20 ) . '.' . $extension;
+
+        $file = Storage::put($file_path, $contents);
+
+        if(!$file)
+            return false;
+        
+        return $file_path;
    }
 }

@@ -15,8 +15,8 @@
         <div class="mt-1 relative flex items-center">
           <input type="text" name="search" id="search" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md">
           <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
-            <button type="button" class="cursor-pointer inline-flex items-center border border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-400"> 
-                {{ translate('Search') }} 
+            <button type="button" class="cursor-pointer inline-flex items-center border border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-400">
+                {{ translate('Search') }}
             </button>
           </div>
         </div>
@@ -50,7 +50,7 @@
                         <div class="relative flex justify-end lg:hidden">
                             <div class="flex items-center">
                                 <button type="button" class="-m-2 p-2 flex items-center text-gray-400 hover:text-gray-500" id="menu-0-button" aria-expanded="false" aria-haspopup="true">
-                                    @svg('heroicon-o-dots-vertical', ['class' => 'w-6 h-6'])
+                                    @svg('heroicon-o-ellipsis-horizontal', ['class' => 'w-6 h-6'])
                                 </button>
                             </div>
                         </div>
@@ -106,15 +106,15 @@
                                                             "name":"{{ $item->subject->name }}",
                                                             "description":"{{ $item->subject->excerpt }}",
                                                             "startDate":"{{ date('Y-m-d', $item->subject->getCoreMeta('start_date')) }}",
-                                                            @if($item->subject->getCoreMeta('date_type') == 'range') 
+                                                            @if($item->subject->getCoreMeta('date_type') == 'range')
                                                                 "endDate":"{{ date('Y-m-d', $item->subject->getCoreMeta('end_date')) }}",
                                                             @else
                                                                 "endDate":"{{ date('Y-m-d', $default_1h_diff) }}",
                                                             @endif
 
                                                             "startTime":"{{ date('H:i', $item->subject->getCoreMeta('start_date')) }}",
-                                                            
-                                                            @if($item->subject->getCoreMeta('date_type') == 'range') 
+
+                                                            @if($item->subject->getCoreMeta('date_type') == 'range')
                                                                 "endTime":"{{ date('H:i', $item->subject->getCoreMeta('end_date')) }}",
                                                             @else
                                                                 "endTime":"{{ date('H:i', $default_1h_diff) }}",
@@ -146,15 +146,15 @@
                                                             "name":"{{ $item->subject->name }}",
                                                             "description":"{{ $item->subject->excerpt }}",
                                                             "startDate":"{{ date('Y-m-d', $item->subject->getCoreMeta('start_date')) }}",
-                                                            @if($item->subject->getCoreMeta('date_type') == 'range') 
+                                                            @if($item->subject->getCoreMeta('date_type') == 'range')
                                                                 "endDate":"{{ date('Y-m-d', $item->subject->getCoreMeta('end_date')) }}",
                                                             @else
                                                                 "endDate":"{{ date('Y-m-d', $default_1h_diff) }}",
                                                             @endif
 
                                                             "startTime":"{{ date('H:i', $item->subject->getCoreMeta('start_date')) }}",
-                                                            
-                                                            @if($item->subject->getCoreMeta('date_type') == 'range') 
+
+                                                            @if($item->subject->getCoreMeta('date_type') == 'range')
                                                                 "endTime":"{{ date('H:i', $item->subject->getCoreMeta('end_date')) }}",
                                                             @else
                                                                 "endTime":"{{ date('H:i', $default_1h_diff) }}",
@@ -177,7 +177,7 @@
                                                         }
                                                     </div>
                                                 @endif
-                                                
+
                                             @elseif($item->subject->type === \App\Enums\ProductTypeEnum::course()->value)
                                                 <a href="{{ $item->subject->getPermalink() }}" type="button" class="btn-primary mt-4">
                                                     {{ translate('Go to course') }}
@@ -209,12 +209,12 @@
                                 </div>
                             </li>
                         @endif
-                        
+
 
                     </ul>
                 </div>
             @endforeach
         @endif
-        
+
     </div>
 </div>

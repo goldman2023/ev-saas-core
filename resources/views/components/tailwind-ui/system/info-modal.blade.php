@@ -56,13 +56,13 @@
                 @svg('heroicon-o-check', ['class' => 'h-6 w-6 text-green-600'])
             </template>
             <template x-if="type === 'warning'">
-                @svg('heroicon-o-exclamation', ['class' => 'h-6 w-6 text-orange-600'])
+                @svg('heroicon-o-exclamation-circle', ['class' => 'h-6 w-6 text-orange-600'])
             </template>
             <template x-if="type === 'info'">
                 @svg('heroicon-o-exclamation-circle', ['class' => 'h-6 w-6 text-blue-600'])
             </template>
             <template x-if="type === 'fail'">
-                @svg('heroicon-o-x', ['class' => 'h-6 w-6 text-red-600'])
+                @svg('heroicon-o-x-mark', ['class' => 'h-6 w-6 text-red-600'])
             </template>
           </div>
           <div class="mt-3 text-center sm:mt-5">

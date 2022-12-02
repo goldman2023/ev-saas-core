@@ -47,7 +47,7 @@
                         <button @click="open = !open" type="button"
                             class="group text-gray-700 font-medium flex items-center" aria-controls="disclosure-1"
                             aria-expanded="false">
-                            @svg('heroicon-s-filter', ['class' => 'flex-none w-5 h-5 mr-2 text-gray-400
+                            @svg('heroicon-s-funnel', ['class' => 'flex-none w-5 h-5 mr-2 text-gray-400
                             group-hover:text-gray-500'])
                             <span x-text="active_filters_count == 0 ? 'All' : active_filters_count"></span><span class="pl-1">
                                 {{ translate(' Categories') }}

@@ -17,7 +17,7 @@
 
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
             href="{{ route('product.edit.stocks', $product->id) }}">
-            @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+            @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
             {{ translate('Stock Management') }}
         </a>
 
@@ -31,7 +31,7 @@
 
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
             href="{{ route('product.edit', $product->id) }}">
-            {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;', 'class' => 'ml-2'])
+            {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height: 16px;', 'class' => 'ml-2'])
         </a>
         <a class="btn btn-soft-danger btn-circle btn-xs d-inline-flex align-items-center confirm-delete "
             href="javascript:void(0)">
@@ -137,7 +137,7 @@
                                         <div>
                                             @if($product->useVariations())
                                                 <span class="badge {{ $product->hasVariations() ? 'badge-soft-success':'badge-soft-warning' }} mr-2 w-auto d-flex align-items-center">
-                                                    {{ svg(($product->hasVariations() ? 'heroicon-o-check':'heroicon-o-exclamation'), ['class' => 'ev-icon__xs mr-2 '.($product->hasVariations() ? 'text-success':'text-warning')]) }}
+                                                    {{ svg(($product->hasVariations() ? 'heroicon-o-check':'heroicon-o-exclamation-circle'), ['class' => 'ev-icon__xs mr-2 '.($product->hasVariations() ? 'text-success':'text-warning')]) }}
 
                                                     @if($product->hasVariations())
                                                         {{translate('Variable Product') }}

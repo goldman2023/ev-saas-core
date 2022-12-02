@@ -33,7 +33,7 @@
         <div class="max-w-7xl mx-auto flex space-x-6 divide-x divide-gray-200 text-sm px-4 sm:px-6 lg:px-8">
           <div>
             <button @click="open = !open" type="button" class="group text-gray-700 font-medium flex items-center" aria-controls="disclosure-1" aria-expanded="false">
-              @svg('heroicon-s-filter', ['class' => 'flex-none w-5 h-5 mr-2 text-gray-400 group-hover:text-gray-500'])
+              @svg('heroicon-s-funnel', ['class' => 'flex-none w-5 h-5 mr-2 text-gray-400 group-hover:text-gray-500'])
               <span x-text="active_filters_count+' {{ translate('Filters') }}'"></span>
             </button>
           </div>

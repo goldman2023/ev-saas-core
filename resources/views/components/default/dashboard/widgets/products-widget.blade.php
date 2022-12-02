@@ -13,8 +13,6 @@
 
             <div class="col-auto">
                 <span class="badge badge-soft-success p-1 text-wrap">
-                    <x-heroicon-o-trending-up class="ev-icon__small" />
-                    <br>
                     {{ App\Models\Lead::trend() }} %
                 </span>
             </div>

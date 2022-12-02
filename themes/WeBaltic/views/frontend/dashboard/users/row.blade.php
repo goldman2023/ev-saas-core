@@ -1,4 +1,5 @@
 <x-livewire-tables::table.cell class="align-middle ">
+    <input type="checkbox" class="rounded p-2" value="{{ $row->id }}" />
     <a class="media items-center text-14" href="{{ route('user.details', $row->id) }}">
         #{{ $row->id }}
     </a>
@@ -89,6 +90,9 @@
 
 <x-livewire-tables::table.cell class="align-middle static ">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
+        <a class="btn bg-gray-100 flex items-center mr-2" href="{{ route('user.details', $row->id) }}">
+            @svg('heroicon-o-arrow-right', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Next Step') }}
+        </a>
         <a class="btn btn-white flex items-center mr-2" href="{{ route('user.details', $row->id) }}">
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a>

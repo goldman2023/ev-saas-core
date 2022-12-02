@@ -24,7 +24,7 @@ class WishlistButton extends Component
         'Like' => [
             'action' => 'Like',
             'action_success' => 'Liked',
-            'icon' => 'heroicon-o-thumb-up',
+            'icon' => 'heroicon-o-hand-thumb-up',
             'icon_success' => 'heroicon-s-thumb-up',
             'view' => 'livewire.actions.wishlist-buttons.like-button',
         ],

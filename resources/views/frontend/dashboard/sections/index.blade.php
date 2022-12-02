@@ -21,7 +21,7 @@
             <livewire:dashboard.tables.sections-table></livewire:dashboard.tables.sections-table>
         @else
             <x-dashboard.empty-states.no-items-in-collection 
-                icon="heroicon-o-collection" 
+                icon="heroicon-o-rectangle-stack" 
                 title="{{ translate('No sections yet') }}"
                 text="{{ translate('Create your first section!') }}"
                 link-href-route="section.create"

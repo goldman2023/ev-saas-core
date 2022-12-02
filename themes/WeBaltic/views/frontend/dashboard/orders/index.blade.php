@@ -15,7 +15,9 @@
         </a>
     </x-slot>
 </x-dashboard.section-headers.section-header>
-
+<div class="-mt-6 mb-6">
+    {{ Breadcrumbs::render('dashboard.orders') }}
+    </div>
 <div class="w-full">
 
     @if($orders_count > 0)
@@ -27,10 +29,10 @@
             <li class="mr-2" role="presentation">
                 <button
                     class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"
-                    id="order-nav-{{ $key }}" data-tabs-target="#orders-tab-{{ $key }}" type="button" role="tab" aria-controls="order-nav-{{ $status }}"
-                    @if($key == 0) aria-selected="true" @endif
-                    >
-                    {{ App\Enums\OrderStatusEnum::labels()[$key] }} ({{ \App\Models\Order::where('status', $key+1)->count() }})
+                    id="order-nav-{{ $key }}" data-tabs-target="#orders-tab-{{ $key }}" type="button" role="tab"
+                    aria-controls="order-nav-{{ $status }}" @if($key==0) aria-selected="true" @endif>
+                    {{ App\Enums\OrderStatusEnum::labels()[$key] }} ({{ \App\Models\Order::where('status',
+                    $key+1)->count() }})
                 </button>
             </li>
             @endforeach
@@ -39,13 +41,24 @@
     </div>
     <div id="myTabContent">
         @foreach(App\Enums\OrderStatusEnum::values() as $key => $status)
+        <div id="orders-tab-{{ $key }}" role="tabpanel" aria-labelledby="order-nav-{{ $key }}"
+            class="grid grid-cols-12 gap-6">
+            <div class="col-span-9">
+                <livewire:dashboard.tables.orders-table :status="$key+1" for="shop">
+                </livewire:dashboard.tables.orders-table>
+            </div>
+            <div class="col-span-3">
+                @if(auth()->user()->isAdmin())
+                <x-dashboard.orders.action-panel>
 
-        <div class="bg-gray-50 rounded-lg dark:bg-gray-800" id="orders-tab-{{ $key }}" role="tabpanel"
-            aria-labelledby="order-nav-{{ $key }}">
-            <livewire:dashboard.tables.orders-table :status="$key+1" for="shop"></livewire:dashboard.tables.orders-table>
-
-
+                </x-dashboard.orders.action-panel>
+                @else
+                <x-dashboard.elements.support-card class="card bg-white p-4 mb-3">
+                </x-dashboard.elements.support-card>
+                @endif
+            </div>
         </div>
+
         @endforeach
 
 
@@ -83,7 +96,7 @@
                 </p>
                 <span class="text-link flex items-center mt-auto">
                     {{ translate('Get Started') }}
-                    @svg('heroicon-o-arrow-narrow-right', ['class' => 'w-[16px] h-[16px] ml-2'])
+                    @svg('heroicon-s-arrow-long-right', ['class' => 'w-[16px] h-[16px] ml-2'])
                 </span>
             </a>
         </div>
@@ -102,7 +115,7 @@
                 </p>
                 <span class="text-link flex items-center mt-auto">
                     {{ translate('Get Started') }}
-                    @svg('heroicon-o-arrow-narrow-right', ['class' => 'w-[16px] h-[16px] ml-2'])
+                    @svg('heroicon-s-arrow-long-right', ['class' => 'w-[16px] h-[16px] ml-2'])
                 </span>
             </a>
         </div>

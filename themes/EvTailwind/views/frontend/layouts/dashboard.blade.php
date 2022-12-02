@@ -39,6 +39,10 @@
 
     {{ seo()->render() }}
     @livewireStyles
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     @stack('head_scripts')
 </head>
 
@@ -62,6 +66,8 @@
     <!-- Carts -->
     <livewire:cart.cart template="flyout-cart" />
     <livewire:we-media-library />
+    <livewire:we-media-editor />
+    <livewire:wef-editor-modal />
 
     <!-- Wishlist -->
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}

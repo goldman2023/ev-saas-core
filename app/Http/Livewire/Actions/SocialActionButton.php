@@ -31,8 +31,8 @@ class SocialActionButton extends Component
         'reaction' => [
             'action' => 'Reaction',
             'action_success' => 'Reacted',
-            'icon' => 'heroicon-o-thumb-up',
-            'icon_success' => 'heroicon-s-thumb-up',
+            'icon' => 'heroicon-o-hand-thumb-up',
+            'icon_success' => 'heroicon-s-hand-thumb-up',
             'view' => 'livewire.actions.social-buttons.like-button',
             'class' => SocialReaction::class,
             'log_description' => 'reacted',
@@ -104,7 +104,7 @@ class SocialActionButton extends Component
         $this->class = $class;
         $this->action_text_success = $action_text_success;
         $this->action_text = $action_text;
-        
+
         if ($action === 'reaction') {
             if(empty($type)) {
                 $this->type == SocialReactionsEnum::like()->value;
@@ -151,7 +151,7 @@ class SocialActionButton extends Component
         /* If product exists, toggle the database entry - delete if exists, create if does not exist */
         if (auth()->user()) {
             if ($this->added) {
-            
+
                 $query = app($this->action['class'])::where('subject_id', $this->object->id)
                         ->where('subject_type', $this->object::class)
                         ->where('user_id', auth()->user()->id);
@@ -159,9 +159,9 @@ class SocialActionButton extends Component
                 if(!empty($this->type)) {
                     $query->where('type', $this->type);
                 }
-    
+
                 $query->first()->delete();
-                
+
 
                 $this->emit('removedSocialAction', [
                     'action' => $this->selectedAction,
@@ -189,7 +189,7 @@ class SocialActionButton extends Component
                 // /* TODO: I think notifications should be defined in events on Wishlist item created outside of controller/component logic
                 //     so we can have clear entry points for all notificaitons */
                 //     // $this->object->user->notify(new WishlistItemAdded($item));
-                
+
                 activity()
                 ->performedOn($social_model->subject)
                 ->causedBy(auth()->user())
@@ -201,7 +201,7 @@ class SocialActionButton extends Component
                 ->log($this->action['log_description']);
 
                 $this->count++;
-                
+
                 $this->emit('addedSocialAction', [
                     'action' => $this->selectedAction,
                     'action_class' => $this->action['class'],

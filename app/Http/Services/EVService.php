@@ -104,7 +104,7 @@ class EVService
 
                     [
                         'label' => translate('Chat'),
-                        'icon' => 'heroicon-o-chat',
+                        'icon' => 'heroicon-o-chat-bubble-left-right',
                         'route' => route('chat.index'),
                         'route_name' => 'chat.index',
                         'is_active' => areActiveRoutes(['chat']),
@@ -128,7 +128,7 @@ class EVService
                         'children' => [
                             [
                                 'label' => translate('All Products'),
-                                'icon' => 'heroicon-o-archive',
+                                'icon' => 'heroicon-o-archive-box',
                                 'route' => route('products.index'),
                                 'route_name' => 'products.index',
                                 'is_active' => areActiveRoutes(['products.index',  'product.details']),
@@ -137,7 +137,7 @@ class EVService
                             ],
                             [
                                 'label' => translate('Product Addons'),
-                                'icon' => 'heroicon-o-archive',
+                                'icon' => 'heroicon-o-archive-box',
                                 'route' => route('products.index'),
                                 'route_name' => 'products.index',
                                 'is_active' => areActiveRoutes(['products.index',  'product.details']),
@@ -146,7 +146,7 @@ class EVService
                             ],
                             [
                                 'label' => translate('Attributes'),
-                                'icon' => 'heroicon-o-view-list',
+                                'icon' => 'heroicon-o-list-bullet',
                                 'route' => route('attributes.index', base64_encode(Product::class)),
                                 'route_name' => 'attributes.index',
                                 'is_active' => areActiveRoutes(['attributes.index']),
@@ -157,7 +157,7 @@ class EVService
                     ],
                     [
                         'label' => translate('Plans'),
-                        'icon' => 'heroicon-o-table',
+                        'icon' => 'heroicon-o-table-cells',
                         'route' => route('plans.index'),
                         'route_name' => 'plans.index',
                         'is_active' => areActiveRoutes(['plans.index']),
@@ -166,7 +166,7 @@ class EVService
                         'children' => [
                             [
                                 'label' => translate('All Plans'),
-                                'icon' => 'heroicon-o-archive',
+                                'icon' => 'heroicon-o-archive-box',
                                 'route' => route('plans.index'),
                                 'route_name' => 'plans.index',
                                 'is_active' => areActiveRoutes(['plans.index']),
@@ -175,7 +175,7 @@ class EVService
                             ],
                             [
                                 'label' => translate('Attributes'),
-                                'icon' => 'heroicon-o-view-list',
+                                'icon' => 'heroicon-o-list-bullet',
                                 'route' => route('attributes.index', base64_encode(Plan::class)),
                                 'route_name' => 'attributes.index',
                                 'is_active' => areActiveRoutes(['attributes.index']),
@@ -304,7 +304,7 @@ class EVService
                     ],
                     [
                         'label' => translate('Sections'),
-                        'icon' => 'heroicon-o-collection',
+                        'icon' => 'heroicon-o-rectangle-stack',
                         'route' => route('sections.index'),
                         'route_name' => 'sections.index',
 
@@ -353,7 +353,7 @@ class EVService
                     ],
                     [
                         'label' => translate('License management'),
-                        'icon' => 'heroicon-o-database',
+                        'icon' => 'heroicon-o-circle-stack',
                         'route' => route('crm.licenses'),
                         'route_name' => 'crm.licenses',
                         'is_active' => areActiveRoutes(['crm.licenses']),
@@ -406,7 +406,7 @@ class EVService
                     ],
                     [
                         'label' => translate('My Subscriptions'),
-                        'icon' => 'heroicon-o-refresh',
+                        'icon' => 'heroicon-o-arrow-path',
                         'route' => route('my.plans.management'),
                         'route_name' => 'my.plans.management',
                         'is_active' => areActiveRoutes(['my.plans.management']),
@@ -485,7 +485,7 @@ class EVService
                     ],
                     [
                         'label' => translate('Shop settings'),
-                        'icon' => 'heroicon-o-office-building',
+                        'icon' => 'heroicon-o-building-office',
                         'route' => route('settings.shop_settings'),
                         'route_name' => 'settings.shop_settings',
                         'is_active' => areActiveRoutes(['settings.shop_settings']),
@@ -512,7 +512,7 @@ class EVService
                             ],
                             [
                                 'label' => translate('Notifications'),
-                                'icon' => 'heroicon-o-view-list',
+                                'icon' => 'heroicon-o-list-bullet',
                                 'route' => route('settings.app.group', AppSettingsGroupEnum::notifications()->value),
                                 'route_name' => 'settings.app.group',
                                 'is_active' => areActiveRoutes(['settings.app.group']),
@@ -574,7 +574,7 @@ class EVService
 
                     // [
                     //     'label' => translate('Company settings'),
-                    //     'icon' => 'heroicon-o-office-building',
+                    //     'icon' => 'heroicon-o-building-office',
                     //     'route' => route('attributes'),
                     //     'is_active' => areActiveRoutes(['attributes']),
                     //     'user_types' => ['admin','seller'],
@@ -620,7 +620,7 @@ class EVService
                 'items' => [
                     [
                         'label' => translate('Log out'),
-                        'icon' => 'heroicon-o-logout',
+                        'icon' => 'heroicon-o-arrow-right-on-rectangle',
                         'route' => route('user.logout'),
                         'is_active' => false,
                         'user_types' => User::$user_types,

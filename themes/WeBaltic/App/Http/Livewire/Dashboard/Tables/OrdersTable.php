@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard\Tables;
-
+namespace WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusEnum;
@@ -57,7 +56,6 @@ class OrdersTable extends DataTableComponent
 
     public function mount($for = 'me', $user = null, $status = null)
     {
-        dd("Overided");
         $this->for = $for;
         $this->status = $status;
         $this->user = $user;
@@ -118,7 +116,7 @@ class OrdersTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('Order', 'id')
+            Column::make('1111', 'id')
                 ->sortable()
                 ->excludeFromSelectable()
                 ->addClass('hidden md:table-cell'),

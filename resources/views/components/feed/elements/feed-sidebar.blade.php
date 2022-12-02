@@ -59,7 +59,7 @@
             aria-current="page">
             <!-- Heroicon name: outline/home -->
 
-            @svg('heroicon-o-annotation', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+            @svg('heroicon-o-chat-bubble-bottom-center-text', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
 
 
 
@@ -162,7 +162,7 @@
         <a href="{{ route('blog.posts.index') }}"
             class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
             <!-- Heroicon name: outline/user-group -->
-            @svg('heroicon-o-document-add', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+            @svg('heroicon-o-document-plus', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
 
             <span class="truncate"> {{ translate('Articles') }} </span>
         </a>
@@ -186,7 +186,7 @@
         <a href="{{ route('products.index') }}"
             class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
             <!-- Heroicon name: outline/user-group -->
-            @svg('heroicon-o-photograph', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+            @svg('heroicon-o-photo', ['class' => 'text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
 
             <span class="truncate"> {{ translate('Products') }} </span>
         </a>

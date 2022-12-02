@@ -158,7 +158,7 @@
                     <!-- If there's still time left before 'end_date', subscription payment is 'paid' and status is 'active_until_end', you can revive subscription cuz it's not fully canceled in Stripe (cancel_at_period_end is just set to true)  -->
                     <li>
                         <div wire:click="revivePlan({{ $row->id }})" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t cursor-pointer">
-                            @svg('heroicon-o-refresh', ['class' => 'text-info w-[18px] h-[18px]'])
+                            @svg('heroicon-o-arrow-path', ['class' => 'text-info w-[18px] h-[18px]'])
                             <span class="ml-2">{{ translate('Revive plan') }}</span>
                         </div>
                     </li>

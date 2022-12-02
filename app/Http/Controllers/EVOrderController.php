@@ -117,9 +117,6 @@ class EVOrderController extends Controller
 
         session()->flash('message', translate('Order status updated'));
 
-
-
-
         return redirect()->back();
     }
 }

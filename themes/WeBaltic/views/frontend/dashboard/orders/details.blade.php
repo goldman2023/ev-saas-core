@@ -8,25 +8,90 @@
 @endpush
 
 @section('panel_content')
+
 <x-dashboard.section-headers.section-header title="{{ translate('Order') }}:
                             #{{ $order->id }}" text="">
     <x-slot name="content">
-        {{-- <a href="{{ route('orders.index') }}" class="btn-warning">
-            @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
-            <span>{{ translate('All orders') }}</span>
-        </a> --}}
+        <div class="items-center flex content-center align-center">
+            {{-- <a href="{{ route('orders.index') }}" class="btn-warning">
+                @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
+                <span>{{ translate('All orders') }}</span>
+            </a> --}}
+            {{-- Actions --}}
+            <div class="px-4 py-2 h-full space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0 mb-4">
+                <div class="flex items-center">
+                    @php
+                    $last_invoice = $order->invoices->first(); // it's already sorted by created_at DESC
+                    @endphp
 
-        <a href="{{ route('order.change-status', $order->id) }}" class="btn-primary ml-3">
+                    @if($last_invoice)
+                    @if($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
+                    <span class="badge-success !py-1 !px-3 mr-3">
+                        {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
+                    </span>
+                    @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
+                    <span class="badge-warning  !py-1 !px-3 mr-3">
+                        {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
+                    </span>
+                    @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
+                    <span class="badge-danger  !py-1 !px-3 mr-3">
+                        {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
+                    </span>
+                    @endif
+                    @endif
 
-            <span>
-                {{ translate('Next status') }}
-            </span>
+                    {{-- Shipping status (only for Standard Products) --}}
+                    @if($order_items->filter(fn($item) => ($item->subject?->isProduct() ?? false) &&
+                    ($item->subject?->isShippable() ?? false))->count() > 0)
+                    @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
+                    <span class="badge-success !py-1 !px-3 mr-2">
+                        {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                    </span>
+                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
+                    <span class="badge-warning !py-1 !px-3 mr-2">
+                        {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                    </span>
+                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
+                    <span class="badge-danger !py-1 !px-3 mr-2">
+                        {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
+                    </span>
+                    @endif
 
-            @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 mr-2'])
+                    {{-- Tracking number (only for Standard Products) --}}
+                    @if(empty($order->tracking_number))
+                    <span class="badge-danger !py-1 !px-3 mr-2">
+                        {{ translate('Tracking number not added') }}
+                    </span>
+                    @endif
+                    @endif
+                </div>
 
-        </a>
+                <div class="flex items-center relative" x-data="{ isOpen: false }" x-cloak>
+                    <a class="flex items-center text-gray-900 mr-3" href="javascript:;"
+                        onclick="window.print(); return false;">
+                        @svg('heroicon-o-printer', ['class' => 'w-[18px] h-[18px] mr-2'])
+                        {{ translate('Print order') }}
+                    </a>
+
+
+                </div>
+            </div>
+            <a href="{{ route('order.change-status', $order->id) }}" class="btn-primary !px-10 text-center !py-3 ml-3">
+
+                <span>
+                    {{ translate('Next status') }}
+                </span>
+
+                @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 ml-3'])
+
+            </a>
+        </div>
+
     </x-slot>
 </x-dashboard.section-headers.section-header>
+<div class="-mt-6 mb-6">
+    {{ Breadcrumbs::render('dashboard.orders', $order) }}
+</div>
 
 <x-dashboard.orders.order-steps :order="$order"></x-dashboard.orders.order-steps>
 <div class="grid sm:grid-cols-12 gap-9">
@@ -42,18 +107,7 @@
                 </x-dashboard.orders.order-details-card>
             </div>
         </div>
-        <div class="card mb-9">
-            <div class="w-full pb-4 mb-4 border-b ">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status') }}</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                    {{ translate('Here you can see the current status of the order') }}
-                </p>
-            </div>
 
-
-            <x-dashboard.orders.order-timeline :order="$order">
-            </x-dashboard.orders.order-timeline>
-        </div>
 
         <div class="we-qr-code card mb-3">
             <div class="w-full pb-4 mb-4 border-b ">
@@ -81,21 +135,37 @@
                         {{ \App\Enums\OrderTypeEnum::labels()[$order->type] ?? '' }}
                     </span> --}}
 
-                    <p class="text-sm text-gray-600">
-                    <div>
-                        {{ translate('Order placed on:') }} <br>
-                        <time datetime="2021-03-22" class="font-semibold text-gray-900">
-                            {{ $order->created_at->format('M d, Y H:i') }}
+                    <div class="flex flex-col">
+                        <span>{{ translate('Order placed on:') }}</span>
+                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="font-semibold text-gray-900">
+                            {{ $order->created_at->format('M d, Y - H:i') }}
                         </time>
                     </div>
-                    {{-- TODO: Create order delivery deadline mechanics --}}
-                    <div>
-                        {{ translate('Order delivery deadline:') }} <br>
-                        <time class="font-semibold text-gray-900">
-                            {{ $order->created_at->format('M d, Y H:i') }}
+
+                    <div class="flex flex-col">
+                        <span>{{ translate('Order delivery deadline:') }}</span>
+
+                        @php
+                            $wef_id = 'wef-order-'.$order->id.'-order_delivery_deadline';
+                        @endphp
+                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="flex items-center font-semibold text-red-600"
+                            id="{{ $wef_id }}"
+                            @click="$dispatch('display-wef-editor-modal', {
+                                'target': '{{ $wef_id }}',
+                                'subject_id': {{ $order->id }},
+                                'subject_type': '{{ base64_encode($order::class) }}',
+                                'wef_key': 'order_delivery_deadline',
+                                'wef_label': '{{ translate('Order delivery deadline') }}',
+                                'data_type': 'date',
+                                'form_type': 'date',
+                                'custom_properties': {'range': false, 'with_time': false},
+                            })" >
+                            {{ $order->getWEF('order_delivery_deadline', false, 'date') }}
+                            @svg('heroicon-s-pencil-square', ['class' => 'ml-2 h-5 w-5 cursor-pointer'])
                         </time>
                     </div>
-                    <div>
+
+                    {{-- <div>
                         <div class="atcb" style="display:none;">
                             {
                             "name":"{{ translate('Order') }} {{ $order->id }}",
@@ -112,13 +182,12 @@
                             "Microsoft365",
                             ],
                             "timeZone":"{{ date_default_timezone_get() }}",
-                            {{-- "timeZoneOffset":"{{ date('P') }}", --}}
+                            "timeZoneOffset":"{{ date('P') }}",
                             "trigger":"click",
                             "iCalFileName":"Order-{{ $order->id }}"
                             }
                         </div>
-                    </div>
-                    </p>
+                    </div> --}}
 
                     <div class="hidden">
                         {{-- TODO: Make invoice generation posible --}}
@@ -176,10 +245,10 @@
                     </ul>
                 </div>
                 <div id="myTabContent">
-                    <div class="card mb-3">
-                        <x-dashboard.orders.order-documents-list :order="$order"></x-dashboard.orders.order-documents-list>
-
-                    </div>
+                    {{-- <div class="card mb-3">
+                        <x-dashboard.orders.order-documents-list :order="$order">
+                        </x-dashboard.orders.order-documents-list>
+                    </div> --}}
 
                     <div class="rounded-lg dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="mb-6">
@@ -196,15 +265,17 @@
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel"
                         aria-labelledby="dashboard-tab">
 
-                        <div class="card mb-6">
-                            <div
-                                class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
-                                <h4 class="text-18 text-gray-900 font-semibold">
-                                    {{ translate('Order Documents') }}</h4>
+                        <div class="card mb-6 !pb-6">
+                            <div class="border-b border-gray-200 bg-white pb-3 mb-4">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">{{ translate('Order documents')
+                                    }}</h3>
+                                <p class="mt-1 text-sm text-gray-500">{{ translate('Here you can find all uploaded
+                                    documents related to the current order') }}</p>
                             </div>
+
                             <livewire:dashboard.forms.file-manager.file-manager :subject="$order" field="documents"
                                 :file-type="\App\Enums\FileTypesEnum::image()->value" :multiple="true"
-                                add-new-item-label="{{ translate('Add new document') }}" />
+                                add-new-item-label="{{ translate('Add new document') }}" wrapper-class="!max-w-full" />
                         </div>
 
 
@@ -222,13 +293,31 @@
 
                     </div>
 
-                    <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="settings" role="tabpanel"
+                    <div class="hidden dark:bg-gray-800" id="settings" role="tabpanel"
                         aria-labelledby="settings-tab">
-                        @livewire('dashboard.elements.activity-log',
-                        [
-                        'subject' => $order,
-                        'title' => translate('Order Activity')
-                        ])
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="card mb-9">
+                                <div class="w-full pb-4 mb-4 border-b ">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Order status')
+                                        }}</h3>
+                                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                        {{ translate('Here you can see the current status of the order') }}
+                                    </p>
+                                </div>
+
+
+                                <x-dashboard.orders.order-timeline :order="$order">
+                                </x-dashboard.orders.order-timeline>
+                            </div>
+
+                            @livewire('dashboard.elements.activity-log',
+                            [
+                            'subject' => $order,
+                            'title' => translate('Order Activity')
+                            ])
+                        </div>
+
 
                     </div>
                     <div class="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="contacts" role="tabpanel"
@@ -256,29 +345,46 @@
                             </li>
                             <li class="flex items-center space-x-3 py-4">
                                 <div class="flex-shrink-0">
-                                    <img class="h-8 w-8 rounded-full"
-                                        src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                        alt="">
+
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <p class="text-sm font-medium text-gray-900">
-                                        <a href="#">{{ translate('Generuoti važtaraštį') }}</a>
+                                        <a href="#">{{ translate('Pridėti į važtaraštį') }}</a>
                                     </p>
                                     <p class="text-sm text-gray-500">
-                                        <a href="#">{{ translate('Pending information') }}</a>
+                                        <a href="#">{{ translate('Pending') }}</a>
                                     </p>
                                 </div>
+
                                 <div class="flex-shrink-0">
                                     <button type="button"
                                         class="inline-flex items-center rounded-full bg-rose-50 px-3 py-0.5 text-sm font-medium text-rose-700 hover:bg-rose-100">
-                                        <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400"
-                                            x-description="Heroicon name: mini/plus" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                            <path
-                                                d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z">
-                                            </path>
-                                        </svg>
-                                        <span>{{ translate('Generate') }}</span>
+
+                                        @svg('heroicon-o-plus', ['class' => '-ml-1 mr-0.5 h-5 w-5 text-rose-400'])
+                                        <span>{{ translate('Add to list') }}</span>
+                                    </button>
+                                </div>
+                            </li>
+
+                            <li class="flex items-center space-x-3 py-4">
+                                <div class="flex-shrink-0">
+
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-medium text-gray-900">
+                                        <a href="#">{{ translate('Pridėti į spausdinimo eilę') }}</a>
+                                    </p>
+                                    <p class="text-sm text-gray-500">
+                                        <a href="#">{{ translate('Pending') }}</a>
+                                    </p>
+                                </div>
+
+                                <div class="flex-shrink-0">
+                                    <button type="button"
+                                        class="inline-flex items-center rounded-full bg-rose-50 px-3 py-0.5 text-sm font-medium text-rose-700 hover:bg-rose-100">
+
+                                        @svg('heroicon-o-plus', ['class' => '-ml-1 mr-0.5 h-5 w-5 text-rose-400'])
+                                        <span>{{ translate('Add to print list') }}</span>
                                     </button>
                                 </div>
                             </li>
@@ -286,89 +392,8 @@
                     </div>
                 </div>
 
-                {{-- Actions --}}
-                <div class="px-4 py-2 space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0 mb-4">
-                    <div class="flex items-center">
-                        @php
-                        $last_invoice = $order->invoices->first(); // it's already sorted by created_at DESC
-                        @endphp
 
-                        @if($last_invoice)
-                        @if($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
-                        <span class="badge-success !py-1 !px-3 mr-3">
-                            {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
-                        </span>
-                        @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
-                        <span class="badge-warning  !py-1 !px-3 mr-3">
-                            {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
-                        </span>
-                        @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
-                        <span class="badge-danger  !py-1 !px-3 mr-3">
-                            {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
-                        </span>
-                        @endif
-                        @endif
-
-                        {{-- Shipping status (only for Standard Products) --}}
-                        @if($order_items->filter(fn($item) => ($item->subject?->isProduct() ?? false) &&
-                        ($item->subject?->isShippable() ?? false))->count() > 0)
-                        @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
-                        <span class="badge-success !py-1 !px-3 mr-2">
-                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                        </span>
-                        @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
-                        <span class="badge-warning !py-1 !px-3 mr-2">
-                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                        </span>
-                        @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
-                        <span class="badge-danger !py-1 !px-3 mr-2">
-                            {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                        </span>
-                        @endif
-
-                        {{-- Tracking number (only for Standard Products) --}}
-                        @if(empty($order->tracking_number))
-                        <span class="badge-danger !py-1 !px-3 mr-2">
-                            {{ translate('Tracking number not added') }}
-                        </span>
-                        @endif
-                        @endif
-                    </div>
-
-                    <div class="flex items-center relative" x-data="{ isOpen: false }" x-cloak>
-                        {{-- <a class="flex items-center text-gray-900 mr-3" href="javascript:;"
-                            onclick="window.print(); return false;">
-                            @svg('heroicon-o-printer', ['class' => 'w-[18px] h-[18px] mr-2'])
-                            {{ translate('Print order') }}
-                        </a> --}}
-
-                        {{-- <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false"
-                            class="flex items-center">
-                            @svg('heroicon-o-chevron-down', ['class' => 'ml-2 w-[18px] h-[18px]'])
-                        </button>
-                        <ul x-show="isOpen" @click.outside="isOpen = false"
-                            class="absolute bg-white z-10 list-none p-0 border rounded top-[30px] right-0 shadow min-w-[150px]">
-                            <li>
-                                <a href="#" target="_blank"
-                                    class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
-                                    @svg('heroicon-o-trash', ['class' => 'w-[18px] h-[18px]'])
-                                    <span class="ml-2">{{ translate('Cacnel order') }}</span>
-                                </a>
-                            </li>
-                        </ul> --}}
-                    </div>
-                </div>
             </div>
-        </div>
-
-
-        <div class="card mb-3 mt-3">
-
-            <livewire:dashboard.forms.file-manager.file-manager :subject="$order" field="documents"
-                :file-type="\App\Enums\FileTypesEnum::image()->value" :multiple="true"
-                add-new-item-label="{{ translate('Add new document') }}" />
-            {{-- <x-dashboard.general.files-manager>
-            </x-dashboard.general.files-manager> --}}
         </div>
 
         <div class="card mb-3">

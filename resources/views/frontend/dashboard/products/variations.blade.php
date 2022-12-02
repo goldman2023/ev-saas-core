@@ -15,7 +15,7 @@
                 </a>
 
                 <a href="{{ route('product.edit.stocks', $product->id) }}" class="btn-standard" >
-                    @svg('heroicon-o-archive', ['class' => 'h-4 h-4'])
+                    @svg('heroicon-o-archive-box', ['class' => 'h-4 h-4'])
                     {{ translate('Stock management') }}
                 </a>
             </x-slot>
@@ -50,7 +50,7 @@
 
         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center"
            href="{{ route('product.edit.stocks', $product->id) }}">
-            @svg('heroicon-o-archive', ['class' => 'square-16 mr-2'])
+            @svg('heroicon-o-archive-box', ['class' => 'square-16 mr-2'])
             {{ translate('Stock Management') }}
         </a>
     </div>

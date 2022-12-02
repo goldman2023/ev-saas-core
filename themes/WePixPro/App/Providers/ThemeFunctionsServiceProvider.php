@@ -3,12 +3,13 @@
 namespace WeThemes\WePixPro\App\Providers;
 
 // Because this file service provider is loaded after tenant is initated and has no namespace, it cannot use Aliases from `app.php`, like: use Log or use File; Instead full namespaces must be used!
+
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
-use Livewire;
-use TenantSettings;
-use Log;
+use Livewire\Livewire;
+use App\Http\Services\TenantSettings;
+use Illuminate\Support\Facades\Log;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
@@ -57,7 +58,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
     protected function registerLivewireComponents()
     {
-        Livewire::component('forms.generate-license-form', \WeThemes\WePixPro\App\Http\Livewire\Forms\GenerateLicenseForm::class);
+        Livewire::component('dashboard.forms.generate-license-form', \WeThemes\WePixPro\App\Http\Livewire\Dashboard\Forms\GenerateLicenseForm::class);
+        Livewire::component('dashboard.tables.licenses-table', \WeThemes\WePixPro\App\Http\Livewire\Dashboard\Tables\LicensesTable::class);
     }
 
     /**
@@ -90,24 +92,24 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 1);
 
             // Add Columns to Licenses table (livewire)
-            add_filter('dashboard.table.licenses.columns', function ($columns) {
-                $data = array_merge($columns, [
-                    \Rappasoft\LaravelLivewireTables\Views\Column::make('Image Limit', 'license_image_limit')
-                        ->excludeFromSelectable(),
-                    \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
-                        ->excludeFromSelectable(),
+            // add_filter('dashboard.table.licenses.columns', function ($columns) {
+            //     $data = array_merge($columns, [
+            //         \Rappasoft\LaravelLivewireTables\Views\Column::make('Image Limit', 'license_image_limit')
+            //             ->excludeFromSelectable(),
+            //         \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
+            //             ->excludeFromSelectable(),
 
-                ]);
+            //     ]);
 
-                if(auth()->user()->isAdmin()) {
-                    $data = array_merge($data, [
-                        \Rappasoft\LaravelLivewireTables\Views\Column::make('Type', 'license_subscription_type')
-                        ->excludeFromSelectable(),
-                    ]);
-                }
+            //     if(auth()->user()->isAdmin()) {
+            //         $data = array_merge($data, [
+            //             \Rappasoft\LaravelLivewireTables\Views\Column::make('Type', 'license_subscription_type')
+            //             ->excludeFromSelectable(),
+            //         ]);
+            //     }
 
-                return $data;
-            }, 10, 1);
+            //     return $data;
+            // }, 10, 1);
 
             // Download License Response
             add_filter('license.download', function ($license) {

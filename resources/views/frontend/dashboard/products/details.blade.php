@@ -207,7 +207,7 @@
                                 @if($product->type === \App\Enums\ProductTypeEnum::course()->value)
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.course', $product->id) }}">
-                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Course Details') }}
                                 </a>
                                 @endif
@@ -215,7 +215,7 @@
                                 @if($product->type === \App\Enums\ProductTypeEnum::course()->value)
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.course', $product->id) }}">
-                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Course Material') }}
                                 </a>
                                 @endif
@@ -225,17 +225,15 @@
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit', $product->id) }}">
-                                    {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;',
+                                    {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height: 16px;',
                                     'class' => 'ml-2'])
                                 </a>
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.stocks', $product->id) }}">
-                                    @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Stock Management') }}
                                 </a>
-
-
 
 
                                 @if($product->useVariations())
@@ -250,7 +248,7 @@
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.activity', $product->id) }}">
-                                    {{ translate('Activity') }} @svg('heroicon-o-pencil-alt', ['style' => 'height:
+                                    {{ translate('Activity') }} @svg('heroicon-o-pencil-square', ['style' => 'height:
                                     16px;', 'class' => 'ml-2'])
                                 </a>
 
@@ -372,7 +370,7 @@
                                                     href="{{ $product->getStripeCheckoutPermalink(qty: 1, preview: true) }}"
                                                     class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     {{ translate('Peview checkout') }}
-                                                    @svg('heroicon-s-mail', ['class' => 'w-6 h-6 ml-2'])
+                                                    @svg('heroicon-o-envelope', ['class' => 'w-6 h-6 ml-2'])
                                                 </a>
 
                                                 <a target="_blank"

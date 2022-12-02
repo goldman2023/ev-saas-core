@@ -93,6 +93,6 @@
 
 @push('modal')
 <x-system.form-modal id="pix-pro-generate-license" title="Online License Activation" class="!max-w-3xl">
-    <livewire:forms.generate-license-form />
+    <livewire:dashboard.forms.generate-license-form />
 </x-system.form-modal>
 @endpush

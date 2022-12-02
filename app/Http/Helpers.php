@@ -246,6 +246,7 @@ if (!function_exists('toJSONMedia')) {
                 'id' => $upload?->id ?? '',
                 'file_name' => $upload?->file_name ?? '',
                 'extension' => $upload?->extension ?? '',
+                'file_size' => $upload?->file_size ?? 0,
                 'type' => $upload?->type ?? null,
                 'file_original_name' => $upload?->file_original_name ?? '',
                 'order' => $upload?->pivot?->order ?? 0,
@@ -255,6 +256,7 @@ if (!function_exists('toJSONMedia')) {
                 'id' => $upload['id'] ?? '',
                 'file_name' => $upload['file_name'] ?? '',
                 'extension' => $upload['extension'] ?? '',
+                'file_size' => $upload?->file_size ?? 0,
                 'type' => $upload['type'] ?? null,
                 'file_original_name' => $upload['file_original_name'] ?? '',
                 'order' => $upload['order'] ?? 0,
@@ -265,6 +267,7 @@ if (!function_exists('toJSONMedia')) {
             'id' => null,
             'file_name' => '',
             'extension' => '',
+            'file_size' => 0,
             'type' => null,
             'file_original_name' => '',
             'order' => 0,
@@ -279,24 +282,48 @@ if (!function_exists('toJSONMedia')) {
  * @param string $url
  * @param int $code http code for the redirect (should be 302 or 301)
  */
-function redirect_now($url, $code = 302)
-{
-    try {
-        \App::abort($code, '', ['Location' => $url]);
-    } catch (\Exception $exception) {
-        // the blade compiler catches exceptions and rethrows them
-        // as ErrorExceptions :(
-        //
-        // also the __toString() magic method cannot throw exceptions
-        // in that case also we need to manually call the exception
-        // handler
-        $previousErrorHandler = set_exception_handler(function () {});
-        restore_error_handler();
-        call_user_func($previousErrorHandler, $exception);
-        die;
+if (!function_exists('redirect_now')) {
+    function redirect_now($url, $code = 302)
+    {
+        try {
+            \App::abort($code, '', ['Location' => $url]);
+        } catch (\Exception $exception) {
+            // the blade compiler catches exceptions and rethrows them
+            // as ErrorExceptions :(
+            //
+            // also the __toString() magic method cannot throw exceptions
+            // in that case also we need to manually call the exception
+            // handler
+            $previousErrorHandler = set_exception_handler(function () {});
+            restore_error_handler();
+            call_user_func($previousErrorHandler, $exception);
+            die;
+        }
     }
 }
 
+if (!function_exists('formatSizeUnits')) {
+    function formatSizeUnits($bytes) {
+        if ($bytes >= 1073741824) {
+            $bytes = number_format((float) $bytes / 1073741824, 2, '.', '') . ' GB';
+        } else if ($bytes >= 1048576) {
+            $bytes = number_format((float) $bytes / 1048576, 2, '.', '') . ' MB';
+        } else if ($bytes >= 1024) {
+            $bytes = number_format((float) $bytes / 1024, 2, '.', '') . ' KB';
+        } else if ($bytes > 1) {
+            $bytes = $bytes + ' bytes';
+        } else if ($bytes == 1) {
+            $bytes = $bytes + ' byte';
+        } else {
+            $bytes = '0 bytes';
+        }
+    
+        return $bytes;
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////
 
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {

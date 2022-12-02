@@ -31,7 +31,7 @@
                     <img class="w-full h-[160px] rounded-t-lg object-cover" x-bind:src="window.WE.IMG.url({{ $field }}.file_name)" />
                 </div>
             </template>
-    
+
             <template x-if="!({{ $field }}.id !== undefined && {{ $field }}.id !== null && {{ $field }}.id > 0)">
                 <div class="h-[160px] w-full rounded cursor-pointer">
                     <img class="w-full h-[160px] rounded-t-lg object-cover" src="https://fakeimg.pl/1200x400/?text=Cover%20Photo" />
@@ -39,11 +39,11 @@
             </template>
 
             <div class="absolute right-[16px] bottom-[16px] btn-primary">
-                @svg('heroicon-s-upload', ['class' => 'w-4 h-4 mr-2'])
+                @svg('heroicon-s-arrow-up-tray', ['class' => 'w-4 h-4 mr-2'])
                 <span>{{ translate('Update cover') }}</span>
             </div>
         </div>
-        
+
 
         {{-- <x-system.invalid-msg field="{{  }}"></x-system.invalid-msg> --}}
     </div>

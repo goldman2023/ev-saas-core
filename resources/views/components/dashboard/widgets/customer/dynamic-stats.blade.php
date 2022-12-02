@@ -40,7 +40,7 @@
       <div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden">
         <dt>
           <div class="absolute bg-indigo-500 rounded-md p-3">
-            @svg('heroicon-o-mail-open', ['class' => 'h-6 w-6 text-white'])
+            @svg('heroicon-o-envelope-open', ['class' => 'h-6 w-6 text-white'])
           </div>
           <p class="ml-16 text-sm font-medium text-gray-500 truncate">{{ translate('Billing period') }}</p>
         </dt>

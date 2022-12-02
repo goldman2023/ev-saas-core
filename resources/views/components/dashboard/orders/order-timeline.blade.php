@@ -193,4 +193,15 @@
         </a>
       </li>
     </ol>
+    <div class="w-full mt-6">
+        <a href="{{ route('order.change-status', $order->id) }}" class="btn-primary w-full !px-10 text-center !py-3">
+
+            <span>
+                {{ translate('Next status') }}
+            </span>
+
+            @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 ml-3'])
+
+        </a>
+    </div>
   </nav>

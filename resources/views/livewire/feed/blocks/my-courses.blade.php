@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="flex-shrink-0 self-start flex">
                                     <div class="relative inline-block text-left cursor-pointer">
-                                        @svg('heroicon-s-dots-horizontal', ['class' => 'text-gray-400 w-5 h-5'])
+                                        @svg('heroicon-s-ellipsis-horizontal', ['class' => 'text-gray-400 w-5 h-5'])
                                     </div>
                                 </div>
                             </div>

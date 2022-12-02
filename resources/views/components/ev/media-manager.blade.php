@@ -13,7 +13,7 @@
                     </ul>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    @svg('heroicon-o-x', ['style' => 'width: 24px; height: 24px; position: relative; top: -25px; right: -20px; stroke: var(--dark);'])
+                    @svg('heroicon-o-x-mark', ['style' => 'width: 24px; height: 24px; position: relative; top: -25px; right: -20px; stroke: var(--dark);'])
                 </button>
             </div>
             <div class="modal-body" style="max-height: 80vh;
