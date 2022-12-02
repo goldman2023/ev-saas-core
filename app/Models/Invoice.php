@@ -302,7 +302,7 @@ class Invoice extends WeBaseModel
 
         if($this->user->entity === UserEntityEnum::company()->value) {
             $customer_custom_fields = array_merge([
-                'company' => $this->getData('customer.company_name', ''),
+                'company' => !empty($invoice->billing_company) ? $invoice->billing_company : $this->getData('customer.company_name', ''),
                 'address' => $this->billing_address.', '.$this->billing_zip
             ], $customer_custom_fields);
 
