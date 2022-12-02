@@ -69,7 +69,7 @@
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
                             @click="current = 'addressesSection'">
 
-                            @svg('heroicon-o-location-marker', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                            @svg('heroicon-o-map-pin', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
                             <span class="truncate">{{ translate('Addresses') }}</span>
                         </a>
 

@@ -69,7 +69,7 @@
                                 class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
                                 @click="current = 'languageSection'">
 
-                                @svg('heroicon-o-location-marker', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                                @svg('heroicon-o-map-pin', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
                                 <span class="truncate">{{ translate('Language') }}</span>
                             </a>
                         @endif
@@ -89,7 +89,7 @@
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
                             @click="current = 'addressesSection'">
 
-                            @svg('heroicon-o-location-marker', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                            @svg('heroicon-o-map-pin', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
                             <span class="truncate">{{ translate('Addresses') }}</span>
                         </a>
                         @endif
@@ -289,8 +289,8 @@
 
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
                                         x-data="{}" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif
-                                        @if($key === 'address_state') 
-                                            x-show="{{ json_encode(\Countries::getCountriesWithStates()) }}.includes(meta.address_country)" 
+                                        @if($key === 'address_state')
+                                            x-show="{{ json_encode(\Countries::getCountriesWithStates()) }}.includes(meta.address_country)"
                                         @endif>
 
                                         <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
@@ -329,24 +329,24 @@
                                                             this.message = error.response.message;
                                                         });
                                                     }
-                                                }" 
-                                                    {{-- wire:key="{{ $company_vat_field_key }}" 
+                                                }"
+                                                    {{-- wire:key="{{ $company_vat_field_key }}"
                                                     key="{{ $company_vat_field_key }}"  --}}
                                                     x-init="$watch('meta.address_country', (country) => { if(entity === 'company') checkVATvalidity() })">
 
                                                     <div class="mt-1 flex" :class="{'opacity-50 pointer-events-none': !meta.address_country}">
-                                    
+
                                                         <div class="relative grow">
-                                                            <input type="text" x-model="meta.{{ $key }}" 
+                                                            <input type="text" x-model="meta.{{ $key }}"
                                                             :class="{'is-valid':valid_vat === true, 'is-invalid':valid_vat === false}"
                                                             class="form-standard pr-10" :disabled="meta.address_country ? false : true">
-    
+
                                                             <template x-if="valid_vat === false">
                                                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                                                     @svg('heroicon-s-exclamation-circle', ['class' => 'h-5 w-5 text-red-500'])
                                                                 </div>
                                                             </template>
-    
+
                                                             <template x-if="valid_vat === true">
                                                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                                                     @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-green-500'])
@@ -358,19 +358,19 @@
                                                             <span>{{ translate('Verify') }}</span>
                                                         </button>
                                                     </div>
-                                                    
+
                                                     <template x-if="message && !valid_vat">
                                                         <div class="w-full" >
                                                             <div class="block text-red-600 text-12 mt-2" x-text="message"></div>
                                                         </div>
                                                     </template>
-                                                    
+
                                                     <template x-if="message && valid_vat">
                                                         <div class="w-full" >
                                                             <div class="block text-success text-12 mt-2" x-text="message"></div>
                                                         </div>
                                                     </template>
-                    
+
                                                     @error('meta.company_vat')
                                                         <div class="w-full vat-livewire-error-msg">
                                                             <x-system.invalid-msg field="meta.company_vat"></x-system.invalid-msg>
@@ -379,12 +379,12 @@
                                                     {{-- <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less than 4 characters.</p> --}}
                                                 </div>
                                             @elseif($key === 'address_state')
-                                                <x-dashboard.form.select field="meta.{{ $key }}" 
-                                                    selected="meta.{{ $key }}" 
-                                                    :items="[]" 
-                                                    :search="true" 
+                                                <x-dashboard.form.select field="meta.{{ $key }}"
+                                                    selected="meta.{{ $key }}"
+                                                    :items="[]"
+                                                    :search="true"
                                                     :nullable="false"
-                                                    x-show-if="{{ json_encode(\Countries::getCountriesWithStates()) }}.includes(meta.address_country)" 
+                                                    x-show-if="{{ json_encode(\Countries::getCountriesWithStates()) }}.includes(meta.address_country)"
                                                     x-append-to-init="
                                                         $nextTick(() => {
                                                             let us_states = {{ json_encode(\Countries::getStatesOfUS()) }};
