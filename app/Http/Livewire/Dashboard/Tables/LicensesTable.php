@@ -27,6 +27,7 @@ class LicensesTable extends DataTableComponent
     public int $perPage = 10;
     public array $perPageAccepted = [10, 25];
     public $status = 'active';
+    public $only_expired = false;
 
     public array $filterNames = [
         // 'type' => 'License Type'
@@ -44,10 +45,11 @@ class LicensesTable extends DataTableComponent
     public bool $viewingModal = false;
     public $currentModal;
 
-    public function mount($user = null, $status = 'active' , $for = 'me') {
+    public function mount($user = null, $status = 'active' , $for = 'me', $only_expired = false) {
         $this->user = $user;
         $this->status = $status;
         $this->for = $for;
+        $this->only_expired = $only_expired;
 
         parent::mount();
         if($this->user) {
@@ -78,6 +80,8 @@ class LicensesTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Offline Services', 'data')
                 ->excludeFromSelectable(),
+            Column::make('Hardware ID', 'had')
+                ->excludeFromSelectable(),
             Column::make('Serial Number', 'serial_number')
                 ->excludeFromSelectable(),
         ]);
@@ -106,12 +110,20 @@ class LicensesTable extends DataTableComponent
             // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
 
         } else {
+
+            if($this->only_expired) {
+
+            }
             $start_date = date('Y-m-d H:i:s');
             $end_date = date("Y-m-d 23:59:59", strtotime('-3 days', strtotime($start_date)));
 
-            $query = License::with('user_subscription')
-            ->whereDate('data->expiration_date', '<', $end_date)
-            ->orderBy('updated_at', 'DESC');
+            $query = License::with('user_subscription');
+
+            if($this->only_expired) {
+                $query = $query->whereDate('data->expiration_date', '<', $end_date)
+                ->orderBy('updated_at', 'DESC');
+            }
+
             // ->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
             // ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search));
             // ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));

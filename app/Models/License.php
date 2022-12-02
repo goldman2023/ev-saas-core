@@ -68,7 +68,7 @@ class License extends WeBaseModel
         }
 
         // Otherwise, if there are keys specified in current theme, return only those keys specified!
-        
+
         // Get only specified keys from current $data and set it inside $editableData (IMPORTANT: dot notaion CAN BE used ;)
         foreach($keys as $key => $options) {
             $value = Arr::get($data, $key, null);
@@ -80,7 +80,7 @@ class License extends WeBaseModel
                     }
                 }
             }
-            
+
             Arr::set($editableData, $key, $value);
         }
 
@@ -100,10 +100,10 @@ class License extends WeBaseModel
         // Otherwise, if there are keys specified in current theme, save only $keys from $new_data to old $data!
         foreach($keys as $key => $options) {
             $value = Arr::get($new_data, $key, null);
-            
+
             Arr::set($data, $key, $value);
         }
-        
+
         $this->data = $data;
     }
 

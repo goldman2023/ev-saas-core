@@ -38,8 +38,14 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle  text-center">
+    {{ ($row->data['hardware_id'])}}
+</x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="align-middle  text-center">
     {{ empty($row?->serial_number ?? null) ? translate('Generating...') : ($row?->serial_number ?? '') }}
 </x-livewire-tables::table.cell>
+
+
 
 @do_action('view.dashboard.row-license.columns', $row)
 
