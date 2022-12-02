@@ -54,7 +54,6 @@ class License extends WeBaseModel
         return $query->where(
             fn ($query) =>  $query->where('serial_number', 'like', '%'.$term.'%')
                 ->orWhere('license_name', 'like', '%'.$term.'%')
-                ->orWhere('data->hardware_id', '=', $term)
         );
     }
 

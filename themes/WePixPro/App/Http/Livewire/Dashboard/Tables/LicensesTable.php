@@ -120,7 +120,9 @@ class LicensesTable extends DataTableComponent
                 $query = $query->whereDate('data->expiration_date', '<', $end_date);
             }
             
-            $query = $query->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))->orderBy('created_at', 'DESC');
+            $query = $query->when($this->getFilter('search'), fn ($query, $search) => $query->where('serial_number', 'like', '%'.$search.'%')
+            ->orWhere('license_name', 'like', '%'.$search.'%')
+            ->orWhere('data->hardware_id', '=', $search))->orderBy('created_at', 'DESC');
         }
 
 
