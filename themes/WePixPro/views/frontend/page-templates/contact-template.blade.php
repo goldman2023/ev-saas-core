@@ -33,7 +33,7 @@
 
                             <dt><span class="sr-only">{{ translate('Email') }}</span></dt>
                             <dd class="flex text-base text-typ-3">
-                                @svg('heroicon-o-mail', ['class' => 'flex-shrink-0 w-6 h-6 text-primary'])
+                                @svg('heroicon-o-envelope', ['class' => 'flex-shrink-0 w-6 h-6 text-primary'])
                                 <span class="ml-3">{{ translate('support@example.com') }}</span>
                             </dd>
                         </dl>
