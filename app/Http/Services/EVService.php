@@ -157,7 +157,7 @@ class EVService
                     ],
                     [
                         'label' => translate('Plans'),
-                        'icon' => 'heroicon-o-table',
+                        'icon' => 'heroicon-o-table-cells',
                         'route' => route('plans.index'),
                         'route_name' => 'plans.index',
                         'is_active' => areActiveRoutes(['plans.index']),
@@ -353,7 +353,7 @@ class EVService
                     ],
                     [
                         'label' => translate('License management'),
-                        'icon' => 'heroicon-o-database',
+                        'icon' => 'heroicon-o-circle-stack',
                         'route' => route('crm.licenses'),
                         'route_name' => 'crm.licenses',
                         'is_active' => areActiveRoutes(['crm.licenses']),
@@ -406,7 +406,7 @@ class EVService
                     ],
                     [
                         'label' => translate('My Subscriptions'),
-                        'icon' => 'heroicon-o-refresh',
+                        'icon' => 'heroicon-o-arrow-path',
                         'route' => route('my.plans.management'),
                         'route_name' => 'my.plans.management',
                         'is_active' => areActiveRoutes(['my.plans.management']),
