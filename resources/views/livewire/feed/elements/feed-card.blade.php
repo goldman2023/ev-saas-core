@@ -75,7 +75,7 @@
             @if(method_exists($item->subject, 'comments'))
                 <div class="inline-flex items-center text-sm cursor-pointer">
                     <button type="button" class="inline-flex items-center" wire:click="toggle_comments()">
-                        @svg('heroicon-s-chat-alt', ['class' => 'w-5 h-5 text-typ-3 mr-2'])
+                        @svg('heroicon-s-chat-bubble-left', ['class' => 'w-5 h-5 text-typ-3 mr-2'])
                         <span class="font-medium text-typ-3 text-14" x-text="comment_count+' {{ 'Comments' }}'"></span>
                     </button>
                 </div>

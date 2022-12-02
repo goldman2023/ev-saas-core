@@ -140,7 +140,7 @@
             <!-- Help Link -->
             <div class="media align-items-center pt-2 border-top">
                 <span class="w-100 max-w-6rem mr-2">
-                    @svg('heroicon-s-chat-alt-2')
+                    @svg('heroicon-s-chat-bubble-left')
                 </span>
                 <div class="media-body text-body small">
                     <span class="font-weight-bold mr-1">{{ translate('Need Help?') }}</span>
