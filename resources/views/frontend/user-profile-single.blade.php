@@ -44,7 +44,7 @@
                             <div class="mt-4 ng-tns-c148-34 ng-star-inserted"> I’m a friendly kitchen assistant who suffers from a severe phobia of buttons. <br><br> Brother of Elijah Jay Watkins, who has phobia of buttons and trust issues. </div><hr class="w-full border-t my-6 ng-tns-c148-34 ng-star-inserted">
                             <div class="flex flex-col ng-tns-c148-34 ng-star-inserted">
                                 <div class="flex items-center">
-                                    @svg('heroicon-o-mail', ['class' => 'w-5 h-5 mr-2'])
+                                    @svg('heroicon-o-envelope', ['class' => 'w-5 h-5 mr-2'])
                                     <span class="leading-none">{{ $user->email }}</span>
                                 </div>
                                 <div class="flex items-center mt-4">

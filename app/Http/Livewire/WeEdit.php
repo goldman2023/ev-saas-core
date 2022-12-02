@@ -33,7 +33,7 @@ class WeEdit extends Component
             [
                 'title' => translate('Menus'),
                 'slug' => 'menus',
-                'icon' => 'heroicon-o-menu',
+                'icon' => 'heroicon-o-bars-3',
                 'template' => 'we-edit.pages.menu',
             ],
             [
