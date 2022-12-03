@@ -133,9 +133,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
         if (function_exists('add_action')) {
             add_action('order.change-status', function($order) {
-                $this->generateOrderDocument($order, 'documents_templates.contract', 'contract', translate('Contract for Order ').$order->id);
-                $this->generateOrderDocument($order, 'documents_templates.proposal', 'proposal', translate('Proposal for Order ').$order->id);
-                $this->generateOrderDocument($order, 'documents_templates.certificate', 'certificate', translate('Certificate for Order ').$order->id);
+                $this->generateOrderDocument($order, 'documents_templates.contract', 'contract', translate('Contract for Order #').$order->id);
+                $this->generateOrderDocument($order, 'documents_templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
+                $this->generateOrderDocument($order, 'documents_templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
             });
 
             // View actions
