@@ -27,9 +27,11 @@
         <div class="mt-16 mx-auto max-w-6xl px-4 sm:mt-24 sm:px-6">
             <div class="text-center">
                 <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-6xl md:text-5xl"><span
-                        class="block">Be a master of your</span><span class="block text-indigo-600">business website</span>
+                        class="block">Be a master of your</span><span class="block text-indigo-600">business
+                        website</span>
                 </h1>
-                <p class="mt-3 font-medium max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+                <p
+                    class="mt-3 font-medium max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
                     Pressent your customers with world class UX.
                     Your Ideas. Our
                     Brain.<br><br>
@@ -44,16 +46,36 @@
                             </svg>
                         </a>
                     </b>
-                <div class="mt-2"> And get latest updates when we launch! </div>
+                    <div class="mt-2"> And get latest updates when we launch! </div>
                 </div>
                 <p></p>
             </div>
+
+            <p class="text-center mt-3 mb-3">
+                <span class="block">
+                - or -
+                </span>
+                <br>
+                <span class="font-bold mt-3 "> Join our Early bird mailing list! And follow our #buildInPublic journey! </span>
+                <br>
+                <span class="text-sm">
+                (1 email a month 📧)
+                </span>
+            </p>
+            <div class="w-full flex justify-center sm:min-w-[400px] !max-w-[100%]">
+                <livewire:forms.newsletter-form />
+            </div>
+
             <p class="text-center max-w-4xl mx-auto mt-8">
                 <span class="text-medium">
                     <i id="ihzzk">
-                        We are still building BusinessPress. Check updates from our team about product development in a feed bellow
-                        </i></span>
+                        We are still building BusinessPress. Check updates from our team about product development in a
+                        feed bellow
+                    </i></span>
+
             </p>
+
+
 
         </div>
     </div>
@@ -65,5 +87,5 @@
         <div class="max-w-3xl mx-auto px-4 sm:px-6 bg-white mb-8">
             <livewire:feed.feed-list :feed-type="$feed_type ?? 'recent'" />
 
-          </div>
-</div>
+        </div>
+    </div>

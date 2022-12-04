@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use EVS;
+use DB;
 use Cache;
 use Session;
 use SplFileInfo;
@@ -243,7 +244,28 @@ class MediaService
 
        return 'uploads/'.tenant('id');
    }
-   
+      
+   /**
+    * generateFilePath
+    *
+    * Generates full Storage $file_path based on provided parameters
+    *
+    * @param  mixed $path
+    * @param  mixed $name
+    * @param  mixed $extension
+    * @param  mixed $with_hash
+    * @return string
+    */
+   public function generateFilePath($path, $name, $extension, $with_hash = true) {
+    $hash  = '';
+
+    if($with_hash) {
+        $hash = '-' . substr(bin2hex(openssl_random_pseudo_bytes(ceil(20 / 2)) ), 0, 20 );
+    }
+
+    return $this->getTenantPath($path). '/' . Str::slug($name, '-') . $hash . '.' . $extension;
+}
+
    /**
     * storeAsUploadFromFile
     *
@@ -275,7 +297,11 @@ class MediaService
         }
 
         // Save Upload to DB
-        $upload = new Upload();
+        try {
+            $upload = Upload::where('file_name', $file_path)->firstOrFail();
+        } catch(\Exception $e) {
+            $upload = new Upload();
+        }
 
         $upload->extension = $extension;
         $upload->file_name = $file_path;
@@ -298,7 +324,7 @@ class MediaService
         }
         
         $upload->save();
-
+        
         // Save Relationship between $model and $upload to DB 
         if(!empty($property_name)) {
 
@@ -310,15 +336,21 @@ class MediaService
                 // Single upload in property
                 $model->{$property_name} = $upload;
             }
-            
+
             $model->syncUploads($property_name);
         }
 
         return $upload;
    }
 
-   public function uploadToStorage($contents, $path, $name, $extension) {
-        $file_path = $this->getTenantPath($path). '/' . Str::slug($name, '-') . '-' . substr(bin2hex(openssl_random_pseudo_bytes(ceil(20 / 2)) ), 0, 20 ) . '.' . $extension;
+   public function uploadToStorage($contents, $path, $name, $extension, $with_hash = true) {
+        $hash  = '';
+
+        if($with_hash) {
+            $hash = '-' . substr(bin2hex(openssl_random_pseudo_bytes(ceil(20 / 2)) ), 0, 20 );
+        }
+
+        $file_path = $this->generateFilePath($path, $name, $extension, $with_hash);
 
         $file = Storage::put($file_path, $contents);
 
@@ -326,5 +358,44 @@ class MediaService
             return false;
         
         return $file_path;
+   }
+
+   public function uploadAndStore(&$model, $contents, $path, $name, $extension, $property_name, $with_hash = true, $file_display_name = '', $upload_tag = null) {
+        DB::beginTransaction();
+
+        try {
+            $file_path = MediaService::uploadToStorage($contents, $path, $name, $extension, $with_hash);
+
+            if (!$file_path) {
+                // The file could not be written to disk...
+                throw new Exception('File could not be written to Storage.');
+            }
+
+            // Create Upload record based on file_path in Storage and sync $order->documentsproperty (aka create UploadRelationship)
+            $upload = MediaService::storeAsUploadFromFile($model, $file_path, $property_name, file_display_name: $file_display_name);
+
+            if($upload_tag) {
+                $upload->setWEF('upload_tag', $upload_tag);
+            }
+
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollback();
+
+            if(isset($file_path) && !empty($file_path)) {
+                // If uploading file to storage was successful, $file_path is set and not empty, hence why we need to delete the file from the Storage
+                Storage::delete($file_path);
+            }
+
+            dd($e);
+            return false;
+        }
+   }
+
+   public function deleteFileFromStorage($file_path) {
+        // File path can be either string or Upload!
+        $file_path = $this->getTenantPath($path);
+
+
    }
 }

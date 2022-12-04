@@ -244,12 +244,21 @@ trait UploadTrait
                         foreach ($this->{$property['property_name']} as $file) {
             
                             if($file instanceof Upload) {
+                                // File is Upload -> just push into array and continue;
                                 $file_uploads->push($file);
                                 continue;
                             }
                             
-                            if(is_array($file) && isset($file['id']) && !empty($file['id'])) {
+                            if((is_array($file) && isset($file['id']) && !empty($file['id']))) {
+                                // File is array which contains `id` property -> get the Upload by id and push it
                                 $file = Upload::find($file['id'] ?? null);
+                            } else if(is_int($file) || ctype_digit($file)) {
+                                // File is just an integer or integer as string -> get the Upload by id, check if File is Upload and ush to array. Otherwise just skip it cuz it's not found among Uploads!
+                                $file = Upload::find($file);
+
+                                if(!($file instanceof Upload)) {
+                                    continue;
+                                }
                             }
             
                             $file_uploads->push($file);

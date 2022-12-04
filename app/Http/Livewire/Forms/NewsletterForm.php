@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
 use MailerService;
 use App\Enums\WeMailingListsEnum;
+use App\Models\Lead;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use Illuminate\Support\Facades\Notification;
@@ -56,6 +57,14 @@ class NewsletterForm extends Component
     public function subscribe()
     {
         $this->validate();
+        if(Lead::where('email', $this->email)->count() == 0) {
+            $lead = new Lead();
+            $lead->email = $this->email;
+            $lead->save();
+        } else {
+            // TODO: Add re-subscribed lead update.
+        }
+
 
         try {
             // Check if user with provided email exists already

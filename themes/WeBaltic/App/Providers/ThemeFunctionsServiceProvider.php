@@ -70,8 +70,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         ];
     }
 
-    protected function registerLivewireComponents()
-    {
+    protected function registerLivewireComponents() {
+        
     }
 
     /**
@@ -133,23 +133,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
         if (function_exists('add_action')) {
             add_action('order.change-status', function($order) {
-
-
-                $this->generate_contract($order);
-                $this->generate_proposal($order);
-                $this->generate_certificate($order);
-
-                // if($order->status == 1) {
-                //     $this->generate_contract($order);
-                // } else if($order->status == 2) {
-
-                // }
-                // /* Generate those always
-                // TODO: Make conditional logic based on status change
-                // */
-                // $this->generate_contract($order);
-                //
-                // $this->generate_transportation_card($order);
+                $this->generateOrderDocument($order, 'documents_templates.contract', 'contract', translate('Contract for Order #').$order->id);
+                $this->generateOrderDocument($order, 'documents_templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
+                $this->generateOrderDocument($order, 'documents_templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
             });
 
             // View actions
@@ -172,68 +158,27 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         parent::register();
     }
 
-
-    public function generate_proposal($order) {
-        // Get order attributes and generate the document
+    public function generateOrderDocument(&$order, $template, $upload_tag, $display_name = '') {
+        // Get order and generate the document
         $data = ['order' => $order];
-        $pdf = Pdf::loadView('documents_templates.proposal', $data );
+        $pdf = Pdf::loadView($template, $data);
 
-        $upload_tag = 'proposal';
-
-        $file_path = MediaService::uploadToStorage($pdf->output(), 'orders/'.$order->id, $upload_tag.'-'.$order->id, 'pdf');
-
-        if (!$file_path) {
-            // The file could not be written to disk...
-            return;
-        }
-
-        $upload = MediaService::storeAsUploadFromFile($order, $file_path, 'documents', file_display_name: translate('Proposal for Order ').$order->id);
-        $upload->setWEF('upload_tag', $upload_tag);
+        // upload generated pdf as file in storage and create Upload and Relationship to $order
+        MediaService::uploadAndStore(
+            model: $order,
+            contents: $pdf->output(),
+            path: 'orders/'.$order->id,
+            name: $upload_tag.'-'.$order->id,
+            extension: 'pdf',
+            property_name: 'documents',
+            with_hash: false,
+            file_display_name: $display_name,
+            upload_tag: $upload_tag,
+        );
 
         return true;
     }
-
-
-    public function generate_contract($order) {
-        // Get order attributes and generate the document
-        $data = ['order' => $order];
-        $pdf = Pdf::loadView('documents_templates.contract', $data );
-
-        $upload_tag = 'contract';
-
-        $file_path = MediaService::uploadToStorage($pdf->output(), 'orders/'.$order->id, $upload_tag.'-'.$order->id, 'pdf');
-
-        if (!$file_path) {
-            // The file could not be written to disk...
-            return;
-        }
-
-        $upload = MediaService::storeAsUploadFromFile($order, $file_path, 'documents', file_display_name: translate('Contract for Order ').$order->id);
-        $upload->setWEF('upload_tag', $upload_tag);
-
-        return true;
-    }
-
-    public function generate_certificate($order) {
-        // Get order attributes and generate the document
-        $data = ['order' => $order];
-        $pdf = Pdf::loadView('documents_templates.certificate', $data );
-
-        $upload_tag = 'certificate';
-
-        $file_path = MediaService::uploadToStorage($pdf->output(), 'orders/'.$order->id, $upload_tag.'-'.$order->id, 'pdf');
-
-        if (!$file_path) {
-            // The file could not be written to disk...
-            return;
-        }
-
-        $upload = MediaService::storeAsUploadFromFile($order, $file_path, 'documents', file_display_name: translate('Certificate for Order ').$order->id);
-        $upload->setWEF('upload_tag', $upload_tag);
-
-        return true;
-    }
-
+    
     public function generate_vin_code($order) {
 
     }

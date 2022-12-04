@@ -1,4 +1,4 @@
-<form class="mt-4 sm:flex sm:flex-col " wire:submit.prevent="subscribe()" wire:loading.class="opacity-30 pointer-events-none" x-data="{
+<form class="mt-4 sm:flex sm:flex-col sm:max-w-md" wire:submit.prevent="subscribe()" wire:loading.class="opacity-30 pointer-events-none" x-data="{
     consent: @js($consent ?? 'false')
 }">
 
@@ -10,7 +10,7 @@
               <input id="newsletter-form-consent-mobile" x-model="consent" type="checkbox" class="focus:ring-primary h-4 w-4 text-primary border-gray-300 rounded">
             </div>
             <div class="ml-3 text-sm">
-              <label for="newsletter-form-consent-mobile" wire:model:defer="consent" class="font-medium text-gray-900 select-none @error('consent') text-danger @enderror">
+              <label for="newsletter-form-consent-mobile" wire:model:defer="consent" class="font-medium text-gray-300 select-none @error('consent') text-danger @enderror">
                 {{ translate('I agree to receiving newsletter') }}
               </label>
             </div>
@@ -28,7 +28,7 @@
           <input id="newsletter-form-consent" x-model="consent" type="checkbox" class="focus:ring-primary h-4 w-4 text-primary border-gray-300 rounded">
         </div>
         <div class="ml-3 text-sm">
-          <label for="newsletter-form-consent" wire:model:defer="consent" class="font-medium text-gray-900 select-none @error('consent') text-danger @enderror">
+          <label for="newsletter-form-consent" wire:model:defer="consent" class="font-medium text-gray-300 select-none @error('consent') text-danger @enderror">
             {{ translate('I agree to receiving newsletter') }}
         </label>
         </div>
