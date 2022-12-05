@@ -61,10 +61,6 @@ class Cart extends Component
 
     public function addToCart($model, $model_type, $qty, $append_qty = true)
     {
-        if ($this->processing) {
-            return;
-        }
-
         $qty = (float) $qty;
 
         if ($append_qty && $qty <= 0) {
@@ -80,37 +76,40 @@ class Cart extends Component
 
         // If passed $model is actually $model_id => Find the desired model
         if (is_numeric($model)) {
+            $model_type = base64_decode($model_type);
             $model = app($model_type)::find($model);
         }
 
-        activity('ecommerce_log')
-            ->performedOn($model)
-            ->causedBy(auth()->user())
-            ->withProperties(['action' => 'add_to_cart'])
-            ->log('add_to_cart');
+        // activity('ecommerce_log')
+        //     ->performedOn($model)
+        //     ->causedBy(auth()->user())
+        //     ->withProperties(['action' => 'add_to_cart'])
+        //     ->log('add_to_cart');
 
         // Add $model and $qty to cart (do not append qty if $model is already in cart) because:
         // addToCart function in Cart.php is called on quantity change event inside cart, which means that given $qty is always the desired qty!
         // This is not the case for Add to cart button because qty counter is reset once addToButton is clicked!
         // IMPORTANT: $qty is sent by reference!!!
-
-        $new_data = \App\Facades\CartService::addToCart($model, $model_type, $qty, $append_qty);
-
+        
+        $new_data = CartService::addToCart($model, $model_type, $qty, $append_qty);
+        
         // Refresh Cart Livewire components
         $this->refreshCart();
 
+        $this->processing = false;
+
         // Init cart item warnings
-        $this->dispatchBrowserEvent('cart-item-warnings', ['id' => $model->id, 'model_type' => $model_type, 'warnings' => $new_data['warnings']]);
+        $this->dispatchBrowserEvent('cart-item-warnings', ['id' => $model->id, 'model_type' => base64_encode($model_type), 'warnings' => $new_data['warnings']]);      
 
         // Dispatch cart_processing_ending Event
-        $this->dispatchBrowserEvent('cart-processing-ending', ['id' => $model->id, 'model_type' => $model_type, 'qty' => $new_data['qty']]);
+        $this->dispatchBrowserEvent('cart-processing-end', ['id' => $model->id, 'model_type' => base64_encode($model_type), 'qty' => $new_data['qty']]);
     }
 
     public function removeFromCart($model, $model_type)
     {
         $this->processing = true;
 
-        $data = \App\Facades\CartService::removeFromCart($model, $model_type);
+        $data = CartService::removeFromCart($model, base64_decode($model_type));
 
         // Refresh Cart Livewire components
         $this->refreshCart();

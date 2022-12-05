@@ -15,6 +15,7 @@ class Select extends Component
     public $selectorClass;
     public $multiple;
     public $hideError = false;
+    public $errorField;
     public $class;
     public $xShowIf = '';
     public $xAppendToInit = '';
@@ -24,7 +25,7 @@ class Select extends Component
      *
      * @return void
      */
-    public function __construct($items = null, $multiple = false, $selected = null, $field = '', $placeholder = 'Please select', $nullable = true, $search = false, $selectorClass = '', $hideError = false, $class = '', $xShowIf = '', $xAppendToInit = '')
+    public function __construct($items = null, $multiple = false, $selected = null, $field = '', $placeholder = 'Please select', $nullable = true, $search = false, $selectorClass = '', $hideError = false, $errorField = null,  $class = '', $xShowIf = '', $xAppendToInit = '')
     {
         $this->items = empty($items) ? [] : $items;
         $this->multiple = $multiple;
@@ -35,6 +36,7 @@ class Select extends Component
         $this->search = $search;
         $this->selectorClass = $selectorClass;
         $this->hideError = $hideError;
+        $this->errorField = (!empty($errorField)) ? $errorField : $this->field;
         $this->class = $class;
         $this->xShowIf = $xShowIf;
         $this->xAppendToInit = $xAppendToInit;
