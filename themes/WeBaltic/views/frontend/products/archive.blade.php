@@ -55,21 +55,91 @@
 
                     </ul>
 
+                    <div class="flex mt-3 mb-3">
+                        <div class="flex items-center h-5">
+                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" value=""
+                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        </div>
+                        <div class="ml-2 text-sm">
+                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">
+                                Stabdžiai
+                            </label>
+                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">
+
+                            </p>
+                        </div>
+                    </div>
+
+                    <h3 class="font-bold mt-3">
+                        Ašys
+                    </h3>
+                    <div class="flex mt-3 mb-3">
+                        <div class="flex items-center h-5">
+                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" value=""
+                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        </div>
+                        <div class="ml-2 text-sm">
+                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">
+                                1 Ašis
+                            </label>
+                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">
+
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="flex mt-3 mb-3">
+                        <div class="flex items-center h-5">
+                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" value=""
+                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        </div>
+                        <div class="ml-2 text-sm">
+                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">
+                                2 Ašys
+                            </label>
+                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">
+
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="flex mt-3 mb-3">
+                        <div class="flex items-center h-5">
+                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" value=""
+                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        </div>
+                        <div class="ml-2 text-sm">
+                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">
+                                3 Ašys
+                            </label>
+                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">
+
+                            </p>
+                        </div>
+
+                    </div>
+
                     {{-- Promo block --}}
-                    <a href="#" class="group block">
-                        <div aria-hidden="true" class="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg group-hover:opacity-75 lg:aspect-w-5 lg:aspect-h-6">
-                          <img src="https://tailwindui.com/img/ecommerce-images/home-page-01-collection-01.jpg" alt="Brown leather key ring with brass metal loops and rivets on wood table." class="h-full w-full object-cover object-center">
+                    <a href="#" class="hidden group block mt-6">
+                        <div aria-hidden="true"
+                            class="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg group-hover:opacity-75 lg:aspect-w-5 lg:aspect-h-6">
+                            <img src="https://tailwindui.com/img/ecommerce-images/home-page-01-collection-01.jpg"
+                                alt="Brown leather key ring with brass metal loops and rivets on wood table."
+                                class="h-full w-full object-cover object-center">
                         </div>
                         <h3 class="mt-4 text-base font-semibold text-gray-900">
                             {{ translate('Individual Orders') }}
                         </h3>
                         <p class="mt-2 text-sm text-gray-500">
-                            {{ translate('We can make you a custom made order. Reach out to us and we will send you a price quote in 1 working day.') }}
+                            {{ translate('We can make you a custom made order. Reach out to us and we will send you a
+                            price quote in 1 working day.') }}
                         </p>
-                        <a href="#" class="btn-primary mt-3">
-                            {{ translate('Fill out order form') }}
-                        </a>
-                      </a>
+                        <button class="btn-primary mt-3">
+                            {{ translate('Filter') }}
+                        </button>
+                    </a>
 
                 </form>
 
@@ -86,7 +156,7 @@
                     <div class="w-full">
                         {{ $products->onEachSide(3)->links('pagination::tailwind') }}
                     </div>
-                @endif
+                    @endif
 
 
 

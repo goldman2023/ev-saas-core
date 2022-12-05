@@ -41,7 +41,7 @@ class OrdersTable extends DataTableComponent
     ];
 
     public array $filterNames = [
-        'payment_status' => 'Payment Status',
+        'payment_status' => 'Lipdukas',
         'shipping_status' => 'Shipping Status',
         'status' => 'Order Status',
     ];
@@ -85,7 +85,7 @@ class OrdersTable extends DataTableComponent
                     OrderTypeEnum::subscription()->value => translate('Subscription'),
                     OrderTypeEnum::installments()->value => translate('Installments'),
                 ]),
-            'payment_status' => Filter::make('Payment Status')
+            'payment_status' => Filter::make('Lipdukas')
                 ->select([
                     '' => translate('Any'),
                     PaymentStatusEnum::paid()->value => translate('Paid'),
@@ -93,11 +93,11 @@ class OrdersTable extends DataTableComponent
                     PaymentStatusEnum::pending()->value => translate('Pending'),
                     PaymentStatusEnum::canceled()->value => translate('Canceled'),
                 ]),
-            'shipping_status' => Filter::make('Shipping Status')
+            'shipping_status' => Filter::make('Printing Status')
                 ->select([
                     '' => translate('Any'),
-                    ShippingStatusEnum::delivered()->value => translate('Delivered'),
-                    ShippingStatusEnum::sent()->value => translate('Sent'),
+                    ShippingStatusEnum::delivered()->value => translate('Not Printed'),
+                    ShippingStatusEnum::sent()->value => translate('Printed'),
                     ShippingStatusEnum::not_sent()->value => translate('Not Sent'),
                 ]),
             'viewed' => Filter::make('Viewed')
@@ -128,7 +128,7 @@ class OrdersTable extends DataTableComponent
             Column::make('Date', 'created_at')
                 ->excludeFromSelectable()
                 ->sortable(),
-            Column::make('Payment status', 'payment_status')
+            Column::make('Lipdukas', 'payment_status')
                 ->sortable()
                 ->addClass('hidden md:table-cell'),
             // Column::make('Shipping status', 'shipping_status')

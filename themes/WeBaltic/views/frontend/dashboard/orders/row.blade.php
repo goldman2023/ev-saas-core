@@ -1,25 +1,27 @@
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->id]) }}">
-       <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded" name="orders" />
+        <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded" name="orders" />
 
         #{{ $row->id }}
         @if(!$row->viewed)
-            <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
+        <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
         @endif
     </a>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
-    {{-- <span class="d-block text-14 mb-0 {{ $row->type === \App\Enums\OrderTypeEnum::subscription()->value ? 'text-info':'' }} {{ $row->type === App\Enums\OrderTypeEnum::installments()->value ? 'text-warning':'' }}">{{ $row->type }}</span> --}}
+    {{-- <span
+        class="d-block text-14 mb-0 {{ $row->type === \App\Enums\OrderTypeEnum::subscription()->value ? 'text-info':'' }} {{ $row->type === App\Enums\OrderTypeEnum::installments()->value ? 'text-warning':'' }}">{{
+        $row->type }}</span> --}}
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
     @isset($row->user)
-        <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user->id]) }}">
-            <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
-            {{ $row->user->email }}
-        </a>
-     @endisset
+    <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user->id]) }}">
+        <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
+        {{ $row->user->email }}
+    </a>
+    @endisset
 
     {{-- <span class="text-14">{{ $row->billing_first_name.' '.$row->billing_last_name }}</span> --}}
 </x-livewire-tables::table.cell>
@@ -32,23 +34,16 @@
 
 @if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('payment_status')))
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
-    @if($row->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
-        <span class="badge-success">
-            {{ ucfirst($row->payment_status) }}
-        </span>
-    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
-        <span class="badge-info">
-            {{ ucfirst($row->payment_status) }}
-        </span>
-    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
-        <span class="badge-danger">
-            {{ ucfirst($row->payment_status) }}
-        </span>
-    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value)
-        <span class="badge-warning">
-            {{ ucfirst($row->payment_status) }}
-        </span>
+    <span class="badge-success">
+        {{ translate('Atspausdintas') }}
+    </span>
+    {{-- TODO: Listen to core meta if sticker was printed --}}
+    @if(1 > 2)
+    <span class="badge-danger">
+        {{ translate('Neatspausdintas') }}
+    </span>
     @endif
+
 </x-livewire-tables::table.cell>
 @endif
 
@@ -62,17 +57,11 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a>
 
-        <button
-            @click="isOpen = !isOpen"
-            @keydown.escape="isOpen = false"
-            class="flex items-center btn"
-        >
+        <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="flex items-center btn">
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
-        <ul x-show="isOpen"
-            @click.outside="isOpen = false"
-            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow"
-        >
+        <ul x-show="isOpen" @click.outside="isOpen = false"
+            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow">
             <li>
                 <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="{{ $row->getPermalink() }} "
                     target="_blank">

@@ -1,7 +1,7 @@
 <div>
 
     <!-- This example requires Tailwind CSS v2.0+ -->
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-6">
+    <div class="max-w-[70%] grid grid-cols-1 gap-4 sm:grid-cols-2 mb-6">
 
         <x-dashboard.widgets.business.quick-action
         route="orders.index"
