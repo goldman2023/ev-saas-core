@@ -7,13 +7,6 @@
 @section('content')
 {{ Breadcrumbs::render('product', $product) }}
 <div class="bg-gray-100">
-    <!--
-      Mobile menu
-
-      Off-canvas menu for mobile, show/hide based on off-canvas menu state.
-    -->
-
-
     <main class="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
         <div class="mx-auto max-w-2xl lg:max-w-none">
             <!-- Product -->
@@ -202,7 +195,6 @@
 
         <x-products.single.related-products :products="$product->relatedProducts()">
         </x-products.single.related-products>
-</div>
-</main>
+    </main>
 </div>
 @endsection

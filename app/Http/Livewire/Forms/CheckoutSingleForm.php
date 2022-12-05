@@ -2,34 +2,34 @@
 
 namespace App\Http\Livewire\Forms;
 
-use App\Enums\OrderTypeEnum;
-use App\Enums\PaymentStatusEnum;
-use App\Enums\ShippingStatusTypeEnum;
-use App\Models\Address;
-use App\Models\Invoice;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\PaymentMethodUniversal;
-use App\Models\User;
-use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\RulesSets;
-use Auth;
-use Carbon;
-use CartService;
-use Categories;
 use DB;
 use EVS;
-use Illuminate\Contracts\Support\Arrayable;
+use Str;
+use Auth;
+use Carbon;
+use Purifier;
+use Categories;
+use CartService;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Address;
+use App\Models\Invoice;
+use Livewire\Component;
+use App\Models\OrderItem;
+use LVR\CreditCard\CardCvc;
+use App\Enums\OrderTypeEnum;
+use LVR\CreditCard\CardNumber;
+use Illuminate\Validation\Rule;
+use App\Enums\PaymentStatusEnum;
+use App\Traits\Livewire\RulesSets;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Livewire\Component;
-use LVR\CreditCard\CardCvc;
+use App\Enums\ShippingStatusTypeEnum;
+use App\Models\PaymentMethodUniversal;
 use LVR\CreditCard\CardExpirationDate;
-use LVR\CreditCard\CardNumber;
-use Purifier;
+use App\Traits\Livewire\DispatchSupport;
+use Illuminate\Contracts\Support\Arrayable;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Str;
 
 class CheckoutSingleForm extends Component
 {
@@ -81,8 +81,8 @@ class CheckoutSingleForm extends Component
             ],
             'main' => [
                 'order.email' => 'required|email:rfc,dns',
-                'order.billing_first_name' => 'required|min:3',
-                'order.billing_last_name' => 'required|min:3',
+                'order.billing_first_name' => 'required|min:2',
+                'order.billing_last_name' => 'required|min:2',
                 'order.billing_company' => 'nullable',
                 'order.same_billing_shipping' => 'nullable',
                 'order.phone_numbers' => 'array|required',
@@ -145,6 +145,27 @@ class CheckoutSingleForm extends Component
     protected function messages()
     {
         return [
+            'order.email.required' => translate('Email is requierd'),
+            'order.email.email' => translate('Wrong email format'),
+            'order.billing_first_name.required' => translate('First name is required'),
+            'order.billing_first_name.min' => translate('Minimum :min characters required'),
+            'order.billing_last_name.required' => translate('Last name is required'),
+            'order.billing_last_name.min' => translate('Minimum :min characters required'),
+
+            'order.billing_address.required' => translate('Address is required'),
+            'order.billing_address.min' => translate('Minimum :min characters required'),
+            'order.billing_country.required' => translate('Country is required'),
+            // 'order.billing_country.required' => ['required', Rule::in(\Countries::getCodesAll(true))],
+
+            'order.billing_state.required' => translate('State is required'),
+            'order.billing_state.min' => translate('Minimum :min characters required'),
+
+            'order.billing_city.required' => translate('City is required'),
+            'order.billing_city.min' => translate('Minimum :min characters required'),
+
+            'order.billing_zip.required' => translate('ZIP code is required'),
+            'order.billing_zip.min' => translate('Minimum :min characters required'),
+
             'account_password.match_password' => translate('Password is not correct for a given email. If you want to create an order under provided email, you have to know password of the user under given email. If you don\'t know, either use Forgot password or create another account. under different email.'),
             'order.buyers_consent.is_true' => translate('You must agree with terms of service'),
             'cc_expiration_date.required' => translate('CC expiration date is required'),

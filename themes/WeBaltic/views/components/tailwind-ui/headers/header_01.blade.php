@@ -91,6 +91,10 @@
                         class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
                         {{ translate('Dashboard') }}
                     </a>
+                     <div>
+                        <livewire:global.user-top-bar></livewire:global.user-top-bar>
+                    </div>
+
                     @endguest
                 </div>
 

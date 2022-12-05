@@ -7,12 +7,12 @@
             current_stock: {{ ($product->hasVariations()) ? $first_variation->current_stock : $product->current_stock }},
             is_low_stock: {{ ($product->hasVariations()) ? ($first_variation->isLowStock() ? 'true':'false') : ($product->isLowStock() ? 'true':'false') }},
             model_id: {{ ($product->hasVariations()) ? $first_variation->id : $product->id }},
-            model_type: '{!!  ($product->hasVariations()) ? addslashes($first_variation::class) : addslashes($product::class) !!}',
+            model_type: '{!!  ($product->hasVariations()) ? base64_encode($first_variation) : base64_encode($product::class) !!}',
             total_price: {{ ($product->hasVariations()) ? $first_variation->total_price : $product->total_price }},
             total_price_display: '{{ ($product->hasVariations()) ? $first_variation->getTotalPrice(true) : $product->getTotalPrice(true) }}',
             base_price: {{ ($product->hasVariations()) ? $first_variation->base_price : $product->base_price }},
             base_price_display: '{{ ($product->hasVariations()) ? $first_variation->getBasePrice(true) : $product->getBasePrice(true) }}',
-        }" @cart-processing-ending.window="
+        }" @cart-processing-end.window="
             if(Number($event.detail.id) === Number(model_id) && model_type == $event.detail.model_type) {
                 qty = 1;
                 processing = false;
@@ -20,15 +20,15 @@
             }
         " @if($product->hasVariations())
     @variation-changed.window="
-    qty = 0;
-    current_stock = $event.detail.current_stock;
-    is_low_stock = $event.detail.is_low_stock;
-    model_id = $event.detail.model_id;
-    model_type = $event.detail.model_type;
-    total_price = $event.detail.total_price;
-    total_price_display = $event.detail.total_price_display;
-    base_price = $event.detail.base_price;
-    base_price_display = $event.detail.base_price_display;
+        qty = 0;
+        current_stock = $event.detail.current_stock;
+        is_low_stock = $event.detail.is_low_stock;
+        model_id = $event.detail.model_id;
+        model_type = $event.detail.model_type;
+        total_price = $event.detail.total_price;
+        total_price_display = $event.detail.total_price_display;
+        base_price = $event.detail.base_price;
+        base_price_display = $event.detail.base_price_display;
     "
     @endif
     >

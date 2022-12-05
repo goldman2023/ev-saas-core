@@ -66,25 +66,26 @@
                 <ul class="flex flex-col list-none border-t border-gray-200 mt-3 pl-[74px]">
                     <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
                         <span class="text-14">{{ translate('Subtotal') }}</span>
-                        <strong class="tracking-[-0.03rem] text-14">{{ CartService::getSubtotalPrice()['display'] ?? ''
-                            }}</strong>
+                        <strong class="tracking-[-0.03rem] text-14">{{ CartService::getSubtotalPrice()['display'] ?? '' }}</strong>
                     </li>
-                    <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
-                        <span class="text-14">{{ translate('Discount') }}</span>
-                        <strong class="tracking-[-0.03rem] text-14">-{{ CartService::getDiscountAmount()['display'] ??
-                            '' }}</strong>
-                    </li>
-                    <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
-                        <span class="text-14">{{ translate('Taxation') }}</span>
-                        <strong class="tracking-[-0.03rem] text-14">{{ FX::formatPrice($model->tax) }}</strong>
-                    </li>
+                    @if(CartService::getDiscountAmount()['raw'] > 0)
+                        <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
+                            <span class="text-14">{{ translate('Discount') }}</span>
+                            <strong class="tracking-[-0.03rem] text-14">-{{ CartService::getDiscountAmount()['display'] ?? '' }}</strong>
+                        </li>
+                    @endif
+                    @if($model->tax > 0)
+                        <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
+                            <span class="text-14">{{ translate('Taxation') }}</span>
+                            <strong class="tracking-[-0.03rem] text-14">{{ FX::formatPrice($model->tax) }}</strong>
+                        </li>
+                    @endif
                     <li class="flex justify-between border-b border-gray-200 py-[16px]">
                         <button type="button" class="btn-success !py-1 !px-3">{{ translate('Add promo code') }}</button>
                     </li>
                     <li class="flex justify-between pt-[16px] pb-[12px]">
                         <span class="text-14">{{ translate('Total due') }}</span>
-                        <strong class="tracking-[-0.03rem] text-14">{{ CartService::getSubtotalPrice()['display'] ?? ''
-                            }}</strong>
+                        <strong class="tracking-[-0.03rem] text-14">{{ CartService::getSubtotalPrice()['display'] ?? '' }}</strong>
                     </li>
                 </ul>
 

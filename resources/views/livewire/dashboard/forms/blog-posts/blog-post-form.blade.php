@@ -27,7 +27,7 @@
         $wire.set('selected_categories', this.selected_categories, true);
         $wire.set('core_meta', this.core_meta, true);
         $wire.set('wef.content_structure', this.content_structure, true);
-        $wire.set('wef.portfolio_link', wef.portfolio_link, true);
+        $wire.set('wef.portfolio_link', this.wef.portfolio_link, true);
     }
 }" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" x-cloak>
 @push('head_scripts')

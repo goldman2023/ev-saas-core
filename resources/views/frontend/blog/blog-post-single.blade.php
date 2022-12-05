@@ -46,7 +46,8 @@ URL: https://flowbite.com/docs/components/typography/
                 <x-blog.share-buttons :item="$blog_post"></x-blog.share-buttons>
             </div>
            <div id="blog_post_single_content">
-            {!! $blog_post->content !!}
+            {{-- {!! $blog_post->content !!} --}}
+            {!! $html !!}
            </div>
            <footer>
             <div class="mt-8">

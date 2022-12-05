@@ -107,7 +107,7 @@ class FXService
         if (get_tenant_setting('decimal_separator') === 1) {
             $formatted_price = number_format($price, $decimals);
         } else {
-            $formatted_price = number_format($price, $decimals, ',', ' ');
+            $formatted_price = number_format($price, $decimals, ',', '.');
         }
 
         if (get_tenant_setting('symbol_format') === 1) {
