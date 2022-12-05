@@ -86,9 +86,9 @@
                 </div>
 
                 <div id="blog_post_single_content" class="w-full block pb-5 mb-[15px]">
-                    {!! $blog_post->content !!}
+                    {{-- {!! $blog_post->content !!} --}}
                     {{-- TODO: Add replaced img tags and optimized html structure --}}
-                    {{-- {!! $html !!} --}}
+                    {!! $html !!}
                 </div>
 
                 <x-blog.social-sharing-buttons> </x-blog.social-sharing-buttons>

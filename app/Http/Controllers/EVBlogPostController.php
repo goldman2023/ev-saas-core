@@ -84,9 +84,9 @@ class EVBlogPostController extends Controller
         } else {
             abort(404);
         }
-        /* Prototype for lazy loading images */
-        // $content = $blog_post->content;
-        // $html = preg_replace('/<img(.+?)src="(.+?)"(.+?)>/i', '<img$1data-src="$2"$3>', $content);
+        // /* Prototype for lazy loading images */
+        $content = $blog_post->content;
+        $html = preg_replace('/<img(.+?)src="(.+?)"(.+?)>/i', '<img$1 loading="lazy" src="$2"$3>', $content);
         if (! empty($blog_post)) {
             return view('frontend.blog.blog-post-single', compact('blog_post', 'authors', 'shop', 'related_blog_posts', 'latest_blog_posts', 'html'));
         }
