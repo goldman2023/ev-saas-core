@@ -1,19 +1,19 @@
-<x-livewire-tables::table.cell class="align-middle p-0">
+{{-- <x-livewire-tables::table.cell class="align-middle p-0">
     <a class="media align-items-center text-14" href="{{ route('product.details', $row->id) }}">
         #{{ $row->id }}
     </a>
-</x-livewire-tables::table.cell>
+</x-livewire-tables::table.cell> --}}
 
 <x-livewire-tables::table.cell class="align-middle" style="width: 150px; box-sizing: content-box;">
     <a class="media flex justify-center items-center text-14" href="{{ route('product.details', $row->id) }}">
-        <x-tenant.system.image alt="{{ $row->name }}" class="w-[80px] h-[60px] object-contain"
+        <x-tenant.system.image alt="{{ $row->name }}" class="rounded sm:min-w-[140px] sm:w-[120px] min-h-[100px] object-contain"
             fit="contain" :image="$row->getThumbnail()">
         </x-tenant.system.image>
     </a>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center" style="min-width: 200px;">
-    <a href="{{ route('product.details', $row->id) }}" class="">
+    <a href="{{ route('product.details', $row->id) }}" class="font-bold text-md">
         {{ $row->name }}
     </a>
 </x-livewire-tables::table.cell>
@@ -42,9 +42,9 @@
     <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
+{{-- <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
     <span class="badge-dark capitalize text-14">{{ $row->type }}</strong>
-</x-livewire-tables::table.cell>
+</x-livewire-tables::table.cell> --}}
 
 
 <x-livewire-tables::table.cell class="align-middle text-center">

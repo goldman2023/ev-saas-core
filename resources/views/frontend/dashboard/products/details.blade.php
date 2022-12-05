@@ -105,10 +105,23 @@
 
                     <section>
                         <div class="card">
-                            <h3 class="font-medium text-xl">
-                                {{ translate('Product speficiation') }}
-                            </h3>
-                        <x-default.products.single.product-specification-table :product="$product"></x-default.products.single.product-specification-table>
+                            <div class="grid grid-cols-2">
+                                <h3 class="font-medium text-xl mb-3">
+                                    {{ translate('Product speficiation') }}
+                                </h3>
+
+                                <div class="text-right">
+                                    <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+                                        href="{{ route('product.edit', $product->id) }}">
+                                        {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height:
+                                        16px;',
+                                        'class' => 'ml-2'])
+                                    </a>
+                                </div>
+                            </div>
+
+                            <x-default.products.single.product-specification-table :product="$product">
+                            </x-default.products.single.product-specification-table>
                         </div>
                     </section>
 
@@ -135,8 +148,8 @@
                                 <ul class="w-full flex-flex-col space-y-3">
                                     @if($course_items->isNotEmpty())
                                     @foreach($course_items as $course_item)
-                                        @include('frontend.product.single.partials.course-item-list-template', ['product' =>
-                                        $product, 'course_item' => $course_item])
+                                    @include('frontend.product.single.partials.course-item-list-template', ['product' =>
+                                    $product, 'course_item' => $course_item])
                                     @endforeach
                                     @endif
                                 </ul>
@@ -225,7 +238,8 @@
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit', $product->id) }}">
-                                    {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height: 16px;',
+                                    {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height:
+                                    16px;',
                                     'class' => 'ml-2'])
                                 </a>
 

@@ -1,6 +1,6 @@
 @php
-    $header_menu = nova_get_menu_by_slug('header');
-    $header_menu_items = $header_menu['menuItems'] ?? null;
+$header_menu = nova_get_menu_by_slug('header');
+$header_menu_items = $header_menu['menuItems'] ?? null;
 @endphp
 <header class="relative z-50" x-data="{
     show_mobile_menu: false,
@@ -9,43 +9,49 @@
     <div class="relative bg-white">
         <div class="bg-gray-900">
             <div class="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-              <!-- Currency selector -->
-              <form class="hidden lg:block lg:flex-1">
-                <div class="flex">
-                  <label for="desktop-currency" class="sr-only">Currency</label>
-                  <div class="group relative -ml-2 rounded-md border-transparent bg-gray-900 focus-within:ring-2 focus-within:ring-white">
-                    <select id="desktop-currency" name="currency" class="flex items-center rounded-md border-transparent bg-gray-900 bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100">
+                <!-- Currency selector -->
+                <form class="hidden lg:block lg:flex-1">
+                    <div class="flex">
+                        <label for="desktop-currency" class="sr-only">Currency</label>
+                        <div
+                            class="group relative -ml-2 rounded-md border-transparent bg-gray-900 focus-within:ring-2 focus-within:ring-white">
+                            <select id="desktop-currency" name="currency"
+                                class="flex items-center rounded-md border-transparent bg-gray-900 bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100">
 
-                        <option>LT</option>
+                                <option>LT</option>
 
-                        <option>EN</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-                      <svg class="h-5 w-5 text-gray-300" x-description="Heroicon name: mini/chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
-                            </svg>
+                                <option>EN</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
+                                <svg class="h-5 w-5 text-gray-300" x-description="Heroicon name: mini/chevron-down"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
-                  </div>
+                </form>
+
+                <p class="flex-1 text-center text-sm font-medium text-white lg:flex-none">
+                    {{ translate(' ') }}
+                </p>
+
+                <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                    <a href="#" class="flex items-center	 text-sm font-medium text-white hover:text-gray-100">
+                        @svg('heroicon-o-phone-arrow-down-left', ['class' => 'h-4 h-4 mr-2'])
+                        Tel.: 8 (671) 81007
+                    </a>
+                    <span class="h-6 w-px bg-gray-600" aria-hidden="true"></span>
+                    <a href="#" class="flex items-center	 text-sm font-medium text-white hover:text-gray-100">
+                        @svg('heroicon-o-envelope', ['class' => 'h-4 h-4 mr-2'])
+                        info@baltic-priekabos.lt
+                    </a>
                 </div>
-              </form>
-
-              <p class="flex-1 text-center text-sm font-medium text-white lg:flex-none">
-                {{ translate(' ') }}
-              </p>
-
-              <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <a href="#" class="flex items-center	 text-sm font-medium text-white hover:text-gray-100">
-                   @svg('heroicon-o-phone-arrow-down-left', ['class' => 'h-4 h-4 mr-2'])
-                    Tel.: 8 (671) 81007
-                </a>
-                <span class="h-6 w-px bg-gray-600" aria-hidden="true"></span>
-                <a href="#" class="flex items-center	 text-sm font-medium text-white hover:text-gray-100">
-                    @svg('heroicon-o-envelope', ['class' => 'h-4 h-4 mr-2'])
-                    info@baltic-priekabos.lt
-                </a>
-              </div>
             </div>
-          </div>
+        </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-5">
             <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">
@@ -91,7 +97,7 @@
                         class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
                         {{ translate('Dashboard') }}
                     </a>
-                     <div>
+                    <div>
                         <livewire:global.user-top-bar></livewire:global.user-top-bar>
                     </div>
 
@@ -112,8 +118,7 @@
         To: "opacity-0 scale-95"
     -->
         <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
-            x-show="show_mobile_menu" x-transition:enter="ease-out duration-200"
-            x-cloak
+            x-show="show_mobile_menu" x-transition:enter="ease-out duration-200" x-cloak
             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
             x-transition:leave="ease-in duration-100" x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95">
@@ -138,7 +143,7 @@
                     </div>
 
                     <div class="mt-6">
-                            <x-system.render-menu :menu="$header_menu_items"></x-system.render-menu>
+                        <x-system.render-menu :menu="$header_menu_items"></x-system.render-menu>
                     </div>
                 </div>
 
@@ -158,6 +163,7 @@
                         <a href="#" class="text-base font-medium text-gray-900 hover:text-gray-700"> Security </a>
                     </div> --}}
                     <div>
+                        @guest
                         <a href="#" @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})"
                             class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                             {{ translate('Login') }}
@@ -167,6 +173,18 @@
                             <a href="#" class="text-indigo-600 hover:text-indigo-500"> {{ translate('Get a Trial') }}
                             </a>
                         </p>
+                        @else
+                        <a href="/dashboard"
+                            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                            {{ translate('Dashboard') }}
+                        </a>
+                        <p class="mt-6 text-center text-base font-medium text-gray-500">
+                            {{ translate('Have questions? Need help?') }}?
+                            <a href="/contact" class="text-indigo-600 hover:text-indigo-500">
+                                {{ translate('Contact us') }}
+                            </a>
+                        </p>
+                        @endguest
                     </div>
                 </div>
 
