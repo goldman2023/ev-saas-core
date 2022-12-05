@@ -18,7 +18,7 @@
                     model_type: '{!! addslashes($item::class) !!}',
                 }"
                 @if($key+1 === $wishlists->count()) x-intersect.once="$wire.loadMore()" @endif
-                @cart-processing-ending.window="
+                @cart-processing-end.window="
                     $nextTick(() => { // Wait for qty to be changed and then stop processing
                         processing = false; // Turn off the Cart processing now. Reason is that if we change qty after turning processing off, we would run qty watcher again and initiate addToCart again!
                     });

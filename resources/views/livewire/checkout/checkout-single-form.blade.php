@@ -27,9 +27,7 @@ x-cloak
             {{ translate('Email') }}
             <span class="text-red-700 ml-1">*</span>
         </label>
-        <input name="order.email"
-                id="order.email"
-                type="email"
+        <input type="email"
                 wire:model.defer="order.email"
                 @auth disabled @endauth
                 class="form-standard @error('order.email') is-invalid @enderror"       
@@ -271,16 +269,19 @@ x-cloak
                         {{ translate('Country') }}
                         <span class="text-red-500 ml-1">*</span>
                     </label>
-                    <x-dashboard.form.select field="billingCountry" :search="true" error-field="order.billing_country" :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" selected="billingCountry" :nullable="false"></x-dashboard.form.select>
+                    <x-dashboard.form.select field="billingCountry" 
+                        :search="true" 
+                        error-field="order.billing_country" 
+                        :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" 
+                        selected="billingCountry" 
+                        :nullable="false"></x-dashboard.form.select>
 
                     {{-- <input name="order.billing_country"
                             id="order.billing_country"
                             type="text"
                             wire:model.defer="order.billing_country" 
                             class="form-standard @error('order.billing_country') is-invalid @enderror"       
-                    />
-    
-                    <x-system.invalid-msg field="order.billing_country" ></x-system.invalid-msg> --}}
+                    />--}}
                 </div>
                 <!-- End Col -->
             </div>

@@ -15,7 +15,7 @@
    @if($model->hasVariations())
     @variation-changed.window="
         if(Number($event.detail.model_id) === model_id &&
-        $event.detail.model_type === model_type
+            $event.detail.model_type === model_type
         ) {
             disabled = Number($event.detail.current_stock) <= 0;
         }

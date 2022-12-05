@@ -33,8 +33,9 @@ x-init="
 @if(!empty($xShowIf)) x-show="{!! $xShowIf !!}" @endif
 wire:ignore.self>
     <div class="relative" wire:ignore.self>
+
       <button type="button" @click="open_dropdown = !open_dropdown" 
-              class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm {{ $selectorClass ?? '' }} @error($field) is-invalid @enderror">
+              class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm {{ $selectorClass ?? '' }} @error($errorField) is-invalid @enderror">
         <span class="block truncate" :class="{'text-gray-600':!items.hasOwnProperty({{ $selected }})}" x-text="items.hasOwnProperty({{ $selected }}) ? items[{{ $selected }}] : placeholder"></span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
           @svg('heroicon-s-chevron-up-down', ['class' => 'h-5 w-5 text-gray-400', 'wire:ignore'])
@@ -100,8 +101,8 @@ wire:ignore.self>
       </ul>
     </div>
 
-    @if(!empty($field) && !$hideError)
-        <x-system.invalid-msg field="{{ $field }}"></x-system.invalid-msg>
+    @if(!empty($errorField) && !$hideError)
+        <x-system.invalid-msg field="{{ $errorField }}"></x-system.invalid-msg>
     @endif
 </div>
   

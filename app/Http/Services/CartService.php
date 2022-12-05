@@ -91,7 +91,8 @@ class CartService
                 $qty += $desired_item_in_cart['qty'];
             }
 
-            if ($model->current_stock < $qty && ! $model->allow_out_of_stock_purchases) {
+            // Do only if track_invetory for the product is ENABLED
+            if ($model->track_inventory && $model->current_stock < $qty && ! $model->allow_out_of_stock_purchases) {
                 // Desired qty is bigger than stock qty, add only available amount to cart
 
                 // Add a warning that there was not enough items in stock to fulfill desired QTY
@@ -156,35 +157,6 @@ class CartService
         $cart_items = collect(Session::get('cart'));
         $count = 0; // start counting from 0!
         $this->resetStats(); // start counting totals from 0!
-
-        /*$cart_items = collect([
-            [
-                'content_type' => 'App\Models\ProductVariation',
-                'id' => 43,
-                'qty' => 2
-            ],
-            [
-                'content_type' => 'App\Models\Product',
-                'id' => 112,
-                'qty' => 1
-            ],
-            [
-                'content_type' => 'App\Models\Product',
-                'id' => 109,
-                'qty' => 5
-            ],
-
-            [
-                'content_type' => 'App\Models\ProductVariation',
-                'id' => 44,
-                'qty' => 2
-            ],
-            [
-                'content_type' => 'App\Models\ProductVariation',
-                'id' => 45,
-                'qty' => 3
-            ],
-        ]);*/
 
         if ($cart_items->isNotEmpty()) {
             $mapped = collect();
