@@ -122,13 +122,20 @@
                     </div>
                     <div class="mt-6 flex-1 flex items-end">
                         <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6">
-                            <div class="flex">
-                                <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}</dt>
+                            @if($order->type === 'standard')
+                              <div class="flex ">
+                                <dt class="font-semibold text-gray-900">{{ translate('Unit price') }}:</dt>
+                                <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->base_price) }}</dd>
+                              </div>
+                            @endif
+                            <div class="@if($order->type === 'standard') pl-4 flex sm:pl-6 @endif">
+                                <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}:</dt>
                                 <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
                             </div>
                             <div class="pl-4 flex sm:pl-6">
-                                <dt class="font-semibold text-gray-900">{{ translate('Total price') }}</dt>
-                                <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price) }} / {{ $order->invoicing_period }}</dd>
+                                <dt class="font-semibold text-gray-900">{{ translate('Total price') }}:</dt>
+                                <dd class="ml-2 text-gray-700">
+                                  {{ FX::formatPrice($item->total_price) }} {{ $order->type === 'subscription' ? ' / ' . $order->invoicing_period : '' }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -145,9 +152,13 @@
             <div class="col-span-3 md:col-span-1 py-4 md:py-6 space-y-0 space-x-3 md:space-x-0 md:space-y-3 border-b border-gray-200 md:border-none">
               {{-- @if(!empty($order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? null)) --}}
                 @if($order->invoices->first())
-                <a href="{{ route('invoice.download', $order->invoices->first()->id) }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
-                    {{ translate('Latest invoice') }}
-                </a>
+                  <a href="{{ route('invoice.download', $order->invoices->first()->id) }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
+                      @if($order->invoices->first()->isForStandard())
+                        {{ translate('Download invoice') }}
+                      @else
+                        {{ translate('Latest invoice') }}
+                      @endif
+                  </a>
                 @endif
               {{-- @endif --}}
 

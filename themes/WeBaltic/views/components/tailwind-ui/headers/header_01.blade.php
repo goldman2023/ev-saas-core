@@ -83,8 +83,19 @@
                     </a>
                     @else
                     <button @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'});" type="button"
-                        class="p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        class="relative p-1 rounded-full text-gray-400 hover:text-primary focus:outline-none"
+                        x-data="{
+                            cart_items_count: @js(\CartService::getTotalItemsCount())
+                        }"
+                        @cart-total-items-count-update.window="
+                            cart_items_count = $event.detail.count;
+                        "
+                        x-cloak>
                         @svg('heroicon-o-shopping-cart', ['class' => 'h-6 w-6'])
+
+                        <span class="absolute top-[-5px] right-[-15px] bg-red-100 text-red-800 text-12 leading-[1] font-medium mr-2 px-1.5 py-1 rounded-full dark:bg-red-200 dark:text-red-900"
+                            x-show="cart_items_count > 0" x-text="cart_items_count">
+                        </span>
                     </button>
 
                     <a href="{{ route('dashboard') }}"

@@ -154,12 +154,15 @@
                         <span>{{ translate('Items:') }}</span>
                         <strong>{{ $originalPrice['display'] }}</strong>
                     </div>
-                    <div class="flex justify-between items-center">
-                        <span>{{ translate('Discounts:') }}</span>
-                        <strong class="text-success">-{{ $discountAmount['display'] }}</strong>
-                    </div>
 
-                    <span class="divide-y divider-third-right py-2"></span>
+                    @if($discountAmount['raw'] > 0)
+                        <div class="flex justify-between items-center">
+                            <span>{{ translate('Discounts:') }}</span>
+                            <strong class="text-success">-{{ $discountAmount['display'] }}</strong>
+                        </div>
+                    @endif
+
+                    <hr class="my-2 ml-auto w-1/2 h-[1px] bg-gray-200 rounded border-0 dark:bg-gray-700">
 
                     <div class="flex justify-between items-center">
                         <span>{{ translate('Subtotal:') }}</span>
