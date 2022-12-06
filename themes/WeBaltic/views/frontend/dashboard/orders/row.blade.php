@@ -1,19 +1,19 @@
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->id]) }}">
-       <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded" name="orders" />
+       <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded mr-2" name="orders" />
 
         #{{ $row->id }}
         @if(!$row->viewed)
-            <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
+            <span class="ml-1 badge badge-warning">{{ translate('New') }}</span>
         @endif
     </a>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle text-center">
-    {{-- <span class="d-block text-14 mb-0 {{ $row->type === \App\Enums\OrderTypeEnum::subscription()->value ? 'text-info':'' }} {{ $row->type === App\Enums\OrderTypeEnum::installments()->value ? 'text-warning':'' }}">{{ $row->type }}</span> --}}
-</x-livewire-tables::table.cell>
+{{-- <x-livewire-tables::table.cell class="align-middle text-center">
+    <span class="d-block text-14 mb-0 {{ $row->type === \App\Enums\OrderTypeEnum::subscription()->value ? 'text-info':'' }} {{ $row->type === App\Enums\OrderTypeEnum::installments()->value ? 'text-warning':'' }}">{{ $row->type }}</span>
+</x-livewire-tables::table.cell> --}}
 
-<x-livewire-tables::table.cell class="align-middle">
+<x-livewire-tables::table.cell class="align-middle max-w-[300px] line-clamp-1">
     @isset($row->user)
         <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user->id]) }}">
             <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
