@@ -963,8 +963,7 @@ x-cloak>
                                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 pt-2">
                                     <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">{{ translate('Tax(percent)') }}</label>
                                     <div class="mt-1 sm:col-span-2 sm:mt-0">
-                                        {{ get_tenant_setting('company_tax_rate') }}
-                                        <x-dashboard.form.input type="number" value="21" field="tax" :x="get_tenant_setting('company_tax_rate')" min="0" max="100" />
+                                        <x-dashboard.form.input type="number" value="21" field="tax" :x="true" min="0" max="100" />
                                     </div>
                                 </div>
                                 {{-- END TAX --}}
