@@ -846,7 +846,7 @@ x-cloak>
 
                             <!-- Payment Status -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                <label class="flex items-center text-sm font-medium text-gray-700">
                                     <span class="mr-2">{{ translate('Payment status') }}</span>
 
                                     @if($order->payment_status === App\Enums\PaymentStatusEnum::unpaid()->value)
@@ -889,7 +889,7 @@ x-cloak>
                             <!-- END Shipping Status -->
 
                             {{-- Tracking number --}}
-                            <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:pt-5">
+                            <div class="sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:pt-5">
                                 <label class="flex items-center text-sm font-medium text-gray-700">
                                     <span class="mr-2">{{ translate('Tracking number') }}</span>
                                 </label>
