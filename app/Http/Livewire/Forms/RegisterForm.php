@@ -254,6 +254,10 @@ class RegisterForm extends Component
 
     protected function createUser()
     {
+        if(empty($this->phone)) {
+            $this->phone = null;
+        }
+
         if ($this->is_ghost) {
             $this->user = User::updateOrCreate([
                 'email' => $this->email,

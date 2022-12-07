@@ -7,6 +7,7 @@ use StripeService;
 use App\Facades\Media;
 use App\Facades\Payments;
 use App\Traits\UploadTrait;
+use App\Enums\OrderTypeEnum;
 use App\Builders\BaseBuilder;
 use App\Enums\UserEntityEnum;
 use App\Traits\HasDataColumn;
@@ -147,7 +148,7 @@ class Invoice extends WeBaseModel
         if ($this->order->type === OrderTypeEnum::standard()->value) {
             return true;
         } elseif ($this->order->type === OrderTypeEnum::subscription()->value) {
-            return false;
+            return false; // TODO: should actually check if it's really last invoice for current period...
         } elseif ($this->order->type === OrderTypeEnum::installments()->value) {
             return $this->order->number_of_invoices === $this->order->invoices()->count();
         }
@@ -163,18 +164,6 @@ class Invoice extends WeBaseModel
         $company_name_char = strtoupper($company_name[0] ?? '');
 
         return $current_date.$first_name_char.$last_name_char.$company_name_char.$random_number;
-    }
-
-    public static function getDaysFromPeriod($period) {
-        if($period === 'year') {
-            return 365;
-        } else if($period === 'month') {
-            return 30;
-        } else if($period === 'week') {
-            return 7;
-        } else if($period === 'day') {
-            return 1;
-        }
     }
 
     public function getRealInvoiceNumber($fallback = false) {
@@ -195,6 +184,38 @@ class Invoice extends WeBaseModel
             } else {
                 $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'test')->where('is_temp', 0)->where('id', '!=', $this->id)->latest()->first()?->real_invoice_number ?? 0) + 1;
             }
+        }
+    }
+    
+    /**
+     * setInvoiceNumber
+     *
+     * This function sets invoice number(s) based on specified payment_method and app settings.
+     * Logic:
+     * 1. Non-payment-processor method (cash-on-delivery/wire-transfer) - invoice_number and real invoice number are same
+     * 2. Payment-processor method (stripe/paysera/paypal etc.) - invoice_number and real invoice number can differ based on app settings
+     * 
+     * @param mixed $payment_method 
+     * @return void
+     */
+    public function setInvoiceNumber($payment_method = null) {
+        $payment_method = $payment_method instanceof PaymentMethodUniversal ? $payment_method : $this->payment_method()->first();
+
+        if($payment_method->isPaymentProcessorGateway()) {
+            // Payment-processor method
+            // IMPORTANT: We are making draft-invoice here because if payment method is payment-processor - Webhooks will determine the invoice_number and real_invoice_number!
+            $this->invoice_number = 'invoice-draft-'.Uuid::generate(4)->string;
+        } else {
+            // Non-payment-processor method -> 1) set real_invoice_prefx and number and make invoice_number combination of the previous two.
+            $this->real_invoice_prefix = !empty(get_tenant_setting('invoice_prefix')) ? get_tenant_setting('invoice_prefix') : 'invoice-';
+
+            if($this->mode === 'live') {
+                $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'live')->where('is_temp', 0)->where('id', '!=', $this->id)->latest()->first()?->real_invoice_number ?? 0) + 1;
+            } else {
+                $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'test')->where('is_temp', 0)->where('id', '!=', $this->id)->latest()->first()?->real_invoice_number ?? 0) + 1;
+            }
+
+            $this->invoice_number = $this->real_invoice_prefix . $this->real_invoice_number;
         }
     }
 
@@ -250,6 +271,7 @@ class Invoice extends WeBaseModel
                         $customer_custom_fields['VAT no.'] = $company_vat;
                     }
                 } else {
+                    // TODO: Should we push notes through theme-functions, no? These noets are for PixPro
                     if(\Countries::isEU($company_country) && !empty($company_vat)) {
                         $notes[] = '“Reverse Charge”  PVMĮ 13str. 2 d.';
                         $customer_custom_fields['VAT no.'] = $company_vat;
@@ -303,14 +325,19 @@ class Invoice extends WeBaseModel
 
         if($this->user->entity === UserEntityEnum::company()->value) {
             $customer_custom_fields = array_merge([
-                'company' => !empty($invoice->billing_company) ? $invoice->billing_company : $this->getData('customer.company_name', ''),
+                'company' => !empty($this->billing_company) ? $this->billing_company : $this->getData('customer.company_name', ''),
                 'address' => $this->billing_address.', '.$this->billing_zip
             ], $customer_custom_fields);
 
-            $customer = new Party([
-                // 'name'          => $this->billing_first_name.' '.$this->billing_last_name,
-                'custom_fields' => $customer_custom_fields,
-            ]);
+            // TODO: This should actually depend on Invoice App Settings!
+            // Like switch called: `display billing first and last name if purchase is made as company`
+            $args = [];
+            if(! $this->payment_method->isPaymentProcessorGateway()) {
+                $args['name'] = $this->billing_first_name.' '.$this->billing_last_name;
+            }
+            $args['custom_fields'] = $customer_custom_fields;
+
+            $customer = new Party($args);
         } else {
             $customer = new Party([
                 'name'          => $this->user->name.' '.$this->user->surname,
@@ -318,9 +345,9 @@ class Invoice extends WeBaseModel
                 'custom_fields' => $customer_custom_fields,
             ]);
         }
+
         
-
-
+        
         $invoice_items = [];
 
         if($this->isFromStripe()) {
@@ -349,7 +376,7 @@ class Invoice extends WeBaseModel
                     } else {
                         $invoice_items[] = (new InvoiceItem())
                             ->title($li_name)
-                            ->description($item->excerpt)
+                            ->description($item->excerpt ?? '')
                             ->pricePerUnit($stripe_line_item['price']['unit_amount'] / 100)
                             ->quantity($stripe_line_item['quantity'])
                             ->discount($item->discount_amount ?? 0)
@@ -361,7 +388,7 @@ class Invoice extends WeBaseModel
             foreach($this->order->order_items as $item) {
                 $invoice_items[] = (new InvoiceItem())
                     ->title($item->name)
-                    ->description($item->excerpt)
+                    ->description($item->excerpt ?? '')
                     ->pricePerUnit($item->base_price)
                     ->quantity($item->quantity)
                     ->discount($item->discount_amount ?? 0)
@@ -451,13 +478,14 @@ class Invoice extends WeBaseModel
                 };
             }
         ];
-
+        
         $invoice = LaravelInvoice::make(!empty($custom_title) ? $custom_title : translate('VAT Invoice'))
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             // ->sequence()
             ->serialNumberFormat('{SERIES}')
             // ability to include translated invoice status
             // in case it was paid
+            ->filename(\Str::slug($custom_title).'_'.$this->getRealInvoiceNumber())
             ->status($this->payment_status)
             ->seller($business)
             ->buyer($customer)
@@ -523,6 +551,26 @@ class Invoice extends WeBaseModel
         }
 
         return $format ? \FX::formatPrice($this->discount_amount) : $this->discount_amount;
+    }
+
+    public static function getDaysFromPeriod($period) {
+        if($period === 'year') {
+            return 365;
+        } else if($period === 'month') {
+            return 30;
+        } else if($period === 'week') {
+            return 7;
+        } else if($period === 'day') {
+            return 1;
+        }
+    }
+
+    public function isForStandard() {
+        return $this->order->type === OrderTypeEnum::standard()->value;
+    }
+
+    public function isForSubscription() {
+        return $this->order->type === OrderTypeEnum::subscription()->value;
     }
 
     public function isTestMode() {

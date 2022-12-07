@@ -476,7 +476,6 @@ class EVCheckoutController extends Controller
             }
         }
 
-
         return view('frontend.order-received', compact('order', 'ghost_user'));
     }
 

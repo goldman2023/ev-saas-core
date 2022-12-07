@@ -375,10 +375,10 @@ class CheckoutSingleForm extends Component
                 $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
             } else {
                 $this->order->type = OrderTypeEnum::standard()->value;
-                $this->order->number_of_invoices = 1; // 'unlimited' for subscriptions
-                $this->order->invoicing_period = null; // TODO: Add monthly/annual switch
+                $this->order->number_of_invoices = 1; // 1 for one-time payment
+                $this->order->invoicing_period = null;
                 $this->order->invoice_grace_period = $default_grace_period;
-                $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
+                $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts? NOW!
             }
 
             /*
@@ -433,20 +433,20 @@ class CheckoutSingleForm extends Component
             $this->order->save();
 
             /*
-             * Create OrderItem
+             * Create OrderItem(s)
              */
             foreach ($this->items as $item) {
                 $order_item = new OrderItem();
                 $order_item->order_id = $this->order->id;
                 $order_item->subject_type = $item::class;
                 $order_item->subject_id = $item->id;
-                $order_item->name = ($item?->is_variation ?? false) ? $item->main->name : $item->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
+                $order_item->name = ($item?->is_variation ?? false) ? $item->main->name : $item->name;
                 $order_item->excerpt = ($item?->is_variation ?? false) ? $item->main->excerpt : $item->excerpt;
                 $order_item->variant = ($item?->is_variation ?? false) ? $item->getVariantName(key_by: 'name') : null;
                 $order_item->quantity = ! empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
 
-                // Check if $item has stock and reduce it if it does
-                if (method_exists($item, 'stock')) {
+                // Check if $item has stock and reduce it if it does (ONLY IF TRACK_INVENTORY is TRUE)
+                if ($item->track_inventory && method_exists($item, 'stock')) {
                     // Reduce the stock quantity of an $item
                     $serial_numbers = $item->reduceStock();
 
@@ -459,10 +459,10 @@ class CheckoutSingleForm extends Component
                     }
                 }
 
-                $order_item->base_price = $item->base_price;
-                $order_item->discount_amount = ($item->base_price - $item->total_price);
-                $order_item->subtotal_price = $item->total_price; // TODO: This should use subtotal_price instead of total_price
-                $order_item->total_price = $item->total_price;
+                $order_item->base_price = $item->base_price; // it's like a unit_price
+                $order_item->discount_amount = $order_item->quantity * ($item->base_price - $item->total_price);
+                $order_item->subtotal_price = $order_item->quantity * $item->total_price;
+                $order_item->total_price = $order_item->quantity * $item->total_price;
                 $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
 
                 $order_item->save();
@@ -475,11 +475,13 @@ class CheckoutSingleForm extends Component
 
             $invoice->order_id = $this->order->id;
             $invoice->shop_id = $this->order->shop_id;
-            $invoice->user_id = auth()->user()->id ?? null;
+            $invoice->user_id = $this->order->user_id;
+            $invoice->is_temp = false;
+            $invoice->mode = 'live';
             $invoice->payment_method_type = PaymentMethodUniversal::class;
             $invoice->payment_method_id = $payment_method->id ?? null;
             $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
-            $invoice->invoice_number = Invoice::generateInvoiceNumber($this->order->billing_first_name, $this->order->billing_last_name, $this->order->billing_company); // Default: VJ21012022
+            // $invoice->invoice_number = Invoice::generateInvoiceNumber($this->order->billing_first_name, $this->order->billing_last_name, $this->order->billing_company); // Default: VJ21012022
 
             $invoice->email = $this->order->email;
             $invoice->billing_first_name = $this->order->billing_first_name;
@@ -506,14 +508,14 @@ class CheckoutSingleForm extends Component
             $invoice->due_date = null; // Default due_date is NULL days for subscription (if not trial mode, if it's trial it's null)
             $invoice->grace_period = $this->order->invoice_grace_period; // NULL; or 5 days grace_period by default
 
+            $invoice->setInvoiceNumber();
+
             $invoice->save();
 
             DB::commit();
 
-            // Depending on payment method, do actions
-            //$this->executePayment(request(), $invoice->id);
+            $this->executePayment(request(), $invoice->id);
 
-            // TODO: Go to Order page in user dashboard! Also, when payment gateway processes payment, callback url should navigate to Order single page in user dashboard (if user is logged in, of course)
 
             // Full cart reset
             CartService::fullCartReset();
@@ -532,9 +534,15 @@ class CheckoutSingleForm extends Component
         $invoice = Invoice::with('payment_method')->find($invoice_id);
         $invoice->load('payment_method');
 
+        // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
+
         if ($invoice->payment_method->gateway === 'wire_transfer') {
-            // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
-        } elseif ($invoice->payment_method->gateway === 'paysera') {
+
+        } else if ($invoice->payment_method->gateway === 'stripe') {
+
+        } else if ($invoice->payment_method->gateway === 'paypal') {
+            
+        } else if ($invoice->payment_method->gateway === 'paysera') {
             $paysera = new PayseraGateway(order: $invoice->order, invoice: $invoice, payment_method: $invoice->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
             $paysera->pay();
         }

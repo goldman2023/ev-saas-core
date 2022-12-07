@@ -71,7 +71,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     }
 
     protected function registerLivewireComponents() {
-
+        Livewire::component('dashboard.tables.orders-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\OrdersTable::class);
     }
 
     /**
@@ -87,12 +87,12 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_filter('dashboard.sidebar.menu', function ($menu) {
                 $included_items = [
                     'dashboard',
-                    'orders.index',
                     'attributes.index',
                     'categories.index',
                     'products.index',
                     'tasks.index',
                     'file-manager.index',
+                    'orders.index',
                     'invoices.index',
                     'blog.posts.index',
                     'pages.index',
@@ -178,11 +178,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
         return true;
     }
-
+    
     public function generate_vin_code($order) {
-        $vin_code = "";
-        $item = $order->get_primary_order_item();
-
 
     }
 
