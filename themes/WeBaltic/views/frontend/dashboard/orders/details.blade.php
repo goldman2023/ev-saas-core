@@ -105,6 +105,10 @@
             <div class="scale-75" style="margin-bottom: -20px; width: 125%; transform-origin: top left;">
                 <x-dashboard.orders.order-details-card :order="$order">
                 </x-dashboard.orders.order-details-card>
+
+                <a href="#" class="btn btn-primary w-full mt-3">
+                    {{ translate('Add to print Queue') }}
+                </a>
             </div>
         </div>
 
