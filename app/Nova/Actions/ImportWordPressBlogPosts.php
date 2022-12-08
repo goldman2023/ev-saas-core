@@ -2,22 +2,22 @@
 
 namespace App\Nova\Actions;
 
+use DB;
+use Log;
+use Storage;
+use MediaService;
+use App\Models\Upload;
 use App\Models\BlogPost;
 use App\Models\Category;
-use App\Models\CategoryRelationship;
-use App\Models\Upload;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
+use Illuminate\Support\Collection;
+use App\Models\CategoryRelationship;
 use Laravel\Nova\Fields\ActionFields;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Http\Services\Integrations\WordPressAPIService;
-use DB;
-use MediaService;
-use Storage;
-use Log;
 
 class ImportWordPressBlogPosts extends Action 
 {
@@ -88,24 +88,34 @@ class ImportWordPressBlogPosts extends Action
     public function importBlogPost($blogPost) {
         DB::beginTransaction();
         try {
-            $new_blog_post = BlogPost::updateOrCreate(
-                [
+            $new_blog_post = BlogPost::where([
+                ['slug', $blogPost['slug']],
+                ['shop_id', 1],
+                ['type', 'blog'],
+            ])->first();
+            $already_exists = true;
+
+            if(empty($new_blog_post)) {
+                $new_blog_post = new BlogPost();
+                $already_exists = false;
+            }
+
+            $new_blog_post->forceFill(array_merge([
                     'slug' => $blogPost['slug'],
                     'shop_id' => 1,
                     'type' => 'blog',
                 ],
                 [
+                    'user_id' => $this->initiator->id,
                     'status' => $blogPost['status'] === 'publish' ? 'published' : $blogPost['status'],
                     'name' => html_entity_decode($blogPost['title']['rendered'] ?? ''),
                     'excerpt' => html_entity_decode(strip_tags($blogPost['excerpt']['rendered'] ?? '')),
                     'content' => $blogPost['content']['rendered'] ?? '',
                     'meta_title' => html_entity_decode($blogPost['yoast_head_json']['title'] ?? ''),
                     'meta_description' => html_entity_decode(strip_tags($blogPost['yoast_head_json']['description'] ?? '')),
-                    'user_id' => $this->initiator->id,
                     'created_at' => $blogPost['date'],
                     'updated_at' => $blogPost['modified'],
-                ]
-            );
+                ]));
 
             $new_blog_post->slug = $blogPost['slug'];
             $new_blog_post->created_at = $blogPost['date'];
@@ -138,50 +148,53 @@ class ImportWordPressBlogPosts extends Action
                 }
             }
 
-            // Add Thumbnail and Cover
-            $wp_media = $this->wp->getMediaByID($blogPost['featured_media']);
+            // Add Thumbnail and Cover (if post was not already imported before)
+            if(!$already_exists) {
+                $wp_media = $this->wp->getMediaByID($blogPost['featured_media']);
 
-            if(empty($new_blog_post->thumbnail) && !empty($wp_media['data']) && !empty($wp_media['data']['media_details'])) {
-                $source_url = $wp_media['data']['media_details']['sizes']['full']['source_url'] ?? null;
-                $extension = MediaService::mime2ext($wp_media['data']['media_details']['sizes']['full']['mime_type'] ?? null);
-
-                if(!empty($source_url) && isset(MediaService::getPermittedExtensions()[$extension])) {
-                    $file_content = file_get_contents($source_url);
-                    $file_size = strlen($file_content);
-                    $file_name = time().'_'.$wp_media['data']['media_details']['sizes']['full']['file'] ?? null;
-
-                    $upload = new Upload();
-                    $tenant_path = 'uploads/all';
-
-                    if (tenant('id')) {
-                        $tenant_path = 'uploads/'.tenant('id');
+                if(empty($new_blog_post->thumbnail) && !empty($wp_media['data']) && !empty($wp_media['data']['media_details'])) {
+                    $source_url = $wp_media['data']['media_details']['sizes']['full']['source_url'] ?? null;
+                    $extension = MediaService::mime2ext($wp_media['data']['media_details']['sizes']['full']['mime_type'] ?? null);
+    
+                    if(!empty($source_url) && isset(MediaService::getPermittedExtensions()[$extension])) {
+                        $file_content = file_get_contents($source_url);
+                        $file_size = strlen($file_content);
+                        $file_name = time().'_'.$wp_media['data']['media_details']['sizes']['full']['file'] ?? null;
+    
+                        $upload = new Upload();
+                        $tenant_path = 'uploads/all';
+    
+                        if (tenant('id')) {
+                            $tenant_path = 'uploads/'.tenant('id');
+                        }
+    
+                        // Check if tenant uploads folder exists an create it if not
+                        if (! Storage::exists($tenant_path)) {
+                            // Create Tenant folder on DO if it doesn't exist
+                            Storage::makeDirectory($tenant_path, 0775, true, true);
+                        }
+    
+                        $s3_image_path = $tenant_path.'/'.$file_name;
+                        Storage::put($s3_image_path, $file_content, 'public');
+    
+                        $upload->extension = $extension;
+                        $upload->file_original_name = $wp_media['data']['media_details']['sizes']['full']['file'] ?? '';
+                        $upload->file_name = $s3_image_path;
+                        $upload->user_id = $this->initiator->id;
+                        $upload->shop_id = 1;
+                        $upload->type = MediaService::getPermittedExtensions()[$extension];
+                        $upload->file_size = $file_size;
+                        $upload->save();
+    
+                        // Sync Uploads with blog post
+                        $new_blog_post->thumbnail = $upload->id;
+                        $new_blog_post->cover = $upload->id;
+                        $new_blog_post->meta_img = $upload->id; // TODO: This one can be taken from Yoast FYI
+                        $new_blog_post->syncUploads();
                     }
-
-                    // Check if tenant uploads folder exists an create it if not
-                    if (! Storage::exists($tenant_path)) {
-                        // Create Tenant folder on DO if it doesn't exist
-                        Storage::makeDirectory($tenant_path, 0775, true, true);
-                    }
-
-                    $s3_image_path = $tenant_path.'/'.$file_name;
-                    Storage::put($s3_image_path, $file_content, 'public');
-
-                    $upload->extension = $extension;
-                    $upload->file_original_name = $wp_media['data']['media_details']['sizes']['full']['file'] ?? '';
-                    $upload->file_name = $s3_image_path;
-                    $upload->user_id = $this->initiator->id;
-                    $upload->shop_id = 1;
-                    $upload->type = MediaService::getPermittedExtensions()[$extension];
-                    $upload->file_size = $file_size;
-                    $upload->save();
-
-                    // Sync Uploads with blog post
-                    $new_blog_post->thumbnail = $upload->id;
-                    $new_blog_post->cover = $upload->id;
-                    $new_blog_post->meta_img = $upload->id; // TODO: This one can be taken from Yoast FYI
-                    $new_blog_post->syncUploads();
                 }
             }
+            
             DB::commit();
 
             Log::info('(#'.$new_blog_post->id.') '.$new_blog_post->name.' - successfully imported!');

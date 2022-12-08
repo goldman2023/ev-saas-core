@@ -146,7 +146,7 @@ class Product extends WeBaseModel
         return 'slug';
     }
 
-    public function getContentColumnName()
+    public static function getContentColumnName()
     {
         return 'description';
     }
@@ -160,7 +160,7 @@ class Product extends WeBaseModel
             fn ($query) =>  $query
                 ->where('name', 'like', '%' . $term . '%')
                 ->orWhere('excerpt', 'like', '%' . $term . '%')
-                ->orWhere($this->getContentColumnName(), 'like', '%' . $term . '%')
+                ->orWhere(self::getContentColumnName(), 'like', '%' . $term . '%')
         );
     }
 
