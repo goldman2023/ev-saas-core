@@ -127,7 +127,7 @@ class Order extends WeBaseModel
         static::relationsRetrieved(function ($order) {
             // 1. base_price in our DB should represent order_item's unit_price
             // 2. quantity is ...quantity
-            // 3. subtotal_price =base_price * quantity
+            // 3. subtotal_price = (base_price * quantity)
             // 4. total_price = subtotal_price - discount(didn't add it yet) + shipping_cost + tax
 
             $sums_properties = ['base_price', 'discount_amount', 'subtotal_price', 'total_price'];
@@ -140,8 +140,7 @@ class Order extends WeBaseModel
 
             $order->initCoreProperties(only: $sums_properties); // init ONLY 'sums' core properties (cuz otherwise, other core properties from traits will be overriden)
 
-
-            if(!empty($order->user_subscription)) {
+            if($order->type === 'subscription') {
                 foreach ($sums_properties as $property) {
                     $order->{$property} = 0;
 
@@ -161,12 +160,12 @@ class Order extends WeBaseModel
                 $order->subtotal_price = 0;
 
                 foreach ($order->order_items as $item) {
-                    $order->base_price += $item->base_price;
-                    $order->discount_amount += $item->discount_amount;
-                    $order->subtotal_price += $item->base_price;
+                    $order->base_price += $item->quantity * $item->base_price; // base_price is unit_price, so we need to multiply it by quantity
+                    $order->discount_amount += $item->discount_amount; // here: discount_amount is `$item->quantity * ($item->base_price - $item->total_price)`
+                    $order->subtotal_price += $item->total_price;
                 }
             }
-
+            
             $order->total_price = $order->subtotal_price + (float) $order->shipping_cost;
             $order->total_price += ($order->total_price * ((float) $order->tax) / 100);
         });

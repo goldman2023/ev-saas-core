@@ -22,7 +22,7 @@
 
     @if($orders_count > 0)
     <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent"
+        <ul class="flex overflow-x-auto sm:flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent"
             role="tablist">
 
             @foreach(App\Enums\OrderStatusEnum::values() as $key => $status)
@@ -42,12 +42,12 @@
     <div id="myTabContent">
         @foreach(App\Enums\OrderStatusEnum::values() as $key => $status)
         <div id="orders-tab-{{ $key }}" role="tabpanel" aria-labelledby="order-nav-{{ $key }}"
-            class="grid grid-cols-12 gap-6">
-            <div class="col-span-9">
+            class="grid sm:grid-cols-12 gap-6">
+            <div class="sm:col-span-9">
                 <livewire:dashboard.tables.orders-table :status="$key+1" for="shop">
                 </livewire:dashboard.tables.orders-table>
             </div>
-            <div class="col-span-3">
+            <div class="sm:col-span-3">
                 @if(auth()->user()->isAdmin())
                 <x-dashboard.orders.action-panel>
 

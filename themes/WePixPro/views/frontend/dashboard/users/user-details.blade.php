@@ -27,7 +27,6 @@
                 </x-dashboard.widgets.customers.data-tabs> --}}
 
                 <div>
-                    @if($user->isSubscribed() ?? false)
                         <div class="w-full pb-5 mb-5 border-b border-gray-200">
                             <div
                                 class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
@@ -43,7 +42,6 @@
                         <div class="relative">
                             @include('frontend.partials.pix-pro-licenses-table', ['user' => $user])
                         </div>
-                    @endif
                 </div>
 
                 {{-- User Invoices --}}

@@ -76,11 +76,11 @@
         <span class="text text-dark">{{ translate('Join') }}</span>
     </a>
     @else
-    <span x-data="" @click="$dispatch('display-flyout-panel', {'id': 'dashboard-sidebar-panel'})"
+    <a href="/dashboard" x-data="" @click="$dispatch('display-flyout-panel', {'id': 'dashboard-sidebar-panel'})"
         class="nav-link text-dark">
         @svg('heroicon-s-user-circle', ['class' => 'icon', 'style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Dashboard') }}</span>
-    </span>
+</a>
     @endif
 
     <span @click="$dispatch('display-flyout-panel', {'id' : 'categories-panel'})" class="hidden nav-link text-dark">
@@ -88,8 +88,8 @@
         <span class="text">{{ translate('Menu') }}</span>
     </span>
 
-    <span @click="$dispatch('display-flyout-panel', {'id' : 'wishlist-panel'})" class="nav-link text-dark">
+    <a href="/" class="nav-link text-dark">
         @svg('heroicon-s-phone', ['class' => 'icon', 'style' => 'width: 24px;'])
         <span class="text">{{ translate('Contact us') }}</span>
-    </span>
+    </a>
 </nav>

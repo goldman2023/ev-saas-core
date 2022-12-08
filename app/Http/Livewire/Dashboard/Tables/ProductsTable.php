@@ -80,9 +80,7 @@ class ProductsTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('ID')
-                ->sortable()
-                ->excludeFromSelectable(),
+
             Column::make('Image')
                 ->excludeFromSelectable(),
             Column::make('Title', 'name')
@@ -91,8 +89,8 @@ class ProductsTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Price', 'price')
                 ->excludeFromSelectable(),
-            Column::make('Type', 'type')
-                ->excludeFromSelectable(),
+            // Column::make('Type', 'type')
+            //     ->excludeFromSelectable(),
             Column::make('Views', 'views')
                 ->excludeFromSelectable(),
             Column::make('Last Update', 'updated_at'),

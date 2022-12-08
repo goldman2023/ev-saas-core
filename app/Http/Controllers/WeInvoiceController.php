@@ -62,6 +62,10 @@ class WeInvoiceController extends Controller
             $invoice = Invoice::findOrFail($id);
             // TODO: Move access restrictions to some Policy classes!!!!
             if($invoice->user_id === auth()->user()->id || $invoice->shop_id === \MyShop::getShopID() || auth()->user()->isAdmin()) {
+                if($invoice->isForStandard()) {
+                    return $invoice->generateInvoicePDF(translate('Invoice').' '.$invoice->id);
+                }
+
                 return $invoice->generateInvoicePDF();
             }
 

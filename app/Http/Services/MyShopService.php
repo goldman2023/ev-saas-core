@@ -31,6 +31,10 @@ class MyShopService
                 $this->shop = auth()->user()->shop->first();
                 $this->setSettings();
             }
+
+            if($this->shop == null) {
+                $this->shop = Shop::where('id', 1)->get()->last();
+            }
         }
     }
 

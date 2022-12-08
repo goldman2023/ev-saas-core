@@ -7,6 +7,7 @@ use Closure;
 trait IsPaymentMethod
 {
     public static $available_gateways = ['wire_transfer', 'paypal', 'stripe', 'paysera'];
+    public static $payment_processor_gateways = ['paypal', 'stripe', 'paysera'];
 
     /**
      * Boot the trait
@@ -41,6 +42,10 @@ trait IsPaymentMethod
                 $model->data = $data;
             });
         });
+    }
+
+    public function isPaymentProcessorGateway() {
+        return in_array($this->gateway, self::$payment_processor_gateways);
     }
 
     /**

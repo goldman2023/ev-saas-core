@@ -103,6 +103,9 @@ class Cart extends Component
 
         // Dispatch cart_processing_ending Event
         $this->dispatchBrowserEvent('cart-processing-end', ['id' => $model->id, 'model_type' => base64_encode($model_type), 'qty' => $new_data['qty']]);
+
+        // Dispatch total cart items count update
+        $this->dispatchBrowserEvent('cart-total-items-count-update', ['count' => \CartService::getTotalItemsCount()]);
     }
 
     public function removeFromCart($model, $model_type)
@@ -115,6 +118,9 @@ class Cart extends Component
         $this->refreshCart();
 
         $this->processing = false;
+
+        // Dispatch total cart items count update
+        $this->dispatchBrowserEvent('cart-total-items-count-update', ['count' => \CartService::getTotalItemsCount()]);
     }
 
     public function render()

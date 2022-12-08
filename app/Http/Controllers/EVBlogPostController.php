@@ -87,6 +87,7 @@ class EVBlogPostController extends Controller
         // /* Prototype for lazy loading images */
         $content = $blog_post->content;
         $html = preg_replace('/<img(.+?)src="(.+?)"(.+?)>/i', '<img$1 loading="lazy" src="$2"$3>', $content);
+        $html = preg_replace('/<img(.+?)srcset="(.+?)"(.+?)>/i', '<img$1 data-srcset="$2"$3>', $html);
         if (! empty($blog_post)) {
             return view('frontend.blog.blog-post-single', compact('blog_post', 'authors', 'shop', 'related_blog_posts', 'latest_blog_posts', 'html'));
         }

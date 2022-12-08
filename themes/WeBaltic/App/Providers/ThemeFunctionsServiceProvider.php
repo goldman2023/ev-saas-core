@@ -71,7 +71,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     }
 
     protected function registerLivewireComponents() {
-        
+        Livewire::component('dashboard.tables.orders-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\OrdersTable::class);
     }
 
     /**

@@ -1,5 +1,5 @@
 <a href="{{ $product->getPermalink() }}" class="group text-sm">
-    <div class="aspect-w-1 aspect-h-1 cover w-full overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+    <div class="aspect-w-5 aspect-h-3 cover w-full overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
       <img loading="lazy" class="object-contain" src="{{ $product->getThumbnail() }}" alt="{{ $product->name }}">
     </div>
     <h3 class="mt-4 font-medium text-gray-900">

@@ -76,7 +76,7 @@
             $wire.set('wef.course_intro_video_url', this.wef.course_intro_video_url, true);
 
         }
-    }" 
+    }"
     @init-product-form.window=""
     @validation-errors.window="console.log($event.detail.errors);" x-cloak>
 
@@ -87,9 +87,9 @@
 
         <div class="w-full" wire:loading.class="opacity-30 pointer-events-none" wire:target="saveProduct">
 
-            <div class="grid grid-cols-12 gap-8 mb-10">
+            <div class="sm:grid sm:grid-cols-12 gap-8 mb-10">
                 {{-- Left side --}}
-                <div class="col-span-8  ">
+                <div class="sm:col-span-8  ">
 
                     @if($is_update && $product->type === 'course')
                     <a href="{{ route('product.edit.course', $product->id) }}" class="mb-3 bg-white bg-opacity-50 flex p-6 "
@@ -1232,8 +1232,8 @@
                                 x-data="{}" wire:ignore>
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                        <x-dashboard.form.editor-js 
-                                            field="wef.unlockables" 
+                                        <x-dashboard.form.editor-js
+                                            field="wef.unlockables"
                                             structure-field="wef.unlockables_structure"
                                             id="product-unlockables-wysiwyg" />
 
