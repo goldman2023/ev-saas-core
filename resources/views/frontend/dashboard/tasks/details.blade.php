@@ -125,7 +125,6 @@
                                         <a href="{{ route('task.completed', ['id' => $task->id]) }}"
                                         class="w-full flex justify-center items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         {{ translate('Mark as Done') }}
-                                        @svg('heroicon-s-badge-check', ['class' => 'w-6 h-6 ml-2'])
                                     </a>
                                 </div>
                             </div>
