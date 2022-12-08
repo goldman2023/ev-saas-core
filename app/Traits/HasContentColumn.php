@@ -11,13 +11,13 @@ use Closure;
 trait HasContentColumn
 {
     // This function can be overriden with corresponding json column name depending on model's table structure
-    public function getContentColumnName()
+    public static function getContentColumnName()
     {
         return 'content';
     }
 
     // This function can be overriden with corresponding json column name depending on model's table structure
-    public function getContentStructureCoreMetaName()
+    public static function getContentStructureCoreMetaName()
     {
         return 'content_structure';
     }
@@ -29,24 +29,42 @@ trait HasContentColumn
      */
     public function initializeHasDataColumn(): void
     {
-        $this->fillable = array_unique(
+        $this->fillable = array_values(array_unique(
             array_merge($this->fillable, [
-                $this->getContentColumnName()
+                self::getContentColumnName()
             ])
-        );
+        ));
+    }
+
+    /**
+     * Boot the trait
+     *
+     * @return void
+     */
+    public function bootHasDataColumn(): void
+    {
+        static::retrieved(function($model) {
+            $model->fillable = array_values(array_unique(
+                array_merge($model->fillable, [
+                    self::getContentColumnName()
+                ])
+            ));
+
+            dd($model->fillable);
+        });
     }
 
     /*
      * Get content_structure core meta
      */
     public function getContentStructure() {
-        return $this->getCoreMeta($this->getContentStructureCoreMetaName());
+        return $this->getCoreMeta(self::getContentStructureCoreMetaName());
     }
 
     /*
      * Set content_structure core meta
      */
     public function setContentStructure($value = null, $default = null) {
-        $this->saveCoreMeta($this->getContentStructureCoreMetaName(), empty($value) ? $default : $value);
+        $this->saveCoreMeta(self::getContentStructureCoreMetaName(), empty($value) ? $default : $value);
     }
 }
