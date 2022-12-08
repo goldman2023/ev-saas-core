@@ -22,7 +22,6 @@
                 </x-ev.label>
 
                 <div class="media text-body mb-3">
-                        <x-heroicon-s-badge-check class="mt-1 mr-2 text-success" style="max-width:30px" />
 
 
                     <div class="media-body">
@@ -30,14 +29,12 @@
                     </div>
                 </div>
                 <div class="media text-body mb-3">
-                    <x-heroicon-s-badge-check class="mt-1  mr-2 text-success" style="max-width:30px" />
 
                     <div class="media-body">
                         Fresh content taught by 1,300+ experts – for any learning style
                     </div>
                 </div>
                 <div class="media text-body mb-3">
-                    <x-heroicon-s-badge-check class="text-success mr-2" style="max-width:30px" />
 
                     <div class="media-body">
                         Actionable learning insights <span
