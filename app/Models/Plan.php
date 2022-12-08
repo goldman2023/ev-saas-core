@@ -109,7 +109,7 @@ class Plan extends WeBaseModel
             fn ($query) =>  $query->where('id', 'like', '%'.$term.'%')
                 ->orWhere('name', 'like', '%'.$term.'%')
                 ->orWhere('excerpt', 'like', '%'.$term.'%')
-                ->orWhere($this->getContentColumnName(), 'like', '%'.$term.'%')
+                ->orWhere(self::getContentColumnName(), 'like', '%'.$term.'%')
         );
     }
 
