@@ -18,8 +18,8 @@ class Kernel extends ConsoleKernel
         \Laravel\Passport\Console\KeysCommand::class,
         \Laravel\Passport\Console\ClientCommand::class,
         \Stancl\Tenancy\Commands\Install::class,
-        \Stancl\Tenancy\Commands\Migrate::class,
-        \Stancl\Tenancy\Commands\Rollback::class,
+        // \Stancl\Tenancy\Commands\Migrate::class,
+        // \Stancl\Tenancy\Commands\Rollback::class,
         \Stancl\Tenancy\Commands\Seed::class,
         \Qirolab\Theme\Commands\MakeThemeCommand::class,
 

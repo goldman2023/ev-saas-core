@@ -1,6 +1,7 @@
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->id]) }}">
-       <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded mr-2" name="orders" />
+       <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded mr-2" name="orders" 
+            @click="$dispatch('table-item-toggle', {id: Number($event.target.getAttribute('value'))})"/>
 
         #{{ $row->id }}
         @if(!$row->viewed)

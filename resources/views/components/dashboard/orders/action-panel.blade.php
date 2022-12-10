@@ -1,4 +1,16 @@
-<div class="bg-white border border-gray-200 rounded-lg">
+<div class="bg-white border border-gray-200 rounded-lg" x-data="{
+    items: [],
+    toggleItem(id) {
+        console.log(this.items.indexOf(id));
+        console.log(this.items);
+
+        if(this.items.indexOf(id) !== -1) {
+            this.items = this.items.splice(this.items.indexOf(id), 1);
+        } else {
+            this.items.push(id);
+        }
+    }
+}" @table-item-toggle.window="toggleItem($event.detail.id)">
     <div class="px-3 py-3 border-b border-gray-200">
         <div class="flex justify-between items-center flex-wrap sm:flex-nowrap">
             <div class="w-full">
@@ -32,8 +44,7 @@
 
             </div>
 
-            <a href="#"
-                class="relative bg-gray-100 m-2 p-3 flex items-center space-x-4 rounded-xl hover:bg-gray-200">
+            <a href="#" class="relative bg-gray-100 m-2 p-3 flex items-center justify-between space-x-4 rounded-xl hover:bg-gray-200">
 
                 <div>
                     <h3 class="text-sm font-medium text-gray-900">

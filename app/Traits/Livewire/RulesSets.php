@@ -60,7 +60,7 @@ trait RulesSets
 
         // Set Meta Defaults
         if(class_has_trait($model::class, HasContentColumn::class)) {
-            $defaultMetaRuleSets['wef_meta']['wef.'.$model->getContentStructureCoreMetaName()] = 'nullable';
+            $defaultMetaRuleSets['wef_meta']['wef.'.$model::getContentStructureCoreMetaName()] = 'nullable';
         }
         // END Set meta defaults
         if(!empty($custom_rules) && (is_array($custom_rules) || $custom_rules instanceof Collection)) {
