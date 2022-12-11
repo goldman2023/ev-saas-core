@@ -17,11 +17,11 @@ class OrdersTable extends DataTableComponent
 {
     use DispatchSupport;
 
-    public $for = 'me';
-
     public $user;
 
     public $status;
+
+    public $tableId;
 
     public ?int $searchFilterDebounce = 800;
 
@@ -54,11 +54,12 @@ class OrdersTable extends DataTableComponent
 
     protected string $tableName = 'orders';
 
-    public function mount($for = 'me', $user = null, $status = null)
+    public function mount($user = null, $status = null, $tableId = null)
     {
-        $this->for = $for;
         $this->status = $status;
         $this->user = $user;
+        $this->tableId = $tableId;
+
         parent::mount();
     }
 
@@ -146,8 +147,7 @@ class OrdersTable extends DataTableComponent
     {
         return Order::query()->where('is_temp', 0)
             ->when($this->status != null, fn ($query, $value) => $query->where('status', $this->status ?? null))
-
-            ->when($this->for === 'me', fn ($query, $value) => $query->where('user_id', $this->user->id ?? null))
+            ->when(auth()->user()->isCustomer(), fn ($query, $value) => $query->where('user_id', $this->user->id ?? null))
             // ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
