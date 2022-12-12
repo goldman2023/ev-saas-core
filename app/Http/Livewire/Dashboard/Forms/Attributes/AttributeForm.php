@@ -2,28 +2,28 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Attributes;
 
-use App\Enums\AmountPercentTypeEnum;
-use App\Enums\AttributeTypeEnum;
-use App\Enums\StatusEnum;
+use DB;
+use FX;
+use EVS;
+use Purifier;
+use Categories;
+use Permissions;
+use App\Models\Plan;
+use App\Models\User;
 use App\Facades\MyShop;
 use App\Models\Address;
-use App\Models\Attribute;
-use App\Models\AttributeValue;
-use App\Models\Category;
-use App\Models\Plan;
-use App\Models\ShopAddress;
-use App\Models\User;
-use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\HasCategories;
-use App\Traits\Livewire\RulesSets;
-use Categories;
-use DB;
-use EVS;
-use FX;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
-use Permissions;
-use Purifier;
+use App\Models\Category;
+use App\Enums\StatusEnum;
+use App\Models\Attribute;
+use App\Models\ShopAddress;
+use App\Models\AttributeValue;
+use Illuminate\Validation\Rule;
+use App\Enums\AttributeTypeEnum;
+use App\Traits\Livewire\RulesSets;
+use App\Enums\AmountPercentTypeEnum;
+use App\Traits\Livewire\HasCategories;
+use App\Traits\Livewire\DispatchSupport;
 use Spatie\ValidationRules\Rules\ModelsExist;
 
 class AttributeForm extends Component
