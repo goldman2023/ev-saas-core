@@ -9,7 +9,6 @@ use App\Enums\TaskStatusEnum;
 use Illuminate\Support\Facades\DB;
 use App\Traits\Livewire\DispatchSupport;
 
-
 class OrdersActionPanel extends Component
 {
     use DispatchSupport;
@@ -103,7 +102,7 @@ class OrdersActionPanel extends Component
         
             $new_task->user_id = auth()->user()->id;
             $new_task->assignee_id = auth()->user()->id;
-            $new_task->type = 'printing';
+            $new_task->type = TaskTypesEnum::printing()->value;
             $new_task->status = TaskStatusEnum::backlog()->value;
             $new_task->name = translate('Printing orders labels/certificates');
             // $new_task->excerpt = translate('Printing order labels (certificates)');
@@ -136,7 +135,7 @@ class OrdersActionPanel extends Component
         
             $new_task->user_id = auth()->user()->id;
             $new_task->assignee_id = auth()->user()->id;
-            $new_task->type = 'delivery';
+            $new_task->type = TaskTypesEnum::delivery()->value;
             $new_task->status = TaskStatusEnum::in_progress()->value;
             $new_task->name = translate('Delivery task');
             // $new_task->excerpt = translate('Printing order labels (certificates)');
