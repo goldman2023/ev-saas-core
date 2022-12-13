@@ -40,7 +40,7 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\WeEditController;
 use App\Http\Controllers\WeAnalyticsController;
-use App\Http\Controllers\WeMenuController;
+// use App\Http\Controllers\WeMenuController;
 use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
@@ -83,7 +83,7 @@ Route::middleware([
 
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard/we-analytics', [WeAnalyticsController::class, 'index'])->name('analytics.index');
-        Route::get('/we-menu', [WeMenuController::class, 'index'])->name('menu.index');
+        // Route::get('/we-menu', [WeMenuController::class, 'index'])->name('menu.index');
         Route::get('/sitemap/generate', [SitemapController::class, 'generate'])->name('sitemap.generate');
 
         Route::get('/we-edit', [WeEditController::class, 'index'])->name('we-edit.index');

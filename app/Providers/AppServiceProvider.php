@@ -45,7 +45,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
+        $this->registerMigratorSingleton();
     }
 
     public function registerCustomValidaionRules()
@@ -165,6 +165,19 @@ class AppServiceProvider extends ServiceProvider
         // WooCommerce Import Enabled
         Blade::if('woo_import', function () {
             return get_tenant_setting('woo_import_enabled') && !empty(get_tenant_setting('woo_import_wp_url')) && !empty(get_tenant_setting('google_recaptcha_wp_rest_api'));
+        });
+    }
+
+    public function registerMigratorSingleton() {
+        // This is important for artisan commands using Migrator:
+        // Laravel's migrate command works because the command is registered in the IoC container by Illuminate\Foundation\Providers\ArtisanServiceProvider, 
+        // and this is where the migrator dependency is injected. 
+        // Following this logic, you should register your own command in your AppServiceProvider (or other service provider you setup) 
+        // to inject the migrator...
+        // BUT ALSO: you could also just register the Migrator class name in the IoC container, 
+        // and then Laravel should be able to resolve the dependency without having to manually register the command:
+        $this->app->singleton(\Illuminate\Database\Migrations\Migrator::class, function ($app) {
+            return $app['migrator'];
         });
     }
 }

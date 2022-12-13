@@ -12,6 +12,7 @@ use Laravel\Cashier\Billable;
 use App\Traits\OwnershipTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
+use App\Traits\SocialCommentsTrait;
 use Laravel\Passport\HasApiTokens;
 use Bavix\Wallet\Interfaces\Wallet;
 use App\Traits\SocialFollowingTrait;
@@ -51,6 +52,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SocialFollowingTrait;
     use Impersonatable;
     use Billable;
+    use SocialCommentsTrait;
+
 
     protected $casts = [
         'trial_ends_at' => 'datetime',

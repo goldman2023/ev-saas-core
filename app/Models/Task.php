@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
+use App\Traits\UploadTrait;
+use App\Traits\GalleryTrait;
+use App\Traits\CoreMetaTrait;
+use Spatie\Sluggable\HasSlug;
+use App\Traits\HasContentColumn;
 use  Spatie\Sluggable\SlugOptions;
 use Spatie\Activitylog\LogOptions;
-use App\Traits\UploadTrait;
-use App\Traits\CoreMetaTrait;
-use App\Traits\GalleryTrait;
-use Spatie\Sluggable\HasSlug;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Task extends WeBaseModel
 {
@@ -22,20 +23,33 @@ class Task extends WeBaseModel
     use SoftDeletes;
     use HasSlug;
     use LogsActivity;
+    use HasContentColumn;
 
     protected $table = 'tasks';
 
-    public function creator(){
-
-        return $this->belongsTo(User::class, 'foreign_key');
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
     }
 
-    public function assigne(){
-        return $this->belongsTo(User::class, 'foreign_key');
+    public function creator(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function assignee() {
+        return $this->belongsTo(User::class, 'assignee_id');
     }
    
-    public function subject(){
-        return $this->morphTo('subject');
+    public function orders() {
+        return $this->morphedByMany(Order::class, 'subject', 'task_relationships');
+    }
+
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
     }
 
     public function getDynamicModelUploadProperties(): array
@@ -45,19 +59,12 @@ class Task extends WeBaseModel
                 'property_name' => 'documents',
                 'relation_type' => 'documents',
                 'multiple' => true,
+            ],
+            [
+                'property_name' => 'attachments',
+                'relation_type' => 'attachments',
+                'multiple' => true,
             ]
         ];
-    }
-    
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults();
-    }
-    
-    public function getSlugOptions(): SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
     }
 }

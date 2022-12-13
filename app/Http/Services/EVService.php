@@ -101,7 +101,21 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => [], // always show, independent of permissions
                     ],
-
+                    [
+                        'label' => translate('Tasks'),
+                        'icon' => 'heroicon-o-clipboard-document-list',
+                        'route' => route('tasks.index'),
+                        'route_name' => 'tasks.index',
+                        'is_active' => areActiveRoutes(['tasks.index']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_orders'],
+                        'badge' => [
+                            'class' => 'badge-danger',
+                            'content' => function () {
+                                return 0;
+                            },
+                        ],
+                    ],
                     [
                         'label' => translate('Chat'),
                         'icon' => 'heroicon-o-chat-bubble-left-right',
@@ -201,6 +215,7 @@ class EVService
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => [] // TODO: Add browse_all_courses and browse_my_courses - when courses are added as new content type
                     ], */
+                    
                     [
                         'label' => translate('Orders'),
                         'icon' => 'heroicon-o-document-text',
