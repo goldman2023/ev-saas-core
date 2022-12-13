@@ -1,6 +1,7 @@
 <?php
 
 namespace WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables;
+
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusEnum;
