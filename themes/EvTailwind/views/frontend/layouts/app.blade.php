@@ -47,7 +47,7 @@
     @stack('head_scripts')
 </head>
 
-<body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{
+<body class="relative font-sans antialiased {{ Route::currentRouteName() }}" x-data="{
 }" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
 
     @include('frontend.layouts.global-partials.global-integrations-body')
