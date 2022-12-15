@@ -539,7 +539,7 @@ class StripeService
         return $stripe_customer;
     }
 
-    public function updateStripeCustomerAddress($user = null) {
+    public function updateStripeCustomerInfo($user = null) {
         $user = !empty($user) && $user instanceof \App\Models\User ? $user : null;
 
         if(!empty($user)) {
@@ -558,9 +558,12 @@ class StripeService
                     }
     
                     // TODO: Make this also work through Address model, not CoreMeta (if possible)
+                    $name = ($user->entity === 'company') ? $user->getUserMeta('company_name') : $user->name.' '.$user->surname;
+
                     $this->stripe->customers->update(
                         $stripe_customer_id,
                         [
+                            'name' => $name,
                             'address' => [
                                 'city' => $user->getUserMeta('address_city'),
                                 'country' => $user->getUserMeta('address_country'),
