@@ -1,6 +1,6 @@
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->id]) }}">
-       <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded mr-2" name="orders" 
+       <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded mr-2" name="orders"
             @click="$dispatch('table-item-toggle', {table_id: '{{ $tableId }}', id: Number($event.target.getAttribute('value'))})"/>
 
         #{{ $row->id }}
@@ -25,40 +25,13 @@
     {{-- <span class="text-14">{{ $row->billing_first_name.' '.$row->billing_last_name }}</span> --}}
 </x-livewire-tables::table.cell>
 
-
-<x-livewire-tables::table.cell class="align-middle">
-    <span class="d-block text-14 mb-0">{{ $row->created_at->format('d M, Y H:i') }}</span>
-</x-livewire-tables::table.cell>
-
-
-@if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('payment_status')))
-<x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
-    @if($row->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
-        <span class="badge-success">
-            {{ ucfirst($row->payment_status) }}
-        </span>
-    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
-        <span class="badge-info">
-            {{ ucfirst($row->payment_status) }}
-        </span>
-    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
-        <span class="badge-danger">
-            {{ ucfirst($row->payment_status) }}
-        </span>
-    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value)
-        <span class="badge-warning">
-            {{ ucfirst($row->payment_status) }}
-        </span>
-    @endif
-</x-livewire-tables::table.cell>
-@endif
-
-<x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
-    <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
-</x-livewire-tables::table.cell>
-
+{{-- Actions --}}
 <x-livewire-tables::table.cell class="align-middle text-center">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
+        <a class="btn bg-gray-100 flex items-center mr-2" href="{{ route('order.change-status', $row->id) }}">
+            @svg('heroicon-o-arrow-right', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Next Step') }}
+        </a>
+
         <a class="btn btn-white flex items-center mr-2" href="{{ route('order.details', ['id' => $row->id]) }}">
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a>
@@ -90,3 +63,37 @@
         </ul>
     </div>
 </x-livewire-tables::table.cell>
+
+
+<x-livewire-tables::table.cell class="align-middle">
+    <span class="d-block text-14 mb-0">{{ $row->created_at->diffForHumans() }}</span>
+</x-livewire-tables::table.cell>
+
+
+@if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('payment_status')))
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
+    @if($row->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
+        <span class="badge-success">
+            {{ ucfirst($row->payment_status) }}
+        </span>
+    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
+        <span class="badge-info">
+            {{ ucfirst($row->payment_status) }}
+        </span>
+    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
+        <span class="badge-danger">
+            {{ ucfirst($row->payment_status) }}
+        </span>
+    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value)
+        <span class="badge-warning">
+            {{ ucfirst($row->payment_status) }}
+        </span>
+    @endif
+</x-livewire-tables::table.cell>
+@endif
+
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
+    <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
+</x-livewire-tables::table.cell>
+
+

@@ -128,6 +128,8 @@ class OrdersTable extends DataTableComponent
             Column::make('Customer', 'user_id')
                 ->excludeFromSelectable()
                 ->addClass('text-left max-w-[300px]'),
+            Column::make('Actions')
+                ->excludeFromSelectable(),
             Column::make('Date', 'created_at')
                 ->excludeFromSelectable()
                 ->sortable(),
@@ -139,8 +141,7 @@ class OrdersTable extends DataTableComponent
             //     ->addClass('hidden md:table-cell'),
             Column::make('Total', 'total')
                 ->excludeFromSelectable(),
-            Column::make('Actions')
-                ->excludeFromSelectable(),
+
         ];
     }
 
