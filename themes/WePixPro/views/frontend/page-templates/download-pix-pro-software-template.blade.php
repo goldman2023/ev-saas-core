@@ -40,6 +40,11 @@
                 {{ translate('Current version: 1.6.7') }} <br>
                 {{ translate('Release date: 2022-10-18') }} <br>
                 {{ translate('File size: 176.3 MB') }} <br>
+                <a href="{{ '/page/pixpro-detailed-features-list#hardware-requirements' }}"
+                target="_blank"
+                class="underline font-medium mt-3 block text-md">
+                    {{ translate('Pixpro Hardware Requirements') }}
+                </a>
             </div>
         </div>
     </div>

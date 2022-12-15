@@ -521,7 +521,7 @@
 
     {{-- Hardware and software requirements --}}
     <div
-    id="hardware-requriements"
+    id="hardware-requirements"
     class="max-w-7xl mx-auto py-16 pb-10 px-4 sm:px-6 lg:pt-12 lg:pb-12 lg:px-8 lg:grid lg:grid-cols-3 lg:gap-x-8 border-b border-gray-200">
         <div>
           {{-- <h2 class="text-base font-semibold text-primary uppercase tracking-wide">Everything you need</h2> --}}
