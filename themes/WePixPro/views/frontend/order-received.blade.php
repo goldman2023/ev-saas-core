@@ -14,8 +14,22 @@ $is_bookable_product = $first_item instanceof \App\Models\Product && $first_item
 
 <!-- Event snippet for Trial subscription conversion page -->
 <script>
+    gtag('config', 'AW-10808493729');
     gtag('event', 'conversion', {'send_to': 'AW-10808493729/zpS-CK_BpoQDEKGN8qEo'});
 </script>
+
+<script>
+    /**
+    * The following event is sent when the page loads. You could
+    * wrap the event in a JavaScript function so the event is
+    * sent when the user performs some action.
+    */
+    gtag('event', 'trial_started', {
+      'plan': '{{ $first_item->name }}',
+      'screen_name': 'Thank You Page'
+    });
+</script>
+
 @if($is_bookable_product)
 <link href="https://calendly.com/assets/external/widget.css" rel="stylesheet">
 <script src="https://calendly.com/assets/external/widget.js" type="text/javascript"></script>
