@@ -68,7 +68,7 @@ class RegisterForm extends Component
 
         if(get_tenant_setting('include_phone_number_in_registration')) {
             if(get_tenant_setting('require_phone_number_in_registration')) {
-                $rules['phone'] = ['required'];
+                $rules['phone'] = ['required', 'unique:App\Models\User,phone'];
             } else {
                 $rules['phone'] = ['nullable'];
             }
