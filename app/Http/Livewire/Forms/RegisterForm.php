@@ -62,7 +62,7 @@ class RegisterForm extends Component
             'terms_consent' => ['required', 'boolean', 'is_true']
         ];
 
-        if ($this->is_ghost) {
+        if($this->is_ghost) {
             $rules['email'] = ['required', 'unique:App\Models\User,email,' . $this->ghostUser->id];
         }
 
