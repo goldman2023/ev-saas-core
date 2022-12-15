@@ -539,6 +539,46 @@ class StripeService
         return $stripe_customer;
     }
 
+    public function updateStripeCustomerAddress($user = null) {
+        $user = !empty($user) && $user instanceof \App\Models\User ? $user : null;
+
+        if(!empty($user)) {
+            dispatch(function () use ($user) {
+                $stripe_customer_id = $user->getCoreMeta(stripe_prefix('stripe_customer_id'));
+
+                try {
+                    $stripe_customer = $this->stripe->customers->retrieve(
+                        $stripe_customer_id,
+                        []
+                    );
+                    $stripe_customer_array = $stripe_customer->toArray();
+        
+                    if ($stripe_customer->deleted ?? null) {
+                        throw new \Exception('Customer is deleted in Stripe!');
+                    }
+    
+                    // TODO: Make this also work through Address model, not CoreMeta (if possible)
+                    $this->stripe->customers->update(
+                        $stripe_customer_id,
+                        [
+                            'address' => [
+                                'city' => $user->getUserMeta('address_city'),
+                                'country' => $user->getUserMeta('address_country'),
+                                'line1' => $user->getUserMeta('address_line'),
+                                'line2' => $user->getUserMeta('address_line_2'),
+                                'postal_code' => $user->getUserMeta('address_postal_code'),
+                                'state' => $user->getUserMeta('address_state'),
+                            ],
+                            'phone' => $user->phone,
+                        ]
+                    );
+                } catch (\Exception $e) {
+                    Log::error('Could not update Stripe customer (id: '.$stripe_customer_id.') billing address. Error: '.$e->getMessage());
+                } 
+            });
+        }
+    }
+
     public function updateStripeCustomerTax($user = null, $update_tax_exempt_for_individual = false) {
         // Dispatch a job to update customer Tax data in stripe
 
