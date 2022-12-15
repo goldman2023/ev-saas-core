@@ -91,26 +91,6 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
-            // Add Columns to Licenses table (livewire)
-            // add_filter('dashboard.table.licenses.columns', function ($columns) {
-            //     $data = array_merge($columns, [
-            //         \Rappasoft\LaravelLivewireTables\Views\Column::make('Image Limit', 'license_image_limit')
-            //             ->excludeFromSelectable(),
-            //         \Rappasoft\LaravelLivewireTables\Views\Column::make('Hardware ID', 'hardware_id')
-            //             ->excludeFromSelectable(),
-
-            //     ]);
-
-            //     if(auth()->user()->isAdmin()) {
-            //         $data = array_merge($data, [
-            //             \Rappasoft\LaravelLivewireTables\Views\Column::make('Type', 'license_subscription_type')
-            //             ->excludeFromSelectable(),
-            //         ]);
-            //     }
-
-            //     return $data;
-            // }, 10, 1);
-
             // Download License Response
             add_filter('license.download', function ($license) {
                 return pix_pro_download_license_logic($license);
@@ -233,10 +213,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 20, 3);
 
             // Create PixPro License(s) when subscription is created through Stripe
-            add_action('stripe.webhook.subscriptions.created_from_stripe', function($user_subscription, $stripe_invoice) {
-                // IMPORTANT: Licenses will be generated inside invoice.paid webhook, no need to do it through this hook
-                // pix_pro_create_license($user_subscription, null, $stripe_invoice);
-            }, 20, 2);
+            // add_action('stripe.webhook.subscriptions.created_from_stripe', function($user_subscription, $stripe_invoice) {
+            //     // IMPORTANT: Licenses will be generated inside invoice.paid webhook (`invoice.paid.subscription_create` hook), no need to do it through this hook
+            //     // pix_pro_create_license($user_subscription, null, $stripe_invoice);
+            // }, 20, 2);
 
             // Update PixPro License
             add_action('stripe.webhook.subscriptions.updated', function ($user_subscription, $previous_subscription, $stripe_invoice, $stripe_previous_attributes) {

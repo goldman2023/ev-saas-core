@@ -762,22 +762,9 @@ if (!function_exists('pix_pro_update_licenses_status')) {
                         } else {
                             if(!empty($response_json['license'] ?? null)) {
                                 $pix_license = $response_json['license'];
-                                // DB::beginTransaction();
 
-                                // try {
-                                    // $license->user_id = $subscription->user->id;
-                                    $license->mergeData($pix_license);
-                                    $license->save();
-
-                                //     DB::commit();
-                                // } catch(\Throwable $e) {
-                                //     DB::rollback();
-                                //     http_response_code(400);
-                                //     print_r($e);
-                                //     Log::error(pix_pro_error($route_paid, 'There was an error while trying to update a license on WeSaaS (after status and expiration_date are updated on PixPro end)', $e));
-
-                                //     die();
-                                // }
+                                $license->mergeData($pix_license);
+                                $license->save();
                             }
                         }
                     });

@@ -347,13 +347,27 @@ class Invoice extends WeBaseModel
         }
 
         
-        
+        // Start: Invoice Items
+        /**
+         * Important: There are two levels of discounts:
+         * 1. Discouts on order_items level - for example: yearly discount etc.
+         * 2. Discounts on order/invoice level - for example: coupon etc.
+         * 
+         * IMPORTANT: getDiscountAmount() - gets all discounts applied to the current invoice
+         * In order to get discounts on order/invoice level, we must subtract 1. from getDiscountAmount()
+         * 
+         * TODO: Find a better way to manage and calculate discounts on these levels!!!
+         */
         $invoice_items = [];
+        $sum_invoice_items_discounts = 0; // Sum of all discounts on invoice items level!
 
         if($this->isFromStripe()) {
             foreach($stripe_line_items as $item) {
                 $stripe_line_item = $item;
                 $item = get_model_by_stripe_product_id($stripe_line_item['price']['product']);
+
+                // TODO: THIS IS WRONG APPROACH! Refer to: https://app.asana.com/0/1201702153260545/1203549791108170
+                $order_item = $this->order->order_items->where('subject_id', $item->id)->where('subject_type', $item::class)->first();
 
                 if(!empty($stripe_line_item) && !empty($item)) {
                     $li_name = $item->name;
@@ -374,13 +388,25 @@ class Invoice extends WeBaseModel
                             ->discount(0)
                             ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
                     } else {
+                        if($stripe_line_item['price']['recurring']['interval'] === 'year') {
+                            $unit_price = $order_item->base_price;
+                            $discount = $order_item->discount_amount;
+                            $subtotal = $stripe_line_item['amount_excluding_tax'] / 100;
+                        } else if($stripe_line_item['price']['recurring']['interval'] === 'month') {
+                            $unit_price = $stripe_line_item['price']['unit_amount'] / 100;
+                            $discount = $item->discount_amount ?? 0;
+                            $subtotal = $stripe_line_item['amount_excluding_tax'] / 100;
+                        }
+
+                        $sum_invoice_items_discounts += $discount;
+
                         $invoice_items[] = (new InvoiceItem())
                             ->title($li_name)
                             ->description($item->excerpt ?? '')
-                            ->pricePerUnit($stripe_line_item['price']['unit_amount'] / 100)
+                            ->pricePerUnit($unit_price)
                             ->quantity($stripe_line_item['quantity'])
-                            ->discount($item->discount_amount ?? 0)
-                            ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
+                            ->discount($discount)
+                            ->subTotalPrice($subtotal);
                     }
                 }  
             }
@@ -396,38 +422,6 @@ class Invoice extends WeBaseModel
             }
         }
 
-
-        
-        // foreach($this->order->order_items as $item) {
-        //     if($this->isFromStripe()) {
-        //         $stripe_product_id = $item->subject->getCoreMeta(stripe_prefix('stripe_product_id'));
-        //         dd($this->order->order_items);
-        //         // In order to identify correct line item, 2 conditions must be met:
-        //         // 1. productID must be $stripe_product_id,
-        //         // 2. proration property must be FALSE (cuz invoice items can be proration items with the same $stripe_product_id),
-        //         $stripe_line_item = $stripe_line_items->filter( fn($item) => $item['price']['product'] === $stripe_product_id)->first(); //  && $item['proration'] === false
-                
-        //         if(!empty($stripe_line_item)) {
-        //             $li_name = $item->name;
-
-        //             if($item->subject->isSubscribable()) {
-        //                 $li_name = $item->name.' / '.$stripe_line_item['price']['recurring']['interval'].' ('.\Carbon::createFromTimestamp($this->start_date)->format('d M, Y').' - '.\Carbon::createFromTimestamp($this->end_date)->format('d M, Y').')';
-        //             }
-
-        //             $invoice_items[] = (new InvoiceItem())
-        //                 ->title($li_name)
-        //                 ->description($item->excerpt)
-        //                 ->pricePerUnit($item->base_price)
-        //                 ->quantity($stripe_line_item['quantity'])
-        //                 ->discount($item->discount_amount)
-        //                 ->subTotalPrice($stripe_line_item['amount_excluding_tax'] / 100);
-        //         }                
-        //     } else {
-                
-        //     }
-            
-        // }
-
         // Append Credit discounts and adjustments if there's any proration
         if($this->isFromStripe()) {
             if($stripe_invoice['starting_balance'] < 0) {
@@ -439,6 +433,7 @@ class Invoice extends WeBaseModel
                     ->subTotalPrice($stripe_invoice['starting_balance'] / 100);
             }   
         }
+        // End: Invoice Items
 
         // if(empty($total_taxes_label = $this->getData(stripe_prefix('total_taxes_label')))) {
         //     if(!empty($stripe_invoice['total_tax_amounts']) && !empty($stripe_invoice['total_tax_amounts'][0]['tax_rate'] ?? null)) {
@@ -467,7 +462,7 @@ class Invoice extends WeBaseModel
         
         // Set custom data
         $custom_data = [
-            'total_discount' => $this->getDiscountAmount(false),
+            'total_discount' => $this->getDiscountAmount(false) - $sum_invoice_items_discounts, // Subtract sum of discounts on invoice items level from discount amount on invoice level!
             'total_taxes_label' => $total_taxes_label,
             'via_payment_method' => function() {
                 return match ($this->getPaymentMethodGateway()) {

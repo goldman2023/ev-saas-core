@@ -43,6 +43,11 @@ trait PriceTrait
             $model->getTotalPrice();
             $model->getDiscountedPrice();
             $model->getBasePrice();
+
+            if($model->isSubscribable()) {
+                $model->getBaseAnnualPrice();
+                $model->getTotalAnnualPrice();
+            }
         });
     }
 
@@ -53,8 +58,8 @@ trait PriceTrait
      */
     public function initializePriceTrait(): void
     {
-        $this->appendCoreProperties(['total_annual_price', 'total_price', 'discounted_price', 'base_price']);
-        $this->append(['total_annual_price', 'total_price', 'discounted_price', 'base_price']);
+        $this->appendCoreProperties(['total_price', 'discounted_price', 'base_price', 'total_annual_price', 'base_annual_price']);
+        $this->append(['total_price', 'discounted_price', 'base_price', 'total_annual_price', 'base_annual_price']);
 
         // These calculated prices ARE NOT FILLABLE! They are calculated based on other properties!
         // $this->fillable(array_unique(array_merge($this->fillable, ['total_price', 'discounted_price', 'base_price'])));
@@ -320,12 +325,42 @@ trait PriceTrait
         return $display ? FX::formatPrice($this->attributes[$price_column] ?? 0, $decimals) : $this->attributes[$price_column] ?? 0;
     }
 
+    // Annual Prices (only for subscribable models)
+    public function getBaseAnnualPrice(bool $display = false, bool $both_formats = false, $decimals = null)
+    {
+        try {
+            if(isset($this->attributes[$this->getPriceColumn()])) {
+                $this->base_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
+            } else if(!$this->isSubscribable()) {
+                $this->base_annual_price = $this->attributes[$this->getPriceColumn()];
+            } else {
+                return 0;
+            }
+
+            if ($both_formats) {
+                return [
+                    'raw' => $this->base_annual_price,
+                    'display' => FX::formatPrice($this->base_annual_price, $decimals),
+                ];
+            }
+
+            return $display ? FX::formatPrice($this->base_annual_price, $decimals) : $this->base_annual_price;
+        } catch(\Throwable $e) {
+            return 0;
+        }
+    }
+
+    public function getBaseAnnualPriceAttribute()
+    {
+        return $this->getBaseAnnualPrice();
+    }
+
     public function getTotalAnnualPrice(bool $display = false, bool $both_formats = false, $decimals = null)
     {
         try {
             /* This if is required for create to work */
             if(isset($this->attributes[$this->getPriceColumn()])) {
-                $total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
+                $this->total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
             } else {
                 return 0;
             }
@@ -333,32 +368,32 @@ trait PriceTrait
             if ($this->isSubscribable()) {
                 // First apply yearly discount, if any!
                 if ($this->yearly_discount_type === AmountPercentTypeEnum::percent()->value) {
-                    $total_annual_price -= ($total_annual_price * $this->attributes['yearly_discount']) / 100;
+                    $this->total_annual_price -= ($this->total_annual_price * $this->attributes['yearly_discount']) / 100;
                 } elseif ($this->yearly_discount_type === AmountPercentTypeEnum::amount()->value) {
-                    $total_annual_price -= $this->attributes['yearly_discount'];
+                    $this->total_annual_price -= $this->attributes['yearly_discount'];
                 }
 
                 // Then, add Plan specific Tax, if any
                 if ($this->tax_type === AmountPercentTypeEnum::percent()->value) {
-                    $total_annual_price += ($total_annual_price * $this->attributes['tax']) / 100;
+                    $this->total_annual_price += ($this->total_annual_price * $this->attributes['tax']) / 100;
                 } elseif ($this->tax_type === AmountPercentTypeEnum::amount()->value) {
-                    $total_annual_price += $this->attributes['tax'];
+                    $this->total_annual_price += $this->attributes['tax'];
                 }
 
                 // TODO: Then add global Tax (like VAT)
             } else {
                 // If item is not subscribable, annual price doesn't make sense, so it falls back to one-time total price
-                $total_annual_price = $this->attributes[$this->getPriceColumn()];
+                $this->total_annual_price = $this->attributes[$this->getPriceColumn()];
             }
 
             if ($both_formats) {
                 return [
-                    'raw' => $total_annual_price,
-                    'display' => FX::formatPrice($total_annual_price, $decimals),
+                    'raw' => $this->total_annual_price,
+                    'display' => FX::formatPrice($this->total_annual_price, $decimals),
                 ];
             }
 
-            return $display ? FX::formatPrice($total_annual_price, $decimals) : $total_annual_price;
+            return $display ? FX::formatPrice($this->total_annual_price, $decimals) : $this->total_annual_price;
         } catch(\Throwable $e) {
             return 0;
         }
