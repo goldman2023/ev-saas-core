@@ -136,9 +136,9 @@ class LicensesTable extends DataTableComponent
 
     public function rowView(): string
     {
-        $view = 'frontend.dashboard.plans.row-license';
+        $view = 'frontend.dashboard.licenses.row-license';
         if(auth()->user()->isAdmin()) {
-            $view = 'frontend.dashboard.plans.row-license-admin';
+            $view = 'frontend.dashboard.licenses.row-license-admin';
         }
         return $view;
     }

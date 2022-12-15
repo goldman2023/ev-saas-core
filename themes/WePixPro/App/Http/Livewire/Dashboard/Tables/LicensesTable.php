@@ -86,17 +86,10 @@ class LicensesTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Serial Number', 'serial_number')
                 ->excludeFromSelectable(),
-            Column::make('Valid', 'ending')
-        ]);
-
-
-        if(auth()->user()->isAdmin()) {
-            $columns = array_merge($columns, [
-                // Column::make('Type', 'license_subscription_type'),
-                Column::make('Actions')
+            Column::make('Valid', 'ending'),
+            Column::make('Actions')
                     ->excludeFromSelectable(),
-            ]);
-        }
+        ]);
 
         return $columns;
     }
@@ -131,10 +124,10 @@ class LicensesTable extends DataTableComponent
 
     public function rowView(): string
     {
-        $view = 'frontend.dashboard.plans.row-license';
+        $view = 'frontend.dashboard.licenses.row-license';
 
         if(auth()->user()->isAdmin()) {
-            $view = 'frontend.dashboard.plans.row-license-admin';
+            $view = 'frontend.dashboard.licenses.row-license-admin';
         }
 
         return $view;

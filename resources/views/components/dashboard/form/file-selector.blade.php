@@ -121,9 +121,9 @@ x-init="makeSortable()"
         @if($multiple)
             <div class="w-full flex flex-col">
                 <template x-if="hasFiles()">
-                    <ul class="file-selector__sortable-list w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-3 ">
+                    <ul class="file-selector__sortable-list w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-3 ">
                         <template x-for="(item, index) in {{ $field }}">
-                            <li class="flex flex-col border rounded-lg cursor-grab relative" :data-image-id="item.id">
+                            <li class="flex flex-col border rounded-lg bg-white cursor-grab relative" :data-image-id="item.id">
                                 <button class="absolute top-[-5px] right-[-5px] p-1 bg-danger rounded-lg z-[1]" @click="removeFile(index);">
                                     @svg('heroicon-o-x-mark', ['class' => 'text-white w-[10px] h-[10px]'])
                                 </button>
@@ -133,14 +133,14 @@ x-init="makeSortable()"
                                 </template>
 
                                 <template x-if="item.type === 'document'">
-                                    <div class="w-full flex flex-col grow">
+                                    <div class="w-full flex flex-col grow"
+                                    @click="$wire.emit('showMediaEditor', id, {{ $subject->id }}, '{{ base64_encode($subject::class) }}', item.id)" >
                                         <div class="w-full px-2 py-3 flex flex-col grow">
-                                            <strong class="text-12" x-text="item.file_original_name"></strong>
+                                            <strong class="text-14" x-text="item.file_original_name"></strong>
                                             <p class="pt-2 text-10" x-text="window.WE.utils.formatSizeUnits(item.file_size)"></p>
                                         </div>
                                         @if($subject)
-                                        <div class="w-full lx-2 py-1 text-center color-gray-700 border-t border-gray-200 text-12 cursor-pointer relative z-10"
-                                            @click="$wire.emit('showMediaEditor', id, {{ $subject->id }}, '{{ base64_encode($subject::class) }}', item.id)">
+                                        <div class="w-full lx-2 py-1 text-center color-gray-700 border-t border-gray-200 text-12 cursor-pointer relative z-10">
                                             <span>{{ translate('Edit file') }}</span>
                                         </div>
                                         @endif

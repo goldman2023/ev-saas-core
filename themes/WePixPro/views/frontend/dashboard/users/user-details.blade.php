@@ -77,7 +77,10 @@
                 </x-dashboard.widgets.invoices.next-payment>
                 @endif
             </div>
-
+            <div class="mb-6">
+                <x-dashboard.widgets.customer.address-details :user="$user">
+                </x-dashboard.widgets.business.address-details>
+            </div>
 
             <div class="mb-6">
                 @if(\Payments::isStripeEnabled())

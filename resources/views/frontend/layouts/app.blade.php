@@ -53,7 +53,6 @@
     @laravelPWA
 </head>
 <body>
-<!-- aiz-main-wrapper -->
 <div class="">
 
     {{-- @include('frontend.inc.nav') --}}

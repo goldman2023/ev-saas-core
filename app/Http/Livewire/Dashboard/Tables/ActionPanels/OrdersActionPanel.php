@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Order;
 use Livewire\Component;
 use App\Enums\TaskStatusEnum;
+use App\Enums\TaskTypesEnum;
 use Illuminate\Support\Facades\DB;
 use App\Traits\Livewire\DispatchSupport;
 
@@ -99,7 +100,7 @@ class OrdersActionPanel extends Component
 
         try {
             $new_task = new Task();
-        
+
             $new_task->user_id = auth()->user()->id;
             $new_task->assignee_id = auth()->user()->id;
             $new_task->type = TaskTypesEnum::printing()->value;
@@ -116,14 +117,14 @@ class OrdersActionPanel extends Component
 
             $this->inform(translate('Printing task successfully created!'), '', 'success');
 
-            
+
         } catch(\Exception $e) {
             DB::rollBack();
             $this->dispatchGeneralError(translate('There was an error while creating a printing task...Please try again.'));
             $this->inform(translate('There was an error while creating a printing task...Please try again.'), '', 'fail');
             dd($e);
         }
-        
+
     }
 
     public function generateDeliveryTask() {
@@ -132,7 +133,7 @@ class OrdersActionPanel extends Component
 
         try {
             $new_task = new Task();
-        
+
             $new_task->user_id = auth()->user()->id;
             $new_task->assignee_id = auth()->user()->id;
             $new_task->type = TaskTypesEnum::delivery()->value;
@@ -159,6 +160,6 @@ class OrdersActionPanel extends Component
     }
 
     public function exportToPdf() {
-        
+
     }
 }

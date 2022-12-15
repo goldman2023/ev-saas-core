@@ -2,7 +2,7 @@
 $header_menu = nova_get_menu_by_slug('header');
 $header_menu_items = $header_menu['menuItems'] ?? null;
 @endphp
-<header class="relative z-50" x-data="{
+<header class="relative z-50 shadow-md sticky top-0" x-data="{
     show_mobile_menu: false,
 }">
     {{-- Header settings should include Background among other things + Sticky behavior (yes/no) --}}
@@ -56,7 +56,7 @@ $header_menu_items = $header_menu['menuItems'] ?? null;
             <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <a href="{{ route('home') }}">
-                        <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-16 w-auto sm:h-16"
+                        <x-tenant.system.image alt="{{ get_site_name() }} logo" class="rounded shadow-md p-2 bg-white h-24 mt-[-20px] mb-[-60px] w-auto sm:h-32"
                             :image="get_site_logo()">
                         </x-tenant.system.image>
                     </a>
