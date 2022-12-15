@@ -57,12 +57,12 @@ class MyAccountForm extends Component
 
         if(get_tenant_setting('include_phone_number_in_registration')) {
             if(get_tenant_setting('require_phone_number_in_registration')) {
-                $basic['me.phone'] = ['required'];
+                $basic['me.phone'] = ['required', 'unique:App\Models\User,phone,' . $this->me->id];
             } else {
                 $basic['me.phone'] = ['nullable'];
             }
 
-            $basic['me.phone'] = ['unique:App\Models\User,phone,' . $this->me->id];
+            $basic['me.phone'] = ['nullable'];
         }
 
         $meta = [];
