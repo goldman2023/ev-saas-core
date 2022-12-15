@@ -156,4 +156,9 @@
             gap: 20px;
         }
     }
+
+    #blog_post_single_content .icv__wrapper img {
+        max-width: none;
+        height: 100%;
+    }
 </style>
