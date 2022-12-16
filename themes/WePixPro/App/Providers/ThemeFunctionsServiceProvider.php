@@ -323,7 +323,6 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_action('dashboard.table.licenses.mount.end', function ($user) {
                 if ($user->hasLicenses()) {
                     foreach ($user->licenses as $license) {
-
                         if (!empty($license) && method_exists($license, 'get_license')) {
                             try {
                                 // Dispatch license hardware ID update (if any)

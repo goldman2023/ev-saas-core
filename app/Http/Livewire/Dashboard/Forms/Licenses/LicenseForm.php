@@ -55,6 +55,11 @@ class LicenseForm extends Component
 
         if($license instanceof License) {
             $this->license = $license->toArray();
+
+            // User can be null if $user is not provided in `pix-pro-licenses-table.blade.php` partial
+            if(empty($this->user)) {
+                $this->user = $this->license->user;
+            }
         }
     }
 
@@ -73,10 +78,11 @@ class LicenseForm extends Component
             if(!empty($license_id)) {
                 // Update
                 $license = License::findOrFail($license_id);
+                $this->user = $license->user;
             } else {
                 // Insert
                 $license = new License();
-                $license->user_id = $this->user->id;
+                $license->user_id = $this->user?->id ?? null;
                 $license->plan_id = null;
                 $license->license_name = '';
                 $license->serial_number = '';
