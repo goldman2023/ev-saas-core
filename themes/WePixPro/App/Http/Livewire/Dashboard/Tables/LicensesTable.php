@@ -154,13 +154,13 @@ class LicensesTable extends DataTableComponent
     }
 
     public function disconnect(License $license) {
-        do_action('license.disconnect', $license, $this->user, $this);
+        do_action('license.disconnect', $license, $license->user, $this);
 
         $this->emit('refreshDatatable');
     }
 
     public function removeLicense(License $license) {
-        do_action('license.remove', $license, $this->user, $this);
+        do_action('license.remove', $license, $license->user, $this);
 
         $this->emit('refreshDatatable');
     }
