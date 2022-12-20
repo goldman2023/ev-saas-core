@@ -250,6 +250,17 @@ class Order extends WeBaseModel
         ];
     }
 
+    // Stripe
+    public function refreshStripeUpcomingInvoice() {
+        $is_stripe_subscription = $this->getData(stripe_prefix('stripe_payment_mode'));
+
+        if(!$this->is_temp && $this->type === 'subscription' && $is_stripe_subscription === 'subscription' && !empty($this->user_subscription)) {
+            $upcoming_invoice = \StripeService::getUpcomingInvoice($this->user_subscription);
+            $this->setData(stripe_prefix('stripe_upcoming_invoice'), is_array($upcoming_invoice) ? $upcoming_invoice : $upcoming_invoice->toArray());
+            $this->save();
+        }
+    }
+
 //    TODO: ORDER TRACKING NUMBER!!!
 //    public function refund_requests()
 //    {

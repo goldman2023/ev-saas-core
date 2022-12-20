@@ -2591,9 +2591,10 @@ class StripeService
                     }
                 }
 
-                
-
                 $subscription->saveQuietly();
+
+                // Refresh Upcoming Invoice
+                $order->refreshStripeUpcomingInvoice();
             }
 
             DB::commit();

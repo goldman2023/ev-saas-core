@@ -120,7 +120,7 @@ class UserSubscription extends WeBaseModel
         // If no upcoming invoice is present in meta column, get upcoming invoice from stripe directly, and store it in meta
         if(empty($upcoming_invoice)) {
             $upcoming_invoice = \StripeService::getUpcomingInvoice($this);
-            $this->order->setData(stripe_prefix('stripe_upcoming_invoice'), is_array($upcoming_invoice) ? $upcoming_invoice : $upcoming_invoice->toArray());            
+            $this->order->setData(stripe_prefix('stripe_upcoming_invoice'), is_array($upcoming_invoice) ? $upcoming_invoice : $upcoming_invoice->toArray());
             $this->order->save();
         }
 
