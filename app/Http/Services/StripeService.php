@@ -1789,8 +1789,6 @@ class StripeService
             }
         }
 
-        $invoice->setRealInvoiceNumber();
-
         $invoice->mergeData([
             stripe_prefix('stripe_invoice_id') => $stripe_invoice->id ?? '',
             stripe_prefix('stripe_hosted_invoice_url') => $stripe_invoice->hosted_invoice_url ?? '',
@@ -1840,6 +1838,8 @@ class StripeService
         }
         
         $invoice->save();
+
+        $invoice->setRealInvoiceNumber();
 
         return $invoice;
     }
@@ -2238,8 +2238,6 @@ class StripeService
             $invoice->billing_city = $order->billing_city;
             $invoice->billing_zip = $order->billing_zip;
 
-            $invoice->setRealInvoiceNumber();
-
             // Get latest invoice_id
             $stripe_subscription = $this->stripe->subscriptions->retrieve(
                 $session->subscription,
@@ -2285,6 +2283,8 @@ class StripeService
 
 
             DB::commit();
+
+            $invoice->setRealInvoiceNumber();
         } catch (\Exception $e) {
             DB::rollBack();
             http_response_code(400);
@@ -2514,7 +2514,7 @@ class StripeService
 
                 if($stripe_billing_reason === 'subscription_create') {
                     // This means that subscription is created for the first time
-                    $invoice = $order->invoices()->withoutGlobalScopes()->firstOrFail();
+                    $invoice = $order->invoices()->withoutGlobalScopes()->where('invoice_number', $stripe_invoice->number)->firstOrFail();
                 } else if($stripe_billing_reason === 'subscription_cycle') {
                     $invoice = $order->invoices()->withoutGlobalScopes()->get()->firstWhere('meta.'.$this->mode_prefix.'stripe_invoice_id', $stripe_invoice->id);
                 }
@@ -2526,8 +2526,6 @@ class StripeService
                     if(!empty($stripe_invoice->number ?? null)) {
                         $invoice->invoice_number = $stripe_invoice->number;
                     }
-                    
-                    $invoice->setRealInvoiceNumber();
 
                     $invoice->mergeData([
                         stripe_prefix('stripe_invoice_paid') => $stripe_invoice->paid ?? true,
@@ -2554,6 +2552,8 @@ class StripeService
                     }
 
                     $invoice->save();
+
+                    $invoice->setRealInvoiceNumber();
                 }
 
                 // ***IMPORTANT: subscription `cycle` and `update` are moved to subscription.updated webhook
