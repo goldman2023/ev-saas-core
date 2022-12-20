@@ -142,7 +142,7 @@ class UserSubscription extends WeBaseModel
 
     public function getTotalUpcomingPrice($format = true) {
         $invoice = $this->getUpcomingInvoiceStats();
-
+        
         if(is_array($invoice) && !empty($invoice['invoice_source'] ?? null)) {
             if($invoice['invoice_source'] === 'stripe') {
                 return $format ? \FX::formatPrice($invoice['amount_due'] / 100) : $invoice['amount_due'] / 100;
