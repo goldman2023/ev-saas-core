@@ -15,6 +15,10 @@
         <span class="badge-danger">
             {{ \App\Enums\UserSubscriptionStatusEnum::inactive()->label }}
         </span>
+    @elseif($row->status === \App\Enums\UserSubscriptionStatusEnum::canceled()->value)
+        <span class="badge-danger">
+            {{ \App\Enums\UserSubscriptionStatusEnum::canceled()->label }}
+        </span>
     @elseif($row->status === \App\Enums\UserSubscriptionStatusEnum::trial()->value)
         <span class="badge-info">
             {{ \App\Enums\UserSubscriptionStatusEnum::trial()->label }}

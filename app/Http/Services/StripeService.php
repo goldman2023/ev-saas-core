@@ -2615,7 +2615,7 @@ class StripeService
                 do_action('invoice.paid.subscription_update', $subscription, $previous_subscription, $stripe_invoice);
             }
             // Fire Subscription "is cycled and paid" Event
-            else if($stripe_billing_reason === 'subscription_cycle') {
+            else if($stripe_billing_reason === 'subscription_cycle') { 
                 do_action('invoice.paid.subscription_cycle', $subscription, $stripe_invoice);
             }
         } catch(\Throwable $e) {

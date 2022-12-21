@@ -826,7 +826,7 @@ if (!function_exists('pix_pro_extend_licenses')) {
                     "ExpirationDate" => $subscription->end_date->format('Y-m-d H:i:s'),
                     "basic_renew" => 'yes' // This will skip updating: license_image_limit, order_currency, price, tax; in Pixpro DB. Reason is that these settings are variable per license and pixpro updates all licenses with same subscription_id in bulk manner in renew_licenses function!
                 ]);
-
+                
                 $response = Http::withoutVerifying()->post($route_paid, $body);
 
                 $response_json = $response->json();
