@@ -8,15 +8,16 @@ class NextPayment extends Component
 {
     public $plan_subscriptions;
     public $class;
+    public $user;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($class = '')
+    public function __construct($user = null, $class = '')
     {
-        $this->plan_subscriptions = auth()->user()->active_subscriptions;
+        $this->plan_subscriptions = (!empty($user) ? $user : auth()->user())->active_subscriptions;
         $this->class = $class;
         //
     }

@@ -60,7 +60,6 @@
             </span>
             @endif
 
-
             @if($user->isOnTrial())
             <span class="badge-warning">
                 {{ translate('Trial') }}
@@ -68,6 +67,10 @@
             @elseif($user->isSubscribed())
             <span class="badge-success">
                 {{ translate('Full') }}
+            </span>
+            @elseif($user->isCanceled())
+            <span class="badge-danger">
+                {{ translate('Canceled') }}
             </span>
             @else
             <span class="badge-danger">

@@ -320,6 +320,7 @@ if(!function_exists('pix_pro_create_single_manual_license')) {
             $offline_service_param = $new_license->getData('offline_service') === true || $new_license->getData('offline_service') == 1 ? 1 : 0;
             $license_subscription_type = $new_license->license_name . '_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
             $expiration_date = $new_license->getData('expiration_date');
+            $hardware_id = $new_license->getData('hardware_id');
 
             $body = pix_pro_add_auth_params([
                 "UserEmail" => $pix_pro_user['email'],
@@ -361,20 +362,33 @@ if(!function_exists('pix_pro_create_single_manual_license')) {
                         // $new_license->license_name = $pix_license['license_name'] ?? '';
                         $new_license->serial_number = $pix_license['serial_number'] ?? '';
                         $new_license->license_type = $pix_license['license_type'] ?? '';
-
+                        
                         $new_license->mergeData($pix_license);
                         $new_license->save();
 
-                        // Add a license <-> user_subscription relationship
-                        // DB::table('user_subscription_relationships')->updateOrInsert(
-                        //     ['user_subscription_id' => $subscription->id, 'subject_id' => $license->id, 'subject_type' => $license::class],
-                        //     ['created_at' => date('Y:m:d H:i:s'), 'updated_at' => date('Y:m:d H:i:s')]
-                        // );
+                        // Just activate license now (if hardware_id is present)
+                        if(!empty($hardware_id)) {
+                            $activation_response = pix_pro_activate_license($user, $new_license->serial_number, $hardware_id);
+                            $new_license_file = $activation_response['license_file'] ?? null;
+    
+                            if(!empty($new_license_file)) {
+                                if(!empty($new_license_file['file_name'] ?? null) && !empty($new_license_file['file_contents'] ?? null)) {
+                                    // IMPORTANT: Even if hardwar_id is provided in manual license form, $pix_license will return null for it cuz the license isnot activated on their server!
+                                    // That's why we must set hardware_id again after we get the $activation_response['license'] - which has it, cuz at this moment license is activated for provided hardware_id!
+                                    $new_license->setData('hardware_id', $activation_response['license']['hardware_id']); 
+                                    
+                                    $new_license->setData('file_name', $new_license_file['file_name']);
+                                    $new_license->setData('file_contents', $new_license_file['file_contents']);
+                                    $new_license->save();
+                                }
+                            }
+                        }
+                        
 
                         DB::commit();
                     } catch(\Exception $e) {
                         DB::rollback();
-                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a license on WeSaaS and link it to user_subscription.', $e));
+                        Log::error(pix_pro_error($route_paid, 'There was an error while trying to create a MANUAL license and ACTIVATE IT on WeSaaS and link it to user_subscription.', $e));
                     }
                 }
             }
@@ -812,7 +826,7 @@ if (!function_exists('pix_pro_extend_licenses')) {
                     "ExpirationDate" => $subscription->end_date->format('Y-m-d H:i:s'),
                     "basic_renew" => 'yes' // This will skip updating: license_image_limit, order_currency, price, tax; in Pixpro DB. Reason is that these settings are variable per license and pixpro updates all licenses with same subscription_id in bulk manner in renew_licenses function!
                 ]);
-
+                
                 $response = Http::withoutVerifying()->post($route_paid, $body);
 
                 $response_json = $response->json();

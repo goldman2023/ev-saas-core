@@ -28,6 +28,18 @@
 
                         @endforeach
 
+                        @if($subscription->getDiscountAmount(false) > 0)
+                            <div class="w-full flex justify-between mt-3 pt-3 border-t border-gray-200">
+                                <span class="text-14 text-gray-500 font-normal">
+                                    {{ translate('Discount') }}: <strong></strong>
+                                </span>
+                                <br>
+                                <span class="text-14 text-gray-500 font-normal">
+                                    - {{ $subscription->getDiscountAmount() }} / {{ $subscription->order->invoicing_period }}
+                                </span>
+                            </div>
+                        @endif
+
                         @if($subscription->getTaxAmount(false) > 0)
                             <div class="w-full flex justify-between mt-3 pt-3 border-t border-gray-200">
                                 <span class="text-14 text-gray-500 font-normal">
@@ -35,7 +47,7 @@
                                 </span>
                                 <br>
                                 <span class="text-14 text-gray-500 font-normal">
-                                    {{ $subscription->getTaxAmount() }}  {{ $subscription->order->invoicing_period }}
+                                    {{ $subscription->getTaxAmount() }} / {{ $subscription->order->invoicing_period }}
                                 </span>
                             </div>
                         @endif
@@ -48,7 +60,7 @@
 
                             <span class="text-14 text-gray-600 font-normal">
                                 {{ translate('Total') }}: <strong> <br>
-                                    {{ $subscription->getTotalUpcomingPrice() }}</strong>
+                                {{ $subscription->getTotalUpcomingPrice() }}</strong>
                             </span>
                         </div>
                     </div>
