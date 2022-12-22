@@ -18,15 +18,15 @@ window._ = require('lodash');
 // WE
 window.WE = {};
 
-require('./IMG');
-require('./utils');
-require('./sortable');
-require('./FX');
-
 // LUXON
 let { DateTime } = require('luxon');
 window.DateTime = DateTime;
 
+require('./IMG');
+require('./utils');
+require('./sortable');
+require('./FX');
+require('./wysiwyg');
 
 // WEF
 window.addEventListener("wef-replace-value-on-frontend", (event) => {

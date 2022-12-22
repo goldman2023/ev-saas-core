@@ -89,6 +89,7 @@ trait HasCoreMeta
                     if(array_key_exists($core_meta_key, is_array($this->wef) ? $this->wef : $this->wef->toArray())) {
                         
                         $new_value = castValueForSave($core_meta_key, $this->wef[$core_meta_key], WEF::getWEFDataTypes($model));
+                        
                         try {
                             CoreMeta::updateOrCreate(
                                 ['subject_id' => $model->id, 'subject_type' => $model::class, 'key' => $core_meta_key],
