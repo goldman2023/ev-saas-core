@@ -38,7 +38,7 @@ trait CoreMetaTrait
         } else {
             $data_types = [$key => $ad_hoc_data_type];
         }
-        
+
         if(!empty($data_types)) {
             return castValuesForGet($setting, $data_types)[$key] ?? null;
         } else {

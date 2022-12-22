@@ -25,6 +25,7 @@
                         ed.saver.save().then((outputData) => {
                             {{ $field }} = window.edjsHTML.parse(outputData).join('');
                             {{ $structureField }} = outputData;
+                            console.log({{ $field }});
                         });
                     }, 500)
                 })

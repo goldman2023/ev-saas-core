@@ -56,7 +56,7 @@ class BlogPostForm extends Component
 
         $this->initCategories($this->blogPost);
         $this->initCoreMeta($this->blogPost);
-
+ 
         $this->selectedPlans = $this->blogPost->plans->keyBy('id')->map(fn ($item) => $item->title);
     }
 
@@ -130,7 +130,6 @@ class BlogPostForm extends Component
             $this->dispatchValidationErrors($e);
             $this->validate();
         }
-
 
         DB::beginTransaction();
 

@@ -5,6 +5,7 @@ import Checklist from '@editorjs/checklist';
 import Code from '@editorjs/code';
 import Embed from '@editorjs/embed';
 import WeImageTool from './we-image-tool/dist/bundle';
+import WeImageCompareTool from './we-image-compare/dist/bundle';
 import InlineCode from '@editorjs/inline-code';
 import Link from '@editorjs/link';
 import Marker from '@editorjs/marker';
@@ -45,6 +46,12 @@ window.getEditorJsDefaultConfig = function($id) {
             checklist: Checklist,
             image: {
                 class: WeImageTool,
+                config: {
+
+                }
+            },
+            imageCompare: {
+                class: WeImageCompareTool,
                 config: {
 
                 }
