@@ -23,6 +23,7 @@ export default function imageCompareParser(block) {
     }
     html += `</div>`;
 
+    // TODO: Fix it up...
     html += `<div class="icv__control" style="width: 50px; left: calc(50.5804% - 25px); transition: all 100ms ease-out 0s;"><div class="icv__control-line" style="width: 2px; background: rgb(255, 255, 255); box-shadow: rgba(0, 0, 0, 0.33) 0px 0px 15px;"></div><div class="icv__theme-wrapper"><div class="icv__arrow-wrapper" style="transform: translateX(8px);"><svg height="15" width="15" style="
     transform: 
     scale(1.5)  

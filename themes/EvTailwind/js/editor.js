@@ -1,5 +1,6 @@
 import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
+import WeEditorJsColumns from './we-columns/dist/editorjs-columns.bundle';
 import List from '@editorjs/list';
 import Checklist from '@editorjs/checklist';
 import Code from '@editorjs/code';
@@ -29,6 +30,87 @@ window.EditorJS = EditorJS;
 window.EditorJSUndoPlugin = Undo;
 window.edjsHTML = edjsHTML(edjsCustomParsers());
 
+let editorJsTools = {
+    header: {
+        class: Header,
+        inlineToolbar : true,
+        tunes: ['alignmentTune'],
+    },
+    list: List,
+    checklist: Checklist,
+    image: {
+        class: WeImageTool,
+        config: {
+
+        }
+    },
+    imageCompare: {
+        class: WeImageCompareTool,
+        config: {
+
+        }
+    },
+    link: Link,
+    warning:Warning,
+    table:Table,
+    raw: Raw,
+    quote:Quote,
+    paragraph:{
+        class: Paragraph,
+        inlineToolbar : true,
+        tunes: ['alignmentTune'],
+    },
+    nestedList:NestedList,
+    marker: {
+        class: ColorPlugin,
+        config: {
+           defaultColor: '#FFBF00',
+           type: 'marker',
+           customPicker: true,
+        }
+      },
+    inlineCode:InlineCode,
+    embed:{
+        class: Embed,
+        inlineToolbar: true
+    },
+    code:Code,
+    Color: {
+        class: ColorPlugin,
+        config: {
+           colorCollections: ['#EC7878','#9C27B0','#673AB7','#3F51B5','#0070FF','#03A9F4','#00BCD4','#4CAF50','#8BC34A','#CDDC39', '#FFF'],
+           defaultColor: '#FF1300',
+           type: 'text',
+           customPicker: true,
+        }
+    },
+    toggle: {
+        class: ToggleBlock,
+        inlineToolbar: true,
+    },
+    hyperlink: {
+        class: Hyperlink,
+        config: {
+          shortcut: 'CMD+L',
+          target: '_blank',
+          rel: 'nofollow',
+          availableTargets: ['_blank', '_self'],
+          availableRels: ['author', 'noreferrer'],
+          validate: false,
+        }
+    },
+    underline: Underline,
+    alignmentTune: {
+        class:AlignmentTuneTool,
+        config:{
+          default: "left",
+          blocks: {
+            header: 'left',
+            list: 'left'
+          }
+        },
+    }
+};
 window.getEditorJsDefaultConfig = function($id) {
     return {
         holder: $id,
@@ -37,92 +119,14 @@ window.getEditorJsDefaultConfig = function($id) {
          * Pass Tool's class or Settings object for each Tool you want to use
          */
         tools: {
-            header: {
-                class: Header,
-                inlineToolbar : true,
-                tunes: ['alignmentTune'],
-            },
-            list: List,
-            checklist: Checklist,
-            image: {
-                class: WeImageTool,
-                config: {
-
+            ...editorJsTools,
+            columns : {
+                class : WeEditorJsColumns,
+                config : {
+                  tools : editorJsTools, // IMPORTANT! ref the column_tools
                 }
             },
-            imageCompare: {
-                class: WeImageCompareTool,
-                config: {
-
-                }
-            },
-            link: Link,
-            warning:Warning,
-            table:Table,
-            raw: Raw,
-            quote:Quote,
-            paragraph:{
-                class: Paragraph,
-                inlineToolbar : true,
-                tunes: ['alignmentTune'],
-            },
-            nestedList:NestedList,
-            marker: {
-                class: ColorPlugin,
-                config: {
-                   defaultColor: '#FFBF00',
-                   type: 'marker',
-                   customPicker: true,
-                }
-              },
-            inlineCode:InlineCode,
-            embed:{
-                class: Embed,
-                inlineToolbar: true
-            },
-            code:Code,
-            Color: {
-                class: ColorPlugin,
-                config: {
-                   colorCollections: ['#EC7878','#9C27B0','#673AB7','#3F51B5','#0070FF','#03A9F4','#00BCD4','#4CAF50','#8BC34A','#CDDC39', '#FFF'],
-                   defaultColor: '#FF1300',
-                   type: 'text',
-                   customPicker: true,
-                }
-            },
-            toggle: {
-                class: ToggleBlock,
-                inlineToolbar: true,
-            },
-            hyperlink: {
-                class: Hyperlink,
-                config: {
-                  shortcut: 'CMD+L',
-                  target: '_blank',
-                  rel: 'nofollow',
-                  availableTargets: ['_blank', '_self'],
-                  availableRels: ['author', 'noreferrer'],
-                  validate: false,
-                }
-            },
-            underline: Underline,
-            //TODO: configure API endpoint to upload files/images to WeMediaLibrary
-            // attaches: {
-            //     class: AttachesTool,
-            //     config: {
-            //       endpoint: 'http://localhost:8008/uploadFile'
-            //     }
-            // },
-            alignmentTune: {
-                class:AlignmentTuneTool,
-                config:{
-                  default: "left",
-                  blocks: {
-                    header: 'left',
-                    list: 'left'
-                  }
-                },
-            }
+            
         },
     };
 };
