@@ -448,7 +448,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
         do_action('user.password.updated', $this, $newPassword, $oldPassword);
 
-        $this->notify(new UserPasswordChangedNotification());
+        try {
+            $this->notify(new UserPasswordChangedNotification());
+        } catch(\Exception $e) {
+            Log::error($e);
+        }
     }
 
     /**

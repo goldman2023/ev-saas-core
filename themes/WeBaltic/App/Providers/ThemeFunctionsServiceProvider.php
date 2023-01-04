@@ -73,6 +73,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     protected function registerLivewireComponents() {
         Livewire::component('dashboard.tables.orders-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\OrdersTable::class);
         Livewire::component('dashboard.tables.tasks-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\TasksTable::class);
+        Livewire::component('dashboard.tables.action-panels.orders-action-panel', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels\OrdersActionPanel::class);
     }
 
     /**
