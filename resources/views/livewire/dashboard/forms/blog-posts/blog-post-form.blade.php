@@ -275,16 +275,7 @@
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
                             <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 <span class="mr-2">{{ translate('Status') }}</span>
-
-                                @if($blogPost->status === App\Enums\StatusEnum::published()->value)
-                                <span class="badge-success">{{ ucfirst($blogPost->status) }}</span>
-                                @elseif($blogPost->status === App\Enums\StatusEnum::draft()->value)
-                                <span class="badge-warning">{{ ucfirst($blogPost->status) }}</span>
-                                @elseif($blogPost->status === App\Enums\StatusEnum::pending()->value)
-                                <span class="badge-info">{{ ucfirst($blogPost->status) }}</span>
-                                @elseif($blogPost->status === App\Enums\StatusEnum::private()->value)
-                                <span class="badge-dark">{{ ucfirst($blogPost->status) }}</span>
-                                @endif
+                                <span class="{{ $this->getStatusBadgeData()['color-class'] }}">{{ $this->getStatusBadgeData()['label'] }}</span>
                             </label>
 
                             <div class="mt-1 sm:mt-0 sm:col-span-2">

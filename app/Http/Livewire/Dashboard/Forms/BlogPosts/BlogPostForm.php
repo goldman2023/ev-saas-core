@@ -20,6 +20,7 @@ use App\Enums\StatusEnum;
 use App\Models\ShopAddress;
 use App\Enums\BlogPostTypeEnum;
 use Illuminate\Validation\Rule;
+use App\Traits\Livewire\HasStatus;
 use App\Traits\Livewire\RulesSets;
 use App\Traits\Livewire\HasCoreMeta;
 use App\Traits\Livewire\HasCategories;
@@ -32,6 +33,7 @@ class BlogPostForm extends Component
     use DispatchSupport;
     use HasCategories;
     use HasCoreMeta;
+    use HasStatus;
 
     public $blogPost;
 
@@ -56,28 +58,55 @@ class BlogPostForm extends Component
 
         $this->initCategories($this->blogPost);
         $this->initCoreMeta($this->blogPost);
+        $this->setOriginalStatus($this->blogPost);
  
         $this->selectedPlans = $this->blogPost->plans->keyBy('id')->map(fn ($item) => $item->title);
     }
 
     protected function rules()
     {
-        return [
-            'selected_categories' => 'required',
-            'blogPost.type' => [Rule::in(BlogPostTypeEnum::toValues('archived'))],
-            'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
-            'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'blogPost.name' => 'required|min:10',
-            'blogPost.subscription_only' => [],
-            'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
-            'blogPost.excerpt' => 'required|min:10',
-            'blogPost.content' => 'required|min:10',
-            'blogPost.gallery' => [''],
-            'blogPost.meta_title' => [''],
-            'blogPost.meta_keywords' => [''],
-            'blogPost.meta_description' => [''],
-            'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
-        ];
+        return $this->overrideRulesBasedOnStatus([
+            'default' => [
+                'selected_categories' => 'nullable',
+                'blogPost.type' => [Rule::in(BlogPostTypeEnum::toValues('archived'))],
+                'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
+                'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
+                'blogPost.name' => 'required|min:10',
+                'blogPost.subscription_only' => [],
+                'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
+                'blogPost.excerpt' => 'required|min:10',
+                'blogPost.content' => 'required|min:10',
+                'blogPost.gallery' => [''],
+                'blogPost.meta_title' => [''],
+                'blogPost.meta_keywords' => [''],
+                'blogPost.meta_description' => [''],
+                'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
+            ],
+            StatusEnum::published()->value => [
+                'selected_categories' => 'required',
+            ]
+        ], $this->blogPost);
+
+        // if($this->blogPost?->status === StatusEnum::published()->value) {
+        //     return ;
+        // } else {
+        //     return [
+        //         'selected_categories' => 'required',
+        //         'blogPost.type' => [Rule::in(BlogPostTypeEnum::toValues('archived'))],
+        //         'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
+        //         'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
+        //         'blogPost.name' => 'required|min:10',
+        //         'blogPost.subscription_only' => [],
+        //         'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
+        //         'blogPost.excerpt' => 'required|min:10',
+        //         'blogPost.content' => 'required|min:10',
+        //         'blogPost.gallery' => [''],
+        //         'blogPost.meta_title' => [''],
+        //         'blogPost.meta_keywords' => [''],
+        //         'blogPost.meta_description' => [''],
+        //         'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
+        //     ];
+        // }
     }
 
     protected function messages()
@@ -162,8 +191,11 @@ class BlogPostForm extends Component
             $this->setCategories($this->blogPost);
 
             // TODO: Determine which package to use for Translations! Set Translations...
-//
+
             DB::commit();
+
+            // Set new Original Status
+            $this->setOriginalStatus($this->blogPost);
 
 
             if ($this->is_update) {

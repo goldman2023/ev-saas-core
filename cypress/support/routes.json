@@ -2026,7 +2026,7 @@
   "blog.archive": {
     "name": "blog.archive",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVBlogPostController@blog_archive",
+    "action": "App\\Http\\Controllers\\BlogPostController@blog_archive",
     "uri": "blog",
     "method": [
       "GET",
@@ -2036,7 +2036,7 @@
   "blog.category.archive": {
     "name": "blog.category.archive",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVBlogPostController@blog_archive_by_category",
+    "action": "App\\Http\\Controllers\\BlogPostController@blog_archive_by_category",
     "uri": "blog/{category_slug}",
     "method": [
       "GET",
@@ -2056,7 +2056,7 @@
   "blog.post.single": {
     "name": "blog.post.single",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVBlogPostController@single",
+    "action": "App\\Http\\Controllers\\BlogPostController@single",
     "uri": "blog/post/{slug}",
     "method": [
       "GET",
@@ -2066,7 +2066,7 @@
   "social.post.single": {
     "name": "social.post.single",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVBlogPostController@social_post_single",
+    "action": "App\\Http\\Controllers\\BlogPostController@social_post_single",
     "uri": "social/post/{id}",
     "method": [
       "GET",
@@ -2867,7 +2867,7 @@
   "blog.posts.index": {
     "name": "blog.posts.index",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVBlogPostController@index",
+    "action": "App\\Http\\Controllers\\BlogPostController@index",
     "uri": "dashboard/blog/posts",
     "method": [
       "GET",
@@ -2877,7 +2877,7 @@
   "blog.post.create": {
     "name": "blog.post.create",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVBlogPostController@create",
+    "action": "App\\Http\\Controllers\\BlogPostController@create",
     "uri": "dashboard/blog/posts/create",
     "method": [
       "GET",
@@ -2887,7 +2887,7 @@
   "blog.post.edit": {
     "name": "blog.post.edit",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVBlogPostController@edit",
+    "action": "App\\Http\\Controllers\\BlogPostController@edit",
     "uri": "dashboard/blog/posts/edit/{id}",
     "method": [
       "GET",

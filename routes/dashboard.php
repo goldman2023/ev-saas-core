@@ -22,7 +22,7 @@ use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\WeInvoiceController;
 use App\Http\Controllers\WeSectionController;
-use App\Http\Controllers\EVBlogPostController;
+use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVTaskController;
@@ -104,9 +104,7 @@ Route::middleware([
 
 
         /* Blog Posts */
-        Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');
-        Route::get('/blog/posts/create', [EVBlogPostController::class, 'create'])->name('blog.post.create');
-        Route::get('/blog/posts/edit/{id}', [EVBlogPostController::class, 'edit'])->name('blog.post.edit');
+        Route::group([], base_path('routes/dashboard/blog-posts-group.php'));
 
         /* Plans */
         Route::get('/plans', [EVPlanController::class, 'index'])->name('plans.index');

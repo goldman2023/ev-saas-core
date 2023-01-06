@@ -12,7 +12,7 @@ use MyShop;
 use Permissions;
 use Session;
 
-class EVBlogPostController extends Controller
+class BlogPostController extends Controller
 {
     public function index(Request $request)
     {
@@ -65,8 +65,11 @@ class EVBlogPostController extends Controller
 
     public function single(Request $request, $slug)
     {
-        $blog_post = BlogPost::where('slug', $slug)->published()->with(['authors', 'shop'])->first();
-
+        // TODO: Think of a way to somehow move the access logic into a trait (so it can be overwritten on demand for some models) and make into a local scope
+        // reason for this is that we can just use local scope (->restrictAccess()) instead of always writing: ->when()->when()->when() bla bla!
+        $blog_post = BlogPost::where('slug', $slug)->with(['authors', 'shop'])
+                        ->when(!(auth()->user()?->isAdmin() ?? false), fn ($query) => $query->published())
+                        ->first();
 
         if($blog_post) {
             $categories_idx = $blog_post->categories->pluck('id')->toArray();
