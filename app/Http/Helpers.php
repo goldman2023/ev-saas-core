@@ -322,6 +322,36 @@ if (!function_exists('formatSizeUnits')) {
     }
 }
 
+if (!function_exists('getRegexForPassword')) {
+    function getRegexForPassword($conditions = []) {
+        $regex = '/^%s$/';
+        $conditions_regex = '';
+
+        if(!empty($conditions)) {
+            foreach($conditions as $condition) {
+                $conditions_regex .= getRegexConditions($condition, $conditions);
+            }
+        }
+
+        return sprintf($regex, $conditions_regex);
+    }
+}
+
+if (!function_exists('getRegexConditions')) {
+    function getRegexConditions($condition = null, $all_conditions = []) {
+        $all = [
+            'at_least_one_digit' => '(?=.*[0-9])',
+            'at_least_one_lowercase_char' => '(?=.*[a-z])',
+            'at_least_one_uppercase_char' => '(?=.*[A-Z])',
+            'at_least_one_special_char' => '(?=.*?[#?!@$%^&*-])',
+        ];
+
+        if($condition === 'all') return $all;
+
+        return $all[$condition] ?? $condition; // $condition can also be a regex string (if not found in $all under certain key)
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 
