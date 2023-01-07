@@ -352,6 +352,14 @@ if (!function_exists('getRegexConditions')) {
     }
 }
 
+if (!function_exists('getPhpMagicMethods')) {
+    function getPhpMagicMethods() {
+        return [
+            '__construct', '__destruct', '__call', '__callStatic', '__get', '__set', '__isset', '__unset', '__sleep', '__wakeup',
+            '__toString', '__invoke', '__set_state', '__clone', '__debugInfo'
+        ];
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////
 
