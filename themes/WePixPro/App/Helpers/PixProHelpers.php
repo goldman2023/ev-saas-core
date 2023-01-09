@@ -654,7 +654,7 @@ if (!function_exists('pix_pro_update_single_license')) {
         $route_paid = pix_pro_endpoint().'/paid/update_license_settings/';
 
         $subscription = $license->user_subscription->first();
-        // dd($subscription->plan);
+
         $is_manual = empty($subscription);
 
         $user = $is_manual ? $license->user : $subscription->user;
@@ -672,7 +672,11 @@ if (!function_exists('pix_pro_update_single_license')) {
             $cloud_service_param = $license->getData('cloud_service') === true || $license->getData('cloud_service') == 1 ? 1 : 0;
             $offline_service_param = $license->getData('offline_service') === true || $license->getData('offline_service') == 1 ? 1 : 0;
 
-            $license_subscription_type = ($is_manual ? $license->license_name : $license->license_name).'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+            if(!empty($license->getData('license_subscription_type'))) {
+                $license_subscription_type = $license->getData('license_subscription_type');
+            } else {
+                $license_subscription_type = $license->license_name.'_'.$cloud_service_param.'_'.$offline_service_param.'_'.$number_of_images;
+            }
 
             $expiration_date = $license->getData('expiration_date');
 
