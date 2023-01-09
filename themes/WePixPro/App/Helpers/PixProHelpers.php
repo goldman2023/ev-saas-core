@@ -138,6 +138,8 @@ if (!function_exists('pix_pro_disconnect_license')) {
                 } else {
                     // Disconnect license on our end
                     $license->setData('hardware_id', null);
+                    $license->setData('file_name', null);
+                    $license->setData('file_contents', null);
                     $license->save();
 
                     if(!empty($form)) {

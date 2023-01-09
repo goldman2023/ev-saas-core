@@ -1,10 +1,17 @@
-@dd(StripeService::processWebhooks())
 @extends('frontend.layouts.user_panel')
 
 @section('page_title', translate('Plans management'))
 
 @push('head_scripts')
 
+@endpush
+
+@push('banners')
+    @if(auth()->user()?->inactive_subscriptions->isNotEmpty())
+        @foreach(auth()->user()?->inactive_subscriptions as $sub) 
+            <x-dashboard.banners.user-subscription-expired-banner :subscription="$sub" />
+        @endforeach
+    @endif
 @endpush
 
 @section('panel_content')
@@ -21,9 +28,9 @@
     </x-dashboard.section-headers.section-header>
 
     @if(auth()->user()?->hasLicenses())
-    <div class="col-span-12">
-        @include('frontend.partials.pix-pro-licenses-table', ['user' => auth()->user()])
-    </div>
+        <div class="col-span-12">
+            @include('frontend.partials.pix-pro-licenses-table', ['user' => auth()->user()])
+        </div>
     @endif
 
 

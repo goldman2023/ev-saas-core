@@ -1,5 +1,13 @@
 @extends('frontend.layouts.user_panel')
 
+@push('banners')
+    @if(auth()->user()?->inactive_subscriptions->isNotEmpty())
+        @foreach(auth()->user()?->inactive_subscriptions as $sub) 
+            <x-dashboard.banners.user-subscription-expired-banner :subscription="$sub" />
+        @endforeach
+    @endif
+@endpush
+
 @section('panel_content')
 <section>
 
@@ -31,22 +39,21 @@
 
             @if(auth()->user()?->isSubscribed() ?? false)
 
+            @else 
+                <div class="col-span-12">
+                    <div
+                        class="p-5 mb-5 border bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
+                        <div class="">
+                            <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('Welcome to') }} {{
+                                get_site_name() }}</h3>
+                            <p class="mt-2 max-w-2xl text-sm text-gray-500">{{ translate('Select your plan and start your
+                                free trial') }}</p>
+                        </div>
 
-            @else
-            <div class="col-span-12">
-                <div
-                    class="p-5 mb-5 border bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
-                    <div class="">
-                        <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('Welcome to') }} {{
-                            get_site_name() }}</h3>
-                        <p class="mt-2 max-w-2xl text-sm text-gray-500">{{ translate('Select your plan and start your
-                            free trial') }}</p>
                     </div>
-
+                    <x-dashboard.widgets.customer.pricing-table>
+                    </x-dashboard.widgets.customer.pricing-table>
                 </div>
-                <x-dashboard.widgets.customer.pricing-table>
-                </x-dashboard.widgets.customer.pricing-table>
-            </div>
             @endif
 
             <div class="col-span-12 md:col-span-6 mb-6">

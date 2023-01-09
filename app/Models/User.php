@@ -253,7 +253,17 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function active_subscriptions()
     {
-        return $this->hasMany(UserSubscription::class)->whereIn('status', ['active', 'trial']);
+        return $this->hasMany(UserSubscription::class)->whereIn('status', ['active', 'trial', 'active_until_end']);
+    }
+
+    public function inactive_subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class)->whereIn('status', ['inactive']);
+    }
+
+    public function canceled_subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class)->whereIn('status', ['canceled']);
     }
 
     public function licenses()

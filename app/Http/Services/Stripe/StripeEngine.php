@@ -866,17 +866,25 @@ class StripeEngine
                     []
                 );
 
-                $previous_subscription_item_id = $stripe_subscription->items->data[0]->id;
+                // If current subscription is active, take the previous sub. items and push them into cart_items with 'deleted' flag
+                if(auth()->user()->subscriptions->first()->isActive()) {
+                    $previous_subscription_item_id = $stripe_subscription->items->data[0]->id;
 
-                if(!empty($stripe_subscription->items->data)) {
-                    foreach($stripe_subscription->items->data as $stripe_subscription_item) {
-                        if(!empty($stripe_subscription_item->id)) {
-                            $cart_items[] = [
-                                'id' => $previous_subscription_item_id,
-                                'deleted' => true
-                            ];
+                    if(!empty($stripe_subscription->items->data)) {
+                        foreach($stripe_subscription->items->data as $stripe_subscription_item) {
+                            if(!empty($stripe_subscription_item->id)) {
+                                $cart_items[] = [
+                                    'id' => $previous_subscription_item_id,
+                                    'deleted' => true
+                                ];
+                            }
                         }
                     }
+                } else {
+                    // If current subscription is NOT active, unset the subscription property from params
+                    unset($params['subscription']);
+                    unset($params['subscription_trial_end']);
+                    unset($params['subscription_proration_date']);
                 }
             }
 
