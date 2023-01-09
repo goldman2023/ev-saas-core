@@ -6,6 +6,7 @@ use DB;
 use Log;
 use App\Enums\UserTypeEnum;
 use App\Enums\UserEntityEnum;
+use App\Models\User;
 
 trait CustomerWebhooks
 {

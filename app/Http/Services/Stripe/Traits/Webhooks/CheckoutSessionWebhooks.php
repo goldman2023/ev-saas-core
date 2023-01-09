@@ -4,6 +4,7 @@ namespace App\Http\Services\Stripe\Traits\Webhooks;
 
 use DB;
 use Log;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Invoice;
 use App\Enums\UserTypeEnum;

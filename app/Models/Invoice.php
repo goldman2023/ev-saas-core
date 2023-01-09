@@ -440,9 +440,11 @@ class Invoice extends WeBaseModel
                     ->quantity($item->quantity)
                     ->discount($item->discount_amount ?? 0)
                     ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
+
+                $sum_invoice_items_discounts += $item->discount_amount ?? 0;
             }
         }
-
+        
         // Append Credit discounts and adjustments if there's any proration
         if($this->isFromStripe()) {
             if($stripe_invoice['starting_balance'] < 0) {
@@ -480,10 +482,18 @@ class Invoice extends WeBaseModel
 
         // DONE: If "VAT Small seller - EU" is enabled
         $total_taxes_label = 'VAT ('.(int) get_tenant_setting('company_tax_rate').'%)';
-        
+
+        // IMPORTANT: Stripe applies discounts only on Payment/Invoice level using coupons/prom-codes
+        // This means that order-items discounts are visible only on our side (example: yearly sub. has 50% discount, but in Stripe, such discount DOES NOT EXIST cuz yearly price is ONE specific Stripe Price)
+        if($this->isFromStripe()) {
+            $order_level_discount = $this->getStripeDiscountAmount(false);
+        } else {
+            $order_level_discount = $this->getDiscountAmount(false);
+        }
+
         // Set custom data
         $custom_data = [
-            'total_discount' => $this->getDiscountAmount(false) - $sum_invoice_items_discounts, // Subtract sum of discounts on invoice items level from discount amount on invoice level!
+            'total_discount' => $order_level_discount,
             'total_taxes_label' => $total_taxes_label,
             'via_payment_method' => function() {
                 return match ($this->getPaymentMethodGateway()) {
@@ -494,7 +504,7 @@ class Invoice extends WeBaseModel
                 };
             }
         ];
-        
+
         $invoice = LaravelInvoice::make(!empty($custom_title) ? $custom_title : translate('VAT Invoice'))
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             // ->sequence()
@@ -555,6 +565,18 @@ class Invoice extends WeBaseModel
     }
 
     public function getDiscountAmount($format = true) {
+        return $format ? \FX::formatPrice($this->discount_amount) : $this->discount_amount;
+    }
+    
+    /**
+     * getStripeDiscountAmount
+     * 
+     * This function returns all discounts applied to stripe invoice (in our case, this is considered invoice/order-level discount - like coupon/promo-code which is on Order/Invoice level, not OrderItem level)
+     *
+     * @param  mixed $format
+     * @return void
+     */
+    public function getStripeDiscountAmount($format = true) {
         if(is_array($invoice = $this->getData(stripe_prefix('stripe_invoice_data')))) {
             if(!empty($invoice['total_discount_amounts'])) {
                 $discount = array_reduce($invoice['total_discount_amounts'], function($carry, $item) {
@@ -566,7 +588,7 @@ class Invoice extends WeBaseModel
             }
         }
 
-        return $format ? \FX::formatPrice($this->discount_amount) : $this->discount_amount;
+        return 0;
     }
 
     public static function getDaysFromPeriod($period) {
