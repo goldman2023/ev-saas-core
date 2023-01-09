@@ -7,6 +7,7 @@
         </div>
     </div>
     <div class="px-4 py-5 sm:px-6">
+        
         @if($plan_subscriptions->isNotEmpty())
             <div class="w-full space-x-3">
                 @foreach($plan_subscriptions as $subscription)

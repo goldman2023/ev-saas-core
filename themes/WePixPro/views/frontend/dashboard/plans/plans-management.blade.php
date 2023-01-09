@@ -6,6 +6,14 @@
 
 @endpush
 
+@push('banners')
+    @if(auth()->user()?->inactive_subscriptions->isNotEmpty())
+        @foreach(auth()->user()?->inactive_subscriptions as $sub) 
+            <x-dashboard.banners.user-subscription-expired-banner :subscription="$sub" />
+        @endforeach
+    @endif
+@endpush
+
 @section('panel_content')
 <section>
     <x-dashboard.section-headers.section-header title="{{ translate('Plans Management') }}"
@@ -20,13 +28,13 @@
     </x-dashboard.section-headers.section-header>
 
     @if(auth()->user()?->hasLicenses())
-    <div class="col-span-12">
-        @include('frontend.partials.pix-pro-licenses-table', ['user' => auth()->user()])
-    </div>
+        <div class="col-span-12">
+            @include('frontend.partials.pix-pro-licenses-table', ['user' => auth()->user()])
+        </div>
     @endif
 
 
-    @if(auth()->user()?->isSubscribed() ?? false)
+    {{-- @if(auth()->user()?->isSubscribed() ?? false) --}}
         <div class="w-full pb-5 mb-5 border-b border-gray-200">
             <div class="flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
                 <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Subscriptions') }}</h4>
@@ -35,7 +43,7 @@
             <livewire:dashboard.tables.my-subscriptions-table :user="auth()->user()" :show-search="false"
                 :show-filters="false" :show-filter-dropdown="false" :show-per-page="false" :column-select="false" />
         </div>
-    @endif
+    {{-- @endif --}}
 
     <x-dashboard.widgets.customer.pricing-table :plans="$plans">
     </x-dashboard.widgets.customer.pricing-table>

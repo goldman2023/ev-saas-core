@@ -17,7 +17,7 @@ use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVAccountVerificationController;
-use App\Http\Controllers\EVBlogPostController;
+use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\EVCartController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
@@ -178,14 +178,11 @@ Route::middleware([
     Route::get('/users/{id}', [EVAccountController::class, 'frontend_user_profile'])->name('user.profile.single');
 
     // Blog Posts
-    Route::get('/blog', [EVBlogPostController::class, 'blog_archive'])->name('blog.archive');
-    Route::get('/blog/{category_slug}', [EVBlogPostController::class, 'blog_archive_by_category'])->name('blog.category.archive');
-
-    Route::get('/shop/{shop_slug}/blog/post/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
-    Route::get('/blog/post/{slug}', [EVBlogPostController::class, 'single'])->name('blog.post.single');
+    Route::group([], base_path('routes/tenant/blog-posts-group.php'));
+    
 
     // Social Posts
-    Route::get('/social/post/{id}', [EVBlogPostController::class, 'social_post_single'])->name('social.post.single');
+    Route::get('/social/post/{id}', [BlogPostController::class, 'social_post_single'])->name('social.post.single');
 
     // Shop pages
     Route::get('/shop/{slug}', [EVShopController::class, 'single'])->name(Shop::getRouteName());

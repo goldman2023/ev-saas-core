@@ -28,7 +28,17 @@ class EVBaseEnum extends Enum
      */
     public static function toValues($skip = null): array
     {
-        return array_keys(static::values($skip));
+        $new = [];
+
+        foreach (static::values() as $value => $label) {
+            if ((is_string($skip) && $skip === $value) || (is_array($skip) && in_array($value, $skip))) {
+                continue;
+            }
+
+            $new[$value] = $label;
+        }
+
+        return array_keys($new);
     }
 
     /**
@@ -36,7 +46,17 @@ class EVBaseEnum extends Enum
      */
     public static function toLabels($skip = null): array
     {
-        return array_values(static::labels($skip));
+        $new = [];
+
+        foreach (static::labels() as $value => $label) {
+            if ((is_string($skip) && $skip === $value) || (is_array($skip) && in_array($value, $skip))) {
+                continue;
+            }
+
+            $new[$value] = $label;
+        }
+
+        return array_keys($new);
     }
 
     public static function implodedValues($skip = null, $separator = ', '): string

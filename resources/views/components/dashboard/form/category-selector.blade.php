@@ -35,7 +35,9 @@
         </ul>
     </fieldset>
 
-    <x-system.invalid-msg field="selected_categories"></x-system.invalid-msg>
+    <div x-show="_.isEmpty(selected_categories)">
+        <x-system.invalid-msg field="selected_categories"></x-system.invalid-msg>
+    </div>
 </div>
 
 <script>

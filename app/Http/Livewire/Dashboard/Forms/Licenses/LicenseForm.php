@@ -124,6 +124,7 @@ class LicenseForm extends Component
             }
 
             $license->forceFill($this->license);
+
             $license->setEditableData($this->license_data);
 
             $license->save();

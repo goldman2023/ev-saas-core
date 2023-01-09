@@ -232,6 +232,16 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 pix_pro_extend_licenses($user_subscription, $stripe_invoice);
             }, 20, 2);
 
+            // Subscription cycle payment_failed
+            add_action('invoice.payment_failed.subscription_cycle', function ($user_subscription, $stripe_invoice) {
+                // When subscription payment fails due to any reason, deactivate license(s)
+                if($user_subscription->licenses->isNotEmpty()) {
+                    foreach($user_subscription->licenses as $license) {
+                        pix_pro_disconnect_license($license, $user_subscription->user, null);
+                    }
+                }
+            }, 20, 2);
+
             // PixPro License disconnect by removing hardware_id
             add_action('license.disconnect', function ($license, $user, $form) {
                 pix_pro_disconnect_license($license, $user, $form);

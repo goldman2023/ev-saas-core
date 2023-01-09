@@ -16,7 +16,8 @@ class PlanSubscriptionsList extends Component
      */
     public function __construct($class = '')
     {
-        $this->plan_subscriptions = auth()->user()->active_subscriptions;
+        // TODO: Manage expire licenses FE display!
+        $this->plan_subscriptions = auth()->user()->subscriptions;
         $this->class = $class;
     }
 

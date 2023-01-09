@@ -58,10 +58,10 @@ class RegisterForm extends Component
             'name' => 'required|min:2',
             'surname' => 'required|min:2',
             'email' => 'required|unique:App\Models\User,email',
-            'password' => ['required', 'min:8', 'regex:/^.*(?=.{1,})(?=.*[a-zA-Z])(?=.*[0-9]).*$/', 'confirmed'],
+            'password' => ['required', 'min:8', 'regex:'.getRegexForPassword(['at_least_one_digit', 'at_least_one_lowercase_char', 'at_least_one_uppercase_char', '.{8,}']), 'confirmed'],
             'terms_consent' => ['required', 'boolean', 'is_true']
         ];
-
+        
         if($this->is_ghost) {
             $rules['email'] = ['required', 'unique:App\Models\User,email,' . $this->ghostUser->id];
         }

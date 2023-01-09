@@ -2,7 +2,7 @@ import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import WeEditorJsColumns from './we-columns/dist/editorjs-columns.bundle';
 import List from '@editorjs/list';
-import Checklist from '@editorjs/checklist';
+// import Checklist from '@editorjs/checklist'; // TODO: Do the Parser!
 import Code from '@editorjs/code';
 import Embed from '@editorjs/embed';
 import WeImageTool from './we-image-tool/dist/bundle';
@@ -10,18 +10,19 @@ import WeImageCompareTool from './we-image-compare/dist/bundle';
 import InlineCode from '@editorjs/inline-code';
 import Link from '@editorjs/link';
 import Marker from '@editorjs/marker';
-import NestedList from '@editorjs/nested-list';
+// import NestedList from '@editorjs/nested-list'; // TODO: Do the Parser!
 import Paragraph from '@editorjs/paragraph';
 import Quote from '@editorjs/quote';
 import Raw from '@editorjs/raw';
 import Table from '@editorjs/table';
-import Warning from '@editorjs/warning';
+// import Warning from '@editorjs/warning'; // TODO: Do the Parser!
 import ColorPlugin from 'editorjs-text-color-plugin';
-import ToggleBlock from 'editorjs-toggle-block';
+// import ToggleBlock from 'editorjs-toggle-block'; // TODO: Fix the page-loading-forever issue in BE - this creates blocking bug, so don't use it for now!
 import Undo from 'editorjs-undo';
 import Hyperlink from 'editorjs-hyperlink';
 import Underline from '@editorjs/underline';
 import AttachesTool from '@editorjs/attaches';
+
 import edjsHTML from 'editorjs-html';
 import edjsCustomParsers from './edjs-parsers';
 import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
@@ -37,7 +38,7 @@ let editorJsTools = {
         tunes: ['alignmentTune'],
     },
     list: List,
-    checklist: Checklist,
+    // checklist: Checklist,
     image: {
         class: WeImageTool,
         config: {
@@ -51,7 +52,7 @@ let editorJsTools = {
         }
     },
     link: Link,
-    warning:Warning,
+    // warning:Warning,
     table:Table,
     raw: Raw,
     quote:Quote,
@@ -60,7 +61,7 @@ let editorJsTools = {
         inlineToolbar : true,
         tunes: ['alignmentTune'],
     },
-    nestedList:NestedList,
+    // nestedList:NestedList,
     marker: {
         class: ColorPlugin,
         config: {
@@ -84,10 +85,10 @@ let editorJsTools = {
            customPicker: true,
         }
     },
-    toggle: {
-        class: ToggleBlock,
-        inlineToolbar: true,
-    },
+    // toggle: {
+    //     class: ToggleBlock,
+    //     inlineToolbar: true,
+    // },
     hyperlink: {
         class: Hyperlink,
         config: {

@@ -5,6 +5,7 @@ namespace App\Traits\Livewire;
 use Illuminate\Support\Arr;
 use App\Traits\HasContentColumn;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 trait RulesSets
 {
@@ -76,5 +77,29 @@ trait RulesSets
         }
 
         return $metaRuleSets;
+    }
+
+    protected function overrideRulesBasedOnStatus($data, $model) {
+        if(empty($model) || !($model instanceof Model)) {
+            return [];
+        }
+        
+        $all = [];
+        $default = [];
+
+        if(!empty($data)) {
+            $default = $data['default'] ?? [];
+
+            foreach($data as $status => $rules) {
+                if($status === 'default') continue;
+
+                if($status === $model->status) {
+                    $all = array_merge($default, $rules);
+                    break;
+                }
+            }
+        }
+
+        return empty($all) ? $default : $all;
     }
 }

@@ -79,7 +79,11 @@
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
     @if(!empty($row->end_date))
-        <span class="text-14">{{ translate('In ') . $row->end_date->diffInDays() . ' ' . translate('days') }}</span>
+        @if($row->end_date->isPast())
+            <span class="text-14 text-danger">{{ translate('Expired on ') . $row->end_date->format('d. M Y, H:i') }}</span>
+        @else
+            <span class="text-14">{{ translate('In ') . $row->end_date->diffInDays() . ' ' . translate('days') }}</span>
+        @endif
     @else
         -
     @endif

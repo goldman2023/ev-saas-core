@@ -76,6 +76,10 @@ class UserSubscription extends WeBaseModel
         return $this->status === UserSubscriptionStatusEnum::trial()->value;
     }
 
+    public function isActive() {
+        return in_array($this->status, UserSubscriptionStatusEnum::toValues(skip: ['inactive', 'canceled']));
+    }
+
     public function scopeActive($query) {
         return $query->whereIn('status', UserSubscriptionStatusEnum::toValues(skip: 'inactive'))->where('end_date', '>', time());
     }

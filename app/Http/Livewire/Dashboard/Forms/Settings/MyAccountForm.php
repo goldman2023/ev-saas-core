@@ -103,7 +103,7 @@ class MyAccountForm extends Component
             ],
             'password' => [
                 'currentPassword' => ['required', 'match_password:App\Models\User,id,me'],
-                'newPassword' => ['required', 'min:8', 'regex:/^.(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/', 'confirmed'],
+                'newPassword' => ['required', 'min:8', 'regex:'.getRegexForPassword(['at_least_one_digit', 'at_least_one_lowercase_char', 'at_least_one_uppercase_char', '.{8,}']), 'confirmed'],
             ],
         ]);
 
