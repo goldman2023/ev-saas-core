@@ -23,23 +23,25 @@ class LatestPrintingTasksBatch extends Component
             ->orderBy('created_at', 'DESC')
             ->first();
 
-        $tasks_ids = $this->upload->getWEF('batch_items');
+        if(!empty($this->upload)) {
+            $tasks_ids = $this->upload->getWEF('batch_items');
 
-        if(!empty($tasks_ids)) {
-            $tasks_ids = array_map(function($task) {
-                return $task['subject_id'];
-            }, $tasks_ids);
-
-            $this->tasks = Task::whereIn('id', $tasks_ids)->get();
-
-            if(!empty($this->tasks)) {
-                $this->orders = $this->tasks->reduce(function ($carry, $item) {
-                    if(empty($carry)) $carry = collect();
-
-                    return $carry->concat(collect($item->orders));
-                });
+            if(!empty($tasks_ids)) {
+                $tasks_ids = array_map(function($task) {
+                    return $task['subject_id'];
+                }, $tasks_ids);
+    
+                $this->tasks = Task::whereIn('id', $tasks_ids)->get();
+    
+                if(!empty($this->tasks)) {
+                    $this->orders = $this->tasks->reduce(function ($carry, $item) {
+                        if(empty($carry)) $carry = collect();
+    
+                        return $carry->concat(collect($item->orders));
+                    });
+                }
             }
-        }        
+        }      
     }
 
     public function render()
