@@ -27,21 +27,24 @@ class LatestPrintingTasksBatch extends Component
             $tasks_ids = $this->upload->getWEF('batch_items');
 
             if(!empty($tasks_ids)) {
+                if(is_string($tasks_ids)) {
+                    $tasks_ids = json_decode($tasks_ids, true);
+                }
                 $tasks_ids = array_map(function($task) {
                     return $task['subject_id'];
                 }, $tasks_ids);
-    
+
                 $this->tasks = Task::whereIn('id', $tasks_ids)->get();
-    
+
                 if(!empty($this->tasks)) {
                     $this->orders = $this->tasks->reduce(function ($carry, $item) {
                         if(empty($carry)) $carry = collect();
-    
+
                         return $carry->concat(collect($item->orders));
                     });
                 }
             }
-        }      
+        }
     }
 
     public function render()
