@@ -25,7 +25,7 @@ use App\Http\Controllers\WeSectionController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
-use App\Http\Controllers\EVTaskController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\NotificationController;
@@ -137,12 +137,8 @@ Route::middleware([
         Route::get('/file-manager', [FileManagerController::class, 'index'])->name('file-manager.index');
 
         /* Tasks */
-        Route::get('/tasks', [EVTaskController::class, 'index'])->name('tasks.index');
-        Route::get('/task/create', [EVTaskController::class, 'create'])->name('task.create');
-        Route::get('/task/edit/{id}', [EVTaskController::class, 'edit'])->name('task.edit');
-        Route::get('/task/details/{id}', [EVTaskController::class, 'details'])->name('task.details');
-        Route::get('/tasks/destroy/{id}', [EVTaskController::class, 'destroy'])->name('task.destroy');
-        Route::get('/tasks/completed/{id}', [EVTaskController::class, 'completed'])->name('task.completed');
+        Route::group([], base_path('routes/dashboard/tasks-group.php'));
+
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.index');

@@ -79,6 +79,13 @@ class CoreMeta extends Model
         ]));
     }
 
+    public static function metaUploadDataTypes()
+    {
+        return array_merge(self::metaGlobalDataTypes(), apply_filters('upload.meta.data-types', [
+            'upload_tag' => 'string',
+        ]));
+    }
+
     public static function getMeta($core_meta, $content_type, $strict = false)
     {
         if (is_array($core_meta)) {

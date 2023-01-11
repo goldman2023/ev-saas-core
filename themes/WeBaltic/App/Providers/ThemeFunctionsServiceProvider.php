@@ -71,9 +71,15 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     }
 
     protected function registerLivewireComponents() {
+        // Tables and Panels
         Livewire::component('dashboard.tables.orders-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\OrdersTable::class);
         Livewire::component('dashboard.tables.tasks-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\TasksTable::class);
         Livewire::component('dashboard.tables.action-panels.orders-action-panel', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels\OrdersActionPanel::class);
+        Livewire::component('dashboard.tables.action-panels.tasks-action-panel', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels\TasksActionPanel::class);
+        
+        // Orders
+        Livewire::component('dashboard.orders.add-to-printing-queue', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Orders\AddToPrintingQueue::class);
+        Livewire::component('dashboard.tasks.latest-printing-tasks-batch', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tasks\LatestPrintingTasksBatch::class);
     }
 
     /**
@@ -125,10 +131,14 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Add baltic general rules
             add_filter('app-settings-general-rules', function ($rules_array) {
-                return array_merge($rules_array, [
-                    'settings.pix_pro_software_download_url' => 'nullable',
-                    'settings.pix_pro_downloads' => 'nullable',
-                    'settings.pix_pro_dataset_samples' => 'nullable',
+                return array_merge($rules_array, []);
+            }, 10, 1);
+
+            // Add Upload WEF data types
+            add_filter('upload.meta.data-types', function ($data_types) {
+                return array_merge($data_types, [
+                    'batch_id' => 'string',
+                    'batch_items' => 'array',
                 ]);
             }, 10, 1);
         }

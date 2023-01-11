@@ -101,17 +101,7 @@
             <x-dashboard.customer.customer-card :user="$user"></x-dashboard.customer.customer-card>
         </div>
 
-        <div class="card mb-9 !pb-0">
-            <div class="scale-75" style="margin-bottom: -20px; width: 125%; transform-origin: top left;">
-                <x-dashboard.orders.order-details-card :order="$order">
-                </x-dashboard.orders.order-details-card>
-
-                <a href="#" class="btn btn-primary w-full mt-3">
-                    {{ translate('Add to print Queue') }}
-                </a>
-            </div>
-        </div>
-
+        <livewire:dashboard.orders.add-to-printing-queue :order="$order" />
 
         <div class="we-qr-code card mb-3">
             <div class="w-full pb-4 mb-4 border-b ">
