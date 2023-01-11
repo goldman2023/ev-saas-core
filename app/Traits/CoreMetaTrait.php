@@ -76,7 +76,7 @@ trait CoreMetaTrait
 
             return true;
         } catch (\Exception $e) {
-            Log::error($e->getMessage);
+            Log::error($e->getMessage());
         }
     }
 

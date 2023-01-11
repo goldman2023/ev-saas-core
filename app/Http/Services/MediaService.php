@@ -2,12 +2,14 @@
 
 namespace App\Http\Services;
 
-use EVS;
+use Log;
 use DB;
+use EVS;
 use Cache;
 use Session;
 use SplFileInfo;
 use App\Models\Shop;
+use App\Models\User;
 use App\Models\Brand;
 use App\Models\Upload;
 use App\Models\Product;
@@ -18,6 +20,7 @@ use Illuminate\Http\File;
 use App\Models\ShopDomain;
 use Illuminate\Support\Str;
 use App\Models\AttributeValue;
+use Illuminate\Support\Collection;
 use App\Models\CategoryRelationship;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
@@ -270,14 +273,17 @@ class MediaService
     * storeAsUploadFromFile
     *
     * This functions creates Upload from the stored file (external or from storage) and
-    * creates UploadRelationship between $model and newly created Upload
+    * creates UploadRelationship between $model(s) and newly created Upload
     * 
     * @param  mixed $model
     * @param  mixed $file
     * @param  mixed $property_name
+    * @param  mixed $file_display_name
+    * @param  mixed $user_id - can be both integer (user ID) or User model
+    * @param  mixed $shop_id - can be both integer (shpo ID) or Shop model
     * @return Upload
     */
-   public function storeAsUploadFromFile(&$model, $file, $property_name, $file_display_name = null) {
+   public function storeAsUploadFromFile(&$model, $file, $property_name, $file_display_name = null, $user_id = null, $shop_id = null) {
 
         if(is_string($file)) {
             $file_path = $file;
@@ -303,10 +309,40 @@ class MediaService
             $upload = new Upload();
         }
 
+        // Determine user_id for the Upload
+        if(empty($user_id)) {
+            if(is_array($model) || $model instanceof Collection) {
+                // Provided $model is array or collection of multiple model instances
+                $user_id = $model->first()?->user_id ?? (auth()->user()?->id ?? null);
+            } else {
+                // Provided $model is a single model isntance
+                $user_id = $model?->user_id ?? (auth()->user()?->id ?? null);
+            }
+        } else {
+            if($user_id instanceof User) {
+                $user_id = $user_id->id;
+            }
+        }
+
+        // Determine shop_id for the Upload
+        if(empty($shop_id)) {
+            if(is_array($model) || $model instanceof Collection) {
+                // Provided $model is array or collection of multiple model instances
+                $shop_id = $model->first()?->shop_id ?? null;
+            } else {
+                // Provided $model is a single model isntance
+                $shop_id = $model?->shop_id ?? null;
+            }
+        } else {
+            if($shop_id instanceof Shop) {
+                $shop_id = $shop_id->id;
+            }
+        }
+
         $upload->extension = $extension;
         $upload->file_name = $file_path;
-        $upload->user_id = $model->user_id;
-        $upload->shop_id = $model->shop_id;
+        $upload->user_id = $user_id;
+        $upload->shop_id = $shop_id;
         $upload->type = MediaService::getPermittedExtensions()[$extension];
         $upload->file_size = $new_file_size;
 
@@ -328,16 +364,28 @@ class MediaService
         // Save Relationship between $model and $upload to DB 
         if(!empty($property_name)) {
 
-            // Differentiate logic between properties with multiple files and one file
-            if($model->getUploadPropertyDefinition($property_name)['multiple'] ?? false) {
-                // Multiple uploads in property - get the current uploads ids from property, push the new upload ID, filter unique values, and reset keys
-                $model->{$property_name} = collect($model->{$property_name})->pluck('id')?->push($upload->id)?->unique()?->values() ?? [$upload->id];
-            } else {
-                // Single upload in property
-                $model->{$property_name} = $upload;
-            }
+            $uploadsSyncing = function($model) use($property_name, $upload) {
+                // Differentiate logic between properties with multiple files and one file
+                if($model->getUploadPropertyDefinition($property_name)['multiple'] ?? false) {
+                    // Multiple uploads in property - get the current uploads ids from property, push the new upload ID, filter unique values, and reset keys
+                    $model->{$property_name} = collect($model->{$property_name})->pluck('id')?->push($upload->id)?->unique()?->values() ?? [$upload->id];
+                } else {
+                    // Single upload in property
+                    $model->{$property_name} = $upload;
+                }
 
-            $model->syncUploads($property_name);
+                $model->syncUploads($property_name);
+            };
+            
+            if(is_array($model) || $model instanceof Collection) {
+                // Logic when $model is an array|Collection of models
+                foreach($model as $subject) {
+                    $uploadsSyncing($subject);
+                }
+            } else {
+                // Logic when $model is single model
+                $uploadsSyncing($model);
+            }
         }
 
         return $upload;
@@ -360,8 +408,9 @@ class MediaService
         return $file_path;
    }
 
-   public function uploadAndStore(&$model, $contents, $path, $name, $extension, $property_name, $with_hash = true, $file_display_name = '', $upload_tag = null) {
+   public function uploadAndStore(&$model, $contents, $path, $name, $extension, $property_name, $with_hash = true, $file_display_name = '', $upload_tag = null, $user_id = null, $shop_id = null) {
         DB::beginTransaction();
+        $upload = null;
 
         try {
             $file_path = MediaService::uploadToStorage($contents, $path, $name, $extension, $with_hash);
@@ -371,15 +420,22 @@ class MediaService
                 throw new Exception('File could not be written to Storage.');
             }
 
-            // Create Upload record based on file_path in Storage and sync $order->documentsproperty (aka create UploadRelationship)
-            $upload = MediaService::storeAsUploadFromFile($model, $file_path, $property_name, file_display_name: $file_display_name);
+            // Create Upload record based on file_path in Storage and sync $model->{$property_name} property (aka create UploadRelationship)
+            $upload = MediaService::storeAsUploadFromFile(
+                model: $model, 
+                file: $file_path, 
+                property_name: $property_name, 
+                file_display_name: $file_display_name, 
+                user_id: $user_id,
+                shop_id: $shop_id
+            );
 
             if($upload_tag) {
                 $upload->setWEF('upload_tag', $upload_tag);
             }
 
             DB::commit();
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             DB::rollback();
 
             if(isset($file_path) && !empty($file_path)) {
@@ -387,9 +443,13 @@ class MediaService
                 Storage::delete($file_path);
             }
 
-            dd($e);
+            Log::error($e);
+
+            dd($e); // for testing purposes
             return false;
         }
+
+        return $upload;
    }
 
    public function deleteFileFromStorage($file_path) {

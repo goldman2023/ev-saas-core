@@ -280,6 +280,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
         'WeBuilder' => App\Facades\WeBuilder::class,
         'Permissions' => App\Facades\Permissions::class,
         'MyShop' => App\Facades\MyShop::class,

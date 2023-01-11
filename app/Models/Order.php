@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Facades\MyShop;
+use App\Traits\TasksTrait;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 use App\Builders\BaseBuilder;
@@ -28,8 +29,7 @@ class Order extends WeBaseModel
     use LogsActivity;
     use UploadTrait;
     use CoreMetaTrait;
-    // use HasStatuses;
-
+    use TasksTrait;
 
     protected $table = 'orders';
 

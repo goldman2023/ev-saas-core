@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Plan;
+use App\Models\Upload;
 use App\Models\Product;
 use App\Models\BlogPost;
 use App\Models\CoreMeta;
@@ -51,6 +52,7 @@ class WEFService
             BlogPost::class => CoreMeta::metaBlogPostDataTypes(),
             Plan::class => CoreMeta::metaPlanDataTypes(),
             UserSubscription::class => CoreMeta::metaUserSubscriptionDataTypes(),
+            Upload::class => CoreMeta::metaUploadDataTypes(),
             default => [],
         };
     }
