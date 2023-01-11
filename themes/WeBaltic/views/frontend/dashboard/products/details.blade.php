@@ -19,7 +19,7 @@
                                 <div class="sm:flex sm:items-center sm:justify-between">
                                     <div class="sm:flex sm:space-x-5">
                                         <div class="flex-shrink-0">
-                                            <img class="object-contain bg-white mx-auto h-20 w-20 rounded-full"
+                                            <img class="object-contain bg-white mx-auto w-40 rounded shadow"
                                                 src="{{ $product->getThumbnail() }}" alt="{{ $product->name }} image">
                                         </div>
                                         <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
