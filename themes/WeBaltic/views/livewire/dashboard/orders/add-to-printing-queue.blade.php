@@ -29,7 +29,9 @@
         <div class="w-full">
             <div class="w-full pb-3 mb-2 border-b ">
                 @if($order->tasks->where('type', 'printing')->count() > 0)
-                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500 flex align-center">
+                        @svg('heroicon-o-check-circle', ['class' => 'inline mr-1.5 h-5 w-5 flex-shrink-0 text-green-500'])
+
                         {{ translate('Order was already added to the printing queue') }}
                     </p>
                 @else

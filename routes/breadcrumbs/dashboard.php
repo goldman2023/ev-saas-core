@@ -9,8 +9,8 @@ use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
 Breadcrumbs::for('dashboard.orders', function (BreadcrumbTrail $trail, $order = null, $content_type = null) {
 
-    $trail->push('Dashboard', route('dashboard'));
-    $trail->push('All orders', route('orders.index'));
+    $trail->push(translate('Dashboard'), route('dashboard'));
+    $trail->push(translate('All orders'), route('orders.index'));
     /* TODO: Add blog category */
     if($order) {
         $trail->push(translate('Order #') . $order->id, route('order.details', $order->id));

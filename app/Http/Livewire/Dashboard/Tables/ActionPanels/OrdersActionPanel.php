@@ -105,7 +105,7 @@ class OrdersActionPanel extends Component
             $new_task->assignee_id = auth()->user()->id;
             $new_task->type = TaskTypesEnum::printing()->value;
             $new_task->status = TaskStatusEnum::backlog()->value;
-            $new_task->name = translate('Printing orders labels/certificates');
+            $new_task->name = translate('🖨️ Printing orders labels/certificates');
             // $new_task->excerpt = translate('Printing order labels (certificates)');
             $new_task->save();
 
