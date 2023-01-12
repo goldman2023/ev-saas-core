@@ -193,12 +193,14 @@ trait InvoiceWebhooks
                 $order->setData(stripe_prefix('stripe_latest_invoice_id'), $stripe_invoice->id);
                 $order->saveQuietly();
 
-                if($stripe_billing_reason === 'subscription_create') {
-                    // This means that subscription is created for the first time
-                    $invoice = $order->invoices()->withoutGlobalScopes()->where('invoice_number', $stripe_invoice->number)->firstOrFail();
-                } else if($stripe_billing_reason === 'subscription_cycle') {
-                    $invoice = $order->invoices()->withoutGlobalScopes()->get()->firstWhere('meta.'.$this->mode_prefix.'stripe_invoice_id', $stripe_invoice->id);
-                }
+                // if($stripe_billing_reason === 'subscription_create') {
+                //     // This means that subscription is created for the first time
+                //     $invoice = $order->invoices()->withoutGlobalScopes()->where('invoice_number', $stripe_invoice->number)->firstOrFail();
+                // } else if($stripe_billing_reason === 'subscription_cycle') {
+                //     $invoice = $order->invoices()->withoutGlobalScopes()->get()->firstWhere('meta.'.stripe_prefix('stripe_invoice_id'), $stripe_invoice->id);
+                // }
+
+                $invoice = $order->invoices()->withoutGlobalScopes()->get()->firstWhere('meta.'.stripe_prefix('stripe_invoice_id'), $stripe_invoice->id);
 
                 if (!empty($invoice)) {
                     $invoice->is_temp = false; // Make this Invoice real!!!
@@ -238,7 +240,7 @@ trait InvoiceWebhooks
                 }
 
                 // ***IMPORTANT: subscription `cycle` and `update` are moved to subscription.updated webhook
-                // Keep in mind that some data is not accessible inside subsription.update (like invoice->number, sine subs_update happens beforeinvoice.paid on stripe for some reason...or at least that's a webhook order)
+                // Keep in mind that some data is not accessible inside subsription.update (like invoice->number, since subs_update happens before invoice.paid on stripe for some reason...or at least that's a webhook order)
             }
 
 
