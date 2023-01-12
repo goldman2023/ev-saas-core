@@ -12,8 +12,8 @@ class LatestPrintingTasksBatch extends Component
     use DispatchSupport;
 
     public $upload;
-    public $orders;
-    public $tasks;
+    public $orders = null;
+    public $tasks = null;
 
     public function mount()
     {
@@ -27,9 +27,11 @@ class LatestPrintingTasksBatch extends Component
             $tasks_ids = $this->upload->getWEF('batch_items');
 
             if(!empty($tasks_ids)) {
+
                 if(is_string($tasks_ids)) {
                     $tasks_ids = json_decode($tasks_ids, true);
                 }
+                
                 $tasks_ids = array_map(function($task) {
                     return $task['subject_id'];
                 }, $tasks_ids);
