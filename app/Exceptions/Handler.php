@@ -20,10 +20,6 @@ class Handler extends ExceptionHandler
     /* Reporting to sentry: https://sentry.io/onboarding/eim-solutions/get-started/  */
     public function report(Throwable $exception)
     {
-        if (app()->bound('sentry') && $this->shouldReport($exception)) {
-            app('sentry')->captureException($exception);
-        }
-
         parent::report($exception);
     }
 

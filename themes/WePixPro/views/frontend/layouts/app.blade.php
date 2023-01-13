@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
     <link rel='canonical' href='@yield(' canonical_link', url()->current() )' />
+    <link rel="preload" as="script" href="https://cdn.tailwindcss.com?plugins=forms,aspect-ratio" />
 
 
     @yield('meta')
@@ -31,13 +32,11 @@
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
-    <script id="img-proxy-data" type="application/json">
-        @json(\IMG::getIMGProxyData())
-    </script>
+
 
     {{-- TailwindCSS --}}
-    {{-- <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script> --}}
-    <script src="{{ static_asset('/bp-assets/tailwind-play/tailwind.js') }}"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,aspect-ratio"></script>
+    {{-- <script src="{{ static_asset('/bp-assets/tailwind-play/tailwind.js') }}"></script> --}}
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
@@ -114,6 +113,9 @@
     @livewireScripts
     <!-- Scripts -->
 
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
     @yield('script')
 
     @stack('footer_scripts')
