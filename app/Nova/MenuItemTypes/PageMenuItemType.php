@@ -3,6 +3,7 @@
 namespace App\Nova\MenuItemTypes;
 
 use App\Models\Page;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Nova\Fields\Text;
 use Outl1ne\MenuBuilder\MenuItemTypes\BaseMenuItemType;
 
@@ -42,7 +43,11 @@ class PageMenuItemType extends BaseMenuItemType
      * @return array
      **/
     public static function getOptions($locale): array {
-        $pages = Page::published()->get()->keyBy('id')->map(fn($item) => $item->name.' (ID: '.$item->id.')')->toArray();
+        $ttl = 600;
+        $pages = Cache::remember('key', $ttl, function () {
+            return Page::published()->get()->keyBy('id')->map(fn($item) => $item->name.' (ID: '.$item->id.')')->toArray();
+        });
+
         return $pages;
     }
 
@@ -75,10 +80,14 @@ class PageMenuItemType extends BaseMenuItemType
      */
     public static function getValue($value, ?array $data, $locale)
     {
+        $page = Cache::remember('page_'.$value, 600, function () use ($value) {
+            return Page::find($value);
+        });
+
         if(!empty($data['query_params'] ?? null)) {
-            $href = (Page::find($value)?->getPermalink() ?? '#').'?'.$data['query_params'];
+            $href = ($page ?? '#').'?'.$data['query_params'];
         } else {
-            $href = Page::find($value)?->getPermalink() ?? '#';
+            $href = $page?->getPermalink() ?? '#';
         }
 
         return $href;

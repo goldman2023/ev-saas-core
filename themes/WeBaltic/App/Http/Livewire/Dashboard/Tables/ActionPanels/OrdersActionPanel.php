@@ -33,7 +33,7 @@ class OrdersActionPanel extends Component
     {
         return [
             'items.required' => translate('At least one order must be selected'),
-            'action' => translate('Action not selected'),
+            'action.required' => translate('Action not selected'),
         ];
     }
 
@@ -51,7 +51,7 @@ class OrdersActionPanel extends Component
 
     public function setAvailableActions() {
         $this->availableActions = [
-            'generate_printing_task' => translate('Generate printing label - Certificate'),
+            'generate_printing_tasks' => translate('Generate printing label - Certificate'),
             'generate_delivery_task' => translate('Generate Delivery List'),
             'export_to_pdf' => translate('Export to PDF'),
         ];
@@ -75,9 +75,8 @@ class OrdersActionPanel extends Component
             $this->validate();
         }
 
-        // IMPORTANT: Move printing and delivery actions to WeBaltic!
-        if($this->action === 'generate_printing_task') {
-            $this->generatePrintingTask();
+        if($this->action === 'generate_printing_tasks') {
+            $this->generatePrintingTasks();
         } else if($this->action === 'generate_delivery_task') {
             $this->generateDeliveryTask();
         } else if($this->action === 'export_to_pdf') {
@@ -94,37 +93,38 @@ class OrdersActionPanel extends Component
 
     }
 
-    public function generatePrintingTask() {
-        // Create new Task
-        DB::beginTransaction();
+    public function generatePrintingTasks() {
+        $orders = Order::whereIn('id', $this->items)->get();
 
-        try {
-            $new_task = new Task();
+        if(!empty($orders)) {
+            DB::beginTransaction();
 
-            $new_task->user_id = auth()->user()->id;
-            $new_task->assignee_id = auth()->user()->id;
-            $new_task->type = TaskTypesEnum::printing()->value;
-            $new_task->status = TaskStatusEnum::backlog()->value;
-            $new_task->name = translate('Printing orders labels/certificates');
-            // $new_task->excerpt = translate('Printing order labels (certificates)');
-            $new_task->save();
+            try {
+                foreach($orders as $order) {
+                    $new_task = new Task();
 
-            $orders = Order::whereIn('id', $this->items)->get();
+                    $new_task->user_id = auth()->user()->id;
+                    $new_task->assignee_id = auth()->user()->id;
+                    $new_task->type = TaskTypesEnum::printing()->value;
+                    $new_task->status = TaskStatusEnum::backlog()->value;
+                    $new_task->name = translate('🖨️ Printing orders labels/certificates for Order #').$order->id;
+                    $new_task->save();
 
-            $new_task->orders()->syncWithoutDetaching($orders);
+                    // Attach Order to Task
+                    $new_task->orders()->sync([$order->id]);
+                }
 
-            DB::commit();
+                DB::commit();
 
-            $this->inform(translate('Printing task successfully created!'), '', 'success');
+                $this->inform(translate('Printing tasks successfully created!'), 'Keep in mind that newly created tasks are currently in backlog', 'success');
 
-
-        } catch(\Exception $e) {
-            DB::rollBack();
-            $this->dispatchGeneralError(translate('There was an error while creating a printing task...Please try again.'));
-            $this->inform(translate('There was an error while creating a printing task...Please try again.'), '', 'fail');
-            dd($e);
+            } catch(\Exception $e) {
+                DB::rollBack();
+                $this->dispatchGeneralError(translate('There was an error while creating a printing task...Please try again.'));
+                $this->inform(translate('There was an error while creating a printing task...Please try again.'), '', 'fail');
+                dd($e);
+            }
         }
-
     }
 
     public function generateDeliveryTask() {

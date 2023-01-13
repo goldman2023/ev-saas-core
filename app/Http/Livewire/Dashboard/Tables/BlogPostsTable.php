@@ -89,7 +89,7 @@ class BlogPostsTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('ID')
+            Column::make('Image')
                 ->sortable()
                 ->excludeFromSelectable(),
             Column::make('Title')
@@ -99,8 +99,6 @@ class BlogPostsTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Subscription', 'subscription_only')
                 ->excludeFromSelectable(),
-            Column::make('Created', 'created_at')
-                ->sortable(),
             Column::make('Last Update', 'updated_at')
                 ->sortable(),
             Column::make('Actions')

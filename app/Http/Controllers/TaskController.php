@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Task;
-use MyShop;
 use DB;
+use MyShop;
+use App\Models\Task;
+use Illuminate\Http\Request;
 
-class EVTaskController extends Controller
+class TaskController extends Controller
 {
-
-
-
     public function index(Request $request){
         $tasks = Task::all();
         return view('frontend.dashboard.tasks.index',compact('tasks'));

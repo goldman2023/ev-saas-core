@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Models\Currency;
 use Cache;
 use EVS;
+use Illuminate\Support\Facades\Cache as FacadesCache;
 use Session;
 
 class FXService
@@ -63,7 +64,9 @@ class FXService
                 return Currency::where('code', $selected_code)->first();
             });
         } else {
-            $this->currency = Currency::where('code', $code)->first();
+            $this->currency = FacadesCache::remember(tenant('id').'_'.$code.'_cache', 86400, function () use ($code) {
+                return Currency::where('code', $code)->first();
+            });
         }
 
         $this->currency_symbol = $this->currency->symbol ?? '';
@@ -101,7 +104,7 @@ class FXService
         if ($convert) {
             $price = $this->convertPrice($price, $base_currency);
         }
-        
+
         $decimals = is_int($decimals) ? $decimals : get_tenant_setting('no_of_decimals');
 
         if (get_tenant_setting('decimal_separator') === 1) {

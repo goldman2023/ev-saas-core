@@ -46,7 +46,7 @@ if (!function_exists('array_deep_merge')) {
         while ($arrays) {
             $array = array_shift($arrays);
             assert(is_array($array));
-            
+
             if (!$array) {
                 continue;
             }
@@ -168,7 +168,9 @@ if (!function_exists('castValuesForGet')) {
                         if($data_type === Upload::class) {
                             $setting = Upload::find($setting);
                         } else if($data_type === Currency::class) {
-                            $setting = Currency::where('code', $setting)?->first() ?? Currency::where('code', 'EUR')?->first();
+                            $setting = Cache::remember('currency_' . $setting, 60 * 60 * 24, function() use ($setting) {
+                                return Currency::where('code', $setting)?->first() ?? Currency::where('code', 'EUR')?->first();
+                            });
                         } else if($data_type === Category::class) {
                             $setting = Category::find($setting);
                         } else if($data_type === 'uploads') {
@@ -317,7 +319,7 @@ if (!function_exists('formatSizeUnits')) {
         } else {
             $bytes = '0 bytes';
         }
-    
+
         return $bytes;
     }
 }

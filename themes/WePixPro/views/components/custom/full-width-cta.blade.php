@@ -9,9 +9,9 @@
             <div class="action-content text-center">
 
                 <div we-slot="" name="title_slot" we-title="Section Title" class="w-full mb-4">
-                    <h2 we-name="section_title" we-title="Title" class="text-[28px]  md:text-[48px]  font-black leading-none mb-5 text-white">
+                    <h5 we-name="section_title" we-title="Title" class="text-[28px]  md:text-[48px]  font-black leading-none mb-5 text-white">
                         {{ translate('Ready to get started with your project?') }}
-                    </h2>
+                    </h5>
                 </div>
 
                 <div we-slot="" name="text_slot" we-title="Section Text" class="w-full mb-8">

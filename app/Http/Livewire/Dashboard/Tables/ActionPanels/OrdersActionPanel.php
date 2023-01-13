@@ -51,7 +51,7 @@ class OrdersActionPanel extends Component
 
     public function setAvailableActions() {
         $this->availableActions = [
-            'generate_printing_task' => translate('Generate printing label - Certificate'),
+            'generate_printing_tasks' => translate('Generate printing label - Certificate'),
             'generate_delivery_task' => translate('Generate Delivery List'),
             'export_to_pdf' => translate('Export to PDF'),
         ];
@@ -76,8 +76,8 @@ class OrdersActionPanel extends Component
         }
 
         // IMPORTANT: Move printing and delivery actions to WeBaltic!
-        if($this->action === 'generate_printing_task') {
-            $this->generatePrintingTask();
+        if($this->action === 'generate_printing_tasks') {
+            $this->generatePrintingTasks();
         } else if($this->action === 'generate_delivery_task') {
             $this->generateDeliveryTask();
         } else if($this->action === 'export_to_pdf') {
@@ -94,7 +94,7 @@ class OrdersActionPanel extends Component
 
     }
 
-    public function generatePrintingTask() {
+    public function generatePrintingTasks() {
         // Create new Task
         DB::beginTransaction();
 
@@ -105,7 +105,7 @@ class OrdersActionPanel extends Component
             $new_task->assignee_id = auth()->user()->id;
             $new_task->type = TaskTypesEnum::printing()->value;
             $new_task->status = TaskStatusEnum::backlog()->value;
-            $new_task->name = translate('Printing orders labels/certificates');
+            $new_task->name = translate('🖨️ Printing orders labels/certificates');
             // $new_task->excerpt = translate('Printing order labels (certificates)');
             $new_task->save();
 

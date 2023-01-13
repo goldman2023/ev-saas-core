@@ -17,12 +17,12 @@
 @endsection
 
 @push('head_scripts')
+    <link rel="preload" as="image" href="{{ $blog_post->getThumbnail(['w' => 1000]) }}" />
 
 @endpush
 
 @push('footer_scripts')
 <link href="{{ static_asset('/bp-assets/vendor/image-compare-viewer.min.css') }}" rel="stylesheet" />
-
 <link href="{{ static_asset('/bp-assets/vendor/fancybox/fancybox.css') }}" rel="stylesheet" />
 <script src="{{ static_asset('/bp-assets/vendor/image-compare-viewer.min.js') }}" defer></script>
 <script src="{{ static_asset('/bp-assets/vendor/fancybox/fancybox.js') }}" defer async></script>
@@ -82,7 +82,7 @@
         <div class="grid grid-cols-12 sm:gap-8">
             <div class="col-span-12 flex flex-col">
                 <div class="w-full aspect-square inline-flex items-center justify-center rounded-md mb-10">
-                    <img src="{{ $blog_post->getThumbnail(['w' => 1000]) }}" alt="" class="w-full object-contain">
+                    <img width="1000px" height="375px" src="{{ $blog_post->getThumbnail(['w' => 1000]) }}" alt="{{ $blog_post->name }} article image" class="w-full object-contain">
                 </div>
 
                 <div id="blog_post_single_content" class="w-full block pb-5 mb-[15px]">
