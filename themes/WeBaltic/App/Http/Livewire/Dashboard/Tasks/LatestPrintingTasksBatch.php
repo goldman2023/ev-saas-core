@@ -15,6 +15,11 @@ class LatestPrintingTasksBatch extends Component
     public $orders = null;
     public $tasks = null;
 
+    protected $listeners = [
+        'refreshDatatable' => 'mount',
+        'refreshLatestPrintingTasksBatch' => 'mount'
+    ];
+
     public function mount()
     {
         $this->upload = Upload::whereHas('core_meta', function ($query) {

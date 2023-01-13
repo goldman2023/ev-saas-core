@@ -50,7 +50,11 @@
                                 </x-dashboard.elements.support-card>
                             @endif
 
-                            <livewire:dashboard.tasks.latest-printing-tasks-batch />
+                            @if($type === 'printing')
+                                <livewire:dashboard.tasks.latest-printing-tasks-batch />
+                            @elseif($type === 'delivery')
+                                <livewire:dashboard.tasks.latest-delivery-task />
+                            @endif
                         </div>
                     </div>
                 @endforeach

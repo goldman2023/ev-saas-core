@@ -137,7 +137,7 @@ class OrderForm extends Component
             'order.tracking_number' => ['nullable'],
             'order.note' => ['nullable'],
             'order.terms' => ['nullable'],
-            'core_meta' => ['nullable'],
+            
             'order_items' => ['nullable'],
         ]);
 
@@ -157,7 +157,7 @@ class OrderForm extends Component
     }
 
     public function getWEFRules() {
-        return [];
+        return apply_filters('dashboard.order-form.rules.wef', []);
     }
 
     public function getWEFMessages() {
@@ -181,17 +181,18 @@ class OrderForm extends Component
             $this->dispatchValidationErrors($e);
             $this->validate();
         }
-
+        
         DB::beginTransaction();
 
         try {
             $this->invoicing_period = null;
 
-            /* Save all meta attributes */
-            $this->saveCoreMeta($this->order);
             $this->order->phone_numbers = [];
             $this->order->is_temp = false;
             $this->order->save();
+
+            /* Save all meta attributes */
+            $this->saveAllCoreMeta($this->order);
 
             // Remove missing previous order_items (if any)
             $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')?->filter() ?? [];

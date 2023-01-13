@@ -18,7 +18,7 @@
                 <span>{{ translate('All orders') }}</span>
             </a> --}}
             {{-- Actions --}}
-            <div class="px-4 py-2 h-full space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0 mb-4">
+            <div class="px-4 py-2 h-full space-y-2 sm:px-0 flex items-center justify-between sm:space-y-0">
                 <div class="flex items-center">
                     @php
                     $last_invoice = $order->invoices->first(); // it's already sorted by created_at DESC

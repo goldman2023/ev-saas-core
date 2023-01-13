@@ -54,7 +54,7 @@ trait RulesSets
                 
             ],
             'core_meta' => [
-                'core_meta' => '',
+
             ]
         ];
         $metaRuleSets = [];
@@ -63,7 +63,8 @@ trait RulesSets
         if(class_has_trait($model::class, HasContentColumn::class)) {
             $defaultMetaRuleSets['wef_meta']['wef.'.$model::getContentStructureCoreMetaName()] = 'nullable';
         }
-        // END Set meta defaults
+
+        // Set custom rules
         if(!empty($custom_rules) && (is_array($custom_rules) || $custom_rules instanceof Collection)) {
             if($custom_rules instanceof Collection) {
                 $custom_rules = $custom_rules->toArray(); // turn collection to array!

@@ -56,6 +56,11 @@ class Upload extends WeBaseModel
             ->withPivot('relation_type, group_id');
     }
 
+    public function related()
+    {
+        return $this->hasMany(UploadsContentRelationship::class);
+    }
+
     /**
      * Generates URL for the Upload model.
      * If Upload is image, it'll be proxified through IMGProxyService using desired $options (otherwise default options for `thumbnail` sizes will be used)

@@ -8,10 +8,11 @@
     shipping_country: @js($order->shipping_country),
     same_billing_shipping: @js($order->same_billing_shipping === true ? true : false),
     order_items: @js($order_items ?? []),
-    tax: @js($order->tax ?? 0),
+    tax: @js($order->tax ?? (get_tenant_setting('company_tax_rate') ?? 0)),
     shipping_cost: @js($hideShipping ? 0 : ($order->shipping_cost ?? 0)),
     email: @js($order->email),
     core_meta: @js($core_meta),
+    wef: @js($wef),
 
     subtotal: 0,
     total: 0,
@@ -49,6 +50,7 @@
         $wire.set('order.tax', this.tax, true);
         $wire.set('order_items', this.order_items, true);
         $wire.set('core_meta', this.core_meta, true);
+        {{-- $wire.set('wef', this.wef, true); --}}
 
         @do_action('view.order-form.wire_set');
     },
@@ -821,6 +823,8 @@ x-cloak>
 
                 {{-- Right side --}}
                 <div class="col-span-12 sm:col-span-4">
+                    @do_action('view.dashboard.form.order.right.start', $order)
+
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                         <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Actions') }}</h3>
@@ -966,7 +970,7 @@ x-cloak>
                                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 pt-2">
                                     <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">{{ translate('Tax(percent)') }}</label>
                                     <div class="mt-1 sm:col-span-2 sm:mt-0">
-                                        <x-dashboard.form.input type="number" value="21" field="tax" :x="true" min="0" max="100" />
+                                        <x-dashboard.form.input type="number" field="tax" :x="true" min="0" max="100" />
                                     </div>
                                 </div>
                                 {{-- END TAX --}}

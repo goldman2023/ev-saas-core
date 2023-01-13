@@ -21,8 +21,10 @@
           </li>
         @elseif($key == $order_cycle_status)
           <!-- Current Step -->
-          <li class="relative pb-6">
-            <div class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-gray-300" aria-hidden="true"></div>
+          <li class="relative @if($key !== count($steps) - 1) pb-6 @endif">
+            @if($key !== count($steps) - 1)
+              <div class="absolute top-4 left-4 -ml-px mt-0.5 h-full w-0.5 bg-gray-300" aria-hidden="true"></div>
+            @endif
             <!-- Current Step -->
             <div class="group relative flex items-center" aria-current="step">
               <span class="flex h-9 items-center" aria-hidden="true">
@@ -197,15 +199,18 @@
         </a>
       </li> --}}
     </ol>
-    <div class="w-full mt-6">
-        <a href="{{ route('order.change-status', $order->id) }}" class="btn-primary w-full !px-10 text-center !py-3">
 
-            <span>
-                {{ translate('Next status') }}
-            </span>
+    @if($key !== $order_cycle_status)
+      <div class="w-full mt-6">
+          <a href="{{ route('order.change-status', $order->id) }}" class="btn-primary w-full !px-10 text-center !py-3">
 
-            @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 ml-3'])
+              <span>
+                  {{ translate('Next status') }}
+              </span>
 
-        </a>
-    </div>
+              @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 ml-3'])
+
+          </a>
+      </div>
+    @endif
   </nav>

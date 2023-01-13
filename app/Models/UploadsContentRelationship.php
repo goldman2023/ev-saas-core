@@ -20,4 +20,9 @@ class UploadsContentRelationship extends Model
     {
         return $this->belongsTo(UploadsGroup::class, 'group_id', 'id');
     }
+
+    public function subject()
+    {
+        return $this->morphTo();
+    }
 }

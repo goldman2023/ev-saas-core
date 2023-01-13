@@ -5,7 +5,7 @@
             <p class="mt-2 max-w-2xl text-sm text-gray-500">{!! $text !!}</p>
         @endif
     </div>
-    <div class="flex sm:mt-0 sm:ml-4">
+    <div class="flex sm:mt-0 sm:ml-4 gap-x-2">
         {{ $content }}
     </div>
 </div>

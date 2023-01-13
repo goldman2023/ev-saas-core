@@ -2,18 +2,19 @@
 
 namespace WeThemes\WeBaltic\App\Providers;
 
-use App\Models\CoreMeta;
+use MediaService;
 use App\Models\Order;
 use App\Models\Upload;
-use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\View;
 use Livewire\Livewire;
-use App\Http\Services\TenantSettings;
+use App\Models\CoreMeta;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
-use MediaService;
+use Illuminate\Support\Facades\View;
+use App\Http\Services\TenantSettings;
+use Illuminate\Support\Facades\Storage;
+use App\Providers\WeThemeFunctionsServiceProvider;
+use WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
@@ -79,6 +80,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         // Orders
         Livewire::component('dashboard.orders.order-queues', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Orders\OrderQueues::class);
         Livewire::component('dashboard.tasks.latest-printing-tasks-batch', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tasks\LatestPrintingTasksBatch::class);
+        Livewire::component('dashboard.tasks.latest-delivery-task', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tasks\LatestDeliveryTask::class);
     }
 
     /**
@@ -148,13 +150,18 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'cycle_status' => 'int',
                 ]);
             }, 10, 1);
+
+            // OrderForm: Add wef rules
+            add_filter('dashboard.order-form.rules.wef', function ($meta) {
+                return array_merge($meta, [
+                    'wef.cycle_status' => 'required',
+                ]);
+            });
         }
 
         if (function_exists('add_action')) {
-            add_action('order.change-status', function($order) {
-                // $this->generateOrderDocument($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
-                // $this->generateOrderDocument($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
-                // $this->generateOrderDocument($order, 'documents-templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
+            add_action('view.order-form.wire_set', function () {
+                js_wire_set('wef.cycle_status', 'wef.cycle_status');
             });
 
             // View actions
@@ -163,6 +170,28 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     echo view('frontend.partials.we-media-editor-other-information', compact('upload', 'subject'));
                 }
             }, 10, 2);
+
+            // Add Order Cycle Status metabox at the TOP RIGHT side of the order-form
+            add_action('view.dashboard.form.order.right.start', function ($order) {
+                if (\View::exists('frontend.partials.order-form-custom-meta-box')) {
+                    $current_cycle_status_label = OrderCycleStatusEnum::labels()[$order->getWEF('cycle_status') ?? 0] ?? OrderCycleStatusEnum::labels()[0];
+                    $current_cycle_status_value = is_string(OrderCycleStatusEnum::values()[$order->getWEF('cycle_status')] ?? -1) ? $order->getWEF('cycle_status') : 0;
+                    $current_cycle_status_date = $order->getWEF('cycle_step_date_'.(OrderCycleStatusEnum::values()[$order->getWEF('cycle_status')] ?? -1), false, 'int') ?? ($order->created_at?->timestamp ?? null);
+
+                    $default_cycle_status_value = 0;
+
+                    if($current_cycle_status_value === count(OrderCycleStatusEnum::values()) - 1) {
+                        // Last step
+                        $next_cycle_status_label = null;
+                    } else if($current_cycle_status_value + 1 >= 1 && $current_cycle_status_value !== count(OrderCycleStatusEnum::values()) - 1) {
+                        // Between 0 and count() - 1
+                        $next_cycle_status_label = OrderCycleStatusEnum::labels()[($order->getWEF('cycle_status') ?? 0) + 1];
+                    }
+
+                    echo view('frontend.partials.order-form-custom-meta-box', 
+                        compact('order', 'current_cycle_status_label', 'current_cycle_status_value', 'default_cycle_status_value', 'next_cycle_status_label', 'current_cycle_status_date'));
+                }
+            });
         }
 
     }
