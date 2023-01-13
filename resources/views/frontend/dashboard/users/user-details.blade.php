@@ -78,7 +78,7 @@
                     <div class="mb-3 flex justify-between items-center bg-white py-4 px-4 border border-gray-200 rounded-lg">
                         <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Orders') }}</h4>
                     </div>
-                    <livewire:dashboard.tables.orders-table for="me" :per-page="6"
+                    <livewire:dashboard.tables.orders-table :per-page="6"
                         :show-per-page="false" :user="$user" :show-search="false" :column-select="false" />
                 </div>
 
