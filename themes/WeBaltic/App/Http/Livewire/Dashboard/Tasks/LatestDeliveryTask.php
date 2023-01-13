@@ -27,10 +27,15 @@ class LatestDeliveryTask extends Component
             ->orderBy('created_at', 'DESC')
             ->first();
 
-        $this->order = $this->upload->load('related.subject')->related->where(function($item) {
-            return $item->subject instanceof Order;
-        })->first()?->subject ?? null;
-        $this->deliveryTask = $this->order->tasks->firstWhere('type', 'delivery');
+        if(!empty($this->upload) && $this->upload instanceof Upload) {
+            $this->order = $this->upload->load('related.subject')?->related->where(function($item) {
+                return $item->subject instanceof Order;
+            })?->first()?->subject ?? null;
+
+            if(!empty($this->order) && $this->order instanceof Order) {
+                $this->deliveryTask = $this->order->tasks->firstWhere('type', 'delivery');
+            }
+        }
     }
 
     public function render()

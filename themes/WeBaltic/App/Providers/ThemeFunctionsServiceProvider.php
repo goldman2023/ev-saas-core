@@ -135,7 +135,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return array_merge($rules_array, []);
             }, 10, 1);
 
-            // TODO: Pack all WEF data types definition to single-use Trait orsomething like that
+            // TODO: Pack all WEF data types definition to single-use Trait or something like that
             // Upload: WEF data types
             add_filter('upload.wef.data-types', function ($data_types) {
                 return array_merge($data_types, [
