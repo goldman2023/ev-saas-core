@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Qirolab\Theme\Theme as Theme;
 
@@ -23,8 +24,11 @@ class ThemeMiddleware
         if (tenant()) {
 
             // Get tenant info
-
-            $domain = tenant()->domains()->first();
+            // dd(tenant());
+            // $domain =
+            $domain = Cache::remember('domain_'.tenant()->id, 60 * 60 * 24, function () {
+                return tenant()->domains()->first();
+            });
 
             /* TODO: Make this to run somewhere else, but this fixes the real time facades issues */
             tenant()->run(function ($tenant) {

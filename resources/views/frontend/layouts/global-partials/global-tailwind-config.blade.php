@@ -280,7 +280,8 @@ if($colors) {
         }
 
         #blog_post_single_content a {
-            @apply text-indigo-600;
+            @apply text-indigo-700;
+            text-decoration: underline;
         }
 
         #blog_post_single_content a:hover {
