@@ -2,7 +2,7 @@
     <ol role="list"
         class="divide-y divide-gray-300 overflow-x-scroll rounded-md border border-gray-300 md:flex md:divide-y-0">
         @foreach($steps as $key => $step)
-        @if($key < $order->status)
+        @if($key < $order_cycle_status)
             <li class="relative md:flex md:flex-1">
                 <!-- Completed Step -->
                 <a href="#" class="group flex w-full items-center">
@@ -31,7 +31,7 @@
                     </svg>
                 </div>
             </li>
-            @elseif($key == $order->status)
+            @elseif($key == $order_cycle_status)
             <li class="relative md:flex md:flex-1">
                 <!-- Current Step -->
                 <a href="#" class="flex items-center px-6 py-4 text-sm font-medium" aria-current="step">

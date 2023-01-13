@@ -14,7 +14,7 @@ use App\Http\Controllers\EVPageController;
 use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVShopController;
 use App\Http\Controllers\WeQuizController;
-use App\Http\Controllers\EVOrderController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WeMediaController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\WEImagesController;
@@ -117,17 +117,17 @@ Route::middleware([
         Route::get('/attributes/edit/{id}', [EVAttributesController::class, 'edit'])->name('attributes.edit');
 
         /* Orders & Invoices*/
-        Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
-        Route::get('/order/create/{customerID?}', [EVOrderController::class, 'create'])->name('order.create');
-        Route::get('/order/edit/{id}', [EVOrderController::class, 'edit'])->name('order.edit');
-        Route::get('/order/details/{id}', [EVOrderController::class, 'details'])->name('order.details');
-        Route::get('/orders/destroy/{id}', [EVOrderController::class, 'destroy'])->name('orders.destroy');
-        Route::post('/orders/details', [EVOrderController::class, 'order_details'])->name('orders.details');
-        Route::post('/orders/update_delivery_status', [EVOrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
-        Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
+        Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/order/create/{customerID?}', [OrderController::class, 'create'])->name('order.create');
+        Route::get('/order/edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
+        Route::get('/order/details/{id}', [OrderController::class, 'details'])->name('order.details');
+        Route::get('/orders/destroy/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
+        Route::post('/orders/details', [OrderController::class, 'order_details'])->name('orders.details');
+        Route::post('/orders/update_delivery_status', [OrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
+        Route::post('/orders/update_payment_status', [OrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
 
         /* Custom Order Statuses and Document generation  */
-        Route::get('/order/{order_id}/change_status', [EVOrderController::class, 'change_status'])->name('order.change-status');
+        Route::get('/order/{order_id}/change_cycle_status', [OrderController::class, 'change_cycle_status'])->name('order.change-status');
 
         Route::get('/invoices', [WeInvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoice/{id}/download', [WeInvoiceController::class, 'download_invoice'])->name('invoice.download');
@@ -141,9 +141,9 @@ Route::middleware([
 
 
         /* My Purchases/Wishlist/Viewed Items */
-        Route::get('/my/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.index');
-        Route::get('/my/wishlist/all', [EVOrderController::class, 'my_purchases'])->name('my.wishlist.index');
-        Route::get('/my/orders/all', [EVOrderController::class, 'my_orders'])->name('my.orders.all');
+        Route::get('/my/purchases/all', [OrderController::class, 'my_purchases'])->name('my.purchases.index');
+        Route::get('/my/wishlist/all', [OrderController::class, 'my_purchases'])->name('my.wishlist.index');
+        Route::get('/my/orders/all', [OrderController::class, 'my_orders'])->name('my.orders.all');
 
         /* My Downloads (all) */
         Route::get('/downloads/all', [EVDownloadsController::class, 'my_downloads'])->name('my.downloads.all');

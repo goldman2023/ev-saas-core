@@ -2,8 +2,6 @@
 
 namespace WeThemes\WeBaltic\App\Providers;
 
-// Because this file service provider is loaded after tenant is initated and has no namespace, it cannot use Aliases from `app.php`, like: use Log or use File; Instead full namespaces must be used!
-
 use App\Models\CoreMeta;
 use App\Models\Order;
 use App\Models\Upload;
@@ -72,13 +70,14 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
     protected function registerLivewireComponents() {
         // Tables and Panels
+        Livewire::component('dashboard.tables.tabs.tabs-header', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\Tabs\TabsHeader::class);
         Livewire::component('dashboard.tables.orders-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\OrdersTable::class);
         Livewire::component('dashboard.tables.tasks-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\TasksTable::class);
         Livewire::component('dashboard.tables.action-panels.orders-action-panel', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels\OrdersActionPanel::class);
         Livewire::component('dashboard.tables.action-panels.tasks-action-panel', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels\TasksActionPanel::class);
         
         // Orders
-        Livewire::component('dashboard.orders.add-to-printing-queue', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Orders\AddToPrintingQueue::class);
+        Livewire::component('dashboard.orders.order-queues', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Orders\OrderQueues::class);
         Livewire::component('dashboard.tasks.latest-printing-tasks-batch', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tasks\LatestPrintingTasksBatch::class);
     }
 
@@ -134,20 +133,28 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return array_merge($rules_array, []);
             }, 10, 1);
 
-            // Add Upload WEF data types
-            add_filter('upload.meta.data-types', function ($data_types) {
+            // TODO: Pack all WEF data types definition to single-use Trait orsomething like that
+            // Upload: WEF data types
+            add_filter('upload.wef.data-types', function ($data_types) {
                 return array_merge($data_types, [
                     'batch_id' => 'string',
                     'batch_items' => 'array',
+                ]);
+            }, 10, 1);
+
+            // Order: WEF data types
+            add_filter('order.wef.data-types', function ($data_types) {
+                return array_merge($data_types, [
+                    'cycle_status' => 'int',
                 ]);
             }, 10, 1);
         }
 
         if (function_exists('add_action')) {
             add_action('order.change-status', function($order) {
-                $this->generateOrderDocument($order, 'documents_templates.contract', 'contract', translate('Contract for Order #').$order->id);
-                $this->generateOrderDocument($order, 'documents_templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
-                $this->generateOrderDocument($order, 'documents_templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
+                // $this->generateOrderDocument($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
+                // $this->generateOrderDocument($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
+                // $this->generateOrderDocument($order, 'documents-templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
             });
 
             // View actions
@@ -168,27 +175,6 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     public function register()
     {
         parent::register();
-    }
-
-    public function generateOrderDocument(&$order, $template, $upload_tag, $display_name = '') {
-        // Get order and generate the document
-        $data = ['order' => $order];
-        $pdf = Pdf::loadView($template, $data);
-
-        // upload generated pdf as file in storage and create Upload and Relationship to $order
-        MediaService::uploadAndStore(
-            model: $order,
-            contents: $pdf->output(),
-            path: 'orders/'.$order->id,
-            name: $upload_tag.'-'.$order->id,
-            extension: 'pdf',
-            property_name: 'documents',
-            with_hash: false,
-            file_display_name: $display_name,
-            upload_tag: $upload_tag,
-        );
-
-        return true;
     }
     
     public function generate_vin_code($order) {

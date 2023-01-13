@@ -2957,7 +2957,7 @@
   "orders.index": {
     "name": "orders.index",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVOrderController@index",
+    "action": "App\\Http\\Controllers\\OrderController@index",
     "uri": "dashboard/orders",
     "method": [
       "GET",
@@ -2967,7 +2967,7 @@
   "order.create": {
     "name": "order.create",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVOrderController@create",
+    "action": "App\\Http\\Controllers\\OrderController@create",
     "uri": "dashboard/order/create",
     "method": [
       "GET",
@@ -2977,7 +2977,7 @@
   "order.details": {
     "name": "order.details",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVOrderController@details",
+    "action": "App\\Http\\Controllers\\OrderController@details",
     "uri": "dashboard/order/details/{id}",
     "method": [
       "GET",
@@ -2987,7 +2987,7 @@
   "orders.destroy": {
     "name": "orders.destroy",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVOrderController@destroy",
+    "action": "App\\Http\\Controllers\\OrderController@destroy",
     "uri": "dashboard/orders/destroy/{id}",
     "method": [
       "GET",
@@ -2997,7 +2997,7 @@
   "orders.details": {
     "name": "orders.details",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVOrderController@order_details",
+    "action": "App\\Http\\Controllers\\OrderController@order_details",
     "uri": "dashboard/orders/details",
     "method": [
       "POST"
@@ -3006,7 +3006,7 @@
   "orders.update_delivery_status": {
     "name": "orders.update_delivery_status",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVOrderController@update_delivery_status",
+    "action": "App\\Http\\Controllers\\OrderController@update_delivery_status",
     "uri": "dashboard/orders/update_delivery_status",
     "method": [
       "POST"
@@ -3015,7 +3015,7 @@
   "orders.update_payment_status": {
     "name": "orders.update_payment_status",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVOrderController@update_payment_status",
+    "action": "App\\Http\\Controllers\\OrderController@update_payment_status",
     "uri": "dashboard/orders/update_payment_status",
     "method": [
       "POST"
@@ -3024,7 +3024,7 @@
   "my.purchases.all": {
     "name": "my.purchases.all",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVOrderController@my_purchases",
+    "action": "App\\Http\\Controllers\\OrderController@my_purchases",
     "uri": "dashboard/my/purchases/all",
     "method": [
       "GET",
@@ -3034,7 +3034,7 @@
   "my.orders.all": {
     "name": "my.orders.all",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVOrderController@my_orders",
+    "action": "App\\Http\\Controllers\\OrderController@my_orders",
     "uri": "dashboard/my/orders/all",
     "method": [
       "GET",

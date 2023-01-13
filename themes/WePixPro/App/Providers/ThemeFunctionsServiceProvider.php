@@ -2,8 +2,6 @@
 
 namespace WeThemes\WePixPro\App\Providers;
 
-// Because this file service provider is loaded after tenant is initated and has no namespace, it cannot use Aliases from `app.php`, like: use Log or use File; Instead full namespaces must be used!
-
 use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
 use Illuminate\Support\Facades\View;
@@ -122,8 +120,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ];
             }, 20, 1);
 
-            // Add custom core meta to Plans
-            add_filter('plan.meta.data-types', function ($plan_meta) {
+            // Add custom WEFs to Plans
+            add_filter('plan.wef.data-types', function ($plan_meta) {
                 return array_merge($plan_meta, [
                     'includes_cloud' => 'boolean',
                     'includes_offline' => 'boolean',
@@ -131,8 +129,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
-            // Add custom core meta to UserSubscription
-            add_filter('user-subscription.meta.data-types', function ($user_subscription_meta) {
+            // Add WEFs to UserSubscription
+            add_filter('user-subscription.wef.data-types', function ($user_subscription_meta) {
                 return array_merge($user_subscription_meta, [
                     'includes_cloud' => 'boolean',
                     'includes_offline' => 'boolean',
@@ -140,15 +138,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 ]);
             }, 10, 1);
 
-            add_filter('user-subscription.meta.data-types', function ($user_subscription_meta) {
-                return array_merge($user_subscription_meta, [
-                    'includes_cloud' => 'boolean',
-                    'includes_offline' => 'boolean',
-                    'number_of_images' => 'number',
-                ]);
-            }, 10, 1);
-
-            add_filter('dashboard.plan-form.wef', function ($meta) {
+            add_filter('dashboard.plan-form.rules.wef', function ($meta) {
                 return array_merge($meta, [
                     'wef.number_of_images' => 'nullable',
                     'wef.includes_cloud' => 'nullable',

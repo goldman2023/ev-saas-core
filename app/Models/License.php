@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use WEF;
 use Illuminate\Support\Arr;
 use App\Traits\GalleryTrait;
 use App\Traits\UploadTrait;
@@ -105,6 +106,10 @@ class License extends WeBaseModel
         }
 
         $this->data = $data;
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('license.wef.data-types', []));
     }
 
     // TODO: Refactor this through ThemeFunctions in some way and make it theme-specific! (Extending the Model functions concept)

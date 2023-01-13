@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\OrderStatusEnum;
-use App\Facades\MyShop;
-use App\Models\CoreMeta;
-use App\Models\Order;
-use App\Models\Invoice;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Order;
+use App\Facades\MyShop;
+use App\Models\Invoice;
+use App\Models\CoreMeta;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
-class EVOrderController extends Controller
+
+
+class OrderController extends Controller
 {
     public function index()
     {
@@ -71,52 +72,5 @@ class EVOrderController extends Controller
         $orders_count = auth()->user()->orders()->count();
 
         return view('frontend.dashboard.my-orders.index', compact('orders', 'orders_count'));
-    }
-
-    public function change_status($order_id)
-    {
-        $order = Order::findOrFail($order_id);
-
-        if (is_integer($order->status)) {
-            // dd($order->status);
-            $order->status = $order->status + 1;
-        } else {
-            $order->status = 1;
-        }
-
-
-        $reason = '';
-        if ($order->status == 1) {
-            $reason = translate('Order Created');
-        } else if ($order->status == 2) {
-            $reason = translate('Contract Signed');
-        } else if ($order->status == 3) {
-            $reason = translate('Approved for manufacturing');
-        }
-        // $order->setStatus('status-' .  $order->status, $reason);
-
-        $order->save();
-
-        do_action('order.change-status', $order);
-
-        $meta_row = new CoreMeta();
-        $meta_row->key = 'date_order_status_' . $order->status;
-        $meta_row->value = time();
-        $meta_row->subject_id = $order->id;
-        $meta_row->subject_type = Order::class;
-        $meta_row->save();
-
-        activity()
-            ->performedOn($order)
-            ->causedBy(auth()->user())
-            ->withProperties([
-                'action' => 'changed_status',
-                'action_title' => 'Changed status to: ' . $order->status,
-            ])
-            ->log('Updated order status to: ' . OrderStatusEnum::labels()[$order->status]);
-
-        session()->flash('message', translate('Order status updated'));
-
-        return redirect()->back();
     }
 }

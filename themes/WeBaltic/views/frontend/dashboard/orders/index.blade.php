@@ -15,57 +15,48 @@
         </a>
     </x-slot>
 </x-dashboard.section-headers.section-header>
+
 <div class="-mt-6 mb-6">
     {{ Breadcrumbs::render('dashboard.orders') }}
-    </div>
-<div class="w-full">
+</div>
 
+
+<div class="w-full" x-cloak>
     @if($orders_count > 0)
-    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
-        <ul class="flex overflow-x-auto sm:flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent"
-            role="tablist">
 
-            @foreach(App\Enums\OrderStatusEnum::values() as $key => $status)
-            <li class="mr-2" role="presentation">
-                <button
-                    class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"
-                    id="order-nav-{{ $key }}" data-tabs-target="#orders-tab-{{ $key }}" type="button" role="tab"
-                    aria-controls="order-nav-{{ $status }}" @if($key==0) aria-selected="true" @endif>
-                    {{ App\Enums\OrderStatusEnum::labels()[$key] }} ({{ \App\Models\Order::where('status',
-                    $key+1)->count() }})
-                </button>
-            </li>
+        <livewire:dashboard.tables.tabs.tabs-header 
+            tabs-id="orders" 
+            :is-wef="true" 
+            property="cycle_status"
+            :enum-class="\WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum::class"
+            :model-class="\App\Models\Order::class">
+    
+        <div id="orders-tabs">
+            @foreach(\WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum::values() as $key => $status)
+                <div id="orders-tab-{{ $key }}" role="tabpanel" aria-labelledby="order-nav-{{ $key }}"
+                    class="grid sm:grid-cols-12 gap-6">
+                    <div class="sm:col-span-9">
+                        <livewire:dashboard.tables.orders-table :status="$key" table-id="orders-table-{{ $status }}">
+                        </livewire:dashboard.tables.orders-table>
+                    </div>
+                    <div class="sm:col-span-3">
+                        @if(auth()->user()->isAdmin())
+                            <livewire:dashboard.tables.action-panels.orders-action-panel table-id="orders-table-{{ $status }}" />
+                        @else
+                            <x-dashboard.elements.support-card class="card bg-white p-4 mb-3">
+                            </x-dashboard.elements.support-card>
+                        @endif
+                    </div>
+                </div>
             @endforeach
 
-        </ul>
-    </div>
-    <div id="myTabContent">
-        @foreach(App\Enums\OrderStatusEnum::values() as $key => $status)
-            <div id="orders-tab-{{ $key }}" role="tabpanel" aria-labelledby="order-nav-{{ $key }}"
-                class="grid sm:grid-cols-12 gap-6">
-                <div class="sm:col-span-9">
-                    <livewire:dashboard.tables.orders-table :status="$key+1" table-id="orders-table-{{ $status }}">
-                    </livewire:dashboard.tables.orders-table>
-                </div>
-                <div class="sm:col-span-3">
-                    @if(auth()->user()->isAdmin())
-                        <livewire:dashboard.tables.action-panels.orders-action-panel table-id="orders-table-{{ $status }}" />
-                    @else
-                        <x-dashboard.elements.support-card class="card bg-white p-4 mb-3">
-                        </x-dashboard.elements.support-card>
-                    @endif
-                </div>
-            </div>
-        @endforeach
 
-
-    </div>
+        </div>
     @else
+        <x-dashboard.empty-states.no-items-in-collection icon="heroicon-o-document" title="{{ translate('No orders yet') }}"
+            text="{{ translate('Engage your customers so you can get a new order!') }}">
 
-    <x-dashboard.empty-states.no-items-in-collection icon="heroicon-o-document" title="{{ translate('No orders yet') }}"
-        text="{{ translate('Engage your customers so you can get a new order!') }}">
-
-    </x-dashboard.empty-states.no-items-in-collection>
+        </x-dashboard.empty-states.no-items-in-collection>
     @endif
 
     {{-- <div class="col-6">

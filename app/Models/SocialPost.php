@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use WEF;
 use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
 use App\Traits\CategoryTrait;
@@ -83,5 +84,9 @@ class SocialPost extends WeBaseModel
     public function getDynamicModelUploadProperties(): array
     {
         return [];
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('social-post.wef.data-types', []));
     }
 }

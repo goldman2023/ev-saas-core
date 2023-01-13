@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use WEF;
 use MyShop;
 use App\Enums\StatusEnum;
 use App\Traits\HasStatus;
@@ -98,6 +99,14 @@ class Plan extends WeBaseModel
     public function getDynamicModelUploadProperties(): array
     {
         return [];
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('plan.wef.data-types', [
+            'custom_redirect_url' => 'string',
+            'custom_cta_label' => 'string',
+            'custom_pricing_label' => 'string',
+        ]));
     }
 
     /*

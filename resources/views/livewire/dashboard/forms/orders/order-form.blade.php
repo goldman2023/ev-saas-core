@@ -849,7 +849,7 @@ x-cloak>
 
                             <!-- Payment Status -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                                <label class="flex items-center text-sm font-medium text-gray-700">
+                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     <span class="mr-2">{{ translate('Payment status') }}</span>
 
                                     @if($order->payment_status === App\Enums\PaymentStatusEnum::unpaid()->value)

@@ -288,6 +288,7 @@ return [
         'MediaService' => App\Facades\Media::class,
         'EVS' => App\Facades\EVS::class,
         'WEF' => App\Facades\WEF::class,
+        'WeTheme' => App\Facades\WeTheme::class,
         'CartService' => App\Facades\CartService::class,
         'TenantSettings' => App\Facades\TenantSettings::class,
         'Payments' => App\Facades\Payments::class,

@@ -2,17 +2,19 @@
 
 namespace WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables;
 
+use App\Models\Order;
+use App\Models\Orders;
+use App\Facades\MyShop;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusEnum;
-use App\Facades\MyShop;
-use App\Models\Order;
-use App\Models\Orders;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
+use WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum;
+use Rappasoft\LaravelLivewireTables\DataTableComponent;
+use WeThemes\WeBaltic\App\Http\Controllers\OrderController;
 
 class OrdersTable extends DataTableComponent
 {
@@ -148,7 +150,7 @@ class OrdersTable extends DataTableComponent
     public function query(): Builder
     {
         return Order::query()->where('is_temp', 0)
-            ->when(!empty($this->status), fn ($query, $value) => $query->where('status', $this->status ?? null))
+            ->when(in_array($this->status, OrderCycleStatusEnum::toValues()), fn ($query, $value) => $query->whereWEF('cycle_status', $this->status ?? null))
             
             ->when(auth()->user()->isCustomer(), fn ($query, $value) => $query->where('user_id', $this->user->id ?? null))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
@@ -171,5 +173,22 @@ class OrdersTable extends DataTableComponent
     public function rowView(): string
     {
         return 'frontend.dashboard.orders.row';
+    }
+
+    public function incrementOrderCycleStatus($order_id = null) {
+
+        $controller = app()->make(OrderController::class);
+        
+        $order = $controller->change_cycle_status(order_id: $order_id, standalone: true);
+
+        if($order instanceof Order) {
+            $new_status_label = OrderCycleStatusEnum::labels()[$order->getWEF('cycle_status', true)] ?? '?';
+
+            $this->inform(translate('Order cycle status successfully incremented!'), translate('Order (#').$order_id.translate(') has the cycle status: ').$new_status_label, 'success');
+            $this->emit('refreshDatatable');
+        } else {
+            $this->inform(translate('Order cycle status could not be incremented'), translate('Order (#').$order_id.translate(') could not increment the cycle status...'), 'fail');
+        }
+
     }
 }
