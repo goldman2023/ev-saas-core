@@ -25,7 +25,7 @@ trait UploadTrait
     {
         static::addGlobalScope('withUploads', function (mixed $builder) {
             // Eager Load Uploads
-            $builder->with(['uploads']);
+            $builder->with(['uploads', 'uploads.core_meta']);
         });
 
         static::relationsRetrieved(function ($model) {
@@ -291,6 +291,49 @@ trait UploadTrait
         }
 
         return $this->{$property_name};
+    }
+    
+    /**
+     * getUploadsWhere
+     *
+     * This is a function to be used on any model to get/query specific Upload based on params
+     * This function only allows `equals` operation for now and `AND` relation... TODO: Make it more like laravel ->where() function!
+     * @return void
+     */
+    public function getUploadsWhere($property_name, $base_params = [], $wef_params = [], $return_all = false) {
+        $uploads = $this->{$property_name}->filter(function($upload) use($base_params, $wef_params) {
+            $pass = true;
+
+            if(!empty($base_params)) {
+                foreach($base_params as $base_param) {
+                    if($upload->{$base_param[0]} !== $base_param[1]) {
+                        $pass = false;
+                        break;
+                    }
+                }
+            }
+
+            if($pass) {
+                if(!empty($wef_params)) {
+                    foreach($wef_params as $wef_param) {
+                        if($upload->core_meta->search(function($meta) use($wef_param, &$pass) {
+                            return $meta->key === $wef_param[0] && $meta->value === $wef_param[1];
+                        }) < 0) {
+                            $pass = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return $pass;
+        });
+
+        if($return_all) {
+            return $uploads;
+        }
+
+        return $uploads->first();
     }
 
     /**

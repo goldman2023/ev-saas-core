@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use WEF;
 use App\Facades\MyShop;
 use App\Traits\HasStatus;
 use App\Traits\UploadTrait;
@@ -27,7 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use GetStream\StreamLaravel\Eloquent\ActivityTrait;
 
-class BlogPost extends WeBaseModel  implements Sitemapable
+class BlogPost extends WeBaseModel implements Sitemapable
 {
     use HasSlug;
     use SoftDeletes;
@@ -141,6 +142,12 @@ class BlogPost extends WeBaseModel  implements Sitemapable
     public function getTranslationModel(): ?string
     {
         return BlogPostTranslation::class;
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('blog-post.wef.data-types', [
+            'portfolio_link' => 'string', // TODO: Should probably go to dynamic WEFs for each tenant, and not be here a core...(not everyone need portoflio_link wef -_-)
+        ]));
     }
 
     public function getPageMeta() {

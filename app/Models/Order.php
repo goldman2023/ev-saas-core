@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use WEF;
 use App\Facades\MyShop;
+use App\Traits\HasStatus;
 use App\Traits\TasksTrait;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
@@ -30,6 +32,7 @@ class Order extends WeBaseModel
     use UploadTrait;
     use CoreMetaTrait;
     use TasksTrait;
+    use HasStatus;
 
     protected $table = 'orders';
 
@@ -248,6 +251,12 @@ class Order extends WeBaseModel
                 'multiple' => true,
             ],
         ];
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('order.wef.data-types', [
+            
+        ]));
     }
 
     // Stripe

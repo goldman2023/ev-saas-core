@@ -9,6 +9,7 @@ use IMG;
 use Auth;
 use Cache;
 use Vendor;
+use WEF;
 use App\Models\User;
 use App\Models\Wishlist;
 use App\Traits\HasStatus;
@@ -334,6 +335,35 @@ class Product extends WeBaseModel
        $products = Product::take($count)->get();
 
        return $products;
+    }
+
+    public function getWEFDataTypes() {
+        // Bunch of stuff from here should go to dynamic WEF for specific project/theme/tenant...
+        return WEF::bundleWithGlobalWEF(apply_filters('product.wef.data-types', [
+            'date_type' => 'string',
+            'start_date' => 'date',
+            'end_date' => 'date',
+            'location_type' => 'string',
+            'location_address' => 'string',
+            'location_address_map_link' => 'string',
+            'location_link' => 'string',
+            'unlockables' => 'string', // for now it's a string/wysiwyg
+            'unlockables_structure' => 'array',
+            'calendly_link' => 'string',
+
+            // Course core_meta
+            'course_what_you_will_learn' => 'array',
+            'course_requirements' => 'array',
+            'course_target_audience' => 'array',
+            'course_includes' => 'array',
+            'course_intro_video_url' => 'string',
+
+            // 'custom_cta_title' => 'string',
+            'thank_you_cta_custom_title' => 'string',
+            'thank_you_cta_custom_text' => 'string',
+            'thank_you_cta_custom_url' => 'string',
+            'thank_you_cta_custom_button_title' => 'string',
+        ]));
     }
 
 }

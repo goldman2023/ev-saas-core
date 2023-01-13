@@ -10,25 +10,27 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\Livewire\DispatchSupport;
 use WeThemes\WeBaltic\App\Enums\TaskTypesEnum;
 
-class AddToPrintingQueue extends Component
+class OrderQueues extends Component
 {
     use DispatchSupport;
 
     public $order;
-    public $tasks;
     public $class;
+    public $deliveryTask;
 
     public function mount($order = null, $class = '')
     {
         $this->order = $order;
         $this->class = $class;
-
-        $this->tasks = $order->tasks->where('type', 'printing');
+        $this->deliveryTask = $order->tasks->firstWhere('type', 'delivery');
+        $this->deliveryPDF = $this->order->getUploadsWhere('documents', wef_params: [
+            ['upload_tag', 'delivery_to_warehouse']
+        ]);
     }
 
     public function render()
     {
-        return view('livewire.dashboard.orders.add-to-printing-queue');
+        return view('livewire.dashboard.orders.order-queues');
     }
 
     public function addToPrintingQueue() {

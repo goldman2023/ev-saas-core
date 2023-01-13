@@ -51,8 +51,7 @@ class OrdersActionPanel extends Component
 
     public function setAvailableActions() {
         $this->availableActions = [
-            'generate_printing_tasks' => translate('Generate printing label - Certificate'),
-            'generate_delivery_task' => translate('Generate Delivery List'),
+            'generate_printing_tasks' => translate('Generate printing labels - Certificates'),
             'export_to_pdf' => translate('Export to PDF'),
         ];
     }
@@ -77,8 +76,6 @@ class OrdersActionPanel extends Component
 
         if($this->action === 'generate_printing_tasks') {
             $this->generatePrintingTasks();
-        } else if($this->action === 'generate_delivery_task') {
-            $this->generateDeliveryTask();
         } else if($this->action === 'export_to_pdf') {
             $this->exportToPdf();
         }
@@ -124,38 +121,6 @@ class OrdersActionPanel extends Component
                 $this->inform(translate('There was an error while creating a printing task...Please try again.'), '', 'fail');
                 dd($e);
             }
-        }
-    }
-
-    public function generateDeliveryTask() {
-        // Create new Task
-        DB::beginTransaction();
-
-        try {
-            $new_task = new Task();
-
-            $new_task->user_id = auth()->user()->id;
-            $new_task->assignee_id = auth()->user()->id;
-            $new_task->type = TaskTypesEnum::delivery()->value;
-            $new_task->status = TaskStatusEnum::in_progress()->value;
-            $new_task->name = translate('Delivery task');
-            // $new_task->excerpt = translate('Printing order labels (certificates)');
-            $new_task->save();
-
-            $orders = Order::whereIn('id', $this->items)->get();
-
-            $new_task->orders()->syncWithoutDetaching($orders);
-
-            DB::commit();
-
-            $this->inform(translate('Delivery task successfully created!'), '', 'success');
-
-
-        } catch(\Exception $e) {
-            DB::rollBack();
-            $this->dispatchGeneralError(translate('There was an error while creating a printing task...Please try again.'));
-            $this->inform(translate('There was an error while creating a printing task...Please try again.'), '', 'fail');
-            dd($e);
         }
     }
 

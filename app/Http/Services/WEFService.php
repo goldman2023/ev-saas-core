@@ -7,6 +7,7 @@ use App\Models\Upload;
 use App\Models\Product;
 use App\Models\BlogPost;
 use App\Models\CoreMeta;
+use App\Traits\CoreMetaTrait;
 use App\Models\UserSubscription;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -29,8 +30,35 @@ class WEFService
     public function __construct($app)
     {
         $this->app = $app;
+    }
 
-        
+    /**
+     * globalWEFDataTypes
+     * 
+     * All global WEF DataTypes should be included here.
+     *
+     * @return void
+     */
+    public static function globalWEFDataTypes() {
+        return [
+            'content_structure' => 'array',
+        ];
+    }
+    
+    /**
+     * bundleWithGlobalWEF
+     * 
+     * This function is just a wrapper to merge given $data_types with global WEF data types and return it all.
+     *
+     * @param  mixed $data_types
+     * @return array
+     */
+    public static function bundleWithGlobalWEF($data_types = []) {
+        if($data_types instanceof Collection) {
+            $data_types = $data_types->toArray();
+        }
+
+        return array_merge(self::globalWEFDataTypes(), $data_types);
     }
     
     /**
@@ -39,22 +67,33 @@ class WEFService
      * This function gets the WeFields definitions for provided $model (actually, it's content type)
      * $model parameter can be a Model object or a model class string.
      * 
-     * @param  mixed $model
+     * Remember, this function is a staic function and needs a provided $model as a parameter to work.
+     * Reason for using this function instead of just writing `$model->getWEFDataTypes()`, is that this function:
+     * 1) checks if $model actually has the CoreMetaTrait which defines that $model using it must have getWEFDataTypes() defined,
+     * 2) we can provide  $model as a class string, not just an object
+     * 
+     * If 1. is not the case, then $data_types are empty array and there's no error. 
+     * But when using $model->getWEFDataTypes() directly we can encounter breaking errors!
+     * 
+     * So, consider this as a wrapper static function from the WEF service itself, which properly gets the model's WEF data_types
+     * 
+     * @param  mixed $model (can be either model instance or model class name)
      * @return mixed
      */
-    public function getWEFDataTypes($model) {
-        if($model instanceof Model) {
-            $model = $model::class;
+    public static function getWEFDataTypes($model) {
+        $data_types = [];
+        
+        try {
+            if($model instanceof Model && class_has_trait($model::class, CoreMetaTrait::class)) {
+                $data_types = $model->getWEFDataTypes();
+            } else if(is_string($model) && class_exists($model) && class_has_trait($model, CoreMetaTrait::class)) {
+                $data_types = $this->app->make($model)->getWEFDataTypes();
+            }
+        } catch(\Throwable $e) {
+            $data_types = [];
         }
 
-        return match ($model) {
-            Product::class => CoreMeta::metaProductDataTypes(),
-            BlogPost::class => CoreMeta::metaBlogPostDataTypes(),
-            Plan::class => CoreMeta::metaPlanDataTypes(),
-            UserSubscription::class => CoreMeta::metaUserSubscriptionDataTypes(),
-            Upload::class => CoreMeta::metaUploadDataTypes(),
-            default => [],
-        };
+        return $data_types;
     }
     
     /**
@@ -88,7 +127,7 @@ class WEFService
             $core_meta = $core_meta->keyBy('key')->toArray();
         }
 
-        $data_types = $this->getWEFDataTypes($content_type);
+        $data_types = self::getWEFDataTypes($content_type);
 
         castValuesForGet($core_meta, $data_types);
         
@@ -125,6 +164,6 @@ class WEFService
             $core_meta_key = $core_meta_key->key;
         }
 
-        return array_key_exists($core_meta_key, $this->getWEFDataTypes($model));
+        return array_key_exists($core_meta_key, self::getWEFDataTypes($model));
     }
 }

@@ -22,7 +22,7 @@ use App\Http\Controllers\EVCartController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\EVOrderController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
 use App\Http\Controllers\EVShopController;

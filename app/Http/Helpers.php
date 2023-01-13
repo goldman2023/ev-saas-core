@@ -109,14 +109,14 @@ if (!function_exists('castValuesForGet')) {
         if(!empty($settings) && is_array($settings)) {
 
             foreach($settings as $key => &$setting) {
-
+                
                 $data_type = $data_types[$key] ?? null;
                 $value = $settings[$key]['value'] ?? null;
 
                 if(is_array($setting) && array_key_exists('value', $setting)) {
                     $setting = $setting['value'];
                 }
-
+                
                 try {
 
                     // This means that there are more sub items inside
@@ -153,7 +153,16 @@ if (!function_exists('castValuesForGet')) {
                         continue;
                     }
 
-                    if(empty($setting)) {
+                    // Check if $setting is one of the specific empty values.
+                    // IMPORTANT: We cannot use php empty() native function cuz it considers '0' and 0 as empty - which in this case is NOT TRUE!
+                    $isEmpty = function ($value) {
+                        if($value === '' || $value === "" || $value === null || $value === NULL || $value === false || $value === []) {
+                            return true;
+                        }
+                        return false;
+                    };
+                    
+                    if($isEmpty($setting)) {
                         if($data_type === 'boolean') {
                             $setting = false;
                         } else if($data_type === Currency::class) {
@@ -164,7 +173,7 @@ if (!function_exists('castValuesForGet')) {
                         continue;
                     }
 
-                    if(isset($settings[$key]) && !empty($setting)) {
+                    if(isset($settings[$key]) && !$isEmpty($setting)) {
                         if($data_type === Upload::class) {
                             $setting = Upload::find($setting);
                         } else if($data_type === Currency::class) {
@@ -184,11 +193,11 @@ if (!function_exists('castValuesForGet')) {
                         } else if($data_type === 'wysiwyg') {
                             $setting = $setting;
                         } else if($data_type === 'int') {
-                            $setting = ctype_digit($setting) ? ((int) $setting) : $setting;
+                            $setting = ctype_digit($setting) || is_numeric($setting) ? ((int) $setting) : $setting;
                         } else if($data_type === 'decimal') {
-                            $setting = ctype_digit($setting) ? ((float) $setting) : $setting;
+                            $setting = ctype_digit($setting) || is_numeric($setting) ? ((float) $setting) : $setting;
                         } else if($data_type === 'boolean') {
-                            $setting = ($setting == 0 || $setting == "0") ? false : true;
+                            $setting = ($setting === 0 || $setting === "0") ? false : true;
                         } else if($data_type === 'array') {
                             $setting = json_decode($setting, true);
                         } else if($data_type === 'date') {

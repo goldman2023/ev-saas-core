@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use WEF;
 use StripeService;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
@@ -99,6 +100,12 @@ class UserSubscription extends WeBaseModel
 
     public function getDynamicModelUploadProperties() : array {
         return [];
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('user-subscription.wef.data-types', [
+            
+        ]));
     }
 
     // STRIPE
