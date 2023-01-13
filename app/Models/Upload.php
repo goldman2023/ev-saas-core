@@ -5,6 +5,7 @@ namespace App\Models;
 use IMG;
 use MyShop;
 use Storage;
+use WEF;
 use App\Traits\CoreMetaTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -104,5 +105,11 @@ class Upload extends WeBaseModel
             'type' => $this?->type ?? null,
             'file_original_name' => $this?->file_original_name ?? '',
         ];
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('upload.wef.data-types', [
+            'upload_tag' => 'string',
+        ]));
     }
 }

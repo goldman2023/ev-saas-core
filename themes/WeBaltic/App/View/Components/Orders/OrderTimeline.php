@@ -1,9 +1,9 @@
 <?php
 
-namespace App\View\Components\Dashboard\Orders;
+namespace WeThemes\WeBaltic\App\View\Components\Orders;
 
-use App\Enums\OrderStatusEnum;
 use Illuminate\View\Component;
+use WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum;
 
 class OrderTimeline extends Component
 {
@@ -33,10 +33,7 @@ class OrderTimeline extends Component
             "description_completed" => translate('Signed'),
         ];
 
-        $this->statuses = OrderStatusEnum::labels();
-
-
-
+        $this->statuses = OrderCycleStatusEnum::labels();
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Models;
 use DB;
 use Log;
 use Carbon;
+use WEF;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 use App\Traits\CoreMetaTrait;
@@ -329,6 +330,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function getDynamicModelUploadProperties(): array
     {
         return [];
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('user.wef.data-types', []));
     }
 
     public static function getAvailableUserTypes($only_vendor_types = true)

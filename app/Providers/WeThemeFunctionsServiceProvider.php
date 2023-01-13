@@ -1,17 +1,22 @@
 <?php
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use App\Support\Hooks;
-use Illuminate\Support\Facades\View;
 use TenantSettings;
+use App\Support\Hooks;
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\View;
+use App\Http\Services\WeThemeService;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\ServiceProvider;
 
 
 abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
 {
+    protected $theme_name;
     protected $theme_root;
     protected $theme_helpers;
+    protected $theme_root_class;
 
     /**
      * Used to define Tenant
@@ -63,6 +68,9 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
         $this->registerMenuLocations();
         $this->registerLivewireComponents();
 
+        // Autoload theme Components
+        Blade::componentNamespace('WeThemes\\'.$this->theme_name.'\\App\\View\\Components', 'theme');
+
         // Add Theme specific sections to GrapeJS
         add_filter('theme-section-components', function($base_sections) {
             if(file_exists($this->theme_root.'/views/components/custom/')) {
@@ -84,6 +92,8 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
             // Set `theme_root` and `theme_helpers` paths
             $this->theme_root = base_path() . '/themes/' . tenant()->domains->first()->theme;
             $this->theme_helpers = $this->theme_root . '/App/Helpers/*.php';
+            $this->theme_name = basename($this->theme_root);
+            $this->theme_root_class = 'WeThemes\\'.$this->theme_name;
 
             // Loop through all helper functions in the theme, and require each php file laoded with functions!
             if(!empty($theme_helpers = glob($this->theme_helpers))) {
@@ -92,5 +102,16 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
                 }
             }
         }
+
+        // Register WeThemeService, use it throughout the theme files as: WeTheme::{something}
+        $theme_data = [
+            'theme_name' => $this->theme_name,
+            'theme_root_class' => '\\'. trim($this->theme_root_class ?? '', '\\'),
+            'theme_root_path' => $this->theme_root,
+            'theme_root_helpers_path' => $this->theme_helpers,
+        ];
+        $this->app->singleton('we_theme_service', function() use ($theme_data) {
+            return new WeThemeService(fn () => Container::getInstance(), $theme_data);
+        });
     }
 }

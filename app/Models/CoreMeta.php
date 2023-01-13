@@ -6,7 +6,7 @@ use WEF;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CoreMeta extends Model
+class CoreMeta extends WeBaseModel
 {
     use HasFactory;
 
@@ -17,73 +17,6 @@ class CoreMeta extends Model
     public function subject()
     {
         return $this->morphTo('subject');
-    }
-
-    public static function metaGlobalDataTypes() {
-        return [
-            'content_structure' => 'array',
-        ];
-    }
-
-    public static function metaProductDataTypes()
-    {
-        return array_merge(self::metaGlobalDataTypes(), [
-            'date_type' => 'string',
-            'start_date' => 'date',
-            'end_date' => 'date',
-            'location_type' => 'string',
-            'location_address' => 'string',
-            'location_address_map_link' => 'string',
-            'location_link' => 'string',
-            'unlockables' => 'string', // for now it's a string/wysiwyg
-            'unlockables_structure' => 'array',
-            'calendly_link' => 'string',
-
-            // Course core_meta
-            'course_what_you_will_learn' => 'array',
-            'course_requirements' => 'array',
-            'course_target_audience' => 'array',
-            'course_includes' => 'array',
-            'course_intro_video_url' => 'string',
-
-
-            // 'custom_cta_title' => 'string',
-            'thank_you_cta_custom_title' => 'string',
-            'thank_you_cta_custom_text' => 'string',
-            'thank_you_cta_custom_url' => 'string',
-            'thank_you_cta_custom_button_title' => 'string',
-            
-        ]);
-    }
-
-    public static function metaBlogPostDataTypes()
-    {
-        return array_merge(self::metaGlobalDataTypes(), [
-            'portfolio_link' => 'string',
-        ]);
-    }
-
-    public static function metaPlanDataTypes()
-    {
-        return array_merge(self::metaGlobalDataTypes(), apply_filters('plan.meta.data-types', [
-            'custom_redirect_url' => 'string',
-            'custom_cta_label' => 'string',
-            'custom_pricing_label' => 'string',
-        ]));
-    }
-
-    public static function metaUserSubscriptionDataTypes()
-    {
-        return array_merge(self::metaGlobalDataTypes(), apply_filters('user-subscription.meta.data-types', [
-            
-        ]));
-    }
-
-    public static function metaUploadDataTypes()
-    {
-        return array_merge(self::metaGlobalDataTypes(), apply_filters('upload.meta.data-types', [
-            'upload_tag' => 'string',
-        ]));
     }
 
     public static function getMeta($core_meta, $content_type, $strict = false)

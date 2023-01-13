@@ -139,7 +139,7 @@ class PlanForm extends Component
     }
 
     public function getWEFRules() {
-        return apply_filters('dashboard.plan-form.wef', [
+        return apply_filters('dashboard.plan-form.rules.wef', [
             'wef.custom_redirect_url' => 'nullable',
             'wef.custom_cta_label' => 'nullable',
             'wef.custom_pricing_label' => 'nullable',

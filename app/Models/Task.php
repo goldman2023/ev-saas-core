@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use WEF;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 use App\Traits\CoreMetaTrait;
@@ -66,5 +67,9 @@ class Task extends WeBaseModel
                 'multiple' => true,
             ]
         ];
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('task.wef.data-types', []));
     }
 }

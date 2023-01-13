@@ -1,4 +1,3 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
 <nav aria-label="Progress">
     <ol role="list" class="overflow-hidden">
       <li class="relative pb-6">

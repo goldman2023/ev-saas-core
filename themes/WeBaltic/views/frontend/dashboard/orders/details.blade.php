@@ -93,7 +93,8 @@
     {{ Breadcrumbs::render('dashboard.orders', $order) }}
 </div>
 
-<x-dashboard.orders.order-steps :order="$order"></x-dashboard.orders.order-steps>
+<x-theme::orders.order-steps :order="$order"></x-theme::dashboard.orders.order-steps>
+
 <div class="grid sm:grid-cols-12 gap-9">
     {{-- Right/Sidebar --}}
     <div class="sm:col-span-4">
@@ -101,7 +102,7 @@
             <x-dashboard.customer.customer-card :user="$user"></x-dashboard.customer.customer-card>
         </div>
 
-        <livewire:dashboard.orders.add-to-printing-queue :order="$order" />
+        <livewire:dashboard.orders.order-queues :order="$order" />
 
         <div class="we-qr-code card mb-3">
             <div class="w-full pb-4 mb-4 border-b ">
@@ -300,15 +301,13 @@
                                     </p>
                                 </div>
 
-
-                                <x-dashboard.orders.order-timeline :order="$order">
-                                </x-dashboard.orders.order-timeline>
+                                <x-theme::orders.order-timeline :order="$order"></x-theme::dashboard.orders.order-timeline>
                             </div>
 
                             @livewire('dashboard.elements.activity-log',
                             [
-                            'subject' => $order,
-                            'title' => translate('Order Activity')
+                                'subject' => $order,
+                                'title' => translate('Order Activity')
                             ])
                         </div>
 

@@ -9,6 +9,7 @@ use IMG;
 use Auth;
 use Cache;
 use Vendor;
+use WEF;
 use App\Models\User;
 use App\Traits\HasStatus;
 use App\Traits\PriceTrait;
@@ -175,6 +176,10 @@ class ProductAddon extends WeBaseModel
     /* TODO: @vukasin Implement checkbox in product.create for enabling units display, by default it's disabled */
     function showUnits($show = false) {
         return $show;
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('product-addon.wef.data-types', []));
     }
 
 }

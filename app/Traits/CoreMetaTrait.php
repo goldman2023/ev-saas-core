@@ -10,23 +10,26 @@ use App\Models\CoreMeta;
 use App\Enums\ProductTypeEnum;
 
 trait CoreMetaTrait
-{
+{    
+    /**
+     * getWEFDataTypes
+     *
+     * Each model which implements CoreMeta trait, must define getWEFDataTypes() function.
+     * Even if model deosn't have core WEF by default, it has to at least include following code:
+     * `return WEF::bundleWithGlobalWEF(apply_filters('{model}.wef.data-types', []))`
+     * 
+     */
+    abstract public function getWEFDataTypes();
+
     public function core_meta()
     {
         return $this->morphMany(CoreMeta::class, 'subject');
     }
 
-    public function isStripeProduct()
-    {
-        if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
-            return true;
-        }
-
-        if ($this->core_meta()->where('key', 'test_stripe_product_id')->first()) {
-            return true;
-        }
-
-        return false;
+    public function scopeWhereWEF($query, $wef_key, $wef_value) {
+        return $query->whereHas('core_meta', function($query) use($wef_key, $wef_value) {
+            $query->where('key', $wef_key)->where('value', castValueForSave($wef_key, $wef_value, $this->getWEFDataTypes()));
+        });
     }
 
     public function getCoreMeta($key, $fresh = false, $ad_hoc_data_type = null)
@@ -84,7 +87,20 @@ trait CoreMetaTrait
         return $this->saveCoreMeta($key, $value, $ad_hoc_data_type);
     }
 
-    // Specific CoreMeta
+    // Specific CoreMeta Getters
+    public function isStripeProduct()
+    {
+        if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
+            return true;
+        }
+
+        if ($this->core_meta()->where('key', 'test_stripe_product_id')->first()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function getStripeCustomerID() {
         return $this->getCoreMeta(stripe_prefix('stripe_customer_id'));
     }

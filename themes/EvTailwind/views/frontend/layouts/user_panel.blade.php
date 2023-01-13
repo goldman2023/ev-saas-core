@@ -6,7 +6,7 @@
     @include('frontend.dashboard.partials.sidebar')
     @include('frontend.dashboard.partials.sidebar-mobile')
 
-    <div class="lg:pl-64 flex flex-col">
+    <div class="lg:pl-64 flex flex-col bg-gray-100">
         @include('frontend.dashboard.navigation.topbar')
         {{-- <x-system.promo-banner></x-system.promo-banner> --}}
         @stack('banners')
