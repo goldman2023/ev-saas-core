@@ -150,9 +150,11 @@ class OrdersTable extends DataTableComponent
     public function query(): Builder
     {
         return Order::query()->where('is_temp', 0)
-            ->when(in_array($this->status, OrderCycleStatusEnum::toValues()), fn ($query, $value) => $query->whereWEF('cycle_status', $this->status ?? null))
+            ->when(in_array($this->status, OrderCycleStatusEnum::toValues(), true), fn ($query, $value) => $query->whereWEF('cycle_status', $this->status ?? null))
             
+            ->when(!auth()->user()->isCustomer() && !empty($this->user), fn ($query, $value) => $query->where('user_id', $this->user->id ?? null))
             ->when(auth()->user()->isCustomer(), fn ($query, $value) => $query->where('user_id', $this->user->id ?? null))
+
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
             ->when($this->getFilter('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))
