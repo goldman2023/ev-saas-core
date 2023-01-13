@@ -103,6 +103,7 @@ class BlogPostController extends Controller
 
         $html = preg_replace('/<img(.+?)src="(.+?)"(.+?)>/i', '<img$1 loading="lazy" src="$2"$3>', $content);
         $html = preg_replace('/<img(.+?)srcset="(.+?)"(.+?)>/i', '<img$1 data-srcset="$2"$3>', $html);
+        $html = preg_replace('/<iframe(.+?)src="(.+?)"(.+?)>/i', '<iframe$1 loading="lazy" src="$2"$3>', $content);
 
 
 
