@@ -14,6 +14,10 @@
                     @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
                     <span>{{ translate('All orders') }}</span>
                 </a>
+                <a href="{{ route('order.details', $order->id) }}" class="btn-primary">
+                    @svg('heroicon-o-clipboard-document-list', ['class' => 'h-4 h-4 mr-2'])
+                    <span>{{ translate('Order Details') }}</span>
+                </a>
             </x-slot>
         </x-dashboard.section-headers.section-header>
 

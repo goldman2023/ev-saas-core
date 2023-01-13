@@ -131,9 +131,6 @@ class TasksActionPanel extends Component
                         ];
                     })->toArray();
 
-                    // <x-dashboard.orders.order-details-card :order="$order">
-                    // </x-dashboard.orders.order-details-card>
-
                     // Generate PDF with combined order certificates/labels
                     $html = '';
 
@@ -178,8 +175,6 @@ class TasksActionPanel extends Component
                 DB::commit();
 
                 $this->inform(translate('Orders printing labels PDF successfully created!'), '', 'success');
-
-                // TODO: Emit LW event to update latest printing-labels batch component
             } catch(\Exception $e) {
                 DB::rollBack();
                 $this->dispatchGeneralError(translate('There was an error while creating a printing task...Please try again.'));

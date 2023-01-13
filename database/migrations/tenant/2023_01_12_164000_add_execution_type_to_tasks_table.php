@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('execution_type', 30)->default('sync')->after('content')->index();
+            if(Schema::hasColumn('tasks', 'content')) {
+                $table->string('execution_type', 30)->default('sync')->after('content')->index();
+            };
         });
     }
 

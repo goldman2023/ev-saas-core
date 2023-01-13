@@ -7,8 +7,10 @@ use WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum;
 
 class OrderTimeline extends Component
 {
-    public $statuses = [];
+    public $steps;
     public $order;
+    public $order_cycle_status;
+    
     /**
      * Create a new component instance.
      *
@@ -16,24 +18,25 @@ class OrderTimeline extends Component
      */
     public function __construct($order)
     {
+        $this->steps = OrderCycleStatusEnum::labels();
         $this->order = $order;
+        $this->order_cycle_status = $this->order->getWEF('cycle_status');
 
         //
-        $this->statuses[] = [
-            "title" => translate('Contract'),
-            "description" => translate('Pending signature'),
-            "description_completed" => translate('Signed'),
-        ];
+        // $this->steps[] = [
+        //     "title" => translate('Contract'),
+        //     "description" => translate('Pending signature'),
+        //     "description_completed" => translate('Signed'),
+        // ];
 
-        $this->statuses[] = [
-            "title" => translate('Manufacturing order approval'),
-            "description" => translate('Pending approval'),
-            "action_label" => translate('Approve'),
-            "action" => 'generate_invoice',
-            "description_completed" => translate('Signed'),
-        ];
+        // $this->steps[] = [
+        //     "title" => translate('Manufacturing order approval'),
+        //     "description" => translate('Pending approval'),
+        //     "action_label" => translate('Approve'),
+        //     "action" => 'generate_invoice',
+        //     "description_completed" => translate('Signed'),
+        // ];
 
-        $this->statuses = OrderCycleStatusEnum::labels();
     }
 
     /**

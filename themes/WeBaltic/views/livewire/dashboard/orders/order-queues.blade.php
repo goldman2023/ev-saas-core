@@ -59,10 +59,10 @@
                         </li>
                     </ul>
                     <div class="w-full flex gap-x-3">
-                        <a href="{{ $deliveryPDF->url() }}" class="text-14 text-sky-500 hover:text-sky-600" target="_blank">{{ translate('View Document') }}</a>
                         @if(!empty($deliveryPDF))
-                            <a href="{{ route('task.edit', $deliveryTask->id) }}" class="text-14 text-sky-500 hover:text-sky-600" target="_blank">{{ translate('Edit Task') }}</a>
+                            <a href="{{ $deliveryPDF->url() }}" class="text-14 text-sky-500 hover:text-sky-600" target="_blank">{{ translate('View Document') }}</a>
                         @endif
+                        <a href="{{ route('task.edit', $deliveryTask->id) }}" class="text-14 text-sky-500 hover:text-sky-600" target="_blank">{{ translate('Edit Task') }}</a>
                     </div>
                 @else
                     <div class="w-full">

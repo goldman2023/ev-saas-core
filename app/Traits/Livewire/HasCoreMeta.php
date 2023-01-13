@@ -70,7 +70,7 @@ trait HasCoreMeta
                 if(empty(WEF::getWEFDataTypes($model))) {
                     $keys_to_delete = $missing_core_meta_keys->toArray();
                 } else {
-                    // Skip WEF deletion
+                    // Skip core meta deletion
                     $keys_to_delete = array_keys(array_diff_key(array_flip($missing_core_meta_keys->toArray()), WEF::getWEFDataTypes($model)));
                 }
 
@@ -84,7 +84,7 @@ trait HasCoreMeta
         if (!empty($model)) {
             foreach (collect($this->getMetaRuleSet($model, 'wef_meta', $this->getWEFRules()))->filter(fn ($item, $key) => str_starts_with($key, 'wef')) as $key => $value) {
                 $core_meta_key = explode('.', $key)[1]; // get the part after `wef.`
-    
+                
                 if (! empty($core_meta_key) && $core_meta_key !== '*') {
                     if(array_key_exists($core_meta_key, is_array($this->wef) ? $this->wef : $this->wef->toArray())) {
                         

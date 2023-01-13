@@ -46,7 +46,7 @@
                                         </div>
                                         <p class="mt-0.5 text-sm text-gray-500">
                                             {{-- <a href="{{ $item->subject->getPermalink() }}"> --}}
-                                            {!! $item->description !!} {{ translate('a') }} {{ class_basename($item->subject) }} #{{ $item->subject_id }}
+                                            {!! $item->description !!} ({{ class_basename($item->subject) }} <b>#{{ $item->subject_id }}</b>)
                                             {{-- </a> --}}
                                         </p>
                                     </div>

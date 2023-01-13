@@ -232,7 +232,7 @@ if (!function_exists('castValuesForGet')) {
 
 if (!function_exists('js_wire_set')) {
     function js_wire_set($lw_key, $js_key, $defer = true) {
-        echo "\$wire.set('".$lw_key."', ".$js_key.", ".($defer ? 'true' : 'false').");";
+        echo "\$wire.set('".$lw_key."', this.".$js_key.", ".($defer ? 'true' : 'false').");";
     }
 }
 
