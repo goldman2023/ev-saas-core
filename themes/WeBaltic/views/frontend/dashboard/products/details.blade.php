@@ -13,7 +13,7 @@
                 <div class="grid grid-cols-1 gap-4 lg:col-span-2">
                     <!-- Welcome panel -->
                     <section aria-labelledby="profile-overview-title">
-                        <div class="rounded-lg bg-white overflow-hidden shadow">
+                        <div class="rounded-lg bg-white overflow-hidden shadow relative">
                             <h2 class="sr-only" id="profile-overview-title">Profile Overview</h2>
                             <div class="bg-white p-6">
                                 <div class="sm:flex sm:items-center sm:justify-between">
@@ -28,49 +28,39 @@
                                             </p>
                                             <div class="text-sm font-medium text-gray-600">
                                                 {{-- TODO: Add expandable view all +some categories total --}}
-                                                <div class="text-clip overflow-hidden max-h-[30px]">
+                                                <div class="text-clip overflow-hidden">
                                                     @foreach($product->categories()->get() as $category)
                                                     <a target="_blank" href="{{ $category->getPermalink() }}"
                                                         class="inline-flex items-center px-3 mb-2 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
                                                         {{ $category->name }}
                                                     </a>
                                                     @endforeach
+
+
+                                                </div>
+                                                <div class="text-right absolute right-6 top-6">
+                                                    <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+                                                        href="{{ route('product.edit', $product->id) }}">
+                                                        {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height:
+                                                        16px;',
+                                                        'class' => 'ml-2'])
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    <span
+                                                        class="capitalize mt-3 mx-auto text-center inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                                                        <svg class="-ml-1 mr-1.5 h-2 w-2 text-indigo-400"
+                                                            fill="currentColor" viewBox="0 0 8 8">
+                                                            <circle cx="4" cy="4" r="3" />
+                                                        </svg>
+                                                        {{ $product->status }}
+                                                    </span>
                                                 </div>
 
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="mt-5 flex justify-center sm:mt-0">
-                                        <div class="text-center">
-                                            <a href="{{ $product->getPermalink() }}" target="_blank"
-                                                class="min-w-[200px] flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-200 bg-indigo-600 hover:bg-gray-50">
 
-                                                {{ translate('View') }} {{ translate('product') }}
-                                                <svg class="gray-600 flex-shrink-0 h-6 w-6 ml-2"
-                                                    xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                </svg>
-                                            </a>
-
-                                            <div>
-                                                <span
-                                                    class="mt-3 mx-auto text-center inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                                                    <svg class="-ml-1 mr-1.5 h-2 w-2 text-indigo-400"
-                                                        fill="currentColor" viewBox="0 0 8 8">
-                                                        <circle cx="4" cy="4" r="3" />
-                                                    </svg>
-                                                    {{ $product->status }}
-                                                </span>
-                                            </div>
-                                        </div>
-
-
-
-                                    </div>
                                 </div>
                             </div>
                             <div
@@ -102,22 +92,39 @@
                         <x-dashboard.widgets.business.quick-actions>
                         </x-dashboard.widgets.business.quick-actions>
                     </section>
+                    <section>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <a class="btn btn-primary w-full !p-4 !bg-indigo-900 !block text-center"
+                                    href="{{ route('order.create') }}?product={{ $product->id }}">
+                                    {{ translate('New order') }} <br>
+                                    <div>
+                                        <small> {{ translate('Create new order with this product') }} </small>
+                                    </div>
+                                </a>
+                            </div>
 
+                            <div>
+                                <a class="btn btn-primary w-full !p-4 !bg-indigo-900 !block text-center"
+                                    href="{{ route('order.create') }}?product={{ $product->id }}">
+                                    {{ translate('New order') }} <br>
+                                    <div>
+                                        <small> {{ translate('Create new order with this product') }} </small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
                     <section>
                         <div class="card">
                             <div class="grid grid-cols-2">
-                                <h3 class="font-medium text-xl mb-3">
-                                    {{ translate('Product speficiation') }}
-                                </h3>
-
-                                <div class="text-right">
-                                    <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                                        href="{{ route('product.edit', $product->id) }}">
-                                        {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height:
-                                        16px;',
-                                        'class' => 'ml-2'])
-                                    </a>
+                                <div class="">
+                                    <h3 class="font-medium text-xl mb-3">
+                                        {{ translate('Product speficiation') }}
+                                    </h3>
                                 </div>
+
+
                             </div>
 
                             <x-default.products.single.product-specification-table :product="$product">
@@ -162,74 +169,45 @@
                     <!-- Actions panel -->
                     <section aria-labelledby="quick-links-title">
                         <div
-                            class="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-2 sm:gap-px">
+                            class="rounded-lg p-6 bg-white overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-1 sm:gap-px">
 
+                            <h3 class="text-lg font-medium">
+
+                                <a href="{{ route('product.single', $product->slug) }}" target="_blank"
+                                    class="focus:outline-none">
+                                    <!-- Extend touch target to entire panel -->
+                                    <span class="absolute inset-0" aria-hidden="true"></span>
+                                    {{ translate('Product actions') }}
+                                </a>
+                            </h3>
+                            <p class="text-sm text-gray-500 mb-3">
+                                {{ translate('Manage and update your product information')
+                                }}
+                            </p>
                             <div
-                                class="relative min-h-[200px] rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
-                                <div class="grid grid-cols-6 gap-2">
-                                    <div class="mr-3">
-                                        <span
-                                            class="rounded-lg inline-flex p-3 bg-teal-50 text-teal-700 ring-4 ring-white ">
-                                            <!-- Heroicon name: outline/clock -->
-
-                                            @svg('heroicon-o-eye', ['class' => 'h-6 w-6'])
-                                        </span>
-                                    </div>
-
-                                    <div class="col-span-4">
-                                        <h3 class="text-lg font-medium">
-
-                                            <a href="{{ route('product.single', $product->slug) }}" target="_blank"
-                                                class="focus:outline-none">
-                                                <!-- Extend touch target to entire panel -->
-                                                <span class="absolute inset-0" aria-hidden="true"></span>
-                                                {{ translate('Product Preview') }}
-                                            </a>
-                                        </h3>
-                                        <p class="text-sm text-gray-500">
-                                            {{ translate('View your product as a customer and share it with the world!')
-                                            }}
-                                        </p>
-                                    </div>
-
-
-                                </div>
-                                <div class="pt-3 mt-3">
-                                    <livewire:feed.elements.product-card :product="$product">
-                                    </livewire:feed.elements.product-card>
-
-                                </div>
-                                <span
-                                    class="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400"
-                                    aria-hidden="true">
-                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z" />
-                                    </svg>
-                                </span>
-                            </div>
-                            <div
-                                class="grid grid-cols-1 gap-6  rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6">
+                                class="grid grid-cols-2 gap-6  rounded-tr-lg sm:rounded-tr-none relative group bg-white ">
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.single', $product->slug) }}" target="_blank">
-                                    @svg('heroicon-o-eye', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Preview') }}
+                                    @svg('heroicon-o-eye', ['style' => 'height: 16px;', 'class' => 'ml-2'])
+
                                 </a>
 
                                 @if($product->type === \App\Enums\ProductTypeEnum::course()->value)
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.course', $product->id) }}">
-                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Course Details') }}
+                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'ml-2'])
+
                                 </a>
                                 @endif
 
                                 @if($product->type === \App\Enums\ProductTypeEnum::course()->value)
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.course', $product->id) }}">
-                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Course Material') }}
+                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'ml-2'])
+
                                 </a>
                                 @endif
 
@@ -245,16 +223,18 @@
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.stocks', $product->id) }}">
-                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Stock Management') }}
+                                    @svg('heroicon-o-archive-box', ['style' => 'height: 16px;', 'class' => 'ml-2'])
+
                                 </a>
 
 
                                 @if($product->useVariations())
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.variations', $product->id) }}">
-                                    @svg('heroicon-o-variable', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Variations') }}
+                                    @svg('heroicon-o-variable', ['style' => 'height: 16px;', 'class' => 'ml-2'])
+
                                 </a>
                                 @endif
 
@@ -289,33 +269,63 @@
                 <div class="grid grid-cols-1 gap-4">
                     <!-- Recent Hires -->
                     <section aria-labelledby="recent-hires-title">
+                        <div
+                            class="relative min-h-[200px] rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
+                            <div class="grid grid-cols-6 gap-2">
+                                <div class="col-span-6">
+                                    <div>
+                                        <h3 class="text-lg font-medium">
 
-                        <div class="rounded-lg bg-white overflow-hidden shadow">
-                            <div class="p-6 relative">
-                                <h3 class="text-base font-medium text-gray-900 relative">
-                                    {{ translate('Product Activity') }}
+                                            <a href="{{ route('product.single', $product->slug) }}" target="_blank"
+                                                class="focus:outline-none">
+                                                <!-- Extend touch target to entire panel -->
+                                                <span class="absolute inset-0" aria-hidden="true"></span>
+                                                {{ translate('Product Preview') }}
+                                            </a>
+                                        </h3>
+                                        <p class="text-sm text-gray-500">
+                                            {{ translate('View your product as a customer and share it with the world!')
+                                            }}
+                                        </p>
+                                    </div>
 
 
-                                </h3>
-                                {{-- Live data badge --}}
-                                <div class="absolute right-6 top-6">
-
-                                    <span
-                                        class="relative inline-flex font-bold items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-500">
-                                        <span
-                                            class="animate-ping inline-flex h-1.5 w-1.5 mr-3 rounded-full bg-red-900 opacity-100"></span>
-                                        {{ translate('Live') }}
-                                    </span>
                                 </div>
-                                {{-- Live data badge end --}}
-                                <livewire:product-activity type="product" :product="$product" />
+                                <div class="col-span-6">
+                                    <livewire:feed.elements.product-card :product="$product">
+                                    </livewire:feed.elements.product-card>
+
+                                </div>
+
                             </div>
-                        </div>
+
                     </section>
+
+                    <div class="rounded-lg bg-white overflow-hidden shadow">
+                        <div class="p-6 relative">
+                            <h3 class="text-base font-medium text-gray-900 relative">
+                                {{ translate('Product Activity') }}
+
+
+                            </h3>
+                            {{-- Live data badge --}}
+                            <div class="absolute right-6 top-6">
+
+                                <span
+                                    class="relative inline-flex font-bold items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-500">
+                                    <span
+                                        class="animate-ping inline-flex h-1.5 w-1.5 mr-3 rounded-full bg-red-900 opacity-100"></span>
+                                    {{ translate('Live') }}
+                                </span>
+                            </div>
+                            {{-- Live data badge end --}}
+                            <livewire:product-activity type="product" :product="$product" />
+                        </div>
+                    </div>
 
                     <!-- Announcements -->
                     <section aria-labelledby="announcements-title">
-                        <div class="rounded-lg bg-white overflow-hidden shadow">
+                        <div class="rounded-lg bg-white overflow-hidden shadow hidden">
                             <div class="p-6">
                                 <h2 class="text-base font-medium text-gray-900" id="announcements-title">
                                     {{ translate('Social eCommerce Channels') }}
@@ -482,45 +492,6 @@
     </main>
 
 </div>
-
-
-<div class="grid grid-cols-3 gap-5">
-    <div>
-
-    </div>
-
-    <div>
-
-
-    </div>
-
-    <div>
-        <!--Categories Card -->
-        <div class="card h-100">
-            <div class="card-body">
-                <h6 class="font-weight-normal mb-1">{{ translate('Product Categories') }}:</h6>
-                <h4 class="card-title">
-                    @foreach($product->categories()->get() as $category)
-                    <span class="badge badge-soft-primary p-2 mb-2">
-                        {{ $category->name }}
-                    </span>
-                    @endforeach
-                    {{-- Assign Categories button --}}
-                    <div class="mt-3">
-                        <small>
-                            <a href="{{ route('product.edit', $product->id) }}" target="_blank">
-                                {{ translate('+ Assign Categories') }} </a>
-                        </small>
-                    </div>
-                </h4>
-            </div>
-        </div>
-        <!-- End Card -->
-    </div>
-</div>
-
-
-
 @endsection
 
 @push('footer_scripts')

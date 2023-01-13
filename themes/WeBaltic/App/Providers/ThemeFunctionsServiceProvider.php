@@ -75,7 +75,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         Livewire::component('dashboard.tables.tasks-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\TasksTable::class);
         Livewire::component('dashboard.tables.action-panels.orders-action-panel', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels\OrdersActionPanel::class);
         Livewire::component('dashboard.tables.action-panels.tasks-action-panel', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels\TasksActionPanel::class);
-        
+
         // Orders
         Livewire::component('dashboard.orders.order-queues', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Orders\OrderQueues::class);
         Livewire::component('dashboard.tasks.latest-printing-tasks-batch', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tasks\LatestPrintingTasksBatch::class);
@@ -152,9 +152,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
         if (function_exists('add_action')) {
             add_action('order.change-status', function($order) {
-                // $this->generateOrderDocument($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
-                // $this->generateOrderDocument($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
-                // $this->generateOrderDocument($order, 'documents-templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
+                baltic_generate_order_document($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
+                baltic_generate_order_document($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
+                baltic_generate_order_document($order, 'documents-templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
             });
 
             // View actions
@@ -176,7 +176,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     {
         parent::register();
     }
-    
+
     public function generate_vin_code($order) {
 
     }
