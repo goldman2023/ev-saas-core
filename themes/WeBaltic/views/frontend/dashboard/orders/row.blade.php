@@ -1,9 +1,7 @@
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->id]) }}">
-        <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded mr-2" name="orders"
+        <input type="checkbox" value="{{ $row->id }}" class="p-3 rounded mr-2" name="orders"
             @click="$dispatch('table-item-toggle', {table_id: '{{ $tableId }}', id: Number($event.target.getAttribute('value'))})" />
-
-        #{{ $row->id }}
         @if(!$row->viewed)
         <span class="ml-1 badge badge-warning">{{ translate('New') }}</span>
         @endif
@@ -21,16 +19,19 @@
         <a class="py-2 flex media whitespace-normal align-items-center text-14"
             href="{{ route('order.details', ['id' => $row->id]) }}">
 
-            <img src="{{ $row->get_primary_order_item()->subject->getThumbnail() }}" class="w-[75px] rounded mr-2"
+            <img src="{{ $row->get_primary_order_item()->subject->getThumbnail() }}" class="w-[75px] h-auto rounded mr-2"
                 width="50" height="50" alt="" />
-            <strong class="text-md"> {{ $row->get_primary_order_item()->subject->name }} {{ $row->user->surname }}
+            <strong class="text-md">
+                {{ $row->get_primary_order_item()->subject->name }}
+                <span class="font-normal"> <br> {{ translate('Order') }} #{{ $row->id }} </span>
             </strong>
+
         </a>
     </div>
     @endisset
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle max-w-[300px]">
+<x-livewire-tables::table.cell class="min-h-[100px] align-middle max-w-[300px]">
     @isset($row->user)
     <div class="py-2">
         <a class="align-items-center text-14 line-clamp-1 overflow-hidden" href="{{ route('user.details', ['id' => $row->user->id]) }}">
