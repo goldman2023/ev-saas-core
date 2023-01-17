@@ -53,7 +53,7 @@ class WEFService
      * @param  mixed $data_types
      * @return array
      */
-    public static function bundleWithGlobalWEF($data_types = []) {
+    public function bundleWithGlobalWEF($data_types = []) {
         if($data_types instanceof Collection) {
             $data_types = $data_types->toArray();
         }
@@ -80,14 +80,14 @@ class WEFService
      * @param  mixed $model (can be either model instance or model class name)
      * @return mixed
      */
-    public static function getWEFDataTypes($model) {
+    public function getWEFDataTypes($model) {
         $data_types = [];
         
         try {
             if($model instanceof Model && class_has_trait($model::class, CoreMetaTrait::class)) {
                 $data_types = $model->getWEFDataTypes();
             } else if(is_string($model) && class_exists($model) && class_has_trait($model, CoreMetaTrait::class)) {
-                $data_types = $this->app->make($model)->getWEFDataTypes();
+                $data_types = ($this->app)()->make($model)->getWEFDataTypes();
             }
         } catch(\Throwable $e) {
             $data_types = [];

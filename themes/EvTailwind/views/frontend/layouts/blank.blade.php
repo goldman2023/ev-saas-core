@@ -66,9 +66,8 @@
     @auth
         <x-default.chat.widget-chat></x-default.chat.widget-chat>
     @endauth
+
     @stack('footer_scripts')
-
-
 </body>
 
 </html>
