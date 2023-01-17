@@ -286,7 +286,7 @@
 
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="manufacturing" role="tabpanel"
                         aria-labelledby="manufacturing-tab">
-                        <x-dashboard.orders.manufacturing-details></x-dashboard.orders.manufacturing-details>
+                        <x-dashboard.orders.manufacturing-details :order="$order"></x-dashboard.orders.manufacturing-details>
 
                     </div>
 
