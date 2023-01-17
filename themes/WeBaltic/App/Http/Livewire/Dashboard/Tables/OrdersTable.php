@@ -127,17 +127,25 @@ class OrdersTable extends DataTableComponent
             // Column::make('Type', 'type')
             //     ->excludeFromSelectable()
             //     ->addClass('hidden md:table-cell'),
+            Column::make('Product')
+                ->excludeFromSelectable()
+                ->addClass('text-left max-w-[300px]'),
             Column::make('Customer', 'user_id')
                 ->excludeFromSelectable()
                 ->addClass('text-left max-w-[300px]'),
+
             Column::make('Actions')
                 ->excludeFromSelectable(),
+                Column::make('Printing Status')
+                ->excludeFromSelectable()
+                ->sortable(),
+                Column::make('Payment', 'payment_status')
+                ->sortable()
+                ->addClass('hidden md:table-cell'),
             Column::make('Date', 'created_at')
                 ->excludeFromSelectable()
                 ->sortable(),
-            Column::make('Lipdukas', 'payment_status')
-                ->sortable()
-                ->addClass('hidden md:table-cell'),
+
             // Column::make('Shipping status', 'shipping_status')
             //     ->sortable()
             //     ->addClass('hidden md:table-cell'),
@@ -151,7 +159,7 @@ class OrdersTable extends DataTableComponent
     {
         return Order::query()->where('is_temp', 0)
             ->when(in_array($this->status, OrderCycleStatusEnum::toValues(), true), fn ($query, $value) => $query->whereWEF('cycle_status', $this->status ?? null))
-            
+
             ->when(!auth()->user()->isCustomer() && !empty($this->user), fn ($query, $value) => $query->where('user_id', $this->user->id ?? null))
             ->when(auth()->user()->isCustomer(), fn ($query, $value) => $query->where('user_id', $this->user->id ?? null))
 
@@ -177,20 +185,20 @@ class OrdersTable extends DataTableComponent
         return 'frontend.dashboard.orders.row';
     }
 
-    public function incrementOrderCycleStatus($order_id = null) {
+    public function incrementOrderCycleStatus($order_id = null)
+    {
 
         $controller = app()->make(OrderController::class);
-        
+
         $order = $controller->change_cycle_status(order_id: $order_id, standalone: true);
 
-        if($order instanceof Order) {
+        if ($order instanceof Order) {
             $new_status_label = OrderCycleStatusEnum::labels()[$order->getWEF('cycle_status', true)] ?? '?';
 
-            $this->inform(translate('Order cycle status successfully incremented!'), translate('Order (#').$order_id.translate(') has the cycle status: ').$new_status_label, 'success');
+            $this->inform(translate('Order cycle status successfully incremented!'), translate('Order (#') . $order_id . translate(') has the cycle status: ') . $new_status_label, 'success');
             $this->emit('refreshDatatable');
         } else {
-            $this->inform(translate('Order cycle status could not be incremented'), translate('Order (#').$order_id.translate(') could not increment the cycle status...'), 'fail');
+            $this->inform(translate('Order cycle status could not be incremented'), translate('Order (#') . $order_id . translate(') could not increment the cycle status...'), 'fail');
         }
-
     }
 }

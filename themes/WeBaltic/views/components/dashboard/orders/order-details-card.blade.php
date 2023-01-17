@@ -44,7 +44,7 @@
             </div>
             <div class="-rotate-90 absolute top-[80px] left-[-80px]">
             <div class="underline">
-                www.tero-trailer.eu
+                www.tero.lt
             </div>
             <div class="underline">
                 +370 (671) 91007
