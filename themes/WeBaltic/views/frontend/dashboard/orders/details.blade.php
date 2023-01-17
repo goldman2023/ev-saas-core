@@ -153,7 +153,9 @@
                             @if( $order->getWEF('order_delivery_deadline', false, 'date'))
                                 {{ $order->getWEF('order_delivery_deadline', false, 'date') }}
                             @else
+                            <span class="text-xs">
                                 {{ translate('Not set. Set order deadline') }}
+                            </span>
                             @endif
                             @svg('heroicon-s-pencil-square', ['class' => 'ml-2 h-5 w-5 cursor-pointer'])
                         </time>

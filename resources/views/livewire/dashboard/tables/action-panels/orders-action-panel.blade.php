@@ -46,18 +46,18 @@
                 </select>
             </div>
 
-            <a href="#" @click="runAction(event)" class="relative bg-gray-100 m-2 p-3 flex items-center justify-between space-x-4 rounded-xl hover:bg-gray-200">
+            <a href="#" @click="runAction(event)" class="relative bg-gray-100 p-3 flex items-center justify-between space-x-4 rounded-xl hover:bg-gray-200">
                 <div>
                     <h3 class="text-sm font-medium text-gray-900">
                         <span>{{ translate('Run Action') }}</span>
                     </h3>
-                    <p class="mt-1 text-sm text-gray-500 line-clamp-2" x-text="'{{ translate('Action will affect') }} '+count+' {{ translate('orders') }}'"></p>
                 </div>
 
-                <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-primary">
+                <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-primary">
                     @svg('heroicon-o-arrow-right', ['class' => 'h-6 w-6 text-white'])
                 </div>
             </a>
+            <p class="mt-1 text-sm text-gray-500 line-clamp-2" x-text="'{{ translate('Action will affect') }} '+count+' {{ translate('orders') }}'"></p>
         </li>
     </div>
 </div>

@@ -8,6 +8,7 @@ use App\Traits\GalleryTrait;
 use App\Traits\CoreMetaTrait;
 use Spatie\Sluggable\HasSlug;
 use App\Traits\HasContentColumn;
+use App\Traits\SocialCommentsTrait;
 use  Spatie\Sluggable\SlugOptions;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,7 @@ class Task extends WeBaseModel
     use HasSlug;
     use LogsActivity;
     use HasContentColumn;
+    use SocialCommentsTrait;
 
     protected $table = 'tasks';
 
@@ -42,7 +44,7 @@ class Task extends WeBaseModel
     public function assignee() {
         return $this->belongsTo(User::class, 'assignee_id');
     }
-   
+
     public function orders() {
         return $this->morphedByMany(Order::class, 'subject', 'task_relationships');
     }

@@ -14,13 +14,6 @@
     {{ $row->name }}
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle text-center">
-    @if ($row->type === \WeThemes\WeBaltic\App\Enums\TaskTypesEnum::printing()->value)
-        <span class="badge-info">{{ \Str::headline($row->type) }}</span>
-    @elseif($row->type === \WeThemes\WeBaltic\App\Enums\TaskTypesEnum::delivery()->value)
-        <span class="badge-dark">{{ \Str::headline($row->type) }}</span>
-    @endif
-</x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
 
@@ -37,6 +30,16 @@
     @endif
 
 </x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="align-middle text-center">
+    @if ($row->type === \WeThemes\WeBaltic\App\Enums\TaskTypesEnum::printing()->value)
+        <span class="badge-info">{{ \Str::headline($row->type) }}</span>
+    @elseif($row->type === \WeThemes\WeBaltic\App\Enums\TaskTypesEnum::delivery()->value)
+        <span class="badge-dark">{{ \Str::headline($row->type) }}</span>
+    @endif
+</x-livewire-tables::table.cell>
+
+
 
 <x-livewire-tables::table.cell class="align-middle">
     <a class="media flex flex-col items-center text-14" href="{{ route('user.details', ['id' => $row->assignee_id]) }}">

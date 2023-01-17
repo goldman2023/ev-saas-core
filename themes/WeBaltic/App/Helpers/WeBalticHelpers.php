@@ -159,15 +159,14 @@ function generate_serial_number($product, $order)
 
     $count_in_orders = OrderItem::where('subject_id', $product->id)->orderBy('order_id')->get();
 
-    foreach($count_in_orders as $key => $order_item) {
-        if($order_item->order_id == $order->id) {
+    foreach ($count_in_orders as $key => $order_item) {
+        if ($order_item->order_id == $order->id) {
             $serial_number = $key;
         }
     }
 
-    $serial_number = sprintf("%03d", $serial_number); // 001234
+    $serial_number = sprintf("%03d", $serial_number + 1); // 001234
     $product->setWEF('serial_order_number', $serial_number, 'string'); // set WEF
-
 
     return $serial_number;
 }
