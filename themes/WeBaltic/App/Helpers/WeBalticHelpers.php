@@ -5,7 +5,7 @@ use App\Models\OrderItem;
 function generate_vin_code($item)
 {
     $product = $item->get_primary_order_item()->subject;
-    $vin_code = 'Z39';
+    $vin_code = 'Z3E';
     $vin_code .= 'L';
     if ($body_type = $product->getAttr(25)) {
         $body_type = $product->getAttr(25)->attribute_values->first()->values;
@@ -99,7 +99,7 @@ function generate_vin_code($item)
     $vin_code .= $manufacturing_location;
 
     /* Keliu inspekcijos kodas */
-    $vin_code .= '020';
+    // $vin_code .= '020';
 
 
     /* Serial number */
@@ -165,7 +165,7 @@ function generate_serial_number($product, $order)
         }
     }
 
-    $serial_number = sprintf("%03d", $serial_number + 1); // 001234
+    $serial_number = sprintf("%06d", $serial_number + 1); // 001234
     $product->setWEF('serial_order_number', $serial_number, 'string'); // set WEF
 
     return $serial_number;
