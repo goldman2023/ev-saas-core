@@ -1,63 +1,63 @@
 <?php
 
-use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\AizUploadController;
+use App\Models\Plan;
+use App\Models\Shop;
+use App\Models\Product;
+use App\Models\CourseItem;
 use App\Http\Controllers\App;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\SocialController;
-use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Middleware\OwnerOnly;
+use App\Http\Middleware\VendorMode;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\CompareController;
-use App\Http\Controllers\CurrencyController;
-use App\Http\Controllers\CustomerProductController;
-use App\Http\Controllers\EVAccountController;
-use App\Http\Controllers\EVAccountVerificationController;
-use App\Http\Controllers\BlogPostController;
-use App\Http\Controllers\EVCartController;
-use App\Http\Controllers\EVCategoryController;
-use App\Http\Controllers\EVCheckoutController;
+use App\Http\Controllers\FeedController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\GrapeController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\EVCartController;
+use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVSaaSController;
 use App\Http\Controllers\EVShopController;
-use App\Http\Controllers\EVWishlistController;
-use App\Http\Controllers\EVPlanController;
-use App\Http\Controllers\FeedController;
-use App\Http\Controllers\GrapeController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Integrations\PixProLicenseController;
+use App\Http\Controllers\QuotesController;
+use App\Http\Controllers\WeEditController;
+use App\Http\Controllers\WeQuizController;
+use App\Http\Controllers\CompareController;
+use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\BlogPostController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\AizUploadController;
+use App\Http\Controllers\EVAccountController;
+use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\EVCategoryController;
+use App\Http\Controllers\EVWishlistController;
 use App\Http\Controllers\OnboardingController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\StripePaymentController;
-use App\Http\Controllers\WeEditController;
-use App\Http\Controllers\WeAnalyticsController;
 // use App\Http\Controllers\WeMenuController;
-use App\Http\Controllers\Tenant\ApplicationSettingsController;
-use App\Http\Controllers\Tenant\DownloadInvoiceController;
-use App\Http\Controllers\Tenant\UserSettingsController;
-use App\Http\Controllers\WeQuizController;
-use App\Http\Controllers\WeSubscriptionsController;
-use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
-use App\Http\Middleware\OwnerOnly;
-use App\Http\Middleware\VendorMode;
-use App\Http\Services\PaymentMethods\PayseraGateway;
-use App\Models\Plan;
-use App\Models\Product;
-use App\Models\Shop;
-use App\Models\CourseItem;
-use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
+use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\WeAnalyticsController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\StripePaymentController;
+use App\Http\Controllers\CustomerProductController;
+use App\Http\Controllers\WeSubscriptionsController;
+use App\Http\Services\PaymentMethods\PayseraGateway;
+use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Tenant\UserSettingsController;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use App\Http\Controllers\EVAccountVerificationController;
+use App\Http\Controllers\Tenant\DownloadInvoiceController;
+use App\Http\Controllers\Integrations\PixProLicenseController;
+use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 
 /*
 |--------------------------------------------------------------------------
@@ -197,13 +197,15 @@ Route::middleware([
 
     // Checkout Routes
     Route::middleware('checkout')->group(function () {
-        Route::get('/checkout', [EVCheckoutController::class, 'index'])->name('checkout');
-        Route::post('/checkout', [EVCheckoutController::class, 'store'])->name('checkout.post');
-        Route::get('/checkout-single', [EVCheckoutController::class, 'single'])->name('checkout.single.page');
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+        Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.post');
+        Route::get('/checkout-single', [CheckoutController::class, 'single'])->name('checkout.single.page');
 
-        Route::get('/order/{id}/canceled', [EVCheckoutController::class, 'orderCanceled'])->name('checkout.order.canceled');
+        Route::get('/order/{id}/canceled', [CheckoutController::class, 'orderCanceled'])->name('checkout.order.canceled');
+
+        Route::get('/request-quote', [QuotesController::class, 'create'])->name('quote.create');
     });
-    Route::get('/order/{id}/received', [EVCheckoutController::class, 'orderReceived'])->name('checkout.order.received');
+    Route::get('/order/{id}/received', [CheckoutController::class, 'orderReceived'])->name('checkout.order.received');
 
 
     /* Old active commerce stripe routes */

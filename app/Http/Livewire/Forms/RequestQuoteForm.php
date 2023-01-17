@@ -31,12 +31,12 @@ use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Contracts\Support\Arrayable;
 use Spatie\ValidationRules\Rules\ModelsExist;
 
-class CheckoutSingleForm extends Component
+class RequestQuoteForm extends Component
 {
     use RulesSets;
     use DispatchSupport;
 
-    public $items;
+    public $items = [];
 
     public $order;
 
@@ -57,14 +57,6 @@ class CheckoutSingleForm extends Component
     public $buyers_consent = false;
 
     public $selected_payment_method = 'wire_transfer';
-
-    public $cc_number;
-
-    public $cc_name;
-
-    public $cc_expiration_date;
-
-    public $cc_cvc;
 
     // Account
     public $account_password;
@@ -121,13 +113,7 @@ class CheckoutSingleForm extends Component
             ],
             'non_registered_user_password_rule' => [
                 'account_password' => 'required|confirmed|min:6',
-            ],
-            'cc' => [
-                'cc_number' => ['required', new CardNumber],
-                'cc_name' => 'required|min:3',
-                'cc_expiration_date' => ['required', new CardExpirationDate('m/y')],
-                'cc_cvc' => ['required'], // new LVR\CreditCard\CardCvc($request->get('card_number'))
-            ],
+            ]
         ];
     }
 
@@ -181,8 +167,7 @@ class CheckoutSingleForm extends Component
      */
     public function mount()
     {
-        $this->items = CartService::getItems();
-
+        // Create new Order model
         $this->order = new Order();
 
         /* TODO: This is temp workaround before implementing bellow option fully  */
@@ -190,19 +175,16 @@ class CheckoutSingleForm extends Component
 
         // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
         // $this->order->shop_id = ($this->items->first()?->shop_id ?? 1);
+
+        $this->order->type = OrderTypeEnum::standard()->value;
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
 
-        if (auth()->user()->id) {
+        if (auth()->user()?->id ?? null) {
             $this->order->email = auth()->user()->email;
             $this->order->billing_first_name = auth()->user()->name;
             $this->order->billing_last_name = auth()->user()?->name;
         }
-
-        $this->cc_number = '';
-        $this->cc_name = '';
-        $this->cc_expiration_date = '';
-        $this->cc_cvc = '';
 
         $this->manual_mode_billing = ! \Auth::check();
         $this->manual_mode_shipping = ! \Auth::check();
@@ -225,6 +207,31 @@ class CheckoutSingleForm extends Component
         if ($this->selected_shipping_address_id === -1) {
             $this->manual_mode_shipping = true;
         }
+
+        // Create OrderItems
+        $this->items =  new \App\Support\Eloquent\Collection();
+        $cart_items = CartService::getItems();
+
+        if($cart_items) {
+            foreach($cart_items as $key => $item) {
+                $order_item = new OrderItem();
+                $order_item->order_id = $this->order->id;
+                $order_item->subject_type = $item::class;
+                $order_item->subject_id = $item->id;
+                $order_item->name = ($item?->is_variation ?? false) ? $item->main->name : $item->name;
+                $order_item->excerpt = ($item?->is_variation ?? false) ? $item->main->excerpt : $item->excerpt;
+                $order_item->variant = ($item?->is_variation ?? false) ? $item->getVariantName(key_by: 'name') : null;
+                $order_item->quantity = ! empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
+                $order_item->base_price = $item->base_price; // it's like a unit_price
+                $order_item->discount_amount = $order_item->quantity * ($item->base_price - $item->total_price);
+                $order_item->subtotal_price = $order_item->quantity * $item->total_price;
+                $order_item->total_price = $order_item->quantity * $item->total_price;
+
+                $order_item->load('subject');
+                
+                $this->items->push($order_item);
+            }
+        }
     }
 
     public function dehydrate()
@@ -234,7 +241,7 @@ class CheckoutSingleForm extends Component
 
     public function render()
     {
-        return view('livewire.forms.checkout-single-form');
+        return view('livewire.forms.request-quote-form');
     }
 
     protected function getSpecificRules()

@@ -2136,7 +2136,7 @@
   "checkout": {
     "name": "checkout",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVCheckoutController@index",
+    "action": "App\\Http\\Controllers\\CheckoutController@index",
     "uri": "checkout",
     "method": [
       "GET",
@@ -2146,7 +2146,7 @@
   "checkout.post": {
     "name": "checkout.post",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVCheckoutController@store",
+    "action": "App\\Http\\Controllers\\CheckoutController@store",
     "uri": "checkout",
     "method": [
       "POST"
@@ -2155,7 +2155,7 @@
   "checkout.single.page": {
     "name": "checkout.single.page",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVCheckoutController@single",
+    "action": "App\\Http\\Controllers\\CheckoutController@single",
     "uri": "checkout-single",
     "method": [
       "GET",
@@ -2165,7 +2165,7 @@
   "checkout.order.received": {
     "name": "checkout.order.received",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVCheckoutController@orderReceived",
+    "action": "App\\Http\\Controllers\\CheckoutController@orderReceived",
     "uri": "order/{id}/received",
     "method": [
       "GET",
@@ -2175,7 +2175,7 @@
   "checkout.order.canceled": {
     "name": "checkout.order.canceled",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVCheckoutController@orderCanceled",
+    "action": "App\\Http\\Controllers\\CheckoutController@orderCanceled",
     "uri": "order/{id}/canceled",
     "method": [
       "GET",
@@ -3203,7 +3203,7 @@
   "checkout.execute.payment": {
     "name": "checkout.execute.payment",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVCheckoutController@executePayment",
+    "action": "App\\Http\\Controllers\\CheckoutController@executePayment",
     "uri": "dashboard/checkout/execute/payment/{invoice_id}",
     "method": [
       "POST"
