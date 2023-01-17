@@ -65,7 +65,7 @@ x-init="$watch('order_items', order_items => {
             order_items[index].total_price = Number(order_items[index].qty) * order_items[index].unit_price;
         }
     }
-    
+
     calculateTotals();
 });
 $watch('tax', order_items => calculateTotals());
@@ -472,7 +472,7 @@ x-cloak>
                                 <ul class="w-full flex flex-col gap-y-4">
                                     <template x-for="(item, index) in order_items"
                                         :key="'order-items-'+index">
-                                        
+
                                         <li class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm "
                                             >
                                             <div class="flex-shrink-0" x-show="item?.thumbnail">
@@ -494,7 +494,7 @@ x-cloak>
                                                     {{ translate('Edit') }}
                                                 </button>
                                             </template>
-                                            
+
                                             <div class="flex-shrink-0 flex items-center " @click="order_items.splice(index, 1);">
                                                 @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
                                             </div>
@@ -514,7 +514,7 @@ x-cloak>
 
                             {{-- Add new item --}}
                             <div class="w-full flex pt-4 mt-4 border-t">
-                                <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal' })" >
+                                <button type="button" class="btn btn-primary btn-sm w-full !font-medium !text-lg" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal' })" >
                                     {{ translate('Add new item') }}
                                 </button>
                             </div>
@@ -595,7 +595,7 @@ x-cloak>
                                             this.custom_order_item.base_price = 0;
                                             this.custom_order_item.subtotal_price = 0;
                                             this.custom_order_item.total_price = 0;
-                                            
+
                                             {{-- Send event to reset attributes form --}}
                                             $dispatch('reset-attributes-form', {form_id: 'custom-order-item-form'});
                                         },
@@ -650,9 +650,9 @@ x-cloak>
                                             this.hide_content_selector = true;
 
                                             modal_title = '{{ translate('Edit Order item') }}';
-                                            
+
                                             let order_item = order_items[order_item_index];
-                                            
+
                                             if(order_item !== undefined) {
                                                 this.custom_order_item = deep_copy(order_item);
                                             }
@@ -796,7 +796,7 @@ x-cloak>
                                                 <div class="col-span-12 ">
                                                     <x-dashboard.form.blocks.attributes-selection-form
                                                         form-id="custom-order-item-form"
-                                                        attributes-field="custom_order_item.custom_attributes" 
+                                                        attributes-field="custom_order_item.custom_attributes"
                                                         selected-attributes-field="custom_order_item.selected_attribute_values"
                                                         :no-variations="true">
 

@@ -7,7 +7,7 @@
             <!-- Modal header -->
             <div
                 class="flex items-center justify-between pb-4 mb-4 border-b border-gray-200 rounded-t sm:mb-5 dark:border-gray-700">
-                <h3 class="font-semibold text-gray-900 dark:text-white">
+                <h3 class="font-semibold text-2xl text-gray-900 dark:text-white">
                     {{ $document['title'] }}
                 </h3>
                 <button type="button"

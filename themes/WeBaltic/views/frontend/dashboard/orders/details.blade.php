@@ -204,14 +204,6 @@
                                 {{ translate('Details') }}
                             </button>
                         </li>
-                        <li class="mr-2" role="presentation">
-                            <button
-                                class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                                id="manufacturing-tab" data-tabs-target="#manufacturing" type="button" role="tab"
-                                aria-controls="dashboard" aria-selected="false">
-                                {{ translate('Manufacturing') }}
-                            </button>
-                        </li>
 
                         <li class="mr-2" role="presentation">
                             <button
@@ -221,6 +213,17 @@
                                 {{ translate('Documents') }}
                             </button>
                         </li>
+
+                        <li class="mr-2" role="presentation">
+                            <button
+                                class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
+                                id="manufacturing-tab" data-tabs-target="#manufacturing" type="button" role="tab"
+                                aria-controls="dashboard" aria-selected="false">
+                                {{ translate('Manufacturing') }}
+                            </button>
+                        </li>
+
+
                         <li class="mr-2" role="presentation">
                             <button
                                 class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
