@@ -7,14 +7,16 @@ use Illuminate\View\Component;
 class OrderDetailsCard extends Component
 {
     public $order;
+    public $print;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($order)
+    public function __construct($order, $print = false)
     {
         $this->order = $order;
+        $this->print = $print;
         //
     }
 
@@ -25,6 +27,10 @@ class OrderDetailsCard extends Component
      */
     public function render()
     {
-        return view('components.dashboard.orders.order-details-card');
+        if ($this->print) {
+            return view('components.dashboard.orders.order-details-card-print');
+        } else {
+            return view('components.dashboard.orders.order-details-card');
+        }
     }
 }

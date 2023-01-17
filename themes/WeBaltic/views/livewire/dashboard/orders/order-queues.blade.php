@@ -2,7 +2,7 @@
     <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#order-queues-tabs-content" role="tablist">
             <li class="mr-2" role="presentation">
-                <button class="inline-block font-medium text-lg p-3 border-b-2 rounded-t-lg" 
+                <button class="inline-block font-medium text-lg p-3 border-b-2 rounded-t-lg"
                     id="order-queues-tab-delivery" data-tabs-target="#order-queues-tab-delivery-content" type="button" role="tab" aria-selected="false">
                     {{ translate('Delivery') }}
 
@@ -12,7 +12,7 @@
                 </button>
             </li>
             <li class="mr-2" role="presentation">
-                <button class="text-lg font-medium inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" 
+                <button class="text-lg font-medium inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                     id="order-queues-tab-printing" data-tabs-target="#order-queues-tab-printing-content" type="button" role="tab" aria-selected="false">
                     {{ translate('Printing') }}
 
@@ -66,7 +66,7 @@
                     </div>
                 @else
                     <div class="w-full">
-                        <p class="max-w-2xl text-sm text-gray-500 font-semibold">
+                        <p class="p-2 max-w-2xl text-sm text-gray-500 font-semibold">
                             {{ translate('When this order reaches `Delivery` cycle step, Task and delivery PDF will be displayed here.') }}
                         </p>
                     </div>
@@ -79,12 +79,12 @@
             <div class="w-full">
                 <div class="w-full pb-3 mb-2 border-b ">
                     @if($order->tasks->where('type', 'printing')->count() > 0)
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500 font-semibold flex align-center">
+                        <p class="p-2 mt-1 max-w-2xl text-sm text-gray-500 font-semibold flex align-center">
                             @svg('heroicon-o-check-circle', ['class' => 'inline mr-1.5 h-5 w-5 flex-shrink-0 text-green-500'])
                             {{ translate('Order was already added to the printing queue') }}
                         </p>
                     @else
-                        <p class="max-w-2xl text-sm text-gray-500 font-semibold">
+                        <p class="p-2 max-w-2xl text-sm text-gray-500 font-semibold">
                             {{ translate('Current order was never added to any printing queue') }}
                         </p>
                     @endif

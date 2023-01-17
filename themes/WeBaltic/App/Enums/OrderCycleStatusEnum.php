@@ -29,18 +29,18 @@ class OrderCycleStatusEnum extends EVBaseEnum
     public static function labels(): array
     {
         return [
-            0 => 'Request',
-            1 => 'Contract',
-            2 => 'Approved',
-            3 => 'Wellding',
-            4 => 'Quality Assurance',
-            5 => 'Zincification',
-            6 => 'Delivery',
-            7 => 'Assembly',
-            8 => 'Final Quality Assurance',
-            9 => 'Certificate approved',
-            10 => 'Completed',
-            11 => 'Customer feedback',
+            0 => translate('Request'),
+            1 => translate('Contract'),
+            2 => translate('Approved'),
+            3 => translate('Wellding'),
+            4 => translate('Quality Assurance'),
+            5 => translate('Zincification'),
+            6 => translate('Delivery'),
+            7 => translate('Assembly'),
+            8 => translate('Final Quality Assurance'),
+            9 => translate('Certificate approved'),
+            10 => translate('Completed'),
+            11 => translate('Customer feedback'),
         ];
     }
 }

@@ -15,23 +15,33 @@
                     </div>
 
                     <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6">
-                        <h3 class="text-base font-medium text-gray-900">
-                            <a href="#">{{ $item->name }}</a>
+                        <h3 class="text-base font-bold text-lg text-gray-900">
+                            @empty($item->subject->getPermalink())
+                            {{ $item->name }}
+
+                            @else
+
+                            <a href="{{ $item->subject->getPermalink() }}" target="_blank">
+                                {{ $item->name }}
+                            </a>
+                            @endempty
                         </h3>
 
                         <p class="mt-3 text-sm text-gray-500">{!! $item->excerpt !!}</p>
 
                         <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6 mt-5">
-                            <div class="flex">
-                                <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}</dt>
-                                <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
-                            </div>
-                            <div class="pl-4 flex sm:pl-6">
-                                <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
-                                <dd class="ml-2 text-gray-700">
+
+                            <div class="pr-4 flex sm:pr-6">
+                                <dt class="font-semibold text-gray-900 mr-1">{{ translate('Price') }} </dt>
+                                <dd class="text-gray-700">
                                     {{ FX::formatPrice($item->total_price) }} {{ $order->type !==
                                     'standard' ? ' / '.$order->invoicing_period : '' }}
                                 </dd>
+                            </div>
+
+                            <div class="hidden flex">
+                                <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}</dt>
+                                <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -76,4 +86,3 @@
 
     </div>
 </div>
-

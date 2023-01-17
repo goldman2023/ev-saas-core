@@ -25,8 +25,8 @@
         </div>
 
         <div class="col-span-3 p-6">
-            <span class="px-3 py-2 text-gray-800 text-2xl font-medium  rounded-full">
-                {{ $product->getTotalPrice(true) }} <small class="text-xs">+ PVM </small>
+            <span class="text-center px-3 py-2 text-gray-800 text-2xl font-medium  rounded-full">
+                {{ $product->getTotalPrice(true) }}
             </span>
             <div class="text-center w-full">
                 <a class="btn btn-primary my-3" href="{{ $product->getPermalink() }}">

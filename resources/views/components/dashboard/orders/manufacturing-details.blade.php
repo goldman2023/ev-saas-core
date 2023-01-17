@@ -3,38 +3,72 @@
     <h3 class="text-lg font-medium leading-6 text-gray-900">
         {{ translate('Manufacturing details') }}
     </h3>
-    <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
+    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+        {{ translate('Enter manufacturing details') }}
+    </p>
 </div>
 <div class="mt-5 border-t border-gray-200">
     <dl class="divide-y divide-gray-200">
         <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-            <dt class="text-sm font-medium text-gray-500">Full name</dt>
+            <dt class="text-sm font-medium text-gray-500">
+                <span>{{ translate('Assembly Notes') }}</span>
+            </dt>
             <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                <span class="flex-grow">Margot Foster</span>
-                <span class="ml-4 flex-shrink-0">
-                    <button type="button"
-                        class="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Update</button>
-                </span>
+                <x-wef.field :subject="$order" :label="translate('Assembly Notes')" key="assembly_notes" type="string" form_type='textarea'></x-wef.field>
             </dd>
         </div>
+
         <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-            <dt class="text-sm font-medium text-gray-500">Application for</dt>
+            <dt class="text-sm font-medium text-gray-500">
+                <span>{{ translate('Assembler') }}</span>
+            </dt>
             <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                <span class="flex-grow">Backend Developer</span>
-                <span class="ml-4 flex-shrink-0">
-                    <button type="button"
-                        class="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Update</button>
-                </span>
+                <x-wef.field :subject="$order" label="Assembler" key="assembler"></x-wef.field>
             </dd>
         </div>
+
+
         <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-            <dt class="text-sm font-medium text-gray-500">Email address</dt>
-            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                <span class="flex-grow">margotfoster@example.com</span>
-                <span class="ml-4 flex-shrink-0">
-                    <button type="button"
-                        class="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Update</button>
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Date of Assembly') }}
                 </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="Date of Assembly" type="string" form_type="date" key="date_of_assembly"></x-wef.field>
+            </dd>
+        </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Date of Welding') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="Date of Welding" type="date" form_type="date" key="date_of_welding"></x-wef.field>
+            </dd>
+        </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Date of Inspection') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="Date of Inspection" type="date" form_type="date" key="date_of_inspection"></x-wef.field>
+            </dd>
+        </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Inspected by') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="Inspected by" type="string" form_type="plain_text" key="inspected_by"></x-wef.field>
             </dd>
         </div>
     </dl>

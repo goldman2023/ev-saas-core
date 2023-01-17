@@ -29,8 +29,8 @@
     @if (auth()->user()->isAdmin())
     @if( $page->id )
 
-    <a target="_blank" href="{{ route('grape.index', [ $page->id]) }}"
-        class="absolute top-0 right-0 btn-primary" style="z-index: 99999;">
+    <a target="_blank" href="{{ route('grape.index', [ $page->id]) }}" class="absolute top-0 right-0 btn-primary"
+        style="z-index: 99999;">
         {{ translate('Edit Page') }}
     </a>
     @endif
@@ -64,8 +64,9 @@
 
     @if( $dynamic_section_id )
     <a target="_blank" href="{{ route('grape.section-editor', [ $dynamic_section_id]) }}"
-        class="absolute top-0 right-0 btn-primary">
+        class="text-xs text-primary-700 absolute top-6 right-6 flex py-2 px-3 bg-primary-200 hover:text-white hover:bg-primary-600 rounded">
         {{ translate('Edit Section') }}
+        @svg('heroicon-o-pencil', ['class' => 'h-4 h-4 ml-2'])
     </a>
     @endif
     @endif

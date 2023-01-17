@@ -6,14 +6,16 @@ use Illuminate\View\Component;
 
 class ManufacturingDetails extends Component
 {
+    public $order;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($order)
     {
         //
+        $this->order = $order;
     }
 
     /**

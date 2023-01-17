@@ -24,7 +24,7 @@ use App\Http\Controllers\WeInvoiceController;
 use App\Http\Controllers\WeSectionController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\EVCategoryController;
-use App\Http\Controllers\EVCheckoutController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\EVAttributesController;
@@ -175,7 +175,7 @@ Route::middleware([
         Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
         Route::get('/checkout/paysera/canceled/{invoice_id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
         Route::get('/checkout/paysera/callback/{invoice_id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
-        Route::post('/checkout/execute/payment/{invoice_id}', [EVCheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
+        Route::post('/checkout/execute/payment/{invoice_id}', [CheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
 
         // WeMediaLibrary
         Route::post('/froala/upload-image', [WeMediaController::class, 'froalaImageUpload'])->name('we-media-library.froala.upload-image');

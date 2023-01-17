@@ -90,10 +90,10 @@ class TasksActionPanel extends Component
         $this->items = [];
 
     }
-    
+
     /**
      * printLabels
-     * 
+     *
      * This function does the following:
      * 1) Gets all the selected tasks and combines all orders attached to the task
      * 2) Created the PDF filled with orders generated certificates/labels
@@ -123,7 +123,7 @@ class TasksActionPanel extends Component
 
                 if(!empty($orders)) {
                     // batch ID and items array will be stored as WEFs to attached Upload
-                    $batch_id = UUID::generate(4)->string; // TODO: Generate batch IDs by incrementing count of all previous $uploads whose upload_tag WEF is printing-label 
+                    $batch_id = UUID::generate(4)->string; // TODO: Generate batch IDs by incrementing count of all previous $uploads whose upload_tag WEF is printing-label
                     $batch_items = $tasks->map(function($task) {
                         return [
                             'subject_id' => $task->id,
@@ -135,22 +135,30 @@ class TasksActionPanel extends Component
                     $html = '';
 
                     foreach($orders as $order) {
-                        $html .= (new OrderDetailsCard($order))->render();
+                        $html .= (new OrderDetailsCard($order, true))->render();
                     }
 
-                    $pdf = PDF::loadHTML($html)->setPaper('a4', 'portrait')->output();
+
+                    // $pdf = PDF::loadHTML($html)->setPaper('a5', 'portrait')->output();
+
+                    $template = 'documents-templates.printing-template';
+                    $data = [
+                        'html' => $html,
+                        'orders' => $orders,
+                    ];
+                    $pdf = PDF::loadView($template, $data)->setPaper('a3', 'portrait')->save(public_path('/output.pdf'))->output();
 
                     // Get all models to which we want to attach generated and uploaded PDF (includes both tasks and orders)
                     $all_models = collect($tasks)->merge($orders);
-                    
+
                     $upload = MediaService::uploadAndStore(
-                        model: $all_models, 
-                        contents: $pdf, 
+                        model: $all_models,
+                        contents: $pdf,
                         path: 'orders/prints/labels',
                         name: 'printing-label-batch-'.$batch_id,
-                        extension: 'pdf', 
-                        property_name: 'documents', 
-                        with_hash: false, 
+                        extension: 'pdf',
+                        property_name: 'documents',
+                        with_hash: false,
                         file_display_name: translate('Printing labels batch ').$batch_id,
                         upload_tag: 'printing-label',
                         user_id: auth()->user()->id,
