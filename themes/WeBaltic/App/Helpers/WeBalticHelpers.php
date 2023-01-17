@@ -165,7 +165,7 @@ function generate_serial_number($product, $order)
         }
     }
 
-    $serial_number = sprintf("%03d", $serial_number); // 001234
+    $serial_number = sprintf("%03d", $serial_number + 1); // 001234
     $product->setWEF('serial_order_number', $serial_number, 'string'); // set WEF
 
     return $serial_number;
