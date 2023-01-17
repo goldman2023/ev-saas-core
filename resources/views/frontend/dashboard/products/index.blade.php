@@ -9,8 +9,8 @@
     <x-dashboard.section-headers.section-header title="{{ translate('All products') }}" text="Manage and create new products">
         <x-slot name="content">
             <a href="{{ route('product.create') }}" class="btn-primary">
-                @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
                 <span>{{ translate('Add new product') }}</span>
+                @svg('heroicon-o-plus', ['class' => 'h-4 h-4 ml-2'])
             </a>
         </x-slot>
     </x-dashboard.section-headers.section-header>

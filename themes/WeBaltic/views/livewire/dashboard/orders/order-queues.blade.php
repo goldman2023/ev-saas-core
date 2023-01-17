@@ -123,7 +123,7 @@
                 </div>
 
                 @if($order->tasks->where('type', 'printing')->count() > 0)
-                <ul role="list" class="divide-y divide-gray-200">
+                <ul role="list" class="px-3 py-2 divide-y divide-gray-200">
                     @foreach($order->tasks->where('type', 'printing') as $task)
                     <li>
                         <a href="{{ route('tasks.index', $task->id) }}" target="_blank" class="block hover:bg-gray-50">

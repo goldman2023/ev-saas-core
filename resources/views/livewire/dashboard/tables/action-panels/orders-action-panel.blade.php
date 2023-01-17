@@ -53,7 +53,7 @@
                     </h3>
                 </div>
 
-                <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-primary">
+                <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-primary">
                     @svg('heroicon-o-arrow-right', ['class' => 'h-6 w-6 text-white'])
                 </div>
             </a>
