@@ -1,9 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html lang="lt">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
-        @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin-ext');
-        body {font-family: 'Roboto', sans-serif;}
+      * { font-family: DejaVu Sans !important; }
         .strong {
             font-weight: 700;
         }
