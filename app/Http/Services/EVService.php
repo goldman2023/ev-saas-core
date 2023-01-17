@@ -132,6 +132,23 @@ class EVService
                 'label' => translate('Business'),
                 'items' => [
                     [
+                        'label' => translate('Orders'),
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('orders.index'),
+                        'route_name' => 'orders.index',
+                        'is_active' => areActiveRoutes(['orders.index']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_orders'],
+                        'badge' => [
+                            'class' => 'badge-danger',
+                            'content' => function () {
+                                return 0;
+
+                                return MyShop::getShop()->orders()->where('viewed', 0)->count();
+                            },
+                        ],
+                    ],
+                    [
                         'label' => translate('Products'),
                         'icon' => 'heroicon-o-shopping-cart',
                         'route' => route('products.index'),
@@ -215,24 +232,8 @@ class EVService
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => [] // TODO: Add browse_all_courses and browse_my_courses - when courses are added as new content type
                     ], */
-                    
-                    [
-                        'label' => translate('Orders'),
-                        'icon' => 'heroicon-o-document-text',
-                        'route' => route('orders.index'),
-                        'route_name' => 'orders.index',
-                        'is_active' => areActiveRoutes(['orders.index']),
-                        'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['browse_orders'],
-                        'badge' => [
-                            'class' => 'badge-danger',
-                            'content' => function () {
-                                return 0;
 
-                                return MyShop::getShop()->orders()->where('viewed', 0)->count();
-                            },
-                        ],
-                    ],
+
                     [
                         'label' => translate('Invoices'),
                         'icon' => 'heroicon-o-document-text',

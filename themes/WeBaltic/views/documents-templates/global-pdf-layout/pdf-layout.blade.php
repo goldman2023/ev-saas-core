@@ -2,6 +2,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin-ext');
+        body {font-family: 'Roboto', sans-serif;}
         .strong {
             font-weight: 700;
         }
@@ -30,6 +32,7 @@
             background-position: center center;
             z-index: -1;
         }
+
     </style>
 </head>
 

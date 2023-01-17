@@ -188,7 +188,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                         $next_cycle_status_label = OrderCycleStatusEnum::labels()[($order->getWEF('cycle_status') ?? 0) + 1];
                     }
 
-                    echo view('frontend.partials.order-form-custom-meta-box', 
+                    echo view('frontend.partials.order-form-custom-meta-box',
                         compact('order', 'current_cycle_status_label', 'current_cycle_status_value', 'default_cycle_status_value', 'next_cycle_status_label', 'current_cycle_status_date'));
                 }
             });
@@ -204,10 +204,6 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     public function register()
     {
         parent::register();
-    }
-
-    public function generate_vin_code($order) {
-
     }
 
     public function nice_attribute_names() {

@@ -42,9 +42,7 @@
 
                 <x-dashboard.orders.latest-orders></x-dashboard.orders.latest-orders>
 
-                <div class=" mb-6 bg-white p-6 rounded-xl shadow">
-                    <x-dashboard.widgets.business.calendar-summary></x-dashboard.widgets.business.calendar-summary>
-                </div>
+
                 {{-- <x-dashboard.orders.latest-orders></x-dashboard.orders.latest-orders> --}}
 
                 {{-- @livewire('dashboard.elements.activity-log') --}}

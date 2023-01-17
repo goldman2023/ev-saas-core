@@ -3,7 +3,7 @@
         <input type="checkbox" value="{{ $row->id }}" class="p-2 rounded mr-2" name="orders"
             @click="$dispatch('table-item-toggle', {table_id: '{{ $tableId }}', id: Number($event.target.value)})"/>
 
-        #{{ $row->id }}
+        {{-- #{{ $row->id }} --}}
         @if (!$row->viewed)
             <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
         @endif

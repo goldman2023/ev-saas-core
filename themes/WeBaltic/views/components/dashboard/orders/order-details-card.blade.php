@@ -1,4 +1,4 @@
-<div>
+<div class="w-full">
     <div class="grid grid-cols-3 gap-9">
         <div class="col-span-2 text-center px-9 border border-r-1 border-gray-700">
             {{-- Left Side --}}
@@ -9,10 +9,19 @@
                 e9*2018/858*XXXXX
             </div>
             <div class="border border-gray-700 p-2 rounded mb-1 font-bold">
-                Z3ELK012XNK000001
+                {{-- Z3ELK012XNK000001 --}}
+                {{ generate_vin_code($order->get_primary_order_item()->subject) }}
             </div>
             <div>
-                750 kg
+                @php
+                if( $order->get_primary_order_item()->subject->getAttr(6)) {
+                    $total_weight = $order->get_primary_order_item()->subject->getAttr(6)->attribute_values->first()->values;
+
+                } else {
+                    $total_weight = 'Missing data';
+                }
+                @endphp
+                {{ $total_weight }} kg
                 {{-- Current way of getting an attribute value --}}
                 {{-- Width: {{ json_encode($order->get_primary_order_item()->subject->get_attribute_value_by_id(6)[0]['values']) }}
 

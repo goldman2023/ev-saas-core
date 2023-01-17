@@ -59,7 +59,7 @@
 
                     {{-- Tracking number (only for Standard Products) --}}
                     @if(empty($order->tracking_number))
-                    <span class="badge-danger !py-1 !px-3 mr-2">
+                    <span class="!hidden badge-danger !py-1 !px-3 mr-2">
                         {{ translate('Tracking number not added') }}
                     </span>
                     @endif
@@ -67,12 +67,6 @@
                 </div>
 
                 <div class="flex items-center relative" x-data="{ isOpen: false }" x-cloak>
-                    <a class="flex items-center text-gray-900 mr-3" href="javascript:;"
-                        onclick="window.print(); return false;">
-                        @svg('heroicon-o-printer', ['class' => 'w-[18px] h-[18px] mr-2'])
-                        {{ translate('Print order') }}
-                    </a>
-
 
                 </div>
             </div>
@@ -155,7 +149,12 @@
                                 'form_type': 'date',
                                 'custom_properties': {'range': false, 'with_time': false},
                             })" >
-                            {{ $order->getWEF('order_delivery_deadline', false, 'date') }}
+
+                            @if( $order->getWEF('order_delivery_deadline', false, 'date'))
+                                {{ $order->getWEF('order_delivery_deadline', false, 'date') }}
+                            @else
+                                {{ translate('Not set. Set order deadline') }}
+                            @endif
                             @svg('heroicon-s-pencil-square', ['class' => 'ml-2 h-5 w-5 cursor-pointer'])
                         </time>
                     </div>
