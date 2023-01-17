@@ -59,7 +59,7 @@ class SingleWefForm extends Component
      * @param string $class
      * @return void
      */
-    public function mount($subject, $wefKey, $wefLabel = '', $dataType = 'string', $formType = 'plain_text', $template = 'form', $positioning = 'horizontal', $customProperties = [], $showForm = false, $predefinedItems = [], $target = null, $class = '') {
+    public function mount($subject, $wefKey, $wefLabel = '', $dataType = 'string', $formType = 'plain_text', $template = 'form', $positioning = 'horizontal', $customProperties = [], $showForm = true, $predefinedItems = [], $target = null, $class = '') {
         $this->showForm = $showForm;
         $this->subject = $subject;
         $this->wefKey = $wefKey;
@@ -72,7 +72,7 @@ class SingleWefForm extends Component
         $this->predefinedItems = $predefinedItems;
         $this->target = $target;
         $this->class = $class;
-        
+
         if(!empty($subject) && $subject instanceof WeBaseModel && !empty($wefKey)) {
             $this->wefValue = $subject->getWEF($wefKey, true, $dataType);
 
@@ -81,7 +81,7 @@ class SingleWefForm extends Component
                 $subject->setWEF($wefKey, null, $dataType); // Create wef for given $key and $subject
                 $this->wefValue = $subject->getWEF($wefKey, true, $dataType); // fetch the wef now
             }
-            
+
         }
     }
 

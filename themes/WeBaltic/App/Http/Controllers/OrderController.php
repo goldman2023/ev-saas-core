@@ -40,7 +40,7 @@ class OrderController extends Controller
                 baltic_generate_order_document($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
             } else if ($new_status == 3) { // welding
                 $reason = translate('Approved for manufacturing');
-                baltic_generate_order_document($order, 'documents-templates.manufacturing-details', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
+                baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
             } else if ($new_status == 6) { // delivery_to_warehouse
                 $reason = translate('Delivering to warehouse');
 

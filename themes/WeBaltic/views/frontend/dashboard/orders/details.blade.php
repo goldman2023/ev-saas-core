@@ -392,7 +392,7 @@
         </div>
 
         <div class="card mb-3">
-            <h3 class="text-2xl font-bold tracking-tight text-gray-900 mb-6">
+            <h3 class="text-2xl font-medium text-gray-900 mb-6">
                 {{ translate('Order notes') }}
             </h3>
             <livewire:actions.social-comments :item="$order">

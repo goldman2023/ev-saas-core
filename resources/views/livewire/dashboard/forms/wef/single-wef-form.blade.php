@@ -18,7 +18,7 @@
     get wef_form_key() {
         return '{{ $wef_form_id }}';
     },
-}" 
+}"
     :id="wef_form_key"
     wire:ignore>
     @php
@@ -39,7 +39,7 @@
 
                 <button class="text-underline ml-2 text-sky-500 hover:text-sky-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="!show_form">({{ translate('Edit') }})</button>
-                
+
                 <button class="text-underline ml-2 text-red-500 hover:text-red-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="show_form">({{ translate('Close') }})</button>
             </label>
@@ -65,7 +65,7 @@
 
                 <button class="text-underline ml-2 text-sky-500 hover:text-sky-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="!show_form">({{ translate('Edit') }})</button>
-                
+
                 <button class="text-underline ml-2 text-red-500 hover:text-red-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="show_form">({{ translate('Close') }})</button>
             </label>
@@ -89,10 +89,10 @@
 
             <label class="flex items-center flex-wrap text-sm font-medium text-gray-700  {{ $form_element_label_class }}" >
                 <span x-text="wef_label"></span>
-                
+
                 <button class="text-underline ml-2 text-sky-500 hover:text-sky-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="!show_form">({{ translate('Edit') }})</button>
-                
+
                 <button class="text-underline ml-2 text-red-500 hover:text-red-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="show_form">({{ translate('Close') }})</button>
             </label>
@@ -116,7 +116,7 @@
                 <template x-if="!show_form && wef_value != null">
                     <p class="text-14 " x-text="wef_value+custom_properties.unit"></p>
                 </template>
-                
+
             </div>
         </div>
     </template>
@@ -125,8 +125,8 @@
     {{-- Date --}}
     <template x-if="form_type === 'date'">
         <div class="{{ $form_element_wrapper_class }}"
-            x-init="$nextTick(() => { 
-                flatpickr('#'+wef_form_key+' .js-flatpickr', WEF.getDateOptions(custom_properties)); 
+            x-init="$nextTick(() => {
+                flatpickr('#'+wef_form_key+' .js-flatpickr', WEF.getDateOptions(custom_properties));
             });">
 
             <label class="flex items-center flex-wrap text-sm font-medium text-gray-700  {{ $form_element_label_class }}" >
@@ -134,7 +134,7 @@
 
                 <button class="text-underline ml-2 text-sky-500 hover:text-sky-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="!show_form">({{ translate('Edit') }})</button>
-                
+
                 <button class="text-underline ml-2 text-red-500 hover:text-red-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="show_form">({{ translate('Close') }})</button>
             </label>
@@ -186,13 +186,13 @@
 
                 <button class="text-underline ml-2 text-sky-500 hover:text-sky-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="!show_form">({{ translate('Edit') }})</button>
-                
+
                 <button class="text-underline ml-2 text-red-500 hover:text-red-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="show_form">({{ translate('Close') }})</button>
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                
+
                 <div class="w-full" x-show="show_form">
                     <template x-if="count <= 1">
                         <div class="flex w-full">
@@ -205,12 +205,12 @@
                         <template
                             x-for="(val, key) in wef_value"
                             :key="'we-text-list-'+wef_key+'-'+key">
-    
+
                             <div class="flex" :class="{'mt-2': key > 0}">
                                 <input type="text" class="form-standard"
                                     x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
                                     x-model="wef_value[key]" />
-    
+
                                 <template x-if="(key+1) > WEF.getMinRows(custom_properties)">
                                     <span class="ml-2 flex items-center cursor-pointer"
                                         @click="remove(key)">
@@ -227,7 +227,7 @@
                         {{ translate('Add new') }}
                     </div>
                 </div>
-                
+
                 <template x-if="!show_form && count > 0">
                     <p class="text-14 " x-text="wef_value.join(', ')"></p>
                 </template>
@@ -236,7 +236,7 @@
         </div>
     </template>
     {{-- END Text List --}}
-    
+
 
     {{-- Dropdown --}}
     <template x-if="form_type === 'dropdown'">
@@ -258,7 +258,7 @@
                         if(objectHasProperty(this.items, wef_value[0])) {
                             return this.items[wef_value[0]];
                         }
-                        
+
                         return '';
                     } else if(this.countSelected() > 1) {
                         return '';
@@ -303,7 +303,7 @@
 
                 <button class="text-underline ml-2 text-sky-500 hover:text-sky-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="!show_form">({{ translate('Edit') }})</button>
-                
+
                 <button class="text-underline ml-2 text-red-500 hover:text-red-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="show_form">({{ translate('Close') }})</button>
             </label>
@@ -313,7 +313,7 @@
                 <div class="we-select relative w-full" x-data="{}" @click.outside="show_dropdown = false" x-show="show_form">
                     <div class="we-select__selector select-none w-full flex flex-wrap border pl-3 pt-2 pb-1 pr-6 relative cursor-pointer"
                         @click="show_dropdown = !show_dropdown">
-                        
+
                         @svg('heroicon-o-chevron-down', ['class' =>
                         'we-select__selector-arrow absolute w-[16px] h-[16px]
                         vertical-center', ':class' => "{'rotate-180': show_dropdown}"])
@@ -365,7 +365,7 @@
                             <div class="text-14 border border-gray-300 rounded-lg py-1 px-2" x-text="items[key]"></div>
                         </template>
                     </div>
-                    
+
                 </template>
             </div>
         </div>
@@ -382,7 +382,7 @@
 
                 <button class="text-underline ml-2 text-sky-500 hover:text-sky-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="!show_form">({{ translate('Edit') }})</button>
-                
+
                 <button class="text-underline ml-2 text-red-500 hover:text-red-800 text-12 mt-0.5"
                     @click="show_form = !show_form" x-show="show_form">({{ translate('Close') }})</button>
             </label>
@@ -413,8 +413,8 @@
     </template> --}}
     {{-- END Checkbox --}}
 
-    <div class="w-full flex justify-end pt-2 pr-1" x-show="show_form">
-        <button class="text-underline ml-2 text-green-500 hover:text-green-800 text-12 mt-0.5" @click="save()" >
+    <div class="w-full flex justify-end" x-show="show_form">
+        <button class="btn-primary mt-3 p-4" @click="save()" >
             {{ translate('Save') }}
         </button>
     </div>

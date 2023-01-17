@@ -1,10 +1,10 @@
 <section class="bg-white dark:bg-gray-900">
-    <div class="max-w-2xl mx-auto">
+    <div class="mx-auto">
         <div class="flex justify-between items-center mb-3">
             @if(!is_null($replyCommentId))
             <h3 class="text-14 mt-2 mb-2">{{ is_null($replyCommentId) ? '' : translate('Replying to a comment') }}</h3>
             @else
-            <h2 class="text-lg lg:text-xl font-bold text-gray-900 dark:text-white">
+            <h2 class="text-lg lg:text-xl font-medium text-gray-900 dark:text-white">
                 {{ translate('Comments') }} ({{$item->comments()->count()}})
             </h2>
 
@@ -83,7 +83,7 @@
 
 
                 <button type="button"
-                    class="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400">
+                    class="hidden flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400">
                     <svg aria-hidden="true" class="mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"

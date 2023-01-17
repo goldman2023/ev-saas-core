@@ -1,4 +1,4 @@
-<div class="flex items-center font-semibold text-red-600"
+<div class="flex items-center font-semibold"
     id="{{ $wef_id }}"
     @click="$dispatch('display-wef-editor-modal', {
         'target': '{{ $wef_id }}',
@@ -8,10 +8,11 @@
         'wef_label': '{{ $label }}',
         'data_type': '{{ $type }}',
         'form_type': '{{ $form_type }}',
+        'custom_properties': {'range': false, 'with_time': false},
     })" >
 
-    @if( $subject->getWEF($key, false, 'date'))
-        {{ $subject->getWEF($key, false, 'date') }}
+    @if( $subject->getWEF($key, false, $type))
+        {{ $subject->getWEF($key, false, $type) }}
     @else
         {{ translate('Not set.') }}
     @endif

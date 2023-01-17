@@ -10,7 +10,7 @@
             </div>
             <div class="border border-gray-700 p-2 rounded mb-1 font-bold">
                 {{-- Z3ELK012XNK000001 --}}
-                {{ generate_vin_code($order->get_primary_order_item()->subject) }}
+                {{ generate_vin_code($order) }}
             </div>
             <div>
                 @php
