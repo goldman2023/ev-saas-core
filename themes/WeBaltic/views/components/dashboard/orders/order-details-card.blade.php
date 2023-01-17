@@ -16,7 +16,7 @@
                 @php
                 $product = $order->get_primary_order_item()->subject;
 
-                if( $order->get_primary_order_item()->subject->getAttr(6)) {
+                if( $order->get_primary_order_item()->subject->getAttr(5)) {
                 $total_weight =
                 $order->get_primary_order_item()->subject->getAttr(6)->attribute_values->first()->values;
 
