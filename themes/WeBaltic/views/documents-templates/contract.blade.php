@@ -1,13 +1,20 @@
 @extends('documents-templates.global-pdf-layout.pdf-layout')
 
 @section('content')
+<style>
+    td {
+        vertical-align: top;
+    }
+</style>
+
 <div class="strong">
-    SUTARTIS Nr. 2022-11-3
+    SUTARTIS Nr. {{ $order->created_at->format('Y-m-j') }}
 </div>
 <div>
     Kaunas, du tūkstančiai dvidešimtų antrųjų metų lapkričio mėnesio 3 diena
 </div>
-UAB „Domantas“ (Į/k 302635282) veikiantis, toliau vadinama "Gamintojas” iš vienos pusės, ir Mototurizmo asociacija
+UAB „Domantas“ (Į/k 302635282) veikiantis, toliau vadinama "Gamintojas” iš vienos pusės, ir {{
+$order->billing_first_name }} {{ $order->billing_last_name }}
 (38207201189) toliau vadinama "Užsakovu" iš kitos pusės, sudarėme šią sutartį:
 
 
@@ -16,7 +23,8 @@ UAB „Domantas“ (Į/k 302635282) veikiantis, toliau vadinama "Gamintojas” i
 </div>
 
 <p>
-    Gamintojas įsipareigoja Užsakovui pagaminti automobilinę priekabą, pagal kom. pasiūlymą B2T-1738 kuris yra
+    Gamintojas įsipareigoja Užsakovui pagaminti automobilinę priekabą, pagal kom. pasiūlymą B2T-{{ $order->id }} kuris
+    yra
     neatskiriama šios sutarties dalis
     Užsakovo užsakytų darbų bendra vertė:
 </p>
@@ -122,7 +130,7 @@ UAB „Domantas“ (Į/k 302635282) veikiantis, toliau vadinama "Gamintojas” i
 
 <div>
     Priedai prie sutarties: <br>
-    Komercinis pasiūlymas Nr. B2T-1738
+    Komercinis pasiūlymas Nr. B2T-{{ $order->id}}
 </div>
 
 <div class="strong">
@@ -130,7 +138,7 @@ UAB „Domantas“ (Į/k 302635282) veikiantis, toliau vadinama "Gamintojas” i
 </div>
 
 <div>
-    <table>
+    <table style="">
         <tr>
             <td>
                 Užsakovas:
@@ -144,9 +152,11 @@ UAB „Domantas“ (Į/k 302635282) veikiantis, toliau vadinama "Gamintojas” i
         <tr>
             {{-- TODO: Add customer data --}}
             <td>
-                Mototurizmas, asociacija <br>
+                {{ $order->billing_company }} <br>
+                {{ $order->billing_first_name }} {{ $order->billing_first_name }}
+                <br>
                 į.k 153094528PVM k. <br>
-                Salomėjos Nėries g. 77-1, LT-06331 Vilnius <br>
+                {{ $order->billing_address }}, {{ $order->billing_city }}, {{ $order->billing_country }} <br>
             </td>
             <td>
                 UAB „Domantas “ <br>
@@ -160,14 +170,16 @@ UAB „Domantas“ (Į/k 302635282) veikiantis, toliau vadinama "Gamintojas” i
                 Mob. tel. 8 (671) 81007 <br>
 
 
-                El. paštas: eduardas@baltictrailer.eu
+                El. paštas: eduardas@baltictrailer.eu <br>
+
+                Direktorius <br>
+
+                Eduard Terechov <br>
+                A.V.<br>
             </td>
         </tr>
     </table>
 </div>
-Užsakovas
-Direktorius
 
-Eduard Terechov
-A.V.
+
 @endsection

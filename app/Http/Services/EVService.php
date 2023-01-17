@@ -272,6 +272,65 @@ class EVService
                 ],
             ],
             [
+                'label' => translate('CRM'),
+                'items' => [
+                    [
+                        'label' => translate('Customers'),
+                        'icon' => 'heroicon-o-user-group',
+                        'route' => route('crm.all_customers'),
+                        'route_name' => 'crm.all_customers',
+                        'is_active' => areActiveRoutes(['crm.all_customers']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => ['browse_customers'],
+                        'badge' => [
+                            'class' => 'badge-info',
+                            'content' => function () {
+
+                                return User::byDays(2)->count() . ' Today';
+                            },
+                        ],
+                    ],
+                    [
+                        'label' => translate('License management'),
+                        'icon' => 'heroicon-o-circle-stack',
+                        'route' => route('crm.licenses'),
+                        'route_name' => 'crm.licenses',
+                        'is_active' => areActiveRoutes(['crm.licenses']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => [],
+                        /* TODO: Add expiring licenses count */
+                        // 'badge' => [
+                        //     'class' => 'badge-info',
+                        //     'content' => function () {
+
+                        //         return User::byDays(10)->count() . ' Today';
+                        //     },
+                        // ],
+                    ],
+
+                    /* TODO: Uncomment this once we have customers page */
+                    /* [
+                        'label' => translate('Customers'),
+                        'icon' => 'heroicon-o-user-group',
+                        'route' => '',
+                        'is_active' => areActiveRoutes(['']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['all_customers', 'browse_customers']
+                    ], */
+                    /* [
+                        'label' => translate('Reviews'),
+                        'icon' => 'heroicon-o-star',
+                        'route' => '',
+                        'is_active' => areActiveRoutes(['']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_reviews', 'view_review']
+                    ], */
+
+                    // TODO: Do we need another route/menu-item for admin/moderator/support Support page? We should have to support panels: one for customers/vendors and one for admin/moderator/support
+                ],
+            ],
+
+            [
                 'label' => translate('Content'),
                 'items' => [
                     [
@@ -348,64 +407,7 @@ class EVService
                 ],
             ],
 
-            [
-                'label' => translate('CRM'),
-                'items' => [
-                    [
-                        'label' => translate('Customers'),
-                        'icon' => 'heroicon-o-user-group',
-                        'route' => route('crm.all_customers'),
-                        'route_name' => 'crm.all_customers',
-                        'is_active' => areActiveRoutes(['crm.all_customers']),
-                        'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_customers'],
-                        'badge' => [
-                            'class' => 'badge-info',
-                            'content' => function () {
 
-                                return User::byDays(2)->count() . ' Today';
-                            },
-                        ],
-                    ],
-                    [
-                        'label' => translate('License management'),
-                        'icon' => 'heroicon-o-circle-stack',
-                        'route' => route('crm.licenses'),
-                        'route_name' => 'crm.licenses',
-                        'is_active' => areActiveRoutes(['crm.licenses']),
-                        'user_types' => User::$non_customer_user_types,
-                        'permissions' => [],
-                        /* TODO: Add expiring licenses count */
-                        // 'badge' => [
-                        //     'class' => 'badge-info',
-                        //     'content' => function () {
-
-                        //         return User::byDays(10)->count() . ' Today';
-                        //     },
-                        // ],
-                    ],
-
-                    /* TODO: Uncomment this once we have customers page */
-                    /* [
-                        'label' => translate('Customers'),
-                        'icon' => 'heroicon-o-user-group',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['all_customers', 'browse_customers']
-                    ], */
-                    /* [
-                        'label' => translate('Reviews'),
-                        'icon' => 'heroicon-o-star',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['browse_reviews', 'view_review']
-                    ], */
-
-                    // TODO: Do we need another route/menu-item for admin/moderator/support Support page? We should have to support panels: one for customers/vendors and one for admin/moderator/support
-                ],
-            ],
 
             [
                 'label' => translate('Customer zone'),
