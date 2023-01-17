@@ -81,15 +81,15 @@ class TasksTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('ID','id')
+            Column::make('ID', 'id')
                 ->sortable()
                 ->excludeFromSelectable(),
             Column::make('Name', 'name')
                 ->excludeFromSelectable()
                 ->addClass('hidden md:table-cell'),
-            Column::make('Type', 'type')
-                ->excludeFromSelectable(),
             Column::make('Status', 'status')
+                ->excludeFromSelectable(),
+            Column::make('Type', 'type')
                 ->excludeFromSelectable(),
             Column::make('Assignee', 'assignee_id')
                 ->excludeFromSelectable()
@@ -109,4 +109,3 @@ class TasksTable extends DataTableComponent
         return 'frontend.dashboard.tasks.row';
     }
 }
-

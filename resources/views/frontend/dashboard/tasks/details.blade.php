@@ -47,7 +47,7 @@
                                 </p>
                                 <div>
                                    <p class="font-semibold text-gray-700"> {{ translate('Subject') }}:
-                                    {{ App\Models\Product::where('id',$task->subject_id)->first()->name}} </p>
+                                    {{-- {{ App\Models\Product::where('id',$task->subject_id)->first()->name}} </p> --}}
                                 </div>
                                 <div>
                                    <p class="font-semibold text-gray-700"> {{ translate('Description') }}</p>

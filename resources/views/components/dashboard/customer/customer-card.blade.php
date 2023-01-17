@@ -9,7 +9,7 @@
         </div>
 
         <div class="col-span-3">
-            <h2 class="text-xl font-bold">
+            <h2 class="text-lg font-medium">
                 <a href="{{ route('user.details', $user->id) }}">
                     {{ $user->fullName }}
                 </a>
