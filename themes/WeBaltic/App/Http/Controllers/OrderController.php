@@ -33,15 +33,17 @@ class OrderController extends Controller
         try {
             if ($new_status == 1) { // contract
                 $reason = translate('Contract Created');
-    
+
                 baltic_generate_order_document($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
             } else if ($new_status == 2) { // approved
                 $reason = translate('Contract Signed');
+                baltic_generate_order_document($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
             } else if ($new_status == 3) { // welding
                 $reason = translate('Approved for manufacturing');
+                baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
             } else if ($new_status == 6) { // delivery_to_warehouse
                 $reason = translate('Delivering to warehouse');
-    
+
                 // 1. Create Delivery Task
                 $new_task = new Task();
 

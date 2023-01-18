@@ -10,8 +10,9 @@
 <x-dashboard.section-headers.section-header title="{{ translate('All orders') }}" text="">
     <x-slot name="content">
         <a href="{{ route('order.create') }}" class="btn-primary">
-            @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
+
             <span>{{ translate('Add new') }}</span>
+            @svg('heroicon-o-plus', ['class' => 'h-4 h-4 ml-2'])
         </a>
     </x-slot>
 </x-dashboard.section-headers.section-header>
@@ -24,13 +25,13 @@
 <div class="w-full" x-cloak>
     @if($orders_count > 0)
 
-        <livewire:dashboard.tables.tabs.tabs-header 
-            tabs-id="orders" 
-            :is-wef="true" 
+        <livewire:dashboard.tables.tabs.tabs-header
+            tabs-id="orders"
+            :is-wef="true"
             property="cycle_status"
             :enum-class="\WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum::class"
             :model-class="\App\Models\Order::class">
-    
+
         <div id="orders-tabs">
             @foreach(\WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum::values() as $key => $status)
                 <div id="orders-tab-{{ $key }}" role="tabpanel" aria-labelledby="order-nav-{{ $key }}"

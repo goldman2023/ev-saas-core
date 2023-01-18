@@ -59,7 +59,7 @@
 
                     {{-- Tracking number (only for Standard Products) --}}
                     @if(empty($order->tracking_number))
-                    <span class="badge-danger !py-1 !px-3 mr-2">
+                    <span class="!hidden badge-danger !py-1 !px-3 mr-2">
                         {{ translate('Tracking number not added') }}
                     </span>
                     @endif
@@ -67,12 +67,6 @@
                 </div>
 
                 <div class="flex items-center relative" x-data="{ isOpen: false }" x-cloak>
-                    <a class="flex items-center text-gray-900 mr-3" href="javascript:;"
-                        onclick="window.print(); return false;">
-                        @svg('heroicon-o-printer', ['class' => 'w-[18px] h-[18px] mr-2'])
-                        {{ translate('Print order') }}
-                    </a>
-
 
                 </div>
             </div>
@@ -155,7 +149,14 @@
                                 'form_type': 'date',
                                 'custom_properties': {'range': false, 'with_time': false},
                             })" >
-                            {{ $order->getWEF('order_delivery_deadline', false, 'date') }}
+
+                            @if( $order->getWEF('order_delivery_deadline', false, 'date'))
+                                {{ $order->getWEF('order_delivery_deadline', false, 'date') }}
+                            @else
+                            <span class="text-xs">
+                                {{ translate('Not set. Set order deadline') }}
+                            </span>
+                            @endif
                             @svg('heroicon-s-pencil-square', ['class' => 'ml-2 h-5 w-5 cursor-pointer'])
                         </time>
                     </div>
@@ -204,14 +205,6 @@
                                 {{ translate('Details') }}
                             </button>
                         </li>
-                        <li class="mr-2" role="presentation">
-                            <button
-                                class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                                id="manufacturing-tab" data-tabs-target="#manufacturing" type="button" role="tab"
-                                aria-controls="dashboard" aria-selected="false">
-                                {{ translate('Manufacturing') }}
-                            </button>
-                        </li>
 
                         <li class="mr-2" role="presentation">
                             <button
@@ -221,6 +214,17 @@
                                 {{ translate('Documents') }}
                             </button>
                         </li>
+
+                        <li class="mr-2" role="presentation">
+                            <button
+                                class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
+                                id="manufacturing-tab" data-tabs-target="#manufacturing" type="button" role="tab"
+                                aria-controls="dashboard" aria-selected="false">
+                                {{ translate('Manufacturing') }}
+                            </button>
+                        </li>
+
+
                         <li class="mr-2" role="presentation">
                             <button
                                 class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
@@ -284,7 +288,7 @@
 
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="manufacturing" role="tabpanel"
                         aria-labelledby="manufacturing-tab">
-                        <x-dashboard.orders.manufacturing-details></x-dashboard.orders.manufacturing-details>
+                        <x-dashboard.orders.manufacturing-details :order="$order"></x-dashboard.orders.manufacturing-details>
 
                     </div>
 
@@ -390,7 +394,7 @@
         </div>
 
         <div class="card mb-3">
-            <h3 class="text-2xl font-bold tracking-tight text-gray-900 mb-6">
+            <h3 class="text-2xl font-medium text-gray-900 mb-6">
                 {{ translate('Order notes') }}
             </h3>
             <livewire:actions.social-comments :item="$order">

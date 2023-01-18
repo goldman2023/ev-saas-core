@@ -9,7 +9,7 @@
         </div>
 
         <div class="col-span-3">
-            <h2 class="text-xl font-bold">
+            <h2 class="text-lg font-medium">
                 <a href="{{ route('user.details', $user->id) }}">
                     {{ $user->fullName }}
                 </a>
@@ -67,9 +67,9 @@
             {{ translate('Actions') }}
         </h3>
         <div class="flex space-x-3">
-            <div class="justify-stretch flex  space-y-3 flex-row sm:space-y-0 sm:space-x-4">
+            <div class="w-full grid grid-cols-1 gap-3">
                 <button type="button"
-                    class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
+                    class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
                     <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" x-description="Heroicon name: mini/envelope"
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z">

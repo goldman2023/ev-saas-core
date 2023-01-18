@@ -40,11 +40,11 @@
             <div class="flex flex-col max-h-[85vh]" x-data="{}">
                 <!-- Modal content -->
                 <div class="relative py-2 bg-white rounded-lg dark:bg-gray-800 sm:py-0">
-                    
+
                     <!-- Modal header -->
                     <div
                         class="flex items-center justify-between pb-4 mb-4 border-b border-gray-200 rounded-t sm:mb-5 dark:border-gray-700">
-                        <h3 class="font-semibold text-gray-900 dark:text-white" >
+                        <h3 class="font-semibold text-2xl text-gray-900 dark:text-white" >
                             {{ $upload?->file_original_name ?? ''}}
                         </h3>
                     </div>
@@ -77,7 +77,7 @@
                                         </a>
                                     </dd>
                                 </div>
-                                
+
                                 <div class="sm:col-span-1">
                                   <dt class="text-sm font-medium text-gray-500">{{ translate('Type') }}</dt>
                                   <dd class="mt-1 text-sm text-gray-900">{{ $upload?->type ?? '' }}</dd>
@@ -100,12 +100,12 @@
                                 <div class="sm:col-span-2">
                                   <dt class="text-sm font-medium text-gray-500">{{ translate('Upload Tag') }}</dt>
                                   <dd class="mt-1 text-sm text-gray-900">
-                                    <livewire:dashboard.forms.wef.single-wef-form 
-                                    :subject="$upload" 
-                                    wef-key="upload_tag" 
-                                    wef-label="{{ translate('Tag') }}" 
+                                    <livewire:dashboard.forms.wef.single-wef-form
+                                    :subject="$upload"
+                                    wef-key="upload_tag"
+                                    wef-label="{{ translate('Tag') }}"
                                     data-type="string"
-                                    form-type="plain_text" 
+                                    form-type="plain_text"
                                     key="{{ 'wef-tag-'.($upload?->id ?? 0).'-'.now() }}" />
                                   </dd>
                                 </div>
@@ -137,8 +137,8 @@
                         </div>
                         {{-- END Upload Details --}}
 
-                        
-                        
+
+
                           {{-- File Preview --}}
                         <div class="overflow-hidden bg-white shadow border border-gray-300 sm:rounded-lg">
                             <div class="px-4 py-5 sm:px-6">

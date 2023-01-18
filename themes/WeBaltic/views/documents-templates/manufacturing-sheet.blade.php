@@ -1,20 +1,36 @@
-<table>
+<style>
+    td {
+        padding: 5px;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+</style>
+
+<table style="width: 100%;">
     <tr>
         <td colspan="4">
-            {{ translate('Welding manufacturing sheet:') }}
+            {{ translate('Suvirinimo gamybos lapas') }}
         </td>
     </tr>
 
     <tr>
         <td>
-            {{ translate('Manufacturing order number: ') }}
+            {{ translate('Gamybos numeris:') }}
         </td>
         <td>
             {{ $order->id }}
         </td>
 
         <td>
-            {{ translate('Commercial offer number: ') }}
+            {{ translate('Komercinio pasiulymo nr:') }}
         </td>
         <td>
             {{ $order->id }}

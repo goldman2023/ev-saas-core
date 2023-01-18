@@ -1,7 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html lang="lt">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
+      * { font-family: DejaVu Sans !important; }
         .strong {
             font-weight: 700;
         }
@@ -30,6 +32,7 @@
             background-position: center center;
             z-index: -1;
         }
+
     </style>
 </head>
 

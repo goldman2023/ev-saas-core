@@ -50,7 +50,14 @@
 
 Komplektacija: Atraminis ratukas
 <div class="strong">
-    Suma (su PVM): {{ $order->total_price}}
+    Suma (be PVM): {{ $order->total_price}}
+</div>
+<div class="strong">
+    PVM (21%): €399.00
+</div>
+<div class="strong">
+    Viso (su PVM)
+    €2,299.00
 </div>
 <div>
     Papildoma įranga / paslaugos:
