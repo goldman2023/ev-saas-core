@@ -391,7 +391,7 @@ class MediaService
         return $upload;
    }
 
-   public function uploadToStorage($contents, $path, $name, $extension, $with_hash = true) {
+   public function uploadToStorage($contents, $path, $name, $extension, $with_hash = true, $headers = []) {
         $hash  = '';
 
         if($with_hash) {
@@ -400,7 +400,7 @@ class MediaService
 
         $file_path = $this->generateFilePath($path, $name, $extension, $with_hash);
 
-        $file = Storage::put($file_path, $contents);
+        $file = Storage::put($file_path, $contents, $headers);
 
         if(!$file)
             return false;
@@ -408,12 +408,12 @@ class MediaService
         return $file_path;
    }
 
-   public function uploadAndStore(&$model, $contents, $path, $name, $extension, $property_name, $with_hash = true, $file_display_name = '', $upload_tag = null, $user_id = null, $shop_id = null) {
+   public function uploadAndStore(&$model, $contents, $path, $name, $extension, $property_name, $with_hash = true, $file_display_name = '', $upload_tag = null, $user_id = null, $shop_id = null, $headers = []) {
         DB::beginTransaction();
         $upload = null;
 
         try {
-            $file_path = MediaService::uploadToStorage($contents, $path, $name, $extension, $with_hash);
+            $file_path = MediaService::uploadToStorage($contents, $path, $name, $extension, $with_hash, $headers);
 
             if (!$file_path) {
                 // The file could not be written to disk...
@@ -445,7 +445,7 @@ class MediaService
 
             Log::error($e);
 
-            dd($e); // for testing purposes
+            // dd($e); // for testing purposes
             return false;
         }
 

@@ -12,6 +12,7 @@ class Field extends Component
     public $type;
     public $form_type;
     public $label;
+
     /**
      * Create a new component instance.
      *
@@ -23,7 +24,7 @@ class Field extends Component
         $this->key = $key;
         $this->label = $label;
         $this->subject = $subject;
-        $this->wef_id = 'wef-order-'.$this->subject->id.'-'.$this->key;
+        $this->wef_id = 'wef-'.$this->subject->id.'-'.$this->key;
         $this->type = $type;
         $this->form_type = $form_type;
 

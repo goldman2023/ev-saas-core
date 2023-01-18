@@ -1,6 +1,6 @@
 <?php
 
-namespace WeThemes\WeBaltic\App\View\Components\Orders;
+namespace WeThemes\WeBaltic\App\View\Components\Dashboard\Orders;
 
 use Illuminate\View\Component;
 use WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum;

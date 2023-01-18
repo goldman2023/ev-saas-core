@@ -170,3 +170,13 @@ function generate_serial_number($product, $order)
 
     return $serial_number;
 }
+
+function define_livewire_dynamic_actions() {
+    $list = [];
+
+    $list['regenerate_document'] = function(&$form) {
+        return lda_regenerate_document($form);
+    };
+
+    return $list;
+}

@@ -10,8 +10,18 @@
       this.upload = null;
       this.subject = null;
       this.displayModal = false;
+    },
+    reloadPreview() {
+      setTimeout(function() {
+        console.log($el);
+        document.getElementById('we-media-editor-preview-iframe').src = document.getElementById('we-media-editor-preview-iframe').src;
+      }, 10);
     }
-}" @display-media-editor-modal.window="displayModal = true;" x-show="displayModal" x-cloak>
+}" 
+@display-media-editor-modal.window="displayModal = true;"
+@reload-media-editor-preview.window="reloadPreview()"
+x-show="displayModal" 
+x-cloak>
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="{{ $wrapperClass }}" x-show="displayModal" x-transition:enter="ease-out duration-300"
             x-transition:enter-start="opacity-0" x-transition:enter-end="oapcity-100"
@@ -71,9 +81,12 @@
 
                                 <div class="col-span-1 sm:col-span-2">
                                     <dt class="text-sm font-medium text-gray-500">{{ translate('File URL') }}</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">
+                                    <dd class="flex flex-col mt-1 text-sm text-gray-900">
                                         <a href="{{ $upload?->url() ?? '#' }}" target="_blank" class="text-sky-600">
                                             {{ $upload?->url() ?? '#' }}
+                                        </a>
+                                        <a download href="{{ $upload?->url() ?? '#' }}" target="_blank" class="btn-standard-outline !px-2 !py-0.5 !text-12 mr-auto mt-1" >
+                                          {{ translate('Download') }}
                                         </a>
                                     </dd>
                                 </div>
@@ -101,12 +114,13 @@
                                   <dt class="text-sm font-medium text-gray-500">{{ translate('Upload Tag') }}</dt>
                                   <dd class="mt-1 text-sm text-gray-900">
                                     <livewire:dashboard.forms.wef.single-wef-form
-                                    :subject="$upload"
-                                    wef-key="upload_tag"
-                                    wef-label="{{ translate('Tag') }}"
-                                    data-type="string"
-                                    form-type="plain_text"
-                                    key="{{ 'wef-tag-'.($upload?->id ?? 0).'-'.now() }}" />
+                                      :show-form="false"
+                                      :subject="$upload"
+                                      wef-key="upload_tag"
+                                      wef-label="{{ translate('Tag') }}"
+                                      data-type="string"
+                                      form-type="plain_text"
+                                      key="{{ 'wef-tag-'.($upload?->id ?? 0).'-'.now() }}" />
                                   </dd>
                                 </div>
 
@@ -116,22 +130,17 @@
                                 </div> --}}
                               </dl>
 
-                              <div class="relative py-5 mt-2">
-                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                  <div class="w-full border-t border-gray-300"></div>
-                                </div>
-                                <div class="relative flex justify-center">
-                                  <span class="bg-white px-2 text-sm text-gray-500">{{ translate('Other information') }}</span>
-                                </div>
-                              </div>
-
                               {{-- Other Information (WEF & CoreMeta)--}}
-                              <div class="grid grid-cols-1 gap-y-3">
-                                @php
-                                    do_action('view.dashboard.we-media-editor.other-information', $upload, $subject);
-                                @endphp
-                              </div>
+                              @php
+                                  do_action('view.dashboard.we-media-editor.other-information', $upload, $subject);
+                              @endphp
                               {{-- END Other Information (WEF & CoreMeta) --}}
+
+                              {{-- Custom Actions--}}
+                              @php
+                                  do_action('view.dashboard.we-media-editor.custom-actions', $this);
+                              @endphp
+                              {{-- END Custom Actions --}}
 
                             </div>
                         </div>
@@ -146,8 +155,7 @@
                               <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('File/Document preview can be inspected here') }}</p>
                             </div>
                             <div class="border-t border-gray-200">
-                                <iframe src="{{ $upload?->url() ?? '' }}" style="min-height: 60vh;"
-                                    title="testPdf" height="100%" width="100%"></iframe>
+                                <iframe src="{{ $upload?->url() ?? '' }}" id="we-media-editor-preview-iframe" style="min-height: 60vh;" height="100%" width="100%"></iframe>
                             </div>
                         </div>
                         {{-- END File Preview --}}
