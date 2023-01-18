@@ -195,6 +195,16 @@ if($colors) {
 
         @endif
 
+        .bg-img-placeholder-stripes {
+            background: repeating-linear-gradient(
+                -55deg,
+                #222,
+                #222 10px,
+                #333 10px,
+                #333 20px
+            );
+        }
+
         .form-standard {
             @apply flex-1 block w-full focus:ring-primary focus:border-primary min-w-0 rounded-md sm:text-sm border-gray-300 shadow-sm;
         }

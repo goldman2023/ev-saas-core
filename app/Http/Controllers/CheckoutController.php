@@ -450,8 +450,6 @@ class CheckoutController extends Controller
 
     public function orderReceived(Request $request, $order_id)
     {
-
-
         $order = Order::find($order_id);
 
         /* Used for /order/demo/received demo */

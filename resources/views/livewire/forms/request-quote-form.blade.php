@@ -1,5 +1,5 @@
 <div class="relative w-full md:max-w-[920px] flex flex-wrap justify-between items-start self-center z-10 py-[60px]" x-data="{
-    items: @js($items),
+    order_items: @js($order_items),
     manual_mode_billing: @js($manual_mode_billing),
     manual_mode_shipping: @js($manual_mode_shipping),
     show_addresses: @js($show_addresses),
@@ -13,6 +13,22 @@
     phoneNumbers: @js($order->phone_numbers),
     shippingCountry: @js($order->shipping_country),
     billingCountry: @js($order->billing_country),
+    core_meta: @js('core_meta'),
+    save() {
+        $wire.set('order_items', this.order_items, true);
+        $wire.set('manual_mode_billing', this.manual_mode_billing, true);
+        $wire.set('manual_mode_shipping', this.manual_mode_shipping, true);
+        $wire.set('core_meta', this.core_meta, true);
+
+        $wire.set('order.phone_numbers', this.phoneNumbers, true);
+        $wire.set('order.billing_country', this.billingCountry, true);
+        $wire.set('order.shipping_country', this.shippingCountry, true);
+        $wire.set('selected_payment_method', this.selected_payment_method, true);
+        $wire.set('order.same_billing_shipping', this.same_billing_shipping, true);
+        $wire.set('order.buyers_consent', this.buyers_consent, true);
+        $wire.set('selected_billing_address_id', this.selected_billing_address_id || -1, true);
+        $wire.set('selected_shipping_address_id', this.selected_shipping_address_id || -1, true);
+    }
 }" 
 @validation-errors.window="$scrollToErrors($event.detail.errors, 700);">
     <div class="w-full md:max-w-[400px]">
@@ -20,363 +36,340 @@
             class="block p-0 mb-6 max-w-[160px]" :image="get_site_logo()">
         </x-tenant.system.image>
 
-        @if($items->isNotEmpty())
-            <div class="item-summary w-full flex-col">
-                <div class="pb-2 mb-2 flex justify-between items-center  border-b border-gray-200">
-                    <strong class="flex">{{ translate('Request a quote for:') }}</strong>
-                    <button type="button" class="btn btn-primary !py-1 !text-12 focus:!ring-0">
-                        {{ translate('Add item') }}
-                    </button>
-                </div>
+        <div class="item-summary w-full flex-col">
+            <div class="pb-2 mb-2 flex justify-between items-center  border-b border-gray-200">
+                <strong class="flex">{{ translate('Request a quote for:') }}</strong>
+                <button type="button" class="btn btn-primary !py-1 !text-12 focus:!ring-0"
+                    @click="$dispatch('display-modal', {'id': 'order-item-form-modal' })">
+                    {{ translate('Add item') }}
+                </button>
+            </div>
 
+            <template x-if="_.get(order_items, 'length', 0) > 0">
                 <ul class="flex flex-col list-none space-y-4 ">
-                    @foreach($items as $item)
+                    <template x-for="(item, index) in order_items" :key="'order-items-'+index">
                         <li class="w-full flex flex-col justify-left">
                             <div class="w-full flex justify-left">
-                                <div class="w-[65px] h-[65px] shrink-0">
+                                <div class="w-[65px] h-[65px] shrink-0" x-show="item?.thumbnail">
                                     <img class="w-[65px] h-[65px] object-cover rounded border"
-                                        src="{{ $item->subject?->getThumbnail() ?? '' }}" />
+                                        :src="window.WE.IMG.url(item?.thumbnail)" />
                                 </div>
                                 <div class="w-full flex flex-col">
                                     <div class="w-full flex justify-between pl-4">
-                                        <strong class="line-clamp-1">{{ $item->subject?->name ?? $item->name }}</strong>
+                                        <strong class="line-clamp-1" x-text="item.name"></strong>
+                                        <span class="pl-2">{{ translate('Qty') }}: <b x-text="item.quantity"></b></span>
                                     </div>
                                     <div class="w-full leading-4 pl-4 mt-auto">
-                                        <button type="button" class="btn-standard-outline !py-0.5 !text-12 hover:!bg-primary hover:!text-white focus:!ring-0">
+                                        <button type="button" class="btn-standard-outline !py-0.5 !text-12 hover:!bg-primary hover:!text-white focus:!ring-0"
+                                        @click="$dispatch('display-modal', {'id': 'order-item-form-modal', 'order_item_index': index })">
                                             {{ translate('Edit item') }}
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </li>
-                    @endforeach
+                    </template>
                 </ul>
+            </template>
+            
 
-                <div class="mt-2 pt-2 flex justify-start border-t border-gray-200">
-                    <div
-                        class="flex flex-row items-center pr-4 relative after:content-[''] after:absolute after:right-0 after:bg-gray-300 after:h-[15px] after:top-[8px] after:w-[1px]">
-                        <span class="text-12 mr-1">{{ translate('Powered by') }}</span>
+            <div class="mt-2 pt-2 flex justify-start border-t border-gray-200">
+                <div
+                    class="flex flex-row items-center pr-4 relative after:content-[''] after:absolute after:right-0 after:bg-gray-300 after:h-[15px] after:top-[8px] after:w-[1px]">
+                    <span class="text-12 mr-1">{{ translate('Powered by') }}</span>
 
-                        <a style="max-width: 120px !important;" class="navbar-brand p-0 mw-100 text-12"
-                            href="https://we-saas.com/" aria-label="">
-                            {{-- <img src="https://images.we-saas.com/insecure/fill/0/0/ce/0/plain/https://businesspress.io/wp-content/uploads/2021/12/cropped-Screenshot_2021-12-22_at_15.12.45-removebg-preview.png"
-                                style="max-width: 100%;" height="auto" alt=""> --}}
-                                <b>BusinessPress</b>
-                        </a>
-                        {{-- <x-default.system.tenant.logo style="max-width: 50px !important;">
-                        </x-default.system.tenant.logo> --}}
-                    </div>
-                    <ul class="flex flex-row list-none pl-5">
-                        <li class="flex pt-1 px-1 mr-1 items-center">
-                            <a href="#" class="text-12 text-gray-500">{{ translate('Terms') }}</a>
-                        </li>
-                        <li class="flex pt-1 px-1 mr-1 items-center">
-                            <a href="#" class="text-12 text-gray-500">{{ translate('Privacy') }}</a>
-                        </li>
-                        <li class="flex pt-1 px-1 mr-1 items-center">
-                            <a href="#" class="text-12 text-gray-500">{{ translate('Contact') }}</a>
-                        </li>
-                    </ul>
+                    <a style="max-width: 120px !important;" class="navbar-brand p-0 mw-100 text-12"
+                        href="https://we-saas.com/" aria-label="">
+                        {{-- <img src="https://images.we-saas.com/insecure/fill/0/0/ce/0/plain/https://businesspress.io/wp-content/uploads/2021/12/cropped-Screenshot_2021-12-22_at_15.12.45-removebg-preview.png"
+                            style="max-width: 100%;" height="auto" alt=""> --}}
+                            <b>BusinessPress</b>
+                    </a>
+                    {{-- <x-default.system.tenant.logo style="max-width: 50px !important;">
+                    </x-default.system.tenant.logo> --}}
                 </div>
+                <ul class="flex flex-row list-none pl-5">
+                    <li class="flex pt-1 px-1 mr-1 items-center">
+                        <a href="#" class="text-12 text-gray-500">{{ translate('Terms') }}</a>
+                    </li>
+                    <li class="flex pt-1 px-1 mr-1 items-center">
+                        <a href="#" class="text-12 text-gray-500">{{ translate('Privacy') }}</a>
+                    </li>
+                    <li class="flex pt-1 px-1 mr-1 items-center">
+                        <a href="#" class="text-12 text-gray-500">{{ translate('Contact') }}</a>
+                    </li>
+                </ul>
+            </div>
 
-                {{-- OrderItem selector modal --}}
-                <x-system.form-modal id="order-item-selector-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
-                    <div class="w-full flex flex-col" x-data="{
-                            q: '',
-                            results: [],
-                            content_type: null,
-                            available_content_types: [
-                                {
-                                    title: '{{ translate('Product') }}',
-                                    slug: 'product',
-                                    model_class: @js(base64_encode(\App\Models\Product::class)),
-                                },
-                                {
-                                    title: '{{ translate('Product Addon') }}',
-                                    slug: 'product_addon',
-                                    model_class: @js(base64_encode(\App\Models\ProductAddon::class)),
-                                },
-                                {
-                                    title: '{{ translate('Custom') }}',
-                                    slug: 'custom',
-                                    model_class: '',
-                                }
-                            ],
-                            hide_content_selector: false,
-                            order_item_index: null,
-                            custom_order_item: {
-                                id: null,
-                                name: '',
-                                excerpt: '',
-                                qty: 1,
-                                unit_price: 0,
-                                base_price: 0,
-                                subtotal_price: 0,
-                                total_price: 0,
-                                custom_attributes: @js($custom_attributes),
-                                selected_attribute_values: @js($selected_predefined_attribute_values),
+            {{-- OrderItem selector modal --}}
+            <x-system.form-modal id="order-item-form-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
+                <div class="w-full flex flex-col" x-data="{
+                        q: '',
+                        results: [],
+                        content_type: null,
+                        available_content_types: [
+                            {
+                                title: '{{ translate('Product') }}',
+                                slug: 'product',
+                                model_class: @js(base64_encode(\App\Models\Product::class)),
                             },
-                            getCurrentContentTypeOptions() {
-                                return this.available_content_types.find(item => item.slug === this.content_type);
+                            {
+                                title: '{{ translate('Product Addon') }}',
+                                slug: 'product_addon',
+                                model_class: @js(base64_encode(\App\Models\ProductAddon::class)),
                             },
-                            search() {
-                                let fetch_route = null;
+                            {
+                                title: '{{ translate('Custom') }}',
+                                slug: 'custom',
+                                model_class: '',
+                            }
+                        ],
+                        hide_content_selector: false,
+                        order_item_index: null,
+                        custom_order_item: {
+                            id: null,
+                            name: '',
+                            excerpt: '',
+                            quantity: 1,
+                            custom_attributes: @js($custom_attributes),
+                            selected_attribute_values: @js($selected_predefined_attribute_values),
+                        },
+                        getCurrentContentTypeOptions() {
+                            return this.available_content_types.find(item => item.slug === this.content_type);
+                        },
+                        search() {
+                            let fetch_route = null;
 
-                                if(this.content_type === 'product') {
-                                    fetch_route = '{{ route('api.dashboard.products.search') }}';
-                                } else if(this.content_type === 'product_addons') {
-                                    fetch_route = '{{ route('api.dashboard.products.addons.search') }}';
-                                }
+                            if(this.content_type === 'product') {
+                                fetch_route = '{{ route('api.dashboard.products.search') }}';
+                            } else if(this.content_type === 'product_addons') {
+                                fetch_route = '{{ route('api.dashboard.products.addons.search') }}';
+                            }
 
-                                if(fetch_route) {
-                                    wetch.get(fetch_route+'?q='+this.q)
-                                    .then(data => {
-                                        if(data.status === 'success' && data.results) {
-                                            this.results = data.results;
-                                        }
-                                    })
-                                    .catch(error => {
-                                        alert(error);
-                                    });
-                                }
-                            },
-                            reset() {
-                                this.q = '';
-                                this.results = null;
-
-                                this.order_item_index = null;
-                                this.hide_content_selector = false;
-
-                                this.custom_order_item.id = null;
-                                this.custom_order_item.name = '';
-                                this.custom_order_item.excerpt = '';
-                                this.custom_order_item.qty = 1;
-                                this.custom_order_item.unit_price = 0;
-                                this.custom_order_item.base_price = 0;
-                                this.custom_order_item.subtotal_price = 0;
-                                this.custom_order_item.total_price = 0;
-                                
-                                {{-- Send event to reset attributes form --}}
-                                $dispatch('reset-attributes-form', {form_id: 'custom-order-item-form'});
-                            },
-                            select(item) {
-                                let existing_item_index = order_items.findIndex(order_item => {
-                                    return order_item.subject_type == this.getCurrentContentTypeOptions().model_class && order_item.subject_id == item.id;
+                            if(fetch_route) {
+                                wetch.get(fetch_route+'?q='+this.q)
+                                .then(data => {
+                                    if(data.status === 'success' && data.results) {
+                                        this.results = data.results;
+                                    }
+                                })
+                                .catch(error => {
+                                    alert(error);
                                 });
-
-                                if(existing_item_index !== -1) {
-                                    order_items[existing_item_index].qty = Number(order_items[existing_item_index].qty) + 1;
-                                    order_items[existing_item_index].base_price = Number(order_items[existing_item_index].unit_price);
-                                    order_items[existing_item_index].subtotal_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
-                                    order_items[existing_item_index].total_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
-                                } else {
-                                    order_items.push({
-                                        id: null,
-                                        subject_type: this.getCurrentContentTypeOptions().model_class,
-                                        subject_id: item.id,
-                                        name: item.name,
-                                        excerpt: item.excerpt,
-                                        qty: 1,
-                                        unit_price: item.unit_price,
-                                        base_price: item.unit_price,
-                                        subtotal_price: item.unit_price * 1,
-                                        total_price: item.unit_price * 1,
-                                        tax: 0,
-                                        thumbnail: item.thumbnail?.file_name,
-                                    });
-                                }
-                            },
-                            selectContentType(content_type) {
-                                this.content_type = content_type;
-                            },
-                            saveCustomOrderItem(order_item_index = null) {
-                                this.custom_order_item.base_price = Number(this.custom_order_item.unit_price);
-                                this.custom_order_item.subtotal_price = Number(this.custom_order_item.qty) * this.custom_order_item.unit_price;
-                                this.custom_order_item.total_price = Number(this.custom_order_item.qty) * this.custom_order_item.unit_price;
-
-                                {{-- Cuz order_item_index can be 0 -_- --}}
-                                if(order_item_index !== null) {
-                                    order_items[order_item_index] = deep_copy(this.custom_order_item);
-                                } else {
-                                    order_items.push(deep_copy(this.custom_order_item));
-                                }
-
-                                this.reset();
-                                show = false;
-                            },
-                            setCustomOrderItem(order_item_index) {
-                                this.selectContentType('custom');
-                                this.order_item_index = order_item_index;
-                                this.hide_content_selector = true;
-
-                                modal_title = '{{ translate('Edit Order item') }}';
-                                
-                                let order_item = order_items[order_item_index];
-                                
-                                if(order_item !== undefined) {
-                                    this.custom_order_item = deep_copy(order_item);
-                                }
                             }
-                        }"
-                        @display-modal.window="
-                            if($event.detail.id === id && _.get($event, 'detail.order_item_index', null) !== null ) {
-                                setCustomOrderItem(Number($event.detail.order_item_index));
-                            } else if($event.detail.id === id) {
-                                reset();
+                        },
+                        reset() {
+                            this.q = '';
+                            this.results = null;
+
+                            this.order_item_index = null;
+                            this.hide_content_selector = false;
+
+                            this.custom_order_item.id = null;
+                            this.custom_order_item.name = '';
+                            this.custom_order_item.excerpt = '';
+                            this.custom_order_item.quantity = 1;
+                            this.custom_order_item.thumbnail = '';
+                            this.custom_order_item.subject_id = null;
+                            this.custom_order_item.subject_type = null;
+
+                            {{-- Send event to reset attributes form --}}
+                            $dispatch('reset-attributes-form', {form_id: 'custom-order-item-attributes-form'});
+                        },
+                        select(item) {
+                            let existing_item_index = order_items.findIndex(order_item => {
+                                return order_item.subject_type == this.getCurrentContentTypeOptions().model_class && order_item.subject_id == item.id;
+                            });
+
+                            if(existing_item_index !== -1) {
+                                order_items[existing_item_index].quantity = Number(order_items[existing_item_index].quantity) + 1;
+                            } else {
+                                order_items.push({
+                                    id: null,
+                                    subject_type: this.getCurrentContentTypeOptions().model_class,
+                                    subject_id: item.id,
+                                    name: item.name,
+                                    excerpt: item.excerpt,
+                                    quantity: 1,
+                                    thumbnail: item.thumbnail?.file_name,
+                                });
                             }
-                        "
-                        wire:ignore
-                    >
-                        <div class="w-full" x-show="!hide_content_selector">
-                            <fieldset>
-                                <legend class="text-base font-medium text-gray-900">{{ translate('Select a content type') }}</legend>
+                        },
+                        selectContentType(content_type) {
+                            this.content_type = content_type;
+                        },
+                        saveCustomOrderItem(order_item_index = null) {
+                            {{-- Cuz order_item_index can be 0 -_- --}}
+                            if(order_item_index !== null) {
+                                order_items[order_item_index] = deep_copy(this.custom_order_item);
+                            } else {
+                                order_items.push(deep_copy(this.custom_order_item));
+                            }
 
-                                <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
-                                    <template x-for="type in available_content_types">
-                                        <div class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
-                                            :class="{'border-success ring-2 ring-success': content_type === type.slug, 'border-gray-300': content_type !== type.slug}"
-                                            @click="content_type = type.slug; reset()">
-                                            <span class="flex flex-1">
-                                                <span id="project-type-0-label" class="block text-sm font-medium text-gray-900" x-text="type.title"></span>
-                                            </span>
+                            this.reset();
+                            show = false;
+                        },
+                        setCustomOrderItem(order_item_index) {
+                            this.selectContentType('custom');
+                            this.order_item_index = order_item_index;
+                            this.hide_content_selector = true;
 
-                                            <svg class="h-5 w-5 text-success" :class="{'hidden': content_type !== type.slug}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-                                            </svg>
+                            modal_title = '{{ translate('Edit Order item') }}';
+                            
+                            let order_item = order_items[order_item_index];
+                            
+                            if(order_item !== undefined) {
+                                this.custom_order_item = deep_copy(order_item);
+                            }
+                        }
+                    }"
+                    @display-modal.window="
+                        if($event.detail.id === id && _.get($event, 'detail.order_item_index', null) !== null ) {
+                            setCustomOrderItem(Number($event.detail.order_item_index));
+                        } else if($event.detail.id === id) {
+                            reset();
+                        }
+                    "
+                    wire:ignore
+                >
+                    <div class="w-full" x-show="!hide_content_selector">
+                        <fieldset>
+                            <legend class="text-base font-medium text-gray-900">{{ translate('Select a content type') }}</legend>
+
+                            <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+                                <template x-for="type in available_content_types">
+                                    <div class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                                        :class="{'border-success ring-2 ring-success': content_type === type.slug, 'border-gray-300': content_type !== type.slug}"
+                                        @click="content_type = type.slug; reset()">
+                                        <span class="flex flex-1">
+                                            <span id="project-type-0-label" class="block text-sm font-medium text-gray-900" x-text="type.title"></span>
+                                        </span>
+
+                                        <svg class="h-5 w-5 text-success" :class="{'hidden': content_type !== type.slug}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                                        </svg>
 {{--
-                                            <span class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"
-                                                :class="{'border-success': content_type === type.slug, 'border-transparent': content_type !== type.slug}"></span> --}}
-                                        </div>
-                                    </template>
-                                </div>
-                            </fieldset>
-                        </div>
-
-                        <template x-if="content_type == 'product' || content_type == 'product_addon'">
-                            <div class="w-full pt-3 mt-5 border-t">
-                                <div class="w-full pb-3 mb-3">
-                                    <label for="search" class="block text-sm font-medium text-gray-700">{{ translate('Search') }}</label>
-                                    <div class="relative mt-1 flex items-center">
-                                        <input type="text"class="form-standard pr-12" x-model="q">
-                                        <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5" >
-                                            <kbd class="inline-flex items-center rounded border border-gray-200 px-2 font-sans text-sm font-medium text-gray-400 cursor-pointer"
-                                                @click="search()">
-                                                {{ translate('Search') }}
-                                            </kbd>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <template x-if="results">
-                                    <div class="w-full mt-3">
-                                        <ul role="list" class="-my-1 divide-y divide-gray-200 max-h-[545px] overflow-y-auto overflow-x-hidden">
-                                            <template x-for="item in results">
-                                                <li class="py-4">
-                                                    <div class="flex items-center space-x-4">
-                                                      <div class="flex-shrink-0">
-                                                        <img class="h-8 w-8 rounded-full" :src="window.WE.IMG.url(item.thumbnail?.file_name)" alt="">
-                                                      </div>
-                                                      <div class="min-w-0 flex-1">
-                                                        <p class="truncate text-sm font-medium text-gray-900" x-text="item.name"></p>
-                                                        <p class="truncate text-sm text-gray-500" x-text="item.slug"></p>
-                                                      </div>
-                                                      <div>
-                                                        <div @click="select(item); reset(); show = false;" class="cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
-                                                            {{ translate('Select') }}
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                </li>
-                                            </template>
-                                        </ul>
+                                        <span class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"
+                                            :class="{'border-success': content_type === type.slug, 'border-transparent': content_type !== type.slug}"></span> --}}
                                     </div>
                                 </template>
-
-                                {{-- <template x-if="!results">
-
-                                </template> --}}
                             </div>
-                        </template>
+                        </fieldset>
+                    </div>
 
-                        <template x-if="content_type == 'custom'">
-                            <div class="w-full " :class="{hide_content_selector: 'pt-3 mt-5 border-t'}">
-                                <div class="grid grid-cols-12 gap-x-3">
-                                    <div class="col-span-12 flex-col gap-y-2">
-                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                            {{ translate('Name') }}
-                                        </label>
-
-                                        <div class="w-full ">
-                                            <input type="text" class="form-standard" x-model="custom_order_item.name">
-                                        </div>
+                    <template x-if="content_type == 'product' || content_type == 'product_addon'">
+                        <div class="w-full pt-3 mt-5 border-t">
+                            <div class="w-full pb-3 mb-3">
+                                <label for="search" class="block text-sm font-medium text-gray-700">{{ translate('Search') }}</label>
+                                <div class="relative mt-1 flex items-center">
+                                    <input type="text"class="form-standard pr-12" x-model="q">
+                                    <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5" >
+                                        <kbd class="inline-flex items-center rounded border border-gray-200 px-2 font-sans text-sm font-medium text-gray-400 cursor-pointer"
+                                            @click="search()">
+                                            {{ translate('Search') }}
+                                        </kbd>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div class="col-span-12 flex-col gap-y-2">
-                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                            {{ translate('Description') }}
-                                        </label>
+                            <template x-if="results">
+                                <div class="w-full mt-3">
+                                    <ul role="list" class="-my-1 divide-y divide-gray-200 max-h-[545px] overflow-y-auto overflow-x-hidden">
+                                        <template x-for="item in results">
+                                            <li class="py-4">
+                                                <div class="flex items-center space-x-4">
+                                                    <div class="flex-shrink-0">
+                                                    <img class="h-8 w-8 rounded-full" :src="window.WE.IMG.url(item.thumbnail?.file_name)" alt="">
+                                                    </div>
+                                                    <div class="min-w-0 flex-1">
+                                                    <p class="truncate text-sm font-medium text-gray-900" x-text="item.name"></p>
+                                                    <p class="truncate text-sm text-gray-500" x-text="item.slug"></p>
+                                                    </div>
+                                                    <div>
+                                                    <div @click="select(item); reset(); show = false;" class="cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
+                                                        {{ translate('Select') }}
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
 
-                                        <div class="w-full ">
-                                            <input type="text" class="form-standard  " x-model="custom_order_item.excerpt">
-                                        </div>
+                            {{-- <template x-if="!results">
+
+                            </template> --}}
+                        </div>
+                    </template>
+
+                    <template x-if="content_type == 'custom'">
+                        <div class="w-full " :class="{hide_content_selector: 'pt-3 mt-5 border-t'}">
+                            <div class="grid grid-cols-12 gap-x-3">
+                                <div class="col-span-12 flex-col gap-y-2">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Name') }}
+                                    </label>
+
+                                    <div class="w-full ">
+                                        <input type="text" class="form-standard" x-model="custom_order_item.name">
                                     </div>
+                                </div>
 
-                                    <div class="col-span-8 flex-col gap-y-2">
-                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                            {{ translate('Unit Price') }}
-                                        </label>
+                                <div class="col-span-12 flex-col gap-y-2">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Description') }}
+                                    </label>
 
-                                        <div class="w-full ">
-                                            <input type="number" class="form-standard  " x-model="custom_order_item.unit_price">
-                                        </div>
+                                    <div class="w-full ">
+                                        <input type="text" class="form-standard  " x-model="custom_order_item.excerpt">
                                     </div>
+                                </div>
 
-                                    <div class="col-span-4 flex-col gap-y-2">
-                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                            {{ translate('Quantity') }}
-                                        </label>
+                                <div class="col-span-4 flex-col gap-y-2">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Quantity') }}
+                                    </label>
 
-                                        <div class="w-full ">
-                                            <input type="number" class="form-standard  " x-model="custom_order_item.qty">
-                                        </div>
+                                    <div class="w-full ">
+                                        <input type="number" class="form-standard  " min="1" x-model="custom_order_item.quantity">
                                     </div>
+                                </div>
 
-                                    {{-- Attributes Divider --}}
-                                    <div class="col-span-12 relative py-5">
-                                        <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                          <div class="w-full border-t border-gray-300"></div>
-                                        </div>
-                                        <div class="relative flex justify-center">
-                                          <button type="button" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                            <span>{{ translate('Attributes') }}</span>
-                                          </button>
-                                        </div>
+                                {{-- Attributes Divider --}}
+                                <div class="col-span-12 relative py-5">
+                                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                        <div class="w-full border-t border-gray-300"></div>
                                     </div>
-
-                                    <div class="col-span-12 ">
-                                        <x-dashboard.form.blocks.attributes-selection-form
-                                            form-id="custom-order-item-form"
-                                            attributes-field="custom_order_item.custom_attributes" 
-                                            selected-attributes-field="custom_order_item.selected_attribute_values"
-                                            :no-variations="true">
-
-                                        </x-dashboard.form.blocks.attributes-selection-form>
-                                    </div>
-
-                                    <div class="col-span-12 flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2">
-                                        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="saveCustomOrderItem(order_item_index)" >
-                                            {{ translate('Save Custom Item') }}
+                                    <div class="relative flex justify-center">
+                                        <button type="button" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                        <span>{{ translate('Attributes') }}</span>
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                        </template>
 
-                    </div>
-                </x-system.form-modal>
-                {{-- END OrderItem selector modal --}}
-            </div>
-        @endif
+                                <div class="col-span-12 ">
+                                    <x-dashboard.form.blocks.attributes-selection-form
+                                        form-id="custom-order-item-attributes-form"
+                                        attributes-field="custom_order_item.custom_attributes" 
+                                        selected-attributes-field="custom_order_item.selected_attribute_values"
+                                        :no-variations="true">
+
+                                    </x-dashboard.form.blocks.attributes-selection-form>
+                                </div>
+
+                                <div class="col-span-12 flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2">
+                                    <button type="button" class="btn btn-primary ml-auto btn-sm" @click="saveCustomOrderItem(order_item_index)" >
+                                        {{ translate('Save Custom Item') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+            </x-system.form-modal>
+            {{-- END OrderItem selector modal --}}
+        </div>
 
 
     </div>
@@ -974,17 +967,8 @@
         
             <div class="mt-4">
                 <button class="btn-primary text-center justify-center w-full bg-red-500 text-white" 
-                        @click="
-                            $wire.set('order.phone_numbers', phoneNumbers, true);
-                            $wire.set('order.billing_country', billingCountry, true);
-                            $wire.set('order.shipping_country', shippingCountry, true);
-                            $wire.set('selected_payment_method', selected_payment_method, true);
-                            $wire.set('order.same_billing_shipping', same_billing_shipping, true);
-                            $wire.set('order.buyers_consent', buyers_consent, true);
-                            $wire.set('selected_billing_address_id', selected_billing_address_id || -1, true);
-                            $wire.set('selected_shipping_address_id', selected_shipping_address_id || -1, true);
-                        "
-                        wire:click="pay()"
+                        @click="save()"
+                        wire:click="requestQuote()"
                         wire:loading.class="bg-gray-100 text-gray-900 pointer-events-none">
                     <span wire:loading.class="hidden">{{ translate('Request a quote') }}</span>
                     @svg('lineawesome-spinner-solid', ['class'=> 'hidden w-[20px] h-[20px] animate-spin text-gray-900', 'wire:loading.class.remove' => 'hidden', 'wire:loading.class' => 'inline'])

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\UploadTrait;
+use App\Traits\GalleryTrait;
 use App\Traits\AttributeTrait;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\OrderItem
@@ -11,6 +13,8 @@ use App\Traits\AttributeTrait;
 class OrderItem extends WeBaseModel
 {
     use AttributeTrait;
+    use UploadTrait;
+    use GalleryTrait;
 
     protected $table = 'order_items';
 
@@ -33,6 +37,11 @@ class OrderItem extends WeBaseModel
     public function subject()
     {
         return $this->morphTo('subject');
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [];
     }
 
 //    public function pickup_point()

@@ -160,6 +160,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         }
 
         if (function_exists('add_action')) {
+            add_action('request-quote.insert', function (&$order) {
+                $order->setWEF('cycle_status', 0); // 0 is 'request'
+                $order->setWEF('cycle_step_date_request', time());
+            }, 10, 1);
+
             add_action('view.order-form.wire_set', function () {
                 js_wire_set('wef.cycle_status', 'wef.cycle_status');
             });

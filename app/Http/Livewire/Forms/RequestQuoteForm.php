@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Address;
 use App\Models\Invoice;
+use App\Models\Product;
 use Livewire\Component;
 use App\Models\OrderItem;
 use LVR\CreditCard\CardCvc;
@@ -23,9 +24,11 @@ use Illuminate\Validation\Rule;
 use App\Enums\PaymentStatusEnum;
 use App\Traits\Livewire\RulesSets;
 use Illuminate\Support\Collection;
+use App\Traits\Livewire\HasCoreMeta;
 use Illuminate\Support\Facades\Hash;
 use App\Enums\ShippingStatusTypeEnum;
 use App\Models\PaymentMethodUniversal;
+use App\Traits\Livewire\HasAttributes;
 use LVR\CreditCard\CardExpirationDate;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Contracts\Support\Arrayable;
@@ -35,8 +38,10 @@ class RequestQuoteForm extends Component
 {
     use RulesSets;
     use DispatchSupport;
+    use HasCoreMeta;
+    use HasAttributes;
 
-    public $items = [];
+    public $order_items = [];
 
     public $order;
 
@@ -68,8 +73,8 @@ class RequestQuoteForm extends Component
     protected function rulesSets()
     {
         return [
-            'items' => [
-                'items.*' => [''],
+            'order_items' => [
+                'order_items' => ['nullable'],
             ],
             'main' => [
                 'order.email' => 'required|email:rfc,dns',
@@ -83,6 +88,8 @@ class RequestQuoteForm extends Component
                 'selected_payment_method' => ['required', Rule::in(PaymentMethodUniversal::$available_gateways)],
                 'checkout_newsletter' => 'nullable',
                 'selected_billing_address_id' => '',
+                'manual_mode_billing' => 'nullable',
+                'manual_mode_shipping' => 'nullable',
             ],
             'account_creation' => [
                 'account_password' => 'required|confirmed|min:6',
@@ -160,6 +167,14 @@ class RequestQuoteForm extends Component
         ];
     }
 
+    public function getWEFRules() {
+        return apply_filters('tenant.request-quote.rules.wef', []);
+    }
+
+    public function getWEFMessages() {
+        return apply_filters('tenant.request-quote.messages.wef', []);
+    }
+
     /**
      * Create a new component instance.
      *
@@ -174,7 +189,7 @@ class RequestQuoteForm extends Component
         $this->order->shop_id = 1;
 
         // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
-        // $this->order->shop_id = ($this->items->first()?->shop_id ?? 1);
+        // $this->order->shop_id = ($this->order_items->first()?['shop_id'] ?? 1);
 
         $this->order->type = OrderTypeEnum::standard()->value;
         $this->order->same_billing_shipping = true;
@@ -185,6 +200,8 @@ class RequestQuoteForm extends Component
             $this->order->billing_first_name = auth()->user()->name;
             $this->order->billing_last_name = auth()->user()?->name;
         }
+
+        $this->initCoreMeta($this->order);
 
         $this->manual_mode_billing = ! \Auth::check();
         $this->manual_mode_shipping = ! \Auth::check();
@@ -209,27 +226,30 @@ class RequestQuoteForm extends Component
         }
 
         // Create OrderItems
-        $this->items =  new \App\Support\Eloquent\Collection();
+        $this->order_items = [];
         $cart_items = CartService::getItems();
+
+        $fake_product = new Product();
+        $this->refreshAttributes($fake_product);
 
         if($cart_items) {
             foreach($cart_items as $key => $item) {
-                $order_item = new OrderItem();
-                $order_item->order_id = $this->order->id;
-                $order_item->subject_type = $item::class;
-                $order_item->subject_id = $item->id;
-                $order_item->name = ($item?->is_variation ?? false) ? $item->main->name : $item->name;
-                $order_item->excerpt = ($item?->is_variation ?? false) ? $item->main->excerpt : $item->excerpt;
-                $order_item->variant = ($item?->is_variation ?? false) ? $item->getVariantName(key_by: 'name') : null;
-                $order_item->quantity = ! empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
-                $order_item->base_price = $item->base_price; // it's like a unit_price
-                $order_item->discount_amount = $order_item->quantity * ($item->base_price - $item->total_price);
-                $order_item->subtotal_price = $order_item->quantity * $item->total_price;
-                $order_item->total_price = $order_item->quantity * $item->total_price;
+                // $item is Product here (or any other purchasable model from Cart)
+                $custom_attributes = [];
+                $selected_predefined_attribute_values = [];
+                self::initAttributes($item, $custom_attributes, $selected_predefined_attribute_values, $item::class);
 
-                $order_item->load('subject');
-                
-                $this->items->push($order_item);
+                $this->order_items[] = [
+                    'id' => $item->id,
+                    'subject_type' => base64_encode($item::class),
+                    'subject_id' => $item->id ?? null,
+                    'name' => $item->name,
+                    'excerpt' => $item->excerpt,
+                    'quantity' => $item->purchase_quantity,
+                    'thumbnail' => $item?->thumbnail?->file_name ?? '',
+                    'custom_attributes' => $custom_attributes,
+                    'selected_attribute_values' => $selected_predefined_attribute_values,
+                ];
             }
         }
     }
@@ -292,10 +312,8 @@ class RequestQuoteForm extends Component
         return $rules;
     }
 
-    public function pay()
+    public function requestQuote()
     {
-        $this->items = CartService::getItems();
-
         try {
             $this->validate($this->getSpecificRules());
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -320,7 +338,7 @@ class RequestQuoteForm extends Component
                     // There is a user under given Email AND passwords match -> LOG IN USER
                     auth()->login($user, true); // log the user in
                 } else {
-                    // Create user 'cuz there's no user under this email and password validation passed
+                    // Create ghost-user 'cuz there's no user under this email and password validation passed
 
                     // TODO: Move to some RegistrationService or something so we can reuse it throughout the app!
 
@@ -366,27 +384,14 @@ class RequestQuoteForm extends Component
             }
 
             // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
-            $this->order->shop_id = $this->items->first()->shop_id;
-            $this->order->user_id = auth()->user()->id ?? null;
+            $this->order->shop_id = 1;
+            $this->order->user_id = auth()->user()?->id ?? null;
 
-            // TODO: THIS IS ALSO VERY IMPORTANT - Separate $items based on type - is it a subscription or a standard product...or installment?
-
-            if ($this->items->first() instanceof Plan) {
-                /*
-                * Invoicing data for SUBSCRIPTIONS/PLANS or INCREMENTAL orders
-                */
-                $this->order->type = OrderTypeEnum::subscription()->value;
-                $this->order->number_of_invoices = -1; // 'unlimited' for subscriptions
-                $this->order->invoicing_period = 'month'; // TODO: Add monthly/annual switch
-                $this->order->invoice_grace_period = 0;
-                $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
-            } else {
-                $this->order->type = OrderTypeEnum::standard()->value;
-                $this->order->number_of_invoices = 1; // 1 for one-time payment
-                $this->order->invoicing_period = null;
-                $this->order->invoice_grace_period = $default_grace_period;
-                $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts? NOW!
-            }
+            $this->order->type = OrderTypeEnum::standard()->value;
+            $this->order->number_of_invoices = 1;
+            $this->order->invoicing_period = null;
+            $this->order->invoice_grace_period = $default_grace_period;
+            $this->order->invoicing_start_date = 0; // when invoicing starts? NOW!
 
             /*
             * Billing data (when Address is selected)
@@ -442,96 +447,44 @@ class RequestQuoteForm extends Component
             /*
              * Create OrderItem(s)
              */
-            foreach ($this->items as $item) {
+            foreach ($this->order_items as $item) {
                 $order_item = new OrderItem();
                 $order_item->order_id = $this->order->id;
-                $order_item->subject_type = $item::class;
-                $order_item->subject_id = $item->id;
-                $order_item->name = ($item?->is_variation ?? false) ? $item->main->name : $item->name;
-                $order_item->excerpt = ($item?->is_variation ?? false) ? $item->main->excerpt : $item->excerpt;
-                $order_item->variant = ($item?->is_variation ?? false) ? $item->getVariantName(key_by: 'name') : null;
-                $order_item->quantity = ! empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
+                $order_item->subject_type = empty($item['subject_type'] ?? null) ? null : base64_decode($item['subject_type']);
+                $order_item->subject_id = $item['subject_id'] ?? null;
+                $order_item->name = $item['name'];
+                $order_item->excerpt = $item['excerpt'];
+                $order_item->variant = $item['variant'] ?? null;
+                $order_item->quantity = $item['quantity'];
 
-                // Check if $item has stock and reduce it if it does (ONLY IF TRACK_INVENTORY is TRUE)
-                if ($item->track_inventory && method_exists($item, 'stock')) {
-                    // Reduce the stock quantity of an $item
-                    $serial_numbers = $item->reduceStock();
-
-                    // Serial Numbers only work for Simple Products.
-                    // TODO: Make Product Variations support serial numbers!
-                    if ($item->use_serial) {
-                        $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $item uses serials
-                    } else {
-                        $order_item->serial_numbers = null;
-                    }
-                }
-
-                $order_item->base_price = $item->base_price; // it's like a unit_price
-                $order_item->discount_amount = $order_item->quantity * ($item->base_price - $item->total_price);
-                $order_item->subtotal_price = $order_item->quantity * $item->total_price;
-                $order_item->total_price = $order_item->quantity * $item->total_price;
-                $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
+                $order_item->base_price = 0; // it's like a unit_price
+                $order_item->discount_amount = 0;
+                $order_item->subtotal_price = 0;
+                $order_item->total_price = 0;
+                $order_item->tax = 0;
 
                 $order_item->save();
+
+                // Define custom_attributes for each $item
+                $item_attributes = $item['custom_attributes'];
+                $selected_attribute_values = $item['selected_attribute_values'];
+                $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_attribute_values']); // set attributes to OrderItem
             }
 
-            /*
-             * Create Invoice
-             */
-            $invoice = new Invoice();
+            $this->order->load('order_items');
 
-            $invoice->order_id = $this->order->id;
-            $invoice->shop_id = $this->order->shop_id;
-            $invoice->user_id = $this->order->user_id;
-            $invoice->is_temp = false;
-            $invoice->mode = 'live';
-            $invoice->payment_method_type = PaymentMethodUniversal::class;
-            $invoice->payment_method_id = $payment_method->id ?? null;
-            $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
-            // $invoice->invoice_number = Invoice::generateInvoiceNumber($this->order->billing_first_name, $this->order->billing_last_name, $this->order->billing_company); // Default: VJ21012022
-
-            $invoice->email = $this->order->email;
-            $invoice->billing_first_name = $this->order->billing_first_name;
-            $invoice->billing_last_name = $this->order->billing_last_name;
-            $invoice->billing_company = $this->order->billing_company;
-            $invoice->billing_address = $this->order->billing_address;
-            $invoice->billing_country = $this->order->billing_country;
-            $invoice->billing_state = $this->order->billing_state;
-            $invoice->billing_city = $this->order->billing_city;
-            $invoice->billing_zip = $this->order->billing_zip;
-
-            // Take invoice totals from Cart
-            $invoice->base_price = CartService::getOriginalPrice()['raw'];
-            $invoice->discount_amount = CartService::getDiscountAmount()['raw'];
-            $invoice->subtotal_price = CartService::getSubtotalPrice()['raw'];
-            $invoice->total_price = CartService::getSubtotalPrice()['raw']; // should be TotalPrice in future...
-
-            $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
-            $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
-
-            // TODO: Add Shop Settings for general due_date and grace_period
-            // TODO: Trial can determine invoicing start_date because trial can append X days on top of current date-time, so invoicing starts on e.g. 15 days from current date, or 30 or X
-            $invoice->start_date = $this->order->invoicing_start_date; // current unix_timestamp (for non-trial plans)
-            $invoice->due_date = null; // Default due_date is NULL days for subscription (if not trial mode, if it's trial it's null)
-            $invoice->grace_period = $this->order->invoice_grace_period; // NULL; or 5 days grace_period by default
-
-            $invoice->setInvoiceNumber();
-
-            $invoice->save();
+            do_action('request-quote.insert', $this->order);
 
             DB::commit();
-
-            $this->executePayment(request(), $invoice->id);
-
 
             // Full cart reset
             CartService::fullCartReset();
 
-            return redirect()->route('checkout.order.received', $this->order->id);
+            return redirect()->route('quote.received', $this->order->id);
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            $this->dispatchGeneralError(translate('There was an error while processing the order...Please try again.'));
+            $this->dispatchGeneralError(translate('There was an error while processing "Request a quote" action...Please try again.'));
             dd($e);
         }
     }
