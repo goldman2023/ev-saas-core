@@ -1,5 +1,5 @@
 <div class="card mb-9 !p-4 !pt-2">
-    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+    <div class="mb-0 border-b border-gray-200 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab"
             data-tabs-toggle="#order-queues-tabs-content" role="tablist">
             <li class="mr-2" role="presentation">
@@ -9,17 +9,15 @@
                     {{ translate('Delivery') }}
 
                     @if($order->tasks->where('type', 'delivery')->count() > 0)
-
-
-                    <span class="ml-2 badge-success">
-                        <svg class="h-2 w-2 text-green-800" fill="currentColor" viewBox="0 0 8 8">
-                            <circle cx="4" cy="4" r="3" />
-                        </svg>
-                        <span class="sr-only">
-                            {{ \Str::headline($order->tasks->where('type',
-                            'delivery')->first()->status) }}
+                        <span class="ml-2 badge-success">
+                            <svg class="h-2 w-2 text-green-800" fill="currentColor" viewBox="0 0 8 8">
+                                <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            <span class="sr-only">
+                                {{ \Str::headline($order->tasks->where('type',
+                                'delivery')->first()->status) }}
+                            </span>
                         </span>
-                    </span>
                     @endif
                 </button>
             </li>
@@ -108,7 +106,7 @@
         <div class="hidden rounded-lg bg-gray-50 dark:bg-gray-800" id="order-queues-tab-printing-content"
             role="tabpanel">
             <div class="w-full">
-                <div class="w-full pb-3 mb-2 border-b ">
+                <div class="w-full py-3 mb-2 border-b ">
                     @if($order->tasks->where('type', 'printing')->count() > 0)
                     <p class="p-2 mt-1 max-w-2xl text-sm text-gray-500 font-semibold flex align-center">
                         @svg('heroicon-o-check-circle', ['class' => 'inline mr-1.5 h-5 w-5 flex-shrink-0
