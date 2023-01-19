@@ -157,9 +157,19 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'wef.cycle_status' => 'required',
                 ]);
             });
+
+            // Dynamic Livewire Actions - TODO: // Move this to dedicated file and include it via calling a function from WeThemeFunctionsServiceProvider - it needs to be standardized
+            add_filter('livewire.forms.dynamic-actions.list', function () {
+                return define_livewire_dynamic_actions(); 
+            });
         }
 
         if (function_exists('add_action')) {
+            add_action('request-quote.insert', function (&$order) {
+                $order->setWEF('cycle_status', 0); // 0 is 'request'
+                $order->setWEF('cycle_step_date_request', time());
+            }, 10, 1);
+
             add_action('view.order-form.wire_set', function () {
                 js_wire_set('wef.cycle_status', 'wef.cycle_status');
             });
@@ -170,6 +180,13 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     echo view('frontend.partials.we-media-editor-other-information', compact('upload', 'subject'));
                 }
             }, 10, 2);
+
+            add_action('view.dashboard.we-media-editor.custom-actions', function ($form) {
+                if (\View::exists('frontend.partials.we-media-editor-custom-actions')) {
+                    echo view('frontend.partials.we-media-editor-custom-actions', compact('form'));
+                }
+            }, 10, 2);
+
 
             // Add Order Cycle Status metabox at the TOP RIGHT side of the order-form
             add_action('view.dashboard.form.order.right.start', function ($order) {

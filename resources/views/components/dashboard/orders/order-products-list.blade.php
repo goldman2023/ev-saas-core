@@ -9,25 +9,27 @@
                     <div
                         class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 border border-gray-200 shadow">
                         @if(!empty($item?->subject))
-                        <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
-                            class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+                            <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
+                                class="w-full h-full object-center object-cover sm:w-full sm:h-full">
                         @endif
                     </div>
 
                     <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6">
                         <h3 class="text-base font-bold text-lg text-gray-900">
-                            @empty($item->subject->getPermalink())
-                            {{ $item->name }}
-
-                            @else
-
-                            <a href="{{ $item->subject->getPermalink() }}" target="_blank">
+                            @empty($item->subject?->getPermalink() ?? null)
                                 {{ $item->name }}
-                            </a>
+                            @else
+                                <a href="{{ $item->subject->getPermalink() }}" target="_blank">
+                                    {{ $item->name }}
+                                </a>
                             @endempty
                         </h3>
+                        <p class="mt-3 text-sm text-gray-500">
+                            {{ translate('Serial number: ')}}
 
-                        <p class="mt-3 text-sm text-gray-500">{!! $item->excerpt !!}</p>
+                            {!! sprintf("%06d", $item->order->id) !!}</p>
+
+                        {{-- <p class="mt-3 text-sm text-gray-500">{!! $item->excerpt !!}</p> --}}
 
                         <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6 mt-5">
 

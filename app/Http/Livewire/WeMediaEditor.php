@@ -10,10 +10,12 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Support\Facades\Validator;
+use App\Traits\Livewire\HasDynamicActions;
 
 class WeMediaEditor extends Component
 {
     use DispatchSupport;
+    use HasDynamicActions;
 
     protected $paginator;
 
@@ -54,6 +56,11 @@ class WeMediaEditor extends Component
         $this->displayModal = false;
         $this->containerClass = 'fixed z-[10000] inset-0 overflow-y-auto';
         $this->wrapperClass = 'fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity';
+    }
+
+    public function dehydrate()
+    {
+        $this->dispatchBrowserEvent('reload-media-editor-preview');
     }
 
     public function render()

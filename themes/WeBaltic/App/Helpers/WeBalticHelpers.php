@@ -4,11 +4,17 @@ use App\Models\OrderItem;
 
 function generate_vin_code($item)
 {
-    $product = $item->get_primary_order_item()->subject;
+    // Since each OrderItem has copies of attributes of each linked product or "custom product", we should get the attributes from OrderItem itself - that's the main source of truth
+
+    $order_item = $item->get_primary_order_item();
+    if(empty($order_item)) {
+        return null;
+    }
+
     $vin_code = 'Z3E';
     $vin_code .= 'L';
-    if ($body_type = $product->getAttr(25)) {
-        $body_type = $product->getAttr(25)->attribute_values->first()->values;
+    if ($body_type = $order_item?->getAttr(25)) {
+        $body_type = $order_item->getAttr(25)->attribute_values->first()->values;
     } else {
         $body_type = 'X';
     }
@@ -34,8 +40,8 @@ function generate_vin_code($item)
         $vin_code .= 'S';
     }
 
-    if ($product->getAttr(6)) {
-        $total_weight = $product->getAttr(6)->attribute_values->first()->values;
+    if ($order_item->getAttr('priekabos-bendroji-mase')) {
+        $total_weight = $order_item->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
     } else {
         $total_weight = 0;
     }
@@ -51,8 +57,8 @@ function generate_vin_code($item)
     }
 
     /* Axel Count */
-    if ($product->getAttr(11)) {
-        $axel_count = $product->getAttr(11)->attribute_values->first()->values;
+    if ($order_item->getAttr(11)) {
+        $axel_count = $order_item->getAttr(11)->attribute_values->first()->values;
     } else {
         $axel_count = 0;
     }
@@ -101,9 +107,10 @@ function generate_vin_code($item)
     /* Keliu inspekcijos kodas */
     // $vin_code .= '020';
 
+    return 'Incomplete Data';
 
     /* Serial number */
-    $vin_code .= generate_serial_number($product, $item);
+    $vin_code .= generate_serial_number($order_item, $item);
 
     if (strlen($vin_code) == 17) {
         $controll_number = vin_control_number($vin_code);
@@ -154,19 +161,26 @@ function vin_control_number($vin)
     }
 }
 
-function generate_serial_number($product, $order)
+function generate_serial_number($order_item, $order)
 {
-
-    $count_in_orders = OrderItem::where('subject_id', $product->id)->orderBy('order_id')->get();
-
-    foreach ($count_in_orders as $key => $order_item) {
-        if ($order_item->order_id == $order->id) {
-            $serial_number = $key;
-        }
+    if(empty($order_item->subject)) {
+        $serial_number = 0;
+    } else {
+        $serial_number = $order->id;
     }
 
     $serial_number = sprintf("%06d", $serial_number + 1); // 001234
-    $product->setWEF('serial_order_number', $serial_number, 'string'); // set WEF
+    $order_item->setWEF('serial_order_number', $serial_number, 'string'); // set WEF
 
     return $serial_number;
+}
+
+function define_livewire_dynamic_actions() {
+    $list = [];
+
+    $list['regenerate_document'] = function(&$form) {
+        return lda_regenerate_document($form);
+    };
+
+    return $list;
 }

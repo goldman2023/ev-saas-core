@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Dashboard\Orders;
+namespace WeThemes\WeBaltic\App\View\Components\Dashboard\Orders;
 
 use Illuminate\View\Component;
 

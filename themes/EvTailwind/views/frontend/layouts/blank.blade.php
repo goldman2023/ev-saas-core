@@ -6,10 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
     <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
-    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
+    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">    
+    <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
+    <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
+    <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('meta')
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel='canonical' href='@yield(' canonical_link', url()->current() )' />
+    <link rel="preload" as="script" href="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp" />
 
     <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
 
@@ -17,10 +22,12 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js', 'themes/EvTailwind') }}" defer></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     @include('frontend.layouts.global-partials.all')
 

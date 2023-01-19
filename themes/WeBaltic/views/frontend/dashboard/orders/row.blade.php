@@ -23,7 +23,9 @@
                 width="50" height="50" alt="" />
             <strong class="text-md">
                 {{ $row->get_primary_order_item()->subject->name }}
-                <span class="font-normal"> <br> {{ translate('Order') }} #{{ $row->id }} </span>
+                <span class="font-normal"> <br>
+
+                    {{ translate('Serial Number') }} #{{ sprintf("%06d", $row->id)  }} </span>
             </strong>
 
         </a>

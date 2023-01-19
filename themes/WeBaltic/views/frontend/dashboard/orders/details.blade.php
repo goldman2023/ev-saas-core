@@ -87,7 +87,7 @@
     {{ Breadcrumbs::render('dashboard.orders', $order) }}
 </div>
 
-<x-theme::orders.order-steps :order="$order"></x-theme::dashboard.orders.order-steps>
+<x-theme::dashboard.orders.order-steps :order="$order"></x-theme::dashboard.orders.order-steps>
 
 <div class="grid sm:grid-cols-12 gap-9">
     {{-- Right/Sidebar --}}
@@ -161,30 +161,6 @@
                         </time>
                     </div>
 
-                    {{-- <div>
-                        <div class="atcb" style="display:none;">
-                            {
-                            "name":"{{ translate('Order') }} {{ $order->id }}",
-                            "description":"{{ translate('Order notification') }}",
-                            "startDate":"{{ date('Y-m-d', $order->getCoreMeta('start_date')) }}",
-                            "endDate":"{{ date('Y-m-d', $order->getCoreMeta('start_date')) }}",
-                            "startTime":"{{ date('H:i', $order->getCoreMeta('start_date')) }}",
-                            "endTime":"{{ date('H:i', $order->getCoreMeta('end_date')) }}",
-                            "label":"{{ translate('Add to Calendar') }}",
-                            "options":[
-                            "Apple",
-                            "Google",
-                            "iCal",
-                            "Microsoft365",
-                            ],
-                            "timeZone":"{{ date_default_timezone_get() }}",
-                            "timeZoneOffset":"{{ date('P') }}",
-                            "trigger":"click",
-                            "iCalFileName":"Order-{{ $order->id }}"
-                            }
-                        </div>
-                    </div> --}}
-
                     <div class="hidden">
                         {{-- TODO: Make invoice generation posible --}}
                         <a href="#" class=" text-sm font-medium text-indigo-600 hover:text-indigo-500 ">
@@ -196,12 +172,12 @@
 
                 <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
                     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab"
-                        data-tabs-toggle="#myTabContent" role="tablist">
+                        data-tabs-toggle="#order-tabs-content" role="tablist">
                         <li class="mr-2" role="presentation">
                             <button
                                 class="inline-block p-4 rounded-t-lg border-b-2 text-blue-600 hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-500 border-blue-600 dark:border-blue-500"
-                                id="profile-tab" data-tabs-target="#profile" type="button" role="tab"
-                                aria-controls="profile" aria-selected="true">
+                                id="order-details-tab" data-tabs-target="#order-details-content" type="button" role="tab"
+                                aria-controls="#order-details-content" aria-selected="true">
                                 {{ translate('Details') }}
                             </button>
                         </li>
@@ -209,8 +185,8 @@
                         <li class="mr-2" role="presentation">
                             <button
                                 class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                                id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab"
-                                aria-controls="dashboard" aria-selected="false">
+                                id="order-documents-tab" data-tabs-target="#order-documents-content" type="button" role="tab"
+                                aria-controls="order-documents-content" aria-selected="false">
                                 {{ translate('Documents') }}
                             </button>
                         </li>
@@ -218,8 +194,8 @@
                         <li class="mr-2" role="presentation">
                             <button
                                 class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                                id="manufacturing-tab" data-tabs-target="#manufacturing" type="button" role="tab"
-                                aria-controls="dashboard" aria-selected="false">
+                                id="order-manufacturing-tab" data-tabs-target="#order-manufacturing-content" type="button" role="tab"
+                                aria-controls="order-manufacturing-content" aria-selected="false">
                                 {{ translate('Manufacturing') }}
                             </button>
                         </li>
@@ -228,28 +204,28 @@
                         <li class="mr-2" role="presentation">
                             <button
                                 class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                                id="settings-tab" data-tabs-target="#settings" type="button" role="tab"
-                                aria-controls="settings" aria-selected="false">
+                                id="order-history-tab" data-tabs-target="#order-history-content" type="button" role="tab"
+                                aria-controls="order-history-content" aria-selected="false">
                                 {{ translate('History') }}
                             </button>
                         </li>
                         <li role="presentation">
                             <button
                                 class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
-                                id="contacts-tab" data-tabs-target="#contacts" type="button" role="tab"
-                                aria-controls="contacts" aria-selected="false">
+                                id="order-actions-tab" data-tabs-target="#order-actions-content" type="button" role="tab"
+                                aria-controls="order-actions-content" aria-selected="false">
                                 {{ translate('Actions') }}
                             </button>
                         </li>
                     </ul>
                 </div>
-                <div id="myTabContent">
+                <div id="order-tabs-content">
                     {{-- <div class="card mb-3">
                         <x-dashboard.orders.order-documents-list :order="$order">
                         </x-dashboard.orders.order-documents-list>
                     </div> --}}
 
-                    <div class="rounded-lg dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="rounded-lg dark:bg-gray-800" id="order-details-content" role="tabpanel" aria-labelledby="order-details-tab">
                         <div class="mb-6">
                             <x-dashboard.orders.order-products-list :order="$order" :orderItems="$order_items">
                             </x-dashboard.orders.order-products-list>
@@ -261,8 +237,8 @@
                         </div>
 
                     </div>
-                    <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="dashboard" role="tabpanel"
-                        aria-labelledby="dashboard-tab">
+                    <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="order-documents-content" role="tabpanel"
+                        aria-labelledby="order-documents-tab">
 
                         <div class="card mb-6 !pb-6">
                             <div class="border-b border-gray-200 bg-white pb-3 mb-4">
@@ -286,14 +262,14 @@
                             :show-per-page="false" :show-search="false" :column-select="false" />
                     </div>
 
-                    <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="manufacturing" role="tabpanel"
-                        aria-labelledby="manufacturing-tab">
-                        <x-dashboard.orders.manufacturing-details :order="$order"></x-dashboard.orders.manufacturing-details>
+                    <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="order-manufacturing-content" role="tabpanel"
+                        aria-labelledby="order-manufacturing-tab">
+                        <x-theme::dashboard.orders.manufacturing-details :order="$order"></x-theme::dashboard.orders.manufacturing-details>
 
                     </div>
 
-                    <div class="hidden dark:bg-gray-800" id="settings" role="tabpanel"
-                        aria-labelledby="settings-tab">
+                    <div class="hidden dark:bg-gray-800" id="order-history-content" role="tabpanel"
+                        aria-labelledby="order-history-tab">
 
                         <div class="grid grid-cols-2 gap-6">
                             <div class="card mb-9">
@@ -305,7 +281,7 @@
                                     </p>
                                 </div>
 
-                                <x-theme::orders.order-timeline :order="$order"></x-theme::dashboard.orders.order-timeline>
+                                <x-theme::dashboard.orders.order-timeline :order="$order"></x-theme::dashboard.orders.order-timeline>
                             </div>
 
                             @livewire('dashboard.elements.activity-log',
@@ -317,8 +293,9 @@
 
 
                     </div>
-                    <div class="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="contacts" role="tabpanel"
-                        aria-labelledby="contacts-tab">
+
+                    <div class="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="order-actions-content" role="tabpanel"
+                        aria-labelledby="order-actions-tab">
                         <ul role="list" class="-my-4 divide-y divide-gray-200">
                             <li class="flex items-center space-x-3 py-4">
                                 <div class="flex-shrink-0">

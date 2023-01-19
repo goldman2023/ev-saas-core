@@ -126,6 +126,8 @@ trait AttributeTrait
 
         if(is_int($slug_or_id) || ctype_digit($slug_or_id)) {
             return $this->custom_attributes->firstWhere('id', (int) $slug_or_id);
+        } else if(is_string($slug_or_id)) {
+            return $this->custom_attributes->firstWhere('slug', $slug_or_id);
         }
 
         return $this->custom_attributes->firstWhere('identificator', $slug_or_id.'|'.$content_type);

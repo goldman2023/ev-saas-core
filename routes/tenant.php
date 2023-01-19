@@ -202,11 +202,10 @@ Route::middleware([
         Route::get('/checkout-single', [CheckoutController::class, 'single'])->name('checkout.single.page');
 
         Route::get('/order/{id}/canceled', [CheckoutController::class, 'orderCanceled'])->name('checkout.order.canceled');
-
-        Route::get('/request-quote', [QuotesController::class, 'create'])->name('quote.create');
     });
     Route::get('/order/{id}/received', [CheckoutController::class, 'orderReceived'])->name('checkout.order.received');
-
+    Route::get('/request-quote', [QuotesController::class, 'create'])->name('quote.create');
+    Route::get('/request-quote/{id}/received', [QuotesController::class, 'quoteReceived'])->name('quote.received');
 
     /* Old active commerce stripe routes */
     Route::get('stripe', [StripePaymentController::class, 'stripe']);
