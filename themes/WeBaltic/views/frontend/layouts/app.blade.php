@@ -36,11 +36,9 @@
         @json(\IMG::getIMGProxyData())
     </script>
 
-    {{-- TailwindCSS --}}
-    <script src="https://cdn.tailwindcss.com?plugins=forms,aspect-ratio"></script>
-    
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeBaltic') }}">
+
     @include('frontend.layouts.global-partials.all')
     @livewireStyles
 
@@ -102,8 +100,8 @@
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
 
-    <script src="{{ mix('js/app.min.js', 'themes/EvTailwind') }}" defer></script>
-    <script src="{{ mix('js/alpine.js', 'themes/EvTailwind') }}" defer></script>
+    <script src="{{ mix('js/app.min.js', 'themes/WeBaltic') }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/WeBaltic') }}" defer></script>
 
     <!-- Scripts -->
     @livewireScripts

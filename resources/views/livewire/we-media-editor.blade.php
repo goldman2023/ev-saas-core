@@ -13,8 +13,7 @@
     },
     reloadPreview() {
       setTimeout(function() {
-        console.log($el);
-        document.getElementById('we-media-editor-preview-iframe').src = document.getElementById('we-media-editor-preview-iframe').src;
+        document.getElementById('we-media-editor-preview-iframe').src = document.getElementById('we-media-editor-preview-iframe').src.split('?')[0] + '?ver='+Date.now();
       }, 10);
     }
 }" 
@@ -131,16 +130,29 @@ x-cloak>
                               </dl>
 
                               {{-- Other Information (WEF & CoreMeta)--}}
-                              @php
-                                  do_action('view.dashboard.we-media-editor.other-information', $upload, $subject);
-                              @endphp
+                              <div class="relative py-5 mt-2">
+                                  <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                    <div class="w-full border-t border-gray-300"></div>
+                                  </div>
+                                  <div class="relative flex justify-center">
+                                    <span class="bg-white px-2 text-sm text-gray-500">{{ translate('Other information') }}</span>
+                                  </div>
+                              </div>
+                              <div class="grid grid-cols-1 gap-y-3">
+                                @php
+                                    do_action('view.dashboard.we-media-editor.other-information', $upload, $subject);
+                                @endphp
+                              </div>
                               {{-- END Other Information (WEF & CoreMeta) --}}
+
 
                               {{-- Custom Actions--}}
                               @php
                                   do_action('view.dashboard.we-media-editor.custom-actions', $this);
                               @endphp
                               {{-- END Custom Actions --}}
+                              
+                              {{-- END Other Information (WEF & CoreMeta) --}}
 
                             </div>
                         </div>
