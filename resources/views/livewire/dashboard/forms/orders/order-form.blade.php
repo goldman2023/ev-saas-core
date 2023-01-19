@@ -924,7 +924,6 @@ x-cloak>
                             </div>
                         </div>
 
-                    <x-dashboard.form.blocks.core-meta-form></x-dashboard.form.blocks.core-meta-form>
 
 
                     </div>
@@ -1008,6 +1007,9 @@ x-cloak>
                         </div>
                     </div>
                     {{-- END Order Summary --}}
+
+
+                    <x-dashboard.form.blocks.core-meta-form></x-dashboard.form.blocks.core-meta-form>
 
                 </div>
             </div>
