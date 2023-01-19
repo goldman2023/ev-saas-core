@@ -1,0 +1,98 @@
+
+[x-cloak] {
+    @apply hidden;
+}
+
+/* Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+display: none;
+}
+
+.no-scrollbar {
+-ms-overflow-style: none; /* IE and Edge */
+scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar { width: 0 !important }
+
+body::-webkit-scrollbar { width: 5px !important }
+
+
+.bg-img-placeholder-stripes {
+    background: repeating-linear-gradient(
+        -55deg,
+        #222,
+        #222 10px,
+        #333 10px,
+        #333 20px
+    );
+}
+
+
+.card {
+    @apply relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden;
+}
+
+@media(max-width: 768px) {
+    .we-horizontal-slider {
+        display: grid;
+        grid-template-columns: repeat(auto-fill,minmax(70%,1fr));
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(70%,1fr);
+        overflow-x: auto;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(70%,1fr);
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+}
+
+// .we-sidebar-menu-item {
+//     @apply !text-gray-600;
+// }
+
+
+.container {
+    @apply w-[1280px] max-w-[100%] px-5 lg:px-0 my-0 mx-auto;
+}
+
+[data-f-id] {
+    @apply hidden;
+}
+
+.tooltip {
+    @apply invisible absolute;
+}
+
+.has-tooltip:hover .tooltip {
+    @apply visible z-50;
+}
+
+// .we-dashboard-sidebar-background {
+//     background-color: {{ $colors['sidebar-bg'] }} !important;
+// }
+
+
+.ev-icon__xs {
+    max-width: 16px !important;
+}
+
+#blog_post_single_content table {
+    border: 1px solid black;
+}
+
+#blog_post_single_content a {
+    @apply text-indigo-700;
+    text-decoration: underline;
+}
+
+#blog_post_single_content a:hover {
+    text-decoration: underline;
+}
+
+#blog_post_single_content table td {
+    border: 1px solid black;
+    padding: 3px;
+}
+
+@import './core';

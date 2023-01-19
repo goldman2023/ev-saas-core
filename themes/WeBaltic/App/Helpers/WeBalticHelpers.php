@@ -178,9 +178,11 @@ function generate_serial_number($order_item, $order)
 function define_livewire_dynamic_actions() {
     $list = [];
 
-    $list['regenerate_document'] = function(&$form) {
-        return lda_regenerate_document($form);
-    };
+    $list = [
+        'regenerate_document' => function(&$form) {
+            return lda_regenerate_document($form);
+        },
+    ];
 
     return $list;
 }
