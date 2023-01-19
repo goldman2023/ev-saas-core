@@ -3,11 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '@/../WeTailwind/scss/global';
-
-@import '@/../WeTailwind/scss/custom';
-@import '@/../WeTailwind/scss/components';
-@import '@/../WeTailwind/scss/wysiwyg';
+@import './global';
+@import './custom';
+@import './components';
+@import './wysiwyg';
 
 // body {
 //     font-family: -apple-system, BlinkMacSystemFont,

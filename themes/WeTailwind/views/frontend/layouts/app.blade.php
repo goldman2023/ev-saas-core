@@ -32,22 +32,20 @@
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WePixPro') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
     
     @include('frontend.layouts.global-partials.all')
     @livewireStyles
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-10808493729"></script>
-    <script>
-        window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-10808493729');
-    </script>
     @stack('head_scripts')
 </head>
 
-<body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{
+<body class="relative font-sans antialiased {{ Route::currentRouteName() }}" x-data="{
 }" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
 
     @include('frontend.layouts.global-partials.global-integrations-body')
@@ -102,16 +100,13 @@
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
 
-    <script src="{{ mix('js/app.min.js', 'themes/WePixPro') }}" defer></script>
-    <script src="{{ mix('js/alpine.js', 'themes/WePixPro') }}" defer></script>
+    <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
 
     <!-- Scripts -->
     @livewireScripts
     <!-- Scripts -->
 
-    <script id="img-proxy-data" type="application/json">
-        @json(\IMG::getIMGProxyData())
-    </script>
     @yield('script')
 
     @stack('footer_scripts')

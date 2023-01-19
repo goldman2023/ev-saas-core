@@ -51,16 +51,16 @@ https://app.gitbook.com/o/2dee19VQhhAOUjO27T0L/s/3mdkYoieCX8rouQqo60o/
 -   Compiling webpack for both central and themes: `yarn dev` (not in watch mode)
 -   Compiling for central: `npx mix --mix-config="webpack.mix.js` (from root directory)
 -   Compiling specific theme: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js"`
--   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"` / Compiling EV-SaaS Default theme: `npx mix watch --mix-config="themes/EvTailwind/webpack.mix.js"`
+-   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"` / Compiling EV-SaaS Default theme: `npx mix watch --mix-config="themes/WeTailwind/webpack.mix.js"`
 -   Compiling specific theme-tenant-combo: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js" -- --env tenant_id={id}` (Note: running npx mix on specific theme compiles 1) default theme and 2) all tenants main scss who use that theme)
 
 ## Compiling for Default theme
 
-- `npx mix --mix-config="themes/EvTailwind/webpack.mix.js"`
+- `npx mix --mix-config="themes/WeTailwind/webpack.mix.js"`
 
-## Compiling for EvTailwind theme
+## Compiling for WeTailwind theme
 
-- `npx mix watch --mix-config="themes/EvTailwind/webpack.mix.js"`
+- `npx mix watch --mix-config="themes/WeTailwind/webpack.mix.js"`
 
 # Running docker
 

@@ -14,23 +14,21 @@
         $row->type }}</span>
 </x-livewire-tables::table.cell> --}}
 <x-livewire-tables::table.cell class="align-middle min-w-[300px] max-w-[300px]">
-    @isset($row->get_primary_order_item()->subject)
     <div class="flex">
         <a class="py-2 flex media whitespace-normal align-items-center text-14"
             href="{{ route('order.details', ['id' => $row->id]) }}">
 
-            <img src="{{ $row->get_primary_order_item()->subject->getThumbnail() }}" class="w-[75px] h-auto rounded mr-2"
-                width="50" height="50" alt="" />
+            @isset($row->get_primary_order_item()->subject)
+                <img src="{{ $row->get_primary_order_item()->subject->getThumbnail() }}" class="w-[75px] h-auto rounded mr-2"
+                    width="50" height="50" alt="" />
+            @endisset
+            
             <strong class="text-md">
-                {{ $row->get_primary_order_item()->subject->name }}
-                <span class="font-normal"> <br>
-
-                    {{ translate('Serial Number') }} #{{ sprintf("%06d", $row->id)  }} </span>
+                {{ $row->get_primary_order_item()->name }}
+                <span class="font-normal"> <br> {{ translate('Order') }} #{{ $row->id }} </span>
             </strong>
-
         </a>
     </div>
-    @endisset
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="min-h-[100px] align-middle max-w-[300px]">
