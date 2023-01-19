@@ -3,9 +3,9 @@
 use Barryvdh\DomPDF\Facade\Pdf;
 
 if (!function_exists('baltic_generate_order_document')) {
-    function baltic_generate_order_document(&$order, $template, $upload_tag, $display_name = '') {
+    function baltic_generate_order_document(&$order, $template, $upload_tag, $display_name = '', $data = []) {
         // Get order and generate the document
-        $data = ['order' => $order];
+        $data = array_merge(['order' => $order], $data);
         $pdf = Pdf::loadView($template, $data);
 
         // Upload generated pdf as file in storage and create Upload and Relationship to $order

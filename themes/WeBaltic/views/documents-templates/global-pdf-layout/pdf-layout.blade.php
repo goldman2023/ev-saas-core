@@ -2,10 +2,14 @@
 <html lang="lt">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeBaltic') }}">
+    {{-- This is the only tailwind which actually works... --}}
+    <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> 
     <style>
         * { 
           font-family: DejaVu Sans !important; 
+        }
+        .w-full {
+            width: 100%;
         }
         .strong {
             font-weight: 700;
@@ -37,6 +41,8 @@
         }
 
     </style>
+
+    @stack('styles')
 </head>
 
 <body>
