@@ -14,11 +14,10 @@
             </div>
             <div>
                 @php
-                $product = $order->get_primary_order_item()->subject;
+                $product = $order->get_primary_order_item();
 
-                if( $order->get_primary_order_item()->subject->getAttr(5)) {
-                $total_weight =
-                $order->get_primary_order_item()->subject->getAttr(6)->attribute_values->first()->values;
+                if( $product->getAttr(5)) {
+                $total_weight = $product->getAttr(6)->attribute_values->first()->values;
 
                 } else {
                 $total_weight = 'Missing data';
