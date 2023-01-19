@@ -23,15 +23,15 @@
                     <x-dashboard.widgets.business.quick-actions>
                     </x-dashboard.widgets.business.quick-actions>
                 </div>
-                <div class="div grid grid-cols-2 gap-6">
+                <div class="div grid grid-cols-1 gap-6">
                     <div>
                     {{-- <x-dashboard.widgets.charts.column-chart>
                     </x-dashboard.widgets.charts.column-chart> --}}
                     </div>
 
                     <div>
-                    {{-- <x-dashboard.widgets.charts.pie-chart>
-                    </x-dashboard.widgets.charts.pie-chart> --}}
+                    <x-dashboard.widgets.charts.pie-chart>
+                    </x-dashboard.widgets.charts.pie-chart>
                     </div>
                 </div>
             </div>

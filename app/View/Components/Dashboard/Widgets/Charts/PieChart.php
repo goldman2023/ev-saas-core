@@ -4,6 +4,7 @@ namespace App\View\Components\Dashboard\Widgets\Charts;
 
 use App\Models\Activity;
 use App\Models\Order;
+use App\Models\User;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
 use Asantibanez\LivewireCharts\Models\PieChartModel;
@@ -36,6 +37,30 @@ class PieChart extends Component
             ->setColors(['#b01a1b', '#d41b2c', '#ec3c3b', '#f66665']);
 
         $this->pieChartModel = $pieChartModel;
+
+        $startDate = \Carbon::createFromFormat('Y-m-d', '2022-01-01');
+        $endDate = \Carbon::createFromFormat('Y-m-d', '2023-01-30');
+
+        $data = User::whereBetween('created_at', [$startDate, $endDate])
+            ->select(\DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), \DB::raw('count(*) as users'))
+            ->groupBy('DATE_FORMAT(created_at, "%Y-%m-%d")')
+            ->get();
+
+
+
+
+
+        $lineChartModel = (new LineChartModel());
+        $total = 0;
+        foreach($data as $key => $item) {
+            $total += $item->users;
+            $lineChartModel->addPoint($key, $total);
+        }
+        // $lineChartModel->addPoint(7, 10);
+        // $lineChartModel->addPoint(8, 20);
+        // $lineChartModel->addPoint(9, 30);
+
+        $this->lineChartModel = $lineChartModel;
     }
 
     /**

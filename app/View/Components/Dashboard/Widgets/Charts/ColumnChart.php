@@ -20,7 +20,7 @@ class ColumnChart extends Component
 
         $this->columnChartModel =
             (new ColumnChartModel())
-            ->setTitle('Expenses by Type')
+            ->setTitle('Users')
             ->setAnimated(false)
             ->addColumn('Food', 100, '#f6ad55')
             ->addColumn('Shopping', 200, '#fc8181')
