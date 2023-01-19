@@ -1,41 +1,112 @@
+@extends('documents-templates.global-pdf-layout.pdf-layout')
+@section('content')
 <style>
-    td {
-        padding: 5px;
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: left;
+        table-layout: fixed;
     }
 
-    table,
+    td {
+        /* width: 25%; */
+    }
+
     th,
     td {
         border: 1px solid;
-    }
-
-    table {
-        border-collapse: collapse;
+        padding: 5px;
     }
 </style>
+<table>
+    <thead>
+        <tr>
+            <th colspan="8">
+                {{ translate('Assembly Card') }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="2">{{ translate('Order no:') }}</td>
+            <td colspan="2">{{ $order->id }}</td>
+            <td colspan="2">{{ translate('Commercial offer no:') }}</td>
+            <td colspan="2">{{ $order->id }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ translate('Date of assembly start') }}</td>
+            <td colspan="2">
+                {{ $order->getWEF('cycle_step_date_assembly') }}
+            </td>
+            <td colspan="4"></td>
+        </tr>
+        <tr>
+            <td colspan="2">Assembled:</td>
+            <td colspan="2"> </td>
+            <td>Assembler:</td>
+            <td colspan="3">{{ $order->getWEF('assembler') }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Inspected</td>
 
-<table style="width: 100%;">
-    <tr>
-        <td colspan="4">
-            {{ translate('Suvirinimo gamybos lapas') }}
-        </td>
-    </tr>
-
-    <tr>
-        <td>
-            {{ translate('Gamybos numeris:') }}
-        </td>
-        <td>
-            {{ $order->id }}
-        </td>
-
-        <td>
-            {{ translate('Komercinio pasiulymo nr:') }}
-        </td>
-        <td>
-            {{ $order->id }}
-        </td>
-    </tr>
-
-
+            <td>Inspector:</td>
+            <td colspan="3">{{ $order->getWEF('inspected_by') }}</td>
+        </tr>
+        <tr>
+            <td colspan="8"><strong>{{ translate('Technical characteristics of trailer') }}:</strong></td>
+        </tr>
+        <tr>
+            <td colspan="2">Trailer Category:</td>
+            <td colspan="2">O - O1</td>
+            <td rowspan="2" colspan="2">Number of axles:</td>
+            <td colspan="2">O - 1 axle</td>
+        </tr>
+        <tr>
+            <td colspan="2">Length:</td>
+            <td colspan="2">_______mm</td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">Width:</td>
+            <td colspan="2">_______mm</td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">Model:</td>
+            <td colspan="2"></td>
+            <td colspan="2">Chasis type:</td>
+            <td colspan="2">O - leaf spring</td>
+        </tr>
+        <tr>
+            <td colspan="2">Lights:</td>
+            <td colspan="2">O - Multipoint 2</td>
+            <td colspan="2">Axle make:</td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="2">Coupling:</td>
+            <td>STC</td>
+            <td>O - 750 kg</td>
+            <td colspan="2">Axle model:</td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td rowspan="2" colspan="2"></td>
+            <td>AL-KO</td>
+            <td>O - 750 kg</td>
+            <td rowspan="2" colspan="2">Wheels:</td>
+            <td rowspan="2" colspan="2">O - Kargo Trail R13</td>
+        </tr>
+        <tr>
+            <td>KNOTT</td>
+            <td>O - 750 kg</td>
+        </tr>
+        <tr>
+            <td colspan="8">{{ translate('Comments') }}: <br>
+                {{ $order->getWEF('inspected_by') }}
+            </td>
+        </tr>
+    </tbody>
 </table>
+@endsection

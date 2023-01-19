@@ -6,7 +6,12 @@ if (!function_exists('baltic_generate_order_document')) {
     function baltic_generate_order_document(&$order, $template, $upload_tag, $display_name = '') {
         // Get order and generate the document
         $data = ['order' => $order];
-        $pdf = Pdf::loadView($template, $data);
+        if($template == 'manufacturing-sheet') {
+            $pdf = Pdf::loadView($template, $data)->setPaper('a4', 'landscape');
+        } else {
+            $pdf = Pdf::loadView($template, $data);
+        }
+
 
         // Upload generated pdf as file in storage and create Upload and Relationship to $order
         $upload = MediaService::uploadAndStore(

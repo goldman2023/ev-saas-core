@@ -7,6 +7,10 @@ function generate_vin_code($item)
     // Since each OrderItem has copies of attributes of each linked product or "custom product", we should get the attributes from OrderItem itself - that's the main source of truth
 
     $order_item = $item->get_primary_order_item();
+    if(empty($order_item)) {
+        return null;
+    }
+
     $vin_code = 'Z3E';
     $vin_code .= 'L';
     if ($body_type = $order_item?->getAttr(25)) {
@@ -36,8 +40,8 @@ function generate_vin_code($item)
         $vin_code .= 'S';
     }
 
-    if ($order_item->getAttr('priekabos-eksplotacine-mase')) {
-        $total_weight = $order_item->getAttr('priekabos-eksplotacine-mase')->attribute_values->first()->values;
+    if ($order_item->getAttr('priekabos-bendroji-mase')) {
+        $total_weight = $order_item->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
     } else {
         $total_weight = 0;
     }
@@ -162,13 +166,7 @@ function generate_serial_number($order_item, $order)
     if(empty($order_item->subject)) {
         $serial_number = 0;
     } else {
-        $count_in_orders = OrderItem::where('subject_id', $order_item->subject->id)->orderBy('order_id')->get();
-
-        foreach ($count_in_orders as $key => $order_item) {
-            if ($order_item->order_id == $order->id) {
-                $serial_number = $key;
-            }
-        }
+        $serial_number = $order->id;
     }
 
     $serial_number = sprintf("%06d", $serial_number + 1); // 001234

@@ -1,4 +1,7 @@
 <div class="w-full">
+    @php
+        $product = $order->get_primary_order_item();
+    @endphp
     <div class="grid grid-cols-3 gap-9">
         <div class="col-span-2 text-center px-9 border border-r-1 border-gray-700">
             {{-- Left Side --}}
@@ -14,14 +17,18 @@
             </div>
             <div>
                 @php
-                $product = $order->get_primary_order_item();
 
+                if(empty($product)) {
+                $total_weight = 'Missing data';
+                } else {
                 if( $product->getAttr(5)) {
                 $total_weight = $product->getAttr(6)->attribute_values->first()->values;
 
                 } else {
                 $total_weight = 'Missing data';
                 }
+                }
+
                 @endphp
                 {{ $total_weight }} kg
                 {{-- Current way of getting an attribute value --}}
@@ -33,19 +40,32 @@
                 <br>
 
                 @php
+                if(empty($product)) {
+                $axel_count = 0;
+
+                } else {
                 if ($product->getAttr(11)) {
                 $axel_count = $product->getAttr(11)->attribute_values->first()->values;
                 } else {
                 $axel_count = 0;
                 }
+                }
+
                 @endphp
 
                 @php
+                if(empty($product)) {
+                $lifting_mass = 0;
+
+                } else {
                 if ($product->getAttr(5)) {
                 $lifting_mass = $product->getAttr(5)->attribute_values->first()->values;
                 } else {
                 $lifting_mass = 0;
                 }
+
+                }
+
                 @endphp
 
                 @if($axel_count == 1)
