@@ -24,7 +24,7 @@ function compileTheme(mix, dirname, theme, defaultTheme = 'WeTailwind') {
     if (fs.existsSync(`${dirname}/images`)) {
         mix.copyDirectory(`${dirname}/images`, `public/themes/${theme}/images`);
     } else {
-        mix.copyDirectory(`/var/www/html/themes/${defaultTheme}/images`, `public/themes/${theme}/images`)
+        mix.copyDirectory(`${dirname}/../${defaultTheme}/images`, `public/themes/${theme}/images`)
     }
     
     // App.js
