@@ -2,8 +2,11 @@
 <html lang="lt">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeBaltic') }}">
     <style>
-      * { font-family: DejaVu Sans !important; }
+        * { 
+          font-family: DejaVu Sans !important; 
+        }
         .strong {
             font-weight: 700;
         }

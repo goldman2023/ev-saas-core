@@ -3,7 +3,7 @@
 All child themes are automatically registered via filesystem. 
 All Child them code is located in `themes/{themeName}` 
 
-Default theme is `EvTailwind`
+Default theme is `WeTailwind`
 
 ## Creating new child theme 
 

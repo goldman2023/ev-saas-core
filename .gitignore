@@ -50,8 +50,8 @@ composer.phar
 storage/*
 public/themes/ev-saas-default/css/*
 public/themes/ev-saas-default/js/*
-public/themes/EvTailwind/js/*
-public/themes/EvTailwind/css/*
+public/themes/WeTailwind/js/*
+public/themes/WeTailwind/css/*
 resources/scss/tenants/*
 resources/scss/dependencies/*.css
 resources/scss/dependencies/*.css.map

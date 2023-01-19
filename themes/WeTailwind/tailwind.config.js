@@ -1,12 +1,10 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
-const defaultWeTheme = 'WeTailwind';
 
 module.exports = {
     darkMode: 'class',
     content: [
         `${__dirname}/views/**/*.blade.php`, // absolute path to current theme
-        `${__dirname}/../${defaultWeTheme}/views/**/*.blade.php`, // absolute path to default theme
         `./resources/views/**/*.blade.php`, // relative to root to core
     ],
     theme: {
