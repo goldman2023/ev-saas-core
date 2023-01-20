@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Orders;
 
+use Log;
 use Uuid;
 use Payments;
 use App\Models\Order;
@@ -245,6 +246,12 @@ class OrderForm extends Component
 
             }
 
+            $this->order->load('order_items'); // load order items
+
+            if (!$this->is_update) {
+                do_action('order.insert', $this->order);
+            }
+
             DB::commit();
 
             $this->inform(translate('Order successfully saved!'), '', 'success');
@@ -256,7 +263,8 @@ class OrderForm extends Component
             }
         } catch (\Exception $e) {
             DB::rollBack();
-
+            Log::error($e);
+            dd($e);
             if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating an order...Please try again.'));
                 $this->inform(translate('There was an error while updating an order...Please try again.'), '', 'fail');

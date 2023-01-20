@@ -79,4 +79,22 @@ function compileTheme(mix, dirname, theme, defaultTheme = 'WeTailwind') {
     return mix;
 }
 
-module.exports = { compileTheme };
+function getPurgePaths(dirname, defaultWeTheme = 'WeTailwind') {
+    let paths = [
+        `${dirname}/views/**/*.blade.php`, // absolute path to current theme
+        `${dirname}/js/**/*.js`, // absolute path
+        `./resources/views/**/*.blade.php`, // relative to root to core
+        `./resources/js/**/*.js`, // relative to root to core
+    ];
+
+    if(defaultWeTheme) {
+        paths = paths.concat([
+            `${dirname}/../${defaultWeTheme}/views/**/*.blade.php`, // absolute path to default theme
+            `${dirname}/../${defaultWeTheme}/js/**/*.js`, // absolute path to default theme
+        ]);
+    }
+
+    return paths;
+}
+
+module.exports = { compileTheme, getPurgePaths };
