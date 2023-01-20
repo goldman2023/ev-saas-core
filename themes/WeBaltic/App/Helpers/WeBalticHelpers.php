@@ -7,7 +7,7 @@ function generate_vin_code($item)
     // Since each OrderItem has copies of attributes of each linked product or "custom product", we should get the attributes from OrderItem itself - that's the main source of truth
 
     $order_item = $item->get_primary_order_item()->subject;
-    if(empty($order_item)) {
+    if (empty($order_item)) {
         return null;
     }
 
@@ -162,7 +162,7 @@ function vin_control_number($vin)
 
 function generate_serial_number($order_item, $order)
 {
-    if(empty($order_item)) {
+    if (empty($order_item)) {
         $serial_number = 0;
     } else {
         $serial_number = $order->id;
@@ -174,14 +174,38 @@ function generate_serial_number($order_item, $order)
     return $serial_number;
 }
 
-function define_livewire_dynamic_actions() {
+function define_livewire_dynamic_actions()
+{
     $list = [];
 
     $list = [
-        'regenerate_document' => function(&$form) {
+        'regenerate_document' => function (&$form) {
             return lda_regenerate_document($form);
         },
     ];
 
     return $list;
+}
+
+function generate_static_mass_on_decoupling($certificate)
+{
+    $string = $certificate;
+    if($certificate) {
+        $string = explode(')', (explode('(', $string)[1]))[0];
+    } else {
+        $string = null;
+    }
+
+    return $string;
+}
+
+function generate_certificate_number($certificate) {
+    $string = $certificate;
+    $string = explode(')', (explode('(', $string)[0]))[0];
+
+    return $string;
+}
+
+function generate_axle_permissable_mass() {
+
 }

@@ -12,7 +12,7 @@
                 UAB Domantas
             </div>
             <div>
-                {{ $product->getAttrValue('sertifikato-numeris') }}
+                {{ generate_certificate_number($product->getAttrValue('sertifikato-numeris')) }}
                 {{-- e9*2018/858*XXXXX --}}
             </div>
             <div class="border border-gray-700 p-2 rounded mb-1 font-bold">
@@ -70,7 +70,7 @@
                 }
 
                 @endphp
-                0 - {{ $lifting_mass }} kg <br>
+                0 - {{ generate_static_mass_on_decoupling($product->getAttrValue('sertifikato-numeris')) }} <br>
                 @if($axel_count == 1)
                 1 - {{ $lifting_mass }} kg <br>
                 2 - <br>
