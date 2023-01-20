@@ -2,16 +2,23 @@
 
 @section('content')
 <style>
-body {
-    font-size: 12px;
-}
+    body {
+        font-size: 12px;
+    }
 </style>
 @php
 $product = $order->get_primary_order_item()->subject;
 
 $vehicle_category = "O1";
 if($product->getAttrValue('stabdziai') == 'mechanical') {
-    $vehicle_category = "O2";
+$vehicle_category = "O2";
+}
+
+
+if ($product->getAttr('asiu-kiekis')) {
+$axel_count = $product->getAttr('asiu-kiekis')->attribute_values->first()->values;
+} else {
+$axel_count = 0;
 }
 @endphp
 
@@ -178,12 +185,32 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
 <div>
     13.1. Distribution of this mass amongst the axles:
 </div>
-<div>
-    1: 400 kg, 2: - kg, 3: - kg
+<div style="font-weight: 700;">
+
+    @php
+    if ($product->getAttr('priekabos-bendroji-mase')) {
+    $lifting_mass = $product->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
+    } else {
+    $lifting_mass = 0;
+    }
+    @endphp
+
+    @if($axel_count == 1)
+    1: {{ $lifting_mass }} kg, 2: - kg, 3: - kg
+    @endif
+
+    @if($axel_count == 2)
+    1: {{ $lifting_mass/2 }} kg, 2: {{ $lifting_mass/2 }} kg, 3: - kg
+    @endif
+
+    @if($axel_count == 3)
+    1: {{ $lifting_mass/3 }} kg, 2: {{ $lifting_mass/3 }} kg, 3: {{ $lifting_mass/3 }} kg
+    @endif
+
 </div>
 
 <div>
-    13.2. Actual mass of the vehicle: {{ $product->getAttrValue('priekabos-bendroji-mase') }} kg
+    13.2. Actual mass of the vehicle: <strong>{{ $product->getAttrValue('priekabos-bendroji-mase') }} kg </strong>
 </div>
 
 <div>
@@ -197,7 +224,19 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
 
 <div>
     16.2. Technically permissible mass on each axle:
-    1: 750 kg, 2: .....kg, 3: ....kg
+    <span style="font-weight: 700;">
+        @if($axel_count == 1)
+        1: {{ $lifting_mass }} kg, 2: - kg, 3: - kg
+        @endif
+
+        @if($axel_count == 2)
+        1: {{ $lifting_mass/2 }} kg, 2: {{ $lifting_mass/2 }} kg, 3: - kg
+        @endif
+
+        @if($axel_count == 3)
+        1: {{ $lifting_mass/3 }} kg, 2: {{ $lifting_mass/3 }} kg, 3: {{ $lifting_mass/3 }} kg
+        @endif
+    </span>
 </div>
 
 <div>
@@ -209,21 +248,42 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
 </div>
 
 <div>
-    17.1. Intended registration/in service maximum permissible laden mass: <strong>{{ $product->getAttrValue('bendra-krova') }} kg </strong>
+    17.1. Intended registration/in service maximum permissible laden mass: <strong>{{
+        $product->getAttrValue('bendra-krova') }} kg </strong>
 </div>
 
 <div>
     17.2. Intended registration/in service maximum permissible laden mass on each axle:
 </div>
-<div>
-    1: 750 kg, 2: - kg, 3: - kg
+<div style="font-weight: 700;">
+    @if($axel_count == 1)
+    1: {{ $lifting_mass }} kg, 2: - kg, 3: - kg
+    @endif
+
+    @if($axel_count == 2)
+    1: {{ $lifting_mass/2 }} kg, 2: {{ $lifting_mass/2 }} kg, 3: - kg
+    @endif
+
+    @if($axel_count == 3)
+    1: {{ $lifting_mass/3 }} kg, 2: {{ $lifting_mass/3 }} kg, 3: {{ $lifting_mass/3 }} kg
+    @endif
 </div>
 <div>
     17.3. Intended registration/in service maximum permissible laden mass on each axle group:
 </div>
 
-<div>
-    1: 750kg, 2: - kg, 3: - kg
+<div style="font-weight: 700;">
+    @if($axel_count == 1)
+    1: {{ $lifting_mass }} kg, 2: - kg, 3: - kg
+    @endif
+
+    @if($axel_count == 2)
+    1: {{ $lifting_mass/2 }} kg, 2: {{ $lifting_mass/2 }} kg, 3: - kg
+    @endif
+
+    @if($axel_count == 3)
+    1: {{ $lifting_mass/3 }} kg, 2: {{ $lifting_mass/3 }} kg, 3: {{ $lifting_mass/3 }} kg
+    @endif
 </div>
 <div>
     19. Technically permissible maximum static mass on the coupling point of a semi-trailer or centre-axle
@@ -242,28 +302,28 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
     </strong>
 </div>
 <div>
-    30.1. Track of each steered axle: N/A
+    30.1. Track of each steered axle: <strong>N/A</strong>
 </div>
 <div>
-    30.2. Track of all other axles: N/A
+    30.2. Track of all other axles: <strong>N/A</strong>
 </div>
 <div>
-    31. Position of lift axle(s): N/A
+    31. Position of lift axle(s): <strong>N/A</strong>
 </div>
 <div>
-    32. Position of loadable axle(s): N/A
+    32. Position of loadable axle(s): <strong>N/A</strong>
 </div>
 <div>
-    33. Drive axle(s) fitted with air suspension or equivalent: yes/no
+    33. Drive axle(s) fitted with air suspension or equivalent: no
 </div>
 <div>
-    35. Tyre/wheel combination(h) : 155R13
+    35. Tyre/wheel combination(h) : <strong>{{ $product->getAttrValue('padangos') }}</strong>
 </div>
 <div>
     <strong>Brakes</strong>
 </div>
 <div>
-    36. Trailer brake connections:  {{ $product->getAttrValue('stabdziai') }}
+    36. Trailer brake connections: <strong>{{ $product->getAttrValue('stabdziai') }}</strong>
 
 </div>
 <div>

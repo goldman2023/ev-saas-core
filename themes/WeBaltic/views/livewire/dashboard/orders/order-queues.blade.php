@@ -155,7 +155,7 @@
                     @endforeach
                 </ul>
                 @else
-                <div class="bg-white scale-75" style="margin-bottom: -20px; width: 125%; transform-origin: top left;">
+                <div class="bg-white scale-50" style="margin-bottom: -20px; width: 200%; transform-origin: top left;">
                     <x-dashboard.orders.order-details-card :order="$order">
                     </x-dashboard.orders.order-details-card>
                 </div>
