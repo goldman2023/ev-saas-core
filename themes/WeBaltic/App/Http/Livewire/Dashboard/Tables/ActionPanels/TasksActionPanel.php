@@ -22,6 +22,7 @@ class TasksActionPanel extends Component
     public $items = [];
     public $action;
     public $availableActions;
+    public $tasksType;
 
     protected function rules()
     {
@@ -46,17 +47,24 @@ class TasksActionPanel extends Component
      *
      * @return void
      */
-    public function mount($tableId = null)
+    public function mount($tableId = null, $tasksType = 'printing')
     {
         $this->tableId = $tableId;
+        $this->tasksType = $tasksType;
 
         $this->setAvailableActions();
     }
 
     public function setAvailableActions() {
-        $this->availableActions = [
-            'print_labels' => translate('Print labels'),
-        ];
+        if($this->tasksType === 'printing') {
+            $this->availableActions = [
+                'print_labels' => translate('Print labels'),
+            ];
+        } else if($this->tasksType === 'delivery') {
+            $this->availableActions = [
+
+            ];
+        }        
     }
 
     /**
