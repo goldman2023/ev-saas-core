@@ -21,7 +21,7 @@ trait AttributeTrait
      */
     public function initializeAttributeTrait(): void
     {
-        
+
     }
 
     /**
@@ -42,7 +42,7 @@ trait AttributeTrait
             if (!$model->relationLoaded('custom_attributes')) {
                 $model->load('custom_attributes');
             }
-            
+
             /**
              * This part of the code is run before relationsRetreived event callback in VariationTrait (because AttributeTrait must be used/declared before VariationTrait)
              * Reason for this is: Since we are eager-loading custom_attributes using hasMany relation, we need to change it's retreived data to follow this structure:
@@ -53,10 +53,10 @@ trait AttributeTrait
             $attributes = new \Illuminate\Database\Eloquent\Collection();
 
             if(($model->custom_attributes?->isNotEmpty() ?? false)) {
-                                
+
                 foreach($model->custom_attributes as $key => $att) {
                     $att_rel = $att->pivot;
-                    
+
                     // Insert attribute from $att_rel to $attributes if attribute being inserted is not in it
                     if(! $attributes->contains(fn($item) => ($item?->id ?? null) === $att->id)) {
                         $attributes->push($att);
@@ -84,7 +84,7 @@ trait AttributeTrait
                         $main_att->setRelation('attribute_values', new \Illuminate\Database\Eloquent\Collection([$att->pivot->attribute_value]));
                     }
                 }
-                
+
                 // Set custom_attributes relation with changed data structure
                 $model->setRelation('custom_attributes', $attributes);
             }
@@ -133,16 +133,34 @@ trait AttributeTrait
         return $this->custom_attributes->firstWhere('identificator', $slug_or_id.'|'.$content_type);
     }
 
+    public function getAttrValue($slug_or_id = null, $content_type = null) {
+        if(empty($slug_or_id)) return null;
+        if(empty($content_type)) $content_type =  $this::class;
+
+        if(is_int($slug_or_id) || ctype_digit($slug_or_id)) {
+            return $this->custom_attributes->firstWhere('id', (int) $slug_or_id)->attribute_values->first()->values;
+        } else if(is_string($slug_or_id)) {
+            $attribute =  $this->custom_attributes->firstWhere('slug', $slug_or_id);
+            if($attribute) {
+                return $attribute->attribute_values->first()->values;
+            } else {
+                return null;
+            }
+        }
+
+        return $this->custom_attributes->firstWhere('identificator', $slug_or_id.'|'.$content_type)->attribute_values->first()->values;
+    }
+
     /**
      * deleteCustomAttributes
      *
-     * This function goes through model's custom attributes and removes all relationships to the $model 
+     * This function goes through model's custom attributes and removes all relationships to the $model
      * and attribute values if attribute is not predefined.
-     * 
+     *
      * Logic is based on attribute `is_predefined` condition:
      * 1. Attribute is predefined - since attribute values for such attribute are shared between many relationships, we are removing ONLY RELATIONSHIPS, and NOT the VALUES
      * 2. Attribute is NOT predefined - we are removing both RELATIONSHIPS and VALUES (because attribute values in this case are exclusive to relationship and $model)
-     * 
+     *
      * IMPORTANT: attribute_relationships inside custom_attributes are PIVOT dynamic models which means that they lack id's (primary key)
      * @return void
      */
@@ -221,7 +239,7 @@ trait AttributeTrait
     {
         // Get mapped attributes to display them in form select element for specific content type
         $attrs = null;
-        
+
         if (! empty($this->id)) {
             // For existing content type:
             // 1. Get attributes for that content type
@@ -241,7 +259,7 @@ trait AttributeTrait
             }
 
             $attrs = $attrs->get()->toArray();
-            
+
             // 3. GET attribute values ids based on all attribute relationships
             $attrs_values_idx = [];
             foreach ($attrs as $key => $att) {

@@ -1,13 +1,33 @@
+@if(!empty($upload))
+
+    {{-- Proposal --}}
+    @if($upload->getWEF('upload_tag') === 'proposal')
+        <livewire:dashboard.forms.wef.single-wef-form 
+            :subject="$upload" 
+            wef-key="proposal_notes" 
+            wef-label="{{ translate('Proposal notes') }}"
+            data-type="array" 
+            form-type="text_list"
+            :custom-properties="['min_rows' => 0]"
+            key="{{ \UUID::generate(4)->string }}" />
+    @endif
+
+    {{-- Delivery to Warehouse --}}
+    @if($upload->getWEF('upload_tag') === 'delivery_to_warehouse')
+        <livewire:dashboard.forms.wef.single-wef-form 
+            :subject="$upload" 
+            wef-key="delivery_to_warehouse_notes" 
+            wef-label="{{ translate('Delivery notes') }}"
+            data-type="array" 
+            form-type="text_list"
+            :custom-properties="['min_rows' => 0]"
+            key="{{ \UUID::generate(4)->string }}" />
+    @endif
+
+@endif
+
 {{-- Other Information (WEF & CoreMeta)--}}
-<div class="relative py-5 mt-2">
-    <div class="absolute inset-0 flex items-center" aria-hidden="true">
-      <div class="w-full border-t border-gray-300"></div>
-    </div>
-    <div class="relative flex justify-center">
-      <span class="bg-white px-2 text-sm text-gray-500">{{ translate('Other information') }}</span>
-    </div>
-</div>
-<div class="grid grid-cols-1 gap-y-3">
+
     {{-- <livewire:dashboard.forms.wef.single-wef-form 
     :subject="$upload" 
     wef-key="notes" 
@@ -61,5 +81,3 @@
     form-type="textarea"
     :custom-properties="['rows' => 5, 'max_chars' => 500]"
     key="{{ \UUID::generate(4)->string }}" /> --}}
-</div>
-{{-- END Other Information (WEF & CoreMeta) --}}

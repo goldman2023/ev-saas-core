@@ -22,7 +22,7 @@ class CreateTenantAction
             'trial_ends_at' => now()->addDays(config('saas.trial_days')),
         ]);
 
-        $tenant->domains()->create(['domain' => $domain, 'theme' => 'EvTailwind']); // Set default theme to: EvTailwind
+        $tenant->domains()->create(['domain' => $domain, 'theme' => 'WeTailwind']); // Set default theme to: WeTailwind
 
         $tenant->save();
 

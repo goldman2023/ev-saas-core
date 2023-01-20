@@ -46,6 +46,6 @@
 
 17. Run: composer install 
 18. Run: yarn install
-19. Run: npx mix --mix-config="themes/EvTailwind/webpack.mix.js"
+19. Run: npx mix --mix-config="themes/WeTailwind/webpack.mix.js"
 
 20. Run: chown -R www-data:www-data html

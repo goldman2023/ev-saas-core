@@ -1,6 +1,9 @@
 <div class="w-full">
     @php
         $product = $order->get_primary_order_item();
+        if($product->subject) {
+            $product = $product->subject;
+        }
     @endphp
     <div class="grid grid-cols-3 gap-9">
         <div class="col-span-2 text-center px-9 border border-r-1 border-gray-700">
@@ -9,7 +12,8 @@
                 UAB Domantas
             </div>
             <div>
-                e9*2018/858*XXXXX
+                {{ generate_certificate_number($product->getAttrValue('sertifikato-numeris')) }}
+                {{-- e9*2018/858*XXXXX --}}
             </div>
             <div class="border border-gray-700 p-2 rounded mb-1 font-bold">
                 {{-- Z3ELK012XNK000001 --}}
@@ -21,13 +25,13 @@
                 if(empty($product)) {
                 $total_weight = 'Missing data';
                 } else {
-                if( $product->getAttr(5)) {
-                $total_weight = $product->getAttr(6)->attribute_values->first()->values;
-
+                if( $product->getAttr('priekabos-nuosava-mase')) {
+                $total_weight = $product->getAttr('priekabos-nuosava-mase')->attribute_values->first()->values;
                 } else {
-                $total_weight = 'Missing data';
+                    $total_weight = 'Missing data';
                 }
                 }
+
 
                 @endphp
                 {{ $total_weight }} kg
@@ -41,11 +45,10 @@
 
                 @php
                 if(empty($product)) {
-                $axel_count = 0;
-
+                    $axel_count = 0;
                 } else {
-                if ($product->getAttr(11)) {
-                $axel_count = $product->getAttr(11)->attribute_values->first()->values;
+                if ($product->getAttr('asiu-kiekis')) {
+                $axel_count = $product->getAttr('asiu-kiekis')->attribute_values->first()->values;
                 } else {
                 $axel_count = 0;
                 }
@@ -58,8 +61,8 @@
                 $lifting_mass = 0;
 
                 } else {
-                if ($product->getAttr(5)) {
-                $lifting_mass = $product->getAttr(5)->attribute_values->first()->values;
+                if ($product->getAttr('priekabos-bendroji-mase')) {
+                $lifting_mass = $product->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
                 } else {
                 $lifting_mass = 0;
                 }
@@ -67,7 +70,7 @@
                 }
 
                 @endphp
-
+                0 - {{ generate_static_mass_on_decoupling($product->getAttrValue('sertifikato-numeris')) }} <br>
                 @if($axel_count == 1)
                 1 - {{ $lifting_mass }} kg <br>
                 2 - <br>
@@ -94,9 +97,11 @@
                 <img src="{{ get_site_logo() }}" class="h-24 mb-2" />
             </div>
             <div class="text-right flex justify-end">
-                {!! QrCode::size(100)->generate(URL::current()) !!}
+               <img src="data:image/svg+xml;base64,  {!! base64_encode(QrCode::size(100)->generate('https://tero.lt')) !!}" />
+
+                {{-- {!! QrCode::size(100)->generate(URL::current()) !!} --}}
             </div>
-            <div class="-rotate-90 absolute top-[80px] left-[-80px]">
+            <div class="-rotate-90 absolute top-[80px] left-[-80px]" style="margin-left: 15px;">
                 <div class="underline">
                     www.tero.lt
                 </div>

@@ -24,7 +24,7 @@ class SitemapController extends Controller
     {
         $sitemap =  Sitemap::create()
             ->add(Page::all())
-            ->add(BlogPost::all())
+            ->add(BlogPost::published())
             ->writeToDisk('public', 'sitemap.xml');
 
         echo "Sitemap Updated Sucesfully";

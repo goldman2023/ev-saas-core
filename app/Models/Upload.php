@@ -50,11 +50,17 @@ class Upload extends WeBaseModel
         return $this->belongsTo(User::class);
     }
 
-    public function uploads()
+    public function orders()
     {
-        return $this->morphedByMany(Product::class, 'subject', 'uploads_content_relationships', 'subject_id', 'upload_id')
-            ->withPivot('relation_type, group_id');
+        return $this->morphedByMany(Order::class, 'subject', 'uploads_content_relationships')
+            ->withPivot('relation_type', 'group_id', 'order');
     }
+
+    // public function products()
+    // {
+    //     return $this->morphedByMany(Product::class, 'subject', 'uploads_content_relationships', 'subject_id')
+    //         ->withPivot(['relation_type', 'order', 'group_id']);
+    // }
 
     public function related()
     {

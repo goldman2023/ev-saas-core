@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
     <link rel='canonical' href='@yield(' canonical_link', url()->current() )' />
-    <link rel="preload" as="script" href="https://cdn.tailwindcss.com?plugins=forms,aspect-ratio" />
 
 
     @yield('meta')
@@ -33,13 +32,9 @@
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
 
-
-    {{-- TailwindCSS --}}
-    <script src="https://cdn.tailwindcss.com?plugins=forms,aspect-ratio"></script>
-    {{-- <script src="{{ static_asset('/bp-assets/tailwind-play/tailwind.js') }}"></script> --}}
-
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/EvTailwind') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WePixPro') }}">
+
     @include('frontend.layouts.global-partials.all')
     @livewireStyles
 
@@ -106,8 +101,8 @@
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
 
-    <script src="{{ mix('js/app.min.js', 'themes/EvTailwind') }}" defer></script>
-    <script src="{{ mix('js/alpine.js', 'themes/EvTailwind') }}" defer></script>
+    <script src="{{ mix('js/app.min.js', 'themes/WePixPro') }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/WePixPro') }}" defer></script>
 
     <!-- Scripts -->
     @livewireScripts
