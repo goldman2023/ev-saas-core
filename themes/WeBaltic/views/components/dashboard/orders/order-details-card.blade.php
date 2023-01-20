@@ -1,6 +1,9 @@
 <div class="w-full">
     @php
-        $product = $order->get_primary_order_item()->subject;
+        $product = $order->get_primary_order_item();
+        if($product->subject) {
+            $product = $product->subject;
+        }
     @endphp
     <div class="grid grid-cols-3 gap-9">
         <div class="col-span-2 text-center px-9 border border-r-1 border-gray-700">
@@ -42,8 +45,7 @@
 
                 @php
                 if(empty($product)) {
-                $axel_count = 0;
-
+                    $axel_count = 0;
                 } else {
                 if ($product->getAttr('asiu-kiekis')) {
                 $axel_count = $product->getAttr('asiu-kiekis')->attribute_values->first()->values;
@@ -68,7 +70,7 @@
                 }
 
                 @endphp
-
+                0 - {{ $lifting_mass }} kg <br>
                 @if($axel_count == 1)
                 1 - {{ $lifting_mass }} kg <br>
                 2 - <br>
