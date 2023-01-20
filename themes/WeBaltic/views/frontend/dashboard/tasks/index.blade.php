@@ -44,7 +44,7 @@
                         </div>
                         <div class="flex flex-col sm:col-span-3 gap-y-4">
                             @if(auth()->user()->isAdmin())
-                                <livewire:dashboard.tables.action-panels.tasks-action-panel table-id="tasks-table-{{ $type }}" />
+                                <livewire:dashboard.tables.action-panels.tasks-action-panel table-id="tasks-table-{{ $type }}" tasks-type="{{ $type }}" />
                             @else
                                 <x-dashboard.elements.support-card class="card bg-white p-4 mb-3">
                                 </x-dashboard.elements.support-card>
