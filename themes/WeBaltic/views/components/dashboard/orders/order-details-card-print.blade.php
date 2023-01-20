@@ -3,7 +3,7 @@
         <tr>
             {{-- Left side --}}
             <td style="border: 1px solid black;">
-                <div style="min-width: 70%; padding: 20px; padding-right: 80px;" class="text-center">
+                <div style="min-width: 70%; padding: 10px 0px; padding-right: 80px;" class="text-center">
                     {{-- Left Side --}}
                     <div class="underline font-medium">
                         UAB Domantas
@@ -14,7 +14,7 @@
                     <div style="max-width: 100%; padding: 0;" class="font-bold">
                         {{-- Z3ELK012XNK000001 --}}
                         <div class="border border-gray-700">
-                         {{ generate_vin_code($order) }}
+                        {{ generate_vin_code($order) }}
                         </div>
                     </div>
                     <div>
