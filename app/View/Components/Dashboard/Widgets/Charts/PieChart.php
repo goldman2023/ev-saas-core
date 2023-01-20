@@ -14,6 +14,9 @@ class PieChart extends Component
 {
     public $pieChartModel;
     public $lineChartModel;
+    public $activityChartModel;
+    public $activityCount;
+    public $ordersCount;
     /**
      * Create a new component instance.
      *
@@ -46,6 +49,17 @@ class PieChart extends Component
             ->groupBy('DATE_FORMAT(created_at, "%Y-%m-%d")')
             ->get();
 
+        $data = Order::whereBetween('created_at', [$startDate, $endDate])
+            ->select(\DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), \DB::raw('count(*) as orders, DATE_FORMAT(created_at, "%Y-%m-%d") as order_date'))
+            ->groupBy('DATE_FORMAT(created_at, "%Y-%m-%d")')
+            ->get();
+
+
+        $dataActivity = Activity::whereBetween('created_at', [$startDate, $endDate])
+            ->select(\DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), \DB::raw('count(*) as orders'))
+            ->groupBy('DATE_FORMAT(created_at, "%Y-%m-%d")')
+            ->get();
+
 
 
 
@@ -56,13 +70,24 @@ class PieChart extends Component
 
         foreach($data as $key => $item) {
             $total = $item->orders;
-            $lineChartModel->addPoint($key, $total);
+            $lineChartModel->addPoint($item->order_date, $total);
         }
         // $lineChartModel->addPoint(7, 10);
         // $lineChartModel->addPoint(8, 20);
         // $lineChartModel->addPoint(9, 30);
 
         $this->lineChartModel = $lineChartModel;
+
+        $this->activityChartModel = (new LineChartModel());
+        $total = 0;
+
+        foreach($dataActivity as $key => $item) {
+            $total = $item->orders;
+            $this->activityChartModel->addPoint($key, $total);
+        }
+
+        $this->activityCount = $dataActivity->count();
+        $this->ordersCount = $data->count();
     }
 
     /**
