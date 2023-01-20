@@ -8,6 +8,7 @@ class OrderDetailsCard extends Component
 {
     public $order;
     public $print;
+    public $product;
     /**
      * Create a new component instance.
      *
@@ -17,6 +18,8 @@ class OrderDetailsCard extends Component
     {
         $this->order = $order;
         $this->print = $print;
+        $this->product = $order->get_primary_order_item()->subject;
+
         //
     }
 

@@ -6,15 +6,15 @@ function generate_vin_code($item)
 {
     // Since each OrderItem has copies of attributes of each linked product or "custom product", we should get the attributes from OrderItem itself - that's the main source of truth
 
-    $order_item = $item->get_primary_order_item();
+    $order_item = $item->get_primary_order_item()->subject;
     if(empty($order_item)) {
         return null;
     }
 
     $vin_code = 'Z3E';
     $vin_code .= 'L';
-    if ($body_type = $order_item?->getAttr(25)) {
-        $body_type = $order_item->getAttr(25)->attribute_values->first()->values;
+    if ($body_type = $order_item?->getAttr('kebulo-tipas')) {
+        $body_type = $order_item->getAttr('kebulo-tipas')->attribute_values->first()->values;
     } else {
         $body_type = 'X';
     }
@@ -57,8 +57,8 @@ function generate_vin_code($item)
     }
 
     /* Axel Count */
-    if ($order_item->getAttr(11)) {
-        $axel_count = $order_item->getAttr(11)->attribute_values->first()->values;
+    if ($order_item->getAttr('asiu-kiekis')) {
+        $axel_count = $order_item->getAttr('asiu-kiekis')->attribute_values->first()->values;
     } else {
         $axel_count = 0;
     }
@@ -107,14 +107,13 @@ function generate_vin_code($item)
     /* Keliu inspekcijos kodas */
     // $vin_code .= '020';
 
-    return 'Incomplete Data';
 
     /* Serial number */
     $vin_code .= generate_serial_number($order_item, $item);
 
     if (strlen($vin_code) == 17) {
         $controll_number = vin_control_number($vin_code);
-        $vin_code[9] = $controll_number;
+        $vin_code[8] = $controll_number;
     } else {
         return 'Incomplete Data';
     }
@@ -163,7 +162,7 @@ function vin_control_number($vin)
 
 function generate_serial_number($order_item, $order)
 {
-    if(empty($order_item->subject)) {
+    if(empty($order_item)) {
         $serial_number = 0;
     } else {
         $serial_number = $order->id;

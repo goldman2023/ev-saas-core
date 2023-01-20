@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
     <link rel='canonical' href='@yield(' canonical_link', url()->current() )' />
-    <link rel="preload" as="script" href="https://cdn.tailwindcss.com?plugins=forms,aspect-ratio" />
 
 
     @yield('meta')
@@ -35,7 +34,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WePixPro') }}">
-    
+
     @include('frontend.layouts.global-partials.all')
     @livewireStyles
 

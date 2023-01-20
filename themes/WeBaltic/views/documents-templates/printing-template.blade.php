@@ -2,8 +2,11 @@
 
 @section('content')
 
-<div class="grid grid-cols-2 bg-gray-100">
-{!! $html !!}
+<div>
+    @foreach($orders as $order)
+        <x-dashboard.orders.order-details-card :print="true" :order="$order">
+        </x-dashboard.orders.order-details-card>
+    @endforeach
 </div>
 
 

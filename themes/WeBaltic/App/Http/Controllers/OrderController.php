@@ -30,14 +30,17 @@ class OrderController extends Controller
 
         DB::beginTransaction();
 
+
+        baltic_generate_order_document($order, 'documents-templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
+
         try {
             if ($new_status == 1) { // contract
-                $reason = translate('Contract Created');
+                $reason = translate('Proposal Created');
+                // baltic_generate_order_document($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
 
-                baltic_generate_order_document($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
             } else if ($new_status == 2) { // approved
-                $reason = translate('Contract Signed');
-                baltic_generate_order_document($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
+                $reason = translate('Contract Created');
+                baltic_generate_order_document($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
             } else if ($new_status == 3) { // welding
                 $reason = translate('Approved for manufacturing');
                 baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
@@ -65,6 +68,8 @@ class OrderController extends Controller
                 $new_task->status = TaskStatusEnum::done()->value;
                 $new_task->save();
             }
+
+
 
             // Change order cycle status
             $order->setWEF('cycle_status', $new_status);

@@ -41,8 +41,8 @@ class PieChart extends Component
         $startDate = \Carbon::createFromFormat('Y-m-d', '2022-01-01');
         $endDate = \Carbon::createFromFormat('Y-m-d', '2023-01-30');
 
-        $data = User::whereBetween('created_at', [$startDate, $endDate])
-            ->select(\DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), \DB::raw('count(*) as users'))
+        $data = Order::whereBetween('created_at', [$startDate, $endDate])
+            ->select(\DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), \DB::raw('count(*) as orders'))
             ->groupBy('DATE_FORMAT(created_at, "%Y-%m-%d")')
             ->get();
 
@@ -52,8 +52,10 @@ class PieChart extends Component
 
         $lineChartModel = (new LineChartModel());
         $total = 0;
+        $lineChartModel->addPoint(0, 0);
+
         foreach($data as $key => $item) {
-            $total += $item->users;
+            $total = $item->orders;
             $lineChartModel->addPoint($key, $total);
         }
         // $lineChartModel->addPoint(7, 10);

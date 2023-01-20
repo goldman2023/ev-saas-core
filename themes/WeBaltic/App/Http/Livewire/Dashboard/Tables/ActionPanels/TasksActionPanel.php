@@ -135,7 +135,8 @@ class TasksActionPanel extends Component
                     $html = '';
 
                     foreach($orders as $order) {
-                        $html .= (new OrderDetailsCard($order, true))->render();
+                        // $details_card = new OrderDetailsCard($order, true);
+                        // $html .= $details_card->render();
                     }
 
 
@@ -146,7 +147,8 @@ class TasksActionPanel extends Component
                         'html' => $html,
                         'orders' => $orders,
                     ];
-                    $pdf = PDF::loadView($template, $data)->setPaper('a4', 'portrait')->save(public_path('/output.pdf'))->output();
+
+                    $pdf = PDF::loadView($template, $data)->setPaper('a4', 'portrait')->output();
 
                     // Get all models to which we want to attach generated and uploaded PDF (includes both tasks and orders)
                     $all_models = collect($tasks)->merge($orders);

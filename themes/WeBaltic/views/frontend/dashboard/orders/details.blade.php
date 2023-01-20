@@ -200,6 +200,15 @@
                             </button>
                         </li>
 
+                        <li class="mr-2" role="presentation">
+                            <button
+                                class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
+                                id="order-specification-tab" data-tabs-target="#order-specification-content" type="button" role="tab"
+                                aria-controls="order-specification-content" aria-selected="false">
+                                {{ translate('Specification') }}
+                            </button>
+                        </li>
+
 
                         <li class="mr-2" role="presentation">
                             <button
@@ -237,6 +246,12 @@
                         </div>
 
                     </div>
+
+                    <div class="rounded-lg dark:bg-gray-800" id="order-specification-content" role="tabpanel" aria-labelledby="order-specification-tab">
+                       Specification.
+
+                    </div>
+
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="order-documents-content" role="tabpanel"
                         aria-labelledby="order-documents-tab">
 
