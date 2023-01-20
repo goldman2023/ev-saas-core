@@ -19,12 +19,12 @@ function compileTheme(mix, dirname, theme, defaultTheme = 'WeTailwind') {
     // That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
     
     mix.setPublicPath(`public/themes/${theme}`);
-    
-    // Images - (IMPORTANT: We must use full public path in second parameter, cuz for some reason, setPublicPath doesn't affect copyDirectory() method!)
+
+    // Images - (IMPORTANT: We must use full public path in second parameter, cuz for some reason, setPublicPath above doesn't affect copyDirectory() method!)
     if (fs.existsSync(`${dirname}/images`)) {
         mix.copyDirectory(`${dirname}/images`, `public/themes/${theme}/images`);
     } else {
-        mix.copyDirectory(`/var/www/html/themes/${defaultTheme}/images`, `public/themes/${theme}/images`)
+        mix.copyDirectory(`${dirname}/../${defaultTheme}/images`, `public/themes/${theme}/images`)
     }
     
     // App.js

@@ -318,7 +318,7 @@ class Order extends WeBaseModel
     }
 
     public function get_primary_order_item() {
-        return $this->order_items()->first();
+        return $this->order_items->first();
     }
 
     public function comments() {
