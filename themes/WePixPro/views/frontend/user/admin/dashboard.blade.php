@@ -27,6 +27,10 @@
 
             <div class="sm:col-span-2">
                 <div class="mb-6">
+                    <x-dashboard.widgets.charts.pie-chart>
+                    </x-dashboard.widgets.charts.pie-chart>
+                </div>
+                <div class="mb-6">
                     <x-dashboard.widgets.business.quick-actions>
                     </x-dashboard.widgets.business.quick-actions>
                 </div>
