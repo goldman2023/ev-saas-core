@@ -43,11 +43,16 @@ $axel_count = 0;
 0.2. Type: <strong>TERO1</strong> <br>
 Variant: S <br>
 Version: - <br>
+<div>
 0.2.1 Commercial name(s): Spec
+</div>
+<div>
 0.2.2.1 Allowed Parameter Values for multistage type approval to use the base vehicle emission values
 (insert range where applicable)
+</div>
+<div>
 Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-mase') }} kg </strong>
-
+</div>
 <div>
     Final Vehicle technically permissible maximum laden mass (in kg):
     <strong>{{ $product->getAttrValue('priekabos-bendroji-mase') }} kg </strong>
@@ -103,7 +108,7 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
         {{ get_tenant_setting('company_address') }}
     </div>
     <div>
-        {{ get_tenant_setting('company_city') }}
+        {{ get_tenant_setting('company_city') }},   {{ get_tenant_setting('company_country') }}
     </div>
 </div>
 
@@ -129,7 +134,9 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
         <span class="text-red-500">Missing</span>
         @endif
     </strong>
+    <div>
     granted on: <strong>{{ $order->created_at }}</strong>
+    </div>
     and can be permanently registered in Member States having right/ left hand traffic and using metric/
     imperial
     units for the
@@ -143,9 +150,17 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
 
 
 <p>
-    General construction characteristics
+    <div>
+        <strong>
+            General construction characteristics
+        </strong>
+    </div>
+    <div>
     1. Number of axles: 1 and wheels: 2
+    </div>
+    <div>
     1.1. Number and position of axles with twin wheels: N/A
+    </div>
 <div>
     <strong>Main dimensions</strong>
 </div>
@@ -153,7 +168,7 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
     4. Wheelbase: <strong>{{ $product->getAttrValue('wheelbase') }} mm </strong>
 </div>
 <div>
-    4.1. Axle spacing: 0-1: 2200 mm,
+    4.1. Axle spacing: 0-1: 2200 mm, {{ ($product->getAttrValue('kraunamo-pavirsiaus-ilgis') / 2) - 350 }}
 </div>
 <div>
     5. Length: <strong>{{ $product->getAttrValue('kraunamo-pavirsiaus-ilgis') }} mm </strong>

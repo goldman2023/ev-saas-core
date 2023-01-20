@@ -1,17 +1,11 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
+const defaultWeTheme = 'WeTailwind';
+let weMix = require('../../we-webpack-mix');
 
 module.exports = {
     darkMode: 'class',
-    content: [
-        `${__dirname}/views/**/*.blade.php`, // absolute path
-        `./resources/views/components/**/*.blade.php`, // relative to root
-        `./resources/views/livewire/**/*.blade.php`, // relative to root
-        `./resources/views/layouts/**/*.blade.php`, // relative to root
-        `./resources/views/we-edit/**/*.blade.php`, // relative to root
-        `${__dirname}/js/**/*.vue`, // absolute path
-        `${__dirname}/js/**/*.js` // absolute path
-    ],
+    content: weMix.getPurgePaths(__dirname, defaultWeTheme),
     theme: {
         screens: {
             'mobile': {'min': '300px', 'max': '599px'},
@@ -24,10 +18,10 @@ module.exports = {
             'md': '900px',
             'lg': '1200px',
             'xl': '1500px',
-          },
+        },
         extend: {
             fontFamily: {
-                sans: ['Inter var', 'Poppins', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'],
                 roboto: ['Roboto'],
             },
             fontSize: {
@@ -58,15 +52,6 @@ module.exports = {
                 10: '10',
                 11: '11',
                 12: '12',
-            },
-            keyframes: {
-                loader: {
-                    '0%, 80%, 100%': { transform: 'scale(0)', opacity: '0.2' },
-                    '40%': { transform: 'scale(1)', opacity: '0.8' }
-                }
-            },
-            animation: {
-                loader: 'loader 1.48s ease-in-out infinite both',
             },
             colors: {
                 /* Indigo is a primary brand color */

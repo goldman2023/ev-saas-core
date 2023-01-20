@@ -168,6 +168,27 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_action('request-quote.insert', function (&$order) {
                 $order->setWEF('cycle_status', 0); // 0 is 'request'
                 $order->setWEF('cycle_step_date_request', time());
+
+                baltic_generate_order_document(
+                    order: $order, 
+                    template: 'documents-templates.proposal', 
+                    upload_tag: 'proposal', 
+                    display_name: translate('Proposal for Order #').$order->id, 
+                    data: ['user' => $order->user->id]
+                );
+            }, 10, 1);
+
+            add_action('order.insert', function (&$order) {
+                $order->setWEF('cycle_status', 0); // 0 is 'request'
+                $order->setWEF('cycle_step_date_request', time());
+
+                baltic_generate_order_document(
+                    order: $order, 
+                    template: 'documents-templates.proposal', 
+                    upload_tag: 'proposal', 
+                    display_name: translate('Proposal for Order #').$order->id, 
+                    data: ['user' => $order->user->id]
+                );
             }, 10, 1);
 
             add_action('view.order-form.wire_set', function () {

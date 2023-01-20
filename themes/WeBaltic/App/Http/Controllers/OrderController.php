@@ -36,7 +36,6 @@ class OrderController extends Controller
         try {
             if ($new_status == 1) { // contract
                 $reason = translate('Proposal Created');
-                baltic_generate_order_document($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
 
             } else if ($new_status == 2) { // approved
                 $reason = translate('Contract Created');
@@ -46,6 +45,9 @@ class OrderController extends Controller
                 baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
             } else if ($new_status == 6) { // delivery_to_warehouse
                 $reason = translate('Delivering to warehouse');
+
+                // TODO: THERE WILL BE A PROBLEM HERE since delivery template uses $uplaod, which at this point is not created yet!
+
 
                 // 1. Create Delivery Task
                 $new_task = new Task();
