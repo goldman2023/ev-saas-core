@@ -1,85 +1,85 @@
-<table>
-    <thead>
-      <tr>
-        <th colspan="8">Assembly Card</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colspan="2">Order no:</td>
-        <td colspan="2"></td>
-        <td colspan="2">Commercial offer no:</td>
-        <td colspan="2"></td>
-      </tr>
-      <tr>
-        <td colspan="2">Date of assembly start</td>
-        <td colspan="2"></td>
-        <td colspan="4"></td>
-      </tr>
-      <tr>
-        <td colspan="2">Assembled:</td>
-        <td colspan="2"></td>
-        <td>Assembler:</td>
-        <td colspan="3"></td>
-      </tr>
-      <tr>
-        <td colspan="2">Inspected</td>
-  
-        <td>Inspector:</td>
-        <td colspan="3"></td>
-      </tr>
-      <tr>
-        <td colspan="8"><strong>Technical characteristics of trailer:</strong></td>
-      </tr>
-      <tr>
-        <td colspan="2">Trailer Category:</td>
-        <td colspan="2">O - O1</td>
-        <td rowspan="2" colspan="2">Number of axles:</td>
-        <td colspan="2">O - 1 axle</td>
-      </tr>
-      <tr>
-        <td colspan="2">Length:</td>
-        <td colspan="2">_______mm</td>
-        <td colspan="2"></td>
-      </tr>
-      <tr>
-        <td colspan="2">Width:</td>
-        <td colspan="2">_______mm</td>
-        <td colspan="2"></td>
-        <td colspan="2"></td>
-      </tr>
-      <tr>
-        <td colspan="2">Model:</td>
-        <td colspan="2"></td>
-        <td colspan="2">Chasis type:</td>
-        <td colspan="2">O - leaf spring</td>
-      </tr>
-      <tr>
-        <td colspan="2">Lights:</td>
-        <td colspan="2">O - Multipoint 2</td>
-        <td colspan="2">Axle make:</td>
-        <td colspan="2"></td>
-      </tr>
-      <tr>
-        <td colspan="2">Coupling:</td>
-        <td>STC</td>
-        <td>O - 750 kg</td>
-        <td colspan="2">Axle model:</td>
-        <td colspan="2"></td>
-      </tr>
-      <tr>
-        <td rowspan="2" colspan="2"></td>
-        <td>AL-KO</td>
-        <td>O - 750 kg</td>
-        <td rowspan="2" colspan="2">Wheels:</td>
-        <td rowspan="2" colspan="2">O - Kargo Trail R13</td>
-      </tr>
-      <tr>
-        <td>KNOTT</td>
-        <td>O - 750 kg</td>
-      </tr>
-      <tr>
-        <td colspan="8">Comments:</td>
-      </tr>
-    </tbody>
-  </table>
+@extends('documents-templates.global-pdf-layout.pdf-layout')
+
+@push('styles')
+<style>
+
+</style>
+@endpush
+
+@section('content')
+
+<div class="watermark">
+
+</div>
+<div class="text-sm py-3">
+  <div class="w-full text-lg font-bold text-center pb-6">
+      Delivery Note
+  </div>
+
+  <div class="w-full pb-1">
+    <span class="font-bold">Delivery No:</span> {{ get_delivery_document_number($upload) }}
+  </div>
+  <div class="w-full pb-1">
+    <span class="font-bold">Delivery initiated:</span> {{ \Carbon::createFromTimestamp($order->getWEF('cycle_step_date_delivery_to_warehouse'))->format('Y-m-d H:i') }}
+  </div>
+
+  <div class="w-full pb-6">
+    <span class="font-bold">Deliery type:</span> To warehouse
+  </div>
+
+  <div class="w-full pb-1">
+    <span class="font-bold">Order reference:</span> #{{ $order->id }}
+  </div>
+  <div class="w-full pb-6">
+    <span class="font-bold">Order date:</span> {{ $order->created_at->format('Y-m-d H:i') }}
+  </div>
+
+
+  {{-- Order Items --}}
+  <div class="w-full pb-3">
+    <span class="font-bold">Order Items</span>
+  </div>
+  <div class="w-full pb-4">
+    @if($order->order_items->isNotEmpty())
+      <table class="table-border w-full table-auto text-sm" style="border-spacing: 20px 0;">
+          <thead>
+            <tr class="text-left">
+              <th align="left" class="pl-2">ID</th>
+              <th align="left" class="pl-2">Name</th>
+              <th align="left" class="pl-2">Quantity</th>
+            </tr>
+          </thead>
+          <tbody class="">
+            @foreach($order->order_items as $item)
+              <tr>
+                <td class="pr-2 pl-2">{{ $item->id }}</td>
+                <td class="pr-2 pl-2">{{ $item->name }}</td>
+                <td class="pr-2 pl-2">{{ $item->quantity }}</td>
+              </tr>
+            @endforeach
+          </tbody>
+      </table>
+    @endif
+  </div>
+
+  <div class="w-full pb-6">
+      <span class="font-bold">Total Weight:</span>  {{ $order->order_items->first()->getAttrValue('priekabos-eksplotacine-mase') }} kg
+  </div>
+
+  <div class="w-full pb-3">
+      <span class="font-bold">Notes</span>
+  </div>
+
+  <div class="w-full border border-gray-400 p-3 min-h-60">
+    {{-- Upload `delivery_to_warehouse_notes` wef --}}
+    @if(!empty($proposal_notes = $upload->getWEF('delivery_to_warehouse_notes', true, 'array')))
+      <ul class="list-disc pl-5">
+          @foreach($proposal_notes as $note)
+              <li>{{ $note }}</li>
+          @endforeach
+      </ul>
+    @endif
+  </div>
+</div>
+
+@endsection

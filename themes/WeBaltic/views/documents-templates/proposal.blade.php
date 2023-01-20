@@ -25,7 +25,7 @@
     </div>
 
     <div class="w-full py-3 text-center">
-        <h1 class="w-full text-20 font-bold">KOMERCINIS PASIŪLYMAS Nr. B2T-{{ $order->id }}</h1>
+        <h1 class="w-full text-lg font-bold">KOMERCINIS PASIŪLYMAS Nr. B2T-{{ $order->id }}</h1>
         <div class="w-full leading-0">{{ $order->updated_at->format('Y-m-d') }}</div>
         <div class="w-full leading-0">Kaunas</div>
     </div>
@@ -34,21 +34,21 @@
         <span class="font-bold">Pavadinimas:</span>  {{ $order->order_items->first()->name }}
     </div>
 
-    <div class="w-full pb-3">
+    <div class="w-full pb-3 font-bold">
         Techniniai parametrai:
     </div>
 
     {{-- Add OrderItem attributes here --}}
     <div class="w-full pb-3">
-        <span class="font-bold">Ilgis:</span>
-        <span class="font-bold">Plotis:</span>
-        <span class="font-bold">Bortai:</span>
+        <div class="w-full font-bold">Ilgis:</div>
+        <div class="w-full font-bold">Plotis:</div>
+        <div class="w-full font-bold">Bortai:</div>
     </div>
 
     <div class="w-full pb-3">
-        <span class="font-bold">Bendroji masė:</span>
-        <span class="font-bold">Ašis:</span>
-        <span class="font-bold">Ratai:</span>
+        <div class="w-full font-bold">Bendroji masė:</div>
+        <div class="w-full font-bold">Ašis:</div>
+        <div class="w-full font-bold">Ratai:</div>
     </div>
 
     {{-- Upload `proposal_notes` wef --}}
@@ -80,7 +80,7 @@
     </div>
 
     <div class="w-full">
-        <table class="table-auto text-xs" style="border-spacing: 10px 0;">
+        <table class="table-auto text-xs" style="border-spacing: 20px 0;">
             <thead>
               <tr>
                 <th></th>
@@ -90,19 +90,19 @@
             </thead>
             <tbody class="">
               <tr>
-                <td>UAB “Domantas”</td>
-                <td>Įmonės kodas 302635282</td>
-                <td>Tel: +370 671 81007</td>
+                <td class="pr-2">UAB “Domantas”</td>
+                <td class="pr-2">Įmonės kodas 302635282</td>
+                <td class="pr-2">Tel: +370 671 81007</td>
               </tr>
               <tr>
-                <td>Pakalnės g-vė 5e, Domeikava, Kauno r.</td>
-                <td>Bankas SEB</td>
-                <td>E-mail: krovininespriekabos@gmail.com</td>
+                <td class="pr-2">Pakalnės g-vė 5e, Domeikava, Kauno r.</td>
+                <td class="pr-2">Bankas SEB</td>
+                <td class="pr-2">E-mail: krovininespriekabos@gmail.com</td>
               </tr>
               <tr>
-                <td>LT- 54354 Kauno r.sav., Lithuania</td>
-                <td>A/s LT66 7044 0600 0785 7947</td>
-                <td>Skype: badutis</td>
+                <td class="pr-2">LT- 54354 Kauno r.sav., Lithuania</td>
+                <td class="pr-2">A/s LT66 7044 0600 0785 7947</td>
+                <td class="pr-2">Skype: badutis</td>
               </tr>
             </tbody>
         </table>
