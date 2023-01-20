@@ -1,12 +1,10 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
+let weMix = require('../../we-webpack-mix');
 
 module.exports = {
     darkMode: 'class',
-    content: [
-        `${__dirname}/views/**/*.blade.php`, // absolute path to current theme
-        `./resources/views/**/*.blade.php`, // relative to root to core
-    ],
+    content: weMix.getPurgePaths(__dirname, null),
     theme: {
         screens: {
             'mobile': {'min': '300px', 'max': '599px'},
@@ -81,15 +79,15 @@ module.exports = {
                 'bg-2': '#EBECF0',
                 'bg-3': '#FAFBFC',
                 'bg-4': '#FFFFFF',
-                'indigo-100': '#f40000',
-                'indigo-200': '#f40000',
-                'indigo-300': '#f40000',
-                'indigo-400': '#f40000',
-                'indigo-500': '#f40000',
-                'indigo-600': '#f40000',
-                'indigo-700': '#f40000',
-                'indigo-800': '#f40000',
-                'indigo-900': '#f40000',
+                'indigo-100': '#FFCFCC',
+                'indigo-200': '#FF9B94',
+                'indigo-300': '#FF6B61',
+                'indigo-400': '#FF3729',
+                'indigo-500': '#F41100',
+                'indigo-600': '#C20D00',
+                'indigo-700': '#940A00',
+                'indigo-800': '#610600',
+                'indigo-900': '#330300',
                 'primary-100': '#f40000',
                 'primary-200': '#f40000',
                 'primary-300': '#f40000',

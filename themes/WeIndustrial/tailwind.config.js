@@ -1,11 +1,10 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
+const defaultTheme = require('tailwindcss/defaultTheme');
+const plugin = require('tailwindcss/plugin');
+const defaultWeTheme = 'WeTailwind';
+let weMix = require('../../we-webpack-mix');
 
 module.exports = {
-    content: [
-        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
-        "./storage/framework/views/*.php",
-        "./resources/views/**/*.blade.php",
-    ],
+    content: weMix.getPurgePaths(__dirname, defaultWeTheme),
 
     theme: {
         extend: {
