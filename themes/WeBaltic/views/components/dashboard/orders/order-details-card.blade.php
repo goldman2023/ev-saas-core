@@ -25,8 +25,8 @@
                 if(empty($product)) {
                 $total_weight = 'Missing data';
                 } else {
-                if( $product->getAttr('priekabos-nuosava-mase')) {
-                $total_weight = $product->getAttr('priekabos-nuosava-mase')->attribute_values->first()->values;
+                if( $product->getAttr('priekabos-bendroji-mase')) {
+                $total_weight = $product->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
                 } else {
                     $total_weight = 'Missing data';
                 }

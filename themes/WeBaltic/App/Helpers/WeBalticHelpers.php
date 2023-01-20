@@ -134,23 +134,54 @@ function vin_control_number($vin)
         'Y' => 8, 'Z' => 9
     );
 
+    $multiplier = [
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        10,
+        'x',
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2
+    ];
+
     // Initialize control number
     $control_number = 0;
 
     // Loop through VIN characters
-    for ($i = 8; $i < 17; $i++) {
+    for ($i = 0; $i < 17; $i++) {
         // Get weight of current character
-        $weight = isset($weights[$vin[$i]]) ? $weights[$vin[$i]] : 0;
-
+        $weight = isset($weights[$vin[$i]]) ? $weights[$vin[$i]] : $vin[$i];
+        $multiply_result = 0;
         // Multiply weight by character position
-        $weight *= ($i - 8 + 1);
+        if($multiplier[$i] != 'x') {
+            // $weight = $weight * $multiplier[$i];
+            $multiply_result = $weight * $multiplier[$i];
+            // echo "Doing calculation";
+            // var_dump($weight . " * " . $multiplier[$i]);
+            // echo "<br>";
+        }
 
         // Add to control number
-        $control_number += $weight;
+        // var_dump("Total Weight: " . $weight);
+        // var_dump("Multiply result: " . $multiply_result);
+        $control_number += $multiply_result;
     }
+
+
 
     // Get remainder of control number divided by 11
     $remainder = $control_number % 11;
+    // var_dump("Controll Number" . $remainder);
 
     // If remainder is 10, return "X" as control number
     if ($remainder == 10) {

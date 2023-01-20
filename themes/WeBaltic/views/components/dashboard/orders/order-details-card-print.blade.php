@@ -1,4 +1,4 @@
-<div class="w-full  border-gray-900" style="margin-bottom: 40px;">
+<div class="w-full  border-gray-900" style="margin-bottom:0px;">
     <table style="width: 100%;">
         <tr>
             {{-- Left side --}}
@@ -9,7 +9,7 @@
                         UAB Domantas
                     </div>
                     <div>
-                        {{ $product->getAttrValue('sertifikato-numeris') }}
+                        {{ generate_certificate_number($product->getAttrValue('sertifikato-numeris')) }}
                     </div>
                     <div style="max-width: 100%; padding: 0;" class="font-bold">
                         {{-- Z3ELK012XNK000001 --}}
@@ -23,8 +23,8 @@
                         if(empty($product)) {
                         $total_weight = 'Missing data';
                         } else {
-                        if( $product->getAttr('priekabos-nuosava-mase')) {
-                        $total_weight = $product->getAttr('priekabos-nuosava-mase')->attribute_values->first()->values;
+                        if( $product->getAttr('priekabos-bendroji-mase')) {
+                        $total_weight = $product->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
                         } else {
                         $total_weight = 'Missing data';
                         }

@@ -32,11 +32,11 @@ class OrderController extends Controller
 
 
         baltic_generate_order_document($order, 'documents-templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
+        // baltic_generate_order_document($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
 
         try {
             if ($new_status == 1) { // contract
                 $reason = translate('Proposal Created');
-                baltic_generate_order_document($order, 'documents-templates.proposal', 'proposal', translate('Proposal for Order #').$order->id);
 
             } else if ($new_status == 2) { // approved
                 $reason = translate('Contract Created');
