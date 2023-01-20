@@ -25,7 +25,7 @@
     </div>
 
     <div class="w-full py-3 text-center">
-        <h1 class="w-full text-20 font-bold">KOMERCINIS PASIŪLYMAS Nr. B2T-{{ $order->id }}</h1>
+        <h1 class="w-full text-lg font-bold">KOMERCINIS PASIŪLYMAS Nr. B2T-{{ $order->id }}</h1>
         <div class="w-full leading-0">{{ $order->updated_at->format('Y-m-d') }}</div>
         <div class="w-full leading-0">Kaunas</div>
     </div>

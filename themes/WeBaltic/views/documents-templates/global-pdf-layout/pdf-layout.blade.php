@@ -29,10 +29,10 @@
 
         .watermark {
             position: absolute;
-            left: 0;
+            right: 0;
             top: 0;
-            width: 100%;
-            height: 100%;
+            width: 200px;
+            height: 200px;
             background: url('{{ get_site_logo() }}') no-repeat;
             opacity: 0.5;
             background-size: contain;
@@ -45,7 +45,7 @@
     @stack('styles')
 </head>
 
-<body>
+<body style="position: relative;">
     @yield('content')
 </body>
 
@@ -823,6 +823,16 @@
     text-align: center;
     }
 
+    .text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+    }
+
+    .text-lg {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+    }
+
     .text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -844,6 +854,36 @@
 
     .pr-2 {
         padding-right: 0.5rem;
+    }
+
+    .p-3 {
+        padding: 0.75rem;
+    }
+
+    .pl-2 {
+        padding-left: 0.5rem;
+    }
+
+    .min-h-60 {
+        min-height: 60px;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .table-border, .table-border th, .table-border td {
+        border: 1px solid black;
+    }
+    .h-12 {
+        height: 3rem;
+    }
+    .border-gray-300 {
+        --tw-border-opacity: 1;
+        border-color: rgb(209 213 219 / var(--tw-border-opacity));
+    }
+    .border-gray-400 {
+        border-color: #9ca3af;
     }
 
 </style>

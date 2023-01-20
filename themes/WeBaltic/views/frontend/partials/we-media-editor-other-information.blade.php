@@ -1,4 +1,6 @@
 @if(!empty($upload))
+
+    {{-- Proposal --}}
     @if($upload->getWEF('upload_tag') === 'proposal')
         <livewire:dashboard.forms.wef.single-wef-form 
             :subject="$upload" 
@@ -10,6 +12,17 @@
             key="{{ \UUID::generate(4)->string }}" />
     @endif
 
+    {{-- Delivery to Warehouse --}}
+    @if($upload->getWEF('upload_tag') === 'delivery_to_warehouse')
+        <livewire:dashboard.forms.wef.single-wef-form 
+            :subject="$upload" 
+            wef-key="delivery_to_warehouse_notes" 
+            wef-label="{{ translate('Delivery notes') }}"
+            data-type="array" 
+            form-type="text_list"
+            :custom-properties="['min_rows' => 0]"
+            key="{{ \UUID::generate(4)->string }}" />
+    @endif
 
 @endif
 

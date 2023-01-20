@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Upload;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 if (!function_exists('baltic_generate_order_document')) {
@@ -29,5 +30,20 @@ if (!function_exists('baltic_generate_order_document')) {
 
         return $upload;
     }
+}
 
+if (!function_exists('get_delivery_document_number')) {
+    function get_delivery_document_number($upload) {
+        $delivery_docs = Upload::whereWEF('upload_tag', 'delivery_to_warehouse')->orderBy('created_at', 'asc')->get();
+
+        $current_delivery_doc_number = $delivery_docs->search(function ($item, $key) use($upload) {
+            return $item->id === $upload->id;
+        });
+
+        if($current_delivery_doc_number >= 0) {
+            $current_delivery_doc_number += 1;
+        }
+
+        return $current_delivery_doc_number;
+    }
 }
