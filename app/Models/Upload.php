@@ -75,10 +75,10 @@ class Upload extends WeBaseModel
      * @param array $options
      * @return string
      */
-    public function url(array $options = []): string
+    public function url(array $options = [], $proxify = true): string
     {
         if (($this->attributes['type'] ?? null) === 'image') {
-            return IMG::get($this, IMG::mergeWithDefaultOptions($options, 'thumbnail'));
+            return IMG::get($this, IMG::mergeWithDefaultOptions($options, 'thumbnail'), proxify: $proxify);
         }
 
         return Storage::disk(config('filesystems.default'))->url($this->attributes['file_name'] ?? '');
@@ -106,6 +106,18 @@ class Upload extends WeBaseModel
     {
         return $query->orderBy('file_size', 'desc');
     }
+
+    public function scopeOnlyImages($query)
+    {
+        return $query->where('type', 'image');
+    }
+
+    public function scopeOnlyDocuments($query)
+    {
+        return $query->where('type', 'document');
+    }
+    // END Local Scopes
+
 
     public function toJSONMedia() {
         return [

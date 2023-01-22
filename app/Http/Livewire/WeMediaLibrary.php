@@ -15,6 +15,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use App\Enums\SortMediaLibraryEnum;
 use Illuminate\Support\Facades\Storage;
+use App\Enums\MediaLibraryFileTypesEnum;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,6 +39,7 @@ class WeMediaLibrary extends Component
     public $multiple = false;
 
     public $sort_by = 'newest'; // newest, oldest, smallest, largest
+    public $filter_type = 'all'; // all, images, documents
 
     public $search_string = '';
 
@@ -69,6 +71,7 @@ class WeMediaLibrary extends Component
             'media_type' => [],
             'selected' => [],
             'sort_by' => [Rule::in(SortMediaLibraryEnum::toValues())],
+            'filter_type' => [Rule::in(MediaLibraryFileTypesEnum::toValues())],
             'search_string' => [],
             'page' => [],
         ];
@@ -119,12 +122,17 @@ class WeMediaLibrary extends Component
         $this->dispatchBrowserEvent('display-media-library-modal');
     }
 
+    public function updatedSearchString($value = null)
+    {
+        $this->populateMedia();
+    }
+
     public function updatedSortBy($value = 'newest')
     {
         $this->populateMedia();
     }
 
-    public function updatedSearchString($value)
+    public function updatedFilterType($value = 'all')
     {
         $this->populateMedia();
     }
@@ -259,7 +267,9 @@ class WeMediaLibrary extends Component
             ->when($this->sort_by === 'oldest', fn ($query, $value) => $query->oldest())
             ->when($this->sort_by === 'smallest', fn ($query, $value) => $query->smallest())
             ->when($this->sort_by === 'largest', fn ($query, $value) => $query->largest())
-            ->when(! empty($this->search_query), fn ($query, $value) => $query->search($this->search_query))
+            ->when($this->filter_type === 'images', fn ($query, $value) => $query->onlyImages())
+            ->when($this->filter_type === 'documents', fn ($query, $value) => $query->onlyDocuments())
+            ->when(! empty($this->search_string), fn ($query, $value) => $query->search($this->search_string))
             ->where('user_id', auth()->user()->id)
             ->paginate(perPage: $this->per_page, page: $this->page);
     }
