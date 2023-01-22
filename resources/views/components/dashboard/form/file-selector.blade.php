@@ -135,7 +135,7 @@ x-init="makeSortable()"
                                 <template x-if="item.type === 'document'">
                                     <div class="w-full flex flex-col grow"
                                         @if($subject)
-                                            @click="$wire.emit('showMediaEditor', id, {{ $subject->id }}, '{{ base64_encode($subject::class) }}', item.id)"
+                                            @click="$wire.emit('showMediaEditor', id, item.id, {{ $subject->id }}, '{{ base64_encode($subject::class) }}')"
                                         @endif
                                     >
                                         <div class="w-full px-2 py-3 flex flex-col grow">
@@ -143,7 +143,7 @@ x-init="makeSortable()"
                                             <p class="pt-2 text-10" x-text="window.WE.utils.formatSizeUnits(item.file_size)"></p>
                                         </div>
                                         @if($subject)
-                                            <div class="w-full lx-2 py-1 text-center color-gray-700 border-t border-gray-200 text-12 cursor-pointer relative z-10">
+                                            <div class="w-full lx-2 py-1 text-center color-gray-700 border-t border-gray-200 text-12 cursor-pointer relative focus:ring-primary focus:ring-1" >
                                                 <span>{{ translate('Edit file') }}</span>
                                             </div>
                                         @endif

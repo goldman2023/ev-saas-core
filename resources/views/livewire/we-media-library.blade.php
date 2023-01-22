@@ -8,6 +8,7 @@
     selected: @entangle('selected').defer,
     multiple: @entangle('multiple'),
     sort_by: @entangle('sort_by'),
+    filter_type: @entangle('filter_type'),
     search_string: @entangle('search_string'),
     page: @entangle('page'),
     isMediaSelected(file) {
@@ -65,6 +66,7 @@
 
 
             <div class="max-w-[90%] lg:max-w-[1150px]  overflow-hidden relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left  shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full sm:p-6"
+                wire:loading.class="pointer-events-none opacity-50"
                 x-show="displayModal" x-transition:enter="ease-out duration-300"
                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -96,45 +98,87 @@
                     <div class="w-full mt-3" x-show="active_tab === 'select_file'">
                         {{-- Sort and Search bar --}}
                         <div class="w-full pb-3 mb-3 border-b border-gray-200 flex items-center justify-between">
-                            <div x-data="{
-                                sort_types: @js(\App\Enums\SortMediaLibraryEnum::labels()),
-                                show_sort_dropdown: false,
+                            <div class="flex items-center gap-x-2">
+                                <div x-data="{
+                                    sort_types: @js(\App\Enums\SortMediaLibraryEnum::labels()),
+                                    show_sort_dropdown: false,
                                 }">
-                                <div class="mt-1 relative">
-                                    <button type="button" @click="show_sort_dropdown = !show_sort_dropdown"
-                                        class="bg-white relative w-[200px] border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
-                                        <span class="block truncate" x-text="sort_types[sort_by]"></span>
-                                        <span
-                                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                            @svg('heroicon-s-chevron-up-down', ['class' => 'h-5 w-5 text-gray-400']);
-                                        </span>
-                                    </button>
+                                    <div class="mt-1 relative">
+                                        <button type="button" @click="show_sort_dropdown = !show_sort_dropdown"
+                                            class="bg-white relative w-[200px] border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
+                                            <span class="block truncate" x-text="sort_types[sort_by]"></span>
+                                            <span
+                                                class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                                @svg('heroicon-s-chevron-up-down', ['class' => 'h-5 w-5 text-gray-400'])
+                                            </span>
+                                        </button>
+    
+                                        <ul class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                                            x-show="show_sort_dropdown" x-transition:leave="transition ease-in duration-100"
+                                            x-transition:leave-start="opacity-100 " x-transition:leave-end="oapcity-0"
+                                            @click.outside="show_sort_dropdown = false">
+    
+                                            <template x-for="(type, key) in sort_types">
+                                                <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer"
+                                                    @click="sort_by = key; show_sort_dropdown= false;">
+                                                    <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
+                                                    <span class="font-normal block truncate"
+                                                        :class="{'font-semibold': key === sort_by, 'font-normal': key !== sort_by }"
+                                                        x-text="type">
+                                                    </span>
+    
+                                                    <span
+                                                        class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4"
+                                                        x-show="key === sort_by">
+                                                        @svg('heroicon-o-check', ['class' => 'h-5 w-5'])
+                                                    </span>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
 
-                                    <ul class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
-                                        x-show="show_sort_dropdown" x-transition:leave="transition ease-in duration-100"
-                                        x-transition:leave-start="opacity-100 " x-transition:leave-end="oapcity-0"
-                                        @click.outside="show_sort_dropdown = false">
-
-                                        <template x-for="(type, key) in sort_types">
-                                            <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer"
-                                                @click="sort_by = key; show_sort_dropdown= false;">
-                                                <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
-                                                <span class="font-normal block truncate"
-                                                    :class="{'font-semibold': key === sort_by, 'font-normal': key !== sort_by }"
-                                                    x-text="type">
-                                                </span>
-
-                                                <span
-                                                    class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4"
-                                                    x-show="key === sort_by">
-                                                    @svg('heroicon-o-check', ['class' => 'h-5 w-5'])
-                                                </span>
-                                            </li>
-                                        </template>
-                                    </ul>
+                                <div x-data="{
+                                    file_types: @js(\App\Enums\MediaLibraryFileTypesEnum::labels()),
+                                    show_type_filter_dropdown: false,
+                                }">
+                                    <div class="mt-1 relative">
+                                        <button type="button" @click="show_type_filter_dropdown = !show_type_filter_dropdown"
+                                            class="bg-white relative w-[200px] border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
+                                            <span class="block truncate" x-text="file_types[filter_type]"></span>
+                                            <span
+                                                class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                                @svg('heroicon-s-chevron-up-down', ['class' => 'h-5 w-5 text-gray-400'])
+                                            </span>
+                                        </button>
+    
+                                        <ul class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                                            x-show="show_type_filter_dropdown" x-transition:leave="transition ease-in duration-100"
+                                            x-transition:leave-start="opacity-100 " x-transition:leave-end="oapcity-0"
+                                            @click.outside="show_type_filter_dropdown = false">
+    
+                                            <template x-for="(type, key) in file_types">
+                                                <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer"
+                                                    @click="filter_type = key; show_type_filter_dropdown= false;">
+                                                    <span class="font-normal block truncate"
+                                                        :class="{'font-semibold': key === filter_type, 'font-normal': key !== filter_type }"
+                                                        x-text="type">
+                                                    </span>
+    
+                                                    <span
+                                                        class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4"
+                                                        x-show="key === filter_type">
+                                                        @svg('heroicon-o-check', ['class' => 'h-5 w-5'])
+                                                    </span>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
+                            
 
                             <div class="" x-data="{}">
                                 <div>
@@ -166,7 +210,9 @@
                                     <ul role="list"
                                         class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8 p-1">
                                         <template x-for="file in media">
-                                            <li class="relative cursor-pointer" @click="selectMedia(file)">
+                                            <li class="relative cursor-pointer" @click="selectMedia(file)" x-data="{
+                                                id: 'file-'+file.id
+                                            }">
                                                 <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden"
                                                     :class="{'ring-2 ring-offset-2 ring-offset-gray-100 ring-indigo-500': isMediaSelected(file)}">
 
@@ -176,7 +222,7 @@
                                                     </template>
 
                                                     <template x-if="file.type === 'document'">
-                                                        <div class="w-full flex items-center justify-center pointer-events-none group-hover:opacity-75 ">
+                                                        <div class="w-full flex items-center justify-center pointer-events-none group-hover:opacity-75">
                                                             @svg('heroicon-s-document', ['class' => 'w-[60px] h-[60px] text-gray-700'])
                                                         </div>
                                                     </template>
@@ -186,8 +232,17 @@
                                                 </div>
                                                 <p class="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none"
                                                     x-text="file.file_original_name"></p>
-                                                <p class="block text-sm font-medium text-gray-500 pointer-events-none"
-                                                    x-text="window.WE.utils.formatSizeUnits(file.file_size)"></p>
+
+                                                <div class="w-full flex justify-between items-center">
+                                                    <p class="block text-sm font-medium text-gray-500 pointer-events-none"
+                                                        x-text="window.WE.utils.formatSizeUnits(file.file_size)"></p>
+
+                                                    @if($display === 'inline')
+                                                        <span class="cursor-pointer underline text-12" @click="$wire.emit('showMediaEditor', id, file.id)">
+                                                            {{ translate('Edit file') }}        
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </li>
                                         </template>
                                     </ul>

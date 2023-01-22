@@ -163,6 +163,7 @@ class AppSettingsForm extends Component
             ],
             'payments' => [
                 'settings.invoice_prefix' => [''],
+                'settings.installments_deposit_amount' => ['nullable'],
             ],
             'design' => [
                 'settings.colors' => [''],

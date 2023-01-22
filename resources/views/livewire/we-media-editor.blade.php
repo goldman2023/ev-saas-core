@@ -81,12 +81,20 @@ x-cloak>
                                 <div class="col-span-1 sm:col-span-2">
                                     <dt class="text-sm font-medium text-gray-500">{{ translate('File URL') }}</dt>
                                     <dd class="flex flex-col mt-1 text-sm text-gray-900">
-                                        <a href="{{ $upload?->url() ?? '#' }}" target="_blank" class="text-sky-600">
-                                            {{ $upload?->url() ?? '#' }}
+                                        <a href="{{ $upload?->url(proxify: false) ?? '#' }}" target="_blank" class="text-sky-600">
+                                            {{ $upload?->url(proxify: false) ?? '#' }}
                                         </a>
-                                        <a download href="{{ $upload?->url() ?? '#' }}" target="_blank" class="btn-standard-outline !px-2 !py-0.5 !text-12 mr-auto mt-1" >
-                                          {{ translate('Download') }}
-                                        </a>
+
+                                        @if($upload?->type === 'document')
+                                          <a download href="{{ $upload?->url(proxify: false) ?? '#' }}" target="_blank" class="btn-standard-outline !px-2 !py-0.5 !text-12 mr-auto mt-1" >
+                                            {{ translate('Download') }}
+                                          </a>
+                                        @else
+                                          <a href="{{ $upload?->url(proxify: false) ?? '#' }}" target="_blank" class="btn-standard-outline !px-2 !py-0.5 !text-12 mr-auto mt-1" >
+                                            {{ translate('View') }}
+                                          </a>
+                                        @endif
+                                        
                                     </dd>
                                 </div>
 

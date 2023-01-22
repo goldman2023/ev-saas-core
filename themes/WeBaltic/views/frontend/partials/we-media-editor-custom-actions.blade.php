@@ -7,8 +7,10 @@
     </div>
 </div>
 
-<div class="flex flex-row justify-end">
+@if(($form->upload?->type ?? null) === 'document')
+  <div class="flex flex-row justify-end">
     <button type="button" class="btn-primary" @click="$wire.dynamicAction('regenerate_document');">
         {{ translate('Regenerate') }}
     </button>
-</div>
+  </div>
+@endif
