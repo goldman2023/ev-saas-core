@@ -16,6 +16,8 @@
 
     subtotal: 0,
     total: 0,
+    global_installments_deposit_amount: @js(empty(get_tenant_setting('installments_deposit_amount')) ? 0 : get_tenant_setting('installments_deposit_amount')),
+
     calculateTotals() {
         this.tax = Number(this.tax);
 
@@ -50,10 +52,19 @@
         $wire.set('order.tax', this.tax, true);
         $wire.set('order_items', this.order_items, true);
         $wire.set('core_meta', this.core_meta, true);
-        {{-- $wire.set('wef', this.wef, true); --}}
+        $wire.set('wef', this.wef, true);
 
         @do_action('view.order-form.wire_set');
     },
+    setDefaults() {
+        if(this.wef.billing_entity !== 'individual' && this.wef.billing_entity !== 'company') {
+            this.wef.billing_entity = 'individual';
+        }
+
+        if(this.type === 'installments' && _.get(this.wef, 'deposit_amount', null) === null) {
+            this.wef.deposit_amount = this.global_installments_deposit_amount
+        }
+    }
 }"
 @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
 @init-form.window=""
@@ -68,9 +79,15 @@ x-init="$watch('order_items', order_items => {
 
     calculateTotals();
 });
+$watch('type', type => {
+    if(type === 'installments' && _.get(wef, 'deposit_amount', null) === null) {
+        wef.deposit_amount = global_installments_deposit_amount
+    }
+});
 $watch('tax', order_items => calculateTotals());
 $watch('shipping_cost', order_items => calculateTotals());
 calculateTotals();
+setDefaults();
 "
 x-cloak>
     <div class="w-full relative">
@@ -675,6 +692,31 @@ x-cloak>
                                 {{-- Billing Info --}}
                                 <div class="col-span-12 md:col-span-6 flex flex-col gap-y-3">
 
+                                    <div class="col-span-12 flex flex-col gap-y-2">
+                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                            {{ translate('Billing Entity') }}
+                                        </label>
+
+                                        <div class="w-full flex gap-x-4">
+                                            <div class="flex items-center">
+                                                <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="individual" input-id="entity_individual_radio" class="w-auto flex items-center" />
+
+                                                <label for="entity_individual_radio" class="pl-3 block text-sm font-medium text-gray-700">
+                                                    {{ translate('Individual') }}
+                                                </label>
+                                            </div>
+                    
+                                            <div class="flex items-center">
+                                                <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="company" 
+                                                    input-id="entity_company_radio" class="w-auto flex items-center" />
+
+                                                <label for="entity_company_radio" class="pl-3 block text-sm font-medium text-gray-700">
+                                                    {{ translate('Company') }} </label>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
                                     <div class="grid grid-cols-12 gap-x-3">
                                         <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
@@ -690,6 +732,32 @@ x-cloak>
                                             </label>
 
                                             <x-dashboard.form.input field="order.billing_last_name" />
+                                        </div>
+                                    </div>
+
+                                    <div class="-full flex flex-col gap-y-2" x-show="wef.billing_entity === 'company'">
+                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                            {{ translate('Billing Company') }}
+                                        </label>
+
+                                        <x-dashboard.form.input field="order.billing_company" />
+                                    </div>
+
+                                    <div class="grid grid-cols-12 gap-x-3" x-show="wef.billing_entity === 'company'">
+                                        <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                {{ translate('Company VAT') }}
+                                            </label>
+
+                                            <x-dashboard.form.input field="wef.billing_company_vat" :x="true" />
+                                        </div>
+
+                                        <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                {{ translate('Company Code') }}
+                                            </label>
+
+                                            <x-dashboard.form.input field="wef.billing_company_code" :x="true" />
                                         </div>
                                     </div>
 
@@ -836,8 +904,8 @@ x-cloak>
 
                         <div class="w-full">
                             <!-- Type -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
-                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center">
+                                <label class="flex items-center text-sm font-medium text-gray-700">
                                     <span class="mr-2">{{ translate('Type') }}</span>
 
                                     @if($order->type === App\Enums\OrderTypeEnum::standard()->value)
@@ -856,8 +924,8 @@ x-cloak>
                             <!-- END Type -->
 
                             <!-- Payment Status -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-5">
+                                <label class="flex items-center text-sm font-medium text-gray-700">
                                     <span class="mr-2">{{ translate('Payment status') }}</span>
 
                                     @if($order->payment_status === App\Enums\PaymentStatusEnum::unpaid()->value)
@@ -879,8 +947,8 @@ x-cloak>
 
                             <!-- Shipping Status -->
                             @if(!$hideShipping)
-                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
-                                    <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-5">
+                                    <label class="flex items-center text-sm font-medium text-gray-700">
                                         <span class="mr-2">{{ translate('Shipping status') }}</span>
 
                                         @if($order->shipping_status === App\Enums\ShippingStatusEnum::not_sent()->value)
@@ -970,13 +1038,27 @@ x-cloak>
                                 @endif
 
                                 {{-- TAX --}}
-                                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 pt-2">
-                                    <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">{{ translate('Tax(percent)') }}</label>
+                                <div class="sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 pt-2">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700">
+                                        {{ translate('Tax(percent)') }}
+                                    </label>
                                     <div class="mt-1 sm:col-span-2 sm:mt-0">
                                         <x-dashboard.form.input disabled type="number" field="tax" :x="true" min="0" max="100" />
                                     </div>
                                 </div>
                                 {{-- END TAX --}}
+
+
+                                {{-- Deposit amount (value in percentage of total value which needs to be paid in advance by customer) --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 pt-2" x-show="type === 'installments'">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700">
+                                        {{ translate('Deposit amount (in % of total value)') }}
+                                    </label>
+                                    <div class="mt-1 sm:col-span-2 sm:mt-0">
+                                        <x-dashboard.form.input type="number" field="wef.deposit_amount" :x="true" min="0" max="100" />
+                                    </div>
+                                </div>
+                                {{-- END Deposit amount --}}
                             </div>
 
                             <div class="w-full pt-3 mt-4 border-t flex flex-col">
@@ -1002,6 +1084,13 @@ x-cloak>
                                       <dt class="text-base">{{ translate('Total') }}</dt>
                                       <dd class="text-base" x-text="FX.formatPrice(total)"></dd>
                                     </div>
+
+                                    <template x-if="type === 'installments' && wef.deposit_amount > 0 && wef.deposit_amount <= 100">
+                                        <div class="flex items-center justify-between border-t border-gray-200 pt-4 text-gray-900">
+                                            <dt class="text-base">{{ translate('Deposit amount') }}</dt>
+                                            <dd class="text-base" x-text="FX.formatPrice(total * wef.deposit_amount / 100)"></dd>
+                                        </div>
+                                    </template>
                                 </dl>
                             </div>
                         </div>

@@ -255,7 +255,10 @@ class Order extends WeBaseModel
 
     public function getWEFDataTypes() {
         return WEF::bundleWithGlobalWEF(apply_filters('order.wef.data-types', [
-            
+            'deposit_amount' => 'decimal',
+            'billing_entity' => 'string',
+            'billing_company_code' => 'string',
+            'billing_company_vat' => 'string',
         ]));
     }
 

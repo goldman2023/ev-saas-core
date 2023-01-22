@@ -1375,6 +1375,28 @@
                             <div class="w-full px-5" x-show="current_tab === 'payments'" wire:ignore>
                                 {{-- Invoice numbering --}}
                                 <div class="mt-2 text-20 font-semibold">
+                                    {{ translate('Orders') }}
+                                </div>
+
+                                {{-- Installments deposit amount --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2"
+                                    x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Initial deposit amount (installments)') }}</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('This is a deposit amount in percentage of total value of the order which customer needs to pay in advance (for orders payed in installments)') }}
+                                        </p>
+                                    </div>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.installments_deposit_amount" type="number" min="0" max="100" />
+                                    </div>
+                                </div>
+                                {{-- END Installments deposit amount --}}
+
+
+                                {{-- Invoice numbering --}}
+                                <div class="mt-2 text-20 font-semibold sm:pt-5 sm:mt-2">
                                     {{ translate('Invoice numbering') }}
                                 </div>
 

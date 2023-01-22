@@ -322,9 +322,9 @@ if (!function_exists('formatSizeUnits')) {
         } else if ($bytes >= 1024) {
             $bytes = number_format((float) $bytes / 1024, 2, '.', '') . ' KB';
         } else if ($bytes > 1) {
-            $bytes = $bytes + ' bytes';
+            $bytes = $bytes . ' bytes';
         } else if ($bytes == 1) {
-            $bytes = $bytes + ' byte';
+            $bytes = $bytes . ' byte';
         } else {
             $bytes = '0 bytes';
         }
