@@ -223,6 +223,7 @@ class TenantSettingsService
 
             // Payments
             'invoice_prefix' => 'string',
+            'installments_deposit_amount' => 'decimal',
 
             // Design
             'product_page_style' => 'string',

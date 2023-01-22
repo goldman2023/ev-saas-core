@@ -158,7 +158,12 @@ class OrderForm extends Component
     }
 
     public function getWEFRules() {
-        return apply_filters('dashboard.order-form.rules.wef', []);
+        return apply_filters('dashboard.order-form.rules.wef', [
+            'wef.deposit_amount' => ['nullable'],
+            'wef.billing_entity' => ['in:individual,company'],
+            'wef.billing_company_vat' => ['nullable'],
+            'wef.billing_company_code' => ['nullable'],
+        ]);
     }
 
     public function getWEFMessages() {
