@@ -19,6 +19,8 @@
 <script src="https://unpkg.com/grapesjs-component-code-editor"></script>
 <script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage"></script>
 <script src="/bp-assets/grapesjs-custom-code.min.js">
+    <link href="https://unpkg.com/grapesjs-component-code-editor/dist/grapesjs-component-code-editor.min.css" rel="stylesheet">
+<script src="https://unpkg.com/grapesjs-component-code-editor"></script>
 </script>
 
 @endpush
@@ -67,12 +69,11 @@
                 container: '#gjs',
                 height: '90%',
                 selectorManager: { escapeName },
-                plugins: ['gjs-blocks-basic', 'grapesjs-preset-webpage'],
+                plugins: ['gjs-blocks-basic', 'grapesjs-preset-webpage', 'grapesjs-component-code-editor'],
                 pluginsOpts: {
                     'grapesjs-custom-code': {
 
                     },
-
                 }
               });
 

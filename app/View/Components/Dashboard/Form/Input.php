@@ -6,8 +6,10 @@ use Illuminate\View\Component;
 
 class Input extends Component
 {
+    public $inputId;
     public $field;
     public $type;
+    public $value;
     public $placeholder;
     public $nullable;
     public $required;
@@ -25,10 +27,28 @@ class Input extends Component
      *
      * @return void
      */
-    public function __construct($field = '', $errorField = '', $type = 'text', $placeholder = '', $nullable = true, $required = false, $min = 0, $max = null, $step = 1, $x = false, $class = '', $inputClass = '', $disabled = false)
+    public function __construct(
+        $inputId = null,
+        $field = '', 
+        $errorField = '', 
+        $type = 'text', 
+        $placeholder = '', 
+        $nullable = true, 
+        $required = false, 
+        $min = 0, 
+        $max = null, 
+        $step = 1, 
+        $x = false, 
+        $class = '', 
+        $inputClass = '', 
+        $disabled = false, 
+        $value = null
+    )
     {
+        $this->inputId = $inputId;
         $this->field = $field;
         $this->type = $type;
+        $this->value = $value;
         $this->placeholder = $placeholder;
         $this->nullable = $nullable;
         $this->required = $required;
@@ -37,9 +57,18 @@ class Input extends Component
         $this->step = $step;
         $this->x = $x;
         $this->class = $class;
-        $this->inputClass = $inputClass;
         $this->disabled = $disabled;
         $this->errorField = $errorField;
+
+        if($type === 'radio') {
+            $this->inputClass = $inputClass;
+        } else if($type === 'radio') {
+            $this->inputClass = $inputClass;
+        } else {
+            $this->inputClass = 'form-standard '.$inputClass;
+        }
+
+
     }
 
     /**

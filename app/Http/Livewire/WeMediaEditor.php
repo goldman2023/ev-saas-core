@@ -68,11 +68,16 @@ class WeMediaEditor extends Component
         return view('livewire.we-media-editor');
     }
 
-    public function changeMediaEditor($for_id, $subject_id, $subject_type, $upload_id)
+    public function changeMediaEditor($for_id, $upload_id, $subject_id = null, $subject_type = null)
     {
         $this->for_id = $for_id;
-        $this->subject = app(base64_decode($subject_type))->find($subject_id);
         $this->upload = Upload::find($upload_id);
+
+        try {
+            $this->subject = app(base64_decode($subject_type))->find($subject_id);
+        } catch(\Exception $e) {
+            $this->subject = null;
+        }
 
         $this->dispatchBrowserEvent('display-media-editor-modal');
     }

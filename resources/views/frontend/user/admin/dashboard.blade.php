@@ -27,24 +27,21 @@
 
             <div class="col-span-2">
                 <div class="mb-6">
+                    <x-dashboard.widgets.charts.pie-chart>
+                    </x-dashboard.widgets.charts.pie-chart>
+                </div>
+
+                <div class="mb-6">
                     <x-dashboard.widgets.business.quick-actions>
                     </x-dashboard.widgets.business.quick-actions>
                 </div>
                 <div class="div grid grid-cols-2 gap-6">
-                   {{--  <div>
-                    <x-dashboard.widgets.charts.column-chart>
-                    </x-dashboard.widgets.charts.column-chart>
-                    </div>
 
-                    <div>
-                    <x-dashboard.widgets.charts.pie-chart>
-                    </x-dashboard.widgets.charts.pie-chart>
-                    </div> --}}
                 </div>
 
-                <div>
+                {{-- <div>
                     <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
-                </div>
+                </div> --}}
 
 
             </div>
@@ -54,7 +51,7 @@
                     <x-dashboard.widgets.quick-links>
                     </x-dashboard.widgets.quick-links>
                 </div>
-                <div class=" mb-6 bg-white p-6 rounded-xl shadow">
+                <div class="hidden mb-6 bg-white p-6 rounded-xl shadow">
                     <x-dashboard.widgets.business.calendar-summary></x-dashboard.widgets.business.calendar-summary>
                 </div>
 
@@ -70,25 +67,5 @@
         </div>
 
     </div>
-</section>
-
-
-
-<section class="stats mb-3">
-    <div class="sm:grid sm:grid-cols-2 gap-5">
-        {{-- <x-default.dashboard.widgets.integrations-widget>
-
-        </x-default.dashboard.widgets.integrations-widget> --}}
-
-
-        <div class="">
-            <div class="mt-3">
-            </div>
-        </div>
-    </div>
-</section>
-
-<section>
-
 </section>
 @endsection
