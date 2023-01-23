@@ -3,16 +3,25 @@
     active: 'Hobby',
     updateRange: function($event) {
         if(this.value === 'battery1') {
-            this.range = 60;
-
+            this.baseRange = 60;
         }
 
         if(this.value === 'battery2') {
-            this.range = 100;
+            this.baseRange = 120;
         }
 
         if(this.value === 'battery3') {
-            this.range = 150;
+            this.baseRange = 300;
+        }
+
+        this.range = this.baseRange;
+
+        if(this.generator == '20 kW') {
+            this.range = this.baseRange + 90;
+        }  else if(this.generator == '8 kW') {
+            this.range = this.baseRange + 40;
+        } else {
+            this.range = this.baseRange;
         }
     }
 }">
@@ -33,7 +42,7 @@
                 <span class="flex items-center">
                     <span class="flex flex-col text-sm">
                         <span id="server-size-1-label" class="font-medium text-gray-900">
-                            150 kWh
+                            100 kWh
                         </span>
                     </span>
                 </span>
@@ -64,7 +73,7 @@
                 </span>
                 <span id="server-size-2-description-1"
                     class="mt-2 flex text-sm sm:mt-0 sm:ml-4 sm:flex-col sm:text-right">
-                    <span class="font-medium text-gray-900">+25 000€</span>
+                    <span class="font-medium text-gray-900">+55 000€</span>
                 </span>
                 <span class="pointer-events-none absolute -inset-px rounded-full border-2 border-transparent"
                     aria-hidden="true"
@@ -72,9 +81,11 @@
             </label>
 
             <label x-radio-group-option=""
-                class="relative block cursor-pointer rounded-full border bg-white px-6 py-3 shadow-sm focus:outline-none sm:flex sm:justify-between border-gray-300 undefined"
+            disabled
+                class="opacity-50 relative block cursor-pointer rounded-full border bg-white px-6 py-3 shadow-sm focus:outline-none sm:flex sm:justify-between border-gray-300 undefined"
                 :class="{ 'border-transparent': (value === 'battery3'), 'border-gray-300': !(value === 'battery3'), 'border-indigo-500 ring-2 ring-indigo-500': (active === 'battery3'), 'undefined': !(active === 'battery3') }">
                 <input
+                disabled
                 x-on:change="updateRange($event)"
 
                 type="radio" x-model="value" name="server-size" value="battery3" class="sr-only"
@@ -89,7 +100,7 @@
                 </span>
                 <span id="server-size-2-description-1"
                     class="mt-2 flex text-sm sm:mt-0 sm:ml-4 sm:flex-col sm:text-right">
-                    <span class="font-medium text-gray-900">+35 000€</span>
+                    <span class="font-medium text-gray-900">Coming soon</span>
                 </span>
                 <span class="pointer-events-none absolute -inset-px rounded-full border-2 border-transparent"
                     aria-hidden="true"

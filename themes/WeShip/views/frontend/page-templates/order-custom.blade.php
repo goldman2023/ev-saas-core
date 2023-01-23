@@ -1,8 +1,11 @@
 <div class="w-full md:flex pt-[80px] md:pt-0" x-data="{
     open: false,
-    selectedColor: 'white',
-    maxSpeed: 18,
+    selectedColor: 'gray',
+    maxSpeed: 42,
     range: 60,
+    baseRange: 60,
+    generator: 'No',
+    cruisingSpeed: '32',
     mainImage: 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg',
  }">
  <style>
@@ -118,6 +121,21 @@
                     <p class="sm:text-lg lg:text-gray-200 whitespace-nowrap">Range (EPA est.)</p>
                 </div>
             </div>
+
+            <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
+                <div class="mr-6">
+
+                </div>
+                <div class="mb-4 mx-auto">
+                    <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
+                        <span x-text="cruisingSpeed"></span> knots
+                    </h3>
+                    <p class="whitespace-nowrap text-lg lg:text-gray-200">
+                        Cruising Speed
+                    </p>
+                </div>
+            </div>
+
             <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
                 <div class="mr-6">
 
@@ -127,22 +145,13 @@
                         <img class="inline"
                             src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431766_-electricity-triangle-sign.png" />
                     </h3>
-                    <p class="text-lg lg:text-gray-200">Generator</p>
+                    <p class="text-lg whitespace-nowrap lg:text-gray-200">
+                        <span x-text="generator"></span>
+                        Generator</p>
                 </div>
             </div>
 
-            <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
-                <div class="mr-6">
 
-                </div>
-                <div class="mb-4 mx-auto">
-                    <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
-                        <img class="inline"
-                            src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431751_solar-panel.png" />
-                    </h3>
-                    <p class="text-lg lg:text-gray-200">Solar Panel</p>
-                </div>
-            </div>
 
 
 
@@ -176,10 +185,12 @@
                     <x-custom.color-filter></x-custom.color-filter>
                 </div>
 
-                <div>
+                <div class="mb-6">
                     <x-custom.batery-filter></x-custom.batery-filter>
                 </div>
-
+                <div class='text-lg'>
+                    Total: <strong>300 000€</strong>
+                </div>
 
 
 
@@ -187,10 +198,13 @@
                 <a href="https://buy.stripe.com/dR600r9zY2BKfBe6op" target="_blank"
                     class="sticky bottom-3 sm:static mt-6 w-full inline-block rounded-full border-2 border-black bg-white px-6 py-3 text-base font-medium text-black shadow-sm hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-center">
                     Pre-Order now<br>
+
+                </a>
+                <div class="text-center">
                     <small class="font-normal">
                         (Deposit 5000€)
                     </small>
-                </a>
+                </div>
             </div>
         </div>
     </div>
