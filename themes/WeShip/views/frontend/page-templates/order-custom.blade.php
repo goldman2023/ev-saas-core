@@ -2,6 +2,8 @@
     open: false,
     selectedColor: 'nardo gray',
     maxSpeed: 42,
+    engine: 'engine2',
+    battery: 'battery1',
     range: 60,
     baseRange: 60,
     generator: 'No',
@@ -10,10 +12,24 @@
     basePrice: 300000,
     showPrice: 300000,
     calculatePrice: function() {
+        if(this.engine === 'engine1') {
+            this.basePrice = 270000;
+        }
         let totalPrice = this.basePrice;
-        if(generator === '8 kW') {
+        if(this.generator === '8 kW') {
             totalPrice += 25000;
         }
+
+        if(this.generator === '20 kW') {
+            totalPrice += 40000;
+        }
+
+        if(this.battery === 'battery2') {
+            totalPrice += 55000;
+        }
+
+
+        this.showPrice = totalPrice;
         return totalPrice;
     },
     mainImage: 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg',
@@ -217,7 +233,7 @@
                     <x-custom.batery-filter></x-custom.batery-filter>
                 </div>
                 <div class='text-lg'>
-                    Total: <strong x-text="showPrice"></strong>
+                    Total: <strong x-text="showPrice"></strong> €
                 </div>
 
 

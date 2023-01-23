@@ -14,6 +14,8 @@
             this.baseRange = 300;
         }
 
+        this.battery = this.value;
+
         this.range = this.baseRange;
 
         if(this.generator == '20 kW') {
@@ -23,6 +25,8 @@
         } else {
             this.range = this.baseRange;
         }
+
+        this.calculatePrice();
     }
 }">
     <span class="font-medium text-lg mb-3 block">
