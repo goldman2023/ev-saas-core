@@ -36,6 +36,7 @@
     </script>
 
     <!-- Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
 
     @include('frontend.layouts.global-partials.all')

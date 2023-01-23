@@ -202,8 +202,6 @@ x-data="{
                             <span class="pointer-events-none absolute -inset-px rounded-full border-2"
                                 aria-hidden="true"></span>
                         </label>
-
-
                     </div>
                 </fieldset>
 
