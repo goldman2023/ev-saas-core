@@ -1,12 +1,48 @@
 <div class="w-full md:flex pt-[80px] md:pt-0" x-data="{
     open: false,
-    selectedColor: 'gray',
+    selectedColor: 'nardo gray',
     maxSpeed: 42,
+    engine: 'engine2',
+    battery: 'battery1',
     range: 60,
     baseRange: 60,
     generator: 'No',
     cruisingSpeed: '32',
+    showSpecifications: false,
+    basePrice: 300000,
+    showPrice: 300000,
+    calculatePrice: function() {
+        if(this.engine === 'engine1') {
+            this.basePrice = 270000;
+        }
+        let totalPrice = this.basePrice;
+        if(this.generator === '8 kW') {
+            totalPrice += 25000;
+        }
+
+        if(this.generator === '20 kW') {
+            totalPrice += 40000;
+        }
+
+        if(this.battery === 'battery2') {
+            totalPrice += 55000;
+        }
+
+
+        this.showPrice = totalPrice;
+        return totalPrice;
+    },
     mainImage: 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg',
+    toggleSpecification: function() {
+        this.showSpecifications = !this.showSpecifications;
+        if(this.showSpecifications) {
+            this.speficicationText = 'Less Specifications'
+        } else {
+            this.speficicationText = 'More Specifications'
+        }
+        return this.showSpecifications;
+    },
+    speficicationText: 'More Specifications',
  }">
  <style>
     footer {
@@ -122,7 +158,9 @@
                 </div>
             </div>
 
-            <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
+            <div
+            :class="{ 'hidden md:flex': ! showSpecifications }"
+            class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
                 <div class="mr-6">
 
                 </div>
@@ -136,13 +174,17 @@
                 </div>
             </div>
 
-            <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
+            <div
+            :class="{ 'hidden md:flex': ! showSpecifications }"
+
+            class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
                 <div class="mr-6">
 
                 </div>
                 <div class="mb-4 mx-auto">
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
-                        <img class="inline"
+                        <span class="md:hidden" x-text="generator"></span>
+                        <img class="hidden md:inline"
                             src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431766_-electricity-triangle-sign.png" />
                     </h3>
                     <p class="text-lg whitespace-nowrap lg:text-gray-200">
@@ -157,8 +199,10 @@
 
 
         </div>
-        <div class="underline decoration-solid text-center block lg:hidden font-medium text-[#383D43]">
-            More specifications
+        <div
+        x-text="speficicationText"
+        @click="toggleSpecification();"
+        class="underline decoration-solid text-center block lg:hidden font-medium text-[#383D43]">
         </div>
     </div>
 
@@ -189,7 +233,7 @@
                     <x-custom.batery-filter></x-custom.batery-filter>
                 </div>
                 <div class='text-lg'>
-                    Total: <strong>300 000€</strong>
+                    Total: <strong x-text="showPrice"></strong> €
                 </div>
 
 

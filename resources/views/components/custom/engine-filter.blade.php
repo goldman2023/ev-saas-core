@@ -8,6 +8,10 @@
         } else {
             this.maxSpeed = 25;
         }
+
+        this.engine = this.value;
+
+        this.calculatePrice();
     }
 }">
     <span class="font-medium text-lg mb-3 block">

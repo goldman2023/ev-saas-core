@@ -13,7 +13,10 @@
 
         if(this.value === 'generator3') {
             this.generator = 'No';
+            this.range = this.baseRange;
         }
+
+        this.calculatePrice();
     }
 }">
     <span class="font-medium text-lg mb-3 block">
