@@ -5,7 +5,6 @@
         @foreach(get_attribute_value_wefs_by_attribute($attribute) as $wef_key => $data_type)
         @php
             $form_type = match ($wef_key) {
-                'test2' => 'text_list',
                 default => 'plain_text'
             };
         @endphp

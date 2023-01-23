@@ -161,12 +161,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // AttributeValue: WEF data types
             add_filter('attribute_values.wef.data-types', function ($data_types) {
                 return array_merge($data_types, [
-                    'test1' => 'string',
-                    'test2' => 'array',
-                    'test3' => 'string',
-                    'test4' => 'string',
-                    'test5' => 'string',
-                    'test6' => 'string',
+                    
                 ]);
             }, 10, 1);
 
