@@ -62,6 +62,7 @@ class AttributeForm extends Component
                 $blank_att_value->id = null;
                 $blank_att_value->attribute_id = null;
                 $blank_att_value->values = null;
+                $blank_att_value->ordering = 0;
 
                 $this->attribute_values = new \Illuminate\Database\Eloquent\Collection([$blank_att_value]);
             }
@@ -76,6 +77,7 @@ class AttributeForm extends Component
                     $blank_att_value->id = null;
                     $blank_att_value->attribute_id = null;
                     $blank_att_value->values = null;
+                    $blank_att_value->ordering = 0;
     
                     $this->attribute_values = new \Illuminate\Database\Eloquent\Collection([$blank_att_value]);
                 }
@@ -102,6 +104,7 @@ class AttributeForm extends Component
             'attribute_values.*.id' => '',
             'attribute_values.*.attribute_id' => '',
             'attribute_values.*.values' => '',
+            'attribute_values.*.ordering' => '',
         ];
     }
 
@@ -216,14 +219,19 @@ class AttributeForm extends Component
 
             try {
                 foreach ($this->attribute_values as $value) {
-                    if (! empty($value['id'] ?? null)) {
+                    if (! empty($value['id'] ?? null) && (is_integer($value['id']) || ctype_digit($value['id']))) {
                         // Update
-                        AttributeValue::where('id', $value['id'])->update(['values' => $value['values'], 'attribute_id' => $this->attribute->id]);
+                        AttributeValue::where('id', $value['id'])->update([
+                            'values' => $value['values'], 
+                            'attribute_id' => $this->attribute->id,
+                            'ordering' => $value['ordering']
+                        ]);
                     } else {
                         // Insert
                         AttributeValue::create([
                             'values' => $value['values'],
                             'attribute_id' => $this->attribute->id,
+                            'ordering' => 0
                         ]);
                     }
                 }

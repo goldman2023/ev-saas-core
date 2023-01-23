@@ -60,6 +60,14 @@ class WEFService
 
         return array_merge(self::globalWEFDataTypes(), $data_types);
     }
+
+    public function unbundleGlobalWEF($data_types = []) {
+        if($data_types instanceof Collection) {
+            $data_types = $data_types->toArray();
+        }
+
+        return array_diff($data_types, self::globalWEFDataTypes());
+    }
     
     /**
      * getWEFDataTypes

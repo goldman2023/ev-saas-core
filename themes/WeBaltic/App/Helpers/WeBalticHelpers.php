@@ -1,6 +1,17 @@
 <?php
 
+use App\Facades\WEF;
 use App\Models\OrderItem;
+use App\Models\AttributeValue;
+
+function get_attribute_value_wefs_by_attribute($attribute = null) {
+    if(empty($attribute)) return [];
+
+    return match ($attribute->slug) {
+        'attribute-dropdown-1' => array_intersect_key(WEF::getWEFDataTypes(AttributeValue::class), array_flip(['test1', 'test2'])),
+        default => []
+    };
+}
 
 function generate_vin_code($item)
 {
