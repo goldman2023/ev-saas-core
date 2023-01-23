@@ -8,6 +8,14 @@
     cruisingSpeed: '32',
     showSpecifications: false,
     basePrice: 300000,
+    showPrice: 300000,
+    calculatePrice: function() {
+        let totalPrice = this.basePrice;
+        if(generator === '8 kW') {
+            totalPrice += 25000;
+        }
+        return totalPrice;
+    },
     mainImage: 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg',
     toggleSpecification: function() {
         this.showSpecifications = !this.showSpecifications;
@@ -134,7 +142,9 @@
                 </div>
             </div>
 
-            <div x-show="showSpecifications" class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
+            <div
+            :class="{ 'hidden md:flex': ! showSpecifications }"
+            class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
                 <div class="mr-6">
 
                 </div>
@@ -148,13 +158,16 @@
                 </div>
             </div>
 
-            <div x-show="showSpecifications" class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
+            <div
+            :class="{ 'hidden md:flex': ! showSpecifications }"
+
+            class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
                 <div class="mr-6">
 
                 </div>
                 <div class="mb-4 mx-auto">
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
-                        <span x-text="generator"></span>
+                        <span class="md:hidden" x-text="generator"></span>
                         <img class="hidden md:inline"
                             src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431766_-electricity-triangle-sign.png" />
                     </h3>
@@ -204,7 +217,7 @@
                     <x-custom.batery-filter></x-custom.batery-filter>
                 </div>
                 <div class='text-lg'>
-                    Total: <strong>300 000€</strong>
+                    Total: <strong x-text="showPrice"></strong>
                 </div>
 
 
