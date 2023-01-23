@@ -1,58 +1,69 @@
-<div class="w-full flex">
-    <div class="w-[70%] relative">
-        <img class="h-[100vh] object-cover w-full object-position-right"
-            src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg" />
+<div class="w-full lg:flex pt-[80px] lg:pt-0"
+x-data="{
+    open: false,
+    selectedColor: 'white',
+    mainImage: 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg',
+ }">
+    <div class="w-full lg:w-[70%] relative">
+        <img class="lg:h-[100vh] object-cover w-full object-position-right"
+        :src="mainImage" />
 
-            <div class="items-center text-center justify-center left-0 flex flex-wrap absolute bottom-8 w-[80%] pl-[10%]">
-                <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 mb-8">
-                  <div class="mr-6">
+        <div
+            class="items-center mt-8 lg:mt-0 text-center justify-center left-0 flex flex-wrap lg:absolute bottom-8 w-[80%] pl-[10%]">
+            <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
+                <div class="mr-6">
 
-                  </div>
-                  <div class="w-2/3 mb-4 ">
-                    <h3 class="mb-2 text-2xl text-gray-50 font-bold font-heading">10,55m</h3>
-                    <p class="text-lg text-gray-200">Length</p>
-                  </div>
                 </div>
-                <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 mb-8">
-                  <div class="mr-6">
-
-                  </div>
-                  <div class="mb-4">
-                    <h3 class="text-center mb-2 text-2xl text-gray-50 font-bold font-heading">3,15m</h3>
-                    <p class="text-center text-lg text-gray-200">Width</p>
-                  </div>
+                <div class="w-2/3 mb-4 ">
+                    <h3 class="mb-2 text-2xl lg:text-gray-50 font-medium font-heading">10,55m</h3>
+                    <p class="text-lg lg:text-gray-200">Length</p>
                 </div>
-                <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
-                  <div class="mr-6">
+            </div>
+            <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
+                <div class="mr-6">
 
-                  </div>
-                  <div class="mb-4">
-                    <h3 class="text-center mb-2 text-2xl text-gray-50 font-bold font-heading">
-                        <img  class="inline" src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431766_-electricity-triangle-sign.png" />
-                        </h3>
-                    <p class="text-lg text-gray-200">Generator</p>
-                  </div>
                 </div>
+                <div class="mb-4">
+                    <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">3,15m</h3>
+                    <p class="text-center text-lg lg:text-gray-200">Width</p>
+                </div>
+            </div>
+            <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
+                <div class="mr-6">
 
-                <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
-                  <div class="mr-6">
-
-                  </div>
-                  <div class="mb-4">
-                    <h3 class="text-center mb-2 text-2xl text-gray-50 font-bold font-heading">
-                      <img class="inline" src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431751_solar-panel.png" />
+                </div>
+                <div class="mb-4">
+                    <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
+                        <img class="inline"
+                            src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431766_-electricity-triangle-sign.png" />
                     </h3>
-                    <p class="text-lg text-gray-200">Solar Panel</p>
-                  </div>
+                    <p class="text-lg lg:text-gray-200">Generator</p>
                 </div>
+            </div>
+
+            <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
+                <div class="mr-6">
+
+                </div>
+                <div class="mb-4">
+                    <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
+                        <img class="inline"
+                            src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431751_solar-panel.png" />
+                    </h3>
+                    <p class="text-lg lg:text-gray-200">Solar Panel</p>
+                </div>
+            </div>
 
 
 
 
-              </div>
         </div>
+        <div class="underline decoration-solid text-center block lg:hidden font-medium text-[#383D43]">
+            More specifications
+        </div>
+    </div>
 
-    <div class="w-[30%] p-8">
+    <div class="w-full lg:w-[30%] p-8 lg:pt-20">
         <div class="text-center">
             <h1 class="text-3xl font-medium mb-3">
                 Emarius 34S
@@ -197,60 +208,76 @@
                 </fieldset>
 
                 <span class="mt-6 font-medium text-lg block mb-3">
-                    Paint:
+                    Paint: <span class="capitalize font-bold" x-text="selectedColor"></span>
                 </span>
                 <fieldset>
                     <div class="flex items-center space-x-3">
-                      <!--
+                        <!--
                         Active and Checked: "ring ring-offset-1"
                         Not Active and Checked: "ring-2"
                       -->
-                      <label class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-pink-500">
-                        <input type="radio" name="color-choice" value="Pink" class="sr-only" aria-labelledby="color-choice-0-label">
-                        <span id="color-choice-0-label" class="sr-only">Pink</span>
-                        <span aria-hidden="true" class="h-8 w-8 bg-[#C9C9C9] border border-black border-opacity-10 rounded-full"></span>
-                      </label>
+                        <label
+                        @click="selectedColor = 'white'; mainImage = 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg'"
 
-                      <!--
-                        Active and Checked: "ring ring-offset-1"
-                        Not Active and Checked: "ring-2"
-                      -->
-                      <label class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-purple-500">
-                        <input type="radio" name="color-choice" value="Purple" class="sr-only" aria-labelledby="color-choice-1-label">
-                        <span id="color-choice-1-label" class="sr-only">Purple</span>
-                        <span aria-hidden="true" class="h-8 w-8 bg-[#F8F5E9] border border-black border-opacity-10 rounded-full"></span>
-                      </label>
+                            class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-pink-500">
+                            <input type="radio" name="color-choice" value="Pink" class="sr-only"
+                                aria-labelledby="color-choice-0-label">
+                            <span id="color-choice-0-label" class="sr-only">Pink</span>
+                            <span aria-hidden="true"
+                                class="h-8 w-8 bg-[#C9C9C9] border border-black border-opacity-10 rounded-full"></span>
+                        </label>
 
-                      <!--
+                        <!--
                         Active and Checked: "ring ring-offset-1"
                         Not Active and Checked: "ring-2"
                       -->
-                      <label class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-blue-500">
-                        <input type="radio" name="color-choice" value="Blue" class="sr-only" aria-labelledby="color-choice-2-label">
-                        <span id="color-choice-2-label" class="sr-only">Blue</span>
-                        <span aria-hidden="true" class="h-8 w-8 bg-[#308DF9] border border-black border-opacity-10 rounded-full"></span>
-                      </label>
+                        <label
+                        @click="selectedColor = 'orange'; mainImage = 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674445471_Emarius34(5).jpg';"
+                            class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-purple-500">
+                            <input type="radio" name="color-choice" value="Purple" class="sr-only"
+                                aria-labelledby="color-choice-1-label">
+                            <span id="color-choice-1-label" class="sr-only">Purple</span>
+                            <span aria-hidden="true"
+                                class="h-8 w-8 bg-[#F8F5E9] border border-black border-opacity-10 rounded-full"></span>
+                        </label>
 
-                      <!--
+                        <!--
                         Active and Checked: "ring ring-offset-1"
                         Not Active and Checked: "ring-2"
                       -->
-                      <label class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-green-500">
-                        <input type="radio" name="color-choice" value="Green" class="sr-only" aria-labelledby="color-choice-3-label">
-                        <span id="color-choice-3-label" class="sr-only">Green</span>
-                        <span aria-hidden="true" class="h-8 w-8 bg-[#EB1B1B] border border-black border-opacity-10 rounded-full"></span>
-                      </label>
+                        <label
+                        @click="selectedColor = 'blue'; mainImage = 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674437328_Emarius34(13).jpg'"
+                            class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-blue-500">
+                            <input type="radio" name="color-choice" value="Blue" class="sr-only"
+                                aria-labelledby="color-choice-2-label">
+                            <span id="color-choice-2-label" class="sr-only">Blue</span>
+                            <span aria-hidden="true"
+                                class="h-8 w-8 bg-[#308DF9] border border-black border-opacity-10 rounded-full"></span>
+                        </label>
+
+                        <!--
+                        Active and Checked: "ring ring-offset-1"
+                        Not Active and Checked: "ring-2"
+                      -->
+                        <label
+                        @click="selectedColor = 'red'; mainImage = 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674421700_Emarius34(17).jpg'"
+                            class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-green-500">
+                            <input type="radio" name="color-choice" value="Green" class="sr-only"
+                                aria-labelledby="color-choice-3-label">
+                            <span id="color-choice-3-label" class="sr-only">Green</span>
+                            <span aria-hidden="true"
+                                class="h-8 w-8 bg-[#EB1B1B] border border-black border-opacity-10 rounded-full"></span>
+                        </label>
 
 
 
                     </div>
-                  </fieldset>
+                </fieldset>
 
 
 
 
-                <a href="https://buy.stripe.com/dR600r9zY2BKfBe6op"
-                target="_blank"
+                <a href="https://buy.stripe.com/dR600r9zY2BKfBe6op" target="_blank"
                     class="mt-6 w-full inline-block rounded-full border-2 border-black bg-white px-6 py-3 text-base font-medium text-black shadow-sm hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-center">
                     Order now
                 </a>
