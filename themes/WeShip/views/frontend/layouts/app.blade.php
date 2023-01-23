@@ -37,6 +37,8 @@
 
     <!-- Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer async src="{{ static_asset('/bp-assets/vendor/flowbite/flowbite.js') }}"></script>
+
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
 
     @include('frontend.layouts.global-partials.all')

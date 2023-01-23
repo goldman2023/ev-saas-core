@@ -55,8 +55,8 @@ module.exports = {
             },
             colors: {
                 /* Indigo is a primary brand color */
-                'primary': '#8BC53F',
-                'primary-hover': '#657934',
+                'primary': '#013367',
+                'primary-hover': '#000000',
                 'primary-light': '#EBF8DC',
                 'primary-dark': '#657934',
                 'secondary': '#FF8E3B',
