@@ -25,11 +25,11 @@
     }
     </style>
     <div class="w-full md:w-[70%] relative">
-        <div id="default-carousel" class="md:min-h-[100vh] object-cover w-full object-position-right relative"
+        <div id="default-carousel" class="-mt-[80px] md:mt-0 min-h-[300px] md:min-h-[100vh] object-cover w-full object-position-right relative"
             data-carousel="static">
             <!-- Carousel wrapper -->
             <div
-                class="overflow-hidden relative md:min-h-[100vh] object-cover w-full object-position-right relative  overflow-hidden">
+                class="overflow-hidden relative min-h-[300px] md:min-h-[100vh] object-cover w-full object-position-right relative  overflow-hidden">
                 <!-- Item 1 -->
                 <div class="hidden duration-700 ease-in-out" data-carousel-item>
 
@@ -98,15 +98,15 @@
 
         <div
             class="
-            absolute bottom-8 left-0 w-full z-[999]
-            items-center mt-8 lg:mt-0 text-center justify-center left-0 flex flex-wrap lg:absolute bottom-8 w-[80%] pl-[10%]">
+            md:absolute bottom-8 left-0 w-full z-[999]
+            items-center mt-8 lg:mt-0 text-center justify-center left-0 flex flex-wrap lg:absolute bottom-8 md:w-[80%] md:pl-[10%]">
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
 
                 <div class="mb-4 mx-auto ">
                     <h3 class="mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
                         <span x-text="maxSpeed"></span> knots
                     </h3>
-                    <p class="text-lg lg:text-gray-200">Max Speed</p>
+                    <p class="sm:text-lg lg:text-gray-200">Max Speed</p>
                 </div>
             </div>
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
@@ -115,7 +115,7 @@
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
                         <span x-text="range"></span>NM
                     </h3>
-                    <p class="text-center text-lg lg:text-gray-200 whitespace-nowrap">Range (EPA est.)</p>
+                    <p class="sm:text-lg lg:text-gray-200 whitespace-nowrap">Range (EPA est.)</p>
                 </div>
             </div>
             <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
@@ -153,7 +153,7 @@
         </div>
     </div>
 
-    <div class="w-full md:w-[30%] p-8 lg:pt-20 md:max-h-[100vh] md:overflow-y-scroll">
+    <div class="w-full md:w-[30%] p-4 md:p-8 lg:pt-20 md:max-h-[100vh] md:overflow-y-scroll">
         <div class="text-center">
             <h1 class="text-3xl font-medium mb-3">
                 Emarius 34S
@@ -185,8 +185,11 @@
 
 
                 <a href="https://buy.stripe.com/dR600r9zY2BKfBe6op" target="_blank"
-                    class="mt-6 w-full inline-block rounded-full border-2 border-black bg-white px-6 py-3 text-base font-medium text-black shadow-sm hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-center">
-                    Order now
+                    class="sticky bottom-3 sm:static mt-6 w-full inline-block rounded-full border-2 border-black bg-white px-6 py-3 text-base font-medium text-black shadow-sm hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-center">
+                    Pre-Order now<br>
+                    <small class="font-normal">
+                        (Deposit 5000€)
+                    </small>
                 </a>
             </div>
         </div>
