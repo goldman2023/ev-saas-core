@@ -2,7 +2,7 @@
     $header_menu = nova_get_menu_by_slug('header');
     $header_menu_items = $header_menu['menuItems'] ?? null;
 @endphp
-<header class="relative z-50" x-data="{
+<header class="relative z-[9990]" x-data="{
     show_mobile_menu: false,
 }">
     {{-- Header settings should include Background among other things + Sticky behavior (yes/no) --}}

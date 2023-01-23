@@ -1,29 +1,119 @@
-<div class="w-full lg:flex pt-[80px] lg:pt-0"
-x-data="{
+<div class="w-full md:flex pt-[80px] md:pt-0" x-data="{
     open: false,
     selectedColor: 'white',
+    maxSpeed: 18,
+    range: 60,
     mainImage: 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg',
  }">
-    <div class="w-full lg:w-[70%] relative">
-        <img class="lg:min-h-[100vh] object-cover w-full object-position-right"
-        :src="mainImage" />
+ <style>
+    footer {
+        display: none;
+    }
+    #default-carousel::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(45,253,170,0) 80%, rgba(0,0,0,0.6) 100%);
+        z-index: 99;
+    }
+
+    [data-carousel-prev], [data-carousel-next] {
+        z-index: 99999;
+    }
+    </style>
+    <div class="w-full md:w-[70%] relative">
+        <div id="default-carousel" class="md:min-h-[100vh] object-cover w-full object-position-right relative"
+            data-carousel="static">
+            <!-- Carousel wrapper -->
+            <div
+                class="overflow-hidden relative md:min-h-[100vh] object-cover w-full object-position-right relative  overflow-hidden">
+                <!-- Item 1 -->
+                <div class="hidden duration-700 ease-in-out" data-carousel-item>
+
+                    <img :src="mainImage" class="object-cover w-full h-full" alt="Emarius electric ship photo">
+                </div>
+                <!-- Item 2 -->
+                <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                    <img src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674421699_Emarius34(15).jpg"
+                        class="object-cover w-full h-full" alt="...">
+                </div>
+                <!-- Item 3 -->
+                <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                    <img src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674421701_Emarius34(20).jpg"
+                        class="object-cover w-full h-full" alt="...">
+                </div>
+            </div>
+            <!-- Slider indicators -->
+            <div class="hidden absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
+                <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 1"
+                    data-carousel-slide-to="0"></button>
+                <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2"
+                    data-carousel-slide-to="1"></button>
+                <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3"
+                    data-carousel-slide-to="2"></button>
+            </div>
+            <!-- Slider controls -->
+            <button type="button"
+                class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                data-carousel-prev>
+                <span
+                    class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <mask id="mask0_1_316" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20"
+                            height="20">
+                            <rect width="20" height="20" fill="#D9D9D9" />
+                        </mask>
+                        <g mask="url(#mask0_1_316)">
+                            <path
+                                d="M13.5208 18.3332L5.1875 9.99984L13.5208 1.6665L15 3.14567L8.14583 9.99984L15 16.854L13.5208 18.3332Z"
+                                fill="#DDE2E8" />
+                        </g>
+                    </svg>
+
+                    <span class="sr-only">Previous</span>
+                </span>
+            </button>
+            <button type="button"
+                class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                data-carousel-next>
+                <span
+                    class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <mask id="mask0_1_313" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
+                        <rect x="20" y="20" width="20" height="20" transform="rotate(180 20 20)" fill="#D9D9D9"/>
+                        </mask>
+                        <g mask="url(#mask0_1_313)">
+                        <path d="M6.47916 1.66683L14.8125 10.0002L6.47917 18.3335L5 16.8543L11.8542 10.0002L5 3.146L6.47916 1.66683Z" fill="#DDE2E8"/>
+                        </g>
+                        </svg>
+
+                    <span class="sr-only">Next</span>
+                </span>
+            </button>
+        </div>
+
 
         <div
-            class="items-center mt-8 lg:mt-0 text-center justify-center left-0 flex flex-wrap lg:absolute bottom-8 w-[80%] pl-[10%]">
+            class="
+            absolute bottom-8 left-0 w-full z-[999]
+            items-center mt-8 lg:mt-0 text-center justify-center left-0 flex flex-wrap lg:absolute bottom-8 w-[80%] pl-[10%]">
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
 
-                <div class="mb-4 ">
+                <div class="mb-4 mx-auto ">
                     <h3 class="mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
-                        18 knots
+                        <span x-text="maxSpeed"></span> knots
                     </h3>
                     <p class="text-lg lg:text-gray-200">Max Speed</p>
                 </div>
             </div>
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
 
-                <div class="mb-4">
+                <div class="mb-4 mx-auto">
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
-                        150NM
+                        <span x-text="range"></span>NM
                     </h3>
                     <p class="text-center text-lg lg:text-gray-200 whitespace-nowrap">Range (EPA est.)</p>
                 </div>
@@ -32,7 +122,7 @@ x-data="{
                 <div class="mr-6">
 
                 </div>
-                <div class="mb-4">
+                <div class="mb-4 mx-auto">
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
                         <img class="inline"
                             src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431766_-electricity-triangle-sign.png" />
@@ -45,7 +135,7 @@ x-data="{
                 <div class="mr-6">
 
                 </div>
-                <div class="mb-4">
+                <div class="mb-4 mx-auto">
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
                         <img class="inline"
                             src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431751_solar-panel.png" />
@@ -63,7 +153,7 @@ x-data="{
         </div>
     </div>
 
-    <div class="w-full lg:w-[30%] p-8 lg:pt-20">
+    <div class="w-full md:w-[30%] p-8 lg:pt-20 md:max-h-[100vh] md:overflow-y-scroll">
         <div class="text-center">
             <h1 class="text-3xl font-medium mb-3">
                 Emarius 34S
@@ -73,206 +163,23 @@ x-data="{
             </span>
 
             <div class="text-left mt-6">
-                <span class="font-medium text-lg mb-3 block">
-                    Emarius 35S single engine
-                </span>
-                <fieldset>
-                    <legend class="sr-only">Server size</legend>
-                    <div class="space-y-4">
-                        <!--
-                    Checked: "border-transparent", Not Checked: "border-gray-300"
-                    Active: "border-indigo-500 ring-2 ring-indigo-500"
-                  -->
-                        <label
-                            class="bg-[#DDE2E8] relative block cursor-pointer rounded-full border bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between">
-                            <input type="radio" name="server-size" value="Hobby" class="sr-only">
-                            <span class="flex items-center">
-                                <span class="flex flex-col text-sm">
-                                    <span id="server-size-0-label" class="font-medium text-gray-900">
-                                        Emarius 34S, 100kwh
-                                    </span>
-                                    <span id="server-size-0-description-0" class="text-gray-500">
+                <div class="mb-6">
+                    <x-custom.engine-filter></x-custom.engine-filter>
+                </div>
 
-                                    </span>
-                                </span>
-                            </span>
-                            <span id="server-size-0-description-1"
-                                class="mt-2 flex text-sm sm:mt-0 sm:ml-4 sm:flex-col sm:text-right">
-                                <span class="font-medium text-gray-900">3528€</span>
-                            </span>
-                            <!--
-                      Active: "border", Not Active: "border-2"
-                      Checked: "border-indigo-500", Not Checked: "border-transparent"
-                    -->
-                            <span class="pointer-events-none absolute -inset-px rounded-full border-2"
-                                aria-hidden="true"></span>
-                        </label>
+                <div>
+                    <x-custom.generator-filter></x-custom.generator-filter>
 
-                        <!--
-                    Checked: "border-transparent", Not Checked: "border-gray-300"
-                    Active: "border-indigo-500 ring-2 ring-indigo-500"
-                  -->
-                        <label
-                            class="relative block cursor-pointer rounded-full border bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between">
-                            <input type="radio" name="server-size" value="Hobby" class="sr-only">
-                            <span class="flex items-center">
-                                <span class="flex flex-col text-sm">
-                                    <span id="server-size-0-label" class="font-medium text-gray-900">
-                                        Emarius 34S, 150kwh
-                                    </span>
-                                    <span id="server-size-0-description-0" class="text-gray-500">
+                </div>
 
-                                    </span>
-                                </span>
-                            </span>
-                            <span id="server-size-0-description-1"
-                                class="mt-2 flex text-sm sm:mt-0 sm:ml-4 sm:flex-col sm:text-right">
-                                <span class="font-medium text-gray-900">3528€</span>
-                            </span>
-                            <!--
-                      Active: "border", Not Active: "border-2"
-                      Checked: "border-indigo-500", Not Checked: "border-transparent"
-                    -->
-                            <span class="pointer-events-none absolute -inset-px rounded-full border-2"
-                                aria-hidden="true"></span>
-                        </label>
+                <div class="mb-6">
+                    <x-custom.color-filter></x-custom.color-filter>
+                </div>
 
+                <div>
+                    <x-custom.batery-filter></x-custom.batery-filter>
+                </div>
 
-                    </div>
-                </fieldset>
-
-                <span class="mt-3 font-medium text-lg mb-3 block">
-                    Diesel generator
-                </span>
-                <fieldset>
-                    <legend class="sr-only">Diesel generator</legend>
-                    <div class="space-y-4">
-                        <!--
-                    Checked: "border-transparent", Not Checked: "border-gray-300"
-                    Active: "border-indigo-500 ring-2 ring-indigo-500"
-                  -->
-                        <label
-                            class="bg-[#DDE2E8] relative block cursor-pointer rounded-full border bg-white px-4 py-3 shadow-sm focus:outline-none sm:flex sm:justify-between">
-                            <input type="radio" name="server-size" value="Hobby" class="sr-only">
-                            <span class="flex items-center">
-                                <span class="flex flex-col text-sm">
-                                    <span id="server-size-0-label" class="font-medium text-gray-900">
-                                        Diesel generator
-                                    </span>
-                                    <span id="server-size-0-description-0" class="text-gray-500">
-
-                                    </span>
-                                </span>
-                            </span>
-                            <span id="server-size-0-description-1"
-                                class="mt-2 flex text-sm sm:mt-0 sm:ml-4 sm:flex-col sm:text-right">
-                            </span>
-                            <!--
-                      Active: "border", Not Active: "border-2"
-                      Checked: "border-indigo-500", Not Checked: "border-transparent"
-                    -->
-                            <span class="pointer-events-none absolute -inset-px rounded-full border-2"
-                                aria-hidden="true"></span>
-                        </label>
-
-                        <!--
-                    Checked: "border-transparent", Not Checked: "border-gray-300"
-                    Active: "border-indigo-500 ring-2 ring-indigo-500"
-                  -->
-                        <label
-                            class="relative block cursor-pointer rounded-full border bg-white  px-4 py-3 shadow-sm focus:outline-none sm:flex sm:justify-between">
-                            <input type="radio" name="server-size" value="Hobby" class="sr-only">
-                            <span class="flex items-center">
-                                <span class="flex flex-col text-sm">
-                                    <span id="server-size-0-label" class="font-medium text-gray-900">
-                                        Without diesel generator
-                                    </span>
-                                    <span id="server-size-0-description-0" class="text-gray-500">
-
-                                    </span>
-                                </span>
-                            </span>
-                            <span id="server-size-0-description-1"
-                                class="mt-2 flex text-sm sm:mt-0 sm:ml-4 sm:flex-col sm:text-right">
-                            </span>
-                            <!--
-                      Active: "border", Not Active: "border-2"
-                      Checked: "border-indigo-500", Not Checked: "border-transparent"
-                    -->
-                            <span class="pointer-events-none absolute -inset-px rounded-full border-2"
-                                aria-hidden="true"></span>
-                        </label>
-                    </div>
-                </fieldset>
-
-                <span class="mt-6 font-medium text-lg block mb-3">
-                    Paint: <span class="capitalize font-bold" x-text="selectedColor"></span>
-                </span>
-                <fieldset>
-                    <div class="flex items-center space-x-3">
-                        <!--
-                        Active and Checked: "ring ring-offset-1"
-                        Not Active and Checked: "ring-2"
-                      -->
-                        <label
-                        @click="selectedColor = 'white'; mainImage = 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg'"
-
-                            class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-pink-500">
-                            <input type="radio" name="color-choice" value="Pink" class="sr-only"
-                                aria-labelledby="color-choice-0-label">
-                            <span id="color-choice-0-label" class="sr-only">Pink</span>
-                            <span aria-hidden="true"
-                                class="h-8 w-8 bg-[#C9C9C9] border border-black border-opacity-10 rounded-full"></span>
-                        </label>
-
-                        <!--
-                        Active and Checked: "ring ring-offset-1"
-                        Not Active and Checked: "ring-2"
-                      -->
-                        <label
-                        @click="selectedColor = 'orange'; mainImage = 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674445471_Emarius34(5).jpg';"
-                            class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-purple-500">
-                            <input type="radio" name="color-choice" value="Purple" class="sr-only"
-                                aria-labelledby="color-choice-1-label">
-                            <span id="color-choice-1-label" class="sr-only">Purple</span>
-                            <span
-                            aria-hidden="true"
-                                class="h-8 w-8 bg-[#F8F5E9] border border-black border-opacity-10 rounded-full">
-                            </span>
-                        </label>
-
-                        <!--
-                        Active and Checked: "ring ring-offset-1"
-                        Not Active and Checked: "ring-2"
-                      -->
-                        <label
-                        @click="selectedColor = 'blue'; mainImage = 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674437328_Emarius34(13).jpg'"
-                            class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-blue-500">
-                            <input type="radio" name="color-choice" value="Blue" class="sr-only"
-                                aria-labelledby="color-choice-2-label">
-                            <span id="color-choice-2-label" class="sr-only">Blue</span>
-                            <span aria-hidden="true"
-                                class="h-8 w-8 bg-[#308DF9] border border-black border-opacity-10 rounded-full"></span>
-                        </label>
-
-                        <!--
-                        Active and Checked: "ring ring-offset-1"
-                        Not Active and Checked: "ring-2"
-                      -->
-                        <label
-                        @click="selectedColor = 'red'; mainImage = 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674421700_Emarius34(17).jpg'"
-                            class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-green-500">
-                            <input type="radio" name="color-choice" value="Green" class="sr-only"
-                                aria-labelledby="color-choice-3-label">
-                            <span id="color-choice-3-label" class="sr-only">Green</span>
-                            <span aria-hidden="true"
-                                class="h-8 w-8 bg-[#EB1B1B] border border-black border-opacity-10 rounded-full"></span>
-                        </label>
-
-
-
-                    </div>
-                </fieldset>
 
 
 
