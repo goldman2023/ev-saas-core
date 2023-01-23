@@ -58,7 +58,7 @@
                 Emarius 34S
             </h1>
             <span>
-                Est. delivery October 15th, 2022
+                Est. delivery October 15th, 2023
             </span>
 
             <div class="text-left mt-6">
@@ -196,9 +196,61 @@
                     </div>
                 </fieldset>
 
+                <span class="mt-6 font-medium text-lg block mb-3">
+                    Paint:
+                </span>
+                <fieldset>
+                    <div class="flex items-center space-x-3">
+                      <!--
+                        Active and Checked: "ring ring-offset-1"
+                        Not Active and Checked: "ring-2"
+                      -->
+                      <label class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-pink-500">
+                        <input type="radio" name="color-choice" value="Pink" class="sr-only" aria-labelledby="color-choice-0-label">
+                        <span id="color-choice-0-label" class="sr-only">Pink</span>
+                        <span aria-hidden="true" class="h-8 w-8 bg-[#C9C9C9] border border-black border-opacity-10 rounded-full"></span>
+                      </label>
+
+                      <!--
+                        Active and Checked: "ring ring-offset-1"
+                        Not Active and Checked: "ring-2"
+                      -->
+                      <label class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-purple-500">
+                        <input type="radio" name="color-choice" value="Purple" class="sr-only" aria-labelledby="color-choice-1-label">
+                        <span id="color-choice-1-label" class="sr-only">Purple</span>
+                        <span aria-hidden="true" class="h-8 w-8 bg-[#F8F5E9] border border-black border-opacity-10 rounded-full"></span>
+                      </label>
+
+                      <!--
+                        Active and Checked: "ring ring-offset-1"
+                        Not Active and Checked: "ring-2"
+                      -->
+                      <label class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-blue-500">
+                        <input type="radio" name="color-choice" value="Blue" class="sr-only" aria-labelledby="color-choice-2-label">
+                        <span id="color-choice-2-label" class="sr-only">Blue</span>
+                        <span aria-hidden="true" class="h-8 w-8 bg-[#308DF9] border border-black border-opacity-10 rounded-full"></span>
+                      </label>
+
+                      <!--
+                        Active and Checked: "ring ring-offset-1"
+                        Not Active and Checked: "ring-2"
+                      -->
+                      <label class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-green-500">
+                        <input type="radio" name="color-choice" value="Green" class="sr-only" aria-labelledby="color-choice-3-label">
+                        <span id="color-choice-3-label" class="sr-only">Green</span>
+                        <span aria-hidden="true" class="h-8 w-8 bg-[#EB1B1B] border border-black border-opacity-10 rounded-full"></span>
+                      </label>
 
 
-                <a href="#"
+
+                    </div>
+                  </fieldset>
+
+
+
+
+                <a href="https://buy.stripe.com/dR600r9zY2BKfBe6op"
+                target="_blank"
                     class="mt-6 w-full inline-block rounded-full border-2 border-black bg-white px-6 py-3 text-base font-medium text-black shadow-sm hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-center">
                     Order now
                 </a>
