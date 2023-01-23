@@ -45,6 +45,13 @@
     @livewireStyles
 
     @stack('head_scripts')
+    <style>
+        .container {
+            width: 100% !important;
+            max-width: 1600px !important;
+        }
+        </style>
+
 </head>
 
 <body class="relative font-sans antialiased {{ Route::currentRouteName() }}" x-data="{

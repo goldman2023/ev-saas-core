@@ -9,7 +9,7 @@
         <legend class="sr-only"> Server size </legend>
         <div class="space-y-4">
             <label x-radio-group-option=""
-                class="relative block cursor-pointer rounded-full border bg-white px-6 py-3 shadow-sm focus:outline-none sm:flex sm:justify-between border-transparent border-indigo-500 ring-2 ring-indigo-500"
+                class="relative block cursor-pointer rounded-full border bg-white px-6 py-3 shadow-sm focus:outline-none flex justify-between border-transparent border-indigo-500 ring-2 ring-indigo-500"
                 :class="{ 'border-transparent': (value === 'generator1'), 'border-gray-300': !(value === 'generator1'), 'border-indigo-500 ring-2 ring-indigo-500': (active === 'generator1'), 'undefined': !(active === 'generator1') }">
                 <input type="radio" x-model="value" name="server-size" value="generator1" class="sr-only"
                     aria-labelledby="server-size-1-label"
@@ -34,7 +34,7 @@
             </label>
 
             <label x-radio-group-option=""
-                class="relative block cursor-pointer rounded-full border bg-white px-6 py-3 shadow-sm focus:outline-none sm:flex sm:justify-between border-gray-300 undefined"
+                class="relative block cursor-pointer rounded-full border bg-white px-6 py-3 shadow-sm focus:outline-none flex justify-between border-gray-300 undefined"
                 :class="{ 'border-transparent': (value === 'generator2'), 'border-gray-300': !(value === 'generator2'), 'border-indigo-500 ring-2 ring-indigo-500': (active === 'generator2'), 'undefined': !(active === 'generator2') }">
                 <input type="radio" x-model="value" name="server-size" value="generator2" class="sr-only"
                     aria-labelledby="server-size-2-label"
