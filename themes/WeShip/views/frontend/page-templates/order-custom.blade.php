@@ -5,27 +5,27 @@ x-data="{
     mainImage: 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg',
  }">
     <div class="w-full lg:w-[70%] relative">
-        <img class="lg:h-[100vh] object-cover w-full object-position-right"
+        <img class="lg:min-h-[100vh] object-cover w-full object-position-right"
         :src="mainImage" />
 
         <div
             class="items-center mt-8 lg:mt-0 text-center justify-center left-0 flex flex-wrap lg:absolute bottom-8 w-[80%] pl-[10%]">
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
-                <div class="mr-6">
 
-                </div>
-                <div class="w-2/3 mb-4 ">
-                    <h3 class="mb-2 text-2xl lg:text-gray-50 font-medium font-heading">10,55m</h3>
-                    <p class="text-lg lg:text-gray-200">Length</p>
+                <div class="mb-4 ">
+                    <h3 class="mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
+                        18 knots
+                    </h3>
+                    <p class="text-lg lg:text-gray-200">Max Speed</p>
                 </div>
             </div>
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
-                <div class="mr-6">
 
-                </div>
                 <div class="mb-4">
-                    <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">3,15m</h3>
-                    <p class="text-center text-lg lg:text-gray-200">Width</p>
+                    <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
+                        150NM
+                    </h3>
+                    <p class="text-center text-lg lg:text-gray-200 whitespace-nowrap">Range (EPA est.)</p>
                 </div>
             </div>
             <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
@@ -235,8 +235,10 @@ x-data="{
                             <input type="radio" name="color-choice" value="Purple" class="sr-only"
                                 aria-labelledby="color-choice-1-label">
                             <span id="color-choice-1-label" class="sr-only">Purple</span>
-                            <span aria-hidden="true"
-                                class="h-8 w-8 bg-[#F8F5E9] border border-black border-opacity-10 rounded-full"></span>
+                            <span
+                            aria-hidden="true"
+                                class="h-8 w-8 bg-[#F8F5E9] border border-black border-opacity-10 rounded-full">
+                            </span>
                         </label>
 
                         <!--
