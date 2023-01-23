@@ -1,11 +1,12 @@
 <div class="w-full md:flex pt-[80px] md:pt-0" x-data="{
     open: false,
-    selectedColor: 'gray',
+    selectedColor: 'nardo gray',
     maxSpeed: 42,
     range: 60,
     baseRange: 60,
     generator: 'No',
     cruisingSpeed: '32',
+    basePrice: 300000,
     mainImage: 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg',
  }">
  <style>
