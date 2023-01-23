@@ -1,8 +1,56 @@
 <div class="w-full flex">
-    <div class="w-[70%]">
+    <div class="w-[70%] relative">
         <img class="h-[100vh] object-cover w-full object-position-right"
-            src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674423379_Emarius34(12).jpg" />
-    </div>
+            src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg" />
+
+            <div class="items-center text-center justify-center left-0 flex flex-wrap absolute bottom-8 w-[80%] pl-[10%]">
+                <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 mb-8">
+                  <div class="mr-6">
+
+                  </div>
+                  <div class="w-2/3 mb-4 ">
+                    <h3 class="mb-2 text-2xl text-gray-50 font-bold font-heading">10,55m</h3>
+                    <p class="text-lg text-gray-200">Length</p>
+                  </div>
+                </div>
+                <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 mb-8">
+                  <div class="mr-6">
+
+                  </div>
+                  <div class="mb-4">
+                    <h3 class="text-center mb-2 text-2xl text-gray-50 font-bold font-heading">3,15m</h3>
+                    <p class="text-center text-lg text-gray-200">Width</p>
+                  </div>
+                </div>
+                <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
+                  <div class="mr-6">
+
+                  </div>
+                  <div class="mb-4">
+                    <h3 class="text-center mb-2 text-2xl text-gray-50 font-bold font-heading">
+                        <img  class="inline" src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431766_-electricity-triangle-sign.png" />
+                        </h3>
+                    <p class="text-lg text-gray-200">Generator</p>
+                  </div>
+                </div>
+
+                <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
+                  <div class="mr-6">
+
+                  </div>
+                  <div class="mb-4">
+                    <h3 class="text-center mb-2 text-2xl text-gray-50 font-bold font-heading">
+                      <img class="inline" src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431751_solar-panel.png" />
+                    </h3>
+                    <p class="text-lg text-gray-200">Solar Panel</p>
+                  </div>
+                </div>
+
+
+
+
+              </div>
+        </div>
 
     <div class="w-[30%] p-8">
         <div class="text-center">
