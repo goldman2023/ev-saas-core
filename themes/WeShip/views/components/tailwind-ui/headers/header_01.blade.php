@@ -29,7 +29,7 @@
                 <div class="-mr-2 -my-2">
                     <button type="button"
                         aria-labelledby="Mobile menu button"
-                        class="lg:hidden bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                        class="hidden bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                         @click="show_mobile_menu = !show_mobile_menu">
                         @svg('heroicon-o-bars-3', ['class' => 'h-6 w-6'])
                     </button>

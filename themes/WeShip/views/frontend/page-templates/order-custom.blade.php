@@ -6,8 +6,19 @@
     baseRange: 60,
     generator: 'No',
     cruisingSpeed: '32',
+    showSpecifications: false,
     basePrice: 300000,
     mainImage: 'https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674320822_Emarius34(6).jpg',
+    toggleSpecification: function() {
+        this.showSpecifications = !this.showSpecifications;
+        if(this.showSpecifications) {
+            this.speficicationText = 'Less Specifications'
+        } else {
+            this.speficicationText = 'More Specifications'
+        }
+        return this.showSpecifications;
+    },
+    speficicationText: 'More Specifications',
  }">
  <style>
     footer {
@@ -123,7 +134,7 @@
                 </div>
             </div>
 
-            <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
+            <div x-show="showSpecifications" class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
                 <div class="mr-6">
 
                 </div>
@@ -137,13 +148,14 @@
                 </div>
             </div>
 
-            <div class="hidden w-1/2 lg:w-1/4 md:flex px-4 mb-8">
+            <div x-show="showSpecifications" class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
                 <div class="mr-6">
 
                 </div>
                 <div class="mb-4 mx-auto">
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
-                        <img class="inline"
+                        <span x-text="generator"></span>
+                        <img class="hidden md:inline"
                             src="https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674431766_-electricity-triangle-sign.png" />
                     </h3>
                     <p class="text-lg whitespace-nowrap lg:text-gray-200">
@@ -158,8 +170,10 @@
 
 
         </div>
-        <div class="underline decoration-solid text-center block lg:hidden font-medium text-[#383D43]">
-            More specifications
+        <div
+        x-text="speficicationText"
+        @click="toggleSpecification();"
+        class="underline decoration-solid text-center block lg:hidden font-medium text-[#383D43]">
         </div>
     </div>
 
