@@ -69,7 +69,7 @@ x-data="{
                 Emarius 34S
             </h1>
             <span>
-                Est. delivery October 15th, 2023
+                Est. delivery June 1st, 2023
             </span>
 
             <div class="text-left mt-6">
