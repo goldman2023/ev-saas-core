@@ -1,6 +1,7 @@
 <div class="w-full" x-data="{
     predefined_types: @js(App\Enums\AttributeTypeEnum::getPredefined()),
     type: @js($attribute->type ?? App\Enums\AttributeTypeEnum::dropdown()->value),
+    slug: @js($attribute->slug),
     filterable: @js($attribute->filterable),
     is_schema: @js($attribute->is_schema),
     is_admin: @js($attribute->is_admin),
@@ -14,23 +15,7 @@
         'with_time': false,
         'range': false,
     }, ...@js($attribute->custom_properties ?? ((object) []))},
-
-    @if($is_update && $attribute->is_predefined)
-        attribute_values: @entangle('attribute_values').defer,
-        countAttributeValues() {
-            if(this.attribute_values === null || this.attribute_values === undefined || this.attribute_values.length <= 0) {
-                this.attribute_values.push({
-                    values: '',
-                });
-            }
-
-            return this.attribute_values.length;
-        },
-    @endif
-}" x-init="countAttributeValues()">
-    {{-- FIXME: If $attribute->custom_properties is {} and not null, it will rise livewire checksum error on
-    saveAttribute() --}}
-
+}">
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:target="saveAttribute"
             wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
@@ -399,91 +384,8 @@
                     </div>
                     {{-- END Actions --}}
 
-                    @if($is_update && $attribute->is_predefined)
-                        {{-- Attribute Values --}}
-                        <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
-                                    open: true,
-                                }" :class="{'p-4': open}" wire:ignore>
-                            <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open"
-                                :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Attribute values') }}
-                                </h3>
-                                @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
-                            </div>
-
-                            <div class="w-full" x-show="open">
-                                <template x-if="predefined_types.indexOf(type) !== -1">
-                                    <!-- Values of Predefined Types -->
-                                    <div class="w-full grid grid-cols-12 gap-3" x-data="{
-                                            count() {
-                                                if(this.attribute_values === undefined || this.attribute_values === null) {
-                                                    this.attribute_values = [{values: ''}];
-                                                }
-
-                                                return this.attribute_values.length;
-                                            },
-                                            hasID(index) {
-                                                return this.attribute_values[index].hasOwnProperty('id') ? true : false;
-                                            },
-                                            add() {
-                                                this.attribute_values.push({values:''});
-                                            },
-                                            remove(index) {
-                                                if(this.hasID(index)) {
-                                                    $wire.removeAttributeValue(this.attribute_values[index]['id']);
-                                                }
-                                                this.attribute_values.splice(index, 1);
-                                            },
-                                        }">
-                                        <div class="col-span-12">
-                                            <template x-if="count() <= 1">
-                                                <div class="flex">
-                                                    <input type="text" class="form-standard"
-                                                        placeholder="{{ translate('Value 1') }}"
-                                                        x-model="attribute_values[0]['values']" />
-                                                </div>
-                                            </template>
-                                            <template x-if="count() > 1">
-                                                <template
-                                                    x-for="[key, attribute_value] of Object.entries(attribute_values)">
-                                                    <div class="flex" :class="{'mt-2': key > 0}">
-                                                        <input type="text" class="form-standard"
-                                                            x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
-                                                            x-model="attribute_value.values" />
-                                                        <template x-if="key > 0">
-                                                            <span class="ml-2 flex items-center cursor-pointer"
-                                                                @click="remove(key)">
-                                                                @svg('heroicon-o-trash', ['class' => 'w-[22px] h-[22px]
-                                                                text-danger'])
-                                                            </span>
-                                                        </template>
-                                                    </div>
-                                                </template>
-                                            </template>
-
-                                            <a href="javascript:;" class="btn-ghost !pl-0 !text-14 mt-1" @click="add()">
-                                                @svg('heroicon-o-plus', ['class' => 'h-3 w-3 mr-2'])
-                                                {{ translate('Add new') }}
-                                            </a>
-
-                                            {{-- <x-system.invalid-msg field="attribute.attribute_values">
-                                            </x-system.invalid-msg> --}}
-                                        </div>
-                                    </div>
-                                    <!-- END Values of Predefined Types -->
-                                </template>
-
-                                <div class="w-full flex justify-end">
-                                    <button type="button" class="btn btn-primary ml-auto" @click="
-                                                    $wire.set('attribute_values', attribute_values, true);
-                                                " wire:click="saveAttributeValues()">
-                                        {{ translate('Save') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- END Attribute Values --}}
-                    @endif
+                    {{-- Attribute Values --}}
+                    <x-dashboard.form.blocks.attribute-values-form :attribute="$attribute" />
 
                 </div>
             </div>

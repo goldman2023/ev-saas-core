@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use WEF;
 use App;
+use App\Traits\CoreMetaTrait;
 use Spatie\Sluggable\HasSlug;
 use App\Models\AttributeGroup;
 use App\Enums\AttributeTypeEnum;
@@ -15,6 +17,7 @@ class Attribute extends WeBaseModel
 {
     use HasSlug;
     use TranslationTrait;
+    use CoreMetaTrait;
 
     // TODO: Think about uncommenting this because Attribute inherits WeBaseModel
     // protected $with = ['attribute_relationships', 'attributes_values'];
@@ -106,7 +109,9 @@ class Attribute extends WeBaseModel
         if ($this->is_predefined) {
             // If attribute is predefined, there is only strict amount of values that it should return from DB,
             // it should not use hasManyThrough relationship, but hasMany, because it does not depend on any AttributeRelationship
-            return $this->hasMany(AttributeValue::class, 'attribute_id', 'id');
+            return $this->hasMany(AttributeValue::class, 'attribute_id', 'id')
+                ->orderByRaw("CASE WHEN ordering = 0 THEN 0 ELSE 1 END DESC") // If ordering is 0, then put it after all other...
+                ->orderBy('ordering', 'ASC');
         }
 
         return $this->attribute_values();
@@ -115,6 +120,12 @@ class Attribute extends WeBaseModel
     public function group()
     {
         return $this->belongsTo(AttributeGroup::class, 'group_id');
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('attributes.wef.data-types', [
+            
+        ]));
     }
     
     /**
