@@ -71,7 +71,7 @@
                 </span>
                 <span id="server-size-1-description-1"
                     class="mt-2 flex text-sm sm:mt-0 sm:ml-4 sm:flex-col sm:text-right">
-                    <span class="font-medium text-gray-900">+25 000€</span>
+                    <span class="font-medium text-gray-900"></span>
                 </span>
                 <span class="pointer-events-none absolute -inset-px rounded-full border border-indigo-500"
                     aria-hidden="true"
@@ -100,7 +100,7 @@
                 </span>
                 <span id="server-size-2-description-1"
                     class="mt-2 flex text-sm sm:mt-0 sm:ml-4 sm:flex-col sm:text-right">
-                    <span class="font-medium text-gray-900">+40 000€</span>
+                    <span class="font-medium text-gray-900"></span>
                 </span>
                 <span class="pointer-events-none absolute -inset-px rounded-full border-2 border-transparent"
                     aria-hidden="true"
