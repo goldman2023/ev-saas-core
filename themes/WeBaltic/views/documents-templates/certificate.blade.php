@@ -16,6 +16,9 @@ $vehicle_category = "O2";
 
 
 if ($product->getAttr('asiu-kiekis')) {
+// $att_val = $product->getAttr('asiu-kiekis')->attribute_values->first() (AttributeValue model)
+// $att_val->getWEF('test1')
+
 $axel_count = $product->getAttr('asiu-kiekis')->attribute_values->first()->values;
 } else {
 $axel_count = 0;

@@ -5,11 +5,14 @@ namespace App\Http\Livewire\Dashboard\Forms\Orders;
 use Log;
 use Uuid;
 use Payments;
+use App\Models\User;
 use App\Models\Order;
+use App\Models\Address;
 use App\Models\Invoice;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\OrderItem;
+use App\Enums\UserTypeEnum;
 use App\Enums\OrderTypeEnum;
 use Illuminate\Validation\Rule;
 use App\Enums\PaymentStatusEnum;
@@ -44,7 +47,7 @@ class OrderForm extends Component
         $this->order = empty($order) ? (new Order())->load(['uploads']) : $order;
 
         if(empty($this->order->id)) {
-            $this->order->shop_id = 1;
+            $this->order->shop_id = 1; // Shop ID by default is 1 - app shop itself
         }
 
         /* Enable Core Meta  */
@@ -187,7 +190,7 @@ class OrderForm extends Component
             $this->dispatchValidationErrors($e);
             $this->validate();
         }
-        
+
         DB::beginTransaction();
 
         try {
@@ -257,6 +260,48 @@ class OrderForm extends Component
                 do_action('order.insert', $this->order);
             }
 
+            // If customer is not selected, create ghost user or select user based on given email
+            if(empty($this->order->user_id)) {
+                $user = User::where('email', $this->order->email)->first();
+
+                if(!empty($user)) {
+                    // Link fetched user by given email to this $order
+                    $this->order->user()->associate($user);
+                } else {
+                    // There's no user with provided email, create ghost user
+                    $ghost_user = User::create(
+                        [
+                            'email' => $this->order->email,
+                            'is_temp' => true,
+                            'user_type' => UserTypeEnum::customer()->value,
+                            'entity' => $this->wef['billing_entity'],
+                            'name' => $this->order->billing_first_name,
+                            'surname' => $this->order->billing_last_name,
+                            'phone' => $this->order->phone_numbers[0] ?? '',
+                        ]
+                    );
+
+                    $this->order->user()->associate($ghost_user);
+
+                    // Create user billing address
+                    $billing_address = Address::create(
+                        [
+                            'user_id' => $ghost_user->id,
+                            'address' => $this->order->billing_address,
+                            'country' => $this->order->billing_country,
+                            'state' => $this->order->billing_state,
+                            'city' => $this->order->billing_city,
+                            'zip_code' => $this->order->billing_zip,
+                            'phones' => $this->order->phone_numbers ?? [],
+                            'is_primary' => 1,
+                            'is_billing' => 1,
+                        ]
+                    );
+                }
+
+                $this->order->save();
+            }
+
             DB::commit();
 
             $this->inform(translate('Order successfully saved!'), '', 'success');
@@ -264,7 +309,7 @@ class OrderForm extends Component
             // $this->emitSelf('refreshComponent');
 
             if (!$this->is_update) {
-                return redirect()->route('order.edit', $this->order->id);
+                return redirect()->route('order.details', $this->order->id);
             }
         } catch (\Exception $e) {
             DB::rollBack();

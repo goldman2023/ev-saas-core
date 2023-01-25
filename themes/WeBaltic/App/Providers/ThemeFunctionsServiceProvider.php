@@ -161,7 +161,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // AttributeValue: WEF data types
             add_filter('attribute_values.wef.data-types', function ($data_types) {
                 return array_merge($data_types, [
-                    
+
                 ]);
             }, 10, 1);
 
@@ -181,7 +181,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     template: 'documents-templates.proposal', 
                     upload_tag: 'proposal', 
                     display_name: translate('Proposal for Order #').$order->id, 
-                    data: ['user' => $order->user->id]
+                    data: ['user' => $order->user]
                 );
             }, 10, 1);
 
@@ -194,7 +194,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     template: 'documents-templates.proposal', 
                     upload_tag: 'proposal', 
                     display_name: translate('Proposal for Order #').$order->id, 
-                    data: ['user' => $order->user->id]
+                    data: ['user' => $order->user]
                 );
             }, 10, 1);
 

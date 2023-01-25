@@ -156,12 +156,12 @@ class EVAccountController extends Controller
         if(auth()->user()->isAdmin()) {
             $q = $request->q;
 
-            $results = User::search($q)->get();
+            $results = User::with(['user_meta', 'addresses'])->search($q)->get();
 
             // TODO: Return this as an API RESOURCE!
             return response()->json([
                 'status' => 'success',
-                'results' => $results
+                'results' => $results->toArray()
             ]);
         }
 
