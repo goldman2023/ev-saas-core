@@ -137,7 +137,7 @@
 
         <div
             class="
-            text-white
+            md:text-white
             md:absolute bottom-8 left-0 w-full z-[999]
             items-center mt-8 lg:mt-0 text-center justify-center left-0 flex flex-wrap lg:absolute bottom-8 lg:w-[80%] lg:pl-[10%]">
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
