@@ -46,17 +46,17 @@
     <div class="mb-4 sm:flex xl:block">
         <div class="sm:flex-1">
             <address class="text-sm not-italic font-normal text-gray-500">
-                <div class="mt-4">Email adress</div>
-                <a class="text-sm font-medium text-gray-900" href="mailto:webmaster@flowbite.com">
+                <div class="mt-4">{{ translate('Email adress') }}</div>
+                <a class="text-sm font-medium text-gray-900" href="mailto:{{ $user->email }}">
                     {{ $user->email }}
                 </a>
 
-                <div class="mt-4">Phone number</div>
+                <div class="mt-4">{{ translate('Phone number') }}</div>
                 <div class="mb-2 text-sm font-medium text-gray-900">
-                    @if($user->phone)
-                    {{ $user->phone }}
+                    @if(!empty($user->phone))
+                        {{ $user->phone }}
                     @else
-                    {{ translate('+ Add phone number') }}
+                        {{ translate('+ Add phone number') }}
                     @endif
                 </div>
             </address>
