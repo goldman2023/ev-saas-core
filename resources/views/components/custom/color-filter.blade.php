@@ -18,7 +18,7 @@
                 <span id="color-choice-0-label" class="sr-only">Pink</span>
                 <span aria-hidden="true"
                 style="background: url('https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674462278_emarius-gray.png@webp?ver=1674462361137'); background-size: contain; background-repeat: no-repeat; background-position: center;"
-                    class="h-28 w-28 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
+                    class="md:h-28 md:w-28 w-24 h-24 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
                 </span>
             </label>
 
@@ -36,7 +36,7 @@
                 <span id="color-choice-1-label" class="sr-only">Purple</span>
                 <span aria-hidden="true"
                 style="background: url('https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674462277_emarius-white.png@webp?ver=1674462290814'); background-size: contain; background-repeat: no-repeat; background-position: center;"
-                    class="h-28 w-28 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
+                    class="md:h-28 md:w-28 w-24 h-24 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
                 </span>
             </label>
 
@@ -53,7 +53,7 @@
                 <span id="color-choice-2-label" class="sr-only">Blue</span>
                 <span aria-hidden="true"
                 style="background: url('https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674462278_emarius-orange.png@webp?ver=1674462346866'); background-size: contain; background-repeat: no-repeat; background-position: center;"
-                    class="h-28 w-28 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
+                    class="md:h-28 md:w-28 w-24 h-24 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
                 </span>
             </label>
 
@@ -72,7 +72,7 @@
                 <span id="color-choice-3-label" class="sr-only">Green</span>
                 <span aria-hidden="true"
                 style="background: url('https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674462278_emarius-blue.png@webp?ver=1674462419733'); background-size: contain; background-repeat: no-repeat; background-position: center;"
-                    class="h-28 w-28 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
+                    class="md:h-28 md:w-28 w-24 h-24 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
                 </span>
             </label>
 
@@ -85,7 +85,7 @@
                 <span id="color-choice-3-label" class="sr-only">Green</span>
                 <span aria-hidden="true"
                 style="background: url('https://images.we-saas.com/insecure/fill/350/0/ce/0/plain/https://businesspress.fra1.digitaloceanspaces.com/uploads/993c7c75-52ff-42ea-9cb6-c149fa874601/1674462277_emarius-red.png@webp?ver=1674462328359'); background-size: contain; background-repeat: no-repeat; background-position: center;"
-                    class="h-28 w-28 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
+                    class="md:h-28 md:w-28 w-24 h-24 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
                 </span>
             </label>
 
