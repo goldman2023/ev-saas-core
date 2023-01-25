@@ -72,6 +72,7 @@ class EVShopController extends Controller
     }
 
     // API Routes
+    // TODO: Move this into Controllers/API/ShopAPIController.php
     public function api_search_shops(Request $request)
     {
         if(auth()->user()->isAdmin()) {

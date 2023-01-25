@@ -21,12 +21,14 @@
             @isset($row->get_primary_order_item()->subject)
                 <img src="{{ $row->get_primary_order_item()->subject->getThumbnail() }}" class="w-[75px] h-auto rounded mr-2"
                     width="50" height="50" alt="" />
+            @elseif(!empty($row->get_primary_order_item()))
+                <strong class="text-md">
+                    {{ $row->get_primary_order_item()->name }}
+                    <span class="font-normal"> <br> {{ translate('Order') }} #{{ $row->id }} </span>
+                </strong>
+            @else
+                {{ translate('No items...') }}
             @endisset
-            
-            <strong class="text-md">
-                {{ $row->get_primary_order_item()->name }}
-                <span class="font-normal"> <br> {{ translate('Order') }} #{{ $row->id }} </span>
-            </strong>
         </a>
     </div>
 </x-livewire-tables::table.cell>

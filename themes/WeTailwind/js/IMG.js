@@ -36,5 +36,8 @@ window.WE.IMG = {
             return this.getStorageBaseURL() + $path;
         }
     },
+    placeholderUrl: function() {
+        return window.WE.IMG.getIMGProxyData()['placeholder_url'];
+    },
 
 };

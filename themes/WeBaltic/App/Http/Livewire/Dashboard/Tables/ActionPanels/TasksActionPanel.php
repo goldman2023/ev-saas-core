@@ -5,6 +5,7 @@ namespace WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels;
 use UUID;
 use PDF;
 use MediaService;
+use Log;
 use App\Models\Task;
 use App\Models\Order;
 use Livewire\Component;
@@ -62,7 +63,7 @@ class TasksActionPanel extends Component
             ];
         } else if($this->tasksType === 'delivery') {
             $this->availableActions = [
-
+                'generate_delivery_documents' => translate('Generate delivery documents')
             ];
         }        
     }
@@ -87,6 +88,8 @@ class TasksActionPanel extends Component
 
         if($this->action === 'print_labels') {
             $this->printLabels();
+        } else if($this->action === 'generate_delivery_documents') {
+            $this->generateDeliveryDocuments();
         }
 
         $this->emit('refreshDatatable');
@@ -140,19 +143,8 @@ class TasksActionPanel extends Component
                     })->toArray();
 
                     // Generate PDF with combined order certificates/labels
-                    $html = '';
-
-                    foreach($orders as $order) {
-                        // $details_card = new OrderDetailsCard($order, true);
-                        // $html .= $details_card->render();
-                    }
-
-
-                    // $pdf = PDF::loadHTML($html)->setPaper('a5', 'portrait')->output();
-
                     $template = 'documents-templates.printing-template';
                     $data = [
-                        'html' => $html,
                         'orders' => $orders,
                     ];
 
@@ -195,11 +187,47 @@ class TasksActionPanel extends Component
                 $this->inform(translate('Orders printing labels PDF successfully created!'), '', 'success');
             } catch(\Exception $e) {
                 DB::rollBack();
-                $this->dispatchGeneralError(translate('There was an error while creating a printing task...Please try again.'));
-                $this->inform(translate('There was an error while creating a printing task...Please try again.'), '', 'fail');
-                dd($e);
+
+                Log::error($e);
+                $this->dispatchGeneralError(translate('There was an error while performing printing-label action...Please try again.'));
+                $this->inform(translate('There was an error while performing printing-label action...Please try again.'), '', 'fail');
             }
         }
     }
 
+    public function generateDeliveryDocuments() {
+        $tasks = Task::whereIn('id', $this->items)->get();
+
+        if(!empty($tasks)) {
+            DB::beginTransaction();
+
+            try {
+                foreach($tasks as $task) {
+                    if($task->orders->isNotEmpty()) {
+                        foreach($task->orders as $order) {
+                            baltic_generate_order_document(
+                                order: $order, 
+                                template: 'documents-templates.delivery-to-warehouse', 
+                                upload_tag: 'delivery_to_warehouse', 
+                                display_name: translate('Delivery to warehouse document for Order #').$order->id
+                            );
+                        }
+
+                        $task->status = TaskStatusEnum::done()->value;
+                        $task->save();
+                    }
+                }
+
+                DB::commit();
+
+                $this->inform(translate('Delivery to warehouse documents successfully created!'), '', 'success');
+            } catch(\Exception $e) {
+                DB::rollBack();
+
+                Log::error($e);
+                $this->dispatchGeneralError(translate('There was an error while performing delivery documents generation...Please try again.'));
+                $this->inform(translate('There was an error while  performing delivery documents generation...Please try again.'), '', 'fail');
+            }
+        }
+    }
 }

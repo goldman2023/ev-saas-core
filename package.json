@@ -89,7 +89,7 @@
         "editorjs-undo": "^2.0.1",
         "faker": "^6.6.6",
         "flag-icon-css": "^3.5.0",
-        "flatpickr": "^4.6.9",
+        "flatpickr": "^4.6.13",
         "froala-editor": "^4.0.10",
         "get-sass-vars": "^3.1.0",
         "glob-parent": "^5.1.2",

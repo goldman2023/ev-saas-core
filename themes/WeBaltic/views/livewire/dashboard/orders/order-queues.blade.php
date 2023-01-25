@@ -1,11 +1,20 @@
 <div class="card mb-9 !p-4 !pt-2">
     <div class="mb-0 border-b border-gray-200 dark:border-gray-700">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab"
-            data-tabs-toggle="#order-queues-tabs-content" role="tablist">
-            <li class="mr-2" role="presentation">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center"
+            data-tabs-toggle="#order-queues-tabs-content" role="tablist" 
+            id="order-queues-tabs"
+            wire:key="order-queues-tabs"
+            wire.ignore.self>
+            <li class="mr-2" role="presentation" 
+                wire:key="order-queues-tab-delivery"
+                wire.ignore.self
+            >
                 <button class="inline-block font-medium text-lg p-3 border-b-2 rounded-t-lg"
                     id="order-queues-tab-delivery" data-tabs-target="#order-queues-tab-delivery-content" type="button"
-                    role="tab" aria-selected="false">
+                    role="tab" aria-selected="false" 
+                    wire:ignore.self
+                    wire:key="order-queues-tab-delivery-nav"
+                >
                     {{ translate('Delivery') }}
 
                     @if($order->tasks->where('type', 'delivery')->count() > 0)
@@ -21,11 +30,17 @@
                     @endif
                 </button>
             </li>
-            <li class="mr-2" role="presentation">
+            <li class="mr-2" role="presentation" 
+                wire:key="order-queues-tab-printing"
+                wire.ignore.self
+            >
                 <button
                     class="text-lg font-medium inline-block p-3 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                     id="order-queues-tab-printing" data-tabs-target="#order-queues-tab-printing-content" type="button"
-                    role="tab" aria-selected="false">
+                    role="tab" aria-selected="false"
+                    wire:ignore.self
+                    wire:key="order-queues-tab-printing-nav"
+                >
                     {{ translate('Printing') }}
 
                     @if($order->tasks->where('type', 'printing')->count() > 0)
@@ -44,10 +59,14 @@
 
         </ul>
     </div>
+
     <div id="order-queues-tabs-content">
         {{-- Delivery Queues --}}
         <div class="p-2 hidden rounded-lg bg-gray-50 dark:bg-gray-800" id="order-queues-tab-delivery-content"
-            role="tabpanel">
+            role="tabpanel"
+            wire:ignore.self
+            wire:key="order-queues-tab-delivery-content"
+        >
             <div class="w-full flex flex-col">
                 @if(!empty($deliveryTask))
                 <ul role="list" class="divide-y divide-gray-200 pb-1">
@@ -85,26 +104,35 @@
                 </ul>
                 <div class="w-full flex gap-x-3">
                     @if(!empty($deliveryPDF))
-                    <a href="{{ $deliveryPDF->url() }}" class="text-14 text-sky-500 hover:text-sky-600"
-                        target="_blank">{{ translate('View Document') }}</a>
+                        <a href="{{ $deliveryPDF->url() }}" class="text-14 text-sky-500 hover:text-sky-600"
+                            target="_blank">{{ translate('View Document') }}</a>
                     @endif
                     <a href="{{ route('task.edit', $deliveryTask->id) }}"
                         class="text-14 text-sky-500 hover:text-sky-600" target="_blank">{{ translate('Edit Task') }}</a>
                 </div>
                 @else
-                <div class="w-full">
-                    <p class="p-2 max-w-2xl text-sm text-gray-500 font-semibold">
-                        {{ translate('When this order reaches `Delivery` cycle step, Task and delivery PDF will be
-                        displayed here.') }}
-                    </p>
-                </div>
+                    <div class="w-full">
+                        <p class="p-2 max-w-2xl text-sm text-gray-500 font-semibold">
+                            {{ translate('When this order reaches `Delivery` cycle step, Task and delivery PDF will be
+                            displayed here.') }}
+                        </p>
+                    </div>
+
+                    <div class="{{ $class }}">
+                        <button type="button" class="btn btn-primary w-full" wire:click="addToDeliveryQueue()">
+                            {{ translate('Add to delivery Queue') }}
+                        </button>
+                    </div>
                 @endif
             </div>
         </div>
 
         {{-- Printing Queues --}}
         <div class="hidden rounded-lg bg-gray-50 dark:bg-gray-800" id="order-queues-tab-printing-content"
-            role="tabpanel">
+            role="tabpanel"
+            wire:ignore.self
+            wire:key="order-queues-tab-printing-content"
+        >
             <div class="w-full">
                 <div class="w-full py-3 mb-2 border-b ">
                     @if($order->tasks->where('type', 'printing')->count() > 0)
@@ -155,16 +183,16 @@
                     @endforeach
                 </ul>
                 @else
-                <div class="bg-white scale-50" style="margin-bottom: -20px; width: 200%; transform-origin: top left;">
-                    <x-dashboard.orders.order-details-card :order="$order">
-                    </x-dashboard.orders.order-details-card>
-                </div>
+                    <div class="bg-white scale-50" style="margin-bottom: -20px; width: 200%; transform-origin: top left;">
+                        <x-dashboard.orders.order-details-card :order="$order">
+                        </x-dashboard.orders.order-details-card>
+                    </div>
 
-                <div class="{{ $class }}">
-                    <button type="button" class="btn btn-primary w-full" wire:click="addToPrintingQueue()">
-                        {{ translate('Add to print Queue') }}
-                    </button>
-                </div>
+                    <div class="{{ $class }}">
+                        <button type="button" class="btn btn-primary w-full" wire:click="addToPrintingQueue()">
+                            {{ translate('Add to print Queue') }}
+                        </button>
+                    </div>
                 @endif
             </div>
         </div>

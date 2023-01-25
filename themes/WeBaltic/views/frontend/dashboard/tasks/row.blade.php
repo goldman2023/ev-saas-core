@@ -4,7 +4,7 @@
             @click="$dispatch('table-item-toggle', {table_id: '{{ $tableId }}', id: Number($event.target.value)})"/>
 
         {{-- #{{ $row->id }} --}}
-        @if (!$row->viewed)
+        @if ($row->status === \App\Enums\TaskStatusEnum::backlog()->value)
             <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
         @endif
     </a>
