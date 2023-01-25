@@ -20,7 +20,8 @@
     <span class="font-bold">Delivery No:</span> {{ get_delivery_document_number($upload) }}
   </div>
   <div class="w-full pb-1">
-    <span class="font-bold">Delivery initiated:</span> {{ \Carbon::createFromTimestamp($order->getWEF('cycle_step_date_delivery_to_warehouse'))->format('Y-m-d H:i') }}
+    <span class="font-bold">Delivery initiated:</span> 
+    {{ empty($order->getWEF('cycle_step_date_delivery_to_warehouse')) ? '' : \Carbon::createFromTimestamp($order->getWEF('cycle_step_date_delivery_to_warehouse'))->format('Y-m-d H:i') }}
   </div>
 
   <div class="w-full pb-6">

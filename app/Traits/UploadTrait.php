@@ -318,14 +318,14 @@ trait UploadTrait
                     foreach($wef_params as $wef_param) {
                         if($upload->core_meta->search(function($meta) use($wef_param, &$pass) {
                             return $meta->key === $wef_param[0] && $meta->value === $wef_param[1];
-                        }) < 0) {
+                        }) === false) {
                             $pass = false;
                             break;
                         }
                     }
                 }
             }
-
+            
             return $pass;
         });
 
