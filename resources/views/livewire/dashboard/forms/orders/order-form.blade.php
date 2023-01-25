@@ -871,9 +871,14 @@ x-cloak>
 
                             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                                 @if(!empty($order->id) && $order->invoices->isEmpty())
-                                    <button type="button" class="btn btn-warning btn-sm" wire:click="generateInvoice()" >
-                                        {{ translate('Generate Invoice') }}
-                                    </button>
+                                    @ob_start()
+                                        <button type="button" class="btn btn-warning btn-sm" 
+                                            @click="save()"
+                                            wire:click="generateInvoice()">
+
+                                            {{ translate('Generate Invoice') }}
+                                        </button>
+                                    @ob_do_action('view.dashboard.form.order.generate-invoice-btn', $order)
                                 @endif
 
                                 <button type="button" class="btn btn-primary ml-auto btn-sm" @click="save()" wire:click="saveOrder()" >
@@ -881,9 +886,6 @@ x-cloak>
                                 </button>
                             </div>
                         </div>
-
-
-
                     </div>
 
                     {{-- Order Summary --}}

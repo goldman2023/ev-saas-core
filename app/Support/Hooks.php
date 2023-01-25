@@ -365,6 +365,20 @@ if (!class_exists('Hooks')){
       array_pop($this->current_filter);
     }
 
+    public function ob_do_action($tag, ...$args) {
+      ob_start();
+      
+      $this->do_action($tag, ...$args);
+
+      $html = ob_get_clean();
+      
+      if(!empty($html)) {
+        echo $html;
+      } else {
+        echo end($args);
+      }
+    }
+
     /**
      * do_action_ref_array
      *

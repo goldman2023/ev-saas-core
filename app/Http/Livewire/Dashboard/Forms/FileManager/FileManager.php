@@ -16,6 +16,7 @@ class FileManager extends Component
     use RulesSets;
     use DispatchSupport;
 
+    public $files;
     public $subject;
     public $field;
     public $errorField;
@@ -24,13 +25,14 @@ class FileManager extends Component
     public $multiple;
     public $addNewItemLabel;
     public $wrapperClass;
+    public $whereWefs;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function mount($subject = null, $field = '', $template = 'image', $fileType = 'image', $errorField = '', $multiple = false, $addNewItemLabel = 'Add', $wrapperClass = '')
+    public function mount($subject = null, $field = '', $template = 'image', $fileType = 'image', $errorField = '', $multiple = false, $addNewItemLabel = 'Add', $wrapperClass = '', $whereWefs = [])
     {
         $this->subject = $subject;
         $this->field = $field;
@@ -40,6 +42,14 @@ class FileManager extends Component
         $this->fileType = $fileType;
         $this->addNewItemLabel = $addNewItemLabel;
         $this->wrapperClass = $wrapperClass;
+
+        $this->whereWefs = $whereWefs;
+
+        // Filter Uploads from $subject->{$field} by provided wefs
+        $this->files = !empty($this->subject->{$field} ?? null) ? 
+            $this->subject->getUploadsWhere(property_name: $this->field, return_all: true, wef_params: $this->whereWefs)->map(function($upload, $key) {
+                return toJSONMedia($upload);
+            })->filter()->values() : [];
     }
 
     protected function rules()

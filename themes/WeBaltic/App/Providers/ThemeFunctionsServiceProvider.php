@@ -243,6 +243,14 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                         compact('order', 'current_cycle_status_label', 'current_cycle_status_value', 'default_cycle_status_value', 'next_cycle_status_label', 'current_cycle_status_date'));
                 }
             });
+
+            add_action('view.dashboard.form.order.generate-invoice-btn', function($order, $html) {
+                if(!empty($order->id) && $order->invoices->isEmpty() && $order->getWEF('cycle_status') === array_flip(OrderCycleStatusEnum::values())['approved'] ?? false) {
+                    echo $html;
+                } else {
+                    echo ' ';
+                }
+            }, 10, 2);
         }
 
     }
