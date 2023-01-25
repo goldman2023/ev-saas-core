@@ -206,7 +206,7 @@
         </div>
     </div>
 
-    <div class="w-full md:w-[30%] p-4 md:p-8 lg:pt-20 md:max-h-[100vh] md:overflow-y-scroll">
+    <div class="md:sticky w-full md:w-[30%] p-4 md:p-8 lg:pt-20 md:max-h-[100vh] md:overflow-y-scroll">
         <div class="text-center">
             <h1 class="text-3xl font-medium mb-3">
                 Emarius 34S
