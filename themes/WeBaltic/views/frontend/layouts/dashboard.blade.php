@@ -26,9 +26,6 @@
         @json(\IMG::getIMGProxyData())
     </script>
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeBaltic') }}">
-
     <script defer async src="{{ static_asset('/bp-assets/vendor/flowbite/flowbite.js') }}"></script>
 
     <!-- Styles -->
@@ -38,7 +35,7 @@
     {{ seo()->render() }}
     @livewireStyles
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+    <link rel="stylesheet" href="{{ static_asset('/bp-assets/vendor/flatpickr/flatpickr-airbnb.min.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     @stack('head_scripts')

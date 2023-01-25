@@ -491,4 +491,15 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
         return $query->where('created_at', '>', $date);
     }
+
+    public function toArray(){
+        $user = parent::toArray();
+        
+        if(isset($user['user_meta'])) {
+            $user_meta_formatted = collect($user['user_meta'])->keyBy('key')->map(fn($item) => $item['value'])->toArray();
+            $user['user_meta'] = $user_meta_formatted;
+        }
+        
+        return $user;
+    }
 }

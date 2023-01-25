@@ -2,20 +2,24 @@
 
 namespace App\Models;
 
+use WEF;
+use App\Traits\CoreMetaTrait;
 use App\Traits\TranslationTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AttributeValue extends WeBaseModel
 {
     use HasFactory;
     use TranslationTrait;
+    use CoreMetaTrait;
 
     public $selected;
 
     protected $appends = ['selected'];
 
-    protected $fillable = ['attribute_id', 'values', 'selected'];
+    protected $fillable = ['attribute_id', 'values', 'ordering', 'selected'];
+    protected $visible = ['id', 'attribute_id', 'values', 'ordering', 'selected'];
 
     public function attribute()
     {
@@ -46,5 +50,11 @@ class AttributeValue extends WeBaseModel
     public function getTranslationModel(): ?string
     {
         return AttributeValueTranslation::class;
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('attribute_values.wef.data-types', [
+            
+        ]));
     }
 }

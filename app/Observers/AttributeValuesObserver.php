@@ -39,5 +39,7 @@ class AttributeValuesObserver
         // IMPORTANT: This is already done by MySQL constraints!
         // $attribute_value->translations()->delete();
         // $attribute_value->attribute_value_relationship()->delete();
+
+        $attribute_value->core_meta()->delete(); // remove attribute value core metas
     }
 }

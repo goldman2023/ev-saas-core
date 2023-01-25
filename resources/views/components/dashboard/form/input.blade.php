@@ -1,8 +1,8 @@
 <div x-data="{
   nullable: @js($nullable),
   required: @js($required),
-}" class="w-full {{ $class }}"
->
+  disabled: @js($disabled)
+}" class="w-full {{ $class }}">
   <input 
           @if(!empty($inputId)) id="{{ $inputId }}" @endif
           type="{{ $type }}"
@@ -32,9 +32,7 @@
             value="{{ $value }}"
           @endif
 
-          @if($disabled)
-          disabled
-          @endif
+          x-bind:disabled="disabled"
   />
   {{ $slot }}
   @if(!empty($field) || ($x && !empty($errorField)))

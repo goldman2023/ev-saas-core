@@ -115,6 +115,12 @@ class AppServiceProvider extends ServiceProvider
     }
 
     public function registerCustomBladeExtensions() {
+        Blade::if('admin', function ($user = null) {
+            if(empty($user)) $user = auth()->user();
+
+            return $user?->isAdmin() ?? false;
+        });
+
         Blade::if('can_access', function ($types, $permissions) {
             return Permissions::canAccess($types, $permissions, false);
         });

@@ -57,6 +57,10 @@ trait CoreMetaTrait
         return $this->getCoreMeta($key, $fresh, $ad_hoc_data_type);
     }
 
+    public function get_wef($key, $fresh = false, $ad_hoc_data_type = null) {
+        return $this->getCoreMeta($key, $fresh, $ad_hoc_data_type);
+    }
+
     public function saveCoreMeta($key, $value, $ad_hoc_data_type = null)
     {
         if(empty($ad_hoc_data_type)) {
@@ -84,6 +88,10 @@ trait CoreMetaTrait
     }
 
     public function setWEF($key, $value, $ad_hoc_data_type = null) {
+        return $this->saveCoreMeta($key, $value, $ad_hoc_data_type);
+    }
+
+    public function set_wef($key, $value, $ad_hoc_data_type = null) {
         return $this->saveCoreMeta($key, $value, $ad_hoc_data_type);
     }
 

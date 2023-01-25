@@ -111,200 +111,82 @@ x-cloak>
                         <div class="w-full">
                             <div class="grid grid-cols-12 gap-x-7">
                                 {{-- Vendor/Shop --}}
-                                <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
-                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Vendor') }}
-                                    </label>
-
-                                    <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
-                                        x-data="{
-                                            image_src: '{{ $order->shop?->getThumbnail() ?? \IMG::getPlaceholder(proxify: false)['url'] ?? '' }}',
-                                            shop_title: @js($order->shop?->name ?? translate('Vendor not selected')),
-                                            subtitle: @js($order->shop?->excerpt ?? translate('Please select vendor by clicking this button')),
-                                        }"
-                                        @click="$dispatch('display-modal', {'id': 'vendor-selector-modal' })">
-                                        <div class="flex-shrink-0">
-                                          <img class="h-10 w-10 rounded-full" :src="image_src" alt="">
-                                        </div>
-                                        <div class="min-w-0 flex-1">
-                                          <div class="focus:outline-none cursor-pointer">
-                                            <span class="absolute inset-0" aria-hidden="true"></span>
-                                            <p class="text-sm font-medium text-gray-900" x-text="shop_title"></p>
-                                            <p class="truncate text-sm text-gray-500" x-text="subtitle"></p>
-                                          </div>
-                                        </div>
-
-                                        <x-system.form-modal id="vendor-selector-modal" title="Select Vendor" class="!max-w-lg">
-                                            <div class="w-full flex flex-col" x-data="{
-                                                q: '',
-                                                results: [],
-                                                search() {
-                                                    wetch.get('{{ route('api.dashboard.shops.search') }}?q='+this.q)
-                                                    .then(data => {
-                                                        if(data.status === 'success' && data.results) {
-                                                            this.results = data.results;
-                                                        }
-                                                    })
-                                                    .catch(error => {
-                                                        alert(error);
-                                                    });
-                                                },
-                                                reset() {
-                                                    this.q = '';
-                                                    this.results = null;
-                                                },
-                                                select(item) {
-                                                    try {
-                                                        shop_id = item?.id;
-                                                        shop_title = item?.name;
-                                                        subtitle = item?.slug;
-                                                        image_src = window.WE.IMG.url(item.thumbnail?.file_name);
-                                                    } catch(error) {
-                                                        console.log(error);
-                                                    }
-                                                }
-                                            }">
-                                                <div class="w-full pb-3 mb-3">
-                                                    <label for="search" class="block text-sm font-medium text-gray-700">{{ translate('Search vendors') }}</label>
-                                                    <div class="relative mt-1 flex items-center">
-                                                        <input type="text"class="form-standard pr-12" x-model="q">
-                                                        <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5" >
-                                                            <kbd class="inline-flex items-center rounded border border-gray-200 px-2 font-sans text-sm font-medium text-gray-400 cursor-pointer"
-                                                                @click="search()">
-                                                                {{ translate('Search') }}
-                                                            </kbd>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <template x-if="results">
-                                                    <div class="w-full mt-3">
-                                                        <ul role="list" class="-my-5 divide-y divide-gray-200">
-                                                            <template x-for="item in results">
-                                                                <li class="py-4">
-                                                                    <div class="flex items-center space-x-4">
-                                                                      <div class="flex-shrink-0">
-                                                                        <img class="h-8 w-8 rounded-full" :src="window.WE.IMG.url(item.thumbnail?.file_name)" alt="">
-                                                                      </div>
-                                                                      <div class="min-w-0 flex-1">
-                                                                        <p class="truncate text-sm font-medium text-gray-900" x-text="item.name"></p>
-                                                                        <p class="truncate text-sm text-gray-500" x-text="item.slug"></p>
-                                                                      </div>
-                                                                      <div>
-                                                                        <div @click="select(item); reset(); show = false;" class="cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
-                                                                            {{ translate('Select') }}
-                                                                        </div>
-                                                                      </div>
-                                                                    </div>
-                                                                </li>
-                                                            </template>
-                                                        </ul>
-                                                    </div>
-                                                </template>
-
-                                            </div>
-                                        </x-system.form-modal>
-                                    </div>
-                                </div>
+                                <x-dashboard.form.blocks.model-selection-form 
+                                    field="shop_id"
+                                    modal-id="vendor-selection-modal"
+                                    :defaultModel="$order->shop"
+                                    model-class="{{ \App\Models\Shop::class }}"
+                                    api-route="{{ route('api.dashboard.shops.search') }}"
+                                    field-title="{{ translate('Vendor') }}"
+                                    modal-title="{{ translate('Select Vendor') }}"
+                                    empty-selected-item-title="{{ translate('Vendor not selected') }}"
+                                    empty-selected-item-subtitle="{{ translate('Please select vendor by clicking this button') }}"
+                                    model-title-property="name"
+                                    model-subtitle-property="slug"
+                                    item-subtitle-prefix="@"
+                                ></x-dashboard.form.blocks.model-selection-form>
                                 {{-- END Vendor/Shop --}}
 
                                 {{-- Customer --}}
-                                <div class="col-span-12 md:col-span-6 flex flex-col gap-y-2">
-                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Customer') }}
-                                    </label>
+                                <x-dashboard.form.blocks.model-selection-form 
+                                    field="user_id"
+                                    modal-id="customer-selector-modal"
+                                    :defaultModel="$order->user"
+                                    model-class="{{ \App\Models\User::class }}"
+                                    :model-with-relations="['user_meta', 'addresses']"
+                                    api-route="{{ route('api.dashboard.users.search') }}"
+                                    field-title="{{ translate('Customer') }}"
+                                    modal-title="{{ translate('Select Customer') }}"
+                                    empty-selected-item-title="{{ translate('Customer not selected') }}"
+                                    empty-selected-item-subtitle="{{ translate('Please select customer by clicking this button') }}"
+                                    :model-title-property="['name', 'surname']"
+                                    model-subtitle-property="email"
+                                    custom-select-logic="
+                                        email = item?.email;
 
-                                    <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
-                                        x-data="{
-                                            image_src: '{{ $order->user?->getThumbnail() ?? \IMG::getPlaceholder(proxify: false)['url'] ?? '' }}',
-                                            customer_title: @js($order->user?->name ?? translate('Customer not selected')),
-                                            subtitle: @js($order->user?->email ?? translate('Please select customer by clicking this button')),
-                                        }"
-                                        @click="$dispatch('display-modal', {'id': 'customer-selector-modal' })">
-                                        <div class="flex-shrink-0">
-                                          <img class="h-10 w-10 rounded-full" :src="image_src" alt="">
-                                        </div>
-                                        <div class="min-w-0 flex-1">
-                                          <div href="#" class="focus:outline-none cursor-pointer">
-                                            <span class="absolute inset-0" aria-hidden="true"></span>
-                                            <p class="text-sm font-medium text-gray-900" x-text="customer_title"></p>
-                                            <p class="truncate text-sm text-gray-500" x-text="subtitle"></p>
-                                          </div>
-                                        </div>
+                                        {{-- Fill order billing info based on item data --}}
+                                        wef.billing_entity = item?.entity;
+                                        wef.billing_company_vat = item?.user_meta?.company_vat || '';
+                                        wef.billing_company_code = item?.user_meta?.company_registration_number || '';
+                                        
+                                        $wire.set('order.billing_first_name', item?.name);
+                                        $wire.set('order.billing_last_name', item?.surname);
+                                        $wire.set('order.billing_company', item?.user_meta?.company_name || '');
 
-                                        <x-system.form-modal id="customer-selector-modal" title="Select Customer" class="!max-w-lg">
-                                            <div class="w-full flex flex-col" x-data="{
-                                                q: '',
-                                                results: [],
-                                                search() {
-                                                    wetch.get('{{ route('api.dashboard.users.search') }}?q='+this.q)
-                                                    .then(data => {
-                                                        if(data.status === 'success' && data.results) {
-                                                            this.results = data.results;
-                                                        }
-                                                    })
-                                                    .catch(error => {
-                                                        alert(error);
-                                                    });
-                                                },
-                                                reset() {
-                                                    this.q = '';
-                                                    this.results = null;
-                                                },
-                                                select(item) {
-                                                    try {
-                                                        user_id = item?.id;
-                                                        email = item?.email;
-                                                        customer_title = item?.name;
-                                                        subtitle = item?.email;
-                                                        image_src = window.WE.IMG.url(item.thumbnail?.file_name);
-                                                    } catch(error) {
-                                                        console.log(error);
-                                                    }
-                                                }
-                                            }">
-                                                <div class="w-full pb-3 mb-3">
-                                                    <label for="search" class="block text-sm font-medium text-gray-700">{{ translate('Search customers') }}</label>
-                                                    <div class="relative mt-1 flex items-center">
-                                                        <input type="text"class="form-standard pr-12" x-model="q">
-                                                        <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5" >
-                                                            <kbd class="inline-flex items-center rounded border border-gray-200 px-2 font-sans text-sm font-medium text-gray-400 cursor-pointer"
-                                                                @click="search()">
-                                                                {{ translate('Search') }}
-                                                            </kbd>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        let billing_address = item?.addresses.find(address => address.is_billing === true);
 
-                                                <template x-if="results">
-                                                    <div class="w-full mt-3">
-                                                        <ul role="list" class="-my-5 divide-y divide-gray-200">
-                                                            <template x-for="item in results">
-                                                                <li class="py-4">
-                                                                    <div class="flex items-center space-x-4">
-                                                                      <div class="flex-shrink-0">
-                                                                        <img class="h-8 w-8 rounded-full" :src="window.WE.IMG.url(item.thumbnail?.file_name)" alt="">
-                                                                      </div>
-                                                                      <div class="min-w-0 flex-1">
-                                                                        <p class="truncate text-sm font-medium text-gray-900" x-text="item.name"></p>
-                                                                        <p class="truncate text-sm text-gray-500" x-text="item.email"></p>
-                                                                      </div>
-                                                                      <div>
-                                                                        <div @click="select(item); reset(); show = false;" class="cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
-                                                                            {{ translate('Select') }}
-                                                                        </div>
-                                                                      </div>
-                                                                    </div>
-                                                                </li>
-                                                            </template>
-                                                        </ul>
-                                                    </div>
-                                                </template>
+                                        billing_country = billing_address?.country || '';
+                                        $wire.set('order.billing_address', billing_address?.address || '');
+                                        $wire.set('order.billing_state', billing_address?.state || '');
+                                        $wire.set('order.billing_city', billing_address?.city || '');
+                                        $wire.set('order.billing_zip', billing_address?.zip_code || '');
 
-                                            </div>
-                                        </x-system.form-modal>
-                                    </div>
-                                </div>
+                                        if(same_billing_shipping) {
+                                            // copy billing info to shipping info here...
+                                        }
+
+                                        save(); // set other parameters!
+                                    "
+                                    custom-deselect-logic="
+                                        email = null;
+
+                                        billing_country = '';
+                                        wef.billing_entity = 'individual';
+                                        wef.billing_company_vat = '';
+                                        wef.billing_company_code = '';
+                                        
+                                        $wire.set('order.billing_first_name', '');
+                                        $wire.set('order.billing_last_name', '');
+                                        $wire.set('order.billing_company', '');
+
+                                        $wire.set('order.billing_address', '');
+                                        $wire.set('order.billing_state', '');
+                                        $wire.set('order.billing_city', '');
+                                        $wire.set('order.billing_zip', '');
+
+                                        save();
+                                    "
+                                ></x-dashboard.form.blocks.model-selection-form>
                                 {{-- END Customer --}}
 
                                 <div class="col-span-12 mt-6">
@@ -735,6 +617,14 @@ x-cloak>
                                         </div>
                                     </div>
 
+                                    <div class="-full flex flex-col gap-y-2" x-show="!user_id">
+                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                            {{ translate('Customer Email') }}
+                                        </label>
+
+                                        <x-dashboard.form.input field="email" error-field="order.email" :x="true" />
+                                    </div>
+
                                     <div class="-full flex flex-col gap-y-2" x-show="wef.billing_entity === 'company'">
                                         <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                             {{ translate('Billing Company') }}
@@ -1055,7 +945,12 @@ x-cloak>
                                         {{ translate('Deposit amount (in % of total value)') }}
                                     </label>
                                     <div class="mt-1 sm:col-span-2 sm:mt-0">
-                                        <x-dashboard.form.input type="number" field="wef.deposit_amount" :x="true" min="0" max="100" />
+                                        <x-dashboard.form.input type="number" field="wef.deposit_amount" :x="true" min="0" max="100" :disabled="true" class="flex flex-col">
+                                            <div class="flex justify-end items-center mt-1">
+                                                <button type="button" class="text-12 hover:underline" :class="{'text-primary': disabled, 'text-success': !disabled}" 
+                                                    x-text="disabled ? '{{ translate('Change') }}' : '{{ translate('Lock') }}'" @click="disabled = !disabled;"></button>
+                                            </div>
+                                        </x-dashboard.form.input>
                                     </div>
                                 </div>
                                 {{-- END Deposit amount --}}
