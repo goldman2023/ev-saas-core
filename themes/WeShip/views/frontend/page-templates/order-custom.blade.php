@@ -137,8 +137,9 @@
 
         <div
             class="
+            text-white
             md:absolute bottom-8 left-0 w-full z-[999]
-            items-center mt-8 lg:mt-0 text-center justify-center left-0 flex flex-wrap lg:absolute bottom-8 md:w-[80%] md:pl-[10%]">
+            items-center mt-8 lg:mt-0 text-center justify-center left-0 flex flex-wrap lg:absolute bottom-8 lg:w-[80%] lg:pl-[10%]">
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
 
                 <div class="mb-4 mx-auto ">
@@ -150,7 +151,7 @@
             </div>
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
 
-                <div class="mb-4 mx-auto">
+                <div class="w-full mb-4 mx-auto">
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
                         <span x-text="range"></span>NM
                     </h3>
@@ -160,11 +161,9 @@
 
             <div
             :class="{ 'hidden md:flex': ! showSpecifications }"
-            class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
-                <div class="mr-6">
+            class="w-1/2 lg:w-1/4 md:flex px-4 lg:mb-8">
 
-                </div>
-                <div class="mb-4 mx-auto">
+                <div class="w-full mb-4 mx-auto">
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
                         <span x-text="cruisingSpeed"></span> knots
                     </h3>
@@ -177,11 +176,9 @@
             <div
             :class="{ 'hidden md:flex': ! showSpecifications }"
 
-            class="w-1/2 lg:w-1/4 md:flex px-4 md:mb-8">
-                <div class="mr-6">
+            class="w-1/2 lg:w-1/4 md:flex px-4 lg:mb-8">
 
-                </div>
-                <div class="mb-4 mx-auto">
+                <div class="mb-4 w-full mx-auto">
                     <h3 class="text-center mb-2 text-2xl lg:text-gray-50 font-medium font-heading">
                         <span class="md:hidden" x-text="generator"></span>
                         <img class="hidden md:inline"
@@ -202,11 +199,11 @@
         <div
         x-text="speficicationText"
         @click="toggleSpecification();"
-        class="underline decoration-solid text-center block lg:hidden font-medium text-[#383D43]">
+        class="underline decoration-solid text-center block md:hidden font-medium text-[#383D43]">
         </div>
     </div>
 
-    <div class="md:sticky w-full md:w-[30%] p-4 md:p-8 lg:pt-20 md:max-h-[100vh] md:overflow-y-scroll">
+    <div class="md:sticky w-full md:w-[40%] lg:w-[30%] p-4 md:p-8 lg:pt-20 md:max-h-[100vh] md:overflow-y-scroll">
         <div class="text-center">
             <h1 class="text-3xl font-medium mb-3">
                 Emarius 34S
