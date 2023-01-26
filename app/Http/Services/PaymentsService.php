@@ -2,17 +2,18 @@
 
 namespace App\Http\Services;
 
-use App\Models\PaymentMethodUniversal;
+use DB;
+use FX;
+use EVS;
+use Cache;
+use Session;
 use App\Models\Shop;
+use App\Models\User;
+use App\Models\Invoice;
 use App\Models\ShopSetting;
 use App\Models\TenantSetting;
-use App\Models\User;
-use Cache;
-use DB;
-use EVS;
-use FX;
+use App\Models\PaymentMethodUniversal;
 use Illuminate\Database\Eloquent\Collection;
-use Session;
 
 class PaymentsService
 {
@@ -131,4 +132,18 @@ class PaymentsService
         return $this->paysera;
     }
     // END Paysera
+
+    // HELPERS
+    public function getViaLabel($gateway) {
+        if($gateway instanceof Invoice) {
+            $gateway = $gateway->getPaymentMethodGateway();
+        }
+        
+        return match ($gateway) {
+            'stripe' => translate('Via Stripe'),
+            'paypal' => translate('Via Paypal'),
+            'paysera' => translate('Via Paysera'),
+            'wire_transfer' => translate('Via Bank Transfer'),
+        };
+    }
 }

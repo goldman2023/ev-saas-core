@@ -248,6 +248,11 @@ class Invoice extends WeBaseModel
     }
 
     public function generateInvoicePDF($custom_title = null, $save = false) {
+        // If there is functions called generateInvoicePDF() in theme Helpers php files, it'll use that one instead of default logic defined here!
+        if (function_exists('generateInvoicePDF')) {
+            return generateInvoicePDF($this, $custom_title, $save);
+        }
+
         $shop = $this->shop;
         $user = $this->user;
 
