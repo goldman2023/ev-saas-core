@@ -59,6 +59,22 @@ if (!function_exists('do_action')) {
     }
 }
 
+if (!function_exists('ob_do_action')) {
+
+    /**
+     * Execute functions hooked on a specific action hook
+     *
+     * @param string $tag
+     * @param mixed $arg
+     * @return void
+     */
+    function ob_do_action($tag, ...$args)
+    {
+        
+        hook()->ob_do_action($tag, ...$args);
+    }
+}
+
 if (!function_exists('add_action')) {
 
     /**

@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\Livewire\HasCoreMeta;
 use App\Traits\Livewire\HasAttributes;
 use App\Traits\Livewire\DispatchSupport;
+use App\Http\Services\TenantSettingsService;
 
 class OrderForm extends Component
 {
@@ -327,100 +328,150 @@ class OrderForm extends Component
 
     public function generateInvoice() {
         if($this->order->invoices->isEmpty()) {
-            DB::beginTransaction();
+            if($this->order->type === OrderTypeEnum::installments()->value) {
+                // For installments create multiple invoices (deposit and main invoice)
+                $deposit_amount = $this->order->getWEF('deposit_amount');
 
-            try {
-                $invoice = new Invoice();
+                $deposit_totals = [
+                    'base_price' => $this->order->base_price * $deposit_amount / 100,
+                    'discount_amount' => $this->order->discount_amount * $deposit_amount / 100,
+                    'subtotal_price' => $this->order->subtotal_price * $deposit_amount / 100,
+                    'total_price' => $this->order->total_price * $deposit_amount / 100,
+                    'shipping_cost' => $this->order->shipping_cost * $deposit_amount / 100,
+                    'tax' => ($this->order->subtotal_price * $this->order->tax / 100) * $deposit_amount / 100,
+                ];
 
-                $invoice->mode = 'live';
-                $invoice->is_temp = false;
-
-                // Make this changable in modal (when generate invoice is clicked)
-                $invoice->payment_method_type = (Payments::wire_transfer())::class;
-                $invoice->payment_method_id = Payments::wire_transfer()->id;
-    
-                $invoice->order_id = $this->order->id;
-                $invoice->shop_id = $this->order->shop_id;
-                $invoice->user_id = $this->order->user_id;
-                $invoice->payment_status = $this->order->payment_status;
-                $invoice->invoice_number = 'invoice-'.Uuid::generate(4)->string; // Change this to be manua; through modal!
-                $invoice->real_invoice_prefix = 'invoice-'; // Change this to be manua; through modal!
-                $invoice->real_invoice_number = Uuid::generate(4)->string; // Change this to be manua; through modal!
-    
-                $invoice->email = $this->order->email;
-                $invoice->billing_first_name = $this->order->billing_first_name;
-                $invoice->billing_last_name = $this->order->billing_last_name;
-                $invoice->billing_company = $this->order->billing_company;
-                $invoice->billing_address = $this->order->billing_address;
-                $invoice->billing_country = $this->order->billing_country;
-                $invoice->billing_state = $this->order->billing_state;
-                $invoice->billing_city = $this->order->billing_city;
-                $invoice->billing_zip = $this->order->billing_zip;
-    
-                // TODO: add base_currency for invoice! and take it from stripe!
-    
-                $invoice->start_date = $this->order->created_at->timestamp;
-                $invoice->end_date = 0;
-    
-                $invoice->base_price = $this->order->base_price;
-                $invoice->discount_amount = $this->order->discount_amount;
-                $invoice->subtotal_price = $this->order->subtotal_price;
-                $invoice->total_price = $this->order->total_price;
-                $invoice->shipping_cost = $this->order->shipping_cost;
-                $invoice->tax = $this->order->tax;
-    
-                $invoice->note = $this->order->note;
-    
-                $user = $this->order->user;
-                if($user->entity === 'company') {
-                    $invoice->billing_company = $user->getUserMeta('company_name');
-    
-                    $invoice->mergeData([
-                        'customer' => [
-                            'entity' => $user->entity,
-                            'billing_country' => $user->getUserMeta('address_country'),
-                            'vat' => $user->getUserMeta('company_vat'),
-                            'company_registration_number' => $user->getUserMeta('company_registration_number'),
-                            'company_name' => $user->getUserMeta('company_name'),
-                        ]
-                    ]);
-                } else {
-                    $invoice->mergeData([
-                        'customer' => [
-                            'entity' => $user->entity,
-                            'billing_country' => $user->getUserMeta('address_country'),
-                        ]
-                    ]);
-                }
-    
-                $invoice->save();
-
-                DB::commit();
-
-                // generateInvoicePDF - generate invoice document and 
-                $filepath = $invoice->generateInvoicePDF(save: true);
-
-                \MediaService::storeAsUploadFromFile($invoice, $filepath, 'invoice_document');
-
-                return redirect()->route('invoice.download', $invoice->id);
-            } catch (\Exception $e) {
-                DB::rollBack();
-                dd($e);
-                
-                $this->dispatchGeneralError(translate('There was an error while generating an invoice...Please try again.'));
-                $this->inform(translate('There was an error while generating an invoice...Please try again.'), '', 'fail');
+                $main_totals = [
+                    'base_price' => $this->order->base_price * (100 - $deposit_amount) / 100,
+                    'discount_amount' => $this->order->discount_amount * (100 - $deposit_amount) / 100,
+                    'subtotal_price' => $this->order->subtotal_price * (100 - $deposit_amount) / 100,
+                    'total_price' => $this->order->total_price * (100 - $deposit_amount) / 100,
+                    'shipping_cost' => $this->order->shipping_cost * (100 - $deposit_amount) / 100,
+                    'tax' => ($this->order->subtotal_price * $this->order->tax / 100) * (100 - $deposit_amount) / 100,
+                ];
+            } else {
+                $deposit_amount = 0;
+                $deposit_totals = [];
+                $main_totals = [
+                    'base_price' => $this->order->base_price,
+                    'discount_amount' => $this->order->discount_amount,
+                    'subtotal_price' => $this->order->subtotal_price,
+                    'total_price' => $this->order->total_price,
+                    'shipping_cost' => $this->order->shipping_cost,
+                    'tax' => ($this->order->subtotal_price * $this->order->tax / 100),
+                ];
             }
-            
 
-            // 
+            $all_totals = [
+                (string) $deposit_amount => $deposit_totals, 
+                (string) (100 - (float) $deposit_amount) => $main_totals
+            ];
+
+            // TODO: Try to load TenantSettings somehow, it's not working (not getting the data from `tenant_settings` table)...
+            // dispatch(function() use($all_totals) {
+                DB::beginTransaction();
+
+                try {
+                    foreach($all_totals as $percentage_of_total => $totals) {
+                        if(!empty($totals)) {
+                            $percentage_of_total = (float) $percentage_of_total;
+
+                            $invoice = new Invoice();
+
+                            $invoice->mode = 'live';
+                            $invoice->is_temp = false;
+            
+                            // Make this changable in modal (when generate invoice is clicked)
+                            $invoice->payment_method_type = (Payments::wire_transfer())::class;
+                            $invoice->payment_method_id = Payments::wire_transfer()->id;
+                
+                            $invoice->order_id = $this->order->id;
+                            $invoice->shop_id = $this->order->shop_id;
+                            $invoice->user_id = $this->order->user_id;
+                            $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
+                            $invoice->setInvoiceNumber();
+                
+                            $invoice->email = $this->order->email;
+                            $invoice->billing_first_name = $this->order->billing_first_name;
+                            $invoice->billing_last_name = $this->order->billing_last_name;
+                            $invoice->billing_company = $this->order->billing_company;
+                            $invoice->billing_address = $this->order->billing_address;
+                            $invoice->billing_country = $this->order->billing_country;
+                            $invoice->billing_state = $this->order->billing_state;
+                            $invoice->billing_city = $this->order->billing_city;
+                            $invoice->billing_zip = $this->order->billing_zip;
+                
+                            // TODO: add base_currency for invoice! and take it from stripe!
+                
+                            $invoice->start_date = $this->order->created_at->timestamp;
+                            $invoice->end_date = 0;
+                
+                            $invoice->base_price = $totals['base_price'];
+                            $invoice->discount_amount = $totals['discount_amount'];
+                            $invoice->subtotal_price = $totals['subtotal_price'];
+                            $invoice->total_price = $totals['total_price'];
+                            $invoice->shipping_cost = $totals['shipping_cost'];
+                            $invoice->tax = $totals['tax'];
+                
+                            $invoice->note = $this->order->note;
+                
+                            $user = $this->order->user;
+                            if($user->entity === 'company') {
+                                $invoice->billing_company = $user->getUserMeta('company_name');
+                
+                                $invoice->mergeData([
+                                    'customer' => [
+                                        'entity' => $user->entity,
+                                        'billing_country' => $user->getUserMeta('address_country'),
+                                        'vat' => $user->getUserMeta('company_vat'),
+                                        'company_registration_number' => $user->getUserMeta('company_registration_number'),
+                                        'company_name' => $user->getUserMeta('company_name'),
+                                    ]
+                                ]);
+                            } else {
+                                $invoice->mergeData([
+                                    'customer' => [
+                                        'entity' => $user->entity,
+                                        'billing_country' => $user->getUserMeta('address_country'),
+                                    ]
+                                ]);
+                            }
+                
+                            $invoice->save();
+            
+                            $invoice->setRealInvoiceNumber();
+
+                            $invoice->setWEF('percentage_of_total_order_price', $percentage_of_total);
+            
+                            // generateInvoicePDF - generate invoice document and 
+                            $filepath = $invoice->generateInvoicePDF(save: true);
+            
+                            \MediaService::storeAsUploadFromFile($invoice, $filepath, 'invoice_document');
+            
+                            // if($this->order->type !== OrderTypeEnum::installments()->value) {
+                            //     return redirect()->route('invoice.download', $invoice->id);
+                            // }
+                        }
+                    }
+
+                    $this->order->save();
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    Log::error($e);
+                    DB::rollBack();
+                    // dd($e);
+                    // $this->dispatchGeneralError(translate('There was an error while generating an invoice(s)...Please try again.'));
+                    // $this->inform(translate('There was an error while generating an invoice(s)...Please try again.'), '', 'fail');
+                }
+            // });
 
             $this->inform(translate('Invoice successfully generated!'), '', 'success');
 
             return redirect()->route('order.details', $this->order->id);
         }
 
-        $this->dispatchGeneralError(translate('Invoice for this order is already generated.'));
-        $this->inform(translate('Invoice for this order is already generated.'), '', 'fail');
-
+        $this->dispatchGeneralError(translate('Invoice(s) for this order is already generated.'));
+        $this->inform(translate('Invoice(s) for this order is already generated.'), '', 'fail');
     }
 }

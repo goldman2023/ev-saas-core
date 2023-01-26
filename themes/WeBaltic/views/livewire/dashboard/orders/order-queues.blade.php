@@ -149,39 +149,51 @@
                 </div>
 
                 @if($order->tasks->where('type', 'printing')->count() > 0)
-                <ul role="list" class="px-3 py-2 divide-y divide-gray-200">
-                    @foreach($order->tasks->where('type', 'printing') as $task)
-                    <li>
-                        <a href="{{ route('tasks.index', $task->id) }}" target="_blank" class="block hover:bg-gray-50">
-                            <div class="py-2">
-                                <div class="flex items-center justify-between">
-                                    <p class="truncate text-sm font-medium text-indigo-600">{{ $task->name }}</p>
-                                </div>
-                                <div class="mt-2 flex flex-column sm:flex-row sm:items-center">
-                                    @if ($task->status === \App\Enums\TaskStatusEnum::scoping()->value)
-                                    <span class="badge-dark">{{ \Str::headline($task->status) }}</span>
-                                    @elseif($task->status === \App\Enums\TaskStatusEnum::backlog()->value)
-                                    <span class="badge-info">{{ \Str::headline($task->status) }}</span>
-                                    @elseif($task->status === \App\Enums\TaskStatusEnum::in_progress()->value)
-                                    <span class="badge-warning">{{ \Str::headline($task->status) }}</span>
-                                    @elseif($task->status === \App\Enums\TaskStatusEnum::review()->value)
-                                    <span class="badge-purple">{{ \Str::headline($task->status) }}</span>
-                                    @elseif($task->status === \App\Enums\TaskStatusEnum::done()->value)
-                                    <span class="badge-success">{{ \Str::headline($task->status) }}</span>
-                                    @endif
+                    <ul role="list" class="px-3 py-2 divide-y divide-gray-200">
+                        @foreach($order->tasks->where('type', 'printing') as $task)
+                        <li class="flex flex-col">
+                            <a href="{{ route('task.details', $task->id) }}" target="_blank" class="block hover:bg-gray-50">
+                                <div class="py-2">
+                                    <div class="flex items-center justify-between">
+                                        <p class="truncate text-sm font-medium text-indigo-600">{{ $task->name }}</p>
+                                    </div>
+                                    <div class="mt-2 flex flex-column sm:flex-row sm:items-center">
+                                        @if ($task->status === \App\Enums\TaskStatusEnum::scoping()->value)
+                                        <span class="badge-dark">{{ \Str::headline($task->status) }}</span>
+                                        @elseif($task->status === \App\Enums\TaskStatusEnum::backlog()->value)
+                                        <span class="badge-info">{{ \Str::headline($task->status) }}</span>
+                                        @elseif($task->status === \App\Enums\TaskStatusEnum::in_progress()->value)
+                                        <span class="badge-warning">{{ \Str::headline($task->status) }}</span>
+                                        @elseif($task->status === \App\Enums\TaskStatusEnum::review()->value)
+                                        <span class="badge-purple">{{ \Str::headline($task->status) }}</span>
+                                        @elseif($task->status === \App\Enums\TaskStatusEnum::done()->value)
+                                        <span class="badge-success">{{ \Str::headline($task->status) }}</span>
+                                        @endif
 
-                                    <p class="flex items-center text-sm text-gray-500 ml-2">
-                                        @svg('heroicon-o-calendar-days', ['class' => 'mr-1.5 h-5 w-5 flex-shrink-0
-                                        text-gray-400'])
-                                        {{ translate('Added to queue on: ') }} {{ $task->created_at->format('d M, Y
-                                        H:i') }}
-                                    </p>
+                                        <p class="flex items-center text-sm text-gray-500 ml-2">
+                                            @svg('heroicon-o-calendar-days', ['class' => 'mr-1.5 h-5 w-5 flex-shrink-0
+                                            text-gray-400'])
+                                            {{ translate('Added to queue on: ') }} {{ $task->created_at->format('d M, Y
+                                            H:i') }}
+                                        </p>
+                                    </div>
                                 </div>
+                            </a>
+                            <div class="w-full flex gap-x-3">
+                                @if(!empty($deliveryPDF))
+                                    <a href="{{ $deliveryPDF->url() }}" class="text-14 text-sky-500 hover:text-sky-600"
+                                        target="_blank">{{ translate('View Document') }}</a>
+                                @endif
+
+                                @if(!empty($deliveryTask))
+                                    <a href="{{ route('task.edit', $deliveryTask->id) }}"
+                                        class="text-14 text-sky-500 hover:text-sky-600" target="_blank">{{ translate('Edit Task') }}</a>
+                                @endif
                             </div>
-                        </a>
-                    </li>
-                    @endforeach
-                </ul>
+                        </li>
+                        @endforeach
+                    </ul>
+                    
                 @else
                     <div class="bg-white scale-50" style="margin-bottom: -20px; width: 200%; transform-origin: top left;">
                         <x-dashboard.orders.order-details-card :order="$order">
