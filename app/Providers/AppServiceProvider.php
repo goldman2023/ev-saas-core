@@ -115,6 +115,12 @@ class AppServiceProvider extends ServiceProvider
     }
 
     public function registerCustomBladeExtensions() {
+        Blade::if('admin', function ($user = null) {
+            if(empty($user)) $user = auth()->user();
+
+            return $user?->isAdmin() ?? false;
+        });
+
         Blade::if('can_access', function ($types, $permissions) {
             return Permissions::canAccess($types, $permissions, false);
         });
@@ -128,8 +134,17 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Hooks system
-        Blade::directive('do_action', function ($name, $arg = '') {
-            return "<?php do_action($name, $arg); ?>";
+        // TODO: Make $arg into ...$args and check if everything works as expected...
+        Blade::directive('do_action', function ($args) {
+            return "<?php do_action($args); ?>";
+        });
+
+        Blade::directive('ob_start', function () {
+            return "<?php ob_start(); ?>";
+        });
+
+        Blade::directive('ob_do_action', function ($args) {
+            return '<?php $html = ob_get_clean(); ob_do_action('.$args.', $html); ?>';
         });
 
         // Define 'UserMeta in use' blade extensions

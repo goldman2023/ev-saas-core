@@ -8,7 +8,6 @@
 
 window._ = require('lodash');
 
-
 /**
  * Require custom prototypes
  */

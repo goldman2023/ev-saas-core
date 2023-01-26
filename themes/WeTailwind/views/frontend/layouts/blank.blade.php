@@ -21,7 +21,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+    <link rel="stylesheet" href="{{ static_asset('/bp-assets/vendor/flatpickr/flatpickr-airbnb.min.css') }}">
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js', 'themes/WeTailwind') }}" defer></script>

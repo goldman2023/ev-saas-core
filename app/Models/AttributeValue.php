@@ -54,7 +54,7 @@ class AttributeValue extends WeBaseModel
 
     public function getWEFDataTypes() {
         return WEF::bundleWithGlobalWEF(apply_filters('attribute_values.wef.data-types', [
-
+            
         ]));
     }
 }

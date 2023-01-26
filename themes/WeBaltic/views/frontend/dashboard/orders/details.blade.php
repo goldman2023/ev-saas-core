@@ -265,7 +265,10 @@
 
                             <livewire:dashboard.forms.file-manager.file-manager :subject="$order" field="documents"
                                 :file-type="\App\Enums\FileTypesEnum::image()->value" :multiple="true"
-                                add-new-item-label="{{ translate('Add new document') }}" wrapper-class="!max-w-full" />
+                                add-new-item-label="{{ translate('Add new document') }}" wrapper-class="!max-w-full"
+                                :where-wefs="[
+                                    ['upload_tag', '!=', 'printing-label']
+                                ]" />
                         </div>
 
 

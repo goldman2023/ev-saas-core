@@ -46,9 +46,6 @@ class OrderController extends Controller
             } else if ($new_status == 6) { // delivery_to_warehouse
                 $reason = translate('Delivering to warehouse');
 
-                // TODO: THERE WILL BE A PROBLEM HERE since delivery template uses $uplaod, which at this point is not created yet!
-
-
                 // 1. Create Delivery Task
                 $new_task = new Task();
 

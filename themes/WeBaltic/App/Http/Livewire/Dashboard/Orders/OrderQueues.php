@@ -2,6 +2,7 @@
 
 namespace WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Orders;
 
+use Log;
 use App\Models\Task;
 use App\Models\Order;
 use Livewire\Component;
@@ -17,6 +18,7 @@ class OrderQueues extends Component
     public $order;
     public $class;
     public $deliveryTask;
+    public $deliveryPDF;
 
     public function mount($order = null, $class = '')
     {
@@ -51,13 +53,46 @@ class OrderQueues extends Component
 
             DB::commit();
 
+            $this->order->load('tasks');
+
             $this->inform(translate('Printing task successfully created!'), '', 'success');
         } catch(\Exception $e) {
             DB::rollBack();
+            
+            Log::error($e);
             $this->dispatchGeneralError(translate('There was an error while creating a printing task...Please try again.'));
             $this->inform(translate('There was an error while creating a printing task...Please try again.'), '', 'fail');
-            dd($e);
         }
+    }
 
+    public function addToDeliveryQueue() {
+        // Create new Task
+        DB::beginTransaction();
+
+        try {
+            $new_task = new Task();
+
+            $new_task->user_id = auth()->user()->id;
+            $new_task->assignee_id = auth()->user()->id;
+            $new_task->type = TaskTypesEnum::delivery()->value;
+            $new_task->status = TaskStatusEnum::backlog()->value;
+            $new_task->name = translate('📦 Generating delivery to warehouse document for Order #').$this->order->id;
+            $new_task->save();
+
+            $new_task->orders()->sync([$this->order->id]);
+
+            DB::commit();
+
+            $this->order->load('tasks');
+            $this->deliveryTask = $new_task;
+
+            $this->inform(translate('Delivery to warehouse document generation task successfully created!'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            
+            Log::error($e);
+            $this->dispatchGeneralError(translate('There was an error while creating a delivery to warehouse document generation task...Please try again.'));
+            $this->inform(translate('There was an error while creating a delivery to warehouse document generation task...Please try again.'), '', 'fail');
+        }
     }
 }

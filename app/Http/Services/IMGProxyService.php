@@ -81,6 +81,7 @@ class IMGProxyService
             'enabled' => $this->isProxyEnabled(),
             'url_template' => $this->getProxyUrlTemplate(),
             'default_options' => $this->getDefaultIMGProxyOptions(),
+            'placeholder_url' => $this->getPlaceholder(proxify: false)['url'] ?? '',
         ];
     }
 
@@ -126,7 +127,7 @@ class IMGProxyService
     protected function getFrom(mixed $data, bool $static = false): array
     {
         if (empty($data)) {
-            return $this->getPlaceholder(false);
+            return $this->getPlaceholder(proxify: false);
         }
 
         if ((! $static || $data instanceof Upload) && in_array($this->filesystem, $this->disk_types['cloud'], true)) {
@@ -134,7 +135,7 @@ class IMGProxyService
                 try {
                     $data = Upload::findOrFail($data);
                 } catch (\Exception $e) {
-                    return $this->getPlaceholder(false);
+                    return $this->getPlaceholder(proxify: false);
                 }
             }
             // dd(Storage::disk($this->filesystem)->url($data->file_name));

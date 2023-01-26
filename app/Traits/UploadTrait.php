@@ -306,9 +306,17 @@ trait UploadTrait
 
             if(!empty($base_params)) {
                 foreach($base_params as $base_param) {
-                    if($upload->{$base_param[0]} !== $base_param[1]) {
+                    if(count($base_param) === 2 && $upload->{$base_param[0]} !== $base_param[1]) {
                         $pass = false;
                         break;
+                    } else if(count($base_param) === 3) {
+                        if($base_param[1] === '==' && $upload->{$base_param[0]} !== $base_param[2]) {
+                            $pass = false;
+                            break;
+                        } else if($base_param[1] === '!=' && $upload->{$base_param[0]} === $base_param[2]) {
+                            $pass = false;
+                            break;
+                        }
                     }
                 }
             }
@@ -317,15 +325,23 @@ trait UploadTrait
                 if(!empty($wef_params)) {
                     foreach($wef_params as $wef_param) {
                         if($upload->core_meta->search(function($meta) use($wef_param, &$pass) {
-                            return $meta->key === $wef_param[0] && $meta->value === $wef_param[1];
-                        }) < 0) {
+                            if(count($wef_param) === 2) {
+                                return $meta->key === $wef_param[0] && $meta->value === $wef_param[1];
+                            } else if(count($wef_param) === 3) {
+                                switch($wef_param[1]) {
+                                    case '==': return $meta->key === $wef_param[0] && $meta->value === $wef_param[2];
+                                    case '!=': return $meta->key === $wef_param[0] && $meta->value !== $wef_param[2];
+                                    default: return $meta->key === $wef_param[0] && $meta->value === $wef_param[2];
+                                }
+                            }
+                        }) === false) {
                             $pass = false;
                             break;
                         }
                     }
                 }
             }
-
+            
             return $pass;
         });
 

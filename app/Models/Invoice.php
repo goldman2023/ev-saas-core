@@ -10,6 +10,7 @@ use App\Traits\UploadTrait;
 use App\Enums\OrderTypeEnum;
 use App\Builders\BaseBuilder;
 use App\Enums\UserEntityEnum;
+use App\Traits\CoreMetaTrait;
 use App\Traits\HasDataColumn;
 use App\Traits\TemporaryTrait;
 use Illuminate\Support\Carbon;
@@ -32,7 +33,7 @@ class Invoice extends WeBaseModel
     use HasDataColumn;
     use TemporaryTrait;
     use UploadTrait;
-
+    use CoreMetaTrait;
 
     protected $table = 'invoices';
 
@@ -136,6 +137,12 @@ class Invoice extends WeBaseModel
         ];
     }
 
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('invoice.wef.data-types', [
+            'percentage_of_total_order_price' => 'decimal',
+        ]));
+    }
+
     /*
      * This functions determines if current Invoice is actually the last invoice of an Order this invoice is related to.
      *
@@ -176,7 +183,7 @@ class Invoice extends WeBaseModel
     }
 
     public function setRealInvoiceNumber() {
-        // Dispatch a jobin order to avoid race-conditioning
+        // Dispatch a job in order to avoid race-conditioning
         dispatch(function() {
             if($this->is_temp === false && $this->total_price > 0 && $this->payment_status === PaymentStatusEnum::paid()->value) {
             
@@ -381,6 +388,7 @@ class Invoice extends WeBaseModel
          */
         $invoice_items = [];
         $sum_invoice_items_discounts = 0; // Sum of all discounts on invoice items level!
+        $percentage_of_total_order_price = $this->getWEF('percentage_of_total_order_price', ad_hoc_data_type: 'decimal') ?? 100;
 
         if($this->isFromStripe()) {
             foreach($stripe_line_items as $item) {
@@ -436,12 +444,12 @@ class Invoice extends WeBaseModel
                 $invoice_items[] = (new InvoiceItem())
                     ->title($item->name)
                     ->description($item->excerpt ?? '')
-                    ->pricePerUnit($item->base_price)
+                    ->pricePerUnit($item->base_price * $percentage_of_total_order_price / 100)
                     ->quantity($item->quantity)
-                    ->discount($item->discount_amount ?? 0)
-                    ->subTotalPrice(($item->base_price - $item->discount_amount) * $item->quantity);
+                    ->discount(($item->discount_amount ?? 0) * $percentage_of_total_order_price / 100)
+                    ->subTotalPrice((($item->base_price - $item->discount_amount) * $percentage_of_total_order_price / 100) * $item->quantity);
 
-                $sum_invoice_items_discounts += $item->discount_amount ?? 0;
+                $sum_invoice_items_discounts += ($item->discount_amount ?? 0) * $percentage_of_total_order_price / 100;
             }
         }
         

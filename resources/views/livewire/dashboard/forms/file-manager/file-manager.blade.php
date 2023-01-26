@@ -1,5 +1,5 @@
 <div class="w-full livewire-file-manager-form" x-data="{
-    {{ $field }}: @js(!empty($subject->{$field}) ? $subject->{$field}->map(fn($item, $key) => toJSONMedia($item)) : []),
+    {{ $field }}: @js($files),
     onSave() {
         $wire.set('subject.{{ $field }}', this.{{ $field }}, true);
     }

@@ -161,7 +161,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // AttributeValue: WEF data types
             add_filter('attribute_values.wef.data-types', function ($data_types) {
                 return array_merge($data_types, [
-                    
+
                 ]);
             }, 10, 1);
 
@@ -181,7 +181,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     template: 'documents-templates.proposal', 
                     upload_tag: 'proposal', 
                     display_name: translate('Proposal for Order #').$order->id, 
-                    data: ['user' => $order->user->id]
+                    data: ['user' => $order->user]
                 );
             }, 10, 1);
 
@@ -194,7 +194,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     template: 'documents-templates.proposal', 
                     upload_tag: 'proposal', 
                     display_name: translate('Proposal for Order #').$order->id, 
-                    data: ['user' => $order->user->id]
+                    data: ['user' => $order->user]
                 );
             }, 10, 1);
 
@@ -243,6 +243,14 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                         compact('order', 'current_cycle_status_label', 'current_cycle_status_value', 'default_cycle_status_value', 'next_cycle_status_label', 'current_cycle_status_date'));
                 }
             });
+
+            add_action('view.dashboard.form.order.generate-invoice-btn', function($order, $html) {
+                if(!empty($order->id) && $order->invoices->isEmpty() && $order->getWEF('cycle_status') === array_flip(OrderCycleStatusEnum::values())['approved'] ?? false) {
+                    echo $html;
+                } else {
+                    echo ' ';
+                }
+            }, 10, 2);
         }
 
     }
