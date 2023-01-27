@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard\Tables;
+namespace WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables;
 
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
@@ -48,13 +48,27 @@ class RecentInvoicesWidgetTable extends DataTableComponent
         parent::mount();
     }
 
+    public array $filterNames = [
+        'payment_status' => 'Lipdukas',
+    ];
+
+    public function filters(): array
+    {
+        return [
+            'payment_status' => Filter::make('Lipdukas')
+                ->select([
+                    '' => translate('Any'),
+                    PaymentStatusEnum::paid()->value => translate('Paid'),
+                    PaymentStatusEnum::unpaid()->value => translate('Unpaid'),
+                    PaymentStatusEnum::pending()->value => translate('Pending'),
+                    PaymentStatusEnum::canceled()->value => translate('Canceled'),
+            ]),
+        ];
+    }
 
     public function columns(): array
     {
         return [
-            // Column::make('Invoice ID')
-            //     ->excludeFromSelectable()
-            //     ->addClass('text-left'),
             Column::make('Invoice Number')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
@@ -64,15 +78,12 @@ class RecentInvoicesWidgetTable extends DataTableComponent
             Column::make('Status', 'status')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
-            Column::make('Amount(with tax)', 'total_price')
+            Column::make('Amount (with tax)', 'total_price')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
             Column::make('Tax', 'tax')
                 ->excludeFromSelectable()
                 ->addClass('text-left'),
-            // Column::make('Next Invoice Date', 'created_at')
-            //     ->excludeFromSelectable()
-            //     ->addClass('text-left'),
             Column::make('Actions')
                 ->excludeFromSelectable(),
         ];
@@ -95,24 +106,8 @@ class RecentInvoicesWidgetTable extends DataTableComponent
         }
 
         return $query
-            ->orderBy('updated_at', 'desc')
-            ->when(!auth()->user()?->isAdmin(), fn ($query, $value) => $query->where('payment_status', 'paid'))
-            ->when(auth()->user()?->isAdmin(), fn ($query, $value) => $query->whereIn('payment_status', PaymentStatusEnum::toValues()));
-
-            // ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
-            // ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
-            // ->when($this->getFilter('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))
-            // ->when($this->getFilter('shipping_status'), fn ($query, $status) => $query->where('shipping_status', $status))
-            // ->when($this->getFilter('viewed'), function ($query, $status) {
-            //     if ($status === 'new') {
-            //         return $query->where('viewed', 0);
-            //     } elseif ($status === 'viewed') {
-            //         return $query->where('viewed', 1);
-            //     } else {
-            //         return $query;
-            //     }
-            // })
-            // ->when($this->getFilter('date_created'), fn ($query, $date) => $query->whereDate('created_at', '=', $date));
+            ->when($this->getFilter('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))
+            ->orderBy('updated_at', 'desc');
     }
 
     public function rowView(): string
