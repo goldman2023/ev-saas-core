@@ -189,6 +189,7 @@ class TasksActionPanel extends Component
                 DB::rollBack();
 
                 Log::error($e);
+                dd($e);
                 $this->dispatchGeneralError(translate('There was an error while performing printing-label action...Please try again.'));
                 $this->inform(translate('There was an error while performing printing-label action...Please try again.'), '', 'fail');
             }
