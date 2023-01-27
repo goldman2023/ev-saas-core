@@ -260,13 +260,16 @@ if (!function_exists('generateInvoicePDF')) {
         ];
         
         // Create PDF with $invoice data and stream it
-        $pdf = LaravelInvoice::make(!empty($custom_title) ? $custom_title : translate('Invoice').' #'.$invoice->id)
+        $invoice_title = !empty($custom_title) ? $custom_title : translate('Invoice').' #'.$invoice->id;
+        $invoice_filename = (!empty($custom_title) ? \Str::slug($custom_title) : translate('Invoice')).'_'.$invoice->getRealInvoiceNumber();
+
+        $pdf = LaravelInvoice::make($invoice_title)
             ->series(!empty($invoice->real_invoice_number) ? $invoice->getRealInvoiceNumber() : $invoice->invoice_number)
             // ->sequence()
             ->serialNumberFormat('{SERIES}')
             // ability to include translated invoice status
             // in case it was paid
-            // ->filename(\Str::slug($custom_title).'_'.$invoice->getRealInvoiceNumber())
+            ->filename($invoice_filename)
             ->status($invoice->payment_status)
             ->seller($business)
             ->buyer($customer)
