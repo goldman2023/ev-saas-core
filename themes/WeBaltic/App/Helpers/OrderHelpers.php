@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Upload;
+use App\Enums\OrderTypeEnum;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 

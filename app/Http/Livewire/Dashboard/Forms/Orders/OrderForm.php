@@ -327,6 +327,11 @@ class OrderForm extends Component
     }
 
     public function generateInvoice() {
+        // If there is functions called generateInvoice() in theme Helpers php files, it'll use that one instead of default logic defined here!
+        if (function_exists('generateInvoice')) {
+            return generateInvoice($this);
+        }
+
         if($this->order->invoices->isEmpty()) {
             if($this->order->type === OrderTypeEnum::installments()->value) {
                 // For installments create multiple invoices (deposit and main invoice)
@@ -372,6 +377,8 @@ class OrderForm extends Component
                 DB::beginTransaction();
 
                 try {
+                    $this->saveOrder();
+
                     foreach($all_totals as $percentage_of_total => $totals) {
                         if(!empty($totals)) {
                             $percentage_of_total = (float) $percentage_of_total;
@@ -446,15 +453,13 @@ class OrderForm extends Component
                             // generateInvoicePDF - generate invoice document and 
                             $filepath = $invoice->generateInvoicePDF(save: true);
             
-                            \MediaService::storeAsUploadFromFile($invoice, $filepath, 'invoice_document');
+                            \MediaService::storeAsUploadFromFile($invoice, $filepath, 'invoice_document', file_display_name: translate('Invoice').' '.$invoice->getRealInvoiceNumber());
             
                             // if($this->order->type !== OrderTypeEnum::installments()->value) {
                             //     return redirect()->route('invoice.download', $invoice->id);
                             // }
                         }
                     }
-
-                    $this->order->save();
 
                     DB::commit();
                 } catch (\Exception $e) {

@@ -1,6 +1,7 @@
 @if(!empty($order_item))
     <div class="w-full">
         @php
+            // TODO: THIS SHOULD BE REMOVED ONCE WE ADD ATTRIBUTE OVERRIDE TO Product OrderItem
             if(!empty($order_item->subject)) {
                 $order_item = $order_item->subject;
             }
