@@ -316,6 +316,12 @@ trait UploadTrait
                         } else if($base_param[1] === '!=' && $upload->{$base_param[0]} === $base_param[2]) {
                             $pass = false;
                             break;
+                        } else if($base_param[1] === 'IN' && !in_array($upload->{$base_param[0]}, $base_param[2])) {
+                            $pass = false;
+                            break;
+                        } else if($base_param[1] === 'NOT IN' && in_array($upload->{$base_param[0]}, $base_param[2])) {
+                            $pass = false;
+                            break;
                         }
                     }
                 }
@@ -331,6 +337,8 @@ trait UploadTrait
                                 switch($wef_param[1]) {
                                     case '==': return $meta->key === $wef_param[0] && $meta->value === $wef_param[2];
                                     case '!=': return $meta->key === $wef_param[0] && $meta->value !== $wef_param[2];
+                                    case 'IN': return $meta->key === $wef_param[0] && in_array($meta->value, $wef_param[2]);
+                                    case 'NOT IN': return $meta->key === $wef_param[0] && !in_array($meta->value, $wef_param[2]);
                                     default: return $meta->key === $wef_param[0] && $meta->value === $wef_param[2];
                                 }
                             }
@@ -343,7 +351,7 @@ trait UploadTrait
             }
             
             return $pass;
-        });
+        })->values();
 
         if($return_all) {
             return $uploads;

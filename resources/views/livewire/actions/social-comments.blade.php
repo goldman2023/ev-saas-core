@@ -1,13 +1,12 @@
-<section class="bg-white dark:bg-gray-900">
+<section class="bg-white dark:bg-gray-900 {{ $class }}">
     <div class="mx-auto">
         <div class="flex justify-between items-center mb-3">
             @if(!is_null($replyCommentId))
-            <h3 class="text-14 mt-2 mb-2">{{ is_null($replyCommentId) ? '' : translate('Replying to a comment') }}</h3>
+                <h3 class="text-14 mt-2 mb-2">{{ is_null($replyCommentId) ? '' : translate('Replying to a comment') }}</h3>
             @else
-            <h2 class="text-lg lg:text-xl font-medium text-gray-900 dark:text-white">
-                {{ translate('Comments') }} ({{$item->comments()->count()}})
-            </h2>
-
+                <h2 class="text-lg lg:text-xl font-medium text-gray-900 dark:text-white">
+                    {{ translate('Comments') }} ({{$item->comments()->count()}})
+                </h2>
             @endif
             <div>
                 @auth

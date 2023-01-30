@@ -43,4 +43,29 @@ class OrderCycleStatusEnum extends EVBaseEnum
             11 => translate('Customer feedback'),
         ];
     }
+
+    public static function getPublicStatuses() {
+        return array_intersect(self::values(), ['request', 'contract', 'approved', 'completed', 'customer_reviewed']);
+    }
+    
+    public static function getPublicStatusesLabels() {
+        return array_intersect_key(self::labels(), self::getPublicStatuses());
+    }
+
+    public static function getPublicStatusesDescriptions() {
+        return [
+            0 => translate('Requested quote is under review'),
+            1 => translate('Waiting for customer contract signing'),
+            2 => translate('Contract signed & approved by customer'),
+            // 3 => translate('Wellding'),
+            // 4 => translate('Quality Assurance'),
+            // 6 => translate('Delivery'),
+            // 5 => translate('Zincification'),
+            // 7 => translate('Assembly'),
+            // 8 => translate('Final Quality Assurance'),
+            // 9 => translate('Certificate approved'),
+            10 => translate('Order completed and products sent'),
+            11 => translate('Awaiting customer feedback'),
+        ];
+    }
 }

@@ -140,10 +140,11 @@ Route::middleware([
         Route::group([], base_path('routes/dashboard/tasks-group.php'));
 
 
-        /* My Purchases/Wishlist/Viewed Items */
+        /* My Purchases/Wishlist/Viewed Items/Orders/Invoices */
         Route::get('/my/purchases/all', [OrderController::class, 'my_purchases'])->name('my.purchases.index');
         Route::get('/my/wishlist/all', [OrderController::class, 'my_purchases'])->name('my.wishlist.index');
         Route::get('/my/orders/all', [OrderController::class, 'my_orders'])->name('my.orders.all');
+        Route::get('/my/invoices/all', [OrderController::class, 'my_invoices'])->name('my.invoices.all');
 
         /* My Downloads (all) */
         Route::get('/downloads/all', [EVDownloadsController::class, 'my_downloads'])->name('my.downloads.all');
