@@ -1,5 +1,5 @@
 <div class="w-full">
-  @if($user->orders->isEmpty())
+  @if($user->orders->isNotEmpty())
     @foreach($user->orders as $order)
       <div class="border-t border-b border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border mb-5">
         {{-- <h3 class="sr-only">{{ translate('Order placed on') }} <time datetime="2021-07-06">{{ $order->created_at->format('d M, Y H:i') }}</time></h3> --}}
