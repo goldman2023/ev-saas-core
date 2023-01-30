@@ -110,12 +110,12 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'crm.all_customers',
                     'my.account.settings',
                     'my.orders.all',
+                    'my.invoices.all',
                     'settings.staff_settings',
                     'settings.app_settings',
                     'settings.super_admin',
                     'we-edit.index'
                 ];
-
 
                 /* TODO: Use this approach for overiding child themes, menu */
                 foreach ($menu as $menuKey => $items) {

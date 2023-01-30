@@ -80,4 +80,12 @@ class OrderController extends Controller
 
         return view('frontend.dashboard.my-orders.index', compact('orders', 'orders_count'));
     }
+
+    public function my_invoices(Request $request)
+    {
+        $invoices = auth()->user()->invoices()->orderBy('created_at', 'desc')->paginate(20);
+        $invoices_count = auth()->user()->invoices()->count();
+
+        return view('frontend.dashboard.my-invoices.index', compact('invoices', 'invoices_count'));
+    }
 }

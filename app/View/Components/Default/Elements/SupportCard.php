@@ -8,14 +8,17 @@ use Illuminate\View\Component;
 class SupportCard extends Component
 {
     public $user;
+    public $class;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($user = null)
+    public function __construct($user = null, $class = '')
     {
+        $this->class = $class;
+        
         if ($user) {
             $this->user = $user;
         } else {

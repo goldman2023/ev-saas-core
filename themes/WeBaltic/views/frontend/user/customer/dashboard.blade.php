@@ -14,15 +14,17 @@
                     <div class="text-4xl text-gray-900 font-bold mb-3">
                         {{ translate('My orders') }}
                     </div>
-                    <div class="mb-8">
+                    <div class="mb-8 pt-8">
                         <x-dashboard.orders.customer-orders-table> </x-dashboard.orders.customer-orders-table>
                     </div>
                 </div>
             </div>
 
-            <div class="col-span-4">
-                <x-dashboard.elements.support-card class="card bg-white p-4 mb-3">
+            <div class="col-span-4 flex flex-col space-y-3">
+                <x-dashboard.elements.support-card class="mb-3">
                 </x-dashboard.elements.support-card>
+
+                <x-theme::dashboard.elements.customer-quick-actions />
             </div>
 
         </div>

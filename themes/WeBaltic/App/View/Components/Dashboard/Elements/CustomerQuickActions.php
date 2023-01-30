@@ -1,10 +1,11 @@
 <?php
 
-namespace App\View\Components\Dashboard\Elements;
+namespace WeThemes\WeBaltic\App\View\Components\Dashboard\Elements;
 
+use App\Models\User;
 use Illuminate\View\Component;
 
-class SupportCard extends Component
+class CustomerQuickActions extends Component
 {
     public $user;
     public $class;
@@ -16,7 +17,7 @@ class SupportCard extends Component
      */
     public function __construct($user = null, $class = '')
     {
-        $this->user = $user;
+        $this->user = auth()->user();
         $this->class = $class;
     }
 
@@ -27,6 +28,7 @@ class SupportCard extends Component
      */
     public function render()
     {
-        return view('components.dashboard.elements.support-card');
+        return view('components.dashboard.elements.customer-quick-actions');
+
     }
 }
