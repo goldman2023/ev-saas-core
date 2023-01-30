@@ -2,17 +2,18 @@
 
 namespace App\Http\Services;
 
-use App\Models\Shop;
-use App\Models\ShopSetting;
-use App\Models\TenantSetting;
-use App\Models\User;
-use Cache;
-use EVS;
 use FX;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
+use EVS;
+use Cache;
 use Session;
+use App\Models\Shop;
+use App\Models\User;
+use App\Models\ShopSetting;
+use App\Models\WeBaseModel;
+use App\Models\TenantSetting;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Database\Eloquent\Collection;
 
 class PermissionsService
 {
@@ -28,10 +29,22 @@ class PermissionsService
         }
     }
 
-    public function canAccess(string|array $user_types, string|array $permissions, bool $abort = true, string|null $redirect_url = null, \Closure|null $fallback = null)
+    public function canAccess(
+        string|array|null $user_types = [], 
+        string|array|null $permissions = [],
+        bool $abort = true, 
+        string|null $redirect_url = null, 
+        \Closure|null $fallback = null,
+        WeBaseModel|null $model = null,
+        bool $allow_mine = true,
+    )
     {
         // Super admin has the access to all pages!
-        if (auth()->user()->user_type === 'admin') {
+        if ((auth()->user()?->user_type ?? null) === 'admin') {
+            return true;
+        }
+
+        if(!empty($model) && isset($model->user_id) && $model->user_id === auth()->user()->id && $allow_mine) {
             return true;
         }
 
@@ -39,7 +52,7 @@ class PermissionsService
             (empty($permissions) || auth()->user()->hasAnyDirectPermission($permissions))) {
             return true;
         } else {
-            // If there's no enough permissions, check if $fallback Closure is defined and check if it's return value is true
+            // If there's no enough permissions, check if $fallback Closure is defined and check if return value is true
             if(!empty($fallback) && $fallback instanceof \Closure) {
                 if($fallback() === true) {
                     return true;

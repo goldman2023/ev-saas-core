@@ -12,14 +12,11 @@
 
                 <div class="mb-8">
                     <div class="text-4xl text-gray-900 font-bold mb-3">
-                        {{ translate('Your orders') }}
+                        {{ translate('My orders') }}
                     </div>
                     <div class="mb-8">
                         <x-dashboard.orders.customer-orders-table> </x-dashboard.orders.customer-orders-table>
                     </div>
-                    {{-- <livewire:dashboard.tables.my-orders-table :show-filters="auth()->user()->isCustomer() ? false : true"
-                        :show-filter-dropdown="auth()->user()->isCustomer() ? false : true">
-                    </livewire:dashboard.tables.my-orders-table> --}}
                 </div>
             </div>
 

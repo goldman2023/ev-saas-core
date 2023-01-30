@@ -253,3 +253,24 @@ function generate_certificate_number($certificate) {
 function generate_axle_permissable_mass() {
 
 }
+
+function get_customer_visible_documents_tags() {
+    return ['proposal', 'contract', 'certificate'];
+}
+
+function get_order_cycle_status_color($cycle_status) {
+    switch($cycle_status) {
+        case 0:
+            return 'badge-danger';
+        case 1:
+            return 'badge-warning';
+        case 2:
+            return 'badge-info';
+        case 10:
+            return 'badge-success';
+        case 11:
+            return 'badge-success';
+        default:
+            return 'badge-dark';
+    }
+}

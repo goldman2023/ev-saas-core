@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Permissions;
 use App\Models\User;
 use App\Models\Order;
 use App\Facades\MyShop;
@@ -9,8 +10,6 @@ use App\Models\Invoice;
 use App\Models\CoreMeta;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-
-
 
 class OrderController extends Controller
 {
@@ -46,6 +45,8 @@ class OrderController extends Controller
     public function details(Request $request, $order_id)
     {
         $order = Order::findOrFail($order_id);
+        Permissions::canAccess(model: $order);
+
         $order_items = $order->order_items()->with(['subject'])->get();
         $user = $order->user;
 
@@ -55,7 +56,13 @@ class OrderController extends Controller
             $order->save();
         }
 
-        return view('frontend.dashboard.orders.details', compact('order', 'order_items', 'user'));
+        // Determine details page based on $user accessing it
+        if(auth()->user()?->isAdmin()) {
+            return view('frontend.dashboard.orders.details', compact('order', 'order_items', 'user'));
+        }
+
+        return view('frontend.dashboard.orders.customer-details', compact('order', 'order_items', 'user'));
+
     }
 
     public function my_purchases(Request $request)
