@@ -1,4 +1,5 @@
 <div class="w-full">
+  @if($user->orders->isEmpty())
     @foreach($user->orders as $order)
       <div class="border-t border-b border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border mb-5">
         {{-- <h3 class="sr-only">{{ translate('Order placed on') }} <time datetime="2021-07-06">{{ $order->created_at->format('d M, Y H:i') }}</time></h3> --}}
@@ -119,4 +120,22 @@
         </ul>
       </div>
     @endforeach
-  </div>
+  @else
+    <div class="bg-white relative block w-full rounded-lg border-2 border-dashed border-gray-400 p-12 text-center hover:border-gray-400 focus:outline-none">
+      <div class="text-center">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">{{ translate('No orders yet') }}</h3>
+        <p class="mt-1 text-sm text-gray-500">{{ translate('Get started by creating a new quote request.') }}</p>
+        <div class="mt-6">
+          <button type="button" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm">
+            @svg('heroicon-o-shopping-cart', ['class' => '-ml-1 mr-2 h-5 w-5'])
+
+            {{ translate('Request a quote') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  @endif
+</div>
