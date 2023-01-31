@@ -12,11 +12,15 @@
 <meta property="og:image" content="{{ $page->getPageMeta()['image'] }}" />
 <meta property="og:description" content="{{ $page->getPageMeta()['description'] }}" />
 <meta property="og:site_name" content="{{ get_site_name() }}" />
+<script src="https://cdn.tailwindcss.com"></script>
+
 @endsection
 
 @section('content')
 @if($page->slug != 'home')
+@if(get_tenant_setting('breadcrumbs_feature', false))
 {{ Breadcrumbs::render('home', $page) }}
+@endif
 @endif
 
 @if($page->type === 'wysiwyg')

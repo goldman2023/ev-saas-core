@@ -1,4 +1,4 @@
-<div class=" overflow-x-auto">
+<div class=" overflow-x-auto mb-6">
 
     <!-- This example requires Tailwind CSS v2.0+ -->
     <div class="sm:grid grid-cols-1 gap-3 sm:grid-cols-2 flex overflow-auto">

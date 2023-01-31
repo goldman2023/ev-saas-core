@@ -72,7 +72,7 @@
                 <!-- Item 1 -->
                 <div class="hidden duration-700 ease-in-out" data-carousel-item>
 
-                    <img :src="mainImage" class="object-cover w-full h-full" alt="Emarius electric ship photo">
+                    <img :src="mainImage" class="object-cover w-full h-full" alt="{{ get_site_name() }} main image">
                 </div>
                 <!-- Item 2 -->
                 <div class="hidden duration-700 ease-in-out" data-carousel-item>

@@ -660,6 +660,24 @@
                                 </div>
                                 {{-- END Addresses Feature --}}
 
+                                {{-- Addresses Feature --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
+                                    x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Breadcrumbs')
+                                            }}</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('If you want to enable breadcrums in custom pages')
+                                            }}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <x-dashboard.form.toggle field="settings.breadcrumbs_feature" />
+                                    </div>
+                                </div>
+                                {{-- END Addresses Feature --}}
+
                                 {{-- WeEdit Feature --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
                                     x-data="{}">
