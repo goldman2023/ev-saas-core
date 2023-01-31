@@ -51,7 +51,7 @@ class OrderForm extends Component
             $this->order->shop_id = 1; // Shop ID by default is 1 - app shop itself
         }
 
-        /* Enable Core Meta  */
+        /* Enable Core Meta */
         $this->initCoreMeta($this->order);
 
         if($customer) {
@@ -66,7 +66,10 @@ class OrderForm extends Component
 
         if(!empty($this->order->order_items)) {
             foreach($this->order->order_items as $item) {
-                
+                $custom_attributes = [];
+                $selected_predefined_attribute_values = [];
+                self::initAttributes($item, $custom_attributes, $selected_predefined_attribute_values, \App\Models\Product::class);
+
                 if(!empty($item->subject_type)) {
                     $this->order_items[] = [
                         'id' => $item->id,
@@ -81,12 +84,10 @@ class OrderForm extends Component
                         'total_price' => $item->total_price,
                         'tax' => $item->tax,
                         'thumbnail' => !empty($item->subject) ? ($item->subject?->thumbnail->file_name ?? null) : '',
+                        'custom_attributes' => $custom_attributes,
+                        'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
                     ];
                 } else {
-                    $custom_attributes = [];
-                    $selected_predefined_attribute_values = [];
-                    self::initAttributes($item, $custom_attributes, $selected_predefined_attribute_values, \App\Models\Product::class);
-                    
                     $this->order_items[] = [
                         'id' => $item->id,
                         'subject_type' => null,
@@ -101,7 +102,7 @@ class OrderForm extends Component
                         'tax' => 0,
                         'thumbnail' => '',
                         'custom_attributes' => $custom_attributes,
-                        'selected_attribute_values' => $selected_predefined_attribute_values,
+                        'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
                     ];
                 }
                 
@@ -217,15 +218,6 @@ class OrderForm extends Component
 
             foreach($this->order_items as $index => $item) {
 
-                // If subject_type is empty - custom OrderItem
-                if(empty($item['subject_type'] ?? null)) {
-                    $item_attributes = $item['custom_attributes'];
-                    $selected_attribute_values = $item['selected_attribute_values'];
-
-                    unset($item['custom_attributes']);
-                    unset($item['selected_attribute_values']);
-                }
-
                 if(!empty($item['id'])) {
                     $order_item = OrderItem::find($item['id'])->fill($item);
                 } else {
@@ -245,14 +237,7 @@ class OrderForm extends Component
 
                 $order_item->save();
 
-                // Order Item Attributes
-                if(empty($item['subject_type'] ?? null)) {
-                    $this->setAttributes($order_item, $item_attributes, $selected_attribute_values); // set attributes to OrderItem
-                    
-                    $item['custom_attributes'] = $item_attributes;
-                    $item['selected_attribute_values'] = $selected_attribute_values;
-                }
-
+                $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_predefined_attribute_values']); // set attributes to OrderItem
             }
 
             $this->order->load('order_items'); // load order items
@@ -315,7 +300,7 @@ class OrderForm extends Component
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e);
-            dd($e);
+
             if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating an order...Please try again.'));
                 $this->inform(translate('There was an error while updating an order...Please try again.'), '', 'fail');

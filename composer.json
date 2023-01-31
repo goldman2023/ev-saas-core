@@ -108,6 +108,7 @@
         "files": [
             "app/Http/Helpers.php",
             "app/Http/Helpers/HookHelpers.php",
+            "app/Http/Helpers/AttributeHelpers.php",
             "app/Http/Helpers/StripeHelpers.php",
             "vendor/webtopay/libwebtopay/WebToPay.php"
         ]

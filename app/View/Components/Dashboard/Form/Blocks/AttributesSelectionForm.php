@@ -16,7 +16,7 @@ class AttributesSelectionForm extends Component
      *
      * @return void
      */
-    public function __construct($formId = '', $attributesField = 'attributes', $selectedAttributesField = 'selected_attribute_values', $noVariations = false)
+    public function __construct($formId = '', $attributesField = 'attributes', $selectedAttributesField = 'selected_predefined_attribute_values', $noVariations = false)
     {
         $this->formId = $formId;
         $this->attributesField = $attributesField;

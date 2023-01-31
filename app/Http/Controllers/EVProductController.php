@@ -18,6 +18,7 @@ use App\Facades\StripeService;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Activitylog\Models\Activity;
 use Laravel\Nova\Notifications\NovaNotification;
+use App\Http\Livewire\Dashboard\Forms\Orders\OrderForm;
 
 class EVProductController extends Controller
 {
@@ -293,11 +294,16 @@ class EVProductController extends Controller
             $q = $request->q;
 
             $results = Product::published()->search($q)->get();
+            $results_array = [];
+
+            foreach($results as $index => $product) {
+                $results_array[] = serialize_with_form_friendly_custom_attributes($product);
+            }
 
             // TODO: Return this as an API RESOURCE!
             return response()->json([
                 'status' => 'success',
-                'results' => $results
+                'results' => $results_array
             ]);
         }
 

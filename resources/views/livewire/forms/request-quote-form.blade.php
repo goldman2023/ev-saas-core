@@ -131,7 +131,7 @@
                             excerpt: '',
                             quantity: 1,
                             custom_attributes: @js($custom_attributes),
-                            selected_attribute_values: @js($selected_predefined_attribute_values),
+                            selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
                         },
                         getCurrentContentTypeOptions() {
                             return this.available_content_types.find(item => item.slug === this.content_type);
@@ -351,7 +351,7 @@
                                     <x-dashboard.form.blocks.attributes-selection-form
                                         form-id="custom-order-item-attributes-form"
                                         attributes-field="custom_order_item.custom_attributes" 
-                                        selected-attributes-field="custom_order_item.selected_attribute_values"
+                                        selected-attributes-field="custom_order_item.selected_predefined_attribute_values"
                                         :no-variations="true">
 
                                     </x-dashboard.form.blocks.attributes-selection-form>

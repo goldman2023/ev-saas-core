@@ -19,56 +19,14 @@ trait HasAttributes
     }
 
     public static function initAttributes(&$model, &$custom_attributes, &$selected_predefined_attribute_values, $custom_content_type = null) {
-        $custom_attributes = $model->getMappedAttributes(custom_content_type: $custom_content_type);
-        $selected_predefined_attribute_values = [];
-        
-        // Set default attributes
-        foreach ($custom_attributes as $key => $attribute) {
-            if ($attribute->is_predefined) {
-                $attribute->selcted_values = '';
-            }
-
-            if (empty($custom_attributes[$key]->attribute_values)) {
-                if (! $attribute->is_predefined) {
-                    $custom_attributes[$key]->attribute_values[] = [
-                        'id' => null,
-                        'attribute_id' => $attribute->id,
-                        'values' => '',
-                        'selected' => true,
-                    ];
-                } else {
-                    $custom_attributes[$key]->attribute_values = [];
-                }
-            }
-        }
+        attributes_form_friendly_mapping($model, $custom_attributes, $selected_predefined_attribute_values, $custom_content_type);
         
         self::initPredefinedAttributeValues($model, $custom_attributes, $selected_predefined_attribute_values);
     }
 
     public static function initPredefinedAttributeValues(&$model, &$custom_attributes, &$selected_predefined_attribute_values)
     {
-        // Set predefined attribute values AND select specific values if it's necessary
-        foreach ($custom_attributes as $attribute) {
-            if ($attribute->is_predefined) {
-                if (isset($model->id) && ! empty($model->id)) {
-                    // edit product
-                    $product_attribute = $model->custom_attributes->firstWhere('id', $attribute->id);
-                    
-                    if ($product_attribute instanceof \App\Models\Attribute) {
-                        $selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck('id')->toArray();
-                    } else if(is_array($product_attribute) && !empty($product_attribute) && !empty($product_attribute?->custom_attributes ?? [])) {
-
-                        $selected_predefined_attribute_values['attribute.'.$attribute->id] = collect($product_attribute->attribute_values)->pluck('id')->toArray();
-                    } else {
-                        $selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
-                    }
-                } else {
-                    // insert product
-                    $selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
-                }
-            }
-        }
-
+        predefined_attributes_form_friendly_mapping($model, $custom_attributes, $selected_predefined_attribute_values);
     }
 
     public function refreshAttributes(&$model)
@@ -191,7 +149,7 @@ trait HasAttributes
     public function saveAttributes($minimum_required = false)
     {
         // Validate minimum required fields and insert/update row!
-        $this->validateData('minimum_required');
+        // $this->validateData('minimum_required');
 
         $this->validateData('attributes');
 
@@ -205,7 +163,7 @@ trait HasAttributes
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving attributes.'));
-            $this->toastify(translate('There was an error while saving attributes. ').$e->getMessage(), 'danger');
+            $this->inform(translate('There was an error while saving attributes.'), $e->getMessage(), 'fail');
         }
     }
 }
