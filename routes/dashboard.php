@@ -180,7 +180,7 @@ Route::middleware([
         Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
         Route::get('/checkout/paysera/canceled/{invoice_id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
         Route::get('/checkout/paysera/callback/{invoice_id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
-        
+
         // WeMediaLibrary
         Route::post('/froala/upload-image', [WeMediaController::class, 'froalaImageUpload'])->name('we-media-library.froala.upload-image');
         Route::get('/froala/load-images', [WeMediaController::class, 'froalaLoadImages'])->name('we-media-library.froala.load-images');
@@ -253,7 +253,7 @@ Route::middleware([
 
     /* IMPORTANT: Last set of routes! To define missing pages and routes */
     /* Catch All Routes: If nothing is matched, try to find a page or throw 404 */
-    Route::get('/{data1}', [PageController::class, 'show_custom_page']);
+    Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
     Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 
     Route::fallback(function () {

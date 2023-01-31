@@ -14,8 +14,12 @@ class PageController extends Controller
         return view('frontend.pages.privacy');
     }
 
-    public function show_custom_page($slug)
+    public function show_custom_page(Request $request, $slug)
     {
+        if(!$request->routeIs('custom-pages.show')) {
+            return redirect()->route('custom-pages.show', $slug);
+        }
+
         try {
             if (view('frontend.custom-pages.'.$slug)) {
                 return view('frontend.custom-pages.'.$slug);
