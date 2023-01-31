@@ -18,9 +18,9 @@ $header_menu_items = $header_menu['menuItems'] ?? null;
                             <select id="desktop-currency" name="currency"
                                 class="flex items-center rounded-md border-transparent bg-gray-900 bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100">
 
-                                <option>LT</option>
+                                <option>LT 🇱🇹</option>
 
-                                <option>EN</option>
+                                <option>EN 🇬🇧</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
                                 <svg class="h-5 w-5 text-gray-300" x-description="Heroicon name: mini/chevron-down"

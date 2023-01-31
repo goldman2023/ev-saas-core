@@ -129,3 +129,7 @@ $footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
         </div>
     </div>
 </footer>
+
+<!-- Start of HubSpot Embed Code -->
+<script type="text/javascript" id="hs-script-loader" async defer src="//js-eu1.hs-scripts.com/26534495.js"></script>
+<!-- End of HubSpot Embed Code -->
