@@ -1,6 +1,6 @@
 <div class="w-full md:flex pt-[80px] md:pt-0" x-data="{
     open: false,
-    selectedColor: 'nardo gray',
+    selectedColor: 'linginė',
     maxSpeed: 750,
     engine: 'engine2',
     battery: 'battery1',
@@ -9,8 +9,8 @@
     generator: 'No',
     cruisingSpeed: '32',
     showSpecifications: false,
-    basePrice: 300000,
-    showPrice: 300000,
+    basePrice: 1000,
+    showPrice: 1000,
     calculatePrice: function() {
         if(this.engine === 'engine1') {
             this.basePrice = 270000;
@@ -200,6 +200,10 @@
 
                     <div class="mb-6">
                         <x-custom.axis-count></x-custom.axis-count>
+                    </div>
+
+                    <div class="mb-6">
+                        <x-custom.product-addons></x-custom.product-addons>
                     </div>
 
                     <div class='text-lg'>

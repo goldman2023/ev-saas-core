@@ -18,7 +18,7 @@
                 <span id="color-choice-0-label" class="sr-only">Pink</span>
                 <span aria-hidden="true"
                 style="background: url('https://businesspress.fra1.digitaloceanspaces.com/uploads/cc772c23-0100-43fc-92c2-13eb0ec7507b/1675099069_Screenshot2023-01-30at19.17.23.png'); background-size: cover; background-repeat: no-repeat; background-position: center;"
-                    class="md:h-48 md:w-48 w-[50%] bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
+                    class="md:h-44 md:w-44 w-[50%] bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
                 </span>
             </label>
 
@@ -36,7 +36,7 @@
                 <span id="color-choice-1-label" class="sr-only">Purple</span>
                 <span aria-hidden="true"
                 style="background: url('https://businesspress.fra1.digitaloceanspaces.com/uploads/cc772c23-0100-43fc-92c2-13eb0ec7507b/1675099068_Screenshot2023-01-30at19.17.35.png'); background-size: cover; background-repeat: no-repeat; background-position: center;"
-                    class="md:h-48 md:w-48 w-24 h-24 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
+                    class="md:h-44 md:w-44 w-24 h-24 bg-[#C9C9C9] border border-black border-opacity-10 rounded-md">
                 </span>
             </label>
         </div>
