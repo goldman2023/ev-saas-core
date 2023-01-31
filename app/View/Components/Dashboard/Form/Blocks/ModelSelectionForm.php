@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Dashboard\Form\Blocks;
 
+use App\Models\Product;
 use Illuminate\View\Component;
 
 class ModelSelectionForm extends Component
@@ -25,6 +26,8 @@ class ModelSelectionForm extends Component
     public $defaultResults;
     public $customSelectLogic;
     public $customDeselectLogic;
+    public $inline;
+    public $hideReset;
 
     /**
      * Create a new component instance.
@@ -51,6 +54,8 @@ class ModelSelectionForm extends Component
         $defaultResults = [],
         $customSelectLogic = '',
         $customDeselectLogic = '',
+        $inline = false,
+        $hideReset = false,
     )
     {
         $this->field = $field;
@@ -71,6 +76,8 @@ class ModelSelectionForm extends Component
         $this->itemSubtitleSuffix = $itemSubtitleSuffix;
         $this->customSelectLogic = $customSelectLogic;
         $this->customDeselectLogic = $customDeselectLogic;
+        $this->inline = $inline;
+        $this->hideReset = $hideReset;
 
         // Define modelClass
         if(!empty($this->defaultModel)) {
@@ -81,6 +88,7 @@ class ModelSelectionForm extends Component
         
         // Fetch Default results
         $this->defaultResults = $defaultResults;
+
         if(!empty($this->modelClass)) {
             $this->defaultResults = app($this->modelClass);
 
@@ -88,7 +96,12 @@ class ModelSelectionForm extends Component
                 $this->defaultResults = $this->defaultResults->with($this->modelWithRelations);
             }
 
-            $this->defaultResults = $this->defaultResults->search('')->limit(5)->get()->toArray();
+            if(method_exists($this->modelClass, 'scopePublished')) {
+                $this->defaultResults = $this->defaultResults->published();
+            }
+            
+            $this->defaultResults = $this->defaultResults->search('')->limit(5)->get()
+                ->map(fn($model) => serialize_with_form_friendly_custom_attributes($model))->toArray();
         }
     }
 

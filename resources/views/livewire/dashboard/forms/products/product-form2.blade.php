@@ -23,7 +23,7 @@
         description_structure: @entangle('wef.content_structure').defer,
 
         attributes: @js($custom_attributes),
-        selected_attribute_values: @js($selected_predefined_attribute_values),
+        selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
         selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
         track_inventory: @js($product->track_inventory),
@@ -58,7 +58,7 @@
             $wire.set('core_meta', this.core_meta, true);
 
             $wire.set('selected_categories', this.selected_categories, true);
-            $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
+            $wire.set('selected_predefined_attribute_values', this.selected_predefined_attribute_values, true);
             $wire.set('custom_attributes', this.attributes, true);
 
             // CoreMeta and WEFs
@@ -513,7 +513,7 @@
                                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 "
                                             x-data="{
                                                 items: attribute.attribute_values,
-                                                selected_items: selected_attribute_values['attribute.'+attribute.id],
+                                                selected_items: selected_predefined_attribute_values['attribute.'+attribute.id],
                                                 show: false,
                                                 multiple: hasCustomProperty('multiple') && attribute.custom_properties.multiple,
                                                 tag: false,
@@ -554,7 +554,7 @@
                                                         this.placeholder = label;
                                                     }
 
-                                                    selected_attribute_values['attribute.'+attribute.id] = this.selected_items;
+                                                    selected_predefined_attribute_values['attribute.'+attribute.id] = this.selected_items;
                                                 }
                                             }">
                                             <div
@@ -745,7 +745,7 @@
                                                         :class="{'!mt-0': index === 0}">
                                                         <div class="flex items-center h-6">
                                                             <input type="checkbox"
-                                                                x-model="selected_attribute_values['attribute.'+attribute.id]"
+                                                                x-model="selected_predefined_attribute_values['attribute.'+attribute.id]"
                                                                 :value="attribute_value.id"
                                                                 :id="'attribute_'+attribute_value.id"
                                                                 class="form-checkbox-standard">
@@ -778,7 +778,7 @@
                                                         :class="{'!mt-0': index === 0}">
                                                         <div class="flex items-center h-6">
                                                             <input type="radio"
-                                                                x-model="selected_attribute_values['attribute.'+attribute.id]"
+                                                                x-model="selected_predefined_attribute_values['attribute.'+attribute.id]"
                                                                 :value="attribute_value.id"
                                                                 :id="'attribute_'+attribute_value.id"
                                                                 class="form-radio-standard">

@@ -283,7 +283,6 @@
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="order-manufacturing-content" role="tabpanel"
                         aria-labelledby="order-manufacturing-tab">
                         <x-theme::dashboard.orders.manufacturing-details :order="$order"></x-theme::dashboard.orders.manufacturing-details>
-
                     </div>
 
                     <div class="hidden dark:bg-gray-800" id="order-history-content" role="tabpanel"

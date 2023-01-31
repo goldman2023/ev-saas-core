@@ -21,7 +21,7 @@
     content_structure: @entangle('wef.content_structure').defer,
     selected_categories: @js($selected_categories),
     attributes: @js($custom_attributes),
-    selected_attribute_values: @js($selected_predefined_attribute_values),
+    selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
     core_meta: @js($core_meta),
     wef: @js($wef),
     onSave() {
@@ -44,7 +44,7 @@
 
         $wire.set('core_meta', this.core_meta, true);
         $wire.set('selected_categories', this.selected_categories, true);
-        $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
+        $wire.set('selected_predefined_attribute_values', this.selected_predefined_attribute_values, true);
         $wire.set('custom_attributes', this.attributes, true);
 
         @do_action('view.plan-form.wire_set')

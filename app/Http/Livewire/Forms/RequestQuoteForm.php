@@ -248,7 +248,7 @@ class RequestQuoteForm extends Component
                     'quantity' => $item->purchase_quantity,
                     'thumbnail' => $item?->thumbnail?->file_name ?? '',
                     'custom_attributes' => $custom_attributes,
-                    'selected_attribute_values' => $selected_predefined_attribute_values,
+                    'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
                 ];
             }
         }
@@ -466,9 +466,7 @@ class RequestQuoteForm extends Component
                 $order_item->save();
 
                 // Define custom_attributes for each $item
-                $item_attributes = $item['custom_attributes'];
-                $selected_attribute_values = $item['selected_attribute_values'];
-                $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_attribute_values']); // set attributes to OrderItem
+                $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_predefined_attribute_values']); // set attributes to OrderItem
             }
 
             $this->order->load('order_items');
