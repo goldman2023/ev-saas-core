@@ -17,6 +17,8 @@ class CustomerOrdersTable extends Component
      */
     public function __construct($user = null)
     {
+        $this->orders = collect();
+        
         if($user == null) {
             $this->user = auth()->user();
         } else {
