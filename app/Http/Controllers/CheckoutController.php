@@ -25,19 +25,27 @@ use Illuminate\Validation\Rule;
 
 class CheckoutController extends Controller
 {
-    public function index(Request $request)
+
+    public function checkout()
     {
-        $cart_items = CartService::getItems();
-        $total_items_count = CartService::getTotalItemsCount();
+        if (empty(request()->data)) {
+            $models = CartService::getItems();
+        } else {
+            $data = json_decode(base64_decode(request()->data ?? null));
 
-        $originalPrice = CartService::getOriginalPrice();
-        $discountAmount = CartService::getDiscountAmount();
-        $subtotalPrice = CartService::getSubtotalPrice();
+            $models = collect([app($data->class)->findOrFail($data->id)]); // for now only one model can be bouoght using a link approach
+            // TODO: Add purchase_quantity to $model here, based on $qty
+        }
 
-        return view('frontend.checkout', compact('cart_items', 'total_items_count', 'originalPrice', 'discountAmount', 'subtotalPrice'));
+        // If models are empty, redirect to Homepage
+        if ($models->isEmpty()) {
+            return redirect()->route('home');
+        }
+
+        return view('frontend.checkout', compact('models'));
     }
 
-    public function store(Request $request)
+    public function process_checkout(Request $request)
     {
         $cart_items = CartService::getItems();
         $total_items_count = CartService::getTotalItemsCount();
@@ -430,25 +438,6 @@ class CheckoutController extends Controller
         // TODO: Go to Order page in user dashboard! Also, when payment gateway processes payment, callback url should navigate to Order single page in user dashboard (if user is logged in, of course)
 
         return redirect()->route('checkout.order.received', $order);
-    }
-
-    public function single()
-    {
-        if (empty(request()->data)) {
-            $models = CartService::getItems();
-        } else {
-            $data = json_decode(base64_decode(request()->data ?? null));
-
-            $models = collect([app($data->class)->findOrFail($data->id)]); // for now only one model can be bouoght using a link approach
-            // TODO: Add purchase_quantity to $model here, based on $qty
-        }
-
-        // If models are empty, redirect to Homepage
-        if ($models->isEmpty()) {
-            return redirect()->route('home');
-        }
-
-        return view('frontend.checkout-single', compact('models'));
     }
 
     public function orderReceived(Request $request, $order_id)

@@ -31,7 +31,7 @@ use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Contracts\Support\Arrayable;
 use Spatie\ValidationRules\Rules\ModelsExist;
 
-class CheckoutSingleForm extends Component
+class CheckoutForm extends Component
 {
     use RulesSets;
     use DispatchSupport;
@@ -234,7 +234,7 @@ class CheckoutSingleForm extends Component
 
     public function render()
     {
-        return view('livewire.forms.checkout-single-form');
+        return view('livewire.forms.checkout-form');
     }
 
     protected function getSpecificRules()

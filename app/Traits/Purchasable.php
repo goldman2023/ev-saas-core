@@ -53,7 +53,7 @@ trait Purchasable
             'qty' => 1
         ]));
 
-        return route('checkout.single.page').'?data='.$data;
+        return route('checkout').'?data='.$data;
     }
 
     public function getStripeCheckoutPermalink($qty = 1, $preview = false, $interval = null) {

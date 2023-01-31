@@ -11,30 +11,27 @@
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{ seo()->render() }}
     @yield('meta')
 
     <link rel='canonical' href='@yield(' canonical_link', url()->current() )' />
 
     <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
 
-    <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
     <link rel="stylesheet" href="{{ static_asset('/bp-assets/vendor/flatpickr/flatpickr-airbnb.min.css') }}">
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'themes/WeTailwind') }}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     @include('frontend.layouts.global-partials.all')
 
-    {{ seo()->render() }}
-
-    @livewireScripts
     @livewireStyles
-
-    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
     @stack('head_scripts')
 </head>
@@ -72,7 +69,15 @@
         <x-default.chat.widget-chat></x-default.chat.widget-chat>
     @endauth
 
+    <!-- Scripts -->
+    <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+
+    @livewireScripts
+
     @stack('footer_scripts')
+    <!-- END Scripts -->
+
 </body>
 
 </html>

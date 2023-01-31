@@ -169,7 +169,7 @@
                         <strong class="text-dark">{{ $subtotalPrice['display'] }}</strong>
                     </div>
 
-                    <a href="{{ route('checkout.single.page') }}" class="btn mt-3 bg-sky-600 text-white">
+                    <a href="{{ route('checkout') }}" class="btn mt-3 bg-sky-600 text-white">
                         {{ translate('Checkout') }}
                     </a>
                 </div>
