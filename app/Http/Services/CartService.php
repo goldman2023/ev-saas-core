@@ -17,9 +17,15 @@ class CartService
 
     protected $originalPrice;
 
+    protected $subtotalPrice;
+
     protected $discountAmount;
 
-    protected $subtotalPrice;
+    protected $taxAmount;
+
+    protected $totalPrice;
+
+    protected $global_tax; // TODO: Make tax system in taxes table which depend on country! For now we are just adding global tax to everyone...
 
     public function __construct($app)
     {
@@ -27,6 +33,18 @@ class CartService
             Session::put('cart', collect());
         }
 
+        // Taxes
+        try {
+            $this->global_tax = (float) get_tenant_setting('company_tax_rate');
+            if(empty($this->global_tax)) {
+                $this->global_tax = 0;
+            }
+        } catch(\Exception $e)  {
+            $this->global_tax = 0;
+        }
+        
+
+        // Refresh cart totals
         $this->refresh();
     }
 
@@ -45,9 +63,19 @@ class CartService
         return $this->discountAmount;
     }
 
+    public function getTaxAmount()
+    {
+        return $this->taxAmount;
+    }
+
     public function getSubtotalPrice()
     {
         return $this->subtotalPrice;
+    }
+
+    public function getTotalPrice()
+    {
+        return $this->totalPrice;
     }
 
     public function getTotalItemsCount()
@@ -186,21 +214,33 @@ class CartService
                 });
             })->flatten();
 
-            // sort by initial order and calculate subtotal
-            $ids_order = $cart_items->pluck('id');
+            // sort by initial order and calculate subtotal and total
+            $order_items_idx = $cart_items->pluck('id');
             $this->items = new \App\Support\Eloquent\Collection(); // THIS IS ULTIMATELY IMPORTANT!!! Otherwise, only one model type can be in standard Eloquent/Collection
 
-            foreach ($ids_order as $id) {
-                $this->items->push($found_item = $mapped->firstWhere('id', $id));
+            foreach ($order_items_idx as $id) {
+                $found_item = $mapped->firstWhere('id', $id);
 
+                if(empty($found_item)) 
+                    continue;
+
+                $this->items->push($found_item);
+                
                 $this->originalPrice['raw'] += $found_item->purchase_quantity * $found_item->base_price;
                 $this->discountAmount['raw'] += $found_item->purchase_quantity * ($found_item->base_price - $found_item->total_price);
-                $this->subtotalPrice['raw'] += $found_item->purchase_quantity * $found_item->total_price;
+
+                $this->subtotalPrice['raw'] = $this->originalPrice['raw'] - $this->discountAmount['raw']; // Subtotal: Original - Line discounts
+                
+                $this->taxAmount['raw'] = $this->subtotalPrice['raw'] * $this->global_tax / 100; // Tax: global_tax percentage of Subtotal
+
+                $this->totalPrice['raw'] = $this->subtotalPrice['raw'] + $this->taxAmount['raw']; // Total: Subtotal + Tax
             }
 
             $this->originalPrice['display'] = FX::formatPrice($this->originalPrice['raw']);
             $this->discountAmount['display'] = FX::formatPrice($this->discountAmount['raw']);
             $this->subtotalPrice['display'] = FX::formatPrice($this->subtotalPrice['raw']);
+            $this->taxAmount['display'] = FX::formatPrice($this->taxAmount['raw']);
+            $this->totalPrice['display'] = FX::formatPrice($this->totalPrice['raw']);
 
             $this->count = $count;
         } else {
@@ -225,7 +265,7 @@ class CartService
 
     protected function resetStats()
     {
-        $this->originalPrice = $this->discountAmount = $this->subtotalPrice = [
+        $this->originalPrice = $this->discountAmount = $this->taxAmount = $this->subtotalPrice = $this->totalPrice = [
             'raw' => 0,
             'display' => FX::formatPrice(0),
         ];

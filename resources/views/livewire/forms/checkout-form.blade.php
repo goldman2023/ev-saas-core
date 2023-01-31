@@ -17,27 +17,52 @@
     cc_number: @js($cc_number),
     cc_expiration_date: @js($cc_expiration_date),
     cc_cvc: @js($cc_cvc),
+    core_meta: @js($core_meta),
+    wef: @js($wef),
+
+    setDefaults() {
+        if(this.wef.billing_entity !== 'individual' && this.wef.billing_entity !== 'company') {
+            this.wef.billing_entity = 'individual';
+        }
+    }
 }" 
 @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
+x-init="setDefaults();"
 x-cloak
 >
+    <div class="w-full flex flex-col  mb-3 gap-y-2">
+        <div class="w-full flex gap-x-4">
+            <div class="flex items-center">
+                <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="individual" input-id="entity_individual_radio" class="w-auto flex items-center" />
+
+                <label for="entity_individual_radio" class="pl-3 block text-sm font-medium text-gray-700">
+                    {{ translate('Individual') }}
+                </label>
+            </div>
+
+            <div class="flex items-center">
+                <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="company" 
+                    input-id="entity_company_radio" class="w-auto flex items-center" />
+
+                <label for="entity_company_radio" class="pl-3 block text-sm font-medium text-gray-700">
+                    {{ translate('Company') }} </label>
+            </div>
+        </div>
+    </div>
+
     <!-- Email -->
     <div class="w-full mb-3">
         <label for="order.email" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
             {{ translate('Email') }}
             <span class="text-red-700 ml-1">*</span>
         </label>
-        <input type="email"
-                wire:model.defer="order.email"
-                @auth disabled @endauth
-                class="form-standard @error('order.email') is-invalid @enderror"       
-        />
 
-        <x-system.invalid-msg field="order.email" ></x-system.invalid-msg>
+        <x-dashboard.form.input field="order.email" :disabled="\Auth::check()" />
     </div>
     <!-- END Email -->
 
-    @guest
+    {{-- TODO: Create ghost user if user does not exist AND send email to activate account! --}}
+    {{-- @guest
         <div class="w-full mb-3">
             <div class="w-full grid md:grid-cols-2 gap-4">
                 <div class="">
@@ -65,7 +90,7 @@ x-cloak
             </div>
             <x-system.invalid-msg field="account_password" ></x-system.invalid-msg>
         </div>
-    @endguest
+    @endguest --}}
 
     <!-- First & Last name -->
     <div class="w-full grid md:grid-cols-2 gap-4 mb-3">
@@ -74,48 +99,49 @@ x-cloak
                 {{ translate('First name') }}
                 <span class="text-red-700 ml-1">*</span>
             </label>
-            <input type="text"
-                    name="order.billing_first_name" 
-                    id="order.billing_first_name"
-                    wire:model.defer="order.billing_first_name"
-                    class="form-standard @error('order.billing_first_name') is-invalid @enderror"       
-            />
 
-            <x-system.invalid-msg field="order.billing_first_name" ></x-system.invalid-msg>
+            <x-dashboard.form.input field="order.billing_first_name" />
         </div>
         <div class="">
             <label for="order.billing_last_name" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                 {{ translate('Last name') }}
                 <span class="text-red-700 ml-1">*</span>
             </label>
-            <input type="text"
-                    name="order.billing_last_name" 
-                    id="order.billing_last_name"
-                    wire:model.defer="order.billing_last_name"
-                    class="form-standard @error('order.billing_first_name') is-invalid @enderror"       
-            />
 
-            <x-system.invalid-msg field="order.billing_last_name" ></x-system.invalid-msg>
+            <x-dashboard.form.input field="order.billing_last_name" />
         </div>
     </div>
     <!-- END First & Last name -->
 
     <!-- Company -->
-    <div class="w-full mb-3">
-        <label for="order.billing_company" class="w-full block mb-2 text-12 font-medium text-gray-900 dark:text-gray-300">
+    <div class="w-full mb-3" x-show="wef.billing_entity === 'company'">
+        <label class="w-full block mb-2 text-12 font-medium text-gray-900 dark:text-gray-300">
             {{ translate('Company') }}
-            <span class="text-orange-300 ml-1">{{ translate('(optional)') }}</span>
         </label>
-        <input name="order.billing_company"
-                id="order.billing_company"
-                type="text"
-                wire:model.defer="order.billing_company" 
-                class="form-standard @error('order.billing_company') is-invalid @enderror"       
-        />
-
-        <x-system.invalid-msg field="order.billing_company" ></x-system.invalid-msg>
+        
+        <x-dashboard.form.input field="order.billing_company" />
     </div>
     <!-- END Company -->
+
+    {{-- Company VAT & Code --}}
+    <div class="w-full mb-3 grid grid-cols-12 gap-x-3" x-show="wef.billing_entity === 'company'">
+        <div class="col-span-12 md:col-span-6 flex flex-col">
+            <label class="w-full block mb-2 text-12 font-medium text-gray-900 dark:text-gray-300">
+                {{ translate('Company VAT') }}
+            </label>
+
+            <x-dashboard.form.input field="wef.billing_company_vat" :x="true" />
+        </div>
+
+        <div class="col-span-12 md:col-span-6 flex flex-col">
+            <label class="w-full block mb-2 text-12 font-medium text-gray-900 dark:text-gray-300">
+                {{ translate('Company Code') }}
+            </label>
+
+            <x-dashboard.form.input field="wef.billing_company_code" :x="true" />
+        </div>
+    </div>
+    {{-- END Company VAT & Code --}}
 
     <!-- Phones -->
     <div class="w-full mt-3">
@@ -124,47 +150,6 @@ x-cloak
         </label>
 
         <x-dashboard.form.text-repeater field="phoneNumbers" error-field="order.phone_numbers" placeholder="{{ translate('Phone') }}"  limit="3"></x-dashboard.form.text-repeater>
-
-        {{-- <div class="w-full @error('order.phone_numbers') mb-2 @enderror">
-            <template x-if="count() <= 1">
-                <div class="flex">
-                    <input type="text" class="form-standard"
-                           placeholder="{{ translate('Phone number 1') }}"
-                           x-model="phoneNumbers[0]">
-                </div>
-            </template>
-            <template x-if="count() > 1">
-                <template x-for="[key, value] of Object.entries(phoneNumbers)">
-                    <div class="flex" :class="{'mt-2': key > 0}">
-                        <input type="text" class="form-standard"
-                               x-bind:placeholder="'{{ translate('Phone number') }} '+(Number(key)+1)"
-                               x-model="phoneNumbers[key]">
-                        <template x-if="key > 0">
-                            <span class="ml-2 flex phoneNumbers-center cursor-pointer" @click="remove(key)">
-                                @svg('heroicon-o-trash', ['class' => 'w-[22px] aspect-square text-danger'])
-                            </span>
-                        </template>
-                    </div>
-                </template>
-            </template>
-
-            <template x-if="count() < limit">
-                <button 
-                    type="button"
-                    href="javascript:;"
-                    class="tw-btn-sm mt-2"
-                    @click="add()">
-                    {{ translate('Add phone') }}
-                </button>
-            </template>
-        </div>
-
-        <template x-for="[key, phone_number] of Object.entries(phoneNumbers)">
-            <input type="hidden" name="order.phone_numbers[]" class="" x-model="phoneNumbers[key]">
-        </template>
-
-
-        <x-system.invalid-msg field="order.phone_numbers" ></x-system.invalid-msg> --}}
     </div>
     <!-- END Phones -->
 
@@ -346,8 +331,8 @@ x-cloak
     <!-- Shipping -->
     <div class="shipping-info-section flex flex-wrap mt-3" :class="{'hidden': same_billing_shipping}" x-data="{
             clearErrors() {
-                $('.shipping-info-section .error-msg').remove();
-                $('.shipping-info-section .is-invalid').removeClass('is-invalid');
+                document.querySelectorAll('.shipping-info-section .error-msg').forEach(item => item.remove())
+                document.querySelectorAll('.shipping-info-section .is-invalid').forEach(item => item.classList.remove('is-invalid'));
             }
         }" @shipping-info-errors-clean.window="clearErrors()">
         <h4 class="text-14 font-semibold" >
@@ -518,8 +503,8 @@ x-cloak
 
     <div class="flex flex-wrap mt-3" x-data="{
             clearErrors() {
-                $('.payment-methods-details .error-msg').remove();
-                $('.payment-methods-details .is-invalid').removeClass('is-invalid');
+                document.querySelectorAll('.payment-methods-details .error-msg').forEach(item => item.remove())
+                document.querySelectorAll('.payment-methods-details .is-invalid').forEach(item => item.classList.remove('is-invalid'));
             }
         }">
         {{-- <h4 class="text-14 font-semibold" >

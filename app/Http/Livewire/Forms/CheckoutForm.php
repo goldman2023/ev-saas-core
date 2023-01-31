@@ -23,18 +23,22 @@ use Illuminate\Validation\Rule;
 use App\Enums\PaymentStatusEnum;
 use App\Traits\Livewire\RulesSets;
 use Illuminate\Support\Collection;
+use App\Traits\Livewire\HasCoreMeta;
 use Illuminate\Support\Facades\Hash;
 use App\Enums\ShippingStatusTypeEnum;
 use App\Models\PaymentMethodUniversal;
+use App\Traits\Livewire\HasAttributes;
 use LVR\CreditCard\CardExpirationDate;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Contracts\Support\Arrayable;
 use Spatie\ValidationRules\Rules\ModelsExist;
 
-class CheckoutSingleForm extends Component
+class CheckoutForm extends Component
 {
     use RulesSets;
     use DispatchSupport;
+    use HasCoreMeta;
+    use HasAttributes;
 
     public $items;
 
@@ -71,7 +75,7 @@ class CheckoutSingleForm extends Component
 
     public $account_password_confirmation;
 
-    protected $listeners = [];
+    protected $listeners = ['refreshCheckoutForm' => '$refresh'];
 
     protected function rulesSets()
     {
@@ -174,6 +178,18 @@ class CheckoutSingleForm extends Component
         ];
     }
 
+    public function getWEFRules() {
+        return apply_filters('checkout-form.rules.wef', [
+            'wef.billing_entity' => ['in:individual,company'],
+            'wef.billing_company_vat' => ['nullable'],
+            'wef.billing_company_code' => ['nullable'],
+        ]);
+    }
+
+    public function getWEFMessages() {
+        return [];
+    }
+
     /**
      * Create a new component instance.
      *
@@ -193,11 +209,22 @@ class CheckoutSingleForm extends Component
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
 
-        if (auth()->user()->id) {
+        $this->initCoreMeta($this->order);
+
+        if (auth()->user()?->id ?? false) {
             $this->order->email = auth()->user()->email;
             $this->order->billing_first_name = auth()->user()->name;
             $this->order->billing_last_name = auth()->user()?->name;
+
+            $this->wef['billing_entity'] = auth()->user()->entity;
+
+            if(auth()->user()->entity === 'company') {
+                $this->order->billing_company = auth()->user()->getUserMeta('company_name') ?? '';
+                $this->wef['billing_company_code'] = auth()->user()->getUserMeta('company_registration_number') ?? '';
+                $this->wef['billing_company_vat'] = auth()->user()->getUserMeta('company_vat') ?? '';
+            }
         }
+
 
         $this->cc_number = '';
         $this->cc_name = '';
@@ -234,7 +261,7 @@ class CheckoutSingleForm extends Component
 
     public function render()
     {
-        return view('livewire.forms.checkout-single-form');
+        return view('livewire.forms.checkout-form');
     }
 
     protected function getSpecificRules()
