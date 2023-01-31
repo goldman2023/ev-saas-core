@@ -82,42 +82,23 @@
                   @endif
                 </div>
               </div>
-
-              <div class="relative mt-4">
-                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                  <div class="w-full border-t border-gray-300"></div>
-                </div>
-                <div class="relative flex justify-center">
-                  <div class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    <span>{{ translate('Invoices') }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <livewire:dashboard.tables.recent-invoices-widget-table :order="$order"
-                        :show-per-page="false" :show-search="false" :column-select="false" :filters-enabled="false" :show-pagination="false" />
-
-              {{-- <div class="mt-6 sm:flex sm:justify-between">
-                <div class="flex items-center">
-                  <!-- Heroicon name: mini/check-circle -->
-                  <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-                  </svg>
-                  <p class="ml-2 text-sm font-medium text-gray-500">Delivered on <time datetime="2021-07-12">July 12, 2021</time></p>
-                </div>
-
-                <div class="mt-6 flex items-center space-x-4 divide-x divide-gray-200 border-t border-gray-200 pt-4 text-sm font-medium sm:mt-0 sm:ml-4 sm:border-none sm:pt-0">
-                  <div class="flex flex-1 justify-center">
-                    <a href="#" class="whitespace-nowrap text-indigo-600 hover:text-indigo-500">View product</a>
-                  </div>
-                  <div class="flex flex-1 justify-center pl-4">
-                    <a href="#" class="whitespace-nowrap text-indigo-600 hover:text-indigo-500">Buy again</a>
-                  </div>
-                </div>
-              </div> --}}
             </li>
           @endforeach
         </ul>
+
+        <div class="relative mt-4">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center">
+            <div class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              <span>{{ translate('Invoices') }}</span>
+            </div>
+          </div>
+        </div>
+
+        <livewire:dashboard.tables.recent-invoices-widget-table :order="$order"
+                        :show-per-page="false" :show-search="false" :column-select="false" :filters-enabled="false" :show-pagination="false" />
       </div>
     @endforeach
   @else

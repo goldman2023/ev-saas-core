@@ -406,6 +406,8 @@ class CheckoutController extends Controller
                 }
             }
 
+            do_action('checkout.flow.end', $order);
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
