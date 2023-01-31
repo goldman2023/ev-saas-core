@@ -1,6 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <nav class="bg-white border-b border-t border-gray-200 flex" aria-label="Breadcrumb">
-    <ol role="list" class="max-w-7xl w-full mr-auto px-4 flex space-x-4 sm:px-6 lg:px-8">
+    <ol role="list" class="container max-w-7xl w-full mr-auto px-4 flex space-x-4 sm:px-6 lg:px-8">
       <li class="flex">
         <div class="flex items-center">
           <a href="/products" class="text-gray-400 hover:text-gray-500">
