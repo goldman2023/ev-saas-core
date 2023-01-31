@@ -16,6 +16,9 @@ class PageController extends Controller
 
     public function show_custom_page(Request $request, $slug)
     {
+        if($slug == 'home') {
+            return redirect()->route('home');
+        }
         if(!$request->routeIs('custom-pages.show')) {
             return redirect()->route('custom-pages.show', $slug);
         }
