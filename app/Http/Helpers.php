@@ -1281,15 +1281,15 @@ if (!function_exists('static_asset')) {
 
         try {
             if ($cache_bust) {
-                $filemtime = filemtime(public_path('themes/' . Theme::parent() . '/' . $path));
+                $filemtime = filemtime(public_path('themes/' . Theme::active() . '/' . $path));
             }
         } catch (\Exception $e) {
         }
         if ($theme) {
             if (config('app.force_https')) {
-                return app('url')->asset('themes/' . Theme::parent() . '/' . $path, true) . ($cache_bust ? '?v=' . $filemtime : '');
+                return app('url')->asset('themes/' . Theme::active() . '/' . $path, true) . ($cache_bust ? '?v=' . $filemtime : '');
             } else {
-                return app('url')->asset('themes/' . Theme::parent() . '/' . $path, $secure) . ($cache_bust ? '?v=' . $filemtime : '');
+                return app('url')->asset('themes/' . Theme::active() . '/' . $path, $secure) . ($cache_bust ? '?v=' . $filemtime : '');
             }
         }
 
