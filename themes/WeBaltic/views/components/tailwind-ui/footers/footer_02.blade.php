@@ -4,7 +4,7 @@ $footer_menu_2 = nova_get_menu_by_slug('footer-2')['menuItems'] ?? null;
 $footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
 @endphp
 <footer class="bg-white dark:bg-gray-800">
-    <div class="p-4 py-6 mx-auto max-w-screen-xl md:p-8 lg:p-10">
+    <div class="py-6 mx-auto container md:p-6 lg:p-6">
         <div class="grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-5">
             <div>
                 <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
@@ -107,12 +107,12 @@ $footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
 
 
 
-            <div class="col-span-2">
+            <div class="col-span-2 text-right">
                 <h2 class="text-right mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
                     {{ get_site_name() }}
                 </h2>
                 <a href="/"
-                class="flex text-right justify-center items-center mb-5 text-2xl font-semibold text-gray-900 dark:text-white">
+                class="inline flex text-right justify-end items-center mb-5 text-2xl font-semibold text-gray-900 dark:text-white">
                 <img src="{{ get_site_logo() }}" class="inline max-w-[200px]" loading="lazy" alt="{{ get_site_name() }}" />
             </a>
 
