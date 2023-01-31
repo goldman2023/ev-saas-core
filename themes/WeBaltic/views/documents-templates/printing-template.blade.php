@@ -2,18 +2,16 @@
 
 @section('content')
 
-<div class="padding: 80px;">
-    <div style="-webkit-transform: rotate(-90deg);
-    -moz-transform: rotate(-90deg);
-    -o-transform: rotate(-90deg);
-    text-align: center;
-    -ms-transform: rotate(-90deg);
-    transform: rotate(-90deg);
-    transform: scale(0.6);
+<div class="padding-top: 40px;">
+    <div style="
+    transform: rotate(90deg) scale(0.6);
+    max-width: 700px;
     ">
     @foreach($orders as $order)
+    <div style="margin-bottom: 10px; ">
         <x-dashboard.orders.order-details-card :print="true" :order="$order">
         </x-dashboard.orders.order-details-card>
+    </div>
     @endforeach
     </div>
 </div>

@@ -2,7 +2,7 @@
 $header_menu = nova_get_menu_by_slug('header');
 $header_menu_items = $header_menu['menuItems'] ?? null;
 @endphp
-<header class="relative z-50 shadow-md sticky top-0" x-data="{
+<header class="relative z-[100] shadow-md sticky top-0" x-data="{
     show_mobile_menu: false,
 }">
     {{-- Header settings should include Background among other things + Sticky behavior (yes/no) --}}
@@ -18,9 +18,9 @@ $header_menu_items = $header_menu['menuItems'] ?? null;
                             <select id="desktop-currency" name="currency"
                                 class="flex items-center rounded-md border-transparent bg-gray-900 bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100">
 
-                                <option>LT</option>
+                                <option>LT 🇱🇹</option>
 
-                                <option>EN</option>
+                                <option>EN 🇬🇧</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
                                 <svg class="h-5 w-5 text-gray-300" x-description="Heroicon name: mini/chevron-down"
@@ -52,7 +52,7 @@ $header_menu_items = $header_menu['menuItems'] ?? null;
                 </div>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-5">
+        <div class="container mx-auto px-4 sm:px-5">
             <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <a href="{{ route('home') }}">

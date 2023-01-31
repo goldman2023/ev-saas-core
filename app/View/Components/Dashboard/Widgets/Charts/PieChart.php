@@ -8,12 +8,18 @@ use App\Models\User;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
 use Asantibanez\LivewireCharts\Models\PieChartModel;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Component;
 
 class PieChart extends Component
 {
     public $pieChartModel;
     public $lineChartModel;
+    public $activityChartModel;
+    public $userChartModel;
+    public $activityCount;
+    public $ordersCount;
+    public $newUserCount;
     /**
      * Create a new component instance.
      *
@@ -41,8 +47,20 @@ class PieChart extends Component
         $startDate = \Carbon::createFromFormat('Y-m-d', '2022-01-01');
         $endDate = \Carbon::createFromFormat('Y-m-d', '2023-01-30');
 
-        $data = Order::whereBetween('created_at', [$startDate, $endDate])
-            ->select(\DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), \DB::raw('count(*) as orders'))
+        $data = Cache::remember('dashboard_orders_stats', 600, function () use ($startDate, $endDate) {
+            return Order::whereBetween('created_at', [$startDate, $endDate])
+            ->select(\DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), \DB::raw('count(*) as orders, DATE_FORMAT(created_at, "%Y-%m-%d") as order_date'))
+            ->groupBy('DATE_FORMAT(created_at, "%Y-%m-%d")')
+            ->get();
+        });
+
+        $dataActivity = Activity::whereBetween('created_at', [$startDate, $endDate])
+            ->select(\DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), \DB::raw('count(*) as orders, DATE_FORMAT(created_at, "%Y-%m-%d") as activity_date'))
+            ->groupBy('DATE_FORMAT(created_at, "%Y-%m-%d")')
+            ->get();
+
+        $dataUsers = User::whereBetween('created_at', [$startDate, $endDate])
+            ->select(\DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d")'), \DB::raw('count(*) as orders, DATE_FORMAT(created_at, "%Y-%m-%d") as user_date'))
             ->groupBy('DATE_FORMAT(created_at, "%Y-%m-%d")')
             ->get();
 
@@ -51,18 +69,42 @@ class PieChart extends Component
 
 
         $lineChartModel = (new LineChartModel());
+        // $lineChartModel->setColors(['#8bc43e']);
+        // $lineChartModel->setSmoothCurve();
         $total = 0;
         $lineChartModel->addPoint(0, 0);
 
-        foreach($data as $key => $item) {
+        foreach ($data as $key => $item) {
             $total = $item->orders;
-            $lineChartModel->addPoint($key, $total);
+            $lineChartModel->addPoint($item->order_date, $total);
         }
         // $lineChartModel->addPoint(7, 10);
         // $lineChartModel->addPoint(8, 20);
         // $lineChartModel->addPoint(9, 30);
 
         $this->lineChartModel = $lineChartModel;
+
+        $this->activityChartModel = (new LineChartModel());
+        $this->activityChartModel->setSmoothCurve();
+        $total = 0;
+
+        foreach ($dataActivity as $key => $item) {
+            $total += $item->orders;
+            $this->activityChartModel->addPoint($item->activity_date, $total);
+        }
+
+        $this->newUserCount = $dataUsers->count();
+
+        $this->userChartModel = (new LineChartModel());
+        $total = 0;
+
+        foreach ($dataUsers as $key => $item) {
+            $total = $item->orders;
+            $this->userChartModel->addPoint($item->user_date, $total);
+        }
+
+        $this->activityCount = $dataActivity->count();
+        $this->ordersCount = $data->count();
     }
 
     /**

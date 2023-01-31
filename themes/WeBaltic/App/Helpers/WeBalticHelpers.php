@@ -8,8 +8,8 @@ function get_attribute_value_wefs_by_attribute($attribute = null) {
     if(empty($attribute)) return [];
 
     return match ($attribute->slug) {
-        // Define wefs for attributes b specifying attribute-slug as key and wanted wefs 
-        // 'attribute-dropdown-1' => array_intersect_key(WEF::getWEFDataTypes(AttributeValue::class), array_flip(['test1', 'test2'])),
+        // Define wefs for attributes b specifying attribute-slug as key and wanted wefs
+        'sertifikato-numeris' => array_intersect_key(WEF::getWEFDataTypes(AttributeValue::class), array_flip(['svoris', 'variantas', 'modifikacija', 'kebulo_kodas'])),
         // Attribute WEFs are taken from ThemeFunctionServiceProvider of a current theme -> hook is: `add_filter('attribute_values.wef.data-types')`
         default => []
     };

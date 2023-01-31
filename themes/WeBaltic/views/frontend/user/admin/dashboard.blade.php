@@ -9,14 +9,16 @@
                 <x-dashboard.widgets.business.dynamic-k-p-i></x-dashboard.widgets.business.dynamic-k-p-i>
             </div>
 
-
         </div>
 
 
         <div class="sm:grid sm:grid-cols-3 gap-8">
 
             <div class="sm:col-span-2">
-                <div class="mb-6">
+                <x-dashboard.widgets.charts.pie-chart>
+                </x-dashboard.widgets.charts.pie-chart>
+
+                <div class="mb-6 mt-6">
                     <h3 class="font-medium mb-3 sm:hidden">
                         {{ translate('Quick actions') }}
                     </h3>
@@ -30,8 +32,7 @@
                     </div>
 
                     <div>
-                    <x-dashboard.widgets.charts.pie-chart>
-                    </x-dashboard.widgets.charts.pie-chart>
+
                     </div>
                 </div>
             </div>

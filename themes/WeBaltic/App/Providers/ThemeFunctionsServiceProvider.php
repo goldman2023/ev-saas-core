@@ -162,13 +162,16 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // AttributeValue: WEF data types
             add_filter('attribute_values.wef.data-types', function ($data_types) {
                 return array_merge($data_types, [
-
+                    'svoris' => 'string',
+                    'variantas' => 'string',
+                    'kebulo_kodas' => 'string',
+                    'modifikacija' => 'string',
                 ]);
             }, 10, 1);
 
             // Dynamic Livewire Actions - TODO: // Move this to dedicated file and include it via calling a function from WeThemeFunctionsServiceProvider - it needs to be standardized
             add_filter('livewire.forms.dynamic-actions.list', function () {
-                return define_livewire_dynamic_actions(); 
+                return define_livewire_dynamic_actions();
             });
         }
 
@@ -178,10 +181,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 $order->setWEF('cycle_step_date_request', time());
 
                 baltic_generate_order_document(
-                    order: $order, 
-                    template: 'documents-templates.proposal', 
-                    upload_tag: 'proposal', 
-                    display_name: translate('Proposal for Order #').$order->id, 
+                    order: $order,
+                    template: 'documents-templates.proposal',
+                    upload_tag: 'proposal',
+                    display_name: translate('Proposal for Order #').$order->id,
                     data: ['user' => $order->user]
                 );
             }, 10, 1);
@@ -191,10 +194,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 $order->setWEF('cycle_step_date_request', time());
 
                 baltic_generate_order_document(
-                    order: $order, 
-                    template: 'documents-templates.proposal', 
-                    upload_tag: 'proposal', 
-                    display_name: translate('Proposal for Order #').$order->id, 
+                    order: $order,
+                    template: 'documents-templates.proposal',
+                    upload_tag: 'proposal',
+                    display_name: translate('Proposal for Order #').$order->id,
                     data: ['user' => $order->user]
                 );
             }, 10, 1);

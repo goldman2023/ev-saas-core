@@ -1,13 +1,15 @@
 <div class="flex">
-    <label for="desktop-currency" class="sr-only">Currency</label>
+    <label for="desktop-currency" class="sr-only">
+        {{ translate('Language') }}
+    </label>
     <div
         class="group relative -ml-2 rounded-md border-transparent bg-gray-600 focus-within:ring-2 focus-within:ring-white">
-        <select id="desktop-currency" name="currency"
+        <select id="desktop-currency" name="language"
             class="flex items-center rounded-md border-transparent bg-gray-600 bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100">
 
-            <option>EN</option>
+            <option>EN 🇬🇧</option>
 
-            <option>LT</option>
+            <option>LT 🇱🇹</option>
         </select>
         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center">
             <svg class="h-5 w-5 text-gray-300" x-description="Heroicon name: mini/chevron-down"
