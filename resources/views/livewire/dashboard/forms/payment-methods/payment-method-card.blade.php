@@ -561,29 +561,54 @@
 
         @elseif($paymentMethod->gateway === 'paysera')
             {{-- PAYSERA --}}
-
-            {{-- <span class="divider divider-text pt-3 pb-5">{{ translate('Paysera details:') }}</span>
-
-            <div class="row">
-                <div class="col-12">
-                    <x-ev.form.input name="paymentMethod.paysera_project_id" :required="true" type="text" label="{{ translate('Paysera Project ID') }}">
-                        <small class="text-muted">{{ translate('Type your Paysera project ID (projectid)') }}</small>
-                    </x-ev.form.input>
+            <div class="w-full mt-6">        
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-gray-400"></div>
+                      </div>
+                      <div class="relative flex justify-start">
+                        <span class="pr-3 bg-white text-lg font-medium text-gray-900 border rounded-lg border-gray-400 px-3">
+                            {{ translate('Paysera API settings') }}:
+                        </span>
+                    </div>
                 </div>
-                <div class="col-12">
-                    <x-ev.form.input name="paymentMethod.paysera_project_password" :required="true" type="text" label="{{ translate('Paysera Project Password') }}">
-                        <small class="text-muted">{{ translate('Type your Paysera project password (sign_password)') }}</small>
-                    </x-ev.form.input>
+                
+                <div class="w-full mt-6 ">
+                    <!-- Paysera Project ID  -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Paysera Project ID') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.paysera_project_id" :required="true"/>
+                        </div>
+                    </div>
+                    <!-- END Paysera Project ID -->
+
+                    <!-- Paysera Project Password -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Paysera Project Password/Secret') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.paysera_project_password" :required="true"/>
+                        </div>
+                    </div>
+                    <!-- END Paysera Project Password -->
                 </div>
 
-                <div class="col-12 d-flex">
-                    <button type="button" class="btn btn-primary ml-auto"
-                            @click="$wire.save()">
-                        {{ translate('Save') }}
+                {{-- Save Paysera --}}
+                <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                    <button type="button" class="btn btn-primary ml-auto btn-sm"
+                        @click=""
+                        wire:click="save()">
+                    {{ translate('Save') }}
                     </button>
                 </div>
-            </div> --}}
-
+                {{-- END Save Paysera --}}
+            </div>
             {{-- END PAYSERA --}}
         @endif
     </div>

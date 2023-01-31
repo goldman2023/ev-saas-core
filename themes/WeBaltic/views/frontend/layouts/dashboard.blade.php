@@ -84,6 +84,34 @@
     <livewire:modals.delete-modal />
     <x-system.validation-errors-toast timeout="5000"></x-system.validation-errors-toast>
 
+    @if(\Payments::getPaymentMethodsForSelect()->isNotEmpty())
+        <x-system.form-modal id="invoice-payment-options-modal" title="{{ translate('Choose payment option') }}" class="!max-w-lg">
+            <div class="py-1 grid grid-cols-3 gap-x-3" x-data="{
+                invoice_id: null,
+            }" @display-modal.window="
+                if($event.detail.id === id) {
+                    invoice_id = $event.detail.invoice_id;
+                }
+            ">
+                @foreach(\Payments::getPaymentMethodsForSelect() as $gateway => $label)
+                    <a :href="'{{ route('checkout.execute.custom.payment', ['invoice_id' => '%d', 'payment_gateway' => $gateway]) }}'.replace('%d', invoice_id)" 
+                        target="_blank" class="col-span-1 p-4 flex flex-col items-center justify-center gap-y-2 rounded-lg border border-gray-200">
+
+                        @if($gateway == 'wire_transfer')
+                            <img src="{{ static_asset('images/wire-transfer.svg', theme: true) }}" class="w-full" />
+
+                        @elseif($gateway === 'paysera')
+                            <img src="{{ static_asset('images/paysera.svg', theme: true) }}" class="w-full" />
+                        @endif
+
+                        <span>{{ $label }}</span>
+                    </a>
+                @endforeach
+            </div>
+        </x-system.form-modal>
+    @endif
+   
+
     @stack('modal')
 
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
