@@ -226,11 +226,11 @@ x-cloak>
                                             <input type="number" min="0" x-model="item.qty" class="form-standard max-w-[90px]" />
                                         </div>
 
-                                        <template x-if="_.get(item, 'subject_id', null) === null && _.get(item, 'subject_type', null) === null">
-                                            <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal', 'order_item_index': index })" >
-                                                {{ translate('Edit') }}
-                                            </button>
-                                        </template>
+                                        {{-- <template x-if="_.get(item, 'subject_id', null) === null && _.get(item, 'subject_type', null) === null"> --}}
+                                        <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-editor-modal', 'order_item_index': index })" >
+                                            {{ translate('Edit') }}
+                                        </button>
+                                        {{-- </template> --}}
 
                                         <div class="flex-shrink-0 flex items-center " @click="order_items.splice(index, 1);">
                                             @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
@@ -291,7 +291,7 @@ x-cloak>
                                         subtotal_price: 0,
                                         total_price: 0,
                                         custom_attributes: @js($custom_attributes),
-                                        selected_attribute_values: @js($selected_predefined_attribute_values),
+                                        selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
                                     },
                                     getCurrentContentTypeOptions() {
                                         return this.available_content_types.find(item => item.slug === this.content_type);
@@ -360,6 +360,8 @@ x-cloak>
                                                 total_price: item.unit_price * 1,
                                                 tax: 0,
                                                 thumbnail: item.thumbnail?.file_name,
+                                                custom_attributes: item.custom_attributes,
+                                                selected_predefined_attribute_values: item.selected_predefined_attribute_values,
                                             });
                                         }
                                     },
@@ -430,8 +432,22 @@ x-cloak>
                                 </div>
 
                                 <template x-if="content_type == 'product' || content_type == 'product_addon'">
+                                    <div class="mt-4">
+                                        {{-- Products --}}
+                                        <x-dashboard.form.blocks.model-selection-form
+                                            :inline="true"
+                                            :hide-reset="true"
+                                            model-class="{{ \App\Models\Product::class }}"
+                                            api-route="{{ route('api.dashboard.products.search') }}"
+                                            custom-select-logic="select(item);"
+                                            custom-deselect-logic=""
+                                        ></x-dashboard.form.blocks.model-selection-form>
+                                        {{-- END Products --}}
+                                    </div>
+                                    
+                                
                                     <div class="w-full pt-3 mt-5 border-t">
-                                        <div class="w-full pb-3 mb-3">
+                                        {{-- <div class="w-full pb-3 mb-3">
                                             <label for="search" class="block text-sm font-medium text-gray-700">{{ translate('Search') }}</label>
                                             <div class="relative mt-1 flex items-center">
                                                 <input type="text"class="form-standard pr-12" x-model="q">
@@ -442,7 +458,7 @@ x-cloak>
                                                     </kbd>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <template x-if="results">
                                             <div class="w-full mt-3">
@@ -468,10 +484,6 @@ x-cloak>
                                                 </ul>
                                             </div>
                                         </template>
-
-                                        {{-- <template x-if="!results">
-
-                                        </template> --}}
                                     </div>
                                 </template>
 
@@ -534,7 +546,7 @@ x-cloak>
                                                 <x-dashboard.form.blocks.attributes-selection-form
                                                     form-id="custom-order-item-form"
                                                     attributes-field="custom_order_item.custom_attributes"
-                                                    selected-attributes-field="custom_order_item.selected_attribute_values"
+                                                    selected-attributes-field="custom_order_item.selected_predefined_attribute_values"
                                                     :no-variations="true">
 
                                                 </x-dashboard.form.blocks.attributes-selection-form>
@@ -548,10 +560,154 @@ x-cloak>
                                         </div>
                                     </div>
                                 </template>
-
                             </div>
                         </x-system.form-modal>
                         {{-- END OrderItem selector modal --}}
+
+                        {{-- OrderItem editor modal --}}
+                        <x-system.form-modal id="order-item-editor-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
+                            <div class="w-full flex flex-col" x-data="{
+                                    order_item_index: null,
+                                    order_item: {
+                                        id: null,
+                                        subject_id: '',
+                                        subject_type: '',
+                                        name: '',
+                                        excerpt: '',
+                                        qty: 1,
+                                        unit_price: 0,
+                                        base_price: 0,
+                                        subtotal_price: 0,
+                                        total_price: 0,
+                                        custom_attributes: @js($custom_attributes),
+                                        selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
+                                    },
+                                    reset() {
+                                        this.order_item_index = null;
+
+                                        this.order_item.id = null;
+                                        this.order_item.subject_id = '';
+                                        this.order_item.subject_type = '';
+                                        this.order_item.name = '';
+                                        this.order_item.excerpt = '';
+                                        this.order_item.qty = 1;
+                                        this.order_item.unit_price = 0;
+                                        this.order_item.base_price = 0;
+                                        this.order_item.subtotal_price = 0;
+                                        this.order_item.total_price = 0;
+
+                                        {{-- Send event to reset attributes form --}}
+                                        $dispatch('reset-attributes-form', {form_id: 'order-item-attributes-form'});
+                                    },
+                                    setOrderItem(order_item_index) {
+                                        this.order_item_index = order_item_index;
+
+                                        modal_title = '{{ translate('Edit Order item') }}';
+
+                                        let order_item_copy = order_items[order_item_index];
+
+                                        if(order_item_copy !== undefined) {
+                                            this.order_item = deep_copy(order_item_copy);
+                                        }
+                                    },
+                                    saveOrderItem(order_item_index = null) {
+                                        this.order_item.base_price = Number(this.order_item.unit_price);
+                                        this.order_item.subtotal_price = Number(this.order_item.qty) * this.order_item.unit_price;
+                                        this.order_item.total_price = Number(this.order_item.qty) * this.order_item.unit_price;
+
+                                        {{-- Cuz order_item_index can be 0 -_- --}}
+                                        if(order_item_index !== null) {
+                                            order_items[order_item_index] = deep_copy(this.order_item);
+                                        } else {
+                                            order_items.push(deep_copy(this.order_item));
+                                        }
+
+                                        this.reset();
+                                        show = false;
+                                    },
+                                }"
+                                @display-modal.window="
+                                    if($event.detail.id === id && _.get($event, 'detail.order_item_index', null) !== null ) {
+                                        setOrderItem(Number($event.detail.order_item_index));
+                                    }
+                                "
+                                wire:ignore
+                            >
+                                <div class="w-full">
+                                    <div class="grid grid-cols-12 gap-x-3">
+                                        <div class="col-span-12 flex-col gap-y-2">
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                {{ translate('Name') }}
+                                            </label>
+
+                                            <div class="w-full ">
+                                                <input type="text" class="form-standard" x-model="order_item.name">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-span-12 flex-col gap-y-2">
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                {{ translate('Description') }}
+                                            </label>
+
+                                            <div class="w-full ">
+                                                <input type="text" class="form-standard  " x-model="order_item.excerpt" >
+                                            </div>
+                                        </div>
+
+                                        <div class="col-span-8 flex-col gap-y-2">
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                {{ translate('Unit Price') }}
+                                            </label>
+
+                                            <div class="w-full ">
+                                                <input type="number" class="form-standard  " x-model="order_item.unit_price">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-span-4 flex-col gap-y-2">
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                                {{ translate('Quantity') }}
+                                            </label>
+
+                                            <div class="w-full ">
+                                                <input type="number" class="form-standard  " x-model="order_item.qty">
+                                            </div>
+                                        </div>
+
+                                        {{-- Attributes Divider --}}
+                                        <div class="col-span-12 relative py-5">
+                                            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                                <div class="w-full border-t border-gray-300"></div>
+                                            </div>
+                                            <div class="relative flex justify-center">
+                                                <button type="button" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
+                                                    <span>{{ translate('Attributes') }}</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-span-12 ">
+                                            <x-dashboard.form.blocks.attributes-selection-form
+                                                form-id="order-item-attributes-form"
+                                                attributes-field="order_item.custom_attributes"
+                                                selected-attributes-field="order_item.selected_predefined_attribute_values"
+                                                :no-variations="true">
+
+                                            </x-dashboard.form.blocks.attributes-selection-form>
+                                        </div>
+
+                                        <div class="col-span-12 flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2">
+                                            <button type="button" class="btn btn-primary ml-auto btn-sm" @click="saveOrderItem(order_item_index)" >
+                                                {{ translate('Save') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </x-system.form-modal>
+                        {{-- END OrderItem editor modal --}}
+
 
                     </div>
                 </div>

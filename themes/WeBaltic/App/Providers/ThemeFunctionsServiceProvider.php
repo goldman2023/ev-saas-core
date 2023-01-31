@@ -164,6 +164,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return array_merge($data_types, [
                     'svoris' => 'string',
                     'variantas' => 'string',
+                    'kebulo_kodas' => 'string',
                     'modifikacija' => 'string',
                 ]);
             }, 10, 1);
