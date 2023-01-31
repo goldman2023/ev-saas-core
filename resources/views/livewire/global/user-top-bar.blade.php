@@ -90,12 +90,24 @@
             <a href="{{ route('my.account.shops') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
                 tabindex="-1" id="user-menu-item-6">
                 @if(auth()->user()->isCustomer())
-                    {{ translate('Create new shop') }}
+                {{ translate('Create new shop') }}
                 @else
-                    {{ translate('My Shops') }}
+                {{ translate('My Shops') }}
                 @endif
             </a>
             @endif
+
+            <a href="{{ route('my.orders.all') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                tabindex="-1" id="user-menu-item-1">
+                {{ translate('Orders') }} ({{ auth()->user()->orders->count() }})
+            </a>
+
+            <a href="{{ route('my.invoices.all') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                tabindex="-1" id="user-menu-item-1">
+                {{ translate('Invoices') }} ({{ auth()->user()->invoices->count() }})
+            </a>
+
+
 
             <a href="{{ route('my.account.settings') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
                 tabindex="-1" id="user-menu-item-1">
