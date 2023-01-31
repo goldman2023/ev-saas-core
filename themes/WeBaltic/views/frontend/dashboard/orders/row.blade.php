@@ -19,15 +19,20 @@
             href="{{ route('order.details', ['id' => $row->id]) }}">
 
             @isset($row->get_primary_order_item()->subject)
-                <img src="{{ $row->get_primary_order_item()->subject->getThumbnail() }}" class="w-[75px] h-auto rounded mr-2"
-                    width="50" height="50" alt="" />
+            <img src="{{ $row->get_primary_order_item()->subject->getThumbnail() }}"
+                class="w-[75px] h-auto rounded mr-2" width="50" height="50" alt="" />
+            <strong class="text-md">
+
+                {{ $row->get_primary_order_item()->name }}
+                <span class="font-normal"> <br> {{ translate('Order') }} #{{ $row->id }} </span>
+            </strong>
             @elseif(!empty($row->get_primary_order_item()))
-                <strong class="text-md">
-                    {{ $row->get_primary_order_item()->name }}
-                    <span class="font-normal"> <br> {{ translate('Order') }} #{{ $row->id }} </span>
-                </strong>
+            <strong class="text-md">
+                {{ $row->get_primary_order_item()->name }}
+                <span class="font-normal"> <br> {{ translate('Order') }} #{{ $row->id }} </span>
+            </strong>
             @else
-                {{ translate('No items...') }}
+            {{ translate('No items...') }}
             @endisset
         </a>
     </div>
@@ -36,10 +41,11 @@
 <x-livewire-tables::table.cell class="min-h-[100px] align-middle max-w-[300px]">
     @isset($row->user)
     <div class="py-2">
-        <a class="align-items-center text-14 line-clamp-1 overflow-hidden" href="{{ route('user.details', ['id' => $row->user->id]) }}">
-            <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong>
+        <a class="align-items-center text-14 line-clamp-1 overflow-hidden"
+            href="{{ route('user.details', ['id' => $row->user->id]) }}">
+            <strong class="font-medium"> {{ $row->user->name }} {{ $row->user->surname }} </strong>
         </a>
-            {{ $row->user->email }}
+        {{ $row->user->email }}
     </div>
     @endisset
 </x-livewire-tables::table.cell>

@@ -10,8 +10,17 @@ use Spatie\Activitylog\Models\Activity;
 class FeedController extends Controller
 {
     //
+    public function __construct()
+    {
+
+    }
     public function index()
     {
+        $this->middleware('auth');
+        if(get_tenant_setting('feed_enabled', true)) {
+            return route('home');
+        }
+
         $type = "index";
 
         return view('frontend.feed.index');

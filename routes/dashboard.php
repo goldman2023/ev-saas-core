@@ -140,10 +140,11 @@ Route::middleware([
         Route::group([], base_path('routes/dashboard/tasks-group.php'));
 
 
-        /* My Purchases/Wishlist/Viewed Items */
+        /* My Purchases/Wishlist/Viewed Items/Orders/Invoices */
         Route::get('/my/purchases/all', [OrderController::class, 'my_purchases'])->name('my.purchases.index');
         Route::get('/my/wishlist/all', [OrderController::class, 'my_purchases'])->name('my.wishlist.index');
         Route::get('/my/orders/all', [OrderController::class, 'my_orders'])->name('my.orders.all');
+        Route::get('/my/invoices/all', [OrderController::class, 'my_invoices'])->name('my.invoices.all');
 
         /* My Downloads (all) */
         Route::get('/downloads/all', [EVDownloadsController::class, 'my_downloads'])->name('my.downloads.all');
@@ -172,10 +173,13 @@ Route::middleware([
         Route::get('/plans-management/add-seats', [EVPlanController::class, 'add_seats'])->name('subscriptions.create');
 
         // Payment Methods callback routes
+        Route::post('/checkout/execute/payment/{invoice_id}', [CheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
+        Route::get('/checkout/execute/payment/{invoice_id}/{payment_gateway}', [CheckoutController::class, 'executePayment'])->name('checkout.execute.custom.payment');
+        Route::post('/checkout/execute/payment/{invoice_id}/{payment_gateway}', [CheckoutController::class, 'executePayment'])->name('checkout.execute.custom.payment.post');
+
         Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
         Route::get('/checkout/paysera/canceled/{invoice_id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
         Route::get('/checkout/paysera/callback/{invoice_id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
-        Route::post('/checkout/execute/payment/{invoice_id}', [CheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
 
         // WeMediaLibrary
         Route::post('/froala/upload-image', [WeMediaController::class, 'froalaImageUpload'])->name('we-media-library.froala.upload-image');
@@ -249,7 +253,7 @@ Route::middleware([
 
     /* IMPORTANT: Last set of routes! To define missing pages and routes */
     /* Catch All Routes: If nothing is matched, try to find a page or throw 404 */
-    Route::get('/{data1}', [PageController::class, 'show_custom_page']);
+    Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
     Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 
     Route::fallback(function () {

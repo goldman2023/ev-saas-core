@@ -8,8 +8,8 @@ function get_attribute_value_wefs_by_attribute($attribute = null) {
     if(empty($attribute)) return [];
 
     return match ($attribute->slug) {
-        // Define wefs for attributes b specifying attribute-slug as key and wanted wefs 
-        // 'attribute-dropdown-1' => array_intersect_key(WEF::getWEFDataTypes(AttributeValue::class), array_flip(['test1', 'test2'])),
+        // Define wefs for attributes b specifying attribute-slug as key and wanted wefs
+        'sertifikato-numeris' => array_intersect_key(WEF::getWEFDataTypes(AttributeValue::class), array_flip(['svoris', 'variantas', 'modifikacija'])),
         // Attribute WEFs are taken from ThemeFunctionServiceProvider of a current theme -> hook is: `add_filter('attribute_values.wef.data-types')`
         default => []
     };
@@ -252,4 +252,25 @@ function generate_certificate_number($certificate) {
 
 function generate_axle_permissable_mass() {
 
+}
+
+function get_customer_visible_documents_tags() {
+    return ['proposal', 'contract', 'certificate'];
+}
+
+function get_order_cycle_status_color($cycle_status) {
+    switch($cycle_status) {
+        case 0:
+            return 'badge-danger';
+        case 1:
+            return 'badge-warning';
+        case 2:
+            return 'badge-info';
+        case 10:
+            return 'badge-success';
+        case 11:
+            return 'badge-success';
+        default:
+            return 'badge-dark';
+    }
 }

@@ -21,7 +21,7 @@
 <script src="/bp-assets/grapesjs-custom-code.min.js">
     <link href="https://unpkg.com/grapesjs-component-code-editor/dist/grapesjs-component-code-editor.min.css" rel="stylesheet">
 <script src="https://unpkg.com/grapesjs-component-code-editor"></script>
-</script>
+<script src="https://unpkg.com/grapesjs-tailwind"></script>
 
 @endpush
 
@@ -47,7 +47,7 @@
 </form>
 
 <script>
-    const escapeName = (name) => `${name}`.trim().replace(/([^a-z0-9\w-:/]+)/gi, '-');
+    const escapeName = (name) => `${name}`;
 
     document.addEventListener('alpine:init', () => {
       Alpine.data('grapeEditor', () => ({
@@ -69,7 +69,7 @@
                 container: '#gjs',
                 height: '90%',
                 selectorManager: { escapeName },
-                plugins: ['gjs-blocks-basic', 'grapesjs-preset-webpage', 'grapesjs-component-code-editor'],
+                plugins: ['gjs-blocks-basic', 'grapesjs-preset-webpage', 'grapesjs-component-code-editor', 'grapesjs-tailwind'],
                 pluginsOpts: {
                     'grapesjs-custom-code': {
 

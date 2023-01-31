@@ -6,14 +6,18 @@ use Illuminate\View\Component;
 
 class SupportCard extends Component
 {
+    public $user;
+    public $class;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user = null, $class = '')
     {
-        //
+        $this->user = $user;
+        $this->class = $class;
     }
 
     /**

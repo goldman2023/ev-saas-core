@@ -89,6 +89,7 @@ class AppSettingsForm extends Component
                 'settings.chat_feature' => ['boolean'],
                 'settings.addresses_feature' => ['boolean'],
                 'settings.notifications_feature' => ['boolean'],
+                'settings.breadcrumbs_feature' => ['boolean'],
                 'settings.weedit_feature' => ['boolean'],
                 'settings.wishlist_feature' => ['boolean'],
                 'settings.vendor_mode_feature' => ['boolean'],

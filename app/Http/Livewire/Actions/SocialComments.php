@@ -13,7 +13,7 @@ class SocialComments extends Component
     use WithCursorPagination;
 
     public $postId;
-
+    
     public $username;
 
     public $comments; // Comments
@@ -25,6 +25,8 @@ class SocialComments extends Component
     public $item; // Activity
 
     public $include_reviews;
+
+    public $class;
 
     protected $rules = [
         'comment_text' => 'required',

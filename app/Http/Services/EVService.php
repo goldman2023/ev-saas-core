@@ -406,9 +406,7 @@ class EVService
                     ],
                 ],
             ],
-
-
-
+            // Customer Zone
             [
                 'label' => translate('Customer zone'),
                 'items' => apply_filters('dashboard.sidebar.customer-zone.items', [
@@ -432,15 +430,23 @@ class EVService
                         'permissions' => [],
                     ],
                     [
-                        'label' => translate('Invoices'),
-                        'icon' => 'heroicon-o-document-text',
+                        'label' => translate('Orders'),
+                        'icon' => 'heroicon-o-shopping-cart',
                         'route' => route('my.orders.all'),
                         'route_name' => 'my.orders.all',
                         'is_active' => areActiveRoutes(['my.orders.all']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
                     ],
-
+                    [
+                        'label' => translate('Invoices'),
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('my.invoices.all'),
+                        'route_name' => 'my.invoices.all',
+                        'is_active' => areActiveRoutes(['my.invoices.all']),
+                        'user_types' => User::$user_types,
+                        'permissions' => [],
+                    ],
                     [
                         'label' => translate('My Account'),
                         'icon' => 'heroicon-o-user',

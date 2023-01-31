@@ -74,6 +74,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         Livewire::component('dashboard.tables.tabs.tabs-header', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\Tabs\TabsHeader::class);
         Livewire::component('dashboard.tables.orders-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\OrdersTable::class);
         Livewire::component('dashboard.tables.tasks-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\TasksTable::class);
+        Livewire::component('dashboard.tables.recent-invoices-widget-table', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\RecentInvoicesWidgetTable::class);
         Livewire::component('dashboard.tables.action-panels.orders-action-panel', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels\OrdersActionPanel::class);
         Livewire::component('dashboard.tables.action-panels.tasks-action-panel', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables\ActionPanels\TasksActionPanel::class);
 
@@ -109,12 +110,12 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'crm.all_customers',
                     'my.account.settings',
                     'my.orders.all',
+                    'my.invoices.all',
                     'settings.staff_settings',
                     'settings.app_settings',
                     'settings.super_admin',
                     'we-edit.index'
                 ];
-
 
                 /* TODO: Use this approach for overiding child themes, menu */
                 foreach ($menu as $menuKey => $items) {
@@ -161,13 +162,15 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // AttributeValue: WEF data types
             add_filter('attribute_values.wef.data-types', function ($data_types) {
                 return array_merge($data_types, [
-
+                    'svoris' => 'string',
+                    'variantas' => 'string',
+                    'modifikacija' => 'string',
                 ]);
             }, 10, 1);
 
             // Dynamic Livewire Actions - TODO: // Move this to dedicated file and include it via calling a function from WeThemeFunctionsServiceProvider - it needs to be standardized
             add_filter('livewire.forms.dynamic-actions.list', function () {
-                return define_livewire_dynamic_actions(); 
+                return define_livewire_dynamic_actions();
             });
         }
 
@@ -177,10 +180,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 $order->setWEF('cycle_step_date_request', time());
 
                 baltic_generate_order_document(
-                    order: $order, 
-                    template: 'documents-templates.proposal', 
-                    upload_tag: 'proposal', 
-                    display_name: translate('Proposal for Order #').$order->id, 
+                    order: $order,
+                    template: 'documents-templates.proposal',
+                    upload_tag: 'proposal',
+                    display_name: translate('Proposal for Order #').$order->id,
                     data: ['user' => $order->user]
                 );
             }, 10, 1);
@@ -190,10 +193,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 $order->setWEF('cycle_step_date_request', time());
 
                 baltic_generate_order_document(
-                    order: $order, 
-                    template: 'documents-templates.proposal', 
-                    upload_tag: 'proposal', 
-                    display_name: translate('Proposal for Order #').$order->id, 
+                    order: $order,
+                    template: 'documents-templates.proposal',
+                    upload_tag: 'proposal',
+                    display_name: translate('Proposal for Order #').$order->id,
                     data: ['user' => $order->user]
                 );
             }, 10, 1);

@@ -53,8 +53,12 @@ trait CoreMetaTrait
         }
     }
 
-    public function getWEF($key, $fresh = false, $ad_hoc_data_type = null) {
-        return $this->getCoreMeta($key, $fresh, $ad_hoc_data_type);
+    public function getWEF($key, $fresh = false, $ad_hoc_data_type = null, $default = null) {
+        if(!empty($meta = $this->getCoreMeta($key, $fresh, $ad_hoc_data_type))) {
+            return $meta;
+        }
+        
+        return $default;
     }
 
     public function get_wef($key, $fresh = false, $ad_hoc_data_type = null) {

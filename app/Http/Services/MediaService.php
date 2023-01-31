@@ -349,16 +349,18 @@ class MediaService
         $upload->file_original_name = $new_file_original_name;
 
         if(empty($file_display_name)) {
+            $upload->file_original_name = '';
+
             $arr = explode('.', $new_file_original_name);
             for ($i = 0; $i < count($arr) - 1; $i++) {
                 if ($i == 0) {
                     $upload->file_original_name .= $arr[$i];
-                } else {
+                } else if(count($arr) - 1 !== $i) {
                     $upload->file_original_name .= '.'.$arr[$i];
                 }
             }
         }
-        
+
         $upload->save();
         
         // Save Relationship between $model and $upload to DB 

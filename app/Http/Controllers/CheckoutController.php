@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusEnum;
@@ -484,15 +485,34 @@ class CheckoutController extends Controller
         return view('frontend.order-canceled', compact('order'));
     }
 
-    public function executePayment(Request $request, $invoice_id)
+    public function executePayment(Request $request, $invoice_id, $payment_gateway = null)
     {
-        $invoice = Invoice::with('payment_method')->find($invoice_id);
+        try {
+            $invoice = Invoice::with('payment_method')->findOrFail($invoice_id);
 
-        if ($invoice->payment_method->gateway === 'wire_transfer') {
-            // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
-        } elseif ($invoice->payment_method->gateway === 'paysera') {
-            $paysera = new PayseraGateway(order: $invoice->order, invoice: $invoice, payment_method: $invoice->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
-            $paysera->pay();
+            if(empty($payment_gateway)) {
+                $payment_gateway = $invoice->payment_method->gateway;
+            }
+
+            if(!\Payments::getPaymentMethodsGateway()->contains($payment_gateway)) {
+                throw new \Exception('Payment gateway: '.$payment_gateway.'; not enabled or does not exist in PaymentsService');
+            }
+
+            if ($payment_gateway === 'wire_transfer') {
+                // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
+            } elseif ($payment_gateway === 'paysera') {
+                $paysera = new PayseraGateway(
+                    order: $invoice->order,
+                    invoice: $invoice,
+                    payment_method: \Payments::$payment_gateway(),
+                    lang: 'ENG',
+                    paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])')
+                );
+                $paysera->pay();
+            }
+        } catch(\Throwable $e) {
+            Log::error($e);
+            abort(500);
         }
     }
 }

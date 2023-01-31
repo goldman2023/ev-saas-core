@@ -248,6 +248,11 @@ class Invoice extends WeBaseModel
     }
 
     public function generateInvoicePDF($custom_title = null, $save = false) {
+        // If there is functions called generateInvoicePDF() in theme Helpers php files, it'll use that one instead of default logic defined here!
+        if (function_exists('generateInvoicePDF')) {
+            return generateInvoicePDF($this, $custom_title, $save);
+        }
+
         $shop = $this->shop;
         $user = $this->user;
 
@@ -513,13 +518,16 @@ class Invoice extends WeBaseModel
             }
         ];
 
-        $invoice = LaravelInvoice::make(!empty($custom_title) ? $custom_title : translate('VAT Invoice'))
+        $invoice_title = !empty($custom_title) ? $custom_title : translate('VAT Invoice');
+        $invoice_filename = (!empty($custom_title) ? \Str::slug($custom_title) : translate('Invoice')).'_'.$this->getRealInvoiceNumber();
+
+        $invoice = LaravelInvoice::make($invoice_title)
             ->series(!empty($this->real_invoice_number) ? $this->getRealInvoiceNumber() : $this->invoice_number)
             // ->sequence()
             ->serialNumberFormat('{SERIES}')
             // ability to include translated invoice status
             // in case it was paid
-            ->filename(\Str::slug($custom_title).'_'.$this->getRealInvoiceNumber())
+            ->filename($invoice_filename)
             ->status($this->payment_status)
             ->seller($business)
             ->buyer($customer)

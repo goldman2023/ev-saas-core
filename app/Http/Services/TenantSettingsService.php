@@ -45,10 +45,10 @@ class TenantSettingsService
     public function getAll() {
         return $this->settings;
     }
-    
+
     /**
      * createMissingSettings
-     * 
+     *
      * This function compares tenant settings from redis (cached for current tenant) and list of hardcoded tenant settings from settingsDataTypes().
      * If there are missing properties (existin $data_types, but not in redis cache or DB):
      * 1. Clear tenant settings cache in Redis
@@ -114,7 +114,7 @@ class TenantSettingsService
         $this->settings = !empty($settings) ? $settings : $default;
 
         // it'll clear the cache and add missing settings if there are missing settings and update the current settings
-        $this->createMissingSettings($re_evaluate); 
+        $this->createMissingSettings($re_evaluate);
     }
 
 
@@ -241,6 +241,7 @@ class TenantSettingsService
             'chat_feature' => 'boolean',
             'addresses_feature' => 'boolean',
             'notifications_feature' => 'boolean',
+            'breadcrumbs_feature' => 'boolean',
             'weedit_feature' => 'boolean',
             'wishlist_feature' => 'boolean',
             'vendor_mode_feature' => 'boolean',

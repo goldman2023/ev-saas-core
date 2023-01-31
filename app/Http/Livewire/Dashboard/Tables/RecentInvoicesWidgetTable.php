@@ -19,8 +19,6 @@ class RecentInvoicesWidgetTable extends DataTableComponent
 {
     use DispatchSupport;
 
-    public $for = 'me';
-
     public ?int $searchFilterDebounce = 800;
 
     public string $defaultSortColumn = 'created_at';

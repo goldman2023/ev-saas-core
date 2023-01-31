@@ -94,8 +94,10 @@ if (!function_exists('castValueForSave')) {
             $setting = ctype_digit($setting) || is_numeric($setting) ? ((int) $setting) : $setting;
         } else if($data_type === 'decimal') {
             $setting = ctype_digit($setting) || is_numeric($setting) ? ((float) $setting) : $setting;
-        }else if($data_type === 'boolean') {
+        } else if($data_type === 'boolean') {
             $setting = $setting ? 1 : 0;
+        } else if($data_type === 'unix_timestamp') {
+            $setting = ctype_digit($setting) || is_numeric($setting) ? ((int) $setting) : null;
         } else if($data_type === 'object' || $data_type === 'array' || $data_type === 'uploads' || is_array($data_type) || is_object($data_type)) {
             $setting = json_encode($setting);
         }
@@ -202,10 +204,30 @@ if (!function_exists('castValuesForGet')) {
                             $setting = ($setting === 0 || $setting === "0") ? false : true;
                         } else if($data_type === 'array') {
                             $setting = json_decode($setting, true);
+                        } else if($data_type === 'unix_timestamp') {
+                            if(ctype_digit($setting) || is_numeric($setting) || is_integer($setting)) {
+                                $setting = (int) $setting;
+                            } else {
+                                $setting = null;
+                            }
                         } else if($data_type === 'date') {
-                            //$setting = \Carbon::parse($setting)->format('d.m.Y');
+                            if(ctype_digit($setting) || is_numeric($setting) || is_integer($setting)) {
+                                $setting = \Carbon::createFromTimestamp($setting)->format('d M, Y');
+                            } else {
+                                $setting = null;
+                            }
                         } else if($data_type === 'datetime') {
-                            //$setting = \Carbon::parse($setting)->format('d.m.Y H:i');
+                            if(ctype_digit($setting) || is_numeric($setting) || is_integer($setting)) {
+                                $setting = \Carbon::createFromTimestamp($setting)->format('d M, Y H:i');
+                            } else {
+                                $setting = null;
+                            }
+                        } else if($data_type === 'carbon') {
+                            if(ctype_digit($setting) || is_numeric($setting) || is_integer($setting)) {
+                                $setting = \Carbon::createFromTimestamp($setting);
+                            } else {
+                                $setting = null;
+                            }
                         } else {
                             $setting = $setting;
                         }
@@ -1259,15 +1281,15 @@ if (!function_exists('static_asset')) {
 
         try {
             if ($cache_bust) {
-                $filemtime = filemtime(public_path('themes/' . Theme::parent() . '/' . $path));
+                $filemtime = filemtime(public_path('themes/' . Theme::active() . '/' . $path));
             }
         } catch (\Exception $e) {
         }
         if ($theme) {
             if (config('app.force_https')) {
-                return app('url')->asset('themes/' . Theme::parent() . '/' . $path, true) . ($cache_bust ? '?v=' . $filemtime : '');
+                return app('url')->asset('themes/' . Theme::active() . '/' . $path, true) . ($cache_bust ? '?v=' . $filemtime : '');
             } else {
-                return app('url')->asset('themes/' . Theme::parent() . '/' . $path, $secure) . ($cache_bust ? '?v=' . $filemtime : '');
+                return app('url')->asset('themes/' . Theme::active() . '/' . $path, $secure) . ($cache_bust ? '?v=' . $filemtime : '');
             }
         }
 

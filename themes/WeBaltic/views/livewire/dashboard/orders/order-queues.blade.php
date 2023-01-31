@@ -1,17 +1,17 @@
 <div class="card mb-9 !p-4 !pt-2">
     <div class="mb-0 border-b border-gray-200 dark:border-gray-700">
-        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center"
-            data-tabs-toggle="#order-queues-tabs-content" role="tablist" 
+        <ul class="grid grid-cols-2 flex-wrap -mb-px text-sm font-medium text-center"
+            data-tabs-toggle="#order-queues-tabs-content" role="tablist"
             id="order-queues-tabs"
             wire:key="order-queues-tabs"
             wire.ignore.self>
-            <li class="mr-2" role="presentation" 
+            <li class="mr-2" role="presentation"
                 wire:key="order-queues-tab-delivery"
                 wire.ignore.self
             >
                 <button class="inline-block font-medium text-lg p-3 border-b-2 rounded-t-lg"
                     id="order-queues-tab-delivery" data-tabs-target="#order-queues-tab-delivery-content" type="button"
-                    role="tab" aria-selected="false" 
+                    role="tab" aria-selected="false"
                     wire:ignore.self
                     wire:key="order-queues-tab-delivery-nav"
                 >
@@ -30,7 +30,7 @@
                     @endif
                 </button>
             </li>
-            <li class="mr-2" role="presentation" 
+            <li class="mr-2" role="presentation"
                 wire:key="order-queues-tab-printing"
                 wire.ignore.self
             >
@@ -193,7 +193,7 @@
                         </li>
                         @endforeach
                     </ul>
-                    
+
                 @else
                     <div class="bg-white scale-50" style="margin-bottom: -20px; width: 200%; transform-origin: top left;">
                         <x-dashboard.orders.order-details-card :order="$order">
