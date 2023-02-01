@@ -1,6 +1,6 @@
 <section aria-labelledby="policies-heading" class="mt-8">
 
-    <dl class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+    <dl class="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
 
         <div class="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center">
             <dt>

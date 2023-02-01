@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Uuid;
 use MyShop;
 use StripeService;
 use App\Facades\Media;

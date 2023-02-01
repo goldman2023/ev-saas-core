@@ -22,7 +22,11 @@
                 <div class="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6">
                     <div class="text-sm">
                         <a href="{{ route('crm.all_customers') }}"
-                            class="font-medium text-indigo-600 hover:text-indigo-500"> View all<span class="sr-only">
+                            class="font-medium text-indigo-600 hover:text-indigo-500">
+
+                            {{ translate('View all') }}
+
+                            <span class="sr-only">
                                 Total
                                 Subscribers stats</span></a>
                     </div>
@@ -53,7 +57,8 @@
                 <div class="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6">
                     <div class="text-sm">
                         <a href="{{ route('orders.index') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
-                            View all<span class="sr-only"> Avg. Open Rate stats</span></a>
+                            {{ translate('View all') }}
+                            <span class="sr-only"> Avg. Open Rate stats</span></a>
                     </div>
                 </div>
             </dd>
