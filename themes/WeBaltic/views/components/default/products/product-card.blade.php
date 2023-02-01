@@ -1,5 +1,5 @@
-<div class="max-h-[230px] bg-white grid grid-cols-12 w-full rounded-lg bg-white shadow-lg">
-    <div class="col-span-12 grid grid-cols-12">
+<div class="lg:max-h-[230px] bg-white lg:grid lg:grid-cols-12 w-full rounded-lg bg-white shadow-lg">
+    <div class="lg:col-span-12 lg:grid lg:grid-cols-12">
         <div class="col-span-4">
             <a href="{{ $product->getPermalink() }}">
 
@@ -10,14 +10,18 @@
         <div class="col-span-5 p-6">
             <h5 class="text-gray-900 text-2xl font-bold mb-2">
                 <a href="{{ $product->getPermalink() }}">
-
                     {{ $product->name }}
                 </a>
             </h5>
             <p class="text-gray-700  text-sm mb-4">
-                Krovinių dėžės ilgis: 2.5 m <br>
-                Krovinių dėžės plotis: 1.25 m <br>
-                Keliamoji galia: 540 kg
+               {{ translate('Krovinių dėžės ilgis:') }} <span class="font-bold">{{ $product->getAttrValue('kraunamo-pavirsiaus-ilgis') }} cm </span><br>
+                {{ translate('Krovinių dėžės plotis:') }} <span class="font-bold">{{ $product->getAttrValue('kraunamo-pavirsiaus-plotis') }} cm </span><br>
+                {{ translate('Keliamoji galia:') }} <span class="font-bold">{{ $product->getAttrValue('bendra-krova') }} kg </span>
+
+                <br>
+                @if($product->getAttrValue('stabdziai'))
+                {{ translate('Su stabdžiais') }}
+                @endif
             </p>
             <p class="text-gray-600 text-xs">
                 {{ translate('2 year waranty') }} / {{ translate('Made in Lithuania') }}

@@ -197,9 +197,8 @@ Route::middleware([
 
     // Checkout Routes
     Route::middleware('checkout')->group(function () {
-        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-        Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.post');
-        Route::get('/checkout-single', [CheckoutController::class, 'single'])->name('checkout.single.page');
+        Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+        Route::post('/checkout', [CheckoutController::class, 'process_checkout'])->name('checkout.process');
 
         Route::get('/order/{id}/canceled', [CheckoutController::class, 'orderCanceled'])->name('checkout.order.canceled');
     });

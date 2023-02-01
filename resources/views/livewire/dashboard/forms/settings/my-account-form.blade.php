@@ -48,9 +48,9 @@
 
             <div class="grid grid-cols-12 gap-8 mb-10">
                 @if(!$onboarding)
-                <div class="col-span-12 lg:col-span-3">
+                <div class="left-0 w-full sticky top-16 col-span-12 lg:col-span-3 z-50">
 
-                    <nav class="space-y-1 p-4 bg-white rounded-lg border border-gray-200">
+                    <nav class=" flex flex-nowrap overflow-x-auto sm:block space-y-1 p-4 bg-white rounded-lg border border-gray-200">
                         <a href="#"
                             :class="{'text-primary': current === 'basicInformation', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'basicInformation'}"
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
