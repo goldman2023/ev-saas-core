@@ -20,7 +20,7 @@
 <div class="w-full">
     <x-dashboard.widgets.business.quick-actions>
     </x-dashboard.widgets.business.quick-actions>
-    <div class="grid sm:grid-cols-12 gap-6">
+    <div class="sm:grid sm:grid-cols-12 gap-6">
         <div class="sm:col-span-8">
             @if($invoices_count > 0)
             <livewire:dashboard.tables.invoices-table :per-page="10" />

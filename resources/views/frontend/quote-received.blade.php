@@ -42,7 +42,7 @@
               <div class="w-full flex flex-col">
                 <div class="py-3 border-b border-gray-200 flex space-x-6">
                   @if(!empty($item->subject))
-                    <img src="{{ $item->subject->getThumbnail(['w' => 180]) }}" alt="" 
+                    <img src="{{ $item->subject->getThumbnail(['w' => 180]) }}" alt=""
                       class="flex-none w-[80px] h-[80px] object-center object-contain bg-gray-100 rounded-lg sm:w-[80px] sm:h-[80px]">
                   @else
                     <div class="flex-none w-[80px] h-[80px] object-center object-contain bg-gray-100 rounded-lg sm:w-[80px] sm:h-[80px] bg-img-placeholder-stripes"></div>
@@ -111,7 +111,7 @@
                     <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
                     <span class="block">{{ $order->billing_address }}</span>
                     <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
-                    <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '').\Countries::get(code: $order->billing_country)->name }}</span>
+                    <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '') }}</span>
                   </address>
                 </dd>
               </div>

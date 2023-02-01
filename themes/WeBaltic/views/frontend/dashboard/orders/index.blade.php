@@ -35,7 +35,7 @@
         <div id="orders-tabs">
             @foreach(\WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum::values() as $key => $status)
                 <div id="orders-tab-{{ $key }}" role="tabpanel" aria-labelledby="order-nav-{{ $key }}"
-                    class="grid sm:grid-cols-12 gap-6">
+                    class="sm:grid sm:grid-cols-12 gap-6">
                     <div class="sm:col-span-9">
                         <livewire:dashboard.tables.orders-table :status="$key" table-id="orders-table-{{ $status }}">
                         </livewire:dashboard.tables.orders-table>

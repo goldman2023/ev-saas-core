@@ -19,9 +19,9 @@
     <div class="w-full" x-cloak>
         @if($tasks->isNotEmpty())
             <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
-                <ul class="flex overflow-x-auto sm:flex-wrap -mb-px text-sm font-medium text-center" 
+                <ul class="flex overflow-x-auto sm:flex-wrap -mb-px text-sm font-medium text-center"
                     id="tasks-tabs-header" data-tabs-toggle="#tasks-tabs" role="tablist">
-        
+
                     @foreach(\WeThemes\WeBaltic\App\Enums\TaskTypesEnum::labels() as $type => $type_label)
                         <li class="mr-2" role="presentation">
                             <button
@@ -32,12 +32,12 @@
                             </button>
                         </li>
                     @endforeach
-        
+
                 </ul>
             </div>
             <div id="tasks-tabs">
                 @foreach(\WeThemes\WeBaltic\App\Enums\TaskTypesEnum::labels() as $type => $label)
-                    <div id="tasks-tab-{{ $type }}" role="tabpanel" class="grid sm:grid-cols-12 gap-6">
+                    <div id="tasks-tab-{{ $type }}" role="tabpanel" class="sm:grid sm:grid-cols-12 gap-6">
                         <div class="sm:col-span-9">
                             <livewire:dashboard.tables.tasks-table :type="$type" table-id="tasks-table-{{ $type }}">
                             </livewire:dashboard.tables.tasks-table>
@@ -68,7 +68,7 @@
 
             </x-dashboard.empty-states.no-items-in-collection>
         @endif
-            
+
 
     </div>
 @endsection
