@@ -2,12 +2,15 @@
     $header_menu = nova_get_menu_by_slug('header');
     $header_menu_items = $header_menu['menuItems'] ?? null;
 @endphp
-<div id="topbar" class="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
+<div id="topbar" class="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow-lg">
     <button type="button" @click="$dispatch('display-flyout-panel', {'id': 'dashboard-sidebar-panel'})" class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary lg:hidden">
       @svg('heroicon-o-bars-3-bottom-left', ['class' => 'h-6 w-6'])
     </button>
     <div class="flex-1 px-4 flex justify-between">
       <div class="flex-1 flex text-center justify-center">
+        <a class="sm:hidden flex-1 flex text-center justify-center" href="{{ route('dashboard') }}">
+            <img class="px-2 sm:hidden inline-block" src="{{ get_site_logo() }}" />
+        </a>
         <nav class="hidden md:flex space-x-[32px] items-center">
             @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
                 @foreach($header_menu_items as $menu_item)
