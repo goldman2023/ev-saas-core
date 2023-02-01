@@ -8,7 +8,7 @@
 <div class="bg-gray-100">
     <main class="container sm:px-6 sm:pt-16 lg:px-8">
         <div class="mx-auto max-w-2xl lg:max-w-none">
-            <div class="mb-6">
+            <div class="mb-6 pt-16 lg:pt-0">
                 <h1 class="text-4xl font-bold tracking-tight text-gray-900">
                     {{ $product->name }}
                 </h1>

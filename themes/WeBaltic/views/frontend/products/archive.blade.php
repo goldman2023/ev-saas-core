@@ -2,26 +2,17 @@
 
 @section('content')
 
-<div class="bg-gray-100 pt-8">
-
-
-    <div class="max-w-7xl mx-auto mt-8">
-
-
-
+<div class="bg-gray-100 pt-12">
+    <div class="container !px-6 mx-auto">
         <div class="flex items-baseline justify-between border-b border-gray-200 pb-6">
-
-
             <h1 class="text-4xl font-bold tracking-tight text-gray-900">
                 @isset($selected_category->name)
-                {{ $selected_category->name }}
+                    {{ $selected_category->name }}
                 @else
-                {{ translate('All products') }}
-
+                    {{ translate('All products') }}
                 @endisset
             </h1>
         </div>
-
     </div>
     <div class="w-full mb-8">
         @isset($selected_category)
@@ -33,7 +24,7 @@
 
         @endisset
     </div>
-    <main class="max-w-7xl mx-auto">
+    <main class="container !px-6 mx-auto">
 
         <section aria-labelledby="products-heading" class="pt-6 pb-24">
             <h2 id="products-heading" class="sr-only">Products</h2>

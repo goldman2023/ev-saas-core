@@ -15,9 +15,14 @@
                 </a>
             </h5>
             <p class="text-gray-700  text-sm mb-4">
-                Krovinių dėžės ilgis: 2.5 m <br>
-                Krovinių dėžės plotis: 1.25 m <br>
-                Keliamoji galia: 540 kg
+               {{ translate('Krovinių dėžės ilgis:') }} <span class="font-bold">{{ $product->getAttrValue('kraunamo-pavirsiaus-ilgis') }} cm </span><br>
+                {{ translate('Krovinių dėžės plotis:') }} <span class="font-bold">{{ $product->getAttrValue('kraunamo-pavirsiaus-plotis') }} cm </span><br>
+                {{ translate('Keliamoji galia:') }} <span class="font-bold">{{ $product->getAttrValue('bendra-krova') }} kg </span>
+
+                <br>
+                @if($product->getAttrValue('stabdziai'))
+                {{ translate('Su stabdžiais') }}
+                @endif
             </p>
             <p class="text-gray-600 text-xs">
                 {{ translate('2 year waranty') }} / {{ translate('Made in Lithuania') }}
