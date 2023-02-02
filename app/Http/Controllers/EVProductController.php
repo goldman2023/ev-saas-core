@@ -117,10 +117,21 @@ class EVProductController extends Controller
     {
         if($slug) {
             $selected_category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
-            $products = $selected_category->products()->published()->orderBy('created_at', 'DESC')->paginate(10);
+            $products = $selected_category
+            ->products()
+            ->withCount('activities')
+            ->orderBy('activities_count', 'desc')
+            ->published()
+            ->where('unit_price' , '>', 0)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
             $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
         } else {
-            $products = Product::published()->orderBy('created_at', 'DESC')->paginate(10);
+            $products = Product::published()
+            ->where('unit_price' , '>', 0)
+            ->withCount('activities')
+            ->orderBy('activities_count', 'desc')
+            ->orderBy('created_at', 'DESC')->paginate(10);
             $shops = [];
             $selected_category = "";
         }

@@ -93,6 +93,9 @@ class CategoryService
     // Routes
     public function getRoute(Category $category, ?string $content_type = null)
     {
+        if($category === null) {
+            $category = 1;
+        }
         if ($content_type) {
             return $this->routes[str_replace(['%d%', '%s%'], [$category->id, $content_type], $this->category_content_type_archive_key)];
         }

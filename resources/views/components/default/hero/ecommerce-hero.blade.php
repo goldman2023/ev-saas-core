@@ -9,8 +9,8 @@ $categories = App\Models\Category::where('level', 0)
     <div class="row">
         <div class="col-sm-3">
             <x-slot name="left-column">
-                <x-default.categories.list.category-list :categories="$categories">
-                </x-default.categories.list.category-list>
+                {{-- <x-default.categories.list.category-list :categories="$categories">
+                </x-default.categories.list.category-list> --}}
             </x-slot>
         </div>
         <div class="col-sm-9">

@@ -21,13 +21,17 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle ">
+    <strong class="text-14">{{ $row->products()->count() }}</strong>
+</x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle ">
     <strong class="text-14">{{ $row->descendants_count }}</strong>
 </x-livewire-tables::table.cell>
 
 
-<x-livewire-tables::table.cell class="align-middle text-center">
+{{-- <x-livewire-tables::table.cell class="align-middle text-center">
     <span class="d-block text-14 mb-0">{{ $row->created_at?->format('d.m.Y') ?? '' }}</span>
-</x-livewire-tables::table.cell>
+</x-livewire-tables::table.cell> --}}
 
 <x-livewire-tables::table.cell class="align-middle static ">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
