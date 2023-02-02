@@ -34,8 +34,8 @@ class CategoryService
     {
         $this->app = $app;
 
-        $cache_key = tenant('id').'_categories';
-        $cache_key_flat = tenant('id').'_categories_flat';
+        $cache_key = tenant('id') . '_categories';
+        $cache_key_flat = tenant('id') . '_categories_flat';
         // $this->clearCache(); // TODO: remove later to use cache fully
         $categories = Cache::get($cache_key, null);
         $categories_flat = Cache::get($cache_key_flat, null);
@@ -49,7 +49,7 @@ class CategoryService
             $categories = collect($tree)->recursiveApply('children', ['fn' => 'keyBy', 'params' => ['slug']]);
 
             // Cache the categories if they are found in DB
-            if (! empty($categories)) {
+            if (!empty($categories)) {
                 Cache::forget($cache_key);
                 Cache::put($cache_key, $categories);
             }
@@ -57,7 +57,7 @@ class CategoryService
             // recrusively sort categories
             $arr = collect();
             $recursive = function ($categories) use (&$arr, &$recursive) {
-                if (! empty($categories) && $categories->isNotEmpty()) {
+                if (!empty($categories) && $categories->isNotEmpty()) {
                     foreach ($categories as $category) {
                         $arr->put($category->slug, $category);
                         $recursive($category->children);
@@ -67,14 +67,14 @@ class CategoryService
             $recursive($categories);
             $categories_flat = $arr;
 
-            if (! empty($categories_flat)) {
+            if (!empty($categories_flat)) {
                 Cache::forget($cache_key_flat);
                 Cache::put($cache_key_flat, $categories_flat);
             }
         }
 
-        $this->categories_flat = ! empty($categories_flat) ? $categories_flat : $default;
-        $this->categories = ! empty($categories) ? $categories : $default;
+        $this->categories_flat = !empty($categories_flat) ? $categories_flat : $default;
+        $this->categories = !empty($categories) ? $categories : $default;
         $this->pluckable_categories = Collection::wrap([$this->categories->all()]);
 
         // Define categories routes
@@ -83,8 +83,8 @@ class CategoryService
 
     public function clearCache()
     {
-        $cache_key = tenant('id').'_categories';
-        $cache_key_flat = tenant('id').'_categories_flat';
+        $cache_key = tenant('id') . '_categories';
+        $cache_key_flat = tenant('id') . '_categories_flat';
 
         Cache::forget($cache_key);
         Cache::forget($cache_key_flat);
@@ -93,11 +93,15 @@ class CategoryService
     // Routes
     public function getRoute(Category $category, ?string $content_type = null)
     {
-        if($category === null) {
+        if ($category === null) {
             $category = 1;
         }
         if ($content_type) {
-            return $this->routes[str_replace(['%d%', '%s%'], [$category->id, $content_type], $this->category_content_type_archive_key)];
+            if (isset($this->routes[str_replace(['%d%', '%s%'], [$category->id, $content_type], $this->category_content_type_archive_key)])) {
+                return $this->routes[str_replace(['%d%', '%s%'], [$category->id, $content_type], $this->category_content_type_archive_key)];
+            } else {
+                return 'category.index';
+            }
         }
 
         return $this->routes[str_replace('%d%', $category->id, $this->category_archive_key)];
@@ -105,7 +109,7 @@ class CategoryService
 
     public function getCategorySlugFromRoute($slug = null)
     {
-        if (! empty($slug)) {
+        if (!empty($slug)) {
             return last(explode(self::URL_SEPARATOR, $slug));
         }
 
@@ -124,13 +128,13 @@ class CategoryService
                 $this->routes[$category_archive_key] = route('category.index', ['slug' => $slugs[0]]);
 
                 foreach ($this->categorizable_items as $item_name) {
-                    $this->routes[str_replace(['%d%', '%s%'], [$id, $item_name], $this->category_content_type_archive_key)] = route('category.'.$item_name.'.index', ['slug' => $slugs[0]]);
+                    $this->routes[str_replace(['%d%', '%s%'], [$id, $item_name], $this->category_content_type_archive_key)] = route('category.' . $item_name . '.index', ['slug' => $slugs[0]]);
                 }
             } else {
                 $this->routes[$category_archive_key] = route('category.index', ['slug' => implode('/', $slugs)]);
 
                 foreach ($this->categorizable_items as $item_name) {
-                    $this->routes[str_replace(['%d%', '%s%'], [$id, $item_name], $this->category_content_type_archive_key)] = route('category.'.$item_name.'.index', ['slug' => implode('/', $slugs)]);
+                    $this->routes[str_replace(['%d%', '%s%'], [$id, $item_name], $this->category_content_type_archive_key)] = route('category.' . $item_name . '.index', ['slug' => implode('/', $slugs)]);
                 }
             }
         }
@@ -140,7 +144,7 @@ class CategoryService
     {
         array_unshift($slugs, $category->slug);
 
-        if (! is_null($category->parent_id)) {
+        if (!is_null($category->parent_id)) {
             try {
                 $slugs = $this->determineCategorySlugs($categories[$category->parent_id], $categories, $slugs);
             } catch (\Exception $e) {
@@ -173,22 +177,25 @@ class CategoryService
     public function getAllFormatted($for_js = false, $flat = false)
     {
         if ($for_js) {
-            return Collection::recursiveApplyStatic($flat ? $this->categories_flat->toArray() : $this->categories->toArray(), 'children',
-            ['fn' => 'keyBy', 'params' => ['slug']],
-            ['fn' => 'map', 'params' => [
-                function ($item) use($flat) {
-                    return [
-                        'id' => $item['id'],
-                        'parent_id' => $item['parent_id'],
-                        'name' => $item['name'],
-                        'slug' => $item['slug'],
-                        'slug_path' => $item['slug_path'],
-                        'path' => $item['path'],
-                        'children' => $flat ? [] : $item['children'],
-                        'descendants_count' => $item['descendants_count'],
-                    ];
-                },
-            ]]);
+            return Collection::recursiveApplyStatic(
+                $flat ? $this->categories_flat->toArray() : $this->categories->toArray(),
+                'children',
+                ['fn' => 'keyBy', 'params' => ['slug']],
+                ['fn' => 'map', 'params' => [
+                    function ($item) use ($flat) {
+                        return [
+                            'id' => $item['id'],
+                            'parent_id' => $item['parent_id'],
+                            'name' => $item['name'],
+                            'slug' => $item['slug'],
+                            'slug_path' => $item['slug_path'],
+                            'path' => $item['path'],
+                            'children' => $flat ? [] : $item['children'],
+                            'descendants_count' => $item['descendants_count'],
+                        ];
+                    },
+                ]]
+            );
         }
 
         return Collection::recursiveApplyStatic($this->categories->toArray(), 'children', ['fn' => 'keyBy', 'params' => ['slug']]);
@@ -213,7 +220,7 @@ class CategoryService
      */
     public function getByID($id = null)
     {
-        return $id ? $this->categories_flat->filter(fn($item) => $item->id === (int) $id)->first() : null;
+        return $id ? $this->categories_flat->filter(fn ($item) => $item->id === (int) $id)->first() : null;
     }
 
     /**
@@ -225,7 +232,7 @@ class CategoryService
      */
     public function restrictByCategories($categories = [], &$builder = null)
     {
-        if (! empty($categories)) {
+        if (!empty($categories)) {
             $subject_type = $builder->getModel()::class;
             $subject_table_name = $builder->getModel()->getTable();
 
@@ -239,10 +246,10 @@ class CategoryService
             }
 
             $builder->distinct()
-                    ->select($subject_table_name.'.*')
-                    ->join(app(CategoryRelationship::class)->getTable().' AS cr', 'cr.subject_id', '=', $subject_table_name.'.id')
-                    ->where('cr.subject_type', '=', $subject_type)
-                    ->whereIn('cr.category_id', $categories);
+                ->select($subject_table_name . '.*')
+                ->join(app(CategoryRelationship::class)->getTable() . ' AS cr', 'cr.subject_id', '=', $subject_table_name . '.id')
+                ->where('cr.subject_type', '=', $subject_type)
+                ->whereIn('cr.category_id', $categories);
         }
 
         return $builder;
@@ -279,7 +286,7 @@ class CategoryService
         if ($type === 'flat') {
             $flattened = new \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection([$category]);
 
-            return (! empty($category->children) && $category->children->isNotEmpty()) ? $flattened->merge($category->children->flattenTree('children')) : $flattened;
+            return (!empty($category->children) && $category->children->isNotEmpty()) ? $flattened->merge($category->children->flattenTree('children')) : $flattened;
         }
 
         return $category;
@@ -292,7 +299,7 @@ class CategoryService
         $recursive = function ($parent_id) use (&$recursive, &$level) {
             $parent = Category::find($parent_id);
 
-            if ($parent instanceof Category && ! empty($parent->id ?? null)) {
+            if ($parent instanceof Category && !empty($parent->id ?? null)) {
                 $level++;
                 $recursive($parent->parent_id);
             }
