@@ -22,7 +22,7 @@
 {{-- Google Tags Manager Integration --}}
 
 {{-- Facebook App Integration --}}
-@if(!empty(get_tenant_setting('facebook_app_id')) && !empty(get_tenant_setting('facebook_app_secret')))
+@if(get_tenant_setting('facebook_pixel_enabled', false) && !empty(get_tenant_setting('facebook_app_id')) && !empty(get_tenant_setting('facebook_app_secret')))
 <meta property="fb:app_id" content="{{ get_tenant_setting('facebook_app_id') }}">
 <script>
     window.fbAsyncInit = function() {
@@ -32,10 +32,10 @@
         xfbml      : true,
         version    : 'v13.0'
       });
-        
-      FB.AppEvents.logPageView();   
+
+      FB.AppEvents.logPageView();
     };
-  
+
     (function(d, s, id){
        var js, fjs = d.getElementsByTagName(s)[0];
        if (d.getElementById(id)) {return;}
