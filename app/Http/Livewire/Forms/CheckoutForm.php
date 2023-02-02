@@ -315,7 +315,7 @@ class CheckoutForm extends Component
 
             // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
             $this->order->shop_id = $this->items->first()->shop_id;
-            $this->order->user_id = auth()->user()->id ?? null;
+            $this->order->user_id = $user->id ?? null;
 
             // TODO: THIS IS ALSO VERY IMPORTANT - Separate $items based on type - is it a subscription or a standard product...or installment?
 
