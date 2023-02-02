@@ -9,9 +9,12 @@
     <main class="container sm:px-6 sm:pt-16 lg:px-8">
         <div class="mx-auto max-w-2xl lg:max-w-none">
             <div class="mb-6 pt-12 sm:pt-0">
-                <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900">
+                <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-2">
                     {{ $product->name }}
                 </h1>
+                <span class="font-medium block text-gray-600 text-[16px] line-clamp-1">
+                    {{ $product->excerpt }}
+                </span>
             </div>
         </div>
     </main>
