@@ -284,6 +284,7 @@ return [
         'WeBuilder' => App\Facades\WeBuilder::class,
         'Permissions' => App\Facades\Permissions::class,
         'MyShop' => App\Facades\MyShop::class,
+        'AuthService' => App\Facades\AuthService::class,
         'Vendor' => App\Facades\Vendor::class,
         'MediaService' => App\Facades\Media::class,
         'EVS' => App\Facades\EVS::class,

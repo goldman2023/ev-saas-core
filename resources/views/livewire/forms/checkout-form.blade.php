@@ -678,7 +678,7 @@ x-cloak
                 <input type="checkbox" class="form-checkbox-standard" id="buyers_consent" name="order.buyers_consent"
                         x-model="buyers_consent">
                 <div class="ml-2">
-                    <label for="buyers_consent" class="text-12 font-medium text-gray-500 mb-0 cursor-pointer underline decoration-solid decoration-red-500 decoration-1 underline-offset-2">
+                    <label for="buyers_consent" class="text-12 font-medium mb-0 cursor-pointer underline decoration-solid decoration-red-500 decoration-1 underline-offset-2 @error('order.buyers_consent') text-red-600 @else text-gray-500 @enderror">
                         {{ translate('By placing an order, I agree to ') }}
                         {{ \TenantSettings::get('site_name') }}
                         <a href="#" target="_blank">{{ translate('terms of sale') }}</a>

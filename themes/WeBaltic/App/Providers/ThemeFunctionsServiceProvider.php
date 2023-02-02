@@ -202,6 +202,39 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 );
             }, 10, 1);
 
+            // In standard checkout flow, cycle_status is approved and we should generate certificate, proposal and contract
+            add_action('checkout.process', function (&$order, &$invoice) {
+                $order->setWEF('cycle_status', 2); // 2 is 'approved'
+                $order->setWEF('cycle_step_date_request', time());
+                $order->setWEF('cycle_step_date_contract', time());
+                $order->setWEF('cycle_step_date_approved', time());
+
+                // Generate certificate
+                baltic_generate_order_document(
+                    order: $order, 
+                    template:'documents-templates.certificate', 
+                    upload_tag: 'certificate', 
+                    display_name: translate('Certificate for Order #').$order->id
+                );
+
+                // Generate proposal
+                baltic_generate_order_document(
+                    order: $order,
+                    template: 'documents-templates.proposal',
+                    upload_tag: 'proposal',
+                    display_name: translate('Proposal for Order #').$order->id,
+                    data: ['user' => $order->user]
+                );
+
+                // Generate Contract
+                baltic_generate_order_document(
+                    order: $order,
+                    template: 'documents-templates.contract',
+                    upload_tag: 'contract',
+                    display_name: translate('Contract for Order #').$order->id,
+                );
+            }, 10, 2);
+
             add_action('view.order-form.wire_set', function () {
                 js_wire_set('wef.cycle_status', 'wef.cycle_status');
             });

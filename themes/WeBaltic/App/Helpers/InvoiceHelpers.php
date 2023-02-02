@@ -240,13 +240,13 @@ if (!function_exists('generateInvoicePDF')) {
                     ->pricePerUnit($item->base_price * $percentage_of_total_order_price / 100)
                     ->quantity($item->quantity)
                     ->discount(($item->discount_amount ?? 0) * $percentage_of_total_order_price / 100)
-                    ->subTotalPrice((($item->base_price - $item->discount_amount) * $percentage_of_total_order_price / 100) * $item->quantity);
+                    ->subTotalPrice((($item->base_price * $percentage_of_total_order_price / 100) * $item->quantity) - $item->discount_amount);
     
                 $sum_invoice_items_discounts += ($item->discount_amount ?? 0) * $percentage_of_total_order_price / 100;
             }
         }
 
-        $order_level_discount = $invoice->getDiscountAmount(false);
+        $order_level_discount = $invoice->getDiscountAmount(false) - $sum_invoice_items_discounts;
 
         $total_taxes_label = 'VAT ('.(int) get_tenant_setting('company_tax_rate').'%)';
 

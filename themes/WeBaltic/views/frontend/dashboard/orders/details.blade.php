@@ -277,7 +277,7 @@
                             <h4 class="text-18 text-gray-900 font-semibold">{{ translate('Invoices') }}</h4>
                         </div>
                         <livewire:dashboard.tables.recent-invoices-widget-table :order="$order" :per-page="10"
-                            :show-per-page="false" :show-search="false" :column-select="false" />
+                            :show-per-page="false" :show-search="false" :column-select="false" :filters-enabled="false" :show-pagination="false"/>
                     </div>
 
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="order-manufacturing-content" role="tabpanel"

@@ -437,6 +437,13 @@ class EVService
                         'is_active' => areActiveRoutes(['my.orders.all']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
+                        'badge' => [
+                            'class' => 'badge-danger',
+                            'content' => function () {
+                                // return 0;
+                                return auth()->user()->orders->where('viewed', 0)->count();
+                            },
+                        ],
                     ],
                     [
                         'label' => translate('Invoices'),
@@ -446,6 +453,13 @@ class EVService
                         'is_active' => areActiveRoutes(['my.invoices.all']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
+                        'badge' => [
+                            'class' => 'badge-danger',
+                            'content' => function () {
+                                // return 0;
+                                return auth()->user()->invoices->where('payment_status', 'unpaid')->count();
+                            },
+                        ],
                     ],
                     [
                         'label' => translate('My Account'),
