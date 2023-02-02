@@ -486,23 +486,4 @@ class RequestQuoteForm extends Component
             dd($e);
         }
     }
-
-    protected function executePayment(mixed $request, $invoice_id)
-    {
-        $invoice = Invoice::with('payment_method')->find($invoice_id);
-        $invoice->load('payment_method');
-
-        // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
-
-        if ($invoice->payment_method->gateway === 'wire_transfer') {
-
-        } else if ($invoice->payment_method->gateway === 'stripe') {
-
-        } else if ($invoice->payment_method->gateway === 'paypal') {
-            
-        } else if ($invoice->payment_method->gateway === 'paysera') {
-            $paysera = new PayseraGateway(order: $invoice->order, invoice: $invoice, payment_method: $invoice->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
-            $paysera->pay();
-        }
-    }
 }

@@ -10,6 +10,8 @@ use Carbon;
 use Purifier;
 use Categories;
 use CartService;
+use Payments;
+use AuthService;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Address;
@@ -70,11 +72,6 @@ class CheckoutForm extends Component
 
     public $cc_cvc;
 
-    // Account
-    public $account_password;
-
-    public $account_password_confirmation;
-
     protected $listeners = ['refreshCheckoutForm' => '$refresh'];
 
     protected function rulesSets()
@@ -88,18 +85,18 @@ class CheckoutForm extends Component
                 'order.billing_first_name' => 'required|min:2',
                 'order.billing_last_name' => 'required|min:2',
                 'order.billing_company' => 'nullable',
-                'order.same_billing_shipping' => 'nullable',
+                'order.same_billing_shipping' => 'required|boolean',
+                'order.billing_country' => 'nullable',
+                'order.shipping_country' => 'nullable',
                 'order.phone_numbers' => 'array|required',
                 'order.buyers_consent' => 'required|boolean|is_true',
 
                 'selected_payment_method' => ['required', Rule::in(PaymentMethodUniversal::$available_gateways)],
                 'checkout_newsletter' => 'nullable',
-                'selected_billing_address_id' => '',
             ],
-            'account_creation' => [
-                'account_password' => 'required|confirmed|min:6',
-            ],
+            'wef' => $this->getWEFRules(),
             'billing' => [
+                'selected_billing_address_id' => '',
                 'order.billing_address' => 'required|min:5',
                 'order.billing_country' => ['required', Rule::in(\Countries::getCodesAll(true))],
                 'order.billing_state' => 'required|min:2',
@@ -107,7 +104,7 @@ class CheckoutForm extends Component
                 'order.billing_zip' => 'required|min:2',
             ],
             'selected_billing_address' => [
-                'selected_shipping_address_id' => 'required|if_id_exists:App\Models\Address,id',
+                'selected_billing_address_id' => 'required|if_id_exists:App\Models\Address,id',
             ],
             'shipping' => [
                 'selected_shipping_address_id' => '',
@@ -120,12 +117,6 @@ class CheckoutForm extends Component
             'selected_shipping_address' => [
                 'selected_shipping_address_id' => 'required|if_id_exists:App\Models\Address,id',
             ],
-            'registered_user_password_rule' => [
-                'account_password' => 'match_password:App\Models\User,email,order.email',
-            ],
-            'non_registered_user_password_rule' => [
-                'account_password' => 'required|confirmed|min:6',
-            ],
             'cc' => [
                 'cc_number' => ['required', new CardNumber],
                 'cc_name' => 'required|min:3',
@@ -137,13 +128,28 @@ class CheckoutForm extends Component
 
     protected function rules()
     {
-        $rules = [];
-
-        foreach ($this->rulesSets() as $key => $array) {
-            $rules = array_merge($rules, $array);
-        }
-
-        return $rules;
+        return $this->getRuleSetsCombined([
+            'main', 
+            'wef',
+            'billing' => function() {
+                if(Auth::check() && $this->selected_billing_address_id === -1) return true; // if user is auth. and billing address IS NOT selected
+                else if(!\Auth::check()) return true; // if user is not auth.
+            },
+            'selected_billing_address' => function() {
+                if(Auth::check() && $this->selected_billing_address_id !== -1) return true; // if user is auth. and billing address IS selected
+            },
+            'shipping' => function() {
+                if(empty($this->order->same_billing_shipping)) {
+                    if(Auth::check() && $this->selected_shipping_address_id === -1) return true;
+                    else if(!\Auth::check()) return true;
+                }
+            },
+            'selected_shipping_address' => function() {
+                if(empty($this->order->same_billing_shipping)) {
+                    if(Auth::check() && $this->selected_shipping_address_id !== -1) return true;
+                }
+            },
+        ]);
     }
 
     protected function messages()
@@ -156,22 +162,36 @@ class CheckoutForm extends Component
             'order.billing_last_name.required' => translate('Last name is required'),
             'order.billing_last_name.min' => translate('Minimum :min characters required'),
 
+            // WEF
+            'wef.billing_entity.in' => translate('CUstomer entity can only be individual or company'),
+
+            // Billing Address
             'order.billing_address.required' => translate('Address is required'),
             'order.billing_address.min' => translate('Minimum :min characters required'),
             'order.billing_country.required' => translate('Country is required'),
-            // 'order.billing_country.required' => ['required', Rule::in(\Countries::getCodesAll(true))],
-
             'order.billing_state.required' => translate('State is required'),
             'order.billing_state.min' => translate('Minimum :min characters required'),
-
             'order.billing_city.required' => translate('City is required'),
             'order.billing_city.min' => translate('Minimum :min characters required'),
-
             'order.billing_zip.required' => translate('ZIP code is required'),
             'order.billing_zip.min' => translate('Minimum :min characters required'),
 
-            'account_password.match_password' => translate('Password is not correct for a given email. If you want to create an order under provided email, you have to know password of the user under given email. If you don\'t know, either use Forgot password or create another account. under different email.'),
+            // Shipping Address
+            'order.shipping_address.required' => translate('Address is required'),
+            'order.shipping_address.min' => translate('Minimum :min characters required'),
+            'order.shipping_country.required' => translate('Country is required'),
+            'order.shipping_state.required' => translate('State is required'),
+            'order.shipping_state.min' => translate('Minimum :min characters required'),
+            'order.shipping_city.required' => translate('City is required'),
+            'order.shipping_city.min' => translate('Minimum :min characters required'),
+            'order.shipping_zip.required' => translate('ZIP code is required'),
+            'order.shipping_zip.min' => translate('Minimum :min characters required'),
+
             'order.buyers_consent.is_true' => translate('You must agree with terms of service'),
+
+            'selected_payment_method.required' => translate('Please select payment method'),
+            'selected_payment_method.in' => translate('Payment method can only be one of the following:').' '.Payments::getPaymentMethodsName()->join(', '),
+
             'cc_expiration_date.required' => translate('CC expiration date is required'),
             'cc_cvc.required' => translate('Card CVC is required'),
             'cc_number.card_invalid' => translate('Card is invalid'),
@@ -266,63 +286,20 @@ class CheckoutForm extends Component
 
     protected function getSpecificRules()
     {
-        $rules = [];
-        $rulesSets = $this->rulesSets();
-
-        $add_billing_shipping_rules = function ($is_billing_selected = false) use (&$rulesSets, &$rules) {
-            $rules = array_merge($rulesSets['main'], $is_billing_selected ? $rulesSets['selected_billing_address'] : $rulesSets['billing']);
-
-            if (empty($this->order->same_billing_shipping)) {
-                if ((int) $this->selected_shipping_address_id === -1) {
-                    // Shipping address IS NOT a selected address, but a manually added address!
-                    $rules = array_merge($rules, $rulesSets['shipping']);
-                } else {
-                    // Shipping address IS a selected address
-                    $rules = array_merge($rules, $rulesSets['selected_shipping_address']);
-                }
-            }
-
-            // User cretion rules (password)
-            if (! Auth::check()) {
-                $new_user = User::where('email', $this->order->email)->first(); // check if user with a given email already exists
-
-                // Check if user with email is not already registered user.
-                if ($new_user instanceof User && ! empty($new_user->id ?? null)) {
-                    // Registered user
-                    $rules = array_merge($rules, $rulesSets['registered_user_password_rule']);
-                } else {
-                    // Not registered user
-                    $rules = array_merge($rules, $rulesSets['non_registered_user_password_rule']);
-                }
-            }
-        };
-
-        if (Auth::check()) {
-            if ((int) $this->selected_billing_address_id === -1) {
-                // Always validate billing info when user IS logged-in AND DID NOT select billing address
-                $add_billing_shipping_rules();
-            } else {
-                $add_billing_shipping_rules(true);
-            }
-        } else {
-            // Always validate billing info when user is not authenticated
-            $add_billing_shipping_rules();
-        }
-
-        return $rules;
+        
     }
 
     public function pay()
     {
         $this->items = CartService::getItems();
-
+        
         try {
-            $this->validate($this->getSpecificRules());
+            $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatchValidationErrors($e);
             $this->validate();
         }
-
+        
         DB::beginTransaction();
 
         try {
@@ -330,59 +307,10 @@ class CheckoutForm extends Component
 
             $default_grace_period = 5; // 5 days is default grace period
             $default_due_date = Carbon::now()->addDays(7)->toDateTimeString(); // 7 days fom now is default invoice due_date
-            $phone_numbers = [];
             $user = auth()->user() ?? null;
 
             if (! Auth::check()) {
-                $user = User::where('email', $this->order->email)->first();
-
-                if (! empty($user->id ?? null) && Hash::check($this->account_password, $user->password)) { // check password again just in case
-                    // There is a user under given Email AND passwords match -> LOG IN USER
-                    auth()->login($user, true); // log the user in
-                } else {
-                    // Create user 'cuz there's no user under this email and password validation passed
-
-                    // TODO: Move to some RegistrationService or something so we can reuse it throughout the app!
-
-                    // Create user
-                    $user = User::create([
-                        'name' => $this->order->billing_first_name.' '.$this->order->billing_last_name,
-                        'user_type' => User::$customer_type,
-                        'email' => $this->order->email,
-                        'password' => bcrypt($this->account_password),
-                    ]);
-
-                    // Create address
-                    $address_billing = Address::create([
-                        'user_id' => $user->id,
-                        'address' => $this->order->billing_address,
-                        'address_2' => '',
-                        'country' => $this->order->billing_country,
-                        'state' => empty($this->order->billing_state) ? $this->order->billing_country : $this->order->billing_state,
-                        'city' => $this->order->billing_city,
-                        'zip_code' => $this->order->billing_zip,
-                        'phones' => json_encode($this->order->phone_numbers),
-                        'set_default' => 1,
-                    ]);
-
-                    if (! $this->order->same_billing_shipping) {
-                        // Create another address with shipping info
-                        $address_shipping = Address::create([
-                            'user_id' => $user->id,
-                            'address' => $this->order->shipping_address,
-                            'address_2' => '',
-                            'country' => $this->order->shipping_country,
-                            'state' => empty($this->order->shipping_state) ? $this->order->shipping_country : $this->order->shipping_state,
-                            'city' => $this->order->shipping_city,
-                            'zip_code' => $this->order->shipping_zip,
-                            'phones' => json_encode($this->order->phone_numbers),
-                            'set_default' => 1,
-                        ]);
-
-                        $address_billing->set_default = 0;
-                        $address_billing->save();
-                    }
-                }
+                $user = AuthService::createGhostUserOnCheckout();
             }
 
             // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
@@ -422,19 +350,22 @@ class CheckoutForm extends Component
                 $this->order->billing_state = empty($address->state) ? $address->country : $address->state;
                 $this->order->billing_city = $address->city;
                 $this->order->billing_zip = $address->zip_code;
-                $this->order->phone_numbers = $phone_numbers = $address->phones; // TODO: To overwrite phones or no???
+
+                if(empty($this->order->phone_numbers)) {
+                    // Overwrite order phones only if they are not added first, but address is selected 
+                    $this->order->phone_numbers = $address->phones;
+                }
             }
 
             /*
              * Shipping data (when billing and shipping data are not the same)
              * Address (user logged-in) + Manual
              */
-            if (! $this->order->same_billing_shipping) {
-                // TODO: Do we need shipping first_name, last_name and shipping_company ???
-                $this->order->shipping_first_name = $this->order->billing_first_name;
-                $this->order->shipping_last_name = $this->order->billing_last_name;
-                $this->order->shipping_company = $this->order->billing_company;
+            $this->order->shipping_first_name = $this->order->billing_first_name;
+            $this->order->shipping_last_name = $this->order->billing_last_name;
+            $this->order->shipping_company = $this->order->billing_company;
 
+            if (empty($this->order->same_billing_shipping)) {
                 // Check if Shipping Address is selected from user's addresses
                 // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
                 if (Auth::check() && $this->selected_shipping_address_id > 0 && Address::where('id', $this->selected_shipping_address_id)->exists()) {
@@ -451,7 +382,7 @@ class CheckoutForm extends Component
 
             $this->order->shipping_method = 'free'; // TODO: Change this to use shipping methods and calculations when the shipping logic is added in BE
             $this->order->shipping_cost = 0;
-            $this->order->tax = 0; // TODO: Change this to use Taxes from DB (Create Tax logic in BE first)
+            $this->order->tax = CartService::getGlobalTaxPercentage();
 
             // payment_status - `unpaid` by default (this should be changed on payment processor callback before Thank you page is shown - if payment goes through of course)
             // shipping_status - `not_sent` by default (this is changed manually in Order management pages by company staff)
@@ -463,6 +394,9 @@ class CheckoutForm extends Component
              * Create OrderItem(s)
              */
             foreach ($this->items as $item) {
+                if(empty($item->purchase_quantity))
+                    continue; // Skip item if purchase quantity is something other than > 0
+
                 $order_item = new OrderItem();
                 $order_item->order_id = $this->order->id;
                 $order_item->subject_type = $item::class;
@@ -488,12 +422,14 @@ class CheckoutForm extends Component
 
                 $order_item->base_price = $item->base_price; // it's like a unit_price
                 $order_item->discount_amount = $order_item->quantity * ($item->base_price - $item->total_price);
-                $order_item->subtotal_price = $order_item->quantity * $item->total_price;
-                $order_item->total_price = $order_item->quantity * $item->total_price;
-                $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
+                $order_item->subtotal_price = ($order_item->quantity * $item->base_price) - $order_item->discount_amount;
+                $order_item->tax = $order_item->subtotal_price * CartService::getGlobalTaxPercentage() / 100;
+                $order_item->total_price = $order_item->subtotal_price + $order_item->tax;
 
                 $order_item->save();
             }
+
+            $this->order->load(['order_items', 'user']);
 
             /*
              * Create Invoice
@@ -508,7 +444,8 @@ class CheckoutForm extends Component
             $invoice->payment_method_type = PaymentMethodUniversal::class;
             $invoice->payment_method_id = $payment_method->id ?? null;
             $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
-            // $invoice->invoice_number = Invoice::generateInvoiceNumber($this->order->billing_first_name, $this->order->billing_last_name, $this->order->billing_company); // Default: VJ21012022
+            
+            $invoice->setInvoiceNumber($payment_method);
 
             $invoice->email = $this->order->email;
             $invoice->billing_first_name = $this->order->billing_first_name;
@@ -524,54 +461,33 @@ class CheckoutForm extends Component
             $invoice->base_price = CartService::getOriginalPrice()['raw'];
             $invoice->discount_amount = CartService::getDiscountAmount()['raw'];
             $invoice->subtotal_price = CartService::getSubtotalPrice()['raw'];
-            $invoice->total_price = CartService::getSubtotalPrice()['raw']; // should be TotalPrice in future...
-
+            $invoice->tax = CartService::getTaxAmount()['raw'];
             $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
-            $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
+            $invoice->total_price = CartService::getTotalPrice()['raw'];
 
             // TODO: Add Shop Settings for general due_date and grace_period
-            // TODO: Trial can determine invoicing start_date because trial can append X days on top of current date-time, so invoicing starts on e.g. 15 days from current date, or 30 or X
             $invoice->start_date = $this->order->invoicing_start_date; // current unix_timestamp (for non-trial plans)
             $invoice->due_date = null; // Default due_date is NULL days for subscription (if not trial mode, if it's trial it's null)
             $invoice->grace_period = $this->order->invoice_grace_period; // NULL; or 5 days grace_period by default
 
-            $invoice->setInvoiceNumber();
-
             $invoice->save();
+
+            do_action('checkout.process', $this->order, $invoice);
 
             DB::commit();
 
-            $this->executePayment(request(), $invoice->id);
-
+            $invoice->setRealInvoiceNumber();
 
             // Full cart reset
             CartService::fullCartReset();
 
-            return redirect()->route('checkout.order.received', $this->order->id);
+            return redirect()->route('checkout.execute.custom.payment', ['invoice_id' => $invoice->id, 'payment_gateway' => $payment_method->gateway] );
+            // return redirect()->route('checkout.order.received', $this->order->id);
         } catch (\Throwable $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while processing the order...Please try again.'));
             dd($e);
-        }
-    }
-
-    protected function executePayment(mixed $request, $invoice_id)
-    {
-        $invoice = Invoice::with('payment_method')->find($invoice_id);
-        $invoice->load('payment_method');
-
-        // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
-
-        if ($invoice->payment_method->gateway === 'wire_transfer') {
-
-        } else if ($invoice->payment_method->gateway === 'stripe') {
-
-        } else if ($invoice->payment_method->gateway === 'paypal') {
-            
-        } else if ($invoice->payment_method->gateway === 'paysera') {
-            $paysera = new PayseraGateway(order: $invoice->order, invoice: $invoice, payment_method: $invoice->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
-            $paysera->pay();
         }
     }
 }
