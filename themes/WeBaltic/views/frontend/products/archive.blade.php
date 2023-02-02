@@ -132,9 +132,7 @@
                             {{ translate('We can make you a custom made order. Reach out to us and we will send you a
                             price quote in 1 working day.') }}
                         </p>
-                        <button class="btn-primary mt-3">
-                            {{ translate('Filter') }}
-                        </button>
+
                     </a>
 
                 </form>
@@ -142,7 +140,7 @@
                 <!-- Product grid -->
                 <div class="grid sm:grid-cols-12 gap-y-10 gap-x-6 sm:grid-cols-1 lg:col-span-3 lg:gap-x-8">
                     @foreach ($products as $item)
-                    @if($item instanceof \App\Models\Product && $item)
+                    @if($item instanceof \App\Models\Product)
                     <x-default.products.product-card :product="$item"></x-default.products.product-card>
                     {{-- <x-feed.elements.product-card :product="$item"></x-feed.elements.product-card> --}}
                     @endif
