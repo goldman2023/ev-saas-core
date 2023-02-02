@@ -2,11 +2,11 @@
 
 namespace App\Http\Services;
 
-
+use Str;
+use Session;
 use App\Models\User;
 use App\Models\Address;
 use Illuminate\Support\Collection;
-use Str;
 
 class AuthService
 {
@@ -34,6 +34,7 @@ class AuthService
                 'user_type' => User::$customer_type,
                 'email' => $order->email,
                 'is_temp' => true,
+                'session_id' => Session::getId()
             ]);
 
             // Create billing address
