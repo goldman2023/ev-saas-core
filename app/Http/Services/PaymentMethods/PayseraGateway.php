@@ -104,6 +104,8 @@ class PayseraGateway
         $invoice->order->save();
         $invoice->save();
 
+        $order = $invoice->order;
+
         return view('frontend.order-accepted', compact('order'));
     }
 
@@ -117,6 +119,8 @@ class PayseraGateway
         $invoice->order->save();
         $invoice->save();
 
+        $order = $invoice->order;
+        
         return view('frontend.order-canceled', compact('order'));
     }
 
