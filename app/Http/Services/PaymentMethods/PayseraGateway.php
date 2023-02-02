@@ -85,6 +85,8 @@ class PayseraGateway
                 'callbackurl' => $this->callbackurl,
                 'test' => $this->test,
             ]);
+            /* Important, add exit to prevent from pausing a redirect with a blank page */
+            exit();
         } catch (\Exception $exception) {
             dd(get_class($exception).':'.$exception->getMessage());
         }
@@ -120,7 +122,7 @@ class PayseraGateway
         $invoice->save();
 
         $order = $invoice->order;
-        
+
         return view('frontend.order-canceled', compact('order'));
     }
 
