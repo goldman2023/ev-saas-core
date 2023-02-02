@@ -72,9 +72,10 @@ class CategoriesTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Featured', 'featured')
                 ->excludeFromSelectable(),
-            Column::make('Children', 'descendants_count')
+            Column::make('Products Count', 'descendants_count'),
+            Column::make('Subcategories', 'descendants_count')
                 ->sortable(),
-            Column::make('Created', 'created_at'),
+            // Column::make('Created', 'created_at'),
             Column::make('Actions')
                 ->excludeFromSelectable(),
         ];
@@ -83,6 +84,7 @@ class CategoriesTable extends DataTableComponent
     public function query(): Builder
     {
         return Category::query()->withCount(['products', 'shops', 'descendants'])
+        ->where('level', 0)
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('featured'), fn ($query, $featured) => $query->where('featured', $featured))
             ->when($this->getFilter('date_created'), fn ($query, $date) => $query->whereDate('created_at', '=', $date));

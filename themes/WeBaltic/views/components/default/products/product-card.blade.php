@@ -4,7 +4,7 @@
             <a href="{{ $product->getPermalink() }}">
 
                 <img class="w-full h-full max-h-[230px] object-cover rounded-t-lg md:rounded-none md:rounded-l-lg"
-                    src="{{ $product->getThumbnail() }}" alt=" {{ $product->name }}" />
+                    src="{{ $product->getThumbnail(['w' => 600]) }}" alt=" {{ $product->name }}" />
             </a>
         </div>
         <div class="col-span-5 p-6">
@@ -23,8 +23,16 @@
                 {{ translate('Su stabdžiais') }}
                 @endif
             </p>
-            <p class="text-gray-600 text-xs">
+            <p class="text-gray-600 text-xs whitespace-nowrap flex">
                 {{ translate('2 year waranty') }} / {{ translate('Made in Lithuania') }}
+
+                @auth
+                @if(auth()->user()->isAdmin())
+                / <span class="flex"> @svg('heroicon-o-chart-bar', ['class' => 'h-4 h-4 ml-2 mr-1'])
+                {{ $product->activities_count}}
+                </span>
+                @endif
+                @endauth
             </p>
         </div>
 

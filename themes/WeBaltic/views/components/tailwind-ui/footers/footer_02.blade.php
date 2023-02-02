@@ -1,7 +1,7 @@
 @php
-$footer_menu = nova_get_menu_by_slug('footer')['menuItems'] ?? null;
-$footer_menu_2 = nova_get_menu_by_slug('footer-2')['menuItems'] ?? null;
-$footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
+$footer_menu = nova_get_menu_by_slug('footer_1')['menuItems'] ?? null;
+$footer_menu_2 = nova_get_menu_by_slug('footer_2')['menuItems'] ?? null;
+$footer_menu_3 = nova_get_menu_by_slug('footer_3')['menuItems'] ?? null;
 @endphp
 <footer class="bg-white dark:bg-gray-800">
     <div class="py-6 mx-auto container md:p-6 lg:p-6">
