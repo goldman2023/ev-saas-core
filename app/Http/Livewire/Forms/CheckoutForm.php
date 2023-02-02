@@ -310,7 +310,7 @@ class CheckoutForm extends Component
             $user = auth()->user() ?? null;
 
             if (! Auth::check()) {
-                $user = AuthService::createGhostUserOnCheckout();
+                $user = AuthService::createGhostUserOnCheckout($this->order);
             }
 
             // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
