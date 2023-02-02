@@ -12,9 +12,12 @@
     </a>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle text-center" style="min-width: 200px;">
-    <a href="{{ route('product.details', $row->id) }}" class="font-bold text-md">
-        {{ $row->name }}
+<x-livewire-tables::table.cell class="align-middle text-left" style="min-width: 200px;">
+    <a href="{{ route('product.details', $row->id) }}" class="font-bold text-lg">
+        {{ $row->name }} <br>
+        <small class="font-medium text-ellipsis	overflow-hidden block whitespace-wrap" style="max-width: 250px; display: block;">
+            {{ $row->excerpt }}
+        </small>
     </a>
 </x-livewire-tables::table.cell>
 
