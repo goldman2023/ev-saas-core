@@ -470,9 +470,22 @@ class CheckoutController extends Controller
         return view('frontend.order-received', compact('order', 'ghost_user'));
     }
 
+    public function orderPaid(Request $request, $order_id)
+    {
+        $order = Order::find($order_id);
+
+        // TODO: Check $invoice payment_status before proceeding -> if not paid go to received!
+
+
+        return view('frontend.order-paid', compact('order'));
+    }
+
     public function orderCanceled(Request $request, $order_id)
     {
         $order = Order::find($order_id);
+
+        // TODO: Check $invoice payment_status before proceeding -> if not canceled go to received!
+
 
         return view('frontend.order-canceled', compact('order'));
     }

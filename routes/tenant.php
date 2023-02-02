@@ -201,6 +201,7 @@ Route::middleware([
         Route::post('/checkout', [CheckoutController::class, 'process_checkout'])->name('checkout.process');
 
         Route::get('/order/{id}/canceled', [CheckoutController::class, 'orderCanceled'])->name('checkout.order.canceled');
+        Route::get('/order/{id}/paid', [CheckoutController::class, 'orderPaid'])->name('checkout.order.paid');
     });
     Route::get('/order/{id}/received', [CheckoutController::class, 'orderReceived'])->name('checkout.order.received');
     Route::get('/request-quote', [QuotesController::class, 'create'])->name('quote.create');

@@ -99,16 +99,18 @@ class PayseraGateway
 
         $invoice = Invoice::find($invoice_id);
 
+        // TODO: Check $invoice payment_status before proceeding -> if not paid go to received!
+
         $invoice->order->payment_status = $invoice->isLastInvoice() ? PaymentStatusEnum::pending()->value : PaymentStatusEnum::unpaid()->value;
         $invoice->meta = $params;
-        $invoice->payment_status = PaymentStatusEnum::pending()->value; // change payment status to pending until callback from paysera changes it to `paid`
+        $invoice->payment_status = PaymentStatusEnum::paid()->value; // change payment status to pending until callback from paysera changes it to `paid`
 
         $invoice->order->save();
         $invoice->save();
 
         $order = $invoice->order;
 
-        return view('frontend.order-accepted', compact('order'));
+        return redirect()->route('checkout.order.paid', $order->id);
     }
 
     public function canceled(Request $request, $invoice_id)
@@ -123,7 +125,7 @@ class PayseraGateway
 
         $order = $invoice->order;
 
-        return view('frontend.order-canceled', compact('order'));
+        return redirect()->route('checkout.order.canceled', $order->id);
     }
 
     public function callback(Request $request, $invoice_id)
