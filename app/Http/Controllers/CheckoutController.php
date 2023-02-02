@@ -3,25 +3,26 @@
 namespace App\Http\Controllers;
 
 use Log;
-use App\Enums\OrderTypeEnum;
-use App\Enums\PaymentStatusEnum;
-use App\Enums\ShippingStatusEnum;
-use App\Http\Services\PaymentMethods\PayseraGateway;
-use App\Models\Address;
-use App\Models\Invoice;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\PaymentMethodUniversal;
-use App\Models\User;
 use Auth;
 use Session;
+use Payments;
 use CartService;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Address;
+use App\Models\Invoice;
+use App\Models\OrderItem;
+use App\Enums\OrderTypeEnum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
+use App\Enums\PaymentStatusEnum;
+use App\Enums\ShippingStatusEnum;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\PaymentMethodUniversal;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use App\Http\Services\PaymentMethods\PayseraGateway;
 
 class CheckoutController extends Controller
 {
@@ -478,32 +479,6 @@ class CheckoutController extends Controller
 
     public function executePayment(Request $request, $invoice_id, $payment_gateway = null)
     {
-        try {
-            $invoice = Invoice::with('payment_method')->findOrFail($invoice_id);
-
-            if(empty($payment_gateway)) {
-                $payment_gateway = $invoice->payment_method->gateway;
-            }
-
-            if(!\Payments::getPaymentMethodsGateway()->contains($payment_gateway)) {
-                throw new \Exception('Payment gateway: '.$payment_gateway.'; not enabled or does not exist in PaymentsService');
-            }
-
-            if ($payment_gateway === 'wire_transfer') {
-                // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
-            } elseif ($payment_gateway === 'paysera') {
-                $paysera = new PayseraGateway(
-                    order: $invoice->order,
-                    invoice: $invoice,
-                    payment_method: \Payments::$payment_gateway(),
-                    lang: 'ENG',
-                    paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])')
-                );
-                $paysera->pay();
-            }
-        } catch(\Throwable $e) {
-            Log::error($e);
-            abort(500);
-        }
+        return Payments::executePayment($request, $invoice_id, $payment_gateway);
     }
 }

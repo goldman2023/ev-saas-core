@@ -1,4 +1,4 @@
-<div class="mb-6 md:sticky top-[65px] z-[1000]">
+<div class="{{ $class ? $class : 'mb-6 md:sticky top-[65px] z-[1000]' }}">
     <nav class="w-full" aria-label="Progress">
       <ol role="list" class="overflow-hidden rounded-lg lg:flex lg:rounded-xl lg:border lg:border-gray-300">
         @foreach($steps as $key => $step)

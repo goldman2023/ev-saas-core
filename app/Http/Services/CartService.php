@@ -25,7 +25,7 @@ class CartService
 
     protected $totalPrice;
 
-    protected $global_tax; // TODO: Make tax system in taxes table which depend on country! For now we are just adding global tax to everyone...
+    protected $globalTaxPercentage; // TODO: Make tax system in taxes table which depend on country! For now we are just adding global tax to everyone...
 
     public function __construct($app)
     {
@@ -35,17 +35,22 @@ class CartService
 
         // Taxes
         try {
-            $this->global_tax = (float) get_tenant_setting('company_tax_rate');
-            if(empty($this->global_tax)) {
-                $this->global_tax = 0;
+            $this->globalTaxPercentage = (float) get_tenant_setting('company_tax_rate');
+            if(empty($this->globalTaxPercentage)) {
+                $this->globalTaxPercentage = 0;
             }
         } catch(\Exception $e)  {
-            $this->global_tax = 0;
+            $this->globalTaxPercentage = 0;
         }
         
 
         // Refresh cart totals
         $this->refresh();
+    }
+
+    public function getGlobalTaxPercentage()
+    {
+        return $this->globalTaxPercentage;
     }
 
     public function getItems()
@@ -231,7 +236,7 @@ class CartService
 
                 $this->subtotalPrice['raw'] = $this->originalPrice['raw'] - $this->discountAmount['raw']; // Subtotal: Original - Line discounts
                 
-                $this->taxAmount['raw'] = $this->subtotalPrice['raw'] * $this->global_tax / 100; // Tax: global_tax percentage of Subtotal
+                $this->taxAmount['raw'] = $this->subtotalPrice['raw'] * $this->globalTaxPercentage / 100; // Tax: globalTaxPercentage of Subtotal
 
                 $this->totalPrice['raw'] = $this->subtotalPrice['raw'] + $this->taxAmount['raw']; // Total: Subtotal + Tax
             }

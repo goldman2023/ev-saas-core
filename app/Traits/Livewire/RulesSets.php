@@ -17,6 +17,41 @@ trait RulesSets
 
     abstract protected function messages();
 
+    protected function rulesSets() {
+        return [
+            'default' => []
+        ];
+    }
+
+    protected function getRuleSetsCombined($data = [], $fallback_set = 'default') {
+        if($data === 'all') {
+            return array_reduce($this->rulesSets(), function($carry, $rules) {
+                if(empty($carry)) {
+                    return array_merge([], $rules);
+                }
+
+                return array_merge($carry, $rules);
+            });
+        }
+
+        if(!empty($data) && is_array($data)) {
+            $rules = [];
+
+            foreach($data as $set_name => $set_condition) {
+                if(is_string($set_condition) && !empty($set_condition) && !empty($this->rulesSets()[$set_condition] ?? false)) {
+                    // If $set_condition is a string, then there's no condition, and we should just include set of rules with $set_condition name
+                    $rules = array_merge($rules, $this->rulesSets()[$set_condition]);
+                } else if(is_string($set_name) && $set_condition instanceof \Closure && $set_condition() === true) {
+                    $rules = array_merge($rules, $this->rulesSets()[$set_name]);
+                }
+            }
+
+            return $rules;
+        }
+
+        return ($this?->rulesSets() ?? [])['fallback_set'] ?? [];
+    }
+
     protected function getRuleSet($set_name = null)
     {
         $all_rules = $this->getRules();

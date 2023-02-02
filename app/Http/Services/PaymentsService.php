@@ -5,15 +5,19 @@ namespace App\Http\Services;
 use DB;
 use FX;
 use EVS;
+use Log;
 use Cache;
 use Session;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Invoice;
 use App\Models\ShopSetting;
+use Illuminate\Http\Request;
 use App\Models\TenantSetting;
 use App\Models\PaymentMethodUniversal;
 use Illuminate\Database\Eloquent\Collection;
+use App\Http\Services\PaymentMethods\PayseraGateway;
+
 
 class PaymentsService
 {
@@ -132,6 +136,52 @@ class PaymentsService
         return $this->paysera;
     }
     // END Paysera
+
+    // Actions
+    public function executePayment(Request $request, $invoice_id, $payment_gateway = null, $livewire_redirect = false) {
+        try {
+            if($invoice_id instanceof Invoice) {
+                $invoice = $invoice_id;
+            } else {
+                $invoice = Invoice::with('payment_method')->findOrFail($invoice_id);
+            }
+
+            if($invoice->user_id !== (auth()->user()?->id ?? null)) {
+                // If current user is not the same as the invoice user, forbid access to payment execution
+                abort(403);
+            }
+
+            if(empty($payment_gateway)) {
+                $payment_gateway = $invoice->payment_method->gateway;
+            }
+
+            if(!self::getPaymentMethodsGateway()->contains($payment_gateway)) {
+                throw new \Exception('Payment gateway: '.$payment_gateway.'; not enabled or does not exist in PaymentsService');
+            }
+
+            // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
+            if ($payment_gateway === 'wire_transfer') {
+                return redirect()->route('checkout.order.received', $invoice->order_id);
+            } else if ($payment_gateway === 'stripe') {
+
+            } else if ($payment_gateway === 'paypal') {
+                
+            } elseif ($payment_gateway === 'paysera') {
+                $paysera = new PayseraGateway(
+                    order: $invoice->order,
+                    invoice: $invoice,
+                    payment_method: self::$payment_gateway(),
+                    lang: 'ENG',
+                    paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])')
+                );
+                return $paysera->pay();
+            }
+        } catch(\Throwable $e) {
+            Log::error($e);
+            // abort(500);
+            dd($e);
+        }
+    }
 
     // HELPERS
     public function getViaLabel($gateway) {

@@ -11,15 +11,16 @@ class CustomerOrderSteps extends Component
     public $order;
     public $order_cycle_status;
     public $steps_description;
+    public $class;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($order)
+    public function __construct($order, $class = '')
     {
-        //
+        $this->class = $class;
         $this->order = $order;
         $this->steps = OrderCycleStatusEnum::getPublicStatusesLabels();
         $this->steps_description = OrderCycleStatusEnum::getPublicStatusesDescriptions();

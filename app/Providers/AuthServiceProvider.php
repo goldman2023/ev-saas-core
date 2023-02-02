@@ -2,14 +2,15 @@
 
 namespace App\Providers;
 
-use App\Http\Services\PermissionsService;
-use App\Models\Product;
 use App\Models\Shop;
-use App\Policies\ProductPolicy;
+use App\Models\Product;
 use App\Policies\ShopPolicy;
+use App\Policies\ProductPolicy;
+use App\Http\Services\AuthService;
 use Illuminate\Container\Container;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Services\PermissionsService;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -37,6 +38,10 @@ class AuthServiceProvider extends ServiceProvider
 //      Gate::before(function ($user, $ability) {
 //          return $user->hasRole('Super Admin') ? true : null;
 //      });
+
+        $this->app->singleton('auth_service', function() {
+            return new AuthService(fn () => Container::getInstance());
+        });
 
         // Register Permissions Service Singleton
         $this->app->singleton('permissions', function () {
