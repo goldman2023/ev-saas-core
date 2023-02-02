@@ -16,6 +16,8 @@
 
 <x-theme::dashboard.orders.customer-order-steps :order="$order" class="mb-6 pt-[60px] static md:static"></x-theme::dashboard.orders.customer-order-steps>
 
+{{-- TODO: Change it accordingly - to show paid order page! It's a copy of order-received now! --}}
+
 <section class="bg-white">
 
     <div class="max-w-3xl mx-auto px-4 py-8 sm:px-6 sm:py-16 lg:px-8">
@@ -156,7 +158,7 @@
           @endif
 
           <dl class="space-y-6 border-t border-gray-200 text-sm pt-6 col-start-1 md:col-start-2 col-end-4">
-
+            
             {{-- Non-subscription Orders --}}
             <div class="flex justify-between">
               <dt class="font-medium text-gray-900">{{ translate('Items') }}</dt>
