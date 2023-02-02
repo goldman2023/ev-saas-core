@@ -26,8 +26,8 @@
                 x-transition:leave="transition ease-in duration-400"
                 x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-90">
-                <ol class="list-decimal border border-gray-200 rounded text-14 p-3 pl-7" 
-                    x-data="{ warnings: [] }" 
+                <ol class="list-decimal border border-gray-200 rounded text-14 p-3 pl-7"
+                    x-data="{ warnings: [] }"
                     @display-flyout-cart-errors.window="warnings = $event.detail.warnings;">
                     <template x-for="warning in warnings">
                         <li class="text-danger text-14" x-html="warning"></li>
@@ -57,7 +57,7 @@
                                 $watch('qty', (value, oldValue) => {
                                     if(!processing) {
                                         processing = true;
-                                        
+
                                         hideWarnings();
                                         $wire.addToCart(model_id, model_type, value, false);
                                     }
@@ -92,13 +92,13 @@
                                     <div class="flex flex-col grow">
                                         <div class="flex flex-row justify-between items-center mb-1">
                                             <strong class="text-gray-800 text-16 w-full inline-block  line-clamp-1" style="line-height: 1.2;">{{ $name }}</strong>
-    
+
                                             <div class="ml-4 w-[18px] h-[18px] rounded flex items-center justify-center cursor-pointer"
                                                 @click="$wire.removeFromCart(model_id, model_type)">
                                                 @svg('heroicon-o-trash', ['class' => 'w-[18px] h-[18px] text-danger'])
                                             </div>
                                         </div>
-    
+
                                         @if(!$hasVariations)
                                             <span class="text-gray-500 text-12 line-clamp-2">{{ $excerpt }}</span>
                                         @else
@@ -109,9 +109,9 @@
                                             </ul>
                                         @endif
                                     </div>
-                                    
 
-                                    
+
+
                                     <div class="w-full flex flex-wrap flex-row justify-between items-center pb-0.5">
                                         <x-system.quantity-counter :model="$item" :wired="true" :mini="true"></x-system.quantity-counter>
 
@@ -136,7 +136,8 @@
                                 <h3 class="h3">{{ translate('Your cart is currently empty') }}</h3>
                                 <p class="mx-3 mt-3">{{ translate('Before proceed to checkout you must add some products to your shopping cart.') }}</p>
                             </div>
-                            <a class="btn btn-pill btn-primary text-white transition-3d-hover px-5 py-2" href="{{ route('feed.products') }}">
+                            <a class="btn btn-pill w-full !text-md !py-3 btn-primary text-white transition-3d-hover px-5 py-2"
+                            href="{{ route('products.all') }}">
                                 {{ translate('Start Shopping') }}
                             </a>
                         </div>
@@ -146,7 +147,7 @@
 
             </div>
 
-            
+
             <!-- Cart Footer -->
             @if($items->isNotEmpty())
                 <div class="w-full flex flex-col border-t pt-3">
