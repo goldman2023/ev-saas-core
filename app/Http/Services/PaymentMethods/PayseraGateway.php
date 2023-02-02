@@ -85,7 +85,7 @@ class PayseraGateway
                 'callbackurl' => $this->callbackurl,
                 'test' => $this->test,
             ]);
-            /* Important, add exit to prevent from pausing a redirect with a blank page */
+            /* Important, add exit() after WebToPay::redirectToPayment() to prevent from pausing a redirect with a blank page */
             exit();
         } catch (\Exception $exception) {
             dd(get_class($exception).':'.$exception->getMessage());
