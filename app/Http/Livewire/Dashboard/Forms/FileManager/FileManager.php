@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\FileManager;
 
-use Livewire\Component;
-use App\Models\Upload;
-use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\RulesSets;
 use DB;
 use EVS;
 use Purifier;
+use App\Models\Upload;
+use Livewire\Component;
+use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\DispatchSupport;
 use Spatie\ValidationRules\Rules\ModelsExist;
 
 class FileManager extends Component
