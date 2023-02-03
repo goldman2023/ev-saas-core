@@ -66,7 +66,6 @@ class EventServiceProvider extends ServiceProvider
         // Plans Events
         PlanSubscriptionCancel::class => [CancelStripePlanSubscription::class],
         PlanSubscriptionRevive::class => [ReviveStripePlanSubscription::class],
-
     ];
 
     /**
