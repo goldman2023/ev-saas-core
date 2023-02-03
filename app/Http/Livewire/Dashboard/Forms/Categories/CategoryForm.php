@@ -107,13 +107,13 @@ class CategoryForm extends Component
 
             DB::commit();
 
-            Categories::clearCache(); // clear cache after category is added/updated
-
             if ($this->is_update) {
                 $this->inform('Category successfully updated!', '', 'success');
             } else {
                 $this->inform('Category successfully created!', '', 'success');
             }
+
+            return redirect()->route('category.edit', $this->category->id);
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -137,6 +137,8 @@ class CategoryForm extends Component
             DB::commit();
 
             $this->inform(translate('Category successfully deleted!'), '', 'success');
+
+            return redirect()->route('categories.index');
         } catch (\Exception $e) {
             $this->dispatchGeneralError(translate('There was an error while trying to remove category and it\'s relationships: ').$e->getMessage());
             $this->inform(translate('There was an error while trying to remove category and it\'s relationships: '), $e->getMessage(), 'danger');
