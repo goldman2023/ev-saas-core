@@ -90,7 +90,7 @@
 														<tr>
 															<td class="pad" style="padding-bottom:15px;padding-top:15px;width:100%;padding-right:0px;padding-left:0px;">
 																<div class="alignment" align="center" style="line-height:10px">
-                                                                    <img src="{{ get_site_logo() }}" style="display: block; height: auto; border: 0; width: 163px; max-width: 100%;" width="163" alt="logo" title="logo" />
+                                                                    <img src="{{ get_site_logo() }}" style="display: block; height: auto; border: 0; width: 163px; max-width: 100%;" width="163" alt="your logo" title="your logo">
                                                                 </div>
 															</td>
 														</tr>
@@ -107,14 +107,14 @@
 						<tbody>
 							<tr>
 								<td>
-									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #ffffff; color: #000000; width: 650px;" width="650">
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; background-size: auto; background-color: #ffffff; width: 650px;" width="650">
 										<tbody>
 											<tr>
 												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 20px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
 													<table class="heading_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
 														<tr>
 															<td class="pad" style="text-align:center;width:100%;">
-																<h1 style="margin: 0; color: #eb1b24; direction: ltr; font-family: 'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 28px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><strong>Email verification for {{ get_site_name() }}</strong></h1>
+																<h1 style="margin: 0; color: #eb1b24; direction: ltr; font-family: 'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 28px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><strong>Finalize your registration on {{ get_site_name() }}</strong></h1>
 															</td>
 														</tr>
 													</table>
@@ -123,8 +123,8 @@
 															<td class="pad" style="padding-left:45px;padding-right:45px;padding-top:10px;">
 																<div style="font-family: Arial, sans-serif">
 																	<div class style="font-size: 12px; font-family: 'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif; mso-line-height-alt: 18px; color: #393d47; line-height: 1.5;">
-																		<p style="margin: 0; text-align: center; mso-line-height-alt: 27px;"><span style="font-size:18px;color:#000101;">Hello  {{ $user->name.' '.$user->surname }}! Please verify your email address.</span></p>
-																		<p style="margin: 0; text-align: center; mso-line-height-alt: 27px;"><span style="font-size:18px;color:#000101;">To access and manage your account, your email address must be verified.</span></p>
+																		<p style="margin: 0; text-align: center; mso-line-height-alt: 27px;"><span style="font-size:18px;color:#000101;">Hello {{ $user->name.' '.$user->surname }}! You have recently ordered from {{ get_site_name() }}</span></p>
+																		<p style="margin: 0; text-align: center; mso-line-height-alt: 27px;"><span style="font-size:18px;color:#000101;">To access and manage your orders and invoices, <br>please finalize your registration.</span></p>
 																	</div>
 																</div>
 															</td>
@@ -148,7 +148,7 @@
 															<td class="pad" style="padding-bottom:10px;padding-left:45px;padding-right:45px;padding-top:10px;">
 																<div style="font-family: Arial, sans-serif">
 																	<div class style="font-size: 12px; font-family: 'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: center; mso-line-height-alt: 18px; color: #393d47; line-height: 1.5;">
-																		<p style="margin: 0; mso-line-height-alt: 19.5px;"><span style="font-size:13px;color:#000101;">Verify your email address by clicking the button below:</span></p>
+																		<p style="margin: 0; mso-line-height-alt: 19.5px;"><span style="font-size:13px;color:#000101;">Finalize your registration by clicking the button below:</span></p>
 																	</div>
 																</div>
 															</td>
@@ -158,11 +158,10 @@
 														<tr>
 															<td class="pad">
 																<div class="alignment" align="center">
-																	<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ route('user.email.verification.verify', ['id' => $user->id, 'hash' => $user->verification_code]) }}" style="height:50px;width:201px;v-text-anchor:middle;" arcsize="0%" strokeweight="0.75pt" strokecolor="#eb1b24" fillcolor="#eb1b24"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:14px"><![endif]-->
-                                                                        <a href="{{ route('user.email.verification.verify', ['id' => $user->id, 'hash' => $user->verification_code]) }}" target="_blank" style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#eb1b24;border-radius:0px;width:auto;border-top:1px solid transparent;font-weight:400;border-right:1px solid transparent;border-bottom:1px solid transparent;border-left:1px solid transparent;padding-top:10px;padding-bottom:10px;font-family:'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;">
-                                                                            <span style="padding-left:40px;padding-right:40px;font-size:14px;display:inline-block;letter-spacing:normal;">
-                                                                                <span dir="ltr" style="word-break: break-word;">
-                                                                                    <span style="line-height: 28px;" dir="ltr" data-mce-style>{{ translate('Verify email address') }}</span>
+																	<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://www.example.com" style="height:50px;width:220px;v-text-anchor:middle;" arcsize="0%" strokeweight="0.75pt" strokecolor="#eb1b24" fillcolor="#eb1b24"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:14px"><![endif]-->
+                                                                        <a href="{{ route('user.registration.finalize', ['id' => $user->id, 'hash' => $user->verification_code]) }}" target="_blank" style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#eb1b24;border-radius:0px;width:auto;border-top:1px solid transparent;font-weight:400;border-right:1px solid transparent;border-bottom:1px solid transparent;border-left:1px solid transparent;padding-top:10px;padding-bottom:10px;font-family:'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;"><span style="padding-left:40px;padding-right:40px;font-size:14px;display:inline-block;letter-spacing:normal;">
+                                                                            <span dir="ltr" style="word-break: break-word;">
+                                                                                <span style="line-height: 28px;" dir="ltr" data-mce-style>Finalize my registration</span>
                                                                                 </span>
                                                                             </span>
                                                                         </a>
@@ -176,16 +175,7 @@
 															<td class="pad" style="padding-bottom:15px;padding-left:10px;padding-right:10px;padding-top:10px;">
 																<div style="font-family: Arial, sans-serif">
 																	<div class style="font-size: 12px; font-family: 'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #393d47; line-height: 1.2;">
-																		<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;">
-                                                                            <span style="font-size:12px;">
-                                                                                <span style="color:#8f8f8f;">
-                                                                                    If button above does not work, please click the following link:<br>
-                                                                                    <a href="{{ route('user.email.verification.verify', ['id' => $user->id, 'hash' => $user->verification_code]) }}" target="_blank">
-                                                                                        {{ route('user.email.verification.verify', ['id' => $user->id, 'hash' => $user->verification_code]) }}
-                                                                                    </a>
-                                                                                </span>
-                                                                            </span>
-                                                                        </p>
+																		<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><span style="font-size:10px;color:#8f8f8f;"><span style>If you didn't interact with {{ get_site_name() }} platform, </span><span style>you don't have to do anything. So that's easy.</span></span></p>
 																	</div>
 																</div>
 															</td>
@@ -196,7 +186,7 @@
 															<td class="pad" style="padding-bottom:20px;padding-left:10px;padding-right:10px;padding-top:10px;">
 																<div style="font-family: sans-serif">
 																	<div class style="font-size: 12px; mso-line-height-alt: 14.399999999999999px; color: #8412c0; line-height: 1.2; font-family: Arial, Helvetica Neue, Helvetica, sans-serif;">
-																		<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><span style="color:#000101;font-size:12px;">Tero.lt © All rights reserved</span></p>
+																		<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><span style="color:#000101;font-size:12px;">{{ get_site_name() }} © All rights reserved</span></p>
 																	</div>
 																</div>
 															</td>

@@ -23,7 +23,19 @@ class OrderController extends Controller
         if (is_integer($current_status)) {
             $new_status = $current_status + 1; // Increment status by 1
         } else {
+            $order->setWEF('cycle_status', 0); // set first to 0, then change later
+            $current_status = $order->getWEF('cycle_status', true);
             $new_status = 1; // Default is 'contract'!
+        }
+
+        if(!isset(OrderCycleStatusEnum::values()[$new_status])) {
+            // If $new_status does not exist in enum, thwo an error
+            if($standalone) {
+                return false;
+            }
+
+            session()->flash('message', translate('Order cycle status was not updated. New status does not exist in Enum'));
+            return redirect()->back();
         }
 
         $reason = '';
@@ -36,10 +48,14 @@ class OrderController extends Controller
         try {
             if ($new_status == 1) { // contract
                 $reason = translate('Proposal Created');
-
+                
+                baltic_generate_order_document($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
             } else if ($new_status == 2) { // approved
                 $reason = translate('Contract Created');
-                baltic_generate_order_document($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
+
+                // Only customer can sign the contract
+                // TODO: Sign the contract here
+
             } else if ($new_status == 3) { // welding
                 $reason = translate('Approved for manufacturing');
                 baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
@@ -67,8 +83,6 @@ class OrderController extends Controller
                 $new_task->status = TaskStatusEnum::done()->value;
                 $new_task->save();
             }
-
-
 
             // Change order cycle status
             $order->setWEF('cycle_status', $new_status);

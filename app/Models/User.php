@@ -4,8 +4,9 @@ namespace App\Models;
 
 use DB;
 use Log;
-use Carbon;
 use WEF;
+use Carbon;
+use MailerService;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 use App\Traits\CoreMetaTrait;
@@ -13,8 +14,8 @@ use Laravel\Cashier\Billable;
 use App\Traits\OwnershipTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
-use App\Traits\SocialCommentsTrait;
 use Laravel\Passport\HasApiTokens;
+use App\Traits\SocialCommentsTrait;
 use Bavix\Wallet\Interfaces\Wallet;
 use App\Traits\SocialFollowingTrait;
 use App\Traits\SocialReactionsTrait;
@@ -40,7 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SoftDeletes;
     use HasRoles;
     use HasApiTokens;
-    use Notifiable;
     use LogsActivity;
     use UploadTrait;
     use GalleryTrait;
@@ -108,6 +108,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function isGhost() {
+        return $this->is_temp === true;
+    }
 
     public function isEmailVerified()
     {
@@ -464,7 +468,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         do_action('user.password.updated', $this, $newPassword, $oldPassword);
 
         try {
-            $this->notify(new UserPasswordChangedNotification());
+            MailerService::notify($this, new UserPasswordChangedNotification());
         } catch(\Exception $e) {
             Log::error($e);
         }

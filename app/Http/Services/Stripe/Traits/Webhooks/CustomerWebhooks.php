@@ -69,7 +69,7 @@ trait CustomerWebhooks
 
                 DB::commit();
 
-                // Remember: created() event from UserObserver will be fired after transaction is comitted because of $afterCommit = true;
+                // Remember: created() event from UsersObserver will be fired after transaction is comitted because of $afterCommit = true;
             } catch (\Exception $e) {
                 DB::rollBack();
                 http_response_code(400);

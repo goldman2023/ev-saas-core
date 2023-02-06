@@ -2,23 +2,26 @@
 
 namespace App\Observers;
 
-use App\Models\User;
-use App\Mail\UserReceivedEmail;
-use App\Mail\WelcomeEmail;
-use Illuminate\Support\Facades\Mail;
 use Log;
+use Session;
 use Payments;
 use MailerService;
 use StripeService;
-use App\Enums\WeMailingListsEnum;
+use Uuid;
+use App\Models\User;
+use App\Mail\WelcomeEmail;
 use App\Mail\EmailVerification;
-use Illuminate\Support\Facades\Notification;
+use App\Mail\UserReceivedEmail;
+use App\Enums\WeMailingListsEnum;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Notification;
 use App\Notifications\UserWelcomeNotification;
 use App\Notifications\UserFinalizeRegistration;
+use App\Notifications\UserEmailVerificationNotification;
 use App\Notifications\Admin\GeneralTransactionalNotification;
 
-class UserObserver
+class UsersObserver
 {
     public $afterCommit = true;
 
@@ -45,44 +48,32 @@ class UserObserver
             Log::error($e->getMessage());
         }
 
-
-
         if(!$user->is_temp && get_tenant_setting('force_email_verification')) {
-            $data= [];
-
-            $data['view'] = 'emails.users.email-verification';
-            $data['subject'] = translate('Email Verification').' | '.get_tenant_setting('site_name');
-            $data['preheader'] = translate('Please verify your email address');
-            $data['content'] = translate('Please click the button below to verify your email address.');
-            $data['link'] = route('user.email.verification.verify', ['id' => $user->id, 'hash' => sha1($user->email)]);
-
             try {
-                Mail::to($user->email)
-                    ->send(new EmailVerification($user, $data));
+                $user->sendEmailVerificationNotification();
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
             }
         } else if($user->is_temp) {
             // If user is ghost user, send a notification to finalize User registration and add a sessionID of guest user to this ghost user!
-            $user->verification_code = sha1($user->id.'_'.$user->email);
+            $user->session_id = Session::getId();
             $user->save();
 
             try {
-                $user->notify(new UserFinalizeRegistration($user->verification_code));
+                MailerService::notify($user, new UserFinalizeRegistration());
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
             }
         }
 
-        /* TODO: Send user welcome notification inly if user is not Ghost/Guest */
+        /* TODO: Send user welcome notification only if user is not Ghost/Guest */
         if(!$user->is_temp) {
             try {
-                $user->notify(new UserWelcomeNotification());
+                MailerService::notify($user, new UserWelcomeNotification());
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
             }
         }
-
 
         // Create Stripe Customer if stripe is enabled
         if(Payments::isStripeEnabled()) {
