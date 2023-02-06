@@ -302,6 +302,10 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
         parent::register();
     }
 
+    protected function setNotificationsFilters() {
+        add_filter('notifications.user-welcome.subject', fn($subject) => translate('Welcome to Tero.lt - Your One-Stop Shop for Quality Truck Trailers!'));
+    }
+
     public function nice_attribute_names() {
         $data = [
             'width' => 9,

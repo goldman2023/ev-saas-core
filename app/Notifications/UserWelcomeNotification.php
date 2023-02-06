@@ -2,16 +2,16 @@
 
 namespace App\Notifications;
 
-use Carbon\Carbon;
-use Illuminate\Notifications\Notification;
-use App\Notifications\Messages\WeMailMessage;
-use Illuminate\Support\Facades\URL;
-use App\Mail\EmailManager;
-use Auth;
 use Log;
+use Auth;
+use Carbon\Carbon;
+use App\Mail\EmailManager;
 use App\Mail\EmailVerification;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\Messages\WeMailMessage;
 
 
 class UserWelcomeNotification extends Notification
@@ -19,6 +19,7 @@ class UserWelcomeNotification extends Notification
 
     public function __construct()
     {
+
     }
 
     public function via($notifiable)
@@ -28,7 +29,7 @@ class UserWelcomeNotification extends Notification
 
     public function toDatabase($notifiable) {
         return [
-            'type' => 'User Welcome Notification',
+            'type' => translate('User Welcome Notification'),
             'data' => json_encode($notifiable)
         ];
     }
@@ -37,13 +38,11 @@ class UserWelcomeNotification extends Notification
     {
         try {
             return (new WeMailMessage)
-                ->markdown('vendor.notifications.email')
-                // ->text('mail.text.message')
-                ->subject(translate('Welcome to ' . get_tenant_setting('site_name')))
-                ->greeting(translate('Hello, ') . $notifiable->name)
-                ->line(translate('Welcome to our site.'))
-                ->line(translate('Thank you for using our application!'))
-                ->action(translate('Explore Plans'), route('dashboard'));
+                ->subject(apply_filters('notifications.user-welcome.subject', translate('Welcome to ' . get_tenant_setting('site_name'))))
+                ->view(
+                    'emails.users.welcome',
+                    ['user' => $notifiable]
+                );
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

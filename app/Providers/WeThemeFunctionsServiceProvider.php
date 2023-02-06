@@ -24,6 +24,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
     abstract protected function getTenantAppSettings() : array;
     abstract protected function getMenuLocations() : array;
     abstract protected function registerLivewireComponents();
+    abstract protected function setNotificationsFilters();
 
     /**
      * This function extends App/Tenant settings with custom settings required in a specific theme (for a specific tenant)!
@@ -64,12 +65,13 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Autoload theme Components
+        Blade::componentNamespace('WeThemes\\'.$this->theme_name.'\\App\\View\\Components', 'theme');
+
         $this->extendAppSettings();
         $this->registerMenuLocations();
         $this->registerLivewireComponents();
-
-        // Autoload theme Components
-        Blade::componentNamespace('WeThemes\\'.$this->theme_name.'\\App\\View\\Components', 'theme');
+        $this->setNotificationsFilters();
 
         // Add Theme specific sections to GrapeJS
         add_filter('theme-section-components', function($base_sections) {

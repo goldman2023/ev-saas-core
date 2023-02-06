@@ -54,7 +54,7 @@ trait CoreMetaTrait
     }
 
     public function getWEF($key, $fresh = false, $ad_hoc_data_type = null, $default = null) {
-        if(!empty($meta = $this->getCoreMeta($key, $fresh, $ad_hoc_data_type))) {
+        if(($meta = $this->getCoreMeta($key, $fresh, $ad_hoc_data_type)) !== null) {
             return $meta;
         }
         

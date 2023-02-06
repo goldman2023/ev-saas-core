@@ -132,6 +132,9 @@ return [
 
 
     'mailers' => [
+        'smtp' => [
+            'transport' => 'smtp',
+        ],
         'mailersend' => [
             'transport' => 'mailersend',
         ],

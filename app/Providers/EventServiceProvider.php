@@ -14,7 +14,7 @@ use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Models\TenantSetting;
 use App\Models\AttributeValue;
-use App\Observers\UserObserver;
+use App\Observers\UsersObserver;
 use App\Models\ProductVariation;
 use App\Models\UserSubscription;
 use App\Observers\PlansObserver;
@@ -96,7 +96,7 @@ class EventServiceProvider extends ServiceProvider
             Order::class => [OrdersObserver::class],
             OrderItem::class => [OrderItemObserver::class],
             Invoice::class => [InvoicesObserver::class],
-            User::class => [UserObserver::class],
+            User::class => [UsersObserver::class],
         ];
 
 

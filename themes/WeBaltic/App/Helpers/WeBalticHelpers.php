@@ -190,8 +190,6 @@ function vin_control_number($vin)
         $control_number += $multiply_result;
     }
 
-
-
     // Get remainder of control number divided by 11
     $remainder = $control_number % 11;
     // var_dump("Controll Number" . $remainder);
@@ -234,9 +232,14 @@ function define_livewire_dynamic_actions()
 function generate_static_mass_on_decoupling($certificate)
 {
     $string = $certificate;
-    if($certificate) {
-        $string = explode(')', (explode('(', $string)[1]))[0];
-    } else {
+    
+    try {
+        if($certificate) {
+            $string = explode(')', (explode('(', $string)[1]))[0];
+        } else {
+            $string = null;
+        }
+    } catch(\Throwable $e) {
         $string = null;
     }
 
@@ -244,8 +247,12 @@ function generate_static_mass_on_decoupling($certificate)
 }
 
 function generate_certificate_number($certificate) {
-    $string = $certificate;
-    $string = explode(')', (explode('(', $string)[0]))[0];
+    try {
+        $string = $certificate;
+        $string = explode(')', (explode('(', $string)[0]))[0];
+    } catch(\Throwable $e) {
+        $string = $certificate;
+    }
 
     return $string;
 }
