@@ -29,34 +29,34 @@ function compileTheme(mix, dirname, theme, defaultTheme = 'WeTailwind') {
     
     // App.js
     if (fs.existsSync(`${dirname}/js/app.js`)) {
-        mix.js(`${dirname}/js/app.js`, `js`).version();
+        mix.js(`${dirname}/js/app.js`, `public/themes/${theme}/js`).version();
     } else {
-        mix.js(`${dirname}/../${defaultTheme}/js/app.js`, `js`).version();
+        mix.js(`${dirname}/../${defaultTheme}/js/app.js`, `public/themes/${theme}/js`).version();
     }
     
     // Alpine.js
     if (fs.existsSync(`${dirname}/js/alpine.js`)) {
-        mix.js(`${dirname}/js/alpine.js`, `js`).version();
+        mix.js(`${dirname}/js/alpine.js`, `public/themes/${theme}/js`).version();
     } else {
-        mix.js(`${dirname}/../${defaultTheme}/js/alpine.js`, `js`).version();
+        mix.js(`${dirname}/../${defaultTheme}/js/alpine.js`, `public/themes/${theme}/js`).version();
     }
     
     // Editor.js
     if (fs.existsSync(`${dirname}/js/editor.js`)) {
-        mix.js(`${dirname}/js/editor.js`, `js`).version();
+        mix.js(`${dirname}/js/editor.js`, `public/themes/${theme}/js`).version();
     } else {
-        mix.js(`${dirname}/../${defaultTheme}/js/editor.js`, `js`).version();
+        mix.js(`${dirname}/../${defaultTheme}/js/editor.js`, `public/themes/${theme}/js`).version();
     }
     
     // Theme SCSS
     if (fs.existsSync(`${dirname}/scss/app.scss`)) {
-        mix.sass(`${dirname}/scss/app.scss`, `css`, {}, [
+        mix.sass(`${dirname}/scss/app.scss`, `public/themes/${theme}/css`, {}, [
             tailwindcss(`${dirname}/tailwind.config.js`), // IT HAS TO BE ADDED HERE, OTHERWISE IT WON'T WORK!
         ]).options({
             processCssUrls: false,
         }).version()
     } else {
-        mix.sass(`${dirname}/../${defaultTheme}/scss/app.scss`, `css`, {}, [
+        mix.sass(`${dirname}/../${defaultTheme}/scss/app.scss`, `public/themes/${theme}/css`, {}, [
             tailwindcss(`${dirname}/../${defaultTheme}/tailwind.config.js`), // IT HAS TO BE ADDED HERE, OTHERWISE IT WON'T WORK!
         ]).options({
             processCssUrls: false,
