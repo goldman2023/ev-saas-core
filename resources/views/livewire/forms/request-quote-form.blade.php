@@ -1,5 +1,8 @@
 <div class="relative w-full md:max-w-[920px] flex flex-wrap justify-between items-start self-center z-10 py-[60px]" x-data="{
-    order_items: @js($order_items),
+    order_items: @entangle('order_items').defer,
+    get hasOrderItems() {
+        return _.get(this.order_items, 'length', 0) > 0;
+    },
     manual_mode_billing: @js($manual_mode_billing),
     manual_mode_shipping: @js($manual_mode_shipping),
     show_addresses: @js($show_addresses),
@@ -13,13 +16,14 @@
     phoneNumbers: @js($order->phone_numbers),
     shippingCountry: @js($order->shipping_country),
     billingCountry: @js($order->billing_country),
-    core_meta: @js('core_meta'),
+    core_meta: @js($core_meta),
+    wef: @entangle('wef').defer,
+    setDefaults() {
+        if(this.wef.billing_entity !== 'individual' && this.wef.billing_entity !== 'company') {
+            this.wef.billing_entity = 'individual';
+        }
+    },
     save() {
-        $wire.set('order_items', this.order_items, true);
-        $wire.set('manual_mode_billing', this.manual_mode_billing, true);
-        $wire.set('manual_mode_shipping', this.manual_mode_shipping, true);
-        $wire.set('core_meta', this.core_meta, true);
-
         $wire.set('order.phone_numbers', this.phoneNumbers, true);
         $wire.set('order.billing_country', this.billingCountry, true);
         $wire.set('order.shipping_country', this.shippingCountry, true);
@@ -28,9 +32,17 @@
         $wire.set('order.buyers_consent', this.buyers_consent, true);
         $wire.set('selected_billing_address_id', this.selected_billing_address_id || -1, true);
         $wire.set('selected_shipping_address_id', this.selected_shipping_address_id || -1, true);
+
+        {{-- $wire.set('order_items', this.order_items, true); --}}
+        $wire.set('manual_mode_billing', this.manual_mode_billing, true);
+        $wire.set('manual_mode_shipping', this.manual_mode_shipping, true);
+        $wire.set('core_meta', this.core_meta, true);
+        {{-- $wire.set('wef', this.wef, true); --}}
     }
-}" 
-@validation-errors.window="$scrollToErrors($event.detail.errors, 700);">
+}"
+@validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
+x-init="setDefaults();"
+x-cloak>
     <div class="w-full md:max-w-[400px]">
         <x-tenant.system.image alt="{{ get_site_name() }} logo"
             class="block p-0 mb-6 max-w-[160px]" :image="get_site_logo()">
@@ -40,15 +52,15 @@
             <div class="pb-2 mb-2 flex justify-between items-center  border-b border-gray-200">
                 <strong class="flex">{{ translate('Request a quote for:') }}</strong>
                 <button type="button" class="btn btn-primary !py-1 !text-12 focus:!ring-0"
-                    @click="$dispatch('display-modal', {'id': 'order-item-form-modal' })">
+                @click="$dispatch('display-modal', {'id': 'order-item-selector-modal' })">
                     {{ translate('Add item') }}
                 </button>
             </div>
 
-            <template x-if="_.get(order_items, 'length', 0) > 0">
-                <ul class="flex flex-col list-none space-y-4 ">
+            <template x-if="hasOrderItems" key="request-a-quote-order-items" wire:ignore>
+                <ul class="flex flex-col list-none pt-3 " wire:ignore>
                     <template x-for="(item, index) in order_items" :key="'order-items-'+index">
-                        <li class="w-full flex flex-col justify-left">
+                        <li class="w-full flex flex-col justify-left pb-3">
                             <div class="w-full flex justify-left">
                                 <div class="w-[65px] h-[65px] shrink-0" x-show="item?.thumbnail">
                                     <img class="w-[65px] h-[65px] object-cover rounded border"
@@ -61,7 +73,7 @@
                                     </div>
                                     <div class="w-full leading-4 pl-4 mt-auto">
                                         <button type="button" class="btn-standard-outline !py-0.5 !text-12 hover:!bg-primary hover:!text-white focus:!ring-0"
-                                        @click="$dispatch('display-modal', {'id': 'order-item-form-modal', 'order_item_index': index })">
+                                            @click="$dispatch('display-modal', {'id': 'order-item-editor-modal', 'order_item_index': index })">
                                             {{ translate('Edit item') }}
                                         </button>
                                     </div>
@@ -70,6 +82,14 @@
                         </li>
                     </template>
                 </ul>
+            </template>
+
+            <template x-if="!hasOrderItems">
+                <div class="text-center py-2 cursor-pointer" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal' })">
+                    @svg('heroicon-o-plus-circle', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">{{ translate('No order items') }}</h3>
+                    <p class="mt-1 text-sm text-gray-500">{{ translate('Start by adding new item to the order') }}</p>
+                </div>
             </template>
             
 
@@ -101,7 +121,7 @@
             </div>
 
             {{-- OrderItem selector modal --}}
-            <x-system.form-modal id="order-item-form-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
+            <x-system.form-modal id="order-item-selector-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
                 <div class="w-full flex flex-col" x-data="{
                         q: '',
                         results: [],
@@ -130,6 +150,10 @@
                             name: '',
                             excerpt: '',
                             quantity: 1,
+                            unit_price: 0,
+                            base_price: 0,
+                            subtotal_price: 0,
+                            total_price: 0,
                             custom_attributes: @js($custom_attributes),
                             selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
                         },
@@ -168,12 +192,13 @@
                             this.custom_order_item.name = '';
                             this.custom_order_item.excerpt = '';
                             this.custom_order_item.quantity = 1;
-                            this.custom_order_item.thumbnail = '';
-                            this.custom_order_item.subject_id = null;
-                            this.custom_order_item.subject_type = null;
+                            this.custom_order_item.unit_price = 0;
+                            this.custom_order_item.base_price = 0;
+                            this.custom_order_item.subtotal_price = 0;
+                            this.custom_order_item.total_price = 0;
 
                             {{-- Send event to reset attributes form --}}
-                            $dispatch('reset-attributes-form', {form_id: 'custom-order-item-attributes-form'});
+                            $dispatch('reset-attributes-form', {form_id: 'custom-order-item-form'});
                         },
                         select(item) {
                             let existing_item_index = order_items.findIndex(order_item => {
@@ -182,6 +207,9 @@
 
                             if(existing_item_index !== -1) {
                                 order_items[existing_item_index].quantity = Number(order_items[existing_item_index].quantity) + 1;
+                                order_items[existing_item_index].base_price = Number(order_items[existing_item_index].unit_price);
+                                order_items[existing_item_index].subtotal_price = Number(order_items[existing_item_index].quantity) * order_items[existing_item_index].unit_price;
+                                order_items[existing_item_index].total_price = Number(order_items[existing_item_index].quantity) * order_items[existing_item_index].unit_price;
                             } else {
                                 order_items.push({
                                     id: null,
@@ -190,7 +218,14 @@
                                     name: item.name,
                                     excerpt: item.excerpt,
                                     quantity: 1,
+                                    unit_price: item.unit_price,
+                                    base_price: item.unit_price,
+                                    subtotal_price: item.unit_price * 1,
+                                    total_price: item.unit_price * 1,
+                                    tax: 0,
                                     thumbnail: item.thumbnail?.file_name,
+                                    custom_attributes: item.custom_attributes,
+                                    selected_predefined_attribute_values: item.selected_predefined_attribute_values,
                                 });
                             }
                         },
@@ -198,6 +233,10 @@
                             this.content_type = content_type;
                         },
                         saveCustomOrderItem(order_item_index = null) {
+                            this.custom_order_item.base_price = Number(this.custom_order_item.unit_price);
+                            this.custom_order_item.subtotal_price = Number(this.custom_order_item.quantity) * this.custom_order_item.unit_price;
+                            this.custom_order_item.total_price = Number(this.custom_order_item.quantity) * this.custom_order_item.unit_price;
+
                             {{-- Cuz order_item_index can be 0 -_- --}}
                             if(order_item_index !== null) {
                                 order_items[order_item_index] = deep_copy(this.custom_order_item);
@@ -214,9 +253,9 @@
                             this.hide_content_selector = true;
 
                             modal_title = '{{ translate('Edit Order item') }}';
-                            
+
                             let order_item = order_items[order_item_index];
-                            
+
                             if(order_item !== undefined) {
                                 this.custom_order_item = deep_copy(order_item);
                             }
@@ -247,7 +286,7 @@
                                         <svg class="h-5 w-5 text-success" :class="{'hidden': content_type !== type.slug}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                                         </svg>
-{{--
+                                        {{--
                                         <span class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"
                                             :class="{'border-success': content_type === type.slug, 'border-transparent': content_type !== type.slug}"></span> --}}
                                     </div>
@@ -257,48 +296,44 @@
                     </div>
 
                     <template x-if="content_type == 'product' || content_type == 'product_addon'">
+                        <div class="mt-4">
+                            {{-- Products --}}
+                            <x-dashboard.form.blocks.model-selection-form
+                                :inline="true"
+                                :hide-reset="true"
+                                model-class="{{ \App\Models\Product::class }}"
+                                api-route="{{ route('api.dashboard.products.search') }}"
+                                custom-select-logic="select(item);"
+                                custom-deselect-logic=""
+                            ></x-dashboard.form.blocks.model-selection-form>
+                            {{-- END Products --}}
+                        </div>
+                        
                         <div class="w-full pt-3 mt-5 border-t">
-                            <div class="w-full pb-3 mb-3">
-                                <label for="search" class="block text-sm font-medium text-gray-700">{{ translate('Search') }}</label>
-                                <div class="relative mt-1 flex items-center">
-                                    <input type="text"class="form-standard pr-12" x-model="q">
-                                    <div class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5" >
-                                        <kbd class="inline-flex items-center rounded border border-gray-200 px-2 font-sans text-sm font-medium text-gray-400 cursor-pointer"
-                                            @click="search()">
-                                            {{ translate('Search') }}
-                                        </kbd>
-                                    </div>
-                                </div>
-                            </div>
-
                             <template x-if="results">
                                 <div class="w-full mt-3">
                                     <ul role="list" class="-my-1 divide-y divide-gray-200 max-h-[545px] overflow-y-auto overflow-x-hidden">
                                         <template x-for="item in results">
                                             <li class="py-4">
                                                 <div class="flex items-center space-x-4">
-                                                    <div class="flex-shrink-0">
+                                                  <div class="flex-shrink-0">
                                                     <img class="h-8 w-8 rounded-full" :src="window.WE.IMG.url(item.thumbnail?.file_name)" alt="">
-                                                    </div>
-                                                    <div class="min-w-0 flex-1">
+                                                  </div>
+                                                  <div class="min-w-0 flex-1">
                                                     <p class="truncate text-sm font-medium text-gray-900" x-text="item.name"></p>
                                                     <p class="truncate text-sm text-gray-500" x-text="item.slug"></p>
-                                                    </div>
-                                                    <div>
+                                                  </div>
+                                                  <div>
                                                     <div @click="select(item); reset(); show = false;" class="cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
                                                         {{ translate('Select') }}
                                                     </div>
-                                                    </div>
+                                                  </div>
                                                 </div>
                                             </li>
                                         </template>
                                     </ul>
                                 </div>
                             </template>
-
-                            {{-- <template x-if="!results">
-
-                            </template> --}}
                         </div>
                     </template>
 
@@ -325,32 +360,42 @@
                                     </div>
                                 </div>
 
+                                {{-- <div class="col-span-8 flex-col gap-y-2">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Unit Price') }}
+                                    </label>
+
+                                    <div class="w-full ">
+                                        <input type="number" class="form-standard" x-model="custom_order_item.unit_price">
+                                    </div>
+                                </div> --}}
+
                                 <div class="col-span-4 flex-col gap-y-2">
                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                         {{ translate('Quantity') }}
                                     </label>
 
                                     <div class="w-full ">
-                                        <input type="number" class="form-standard  " min="1" x-model="custom_order_item.quantity">
+                                        <input type="number" class="form-standard  " x-model="custom_order_item.quantity">
                                     </div>
                                 </div>
 
                                 {{-- Attributes Divider --}}
                                 <div class="col-span-12 relative py-5">
                                     <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                        <div class="w-full border-t border-gray-300"></div>
+                                      <div class="w-full border-t border-gray-300"></div>
                                     </div>
                                     <div class="relative flex justify-center">
-                                        <button type="button" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                      <button type="button" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                         <span>{{ translate('Attributes') }}</span>
-                                        </button>
+                                      </button>
                                     </div>
                                 </div>
 
                                 <div class="col-span-12 ">
                                     <x-dashboard.form.blocks.attributes-selection-form
-                                        form-id="custom-order-item-attributes-form"
-                                        attributes-field="custom_order_item.custom_attributes" 
+                                        form-id="custom-order-item-form"
+                                        attributes-field="custom_order_item.custom_attributes"
                                         selected-attributes-field="custom_order_item.selected_predefined_attribute_values"
                                         :no-variations="true">
 
@@ -365,10 +410,153 @@
                             </div>
                         </div>
                     </template>
-
                 </div>
             </x-system.form-modal>
             {{-- END OrderItem selector modal --}}
+
+            {{-- OrderItem editor modal --}}
+            <x-system.form-modal id="order-item-editor-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
+                <div class="w-full flex flex-col" x-data="{
+                        order_item_index: null,
+                        order_item: {
+                            id: null,
+                            subject_id: '',
+                            subject_type: '',
+                            name: '',
+                            excerpt: '',
+                            quantity: 1,
+                            unit_price: 0,
+                            base_price: 0,
+                            subtotal_price: 0,
+                            total_price: 0,
+                            custom_attributes: @js($custom_attributes),
+                            selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
+                        },
+                        reset() {
+                            this.order_item_index = null;
+
+                            this.order_item.id = null;
+                            this.order_item.subject_id = '';
+                            this.order_item.subject_type = '';
+                            this.order_item.name = '';
+                            this.order_item.excerpt = '';
+                            this.order_item.quantity = 1;
+                            this.order_item.unit_price = 0;
+                            this.order_item.base_price = 0;
+                            this.order_item.subtotal_price = 0;
+                            this.order_item.total_price = 0;
+
+                            {{-- Send event to reset attributes form --}}
+                            $dispatch('reset-attributes-form', {form_id: 'order-item-attributes-form'});
+                        },
+                        setOrderItem(order_item_index) {
+                            this.order_item_index = order_item_index;
+
+                            modal_title = '{{ translate('Edit Order item') }}';
+
+                            let order_item_copy = order_items[order_item_index];
+
+                            if(order_item_copy !== undefined) {
+                                this.order_item = deep_copy(order_item_copy);
+                            }
+                        },
+                        saveOrderItem(order_item_index = null) {
+                            this.order_item.base_price = Number(this.order_item.unit_price);
+                            this.order_item.subtotal_price = Number(this.order_item.quantity) * this.order_item.unit_price;
+                            this.order_item.total_price = Number(this.order_item.quantity) * this.order_item.unit_price;
+
+                            {{-- Cuz order_item_index can be 0 -_- --}}
+                            if(order_item_index !== null) {
+                                order_items[order_item_index] = deep_copy(this.order_item);
+                            } else {
+                                order_items.push(deep_copy(this.order_item));
+                            }
+
+                            this.reset();
+                            show = false;
+                        },
+                    }"
+                    @display-modal.window="
+                        if($event.detail.id === id && _.get($event, 'detail.order_item_index', null) !== null ) {
+                            setOrderItem(Number($event.detail.order_item_index));
+                        }
+                    "
+                    wire:ignore
+                >
+                    <div class="w-full">
+                        <div class="grid grid-cols-12 gap-x-3">
+                            <div class="col-span-12 flex-col gap-y-2">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Name') }}
+                                </label>
+
+                                <div class="w-full ">
+                                    <input type="text" class="form-standard" x-model="order_item.name">
+                                </div>
+                            </div>
+
+                            <div class="col-span-12 flex-col gap-y-2">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Description') }}
+                                </label>
+
+                                <div class="w-full ">
+                                    <input type="text" class="form-standard  " x-model="order_item.excerpt" >
+                                </div>
+                            </div>
+
+                            {{-- <div class="col-span-8 flex-col gap-y-2">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Unit Price') }}
+                                </label>
+
+                                <div class="w-full ">
+                                    <input type="number" class="form-standard" x-model="order_item.unit_price">
+                                </div>
+                            </div> --}}
+
+                            <div class="col-span-4 flex-col gap-y-2">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Quantity') }}
+                                </label>
+
+                                <div class="w-full ">
+                                    <input type="number" class="form-standard  " x-model="order_item.quantity">
+                                </div>
+                            </div>
+
+                            {{-- Attributes Divider --}}
+                            <div class="col-span-12 relative py-5">
+                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                    <div class="w-full border-t border-gray-300"></div>
+                                </div>
+                                <div class="relative flex justify-center">
+                                    <button type="button" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
+                                        <span>{{ translate('Attributes') }}</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-span-12 ">
+                                <x-dashboard.form.blocks.attributes-selection-form
+                                    form-id="order-item-attributes-form"
+                                    attributes-field="order_item.custom_attributes"
+                                    selected-attributes-field="order_item.selected_predefined_attribute_values"
+                                    :no-variations="true">
+
+                                </x-dashboard.form.blocks.attributes-selection-form>
+                            </div>
+
+                            <div class="col-span-12 flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="saveOrderItem(order_item_index)" >
+                                    {{ translate('Save') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </x-system.form-modal>
+            {{-- END OrderItem editor modal --}}
         </div>
 
 
@@ -377,51 +565,39 @@
         <h1 class="font-semibold text-20 ">{{ translate('Contact information') }}</h1>
 
         <div class="mt-4" x-cloak>
+            {{-- Billing Entity --}}
+            {{-- TODO: Fix entity change after failed validation --}}
+            <div class="w-full flex flex-col  mb-3 gap-y-2">
+                <div class="w-full flex gap-x-4" wire:ignore>
+                    <div class="flex items-center">
+                        <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="individual" input-id="entity_individual_radio" class="w-auto flex items-center" />
+
+                        <label for="entity_individual_radio" class="pl-3 block text-sm font-medium text-gray-700">
+                            {{ translate('Individual') }}
+                        </label>
+                    </div>
+
+                    <div class="flex items-center">
+                        <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="company" 
+                            input-id="entity_company_radio" class="w-auto flex items-center" />
+
+                        <label for="entity_company_radio" class="pl-3 block text-sm font-medium text-gray-700">
+                            {{ translate('Company') }} 
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <!-- Email -->
             <div class="w-full mb-3">
                 <label for="order.email" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                     {{ translate('Email') }}
                     <span class="text-red-700 ml-1">*</span>
                 </label>
-                <input type="email"
-                        wire:model.defer="order.email"
-                        @auth disabled @endauth
-                        class="form-standard @error('order.email') is-invalid @enderror"       
-                />
         
-                <x-system.invalid-msg field="order.email" ></x-system.invalid-msg>
+                <x-dashboard.form.input field="order.email" :disabled="\Auth::check()" />
             </div>
             <!-- END Email -->
-        
-            @guest
-                <div class="w-full mb-3">
-                    <div class="w-full grid md:grid-cols-2 gap-4">
-                        <div class="">
-                            <label for="account_password" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
-                                {{ translate('Password') }}
-                                <span class="text-red-700 ml-1">*</span>
-                            </label>
-                            <input type="password" name="account_password" 
-                                    id="account_password"
-                                    wire:model.defer="account_password" 
-                                    class="form-standard @error('account_password') is-invalid @enderror"       
-                            />
-                        </div>
-                        <div class="">
-                            <label for="account_password_confirmation" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
-                                {{ translate('Confirm password') }}
-                                <span class="text-red-700 ml-1">*</span>
-                            </label>
-                            <input type="password" name="account_password_confirmation" 
-                                    id="account_password_confirmation"
-                                    wire:model.defer="account_password_confirmation" 
-                                    class="form-standard @error('account_password') is-invalid @enderror"       
-                            />
-                        </div>
-                    </div>
-                    <x-system.invalid-msg field="account_password" ></x-system.invalid-msg>
-                </div>
-            @endguest
         
             <!-- First & Last name -->
             <div class="w-full grid md:grid-cols-2 gap-4 mb-3">
@@ -430,97 +606,57 @@
                         {{ translate('First name') }}
                         <span class="text-red-700 ml-1">*</span>
                     </label>
-                    <input type="text"
-                            name="order.billing_first_name" 
-                            id="order.billing_first_name"
-                            wire:model.defer="order.billing_first_name"
-                            class="form-standard @error('order.billing_first_name') is-invalid @enderror"       
-                    />
-        
-                    <x-system.invalid-msg field="order.billing_first_name" ></x-system.invalid-msg>
+
+                    <x-dashboard.form.input field="order.billing_first_name" />
                 </div>
                 <div class="">
                     <label for="order.billing_last_name" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                         {{ translate('Last name') }}
                         <span class="text-red-700 ml-1">*</span>
                     </label>
-                    <input type="text"
-                            name="order.billing_last_name" 
-                            id="order.billing_last_name"
-                            wire:model.defer="order.billing_last_name"
-                            class="form-standard @error('order.billing_first_name') is-invalid @enderror"       
-                    />
-        
-                    <x-system.invalid-msg field="order.billing_last_name" ></x-system.invalid-msg>
+
+                    <x-dashboard.form.input field="order.billing_last_name" />
                 </div>
             </div>
             <!-- END First & Last name -->
         
             <!-- Company -->
-            <div class="w-full mb-3">
-                <label for="order.billing_company" class="w-full block mb-2 text-12 font-medium text-gray-900 dark:text-gray-300">
+            <div class="w-full mb-3" x-show="wef.billing_entity === 'company'">
+                <label class="w-full block mb-2 text-12 font-medium text-gray-900 dark:text-gray-300">
                     {{ translate('Company') }}
-                    <span class="text-orange-300 ml-1">{{ translate('(optional)') }}</span>
                 </label>
-                <input name="order.billing_company"
-                        id="order.billing_company"
-                        type="text"
-                        wire:model.defer="order.billing_company" 
-                        class="form-standard @error('order.billing_company') is-invalid @enderror"       
-                />
-        
-                <x-system.invalid-msg field="order.billing_company" ></x-system.invalid-msg>
+                
+                <x-dashboard.form.input field="order.billing_company" />
             </div>
             <!-- END Company -->
+
+            {{-- Company VAT & Code --}}
+            <div class="w-full mb-3 grid grid-cols-12 gap-x-3" x-show="wef.billing_entity === 'company'" wire:ignore>
+                <div class="col-span-12 md:col-span-6 flex flex-col">
+                    <label class="w-full block mb-2 text-12 font-medium text-gray-900 dark:text-gray-300">
+                        {{ translate('Company VAT') }}
+                    </label>
+
+                    <x-dashboard.form.input field="wef.billing_company_vat" :x="true" />
+                </div>
+
+                <div class="col-span-12 md:col-span-6 flex flex-col">
+                    <label class="w-full block mb-2 text-12 font-medium text-gray-900 dark:text-gray-300">
+                        {{ translate('Company Code') }}
+                    </label>
+
+                    <x-dashboard.form.input field="wef.billing_company_code" :x="true" />
+                </div>
+            </div>
+            {{-- END Company VAT & Code --}}
         
             <!-- Phones -->
             <div class="w-full mt-3">
                 <label class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                     {{ translate('Phones') }}
                 </label>
-        
+
                 <x-dashboard.form.text-repeater field="phoneNumbers" error-field="order.phone_numbers" placeholder="{{ translate('Phone') }}"  limit="3"></x-dashboard.form.text-repeater>
-        
-                {{-- <div class="w-full @error('order.phone_numbers') mb-2 @enderror">
-                    <template x-if="count() <= 1">
-                        <div class="flex">
-                            <input type="text" class="form-standard"
-                                   placeholder="{{ translate('Phone number 1') }}"
-                                   x-model="phoneNumbers[0]">
-                        </div>
-                    </template>
-                    <template x-if="count() > 1">
-                        <template x-for="[key, value] of Object.entries(phoneNumbers)">
-                            <div class="flex" :class="{'mt-2': key > 0}">
-                                <input type="text" class="form-standard"
-                                       x-bind:placeholder="'{{ translate('Phone number') }} '+(Number(key)+1)"
-                                       x-model="phoneNumbers[key]">
-                                <template x-if="key > 0">
-                                    <span class="ml-2 flex phoneNumbers-center cursor-pointer" @click="remove(key)">
-                                        @svg('heroicon-o-trash', ['class' => 'w-[22px] aspect-square text-danger'])
-                                    </span>
-                                </template>
-                            </div>
-                        </template>
-                    </template>
-        
-                    <template x-if="count() < limit">
-                        <button 
-                            type="button"
-                            href="javascript:;"
-                            class="tw-btn-sm mt-2"
-                            @click="add()">
-                            {{ translate('Add phone') }}
-                        </button>
-                    </template>
-                </div>
-        
-                <template x-for="[key, phone_number] of Object.entries(phoneNumbers)">
-                    <input type="hidden" name="order.phone_numbers[]" class="" x-model="phoneNumbers[key]">
-                </template>
-        
-        
-                <x-system.invalid-msg field="order.phone_numbers" ></x-system.invalid-msg> --}}
             </div>
             <!-- END Phones -->
         
@@ -547,7 +683,7 @@
                 <h4 class="text-14 font-semibold" >
                     {{ translate('Billing address') }}
                 </h4>
-        
+
                 <div class="w-full" wire:ignore>
                     <template x-if="show_addresses">
                         <fieldset>
@@ -597,12 +733,12 @@
                     </template>
                 </div>
                 
-        
+
                 <template x-if="show_addresses">
                     <input type="hidden" name="selected_billing_address_id" x-model="selected_billing_address_id">
                 </template>
-        
-        
+
+
                 <div class="flex-wrap mt-3" :class="{'flex':manual_mode_billing}" x-show="manual_mode_billing">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -616,10 +752,10 @@
                                     wire:model.defer="order.billing_address" 
                                     class="form-standard @error('order.billing_address') is-invalid @enderror"       
                             />
-        
+
                             <x-system.invalid-msg field="order.billing_address" ></x-system.invalid-msg>
                         </div>
-        
+
                         <div class="">
                             <label for="order.billing_country" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                                 {{ translate('Country') }}
@@ -631,7 +767,7 @@
                                 :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" 
                                 selected="billingCountry" 
                                 :nullable="false"></x-dashboard.form.select>
-        
+
                             {{-- <input name="order.billing_country"
                                     id="order.billing_country"
                                     type="text"
@@ -642,7 +778,7 @@
                         <!-- End Col -->
                     </div>
                     <!-- End Col -->
-        
+
                     
                     <div class="grid grid-cols-3 gap-4 mt-3">
                         <div class="">
@@ -660,7 +796,7 @@
                             <x-system.invalid-msg field="order.billing_state" ></x-system.invalid-msg>
                         </div>
                         <!-- End Col -->
-        
+
                         <div class="">
                             <label for="order.billing_city" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                                 {{ translate('City') }}
@@ -676,7 +812,7 @@
                             <x-system.invalid-msg field="order.billing_city" ></x-system.invalid-msg>
                         </div>
                         <!-- End Col -->
-        
+
                         <div class="">
                             <label for="order.billing_zip" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                                 {{ translate('ZIP') }}
@@ -701,11 +837,11 @@
         
             <!-- Shipping -->
             <div class="shipping-info-section flex flex-wrap mt-3" :class="{'hidden': same_billing_shipping}" x-data="{
-                    clearErrors() {
-                        $('.shipping-info-section .error-msg').remove();
-                        $('.shipping-info-section .is-invalid').removeClass('is-invalid');
-                    }
-                }" @shipping-info-errors-clean.window="clearErrors()">
+                clearErrors() {
+                    document.querySelectorAll('.shipping-info-section .error-msg').forEach(item => item.remove())
+                    document.querySelectorAll('.shipping-info-section .is-invalid').forEach(item => item.classList.remove('is-invalid'));
+                }
+            }" @shipping-info-errors-clean.window="clearErrors()">
                 <h4 class="text-14 font-semibold" >
                     {{ translate('Shipping address') }}
                 </h4>
@@ -777,8 +913,8 @@
                         <input type="hidden" name="selected_shipping_address_id" x-model="selected_shipping_address_id">
                     </template>
                 </div>
-                
-        
+            
+    
                 <div class="flex-wrap mt-3" :class="{'flex':manual_mode_shipping}" x-show="manual_mode_shipping">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -802,7 +938,7 @@
                                 <span class="text-red-500 ml-1">*</span>
                             </label>
                             <x-dashboard.form.select field="shippingCountry" error-field="order.shipping_country" :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" selected="shippingCountry" :nullable="true"></x-dashboard.form.select>
-        {{-- 
+                            {{-- 
                             <input name="order.shipping_country"
                                     id="order.shipping_country"
                                     type="text"
@@ -874,8 +1010,8 @@
         
             <div class="flex flex-wrap mt-3" x-data="{
                     clearErrors() {
-                        $('.payment-methods-details .error-msg').remove();
-                        $('.payment-methods-details .is-invalid').removeClass('is-invalid');
+                        document.querySelectorAll('.payment-methods-details .error-msg').forEach(item => item.remove())
+                        document.querySelectorAll('.payment-methods-details .is-invalid').forEach(item => item.classList.remove('is-invalid'));
                     }
                 }">
                 {{-- <h4 class="text-14 font-semibold" >
@@ -923,45 +1059,142 @@
                                 {!! $payment_method->description !!}
                             </div>
         
+                            @if($payment_method->gateway === 'stripe')
+                                <div class="w-full">
+                                    <div class="w-full mb-2">
+                                        <label for="cc_name" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
+                                            {{ translate('Name on card') }}
+                                            <span class="text-red-500 ml-1">*</span>
+                                        </label>
+                                        <input name="cc_name"
+                                                id="cc_name"
+                                                type="text"
+                                                x-model="cc_name" 
+                                                class="form-standard @error('cc_name') is-invalid @enderror"       
+                                        />
+                    
+                                        <x-system.invalid-msg field="cc_name" ></x-system.invalid-msg>
+                                    </div>
+                    
+                                    <div class="w-full mb-2">
+                                        <label for="cc_number" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
+                                            {{ translate('Card number') }}
+                                            <span class="text-red-500 ml-1">*</span>
+                                        </label>
+                                        <input name="cc_number"
+                                                id="cc_number"
+                                                type="number"
+                                                x-model="cc_number"
+                                                class="form-standard @error('cc_number') is-invalid @enderror"       
+                                        />
+                    
+                                        <x-system.invalid-msg field="cc_number" ></x-system.invalid-msg>
+                                    </div>
+                
+                                    <div class="w-full grid grid-cols-2 gap-4">
+                                        <div x-data="{
+                                            formatString(e) {
+                                                var inputChar = String.fromCharCode(event.keyCode);
+                                                var code = event.keyCode;
+                                                var allowedKeys = [8];
+                                                if (allowedKeys.indexOf(code) !== -1) {
+                                                    return;
+                                                }
+                                                
+                                                event.target.value = event.target.value.replace(
+                                                    /^([1-9]\/|[2-9])$/g, '0$1/' // 3 > 03/
+                                                ).replace(
+                                                    /^(0[1-9]|1[0-2])$/g, '$1/' // 11 > 11/
+                                                ).replace(
+                                                    /^([0-1])([3-9])$/g, '0$1/$2' // 13 > 01/3
+                                                ).replace(
+                                                    /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2' // 141 > 01/41
+                                                ).replace(
+                                                    /^([0]+)\/|[0]+$/g, '0' // 0/ > 0 and 00 > 0
+                                                ).replace(
+                                                    /[^\d\/]|^[\/]*$/g, '' // To allow only digits and `/`
+                                                ).replace(
+                                                    /\/\//g, '/' // Prevent entering more than 1 `/`
+                                                );
+                                            }
+                                        }"
+                                        >
+                                            <label for="cc_expiration_date" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
+                                                {{ translate('Expiration date') }}
+                                                <span class="text-red-500 ml-1">*</span>
+                                            </label>
+                                            <input name="cc_expiration_date"
+                                                    type="text"
+                                                    id="cc_expiration_date"
+                                                    x-model.defer="cc_expiration_date"
+                                                    placeholder="MM/YY"
+                                                    maxlength="5"
+                                                    @keyup="formatString(event)"
+                                                    class="form-standard @error('cc_expiration_date') is-invalid @enderror"       
+                                            />
+                    
+                                            <x-system.invalid-msg field="cc_expiration_date" ></x-system.invalid-msg>
+                                        </div>
+                    
+                                        <div class="">
+                                            <label for="cc_cvc" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
+                                                {{ translate('CVC') }}
+                                                <span class="text-red-500 ml-1">*</span>
+                                            </label>
+                                            <input name="cc_cvc"
+                                                    id="cc_cvc"
+                                                    x-model="cc_cvc"
+                                                    pattern="\d*" 
+                                                    maxlength="4"
+                                                    type="number"
+                                                    min="0"
+                                                    class="form-standard @error('cc_cvc') is-invalid @enderror"       
+                                            />
+                            
+                                            <x-system.invalid-msg field="cc_cvc" ></x-system.invalid-msg>
+                                        </div>
+                                        <!-- End Col -->
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         @endforeach
                     </div>
                 </template>
-                
             </div>
             
             <hr class="mt-4" />
         
             <div class="flex flex-col mt-3">
-                {{-- Checkbox --}}
+                {{-- Newletter --}}
                 <div class="flex items-center cursor-pointer">
                     <input type="checkbox" class="form-checkbox-standard" id="checkout_newsletter" name="checkout_newsletter"
-                           wire:model.defer="checkout_newsletter">
+                        wire:model.defer="checkout_newsletter">
                     <div class="ml-2">
                         <label for="checkout_newsletter" class="text-12 font-medium text-gray-500 mb-0 cursor-pointer">
                             {{ translate('Please send me emails with exclusive info') }}
                         </label>
                     </div>
                 </div>
-                <!-- End Checkbox -->
+                {{-- END Newletter --}}
         
-                <!-- Checkbox -->
+                <!-- Consent -->
                 <div class="mb-2">
                     <div class="flex items-center cursor-pointer">
                         <input type="checkbox" class="form-checkbox-standard" id="buyers_consent" name="order.buyers_consent"
                                 x-model="buyers_consent">
                         <div class="ml-2">
-                            <label for="buyers_consent" class="text-12 font-medium text-gray-500 mb-0 cursor-pointer underline decoration-solid decoration-red-500 decoration-1 underline-offset-2">
+                            <label for="buyers_consent" class="text-12 font-medium mb-0 cursor-pointer underline decoration-solid decoration-red-500 decoration-1 underline-offset-2 @error('order.buyers_consent') text-red-600 @else text-gray-500 @enderror">
                                 {{ translate('By placing an order, I agree to ') }}
                                 {{ \TenantSettings::get('site_name') }}
                                 <a href="#" target="_blank">{{ translate('terms of sale') }}</a>
                             </label>
                         </div>
                     </div>
-        
+
                     <x-system.invalid-msg field="order.buyers_consent" ></x-system.invalid-msg>
                 </div>
-                <!-- End Checkbox -->
+                <!-- End Consent -->
             </div>
         
         

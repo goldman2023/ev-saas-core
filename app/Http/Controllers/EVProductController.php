@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Enums\CourseItemTypes;
 use App\Enums\ProductTypeEnum;
 use App\Facades\StripeService;
+use App\Exceptions\WeAPIException;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Activitylog\Models\Activity;
 use Laravel\Nova\Notifications\NovaNotification;
@@ -290,7 +291,7 @@ class EVProductController extends Controller
 
     // API routes
     public function api_search_products(Request $request) {
-        if(auth()->user()->isAdmin()) {
+        // if(auth()->user()->isAdmin()) {
             $q = $request->q;
 
             $results = Product::published()->search($q)->get();
@@ -305,13 +306,13 @@ class EVProductController extends Controller
                 'status' => 'success',
                 'results' => $results_array
             ]);
-        }
+        // }
 
-        throw new WeAPIException(message: translate('Cannot search products if not admin or moderator'), type: 'WeApiException', code: 403);
+        // throw new WeAPIException(message: translate('Cannot search products if not admin or moderator'), type: 'WeApiException', code: 403);
     }
 
     public function api_search_product_addons(Request $request) {
-        if(auth()->user()->isAdmin()) {
+        // if(auth()->user()->isAdmin()) {
             $q = $request->q;
 
             $results = ProductAddon::published()->search($q)->get();
@@ -321,9 +322,9 @@ class EVProductController extends Controller
                 'status' => 'success',
                 'results' => $results
             ]);
-        }
+        // }
 
-        throw new WeAPIException(message: translate('Cannot search product addons if not admin or moderator'), type: 'WeApiException', code: 403);
+        // throw new WeAPIException(message: translate('Cannot search product addons if not admin or moderator'), type: 'WeApiException', code: 403);
     }
 
 }

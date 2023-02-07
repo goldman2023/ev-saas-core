@@ -84,6 +84,14 @@ class Upload extends WeBaseModel
         return Storage::disk(config('filesystems.default'))->url($this->attributes['file_name'] ?? '');
     }
 
+    public function rawData() {
+        if (($this->attributes['type'] ?? null) !== 'image') {
+            return file_get_contents(Storage::disk(config('filesystems.default'))->url($this->attributes['file_name'] ?? ''));
+        }
+
+        return null;
+    }
+
     /**
      * Local Scopes
      */

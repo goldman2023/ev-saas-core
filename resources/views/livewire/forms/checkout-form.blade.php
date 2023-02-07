@@ -30,6 +30,8 @@
 x-init="setDefaults();"
 x-cloak
 >
+    {{-- Billing Entity --}}
+    {{-- TODO: Fix entity change after failed validation --}}
     <div class="w-full flex flex-col  mb-3 gap-y-2">
         <div class="w-full flex gap-x-4">
             <div class="flex items-center">
@@ -660,7 +662,7 @@ x-cloak
     <hr class="mt-4" />
 
     <div class="flex flex-col mt-3">
-        {{-- Checkbox --}}
+        {{-- Newletter --}}
         <div class="flex items-center cursor-pointer">
             <input type="checkbox" class="form-checkbox-standard" id="checkout_newsletter" name="checkout_newsletter"
                    wire:model.defer="checkout_newsletter">
@@ -670,9 +672,9 @@ x-cloak
                 </label>
             </div>
         </div>
-        <!-- End Checkbox -->
+        {{-- END Newletter --}}
 
-        <!-- Checkbox -->
+        <!-- Consent -->
         <div class="mb-2">
             <div class="flex items-center cursor-pointer">
                 <input type="checkbox" class="form-checkbox-standard" id="buyers_consent" name="order.buyers_consent"
@@ -688,7 +690,7 @@ x-cloak
 
             <x-system.invalid-msg field="order.buyers_consent" ></x-system.invalid-msg>
         </div>
-        <!-- End Checkbox -->
+        <!-- End Consent -->
     </div>
 
 

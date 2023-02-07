@@ -92,7 +92,6 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
-        // MailerService::notify(\App\Models\User::where('email', 'jockovicvukasin+22@gmail.com')->first(), new UserEmailVerificationNotification());
         
         if (auth()->user()->isSeller()) {
             return view('frontend.user.seller.dashboard');

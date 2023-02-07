@@ -308,6 +308,34 @@ if (!function_exists('toJSONMedia')) {
     }
 }
 
+if (!function_exists('glob_recursive')) {
+    function glob_recursive($base, $pattern, $flags = 0) {
+        $flags = $flags & ~GLOB_NOCHECK;
+        
+        if (substr($base, -1) !== DIRECTORY_SEPARATOR) {
+            $base .= DIRECTORY_SEPARATOR;
+        }
+    
+        $files = glob($base.$pattern, $flags);
+        if (!is_array($files)) {
+            $files = [];
+        }
+    
+        $dirs = glob($base.'*', GLOB_ONLYDIR|GLOB_NOSORT|GLOB_MARK);
+        if (!is_array($dirs)) {
+            return $files;
+        }
+        
+        foreach ($dirs as $dir) {
+            $dirFiles = glob_recursive($dir, $pattern, $flags);
+            $files = array_merge($files, $dirFiles);
+        }
+    
+        return $files;
+    }
+}
+
+
 /**
  * Redirect the user no matter what. No need to use a return
  * statement. Also avoids the trap put in place by the Blade Compiler.
