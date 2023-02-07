@@ -28,6 +28,10 @@ class WeThemeService
         $this->theme_controllers_class = $theme_data['theme_root_class'] . '\App\Http\Controllers\\';
     }
 
+    public function getThemeName() {
+        return $this->theme_name;
+    }
+
     public function getThemeController($controller_basename = '') {
         $controller = null;
         $controller_basename = ltrim($controller_basename, '\\');
