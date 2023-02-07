@@ -27,18 +27,19 @@
     </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
+    @themefilexists('css/app.css')
+        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/'.\WeTheme::getThemeName()) }}">
+    @else
+        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
+    @endthemefilexists
+    <link rel="stylesheet" href="{{ static_asset('/bp-assets/vendor/flatpickr/flatpickr-airbnb.min.css') }}">
 
-    <script defer async src="{{ static_asset('/bp-assets/vendor/flowbite/flowbite.js') }}"></script>
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
     @include('frontend.layouts.global-partials.all')
 
     {{ seo()->render() }}
     @livewireStyles
 
-    <link rel="stylesheet" href="{{ static_asset('/bp-assets/vendor/flatpickr/flatpickr-airbnb.min.css') }}">
+    <script defer async src="{{ static_asset('/bp-assets/vendor/flowbite/flowbite.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     @stack('head_scripts')
@@ -92,8 +93,18 @@
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'themes/WeTailwind') }}" defer></script>
-    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
+    @themefilexists('js/app.min.js')
+        <script src="{{ mix('js/app.min.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
+
+    @themefilexists('js/alpine.js')
+        <script src="{{ mix('js/alpine.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
+
     @livewireScripts
     @yield('script')
 

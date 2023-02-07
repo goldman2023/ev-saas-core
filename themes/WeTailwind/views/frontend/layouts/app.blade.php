@@ -36,7 +36,11 @@
     </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
+    @themefilexists('css/app.css')
+        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/'.\WeTheme::getThemeName()) }}">
+    @else
+        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
+    @endthemefilexists
 
     @include('frontend.layouts.global-partials.all')
     @livewireStyles
@@ -99,8 +103,17 @@
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
 
-    <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
-    <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    @themefilexists('js/app.min.js')
+        <script src="{{ mix('js/app.min.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
+
+    @themefilexists('js/alpine.js')
+        <script src="{{ mix('js/alpine.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
 
     <!-- Scripts -->
     @livewireScripts
