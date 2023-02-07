@@ -92,8 +92,9 @@
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'themes/WePixPro') }}" defer></script>
-    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
+    <script src="{{ mix('js/app.min.js', 'themes/WePixPro') }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/WePixPro') }}" defer></script>
+
     @livewireScripts
     @yield('script')
 

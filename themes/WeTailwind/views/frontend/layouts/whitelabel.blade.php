@@ -10,12 +10,14 @@
     </title>
     
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
-
+    @themefilexists('css/app.css')
+        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/'.\WeTheme::getThemeName()) }}">
+    @else
+        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
+    @endthemefilexists
     {{ seo()->render() }}
 
     @livewireStyles
-    {{-- <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script> --}}
 
 </head>
 
@@ -28,8 +30,19 @@
 
     {{-- <x-tailwind.system.countdown></x-tailwind.system.countdown> --}}
 
-    <!-- Scripts -->
-    {{-- <script src="{{ mix('js/app.js', 'themes/WeTailwind') }}" defer></script> --}}
+    {{-- Scripts --}}
+    @themefilexists('js/app.min.js')
+        <script src="{{ mix('js/app.min.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
+
+    @themefilexists('js/alpine.js')
+        <script src="{{ mix('js/alpine.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
+
     @livewireScripts
     @yield('script')
 </body>

@@ -23,7 +23,11 @@
     </script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
+    @themefilexists('css/app.css')
+        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/'.\WeTheme::getThemeName()) }}">
+    @else
+        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
+    @endthemefilexists
     <link rel="stylesheet" href="{{ static_asset('/bp-assets/vendor/flatpickr/flatpickr-airbnb.min.css') }}">
 
     <!-- Scripts -->
@@ -70,8 +74,17 @@
     @endauth
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
-    <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    @themefilexists('js/app.min.js')
+        <script src="{{ mix('js/app.min.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
+
+    @themefilexists('js/alpine.js')
+        <script src="{{ mix('js/alpine.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
 
     @livewireScripts
 
