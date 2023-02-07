@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 use App\Listeners\Tenancy\BootstrapWEF;
 use Illuminate\Support\ServiceProvider;
 use Stancl\Tenancy\Features\TenantConfig;
-use App\Listeners\Tenancy\BootstrapMailService;
+use App\Listeners\Tenancy\BootstrapMailConfig;
 use App\Listeners\Tenancy\StorageToConfigMapping;
 use App\Listeners\Tenancy\BootstrapThemeFunctions;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
@@ -94,7 +94,7 @@ class TenancyServiceProvider extends ServiceProvider
             Events\TenancyBootstrapped::class => [
                 StorageToConfigMapping::class,
                 BootstrapThemeFunctions::class,
-                BootstrapMailService::class,
+                BootstrapMailConfig::class,
 
                 BootstrapWEF::class, // should be last!
             ],

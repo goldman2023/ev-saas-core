@@ -154,16 +154,13 @@ class CheckoutForm extends Component
 
     protected function messages()
     {
-        return [
+        return array_merge([
             'order.email.required' => translate('Email is requierd'),
             'order.email.email' => translate('Wrong email format'),
             'order.billing_first_name.required' => translate('First name is required'),
             'order.billing_first_name.min' => translate('Minimum :min characters required'),
             'order.billing_last_name.required' => translate('Last name is required'),
             'order.billing_last_name.min' => translate('Minimum :min characters required'),
-
-            // WEF
-            'wef.billing_entity.in' => translate('CUstomer entity can only be individual or company'),
 
             // Billing Address
             'order.billing_address.required' => translate('Address is required'),
@@ -195,7 +192,7 @@ class CheckoutForm extends Component
             'cc_expiration_date.required' => translate('CC expiration date is required'),
             'cc_cvc.required' => translate('Card CVC is required'),
             'cc_number.card_invalid' => translate('Card is invalid'),
-        ];
+        ], $this->getWEFMessages());
     }
 
     public function getWEFRules() {
@@ -207,7 +204,9 @@ class CheckoutForm extends Component
     }
 
     public function getWEFMessages() {
-        return [];
+        return apply_filters('checkout-form.messages.wef', [
+            'wef.billing_entity.in' => translate('Customer entity can only be individual or company')
+        ]);
     }
 
     /**

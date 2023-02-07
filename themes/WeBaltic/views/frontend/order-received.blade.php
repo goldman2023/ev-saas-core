@@ -124,7 +124,7 @@
                         <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
                         <span class="block">{{ $order->billing_address }}</span>
                         <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
-                        <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '').\Countries::get(code: $order->billing_country)->name }}</span>
+                        <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '').(\Countries::get(code: $order->billing_country)?->name ?? '') }}</span>
                       </address>
                     </dd>
                   @elseif(!empty($order->shipping_address))
@@ -134,7 +134,7 @@
                         <span class="block">{{ $order->shipping_first_name.' '.$order->shipping_last_name }}</span>
                         <span class="block">{{ $order->shipping_address }}</span>
                         <span class="block">{{ $order->shipping_city }}, {{ $order->shipping_zip }}</span>
-                        <span class="block">{{ (!empty($order->shipping_state) ? $order->shipping_state.', ' : '').\Countries::get(code: $order->shipping_country)->name }}</span>
+                        <span class="block">{{ (!empty($order->shipping_state) ? $order->shipping_state.', ' : '').(\Countries::get(code: $order->shipping_country)?->name ?? '') }}</span>
                       </address>
                     </dd>
                   @endif
@@ -148,7 +148,7 @@
                     <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
                     <span class="block">{{ $order->billing_address }}</span>
                     <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
-                    <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '').\Countries::get(code: $order->billing_country)->name }}</span>
+                    <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' : '').(\Countries::get(code: $order->billing_country)?->name ?? '') }}</span>
                   </address>
                 </dd>
               </div>

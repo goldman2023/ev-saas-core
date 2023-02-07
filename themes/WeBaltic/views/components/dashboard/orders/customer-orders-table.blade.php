@@ -110,10 +110,10 @@
         <h3 class="mt-2 text-sm font-medium text-gray-900">{{ translate('No orders yet') }}</h3>
         <p class="mt-1 text-sm text-gray-500">{{ translate('Get started by creating a new quote request.') }}</p>
         <div class="mt-6">
-          <button type="button" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm">
+          <a href="{{ route('quote.create') }}" target="_blank" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm">
             @svg('heroicon-o-shopping-cart', ['class' => '-ml-1 mr-2 h-5 w-5'])
             {{ translate('Request a quote') }}
-          </button>
+          </a>
         </div>
       </div>
     </div>

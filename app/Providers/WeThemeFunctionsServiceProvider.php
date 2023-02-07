@@ -24,6 +24,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
     abstract protected function getTenantAppSettings() : array;
     abstract protected function getMenuLocations() : array;
     abstract protected function registerLivewireComponents();
+    abstract protected function setNotificationsFilters();
 
     /**
      * This function extends App/Tenant settings with custom settings required in a specific theme (for a specific tenant)!
@@ -64,12 +65,13 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Autoload theme Components
+        Blade::componentNamespace('WeThemes\\'.$this->theme_name.'\\App\\View\\Components', 'theme');
+
         $this->extendAppSettings();
         $this->registerMenuLocations();
         $this->registerLivewireComponents();
-
-        // Autoload theme Components
-        Blade::componentNamespace('WeThemes\\'.$this->theme_name.'\\App\\View\\Components', 'theme');
+        $this->setNotificationsFilters();
 
         // Add Theme specific sections to GrapeJS
         add_filter('theme-section-components', function($base_sections) {
@@ -91,12 +93,12 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
         if (!empty(tenant()->domains->first())) {
             // Set `theme_root` and `theme_helpers` paths
             $this->theme_root = base_path() . '/themes/' . tenant()->domains->first()->theme;
-            $this->theme_helpers = $this->theme_root . '/App/Helpers/*.php';
+            $this->theme_helpers = $this->theme_root . '/App/Helpers/';
             $this->theme_name = basename($this->theme_root);
             $this->theme_root_class = 'WeThemes\\'.$this->theme_name;
 
             // Loop through all helper functions in the theme, and require each php file laoded with functions!
-            if(!empty($theme_helpers = glob($this->theme_helpers))) {
+            if(!empty($theme_helpers = glob_recursive($this->theme_helpers, '*.php'))) {
                 foreach ($theme_helpers as $filename) {
                     require_once($filename);
                 }

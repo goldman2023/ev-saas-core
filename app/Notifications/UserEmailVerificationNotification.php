@@ -4,18 +4,21 @@ namespace App\Notifications;
 
 use Log;
 use Auth;
+use Uuid;
 use Carbon\Carbon;
 use App\Mail\EmailManager;
+use Illuminate\Bus\Queueable;
 use App\Mail\EmailVerification;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Notifications\Messages\WeMailMessage;
 
 
-class UserFinalizeRegistration extends Notification
+class UserEmailVerificationNotification extends Notification
 {
+    use Queueable;
+
     public function __construct()
     {
 
@@ -28,14 +31,15 @@ class UserFinalizeRegistration extends Notification
 
     public function toMail($notifiable)
     {
-        $notifiable->verification_code = sha1($notifiable->id.'_'.$notifiable->email);
+        // IMPORTANT: Illuminate\Foundation\Auth\EmailVerificationRequest uses sha1 instead of encrypt to create verification_code for email verification!!!!
+        $notifiable->verification_code = sha1($notifiable->email);
         $notifiable->save();
-
+        
         try {
             return (new WeMailMessage)
-                ->subject(apply_filters('notifications.user-finalize-registration.subject', translate('Finalize your registration on').' '.get_tenant_setting('site_name')))
+                ->subject(apply_filters('notifications.user-email-verification.subject', translate('Verify Email on').' '. get_tenant_setting('site_name')))
                 ->view(
-                    'emails.users.finalize-registration',
+                    'emails.users.email-verification',
                     ['user' => $notifiable]
                 );
         } catch(\Exception $e) {

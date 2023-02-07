@@ -12,7 +12,6 @@ use App\Models\Invoice;
 use Livewire\Component;
 use App\Models\OrderItem;
 use Illuminate\Validation\Rule;
-use App\Mail\PasswordResetEmail;
 use App\Enums\WeMailingListsEnum;
 use App\Traits\Livewire\RulesSets;
 use Illuminate\Support\Collection;

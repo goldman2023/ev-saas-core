@@ -89,4 +89,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     {
         parent::register();
     }
+
+    protected function setNotificationsFilters() {
+
+    }
 }
