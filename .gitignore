@@ -48,10 +48,7 @@ composer.phar
 /cypress/videos/*
 /cypress/screenshots/*
 storage/*
-public/themes/ev-saas-default/css/*
-public/themes/ev-saas-default/js/*
-public/themes/WeTailwind/js/*
-public/themes/WeTailwind/css/*
+public/themes/*
 resources/scss/tenants/*
 resources/scss/dependencies/*.css
 resources/scss/dependencies/*.css.map

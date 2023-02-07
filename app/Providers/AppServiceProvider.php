@@ -137,6 +137,16 @@ class AppServiceProvider extends ServiceProvider
             return ($shop?->id ?? null) === (auth()->user()?->shop->first()?->id ?? null);
         });
 
+        Blade::if('themefilexists', function ($file_path = '', $theme_name = '', $current = true) {
+            $theme_name = $current ? \WeTheme::getThemeName() : $theme_name;
+            
+            if(!empty($theme_name) && !empty($file_path)) {
+                return file_exists(public_path('themes/'.$theme_name.'/'.$file_path));
+            }
+
+            return false;
+        });
+
         // Hooks system
         // TODO: Make $arg into ...$args and check if everything works as expected...
         Blade::directive('do_action', function ($args) {
