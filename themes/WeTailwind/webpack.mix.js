@@ -1,5 +1,5 @@
+const path = require('path');
+const mix = require("laravel-mix");
 let weMix = require('../../we-webpack-mix');
 
-const mix = require("laravel-mix");
-
-weMix.compileTheme(mix, __dirname, 'WeTailwind');
+weMix.compileTheme(mix, __dirname, path.basename(__dirname));
