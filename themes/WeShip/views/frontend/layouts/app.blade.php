@@ -36,10 +36,9 @@
     </script>
 
     <!-- Styles -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <script defer async src="{{ static_asset('/bp-assets/vendor/flowbite/flowbite.js') }}"></script>
 
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeShip') }}">
 
     @include('frontend.layouts.global-partials.all')
     @livewireStyles
@@ -109,8 +108,8 @@
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
 
-    <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
-    <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    <script src="{{ mix('js/app.min.js', 'themes/WeShip') }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/WeShip') }}" defer></script>
 
     <!-- Scripts -->
     @livewireScripts
