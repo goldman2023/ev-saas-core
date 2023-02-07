@@ -162,7 +162,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // AttributeValue: WEF data types
             add_filter('attribute_values.wef.data-types', function ($data_types) {
                 return array_merge($data_types, [
-                    'svoris' => 'string',
+                    'max_grazulo_svoris' => 'string',
+                    'bendroji_mase' => 'string',
                     'variantas' => 'string',
                     'kebulo_kodas' => 'string',
                     'modifikacija' => 'string',
@@ -211,9 +212,9 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
                 // Generate certificate
                 baltic_generate_order_document(
-                    order: $order, 
-                    template:'documents-templates.certificate', 
-                    upload_tag: 'certificate', 
+                    order: $order,
+                    template:'documents-templates.certificate',
+                    upload_tag: 'certificate',
                     display_name: translate('Certificate for Order #').$order->id
                 );
 

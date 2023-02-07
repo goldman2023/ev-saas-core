@@ -126,7 +126,7 @@
 
         <div
             class="
-            left-0 w-full z-[999]
+            hidden left-0 w-full z-[999]
             items-center mt-8 text-center justify-center left-0 flex flex-wrap lg:w-[80%] lg:pl-[10%]">
             <div class="w-1/2 sm:w-1/2 lg:w-1/4 flex px-4 lg:mb-8">
 
@@ -203,12 +203,14 @@
                     </div>
 
                     <div class="mb-6">
+                        <x-custom.product-type></x-custom.product-type>
+                    </div>
+
+                    <div class="mb-6">
                         <x-custom.product-addons></x-custom.product-addons>
                     </div>
 
-                    <div class='text-lg'>
-                        Total: <strong x-text="showPrice"></strong> €
-                    </div>
+
 
                     <input type="submit" href="" target="_blank" value="{{ translate('Get a quote') }}"
                         class="sticky bottom-3 sm:static mt-6 w-full inline-block rounded-full border-2 border-black bg-white px-6 py-3 text-base font-medium text-black shadow-sm hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-center" />

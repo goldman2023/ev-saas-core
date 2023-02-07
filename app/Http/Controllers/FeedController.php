@@ -17,8 +17,8 @@ class FeedController extends Controller
     public function index()
     {
         $this->middleware('auth');
-        if(get_tenant_setting('feed_enabled', true)) {
-            return route('home');
+        if(get_tenant_setting('feed_enabled', true) == false) {
+            return redirect()->route('home');
         }
 
         $type = "index";

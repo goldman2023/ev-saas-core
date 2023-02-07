@@ -1,7 +1,7 @@
 <div>
 
     <div class="border-b border-gray-200 dark:border-gray-700">
-        <ul class="bg-white flex flex-wrap -mb-px text-md font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent"
+        <ul class="we-horizontal-slider bg-white flex lg:flex-wrap -mb-px text-md font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent"
             role="tablist">
             <li role="presentation">
                 <button style="min-width: 200px;" class="min-w-[100px] inline-block border-r-1 p-4 border-t-2  text-left" id="engagement-stats-tab" data-tabs-target="#engagement-stats"

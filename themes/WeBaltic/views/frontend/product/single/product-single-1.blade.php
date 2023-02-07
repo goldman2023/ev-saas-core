@@ -8,20 +8,23 @@
 <div class="bg-gray-100">
     <main class="container sm:px-6 sm:pt-16 lg:px-8">
         <div class="mx-auto max-w-2xl lg:max-w-none">
-            <div class="mb-6">
-                <h1 class="text-4xl font-bold tracking-tight text-gray-900">
+            <div class="mb-6 pt-12 sm:pt-0">
+                <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-2">
                     {{ $product->name }}
                 </h1>
+                <span class="font-medium block text-gray-600 text-[16px] line-clamp-1">
+                    {{ $product->excerpt }}
+                </span>
             </div>
         </div>
     </main>
-    <div class="mb-6">
+    <div class="hidden sm:block mb-6">
         {{ Breadcrumbs::render('product', $product) }}
     </div>
 
-    <main class="container">
+    <main class="container sm:px-8">
         <!-- Product -->
-        <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+        <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-12">
             <!-- Image gallery -->
             <div class="flex flex-col-reverse">
                 {{-- <x-product.single.support-box></x-product.single.support-box> --}}
@@ -89,6 +92,9 @@
                 <x-default.products.single.product-checkout-card :product="$product">
                 </x-default.products.single.product-checkout-card>
 
+                <div class="mt-6">
+                    <iframe src="https://api.mokilizingas.lt/api/16ac3af4dcd38b40e422ca630b4adb8e/calc/deals.html?amount_advance=0&amp;layout=ml-004&amp;amount_total=6.5&amp;term=24" style="border: none; width: 100%; height: 100%;" title="Moki lizingas"></iframe>
+                </div>
                 <div class="mt-4"><a href="#" class="group inline-flex text-sm text-gray-500 hover:text-gray-700"><span
                             id="i72hhgh">
                             {{ translate('Reikia pagalbos?') }} +37065455654

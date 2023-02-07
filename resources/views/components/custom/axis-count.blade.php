@@ -67,6 +67,28 @@
                     :class="{ 'border': (active === 'engine1'), 'border-2': !(active === 'engine1'), 'border-indigo-500': (value === 'engine1'), 'border-transparent': !(value === 'engine1') }"></span>
             </label>
 
+            <label x-radio-group-option=""
+                class="relative block cursor-pointer rounded-full border bg-white px-6 py-3 shadow-sm focus:outline-none sm:flex sm:justify-between border-transparent border-indigo-500 ring-2 ring-indigo-500"
+                :class="{ 'border-transparent': (value === 'engine3'), 'border-gray-300': !(value === 'engine3'), 'border-indigo-500 ring-2 ring-indigo-500': (active === 'engine3'), 'undefined': !(active === 'engine3') }">
+                <input type="radio" x-on:change="updateSpeed($event)" x-model="value" name="server-size" value="engine3"
+                    class="sr-only" aria-labelledby="server-size-1-label"
+                    aria-describedby="server-size-1-description-0 server-size-1-description-1">
+                <span class="flex items-center">
+                    <span class="flex flex-col text-sm">
+                        <span id="server-size-1-label" class="font-medium text-gray-900">
+                            {{ translate('Triple axel') }}
+                        </span>
+                    </span>
+                </span>
+                <span id="server-size-1-description-1"
+                    class="mt-2 flex text-sm sm:mt-0 sm:ml-4 sm:flex-col sm:text-right">
+                    <span class="font-medium text-gray-900"></span>
+                </span>
+                <span class="pointer-events-none absolute -inset-px rounded-full border border-indigo-500"
+                    aria-hidden="true"
+                    :class="{ 'border': (active === 'engine3'), 'border-2': !(active === 'engine3'), 'border-indigo-500': (value === 'engine3'), 'border-transparent': !(value === 'engine3') }"></span>
+            </label>
+
 
 
         </div>

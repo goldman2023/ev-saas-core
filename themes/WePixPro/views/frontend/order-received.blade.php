@@ -226,7 +226,7 @@ $is_bookable_product = $first_item instanceof \App\Models\Product && $first_item
                                 <span class="block">{{ $order->billing_address }}</span>
                                 <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
                                 <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' :
-                                    '').\Countries::get(code: $order->billing_country)->name }}</span>
+                                    '') }}</span>
                             </address>
                         </dd>
                         @elseif(!empty($order->shipping_address))
@@ -254,7 +254,7 @@ $is_bookable_product = $first_item instanceof \App\Models\Product && $first_item
                                 <span class="block">{{ $order->billing_address }}</span>
                                 <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
                                 <span class="block">{{ (!empty($order->billing_state) ? $order->billing_state.', ' :
-                                    '').\Countries::get(code: $order->billing_country)->name }}</span>
+                                    '') }}</span>
                             </address>
                         </dd>
                     </div>

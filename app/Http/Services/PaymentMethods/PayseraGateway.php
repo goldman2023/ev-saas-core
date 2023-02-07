@@ -85,6 +85,8 @@ class PayseraGateway
                 'callbackurl' => $this->callbackurl,
                 'test' => $this->test,
             ]);
+            /* Important, add exit() after WebToPay::redirectToPayment() to prevent from pausing a redirect with a blank page */
+            exit();
         } catch (\Exception $exception) {
             dd(get_class($exception).':'.$exception->getMessage());
         }
@@ -96,7 +98,7 @@ class PayseraGateway
         parse_str(base64_decode(strtr($request->data, ['-' => '+', '_' => '/'])), $params);
 
         $invoice = Invoice::find($invoice_id);
-        
+
         // TODO: Check $invoice payment_status before proceeding -> if not paid go to received!
 
         $invoice->order->payment_status = $invoice->isLastInvoice() ? PaymentStatusEnum::pending()->value : PaymentStatusEnum::unpaid()->value;
@@ -122,7 +124,7 @@ class PayseraGateway
         $invoice->save();
 
         $order = $invoice->order;
-        
+
         return redirect()->route('checkout.order.canceled', $order->id);
     }
 

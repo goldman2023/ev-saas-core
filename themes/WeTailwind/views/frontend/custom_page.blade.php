@@ -13,6 +13,12 @@
 <meta property="og:description" content="{{ $page->getPageMeta()['description'] }}" />
 <meta property="og:site_name" content="{{ get_site_name() }}" />
 
+<meta property="twitter:image" content="{{ $page->getPageMeta()['image'] }}" />
+<meta property="twitter:title" content="{{ $page->getPageMeta()['title'] }}" />
+<meta property="twitter:description" content="{{ $page->getPageMeta()['description'] }}" />
+<meta property="twitter:card" content="summary_large_image" />
+
+
 <link rel="preload" href="https://cdn.tailwindcss.com" as="script" />
 <script src="https://cdn.tailwindcss.com"></script>
 

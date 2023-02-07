@@ -210,6 +210,10 @@ class Category extends WeBaseModel
 
     public function getPermalink($content_type = null)
     {
+        if($this == null) {
+            return '';
+        }
+
         return Categories::getRoute($this, $content_type);
     }
 

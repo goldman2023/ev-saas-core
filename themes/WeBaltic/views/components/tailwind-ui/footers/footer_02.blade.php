@@ -1,7 +1,7 @@
 @php
-$footer_menu = nova_get_menu_by_slug('footer')['menuItems'] ?? null;
-$footer_menu_2 = nova_get_menu_by_slug('footer-2')['menuItems'] ?? null;
-$footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
+$footer_menu = nova_get_menu_by_slug('footer_1')['menuItems'] ?? null;
+$footer_menu_2 = nova_get_menu_by_slug('footer_2')['menuItems'] ?? null;
+$footer_menu_3 = nova_get_menu_by_slug('footer_3')['menuItems'] ?? null;
 @endphp
 <footer class="bg-white dark:bg-gray-800">
     <div class="py-6 mx-auto container md:p-6 lg:p-6">
@@ -112,11 +112,19 @@ $footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
                     {{ get_site_name() }}
                 </h2>
                 <a href="/"
-                class="inline flex text-right justify-end items-center mb-5 text-2xl font-semibold text-gray-900 dark:text-white">
-                <img src="{{ get_site_logo() }}" class="inline max-w-[200px]" loading="lazy" alt="{{ get_site_name() }}" />
-            </a>
+                    class="block flex text-right justify-end items-center mb-5 text-2xl font-semibold text-gray-900 dark:text-white">
+                    <img src="{{ get_site_logo() }}" class="inline max-w-[200px]" loading="lazy"
+                        alt="{{ get_site_name() }}" />
+                </a>
 
-                {{-- <livewire:forms.newsletter-form /> --}}
+                <div class="flex justify-end">
+                    <a href="/eu-investments" target="_blank">
+                        <img class="block justify-end   max-w-[200px]"
+                            src="https://businesspress.fra1.digitaloceanspaces.com/uploads/fff40500-0cca-4b32-8500-92dbfff35e36/1675173047_Screenshot-2022-03-07-at-15.36.58.png" />
+                    </a>
+                </div>
+                {{--
+                <livewire:forms.newsletter-form /> --}}
             </div>
         </div>
         <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8">
@@ -129,7 +137,3 @@ $footer_menu_3 = nova_get_menu_by_slug('footer-3')['menuItems'] ?? null;
         </div>
     </div>
 </footer>
-
-<!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js-eu1.hs-scripts.com/26534495.js"></script>
-<!-- End of HubSpot Embed Code -->

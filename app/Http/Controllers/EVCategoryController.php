@@ -43,13 +43,20 @@ class EVCategoryController extends Controller
 
         if(!empty($selected_category)) {
             // TODO: Get content types based on page builder sections added here
-            $products = $selected_category->products()->orderBy('created_at', 'DESC')->paginate(10);
+            $products = $selected_category
+            ->products()
+            ->where('unit_price' , '>', 0)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
             $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
         } else {
-            $products = Product::orderBy('created_at', 'DESC')->paginate(10);
+            $products = Product::orderBy('created_at', 'DESC')
+            ->where('unit_price' , '>', 0)
+
+            ->paginate(10);
             $shops = Shop::orderBy('created_at', 'DESC')->paginate(10);
         }
-        
+
 
         return view('frontend.products.archive', compact('selected_category', 'products', 'shops'));
     }

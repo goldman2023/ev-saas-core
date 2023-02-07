@@ -23,7 +23,7 @@ class CategoryList extends Component
      */
     public function __construct($selectedCategory = null, $slider = false, $style = 'category-list')
     {
-        $this->categories = Categories::getAll();
+        $this->categories = Category::where('featured', 1)->get();;
         $this->selectedCategory = $selectedCategory;
         $this->slider = $slider;
         $this->style = $style;
