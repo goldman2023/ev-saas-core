@@ -31,31 +31,3 @@
 .btn-ghost {
     @apply cursor-pointer inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
 }
-
-.badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
-}
-
-.badge-primary {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-primary;
-}
-
-.badge-info {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-info-light text-info;
-}
-
-.badge-success {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-light text-success;
-}
-
-.badge-warning {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning-light text-warning;
-}
-
-.badge-danger {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger-light text-danger;
-}
-
-.badge-dark {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-900 text-white;
-}

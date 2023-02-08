@@ -25,6 +25,7 @@ use App\Http\Controllers\QuotesController;
 use App\Http\Controllers\WeEditController;
 use App\Http\Controllers\WeQuizController;
 use App\Http\Controllers\CompareController;
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\BlogPostController;
@@ -38,8 +39,8 @@ use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVWishlistController;
-use App\Http\Controllers\OnboardingController;
 // use App\Http\Controllers\WeMenuController;
+use App\Http\Controllers\OnboardingController;
 use Stancl\Tenancy\Features\UserImpersonation;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\WeAnalyticsController;
@@ -252,7 +253,12 @@ Route::middleware([
     Route::get('/page/{slug}', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.show_custom_page');
     Route::get('/shop/create', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
 
-
+    // TODO: SHould be added through theme routes!
+    Route::get('/country/{slug}', [CountryController::class, 'show'])->name('country.show');
+    Route::middleware('auth')->group(function () {
+        Route::get('/country/export/{type?}', [CountryController::class, 'export'])->name('country.export');
+    });
+    // END TODO
 });
 
 /**

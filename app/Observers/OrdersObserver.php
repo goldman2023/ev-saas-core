@@ -18,20 +18,24 @@ class OrdersObserver
      */
     public function created(Order $order)
     {
+        if (function_exists('orderCreatedObserved')) {
+            return orderCreatedObserved($order);
+        }
+
         // If order which is created is not temp, then send a transacional email
         if(!$order->is_temp) {
-            // try {
-            //     // Send order in email to user
-            //     Mail::to($order->user->email)
-            //         ->send(new OrderReceivedEmail($order));
+            try {
+                // Send order in email to user
+                Mail::to($order->user->email)
+                    ->send(new OrderReceivedEmail($order));
     
-            //     $meta = $order->meta;
-            //     $meta['email_sent'] = true;
-            //     $order->meta = $meta;
-            //     $order->save();
-            // } catch(\Exception $e) {
-            //     Log::error($e->getMessage());
-            // }
+                $meta = $order->meta;
+                $meta['email_sent'] = true;
+                $order->meta = $meta;
+                $order->save();
+            } catch(\Exception $e) {
+                Log::error($e->getMessage());
+            }
         }
 
         /**

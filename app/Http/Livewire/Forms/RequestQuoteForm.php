@@ -10,6 +10,8 @@ use Carbon;
 use Purifier;
 use Categories;
 use CartService;
+use AuthService;
+use Payments;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Address;
@@ -63,12 +65,7 @@ class RequestQuoteForm extends Component
 
     public $selected_payment_method = 'wire_transfer';
 
-    // Account
-    public $account_password;
-
-    public $account_password_confirmation;
-
-    protected $listeners = [];
+    protected $listeners = ['refreshRequestQuoteForm' => '$refresh'];
 
     protected function rulesSets()
     {
@@ -81,20 +78,18 @@ class RequestQuoteForm extends Component
                 'order.billing_first_name' => 'required|min:2',
                 'order.billing_last_name' => 'required|min:2',
                 'order.billing_company' => 'nullable',
-                'order.same_billing_shipping' => 'nullable',
+                'order.same_billing_shipping' => 'required|boolean',
+                'order.billing_country' => 'nullable',
+                'order.shipping_country' => 'nullable',
                 'order.phone_numbers' => 'array|required',
                 'order.buyers_consent' => 'required|boolean|is_true',
 
                 'selected_payment_method' => ['required', Rule::in(PaymentMethodUniversal::$available_gateways)],
                 'checkout_newsletter' => 'nullable',
-                'selected_billing_address_id' => '',
-                'manual_mode_billing' => 'nullable',
-                'manual_mode_shipping' => 'nullable',
             ],
-            'account_creation' => [
-                'account_password' => 'required|confirmed|min:6',
-            ],
+            'wef' => $this->getWEFRules(),
             'billing' => [
+                'selected_billing_address_id' => '',
                 'order.billing_address' => 'required|min:5',
                 'order.billing_country' => ['required', Rule::in(\Countries::getCodesAll(true))],
                 'order.billing_state' => 'required|min:2',
@@ -102,7 +97,7 @@ class RequestQuoteForm extends Component
                 'order.billing_zip' => 'required|min:2',
             ],
             'selected_billing_address' => [
-                'selected_shipping_address_id' => 'required|if_id_exists:App\Models\Address,id',
+                'selected_billing_address_id' => 'required|if_id_exists:App\Models\Address,id',
             ],
             'shipping' => [
                 'selected_shipping_address_id' => '',
@@ -115,24 +110,33 @@ class RequestQuoteForm extends Component
             'selected_shipping_address' => [
                 'selected_shipping_address_id' => 'required|if_id_exists:App\Models\Address,id',
             ],
-            'registered_user_password_rule' => [
-                'account_password' => 'match_password:App\Models\User,email,order.email',
-            ],
-            'non_registered_user_password_rule' => [
-                'account_password' => 'required|confirmed|min:6',
-            ]
         ];
     }
 
     protected function rules()
     {
-        $rules = [];
-
-        foreach ($this->rulesSets() as $key => $array) {
-            $rules = array_merge($rules, $array);
-        }
-
-        return $rules;
+        return $this->getRuleSetsCombined([
+            'main', 
+            'wef',
+            'billing' => function() {
+                if(Auth::check() && $this->selected_billing_address_id === -1) return true; // if user is auth. and billing address IS NOT selected
+                else if(!\Auth::check()) return true; // if user is not auth.
+            },
+            'selected_billing_address' => function() {
+                if(Auth::check() && $this->selected_billing_address_id !== -1) return true; // if user is auth. and billing address IS selected
+            },
+            'shipping' => function() {
+                if(empty($this->order->same_billing_shipping)) {
+                    if(Auth::check() && $this->selected_shipping_address_id === -1) return true;
+                    else if(!\Auth::check()) return true;
+                }
+            },
+            'selected_shipping_address' => function() {
+                if(empty($this->order->same_billing_shipping)) {
+                    if(Auth::check() && $this->selected_shipping_address_id !== -1) return true;
+                }
+            },
+        ]);
     }
 
     protected function messages()
@@ -145,34 +149,47 @@ class RequestQuoteForm extends Component
             'order.billing_last_name.required' => translate('Last name is required'),
             'order.billing_last_name.min' => translate('Minimum :min characters required'),
 
+            // Billing Address
             'order.billing_address.required' => translate('Address is required'),
             'order.billing_address.min' => translate('Minimum :min characters required'),
             'order.billing_country.required' => translate('Country is required'),
-            // 'order.billing_country.required' => ['required', Rule::in(\Countries::getCodesAll(true))],
-
             'order.billing_state.required' => translate('State is required'),
             'order.billing_state.min' => translate('Minimum :min characters required'),
-
             'order.billing_city.required' => translate('City is required'),
             'order.billing_city.min' => translate('Minimum :min characters required'),
-
             'order.billing_zip.required' => translate('ZIP code is required'),
             'order.billing_zip.min' => translate('Minimum :min characters required'),
 
-            'account_password.match_password' => translate('Password is not correct for a given email. If you want to create an order under provided email, you have to know password of the user under given email. If you don\'t know, either use Forgot password or create another account. under different email.'),
+            // Shipping Address
+            'order.shipping_address.required' => translate('Address is required'),
+            'order.shipping_address.min' => translate('Minimum :min characters required'),
+            'order.shipping_country.required' => translate('Country is required'),
+            'order.shipping_state.required' => translate('State is required'),
+            'order.shipping_state.min' => translate('Minimum :min characters required'),
+            'order.shipping_city.required' => translate('City is required'),
+            'order.shipping_city.min' => translate('Minimum :min characters required'),
+            'order.shipping_zip.required' => translate('ZIP code is required'),
+            'order.shipping_zip.min' => translate('Minimum :min characters required'),
+
             'order.buyers_consent.is_true' => translate('You must agree with terms of service'),
-            'cc_expiration_date.required' => translate('CC expiration date is required'),
-            'cc_cvc.required' => translate('Card CVC is required'),
-            'cc_number.card_invalid' => translate('Card is invalid'),
+
+            'selected_payment_method.required' => translate('Please select payment method'),
+            'selected_payment_method.in' => translate('Payment method can only be one of the following:').' '.Payments::getPaymentMethodsName()->join(', '),
         ];
     }
 
     public function getWEFRules() {
-        return apply_filters('tenant.request-quote.rules.wef', []);
+        return apply_filters('request-quote.rules.wef', [
+            'wef.billing_entity' => ['in:individual,company'],
+            'wef.billing_company_vat' => ['nullable'],
+            'wef.billing_company_code' => ['nullable'],
+        ]);
     }
 
     public function getWEFMessages() {
-        return apply_filters('tenant.request-quote.messages.wef', []);
+        return apply_filters('request-quote.messages.wef', [
+            'wef.billing_entity.in' => translate('Customer entity can only be individual or company')
+        ]);
     }
 
     /**
@@ -195,13 +212,21 @@ class RequestQuoteForm extends Component
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
 
-        if (auth()->user()?->id ?? null) {
+        $this->initCoreMeta($this->order);
+
+        if (!empty(auth()->user()?->id ?? null)) {
             $this->order->email = auth()->user()->email;
             $this->order->billing_first_name = auth()->user()->name;
             $this->order->billing_last_name = auth()->user()?->name;
-        }
 
-        $this->initCoreMeta($this->order);
+            $this->wef['billing_entity'] = auth()->user()->entity;
+
+            if(auth()->user()->entity === 'company') {
+                $this->order->billing_company = auth()->user()->getUserMeta('company_name') ?? '';
+                $this->wef['billing_company_code'] = auth()->user()->getUserMeta('company_registration_number') ?? '';
+                $this->wef['billing_company_vat'] = auth()->user()->getUserMeta('company_vat') ?? '';
+            }
+        }
 
         $this->manual_mode_billing = ! \Auth::check();
         $this->manual_mode_shipping = ! \Auth::check();
@@ -328,59 +353,10 @@ class RequestQuoteForm extends Component
 
             $default_grace_period = 5; // 5 days is default grace period
             $default_due_date = Carbon::now()->addDays(7)->toDateTimeString(); // 7 days fom now is default invoice due_date
-            $phone_numbers = [];
             $user = auth()->user() ?? null;
 
-            if (! Auth::check()) {
-                $user = User::where('email', $this->order->email)->first();
-
-                if (! empty($user->id ?? null) && Hash::check($this->account_password, $user->password)) { // check password again just in case
-                    // There is a user under given Email AND passwords match -> LOG IN USER
-                    auth()->login($user, true); // log the user in
-                } else {
-                    // Create ghost-user 'cuz there's no user under this email and password validation passed
-
-                    // TODO: Move to some RegistrationService or something so we can reuse it throughout the app!
-
-                    // Create user
-                    $user = User::create([
-                        'name' => $this->order->billing_first_name.' '.$this->order->billing_last_name,
-                        'user_type' => User::$customer_type,
-                        'email' => $this->order->email,
-                        'password' => bcrypt($this->account_password),
-                    ]);
-
-                    // Create address
-                    $address_billing = Address::create([
-                        'user_id' => $user->id,
-                        'address' => $this->order->billing_address,
-                        'address_2' => '',
-                        'country' => $this->order->billing_country,
-                        'state' => empty($this->order->billing_state) ? $this->order->billing_country : $this->order->billing_state,
-                        'city' => $this->order->billing_city,
-                        'zip_code' => $this->order->billing_zip,
-                        'phones' => json_encode($this->order->phone_numbers),
-                        'set_default' => 1,
-                    ]);
-
-                    if (! $this->order->same_billing_shipping) {
-                        // Create another address with shipping info
-                        $address_shipping = Address::create([
-                            'user_id' => $user->id,
-                            'address' => $this->order->shipping_address,
-                            'address_2' => '',
-                            'country' => $this->order->shipping_country,
-                            'state' => empty($this->order->shipping_state) ? $this->order->shipping_country : $this->order->shipping_state,
-                            'city' => $this->order->shipping_city,
-                            'zip_code' => $this->order->shipping_zip,
-                            'phones' => json_encode($this->order->phone_numbers),
-                            'set_default' => 1,
-                        ]);
-
-                        $address_billing->set_default = 0;
-                        $address_billing->save();
-                    }
-                }
+            if (!Auth::check()) {
+                $user = AuthService::createGhostUserOnCheckout($this->order);
             }
 
             // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
@@ -407,19 +383,22 @@ class RequestQuoteForm extends Component
                 $this->order->billing_state = empty($address->state) ? $address->country : $address->state;
                 $this->order->billing_city = $address->city;
                 $this->order->billing_zip = $address->zip_code;
-                $this->order->phone_numbers = $phone_numbers = $address->phones; // TODO: To overwrite phones or no???
+                
+                if(empty($this->order->phone_numbers)) {
+                    // Overwrite order phones only if they are not added first, but address is selected 
+                    $this->order->phone_numbers = $address->phones;
+                }
             }
 
             /*
              * Shipping data (when billing and shipping data are not the same)
              * Address (user logged-in) + Manual
              */
-            if (! $this->order->same_billing_shipping) {
-                // TODO: Do we need shipping first_name, last_name and shipping_company ???
-                $this->order->shipping_first_name = $this->order->billing_first_name;
-                $this->order->shipping_last_name = $this->order->billing_last_name;
-                $this->order->shipping_company = $this->order->billing_company;
+            $this->order->shipping_first_name = $this->order->billing_first_name;
+            $this->order->shipping_last_name = $this->order->billing_last_name;
+            $this->order->shipping_company = $this->order->billing_company;
 
+            if (! $this->order->same_billing_shipping) {
                 // Check if Shipping Address is selected from user's addresses
                 // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
                 if (Auth::check() && $this->selected_shipping_address_id > 0 && Address::where('id', $this->selected_shipping_address_id)->exists()) {
@@ -455,7 +434,15 @@ class RequestQuoteForm extends Component
                 $order_item->name = $item['name'];
                 $order_item->excerpt = $item['excerpt'];
                 $order_item->variant = $item['variant'] ?? null;
-                $order_item->quantity = $item['quantity'];
+                $order_item->quantity = (float) $item['quantity'];
+
+                // $order_item->base_price = $item['base_price']; // it's like a unit_price
+                // $order_item->discount_amount = $order_item->quantity * ($item->base_price - $item->total_price);
+                // $order_item->subtotal_price = ($order_item->quantity * $item->base_price) - $order_item->discount_amount;
+                // $order_item->tax = $order_item->subtotal_price * CartService::getGlobalTaxPercentage() / 100;
+                // $order_item->total_price = $order_item->subtotal_price + $order_item->tax;
+
+                // Since this is request a quote, totals are 0!
 
                 $order_item->base_price = 0; // it's like a unit_price
                 $order_item->discount_amount = 0;
@@ -469,7 +456,7 @@ class RequestQuoteForm extends Component
                 $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_predefined_attribute_values']); // set attributes to OrderItem
             }
 
-            $this->order->load('order_items');
+            $this->order->load(['order_items', 'user']);
 
             do_action('request-quote.insert', $this->order);
 
