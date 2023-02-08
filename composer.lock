@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "196e6c7d074ba20f3ac2ba702274cb4b",
+    "content-hash": "43662f7cf99de879b5f2ed824436d08e",
     "packages": [
         {
             "name": "alexwenzel/nova-dependency-container",
@@ -4610,6 +4610,70 @@
             "time": "2022-08-05T06:57:45+00:00"
         },
         {
+            "name": "laravie/serialize-queries",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravie/serialize-queries.git",
+                "reference": "0c97a8487143f6249854367d62b39630b0f6ae76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravie/serialize-queries/zipball/0c97a8487143f6249854367d62b39630b0f6ae76",
+                "reference": "0c97a8487143f6249854367d62b39630b0f6ae76",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^8.67 || ^9.34",
+                "illuminate/queue": "^8.67 || ^9.34",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.22 || ^7.10",
+                "phpstan/phpstan": "^1.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Laravie\\SerializesQuery\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mior Muhammad Zaki",
+                    "email": "crynobone@gmail.com"
+                }
+            ],
+            "description": "Serializable Laravel Query Builder",
+            "support": {
+                "issues": "https://github.com/laravie/serialize-queries/issues",
+                "source": "https://github.com/laravie/serialize-queries/tree/v2.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/crynobone",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://liberapay.com/crynobone",
+                    "type": "liberapay"
+                }
+            ],
+            "time": "2022-11-23T14:31:20+00:00"
+        },
+        {
             "name": "lcobucci/clock",
             "version": "2.2.0",
             "source": {
@@ -5754,6 +5818,64 @@
                 }
             ],
             "time": "2022-10-14T20:01:10+00:00"
+        },
+        {
+            "name": "maatwebsite/laravel-nova-excel",
+            "version": "1.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SpartnerNL/Laravel-Nova-Excel.git",
+                "reference": "ac7f1aedce6d6168e5c23407b0a30305f962c0cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SpartnerNL/Laravel-Nova-Excel/zipball/ac7f1aedce6d6168e5c23407b0a30305f962c0cf",
+                "reference": "ac7f1aedce6d6168e5c23407b0a30305f962c0cf",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "laravie/serialize-queries": "^1.0|^2.0",
+                "maatwebsite/excel": "^3.1",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Maatwebsite\\LaravelNovaExcel\\LaravelNovaExcelServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Maatwebsite\\LaravelNovaExcel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Brouwers",
+                    "email": "patrick@maatwebsite.nl"
+                }
+            ],
+            "description": "Supercharged Excel exports for Laravel Nova Resources",
+            "keywords": [
+                "PHPExcel",
+                "actions",
+                "laravel",
+                "laravel-nova",
+                "nova",
+                "phpspreadsheet"
+            ],
+            "support": {
+                "issues": "https://github.com/SpartnerNL/Laravel-Nova-Excel/issues",
+                "source": "https://github.com/SpartnerNL/Laravel-Nova-Excel/tree/1.3.2"
+            },
+            "time": "2022-05-20T12:50:36+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -7477,6 +7599,126 @@
                 }
             ],
             "time": "2022-10-21T12:56:38+00:00"
+        },
+        {
+            "name": "outl1ne/nova-multiselect-field",
+            "version": "4.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/outl1ne/nova-multiselect-field.git",
+                "reference": "b9a1977dd94a8c172af62578ae700546061d5d35"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/outl1ne/nova-multiselect-field/zipball/b9a1977dd94a8c172af62578ae700546061d5d35",
+                "reference": "b9a1977dd94a8c172af62578ae700546061d5d35",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.1",
+                "nova-kit/nova-packages-tool": "^1.0.1",
+                "outl1ne/nova-translations-loader": "^5.0",
+                "php": ">=8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Outl1ne\\MultiselectField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Outl1ne\\MultiselectField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tarvo Reinpalu",
+                    "email": "tarvoreinpalu@gmail.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Optimist Digital",
+                    "email": "info@optimistdigital.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A multiple select field for Laravel Nova.",
+            "keywords": [
+                "laravel",
+                "multiselect",
+                "nova",
+                "select"
+            ],
+            "support": {
+                "issues": "https://github.com/outl1ne/nova-multiselect-field/issues",
+                "source": "https://github.com/outl1ne/nova-multiselect-field/tree/4.2.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/outl1ne",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-11-23T14:04:58+00:00"
+        },
+        {
+            "name": "outl1ne/nova-simple-repeatable",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/outl1ne/nova-simple-repeatable.git",
+                "reference": "eca3dcb283c876247a26b0a0dd15a6f99e340dc8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/outl1ne/nova-simple-repeatable/zipball/eca3dcb283c876247a26b0a0dd15a6f99e340dc8",
+                "reference": "eca3dcb283c876247a26b0a0dd15a6f99e340dc8",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "outl1ne/nova-translations-loader": "^5.0",
+                "php": ">=8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Outl1ne\\NovaSimpleRepeatable\\SimpleRepeatableServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Outl1ne\\NovaSimpleRepeatable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova simple repeatable rows field.",
+            "keywords": [
+                "Flexible",
+                "field",
+                "keyvalue",
+                "laravel",
+                "nova",
+                "repeatable",
+                "rows"
+            ],
+            "support": {
+                "issues": "https://github.com/outl1ne/nova-simple-repeatable/issues",
+                "source": "https://github.com/outl1ne/nova-simple-repeatable/tree/2.1.0"
+            },
+            "time": "2022-10-21T14:13:02+00:00"
         },
         {
             "name": "outl1ne/nova-translations-loader",
@@ -14759,6 +15001,54 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/2.2.5"
             },
             "time": "2022-09-12T13:28:28+00:00"
+        },
+        {
+            "name": "timothyasp/nova-badge-field",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/timothyasp/nova-badge-field.git",
+                "reference": "3b4ae2cb26785d19f078dca68bdeff1705b891c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/timothyasp/nova-badge-field/zipball/3b4ae2cb26785d19f078dca68bdeff1705b891c8",
+                "reference": "3b4ae2cb26785d19f078dca68bdeff1705b891c8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "laravel/nova": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Timothyasp\\Badge\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Timothyasp\\Badge\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/timothyasp/nova-badge-field/issues",
+                "source": "https://github.com/timothyasp/nova-badge-field/tree/v2.0.1"
+            },
+            "time": "2022-06-23T21:35:36+00:00"
         },
         {
             "name": "twig/twig",
