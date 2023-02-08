@@ -50,6 +50,7 @@ class RegisterForm extends Component
     protected $invite = null;
     public $available_meta;
     public $user_meta = [];
+    public $disabled_registration = false;
 
     protected function rules()
     {
@@ -148,6 +149,8 @@ class RegisterForm extends Component
      */
     public function mount($ghostUser = null)
     {
+        $this->disabled_registration = get_tenant_setting('disable_user_registration') === true;
+        
         $this->token = request()->token ?? null;
         if (!empty($this->token)) {
             $this->invite = UserInvite::where('token', $this->token)->first();

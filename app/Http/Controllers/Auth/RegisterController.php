@@ -37,6 +37,10 @@ class RegisterController extends Controller
      */
     public function user_registration(Request $request, $token = null)
     {
+        if(get_tenant_setting('disable_user_registration') === true) {
+            abort(404);
+        }
+
         $plan = $request->get('plan');
         $interval = $request->get('interval');
 

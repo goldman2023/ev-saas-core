@@ -27,7 +27,10 @@ class Controller extends BaseController
             }
         }
 
-
-        return parent::__call($method, $arguments);
+        try {
+            return parent::__call($method, $arguments);
+        } catch(\Exception $e) {
+            abort(404);
+        }
     }
 }

@@ -38,7 +38,7 @@ class WeThemeService
 
         try {
             $controller = $this->app->make($this->theme_controllers_class . $controller_basename);
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
 
         }
 

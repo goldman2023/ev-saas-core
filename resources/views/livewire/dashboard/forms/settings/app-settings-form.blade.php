@@ -750,9 +750,26 @@
                                 </div>
                                 {{-- END Allow subscription items distribution enabled --}}
 
-                                {{-- Onboarding flow --}}
+                                {{-- Login/Registration/Onboarding flow --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
                                     x-data="{}">
+
+                                    {{-- Enable registration --}}
+                                    <div class="col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-3"
+                                        x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">{{ translate('Disable user registration') }}:</span>
+                                            <p class="text-gray-500 text-sm">
+                                                {{ translate('Enable/Disable user registration.') }}
+                                            </p>
+                                        </div>
+
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.toggle field="settings.disable_user_registration" />
+                                        </div>
+                                    </div>
+                                    {{-- END Enable registration --}}
+
 
                                     {{-- Enable entity selection --}}
                                     <div class="col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-3"
@@ -885,7 +902,7 @@
                                     </div>
 
                                 </div>
-                                {{-- END Onboarding flow --}}
+                                {{-- END Login/Registration/Onboarding flow --}}
 
                                 {{-- Wishlist Feature --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4"
@@ -987,6 +1004,7 @@
                                         $wire.set('settings.multi_item_subscription_enabled', settings.multi_item_subscription_enabled, true);
                                         $wire.set('settings.subscription_items_distribution_enabled', settings.subscription_items_distribution_enabled, true);
                                         $wire.set('settings.user_entity_choice', settings.user_entity_choice, true);
+                                        $wire.set('settings.disable_user_registration', settings.disable_user_registration, true);
                                         $wire.set('settings.onboarding_flow', settings.onboarding_flow, true);
                                         $wire.set('settings.force_email_verification', settings.force_email_verification, true);
                                         $wire.set('settings.register_dynamic_redirect', settings.register_dynamic_redirect, true);

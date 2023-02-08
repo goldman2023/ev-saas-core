@@ -26,11 +26,13 @@
             </button>
         </div>
 
-        <div class="text-center">
-            <span class="text-12 w-full text-muted">{{ translate('Do not have an account?') }}</span>
-            <a class="text-12 font-semibold text-primary" href="{{ route('user.registration') }}">
-                {{ translate('Sign Up') }}
-            </a>
-        </div>
+        @if(get_tenant_setting('disable_user_registration') !== true)
+            <div class="text-center">
+                <span class="text-12 w-full text-muted">{{ translate('Do not have an account?') }}</span>
+                <a class="text-12 font-semibold text-primary" href="{{ route('user.registration') }}">
+                    {{ translate('Sign Up') }}
+                </a>
+            </div>
+        @endif
     </div>
 </div>
