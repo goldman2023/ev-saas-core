@@ -138,7 +138,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Blade::if('themefilexists', function ($file_path = '', $theme_name = '', $current = true) {
-            $theme_name = $current ? \WeTheme::getThemeName() : $theme_name;
+            try {
+                $theme_name = $current ? \WeTheme::getThemeName() : $theme_name;
+            } catch(\Throwable $e) {
+                $theme_name = $current ? \Theme::active() : $theme_name;
+            }
             
             if(!empty($theme_name) && !empty($file_path)) {
                 return file_exists(public_path('themes/'.$theme_name.'/'.$file_path));
