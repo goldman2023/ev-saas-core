@@ -262,7 +262,7 @@
                         </div>
                     </div>
 
-                   <x-dashboard.global.meta-fields :page="$blogPost"></x-dashboard.global.meta-fields>
+                   <x-dashboard.global.meta-fields model-field="blogPost" :model="$blogPost"></x-dashboard.global.meta-fields>
                 </div>
                 {{-- END Left side --}}
 
@@ -338,7 +338,6 @@
                         </div>
                     </div>
                     {{-- END Porfolio Meta --}}
-
 
                     {{-- Media --}}
                     <div class="mt-8 p-4 border bg-white border-gray-200 rounded-lg shadow">

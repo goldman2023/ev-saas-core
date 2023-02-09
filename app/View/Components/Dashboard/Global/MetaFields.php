@@ -6,16 +6,18 @@ use Illuminate\View\Component;
 
 class MetaFields extends Component
 {
-    public $page;
+    public $model;
+    public $modelField;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($page)
+    public function __construct($model, $modelField)
     {
-        //
-        $this->page = $page;
+        $this->model = $model;
+        $this->modelField = $modelField;
     }
 
     /**

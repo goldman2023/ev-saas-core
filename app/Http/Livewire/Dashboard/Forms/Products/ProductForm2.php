@@ -2,42 +2,42 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Products;
 
-use App\Enums\AmountPercentTypeEnum;
-use App\Enums\ProductTypeEnum;
-use App\Enums\StatusEnum;
-use App\Facades\TenantSettings;
-use App\Models\Attribute;
-use App\Models\AttributeRelationship;
-use App\Models\AttributeTranslation;
-use App\Models\AttributeValue;
-use App\Models\AttributeValueTranslation;
-use App\Models\Category;
-use App\Models\CoreMeta;
-use App\Models\Product;
-use App\Models\ProductStock;
-use App\Models\ProductTranslation;
-use App\Models\Upload;
-use App\Rules\AttributeValuesSelected;
-use App\Rules\EVModelsExist;
-use App\Traits\Livewire\CanDelete;
-use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\HasCategories;
-use App\Traits\Livewire\RulesSets;
-use App\Traits\Livewire\HasCoreMeta;
-use App\Traits\Livewire\HasAttributes;
-use Categories;
 use DB;
-use EVS;
 use FX;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
-use Livewire\Component;
+use EVS;
+use Str;
 use MyShop;
 use Purifier;
+use Categories;
+use App\Models\Upload;
+use App\Models\Product;
+use Livewire\Component;
+use App\Models\Category;
+use App\Models\CoreMeta;
+use App\Enums\StatusEnum;
+use App\Models\Attribute;
+use App\Models\ProductStock;
+use App\Rules\EVModelsExist;
+use App\Enums\ProductTypeEnum;
+use App\Models\AttributeValue;
+use App\Facades\TenantSettings;
+use Illuminate\Validation\Rule;
+use App\Models\ProductTranslation;
+use App\Traits\Livewire\CanDelete;
+use App\Traits\Livewire\RulesSets;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use App\Enums\AmountPercentTypeEnum;
+use App\Models\AttributeTranslation;
+use App\Traits\Livewire\HasCoreMeta;
+use App\Models\AttributeRelationship;
+use App\Rules\AttributeValuesSelected;
+use App\Traits\Livewire\HasAttributes;
+use App\Traits\Livewire\HasCategories;
+use App\Traits\Livewire\DispatchSupport;
+use App\Models\AttributeValueTranslation;
+use Illuminate\Contracts\Support\Arrayable;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Str;
 use Spatie\Activitylog\Facades\CauserResolver;
 
 class ProductForm2 extends Component
@@ -76,7 +76,7 @@ class ProductForm2 extends Component
                 'product.status' => [Rule::in(StatusEnum::toValues())],
             ],
             'categories_and_tags' => [
-                'selected_categories' => 'required',
+                'selected_categories' => 'nullable',
                 'product.tags' => 'nullable|array',
             ],
             'brand' => [
