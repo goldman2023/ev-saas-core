@@ -76,7 +76,7 @@ class ProductForm2 extends Component
                 'product.status' => [Rule::in(StatusEnum::toValues())],
             ],
             'categories_and_tags' => [
-                'selected_categories' => 'required',
+                'selected_categories' => 'nullable',
                 'product.tags' => 'nullable|array',
             ],
             'brand' => [
