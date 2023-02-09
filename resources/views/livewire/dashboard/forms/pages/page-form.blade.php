@@ -161,10 +161,8 @@
                     </div>
                     {{-- END Actions --}}
 
-                   <x-dashboard.global.meta-fields :page="$page"></x-dashboard.global.meta-fields>
-                   
+                   <x-dashboard.global.meta-fields model-field="page" :model="$page"></x-dashboard.global.meta-fields>
                 </div>
-
             </div>
         </div>
     </div>
