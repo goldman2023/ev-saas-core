@@ -37,7 +37,9 @@
             </div>
             <div id="tasks-tabs">
                 @foreach(\WeThemes\WeBaltic\App\Enums\TaskTypesEnum::labels() as $type => $label)
-                    <div id="tasks-tab-{{ $type }}" role="tabpanel" class="sm:grid sm:grid-cols-12 gap-6">
+                    <div id="tasks-tab-{{ $type }}" role="tabpanel"
+                    class="">
+                    <div class="sm:grid grid-cols-12 gap-6">
                         <div class="sm:col-span-9">
                             <livewire:dashboard.tables.tasks-table :type="$type" table-id="tasks-table-{{ $type }}">
                             </livewire:dashboard.tables.tasks-table>
@@ -56,6 +58,7 @@
                                 <livewire:dashboard.tasks.latest-delivery-task />
                             @endif
                         </div>
+                    </div>
                     </div>
                 @endforeach
             </div>

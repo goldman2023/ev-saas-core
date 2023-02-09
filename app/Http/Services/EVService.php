@@ -441,7 +441,7 @@ class EVService
                             'class' => 'badge-danger',
                             'content' => function () {
                                 // return 0;
-                                return auth()->user()->orders->where('viewed', 0)->count();
+                                return auth()->user()->orders()->where('viewed', 0)->count();
                             },
                         ],
                     ],
@@ -457,7 +457,7 @@ class EVService
                             'class' => 'badge-danger',
                             'content' => function () {
                                 // return 0;
-                                return auth()->user()->invoices->where('payment_status', 'unpaid')->count();
+                                return auth()->user()->invoices()->where('payment_status', 'unpaid')->count();
                             },
                         ],
                     ],
