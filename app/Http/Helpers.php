@@ -111,14 +111,14 @@ if (!function_exists('castValuesForGet')) {
         if(!empty($settings) && is_array($settings)) {
 
             foreach($settings as $key => &$setting) {
-                
+
                 $data_type = $data_types[$key] ?? null;
                 $value = $settings[$key]['value'] ?? null;
 
                 if(is_array($setting) && array_key_exists('value', $setting)) {
                     $setting = $setting['value'];
                 }
-                
+
                 try {
 
                     // This means that there are more sub items inside
@@ -163,7 +163,7 @@ if (!function_exists('castValuesForGet')) {
                         }
                         return false;
                     };
-                    
+
                     if($isEmpty($setting)) {
                         if($data_type === 'boolean') {
                             $setting = false;
@@ -311,26 +311,26 @@ if (!function_exists('toJSONMedia')) {
 if (!function_exists('glob_recursive')) {
     function glob_recursive($base, $pattern, $flags = 0) {
         $flags = $flags & ~GLOB_NOCHECK;
-        
+
         if (substr($base, -1) !== DIRECTORY_SEPARATOR) {
             $base .= DIRECTORY_SEPARATOR;
         }
-    
+
         $files = glob($base.$pattern, $flags);
         if (!is_array($files)) {
             $files = [];
         }
-    
+
         $dirs = glob($base.'*', GLOB_ONLYDIR|GLOB_NOSORT|GLOB_MARK);
         if (!is_array($dirs)) {
             return $files;
         }
-        
+
         foreach ($dirs as $dir) {
             $dirFiles = glob_recursive($dir, $pattern, $flags);
             $files = array_merge($files, $dirFiles);
         }
-    
+
         return $files;
     }
 }
@@ -1132,7 +1132,8 @@ function translate($key = null, $lang = null)
      */
 
     $translation_def = Cache::remember('translation_'.$key .'_'. $lang, 60, function () use ($key) {
-        return Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
+        $value = Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
+        return $value->lang_value;
     });
 
     if ($translation_def == null) {
@@ -1149,8 +1150,8 @@ function translate($key = null, $lang = null)
     // if ($translation_locale != null && $translation_locale->lang_value != null) {
     //     return $translation_locale->lang_value;
     // } else
-    if (!empty($translation_def->lang_value)) {
-        return $translation_def->lang_value;
+    if (!empty($translation_def)) {
+        return $translation_def;
     } else {
         return $key;
     }
