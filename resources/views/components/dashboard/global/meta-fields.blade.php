@@ -19,10 +19,10 @@
                 </label>
 
                 <div class="mt-1 sm:mt-0 w-full">
-                    <x-dashboard.form.file-selector field="meta_img" id="page-meta-image"
-                        :selected-image="$page->meta_img"></x-dashboard.form.file-selector>
+                    <x-dashboard.form.file-selector field="meta_img" id="{{ $modelField }}-meta-image"
+                        :selected-image="$model->meta_img"></x-dashboard.form.file-selector>
 
-                    <x-system.invalid-msg field="page.meta_img"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="{{ $modelField }}.meta_img"></x-system.invalid-msg>
                 </div>
             </div>
         </div>
@@ -36,12 +36,7 @@
             </label>
 
             <div class="mt-1 sm:mt-0">
-                <input type="text"
-                    class="form-standard @error('page.meta_title') is-invalid @enderror" {{--
-                    placeholder="{{ translate('Write meta title...') }}" --}}
-                    wire:model.defer="page.meta_title" />
-
-                <x-system.invalid-msg field="page.meta_title"></x-system.invalid-msg>
+                <x-dashboard.form.input type="text" field="{{ $modelField }}.meta_title"></x-dashboard.form.input>
             </div>
         </div>
         <!-- END Meta Title -->
@@ -55,14 +50,10 @@
 
             <div class="mt-1 sm:mt-0">
                 <textarea type="text"
-                    class="form-standard h-[80px] @error('page.meta_description') is-invalid @enderror"
-                    {{--
-                    placeholder="{{ translate('Meta description which will be shown when link is shared on social network and') }}"
-                    --}} wire:model.defer="page.meta_description">
-            </textarea>
+                    class="form-standard h-[80px] @error($modelField.'.meta_description') is-invalid @enderror" wire:model.defer="{{ $modelField }}.meta_description">
+                </textarea>
 
-                <x-system.invalid-msg class="w-full" field="page.meta_description">
-                </x-system.invalid-msg>
+                <x-system.invalid-msg class="w-full" field="{{ $modelField }}.meta_description"></x-system.invalid-msg>
             </div>
         </div>
         <!-- END Meta Description -->

@@ -248,6 +248,7 @@ class TenantSettingsService
             'plans_trial_mode' => 'boolean',
             'plans_trial_duration' => 'int',
 
+            'disable_user_registration' => 'boolean',
             'force_email_verification' => 'boolean',
             'register_redirect_url' => 'string',
             'login_redirect_url' => 'string', //
