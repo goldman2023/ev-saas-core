@@ -1133,7 +1133,11 @@ function translate($key = null, $lang = null)
 
     $translation_def = Cache::remember('translation_'.$key .'_'. $lang, 60, function () use ($key) {
         $value = Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
-        return $value->lang_value;
+        if(isset($value->lang_value)) {
+            return $value->lang_value;
+        } else {
+            return null;
+        }
     });
 
     if ($translation_def == null) {
