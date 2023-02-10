@@ -35,18 +35,20 @@
         <div id="orders-tabs">
             @foreach(\WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum::values() as $key => $status)
                 <div id="orders-tab-{{ $key }}" role="tabpanel" aria-labelledby="order-nav-{{ $key }}"
-                    class="sm:grid sm:grid-cols-12 gap-6">
-                    <div class="sm:col-span-9">
-                        <livewire:dashboard.tables.orders-table :status="$key" table-id="orders-table-{{ $status }}">
-                        </livewire:dashboard.tables.orders-table>
-                    </div>
-                    <div class="sm:col-span-3">
-                        @if(auth()->user()->isAdmin())
-                            <livewire:dashboard.tables.action-panels.orders-action-panel table-id="orders-table-{{ $status }}" />
-                        @else
-                            <x-dashboard.elements.support-card class="card bg-white p-4 mb-3">
-                            </x-dashboard.elements.support-card>
-                        @endif
+                    class="">
+                    <div class="sm:grid grid-cols-12 gap-6">
+                        <div class="sm:col-span-9">
+                            <livewire:dashboard.tables.orders-table :status="$key" table-id="orders-table-{{ $status }}">
+                            </livewire:dashboard.tables.orders-table>
+                        </div>
+                        <div class="sm:col-span-3">
+                            @if(auth()->user()->isAdmin())
+                                <livewire:dashboard.tables.action-panels.orders-action-panel table-id="orders-table-{{ $status }}" />
+                            @else
+                                <x-dashboard.elements.support-card class="card bg-white p-4 mb-3">
+                                </x-dashboard.elements.support-card>
+                            @endif
+                        </div>
                     </div>
                 </div>
             @endforeach
