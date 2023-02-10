@@ -138,7 +138,7 @@ class Category extends WeBaseModel
                 });
             }
         } catch(\Throwable $e) {
-            // reason for this try/catch is actually EventServiceProvider which registers Observers before EVServiceProvider boot() method is loaded
+            // reason for this try/catch is actually EventServiceProvider which registers Observers before WeServiceProvider boot() method is loaded
             // Observers are loaded for Category class with method Category::observe() which has to run booted method of Category (current function), and this happens before Vendor facade is properly initated, hence the error!
         }
 
