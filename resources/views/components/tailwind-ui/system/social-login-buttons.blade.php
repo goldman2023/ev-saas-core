@@ -31,7 +31,7 @@
                     </clipPath>
                 </defs>
             </svg>
-            Sign up with Google
+            {{ translate('Sign up with Google') }}
         </a>
         @endif
         @if($fb_enabled)

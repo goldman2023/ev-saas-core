@@ -105,13 +105,15 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
             }
         }
 
-        // Register WeThemeService, use it throughout the theme files as: WeTheme::{something}
+        // Register WeThemeService, use it throughout the theme files as: WeTheme::{something}.
+        // IMPORTANT: This overriden the default WeTheme which is already defined singleton for WeTailwind info and methods
         $theme_data = [
             'theme_name' => $this->theme_name,
             'theme_root_class' => '\\'. trim($this->theme_root_class ?? '', '\\'),
             'theme_root_path' => $this->theme_root,
             'theme_root_helpers_path' => $this->theme_helpers,
         ];
+        
         $this->app->singleton('we_theme_service', function() use ($theme_data) {
             return new WeThemeService(fn () => Container::getInstance(), $theme_data);
         });

@@ -215,8 +215,8 @@ return [
 
         Mews\Purifier\PurifierServiceProvider::class,
 
-        // EVServiceProviders
-        App\Providers\EVServiceProvider::class,
+        // WeServiceProviders
+        App\Providers\WeServiceProvider::class,
         App\Providers\MacrosServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
         App\Providers\PaymentsProvider::class,

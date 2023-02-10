@@ -14,6 +14,7 @@ use App\Http\Services\MyShopService;
 use App\Http\Services\StripeService;
 use App\Http\Services\VendorService;
 use App\Http\Services\CountryService;
+use App\Http\Services\WeThemeService;
 use Illuminate\Support\Facades\Blade;
 use App\Http\Services\CategoryService;
 use App\Http\Services\IMGProxyService;
@@ -25,7 +26,7 @@ use App\Http\Services\AttributesService;
 use App\Http\Services\TenantSettingsService;
 
 
-class EVServiceProvider extends ServiceProvider
+class WeServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -35,7 +36,10 @@ class EVServiceProvider extends ServiceProvider
     public function boot()
     {
         // Add EV dynamic components to EV namespace
+        // DEPRECATED!
         Blade::componentNamespace('App\\View\\Components\\EV', 'ev');
+
+        $this->bootDefaultWeTheme();
 
         // MyShop
         $this->app->singleton('myshop', function() {
@@ -121,5 +125,32 @@ class EVServiceProvider extends ServiceProvider
     public function register()
     {
 
+    }
+    
+    /**
+     * bootDefaultWeTheme
+     *
+     * This method registered a singleton `we_theme_service` which boots default theme (WeTailwind) first.
+     * Singleton `we_theme_service` will be overriden by registering the same singleton in WeThemeFunctionsServiceProvider if current theme has it.
+     * Otherwise, it'll stay as WeTailwind
+     * 
+     * @return void
+     */
+    protected function bootDefaultWeTheme() {
+        $theme_root = base_path() . '/themes/WeTailwind';
+        $theme_helpers = $theme_root . '/App/Helpers/';
+        $theme_name = basename($theme_root);
+        $theme_root_class = 'WeThemes\\'.$theme_name;
+
+        $theme_data = [
+            'theme_name' => $theme_name,
+            'theme_root_class' => $theme_root_class,
+            'theme_root_path' => $theme_root,
+            'theme_root_helpers_path' => $theme_helpers,
+        ];
+
+        $this->app->singleton('we_theme_service', function() use ($theme_data) {
+            return new WeThemeService(fn () => Container::getInstance(), $theme_data);
+        });
     }
 }
