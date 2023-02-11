@@ -251,6 +251,10 @@ Route::middleware([
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');
 
+
+    Route::get('/styleguide/demo', [EVShopController::class, 'styleguide'])->name('styleguide.show');
+
+
     /* IMPORTANT: Last set of routes! To define missing pages and routes */
     /* Catch All Routes: If nothing is matched, try to find a page or throw 404 */
     Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');

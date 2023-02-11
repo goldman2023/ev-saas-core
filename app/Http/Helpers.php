@@ -1136,7 +1136,7 @@ function translate($key = null, $lang = null)
         if(isset($value->lang_value)) {
             return $value->lang_value;
         } else {
-            return null;
+            return $value->lang_key;
         }
     });
 
