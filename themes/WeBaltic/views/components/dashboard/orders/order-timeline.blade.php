@@ -202,7 +202,7 @@
 
     @if($key !== $order_cycle_status)
       <div class="w-full mt-6">
-          <a href="{{ route('order.change-status', $order->id) }}" class="btn-primary w-full !px-10 text-center !py-3">
+          <a href="{{ route('dashboard.order.change-status', $order->id) }}" class="btn-primary w-full !px-10 text-center !py-3">
 
               <span>
                   {{ translate('Next status') }}

@@ -90,4 +90,8 @@ class EVShopController extends Controller
 
         throw new WeAPIException(message: translate('Cannot search shops if not admin or moderator'), type: 'WeApiException', code: 403);
     }
+
+    function styleguide() {
+        return view('system.styleguide');
+    }
 }

@@ -75,7 +75,6 @@ use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 Route::middleware([
     'web',
     InitializeTenancyByDomainAndVendorDomains::class,
-    PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->group(function () {
 
@@ -180,7 +179,7 @@ Route::middleware([
 
     // Blog Posts
     Route::group([], base_path('routes/tenant/blog-posts-group.php'));
-    
+
 
     // Social Posts
     Route::get('/social/post/{id}', [BlogPostController::class, 'social_post_single'])->name('social.post.single');
@@ -267,7 +266,6 @@ Route::middleware([
 Route::middleware([
     'api',
     InitializeTenancyByDomainAndVendorDomains::class,
-    PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->prefix('api')->name('api.')->group(function () {
     // Quizz Result Save

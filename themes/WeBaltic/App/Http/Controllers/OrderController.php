@@ -116,6 +116,7 @@ class OrderController extends Controller
             }
         }
 
+       
         session()->flash('message', translate('Order cycle status updated'));
         return redirect()->back();
     }

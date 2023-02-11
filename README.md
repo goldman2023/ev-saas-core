@@ -1,41 +1,34 @@
-[![NodeJS with Webpack](https://github.com/eim-solutions/ev-saas-core/actions/workflows/webpack.yml/badge.svg)](https://github.com/eim-solutions/ev-saas-core/actions/workflows/webpack.yml)
+[![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2Fcd104744-469d-484a-a6a0-af45f2d1c631&style=plastic)](https://forge.laravel.com)
 
-Who am I????
-We-SaaS Core. This is a repository of multitenancy SaaS Application builder We-SaaS. 
+
+BusinessPress Core. This is a repository of website framework with multitenancy and SaaS Application builder.
 
 # General Information
 
 Documentation URL: https://docs.we-saas.com
 
-Production url: https://app.we-saas.com
+Production url: https://businesspress.io
 
-Staging URL: https://ev-saas.com
+Staging URL: https://dev.businesspress.io
 
 Cypress Dashboard: https://dashboard.cypress.io/projects/teqkyz/runs
 
 Asana Board: https://app.asana.com/0/1201613541420424/list
 
-<div style="position: relative; padding-bottom: 60.810810810810814%; height: 0;">
-<iframe src="https://www.loom.com/embed/3f94edc7d7fd450391b1710156151f69" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-</div>
-
 # Features
 
 - multi-tenancy
-- multilanguage
-- multcurrency
-- advanced permissions management
+- multilanguage (Coming soon)
 - stripe payment gateway and stripe checkout option
 - scheduling
 - email templates
 - email notifications
-- real-time chat
 
 ## Documentation
 Documentation can be found at: https://docs.we-saas.com/
 
 ## Demo
-https://demo.we-saas.com
+https://demo.businesspress.io
 
 ## Remote Development Environment
 https://app.gitbook.com/o/2dee19VQhhAOUjO27T0L/s/3mdkYoieCX8rouQqo60o/
@@ -51,22 +44,7 @@ https://app.gitbook.com/o/2dee19VQhhAOUjO27T0L/s/3mdkYoieCX8rouQqo60o/
 -   Compiling webpack for both central and themes: `yarn dev` (not in watch mode)
 -   Compiling for central: `npx mix --mix-config="webpack.mix.js` (from root directory)
 -   Compiling specific theme: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js"`
--   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"` / Compiling EV-SaaS Default theme: `npx mix watch --mix-config="themes/WeTailwind/webpack.mix.js"`
--   Compiling specific theme-tenant-combo: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js" -- --env tenant_id={id}` (Note: running npx mix on specific theme compiles 1) default theme and 2) all tenants main scss who use that theme)
-
-## Compiling for Default theme
-
-- `npx mix --mix-config="themes/WeTailwind/webpack.mix.js"`
-
-## Compiling for WeTailwind theme
-
-- `npx mix watch --mix-config="themes/WeTailwind/webpack.mix.js"`
-
-# Running docker
-
-`chmod +x sail`
-`kool run up`
-
+- Build script: `yarn prod-all` and `yarn dev-all` fro development purposes.
 # Local setup for assets
 To download dependecies and build assets:
 
@@ -85,10 +63,11 @@ And in `domains` table , you should see added domain details.
 
 # Routing
 All tenant routes should be located in `routes/tenant.php`
+All tenant dashboard admin routes should be located in `routes/dashboard.php`
 All Central app routes should be located in `routes/web.php`
 
 # Filesystem
-In config you need to define `FILESYSTEM_DISK` to `s3` , but it's actually using DigitalOcean Spaces
+In config you need to define `FILESYSTEM_DISK` to `s3` , but it's actually using *DigitalOcean Spaces*
 Access Details can be found in `.env.example` file
 
 # User Permissions
@@ -109,11 +88,6 @@ Run: UniversalPaymentMethodsTableSeeder.php:
 Runs: CreateStockForAllProducts.php: 
 
 `php artisan command:create_product_stock --tenant_id={tenant_id}`
-
-# Dynamic Components for Label/Image/Button
-
-Documentation can be found here:
-https://we-saas.gitbook.io/we-saas-internal-dev-docs/dynamic-components-for-label-image-button
 
 
 # Data tables
@@ -202,23 +176,6 @@ spatie/laravel-query-builder
 dwightwatson/rememberable
 kalnoy/nestedset
 ```
-
-
-# Cypress Testing Guidelines
-
-Please check and review documentation for any questions
-
-https://we-saas.gitbook.io/we-saas-internal-dev-docs/cypress-testing/example-basic-login-test
-
-
-**Project URL:**
-
-https://app.ev-saas.com
-
-## Documentation:
-
-https://docs.ev-saas/
-
 
 ## Demo Login Details:
 

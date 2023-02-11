@@ -12,6 +12,7 @@ use Stancl\Tenancy\Listeners;
 use Stancl\Tenancy\Middleware;
 use Stancl\JobPipeline\JobPipeline;
 use Illuminate\Support\Facades\View;
+use App\Http\Middleware\SetDashboard;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use App\Listeners\Tenancy\BootstrapWEF;
@@ -21,6 +22,11 @@ use App\Listeners\Tenancy\BootstrapMailConfig;
 use App\Listeners\Tenancy\StorageToConfigMapping;
 use App\Listeners\Tenancy\BootstrapThemeFunctions;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
+use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
+use Stancl\Tenancy\Middleware\InitializeTenancyByRequestData;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 class TenancyServiceProvider extends ServiceProvider
 {
@@ -113,7 +119,6 @@ class TenancyServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //
     }
 
     public function boot()
@@ -161,11 +166,18 @@ class TenancyServiceProvider extends ServiceProvider
         /* Note: Do not include central app routes here ever. Because of midlewares applied in: makeTenancyMiddlewareHighestPriority */
         if (file_exists(base_path('routes/tenant.php'))) {
             Route::namespace(static::$controllerNamespace)
+                ->middleware([
+                    \Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains::class,
+                ])
                 ->group(base_path('routes/tenant.php'));
         }
 
         if (file_exists(base_path('routes/dashboard.php'))) {
             Route::namespace(static::$controllerNamespace)
+                ->middleware([
+                    \Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains::class,
+                    SetDashboard::class,
+                ])
                 ->group(base_path('routes/dashboard.php'));
         }
     }
@@ -215,9 +227,10 @@ class TenancyServiceProvider extends ServiceProvider
             Middleware\InitializeTenancyByDomainOrSubdomain::class,
             Middleware\InitializeTenancyByPath::class,
             Middleware\InitializeTenancyByRequestData::class,
+            \App\Http\Middleware\ThemeMiddleware::class,
         ];
 
-        foreach (($tenancyMiddleware) as $middleware) {
+        foreach (array_reverse($tenancyMiddleware) as $middleware) {
             $this->app[\Illuminate\Contracts\Http\Kernel::class]->prependToMiddlewarePriority($middleware);
         }
     }
