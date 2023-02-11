@@ -2,10 +2,11 @@
 
 namespace App\Listeners\Tenancy;
 
+use App;
+use WeTheme;
+use Qirolab\Theme\Theme;
 use App\Facades\TenantSettings;
 use Stancl\Tenancy\Events\TenancyBootstrapped;
-use Qirolab\Theme\Theme;
-use App;
 
 class BootstrapThemeFunctions
 {
@@ -24,9 +25,10 @@ class BootstrapThemeFunctions
                 // Note: No need to require file if namespacing is correct! App::register() will find it and register it.
                 // FIXED (w)ith appropriate namespaces):  Find a way to bypass tenats:migration duplicate class initialization after tenant is manually changed in the function...
                 App::register($this->guessThemeFunctionsNamespace($theme_folder));
+
+                WeTheme::loadCachedTenantRoutes();
             }
         }
-
     }
 
     protected function guessThemeFunctionsNamespace($theme_folder) {

@@ -2,13 +2,13 @@
 
 namespace App\Http\Services;
 
-use App\Models\Central\CentralSetting;
-use App\Models\TenantSetting;
 use Cache;
-use App\Models\Currency;
 use App\Models\Upload;
-use Illuminate\Support\Facades\Request;
+use App\Models\Currency;
+use App\Models\TenantSetting;
 use Illuminate\Support\Facades\DB;
+use App\Models\Central\CentralSetting;
+use Illuminate\Support\Facades\Request;
 
 /**
  * We are getting all Tenant Settings from the cache, or DB.
@@ -28,8 +28,11 @@ class TenantSettingsService
     public function __construct($app) {
         $this->app = $app;
 
-        $this->setAll();
-        // dd($this->getAll()); // testing castValuesForGet
+        try {
+            $this->setAll();
+        } catch(\Exception $e) {
+
+        }
     }
 
     public function get($name, $default = null) {
