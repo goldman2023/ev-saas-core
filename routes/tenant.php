@@ -75,7 +75,6 @@ use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 Route::middleware([
     'web',
     InitializeTenancyByDomainAndVendorDomains::class,
-    PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->group(function () {
 
@@ -267,7 +266,6 @@ Route::middleware([
 Route::middleware([
     'api',
     InitializeTenancyByDomainAndVendorDomains::class,
-    PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->prefix('api')->name('api.')->group(function () {
     // Quizz Result Save

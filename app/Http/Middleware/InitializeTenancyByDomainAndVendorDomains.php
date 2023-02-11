@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Tenancy\Resolvers\ExtendedDomainTenantResolver;
 use Closure;
-use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Tenancy;
+use App\Tenancy\Resolvers\ExtendedDomainTenantResolver;
+use Stancl\Tenancy\Middleware\IdentificationMiddleware;
 
-class InitializeTenancyByDomainAndVendorDomains extends InitializeTenancyByDomain
+class InitializeTenancyByDomainAndVendorDomains extends IdentificationMiddleware
 {
     /** @var callable|null */
     public static $onFail;
@@ -24,5 +24,23 @@ class InitializeTenancyByDomainAndVendorDomains extends InitializeTenancyByDomai
     {
         $this->tenancy = $tenancy;
         $this->resolver = $resolver;
+    }
+
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        if((int) $request->header('WE-SKIP-PREV-MIDDLEWARES', 0) === 1) {
+            return $next($request);
+        }
+
+        return $this->initializeTenancy(
+            $request, $next, $request->getHost()
+        );
     }
 }

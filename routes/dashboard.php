@@ -44,8 +44,6 @@ use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 Route::middleware([
     'web',
     InitializeTenancyByDomainAndVendorDomains::class,
-    PreventAccessFromCentralDomains::class,
-    SetDashboard::class,
     VendorMode::class,
 ])->group(function () {
     Route::middleware('auth')->prefix('previews')->group(function () {
@@ -58,7 +56,7 @@ Route::middleware([
         Route::get('/categories', [EVCategoryController::class, 'index'])->name('categories.index');
         Route::get('/categories/create', [EVCategoryController::class, 'create'])->name('category.create');
         Route::get('/categories/edit/{id}', [EVCategoryController::class, 'edit'])->name('category.edit');
-
+        
         // Tenant blog posts
         //        Route::get('/tenant/blog/posts', [EVProductController::class, 'index'])->name('blog-posts.index');
         //        Route::get('/tenant/blog/posts/create', [EVProductController::class, 'create'])->name('blog-posts.create');
@@ -125,10 +123,7 @@ Route::middleware([
         Route::post('/orders/details', [OrderController::class, 'order_details'])->name('orders.details');
         Route::post('/orders/update_delivery_status', [OrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
         Route::post('/orders/update_payment_status', [OrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
-
-        /* Custom Order Statuses and Document generation  */
-        Route::get('/order/{order_id}/change_cycle_status', [OrderController::class, 'change_cycle_status'])->name('order.change-status');
-
+        
         Route::get('/invoices', [WeInvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoice/{id}/download', [WeInvoiceController::class, 'download_invoice'])->name('invoice.download');
         Route::get('/order/{order_id}/upcoming-invoice/download', [WeInvoiceController::class, 'download_upcoming_invoice'])->name('invoice.upcoming.download');
@@ -202,8 +197,6 @@ Route::middleware([
         // Route::post('/review/published', [App\Http\Controllers\ReviewController::class, 'updatePublished'])->name('reviews.published');
 
 
-
-
         //Product Export
         // Route::get('/product-bulk-export', [App\Http\Controllers\ProductBulkUploadController::class, 'export'])->name('product_bulk_export.index');
 
@@ -251,11 +244,14 @@ Route::middleware([
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');
 
+    do_action('routes.dashboard');
+
     /* IMPORTANT: Last set of routes! To define missing pages and routes */
     /* Catch All Routes: If nothing is matched, try to find a page or throw 404 */
     Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
     Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 
+    
     Route::fallback(function () {
         abort(404);
     });
@@ -266,8 +262,6 @@ Route::middleware([
     'web',
     'auth',
     InitializeTenancyByDomainAndVendorDomains::class,
-    PreventAccessFromCentralDomains::class,
-    SetDashboard::class,
     VendorMode::class,
 ])->prefix('api')->name('api.dashboard.')->group(function () {
     Route::post('/quiz/save', [WeQuizController::class, 'save_quiz'])->name('we-quiz.create');

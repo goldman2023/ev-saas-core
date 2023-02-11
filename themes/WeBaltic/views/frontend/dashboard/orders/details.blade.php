@@ -70,7 +70,7 @@
 
                 </div>
             </div>
-            <a href="{{ route('order.change-status', $order->id) }}" class="btn-primary !px-10 text-center !py-3 ml-3">
+            <a href="{{ route('dashboard.order.change-status', $order->id) }}" class="btn-primary !px-10 text-center !py-3 ml-3">
 
                 <span>
                     {{ translate('Next status') }}

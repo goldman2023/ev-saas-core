@@ -16,7 +16,7 @@
         @if(!empty($order->id))
 
             @if($next_cycle_status_label)
-                <a type="button" href="{{ route('order.change-status', $order->id) }}" class="btn-primary">
+                <a type="button" href="{{ route('dashboard.order.change-status', $order->id) }}" class="btn-primary">
                     {{ translate('Next step') }}
                     @svg('heroicon-s-chevron-right', ['class' => 'w-5 h-5 ml-2'])
                 </a>

@@ -3,19 +3,24 @@ namespace App\Providers;
 
 use TenantSettings;
 use App\Support\Hooks;
+use App\Http\Middleware\VendorMode;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
+use App\Http\Middleware\SetDashboard;
 use App\Http\Services\WeThemeService;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 
 abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
 {
     protected $theme_name;
     protected $theme_root;
     protected $theme_helpers;
+    protected $theme_routes;
     protected $theme_root_class;
 
     /**
@@ -71,8 +76,9 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
         $this->extendAppSettings();
         $this->registerMenuLocations();
         $this->registerLivewireComponents();
+        $this->mapRoutes();
         $this->setNotificationsFilters();
-
+        
         // Add Theme specific sections to GrapeJS
         add_filter('theme-section-components', function($base_sections) {
             if(file_exists($this->theme_root.'/views/components/custom/')) {
@@ -94,6 +100,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
             // Set `theme_root` and `theme_helpers` paths
             $this->theme_root = base_path() . '/themes/' . tenant()->domains->first()->theme;
             $this->theme_helpers = $this->theme_root . '/App/Helpers/';
+            $this->theme_routes = $this->theme_root . '/routes';
             $this->theme_name = basename($this->theme_root);
             $this->theme_root_class = 'WeThemes\\'.$this->theme_name;
 
@@ -112,10 +119,66 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
             'theme_root_class' => '\\'. trim($this->theme_root_class ?? '', '\\'),
             'theme_root_path' => $this->theme_root,
             'theme_root_helpers_path' => $this->theme_helpers,
+            'theme_root_routes_path' => $this->theme_routes,
         ];
-        
+
         $this->app->singleton('we_theme_service', function() use ($theme_data) {
             return new WeThemeService(fn () => Container::getInstance(), $theme_data);
         });
+    }
+    
+    /**
+     * mapRoutes
+     *
+     * Register custom theme routes here. Remember, there are three routes files which can be added (unless mapRoutes is overriden in ThemeFunctionsService.php of the theme itself):
+     * 1. routes/tenant.php
+     * 2. routes/dashboard.php
+     * 3. routes/api.php
+     * 
+     * @return void
+     */
+    protected function mapRoutes()
+    {
+        $controllerNamespace = '\\' . trim($this->theme_root_class ?? '', '\\') . '\App\Http\Controllers\\';
+        $apiControllerNamespace = '\\' . trim($this->theme_root_class ?? '', '\\') . '\App\Http\Controllers\Api\\';
+
+        if (file_exists($this->theme_routes.'/tenant.php')) {
+            Route::namespace($controllerNamespace)
+                ->middleware([
+                    'web',
+                    InitializeTenancyByDomainAndVendorDomains::class,
+                    PreventAccessFromCentralDomains::class,
+                    VendorMode::class,
+                ])
+                ->group($this->theme_routes.'/tenant.php');
+        }
+
+        if (file_exists($this->theme_routes.'/dashboard.php')) {
+            Route::namespace($controllerNamespace)
+                ->middleware([
+                    'web',
+                    'auth',
+                    InitializeTenancyByDomainAndVendorDomains::class,
+                    PreventAccessFromCentralDomains::class,
+                    SetDashboard::class,
+                    VendorMode::class,
+                ])
+                ->name('dashboard.') // Prefix names with `dashboard.`
+                ->prefix('dashboard') // prefix urls with `dashboard`
+                ->group($this->theme_routes.'/dashboard.php');          
+        }
+
+        if (file_exists($this->theme_routes.'/api.php')) {
+            Route::namespace($apiControllerNamespace)
+                ->middleware([
+                    'api',
+                    'auth',
+                    InitializeTenancyByDomainAndVendorDomains::class,
+                    PreventAccessFromCentralDomains::class,
+                ])
+                ->name('api.')
+                ->prefix('api')
+                ->group($this->theme_routes.'/api.php');
+        }
     }
 }
