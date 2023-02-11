@@ -1131,12 +1131,16 @@ function translate($key = null, $lang = null)
      * TODO: If there's none, create it in the DB and regenerate whole assoc array in Cache
      */
 
-    $translation_def = Cache::remember('translation_'.$key .'_'. $lang, 60, function () use ($key) {
-        $value = Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
+    $translation_def = Cache::remember('translation_'.$key .'_'. $lang, 60, function () use ($key, $lang) {
+        $value = Translation::where('lang', $lang)->where('lang_key', $key)->first();
         if(isset($value->lang_value)) {
             return $value->lang_value;
         } else {
-            return $value->lang_key;
+            if(isset($value->lang_key)) {
+                return $value->lang_key;
+            } else {
+                return null;
+            }
         }
     });
 
