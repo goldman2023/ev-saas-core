@@ -73,6 +73,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
         // Autoload theme Components
         Blade::componentNamespace('WeThemes\\'.$this->theme_name.'\\App\\View\\Components', 'theme');
 
+        $this->registerServiceProviders();
         $this->extendAppSettings();
         $this->registerMenuLocations();
         $this->registerLivewireComponents();
@@ -180,5 +181,9 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group($this->theme_routes.'/api.php');
         }
+    }
+    
+    public function registerServiceProviders() {
+
     }
 }
