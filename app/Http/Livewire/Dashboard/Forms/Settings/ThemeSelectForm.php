@@ -65,7 +65,6 @@ class ThemeSelectForm extends Component
             // TODO: Add running a sync or async process which basically runs the theme compilation function 
             $this->inform('Tailwind config successfully updated for theme'.': '.$this->theme, '', 'success');
         } catch (\Exception $e) {
-            dd($e);
             $this->inform(translate('Could not change app tailwind config...'), $e->getMessage(), 'fail');
         }
     }
