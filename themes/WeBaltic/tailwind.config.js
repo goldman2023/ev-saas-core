@@ -3,10 +3,12 @@ const plugin = require('tailwindcss/plugin');
 const defaultWeTheme = 'WeTailwind';
 let weMix = require('../../we-webpack-mix');
 
+let dynamicConfig = weMix.getTailwindDynamicConfig(__dirname);
+
 module.exports = {
     darkMode: 'class',
     content: weMix.getPurgePaths(__dirname, defaultWeTheme),
-    theme: {
+    theme: dynamicConfig.theme !== undefined ? dynamicConfig.theme : {
         screens: {
             'mobile': {'min': '300px', 'max': '599px'},
             'tablet-portrait-up': '600px',
@@ -101,8 +103,7 @@ module.exports = {
             }
         },
     },
-
-    variants: {
+    variants: dynamicConfig.variants !== undefined ? dynamicConfig.variants : {
         extend: {
 
         },

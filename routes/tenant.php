@@ -249,15 +249,7 @@ Route::middleware([
 
     //Custom page
     // Route::get('/page/privacy-policy', [\App\Http\Controllers\PageController::class, 'privacy_policy_page'])->name('custom-pages.privacy-policy');
-    Route::get('/page/{slug}', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.show_custom_page');
-    Route::get('/shop/create', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
-
-    // TODO: SHould be added through theme routes!
-    Route::get('/country/{slug}', [CountryController::class, 'show'])->name('country.show');
-    Route::middleware('auth')->group(function () {
-        Route::get('/country/export/{type?}', [CountryController::class, 'export'])->name('country.export');
-    });
-    // END TODO
+    
 });
 
 /**

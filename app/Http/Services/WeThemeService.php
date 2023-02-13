@@ -21,6 +21,8 @@ class WeThemeService
 
     public $theme_controllers_class = '';
 
+    public $all_themes = [];
+
     public function __construct($app, $theme_data = [])
     {
         $this->app = $app(); // $app is a clousre which returns LATEST APPLICATION instance (this is important for Octane later on...)
@@ -33,10 +35,24 @@ class WeThemeService
         $this->theme_controllers_class = $theme_data['theme_root_class'] . '\App\Http\Controllers\\';
 
         $this->bootstrap_cache_tenant_routes_path = base_path('bootstrap/cache/tenants/routes/tenant-'.tenancy()->tenant->id.'-routes.php');
+
+        $this->all_themes = collect(array_values(array_diff(scandir(base_path().'/themes'), ['..', '.'])))->keyBy(function ($item) {
+            return $item;
+        })->map(function($item, $key) {
+            return [
+                'tailwind_config_json' => file_exists(base_path().'/themes/'.$key.'/tailwind.config.json') ? base_path().'/themes/'.$key.'/tailwind.config.json' : null,
+                'tailwind_config_js' => file_exists(base_path().'/themes/'.$key.'/tailwind.config.js') ? base_path().'/themes/'.$key.'/tailwind.config.js' : null,
+                'webpack_mix_config' => file_exists(base_path().'/themes/'.$key.'/webpack.mix.js') ? base_path().'/themes/'.$key.'/webpack.mix.js' : null,
+            ];
+        });
     }
 
     public function getThemeName() {
         return $this->theme_name;
+    }
+
+    public function getAllThemes($for_selection = false) {
+        return $for_selection ? $this->all_themes->map(fn($item, $key) => $key)->toArray() : $this->all_themes->toArray();
     }
 
     public function loadCachedTenantRoutes() {
