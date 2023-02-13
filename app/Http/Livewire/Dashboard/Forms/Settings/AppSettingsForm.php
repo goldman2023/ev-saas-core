@@ -2,28 +2,28 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
-use App\Enums\AppSettingsGroupEnum;
-use App\Models\Product;
-use App\Models\ProductStock;
-use App\Models\SerialNumber;
-use App\Models\Shop;
-use App\Models\ShopSetting;
-use App\Models\TenantSetting;
-use App\Rules\UniqueSKU;
-use App\Traits\Livewire\DispatchSupport;
 use DB;
 use EVS;
 use MyShop;
-use Categories;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Purifier;
-use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
-use Illuminate\Support\Facades\Http;
-use TenantSettings;
 use Payments;
+use Purifier;
+use Categories;
+use TenantSettings;
+use App\Models\Shop;
+use App\Models\Product;
+use Livewire\Component;
+use App\Rules\UniqueSKU;
+use App\Models\ShopSetting;
+use App\Models\ProductStock;
+use App\Models\SerialNumber;
+use App\Models\TenantSetting;
+use Illuminate\Validation\Rule;
+use App\Traits\Livewire\RulesSets;
+use App\Enums\AppSettingsGroupEnum;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use App\Traits\Livewire\DispatchSupport;
+use Spatie\ValidationRules\Rules\ModelsExist;
 
 class AppSettingsForm extends Component
 {

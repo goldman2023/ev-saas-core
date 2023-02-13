@@ -3,9 +3,11 @@
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
 use WeTheme;
-use App\Traits\Livewire\DispatchSupport;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Illuminate\Validation\Rule;
+use Symfony\Component\Process\Process;
+use App\Traits\Livewire\DispatchSupport;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ThemeSelectForm extends Component
 {
@@ -61,10 +63,22 @@ class ThemeSelectForm extends Component
 
         try {
             $this->currentThemeTailwindConfig = file_put_contents($tailwind_config_json, json_encode($this->currentThemeTailwindConfig));
+            // dd(var_dump(shell_exec('cd '.base_path() . '/themes/'.$this->currentTheme.' && npx mix --production --mix-config="themes/'.$this->theme.'/webpack.mix.js" 2>&1')));
+            // , 'npx mix --production --mix-config="themes/'.$this->theme.'/webpack.mix.js"'
+            // $process = new Process(['cd', base_path() . '\\themes\\'.$this->currentTheme]);
+            // $process->run();
+
+            // // executes after the command finishes
+            // if (!$process->isSuccessful()) {
+            //     throw new ProcessFailedException($process);
+            // }
+
+            // dd($process->getOutput());
 
             // TODO: Add running a sync or async process which basically runs the theme compilation function 
-            $this->inform('Tailwind config successfully updated for theme'.': '.$this->theme, '', 'success');
+            $this->inform('Tailwind config successfully updated for theme'.': '.$this->theme, 'Please refresh the page to see changes...', 'success');
         } catch (\Exception $e) {
+            dd($e);
             $this->inform(translate('Could not change app tailwind config...'), $e->getMessage(), 'fail');
         }
     }
