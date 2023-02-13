@@ -2,9 +2,8 @@
     id: '{{ $id }}',
     editor: null,
     setEditorJSON() {
-        var self = this;
-        setTimeout(function() {
-            self.editor.set({{ $field }});
+        setTimeout(() => {
+            this.editor.set({{ $field }});
         }, 1000);
     },
     initEditor() {
@@ -15,6 +14,8 @@
                     {{ $field }} = this.editor.get();
                 }, 400)
             });
+
+            this.setEditorJSON();
         });
     }
 }"
