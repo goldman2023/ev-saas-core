@@ -1,7 +1,9 @@
 <?php
 // Greedy Tenant routes
 
+use App\Http\Middleware\VendorMode;
 use App\Http\Controllers\PageController;
+use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 
 Route::middleware([
     'web',
