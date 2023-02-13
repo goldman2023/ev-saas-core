@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
+use WeTheme;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -17,6 +18,8 @@ class ThemeSelectForm extends Component
     public $theme;
 
     public $domain;
+
+    public $currentThemeTailwindConfig;
 
     protected function rules()
     {
@@ -41,11 +44,29 @@ class ThemeSelectForm extends Component
     public function mount()
     {
         $this->domain = tenant()->domains()->first();
-        $this->currentTheme = $this->domain->theme;
-        $this->theme = $this->domain->theme;
-        $this->themes = collect(array_values(array_diff(scandir(base_path().'/themes'), ['..', '.'])))->keyBy(function ($item) {
-            return $item;
-        })->toArray();
+        $this->currentTheme = WeTheme::getThemeName();
+        $this->theme = WeTheme::getThemeName();
+        $this->themes = WeTheme::getAllThemes(for_selection: true);
+        $this->all_themes = WeTheme::getAllThemes();
+
+        $tailwind_config_json = $this->all_themes[$this->theme]['tailwind_config_json'];
+
+        if(file_exists($tailwind_config_json)) {
+            $this->currentThemeTailwindConfig = json_decode(file_get_contents($tailwind_config_json), true);
+        }
+    }
+
+    public function saveTailwindConfig() {
+        $tailwind_config_json = $this->all_themes[$this->theme]['tailwind_config_json'];
+
+        try {
+            $this->currentThemeTailwindConfig = file_put_contents($tailwind_config_json, json_encode($this->currentThemeTailwindConfig));
+
+            // TODO: Add running a sync or async process which basically runs the theme compilation function 
+            $this->inform('Tailwind config successfully updated for theme'.': '.$this->theme, '', 'success');
+        } catch (\Exception $e) {
+            $this->inform(translate('Could not change app tailwind config...'), $e->getMessage(), 'fail');
+        }
     }
 
     public function saveTheme()

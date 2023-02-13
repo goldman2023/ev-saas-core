@@ -3,7 +3,28 @@ function compileTheme(mix, dirname, theme, defaultTheme = 'WeTailwind') {
     const tailwindcss = require('tailwindcss');
     const path = require("path");
     const fs = require('fs');
+    const tailwindConf = require(`${dirname}/tailwind.config.js`);
     
+    // Check if tailwind jsons exist or not yet. If not yet, create them. If they exist, don't touch them!
+    if (! fs.existsSync(`${dirname}/tailwind.config.json`)) {
+        let tailwind_config_json = {};
+        
+        // Check if theme property exists in tailwind config and 
+        if(tailwindConf.theme !== undefined) {
+            tailwind_config_json.theme = tailwindConf.theme;
+        }
+
+        if(tailwindConf.variants !== undefined) {
+            tailwind_config_json.variants = tailwindConf.variants;
+        }
+
+        // Save as json file in theme root
+        fs.writeFile(`${dirname}/tailwind.config.json`, JSON.stringify(tailwind_config_json), function (err) {
+            if (err) console.log(`Couldn\'t create ${dirname}/tailwind.config.json file. Error: ` + err);
+            console.log(`${dirname}/tailwind.config.json file is created successfully.`);
+        });
+    }
+
     /*
      |--------------------------------------------------------------------------
      | Mix Asset Management
@@ -97,4 +118,15 @@ function getPurgePaths(dirname, defaultWeTheme = 'WeTailwind') {
     return paths;
 }
 
-module.exports = { compileTheme, getPurgePaths };
+function getTailwindDynamicConfig(dirname) {
+    const fs = require('fs');
+
+    if (fs.existsSync(`${dirname}/tailwind.config.json`)) {
+        let rawConfig = fs.readFileSync(`${dirname}/tailwind.config.json`);
+        return JSON.parse(rawConfig);
+    }
+    
+    return {};
+}
+
+module.exports = { compileTheme, getPurgePaths, getTailwindDynamicConfig };

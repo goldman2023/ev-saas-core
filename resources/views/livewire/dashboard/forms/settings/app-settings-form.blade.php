@@ -542,6 +542,7 @@
                                             target="_blank">Palette Generator</a>
                                     </div>
                                 </div>
+
                                 {{-- Colors --}}
                                 @php $i = 0; @endphp
                                 @foreach($colors as $color_key => $data_type)
