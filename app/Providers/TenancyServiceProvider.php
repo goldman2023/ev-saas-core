@@ -22,6 +22,7 @@ use App\Listeners\Tenancy\BootstrapMailConfig;
 use App\Listeners\Tenancy\StorageToConfigMapping;
 use App\Listeners\Tenancy\BootstrapThemeFunctions;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
+use App\Listeners\Tenancy\BootstrapGreedyCoreRoutes;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
@@ -103,6 +104,8 @@ class TenancyServiceProvider extends ServiceProvider
                 BootstrapMailConfig::class,
 
                 BootstrapWEF::class, // should be last!
+
+                BootstrapGreedyCoreRoutes::class,
             ],
             Events\RevertingToCentralContext::class => [],
             Events\RevertedToCentralContext::class => [],
