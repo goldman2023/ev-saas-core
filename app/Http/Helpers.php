@@ -1150,6 +1150,7 @@ function translate($key = null, $lang = null)
         $translation_def->lang_key = $key;
         $translation_def->lang_value = $key;
         $translation_def->save();
+        $translation_def = $translation_def->lang_value;
     }
 
     // Check for session lang
