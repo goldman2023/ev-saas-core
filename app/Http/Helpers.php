@@ -1131,9 +1131,17 @@ function translate($key = null, $lang = null)
      * TODO: If there's none, create it in the DB and regenerate whole assoc array in Cache
      */
 
-    $translation_def = Cache::remember('translation_'.$key .'_'. $lang, 60, function () use ($key) {
-        $value = Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
-        return $value->lang_value;
+    $translation_def = Cache::remember('translation_'.$key .'_'. $lang, 60, function () use ($key, $lang) {
+        $value = Translation::where('lang', $lang)->where('lang_key', $key)->first();
+        if(isset($value->lang_value)) {
+            return $value->lang_value;
+        } else {
+            if(isset($value->lang_key)) {
+                return $value->lang_key;
+            } else {
+                return null;
+            }
+        }
     });
 
     if ($translation_def == null) {
@@ -1142,6 +1150,7 @@ function translate($key = null, $lang = null)
         $translation_def->lang_key = $key;
         $translation_def->lang_value = $key;
         $translation_def->save();
+        $translation_def = $translation_def->lang_value;
     }
 
     // Check for session lang

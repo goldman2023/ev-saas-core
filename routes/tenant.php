@@ -179,7 +179,7 @@ Route::middleware([
 
     // Blog Posts
     Route::group([], base_path('routes/tenant/blog-posts-group.php'));
-    
+
 
     // Social Posts
     Route::get('/social/post/{id}', [BlogPostController::class, 'social_post_single'])->name('social.post.single');
