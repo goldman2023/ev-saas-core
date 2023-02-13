@@ -244,12 +244,10 @@ Route::middleware([
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');
 
-    do_action('routes.dashboard');
-
     /* IMPORTANT: Last set of routes! To define missing pages and routes */
     /* Catch All Routes: If nothing is matched, try to find a page or throw 404 */
-    Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
-    Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
+    // Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
+    // Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 
     
     Route::fallback(function () {
