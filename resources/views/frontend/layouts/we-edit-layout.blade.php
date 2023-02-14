@@ -42,7 +42,12 @@
 
     @stack('pre_head_scripts')
 
-    <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    @themefilexists('js/alpine.js')
+        <script src="{{ mix('js/alpine.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
+
     @themefilexists('js/app.min.js')
         <script src="{{ mix('js/app.min.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
     @else
