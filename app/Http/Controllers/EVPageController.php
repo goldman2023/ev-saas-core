@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use MyShop;
 use Permissions;
 use Session;
+use Spatie\Browsershot\Browsershot;
 
 class EVPageController extends Controller
 {
@@ -30,5 +31,12 @@ class EVPageController extends Controller
         $page = Page::findOrFail($id);
 
         return view('frontend.dashboard.pages.edit', compact('page'));
+    }
+
+    public function details(Request $request, $id)
+    {
+        $page = Page::findOrFail($id);
+
+        return view('frontend.dashboard.pages.details', compact('page'));
     }
 }

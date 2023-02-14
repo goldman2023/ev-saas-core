@@ -37,13 +37,12 @@
     <!-- Theme styles -->
     <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
 
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
     @include('frontend.layouts.global-partials.all')
 
 
     @stack('pre_head_scripts')
 
-    <script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
+    <script src="{{ mix('js/app.js', 'themes/WeTailwind', true, true) }}"></script>
     <!-- Vendor Scripts -->
 
     <x-default.system.tracking-pixels>
@@ -57,10 +56,11 @@
     <style type="text/css">
         .CodeMirror {
             height: 100% !important;
+            text-align: left;
         }
     </style>
 
-    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
+<script src="{{ mix('js/app.js', 'themes/WeTailwind', true, true) }}"></script>
 </head>
 <body class="h-full">
     <div class="main-wrapper h-full">

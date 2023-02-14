@@ -56,7 +56,7 @@ Route::middleware([
         Route::get('/categories', [EVCategoryController::class, 'index'])->name('categories.index');
         Route::get('/categories/create', [EVCategoryController::class, 'create'])->name('category.create');
         Route::get('/categories/edit/{id}', [EVCategoryController::class, 'edit'])->name('category.edit');
-        
+
         // Tenant blog posts
         //        Route::get('/tenant/blog/posts', [EVProductController::class, 'index'])->name('blog-posts.index');
         //        Route::get('/tenant/blog/posts/create', [EVProductController::class, 'create'])->name('blog-posts.create');
@@ -95,6 +95,7 @@ Route::middleware([
         Route::get('/pages', [EVPageController::class, 'index'])->name('pages.index');
         Route::get('/pages/create', [EVPageController::class, 'create'])->name('page.create');
         Route::get('/pages/edit/{id}', [EVPageController::class, 'edit'])->name('page.edit');
+        Route::get('/pages/details/{id}', [EVPageController::class, 'details'])->name('page.details');
         Route::get('/sections', [WeSectionController::class, 'index'])->name('sections.index');
         Route::get('/sections/create', [WeSectionController::class, 'create'])->name('section.create');
         Route::get('/sections/edit/{id}', [WeSectionController::class, 'edit'])->name('section.edit');
@@ -123,7 +124,7 @@ Route::middleware([
         Route::post('/orders/details', [OrderController::class, 'order_details'])->name('orders.details');
         Route::post('/orders/update_delivery_status', [OrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
         Route::post('/orders/update_payment_status', [OrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
-        
+
         Route::get('/invoices', [WeInvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoice/{id}/download', [WeInvoiceController::class, 'download_invoice'])->name('invoice.download');
         Route::get('/order/{order_id}/upcoming-invoice/download', [WeInvoiceController::class, 'download_upcoming_invoice'])->name('invoice.upcoming.download');
@@ -249,7 +250,7 @@ Route::middleware([
     // Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
     // Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 
-    
+
     Route::fallback(function () {
         abort(404);
     });
