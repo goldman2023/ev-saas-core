@@ -118,7 +118,7 @@
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js', 'themes/WeBaltic') }}" defer></script>
-    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/WeBaltic') }}" defer></script>
     @livewireScripts
     @yield('script')
 
