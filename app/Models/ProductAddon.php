@@ -168,11 +168,11 @@ class ProductAddon extends WeBaseModel
     }
 
     public function products() {
-        return $this->morphedByMany(Product::class, 'subject', 'product_addon_relationship');
+        return $this->morphedByMany(Product::class, 'subject', 'product_addon_relationships');
     }
 
-    public function taxonomy() {
-        return $this->morphedByMany(Category::class, 'subject', 'product_addon_relationship');
+    public function category_taxonomy() {
+        return $this->morphedByMany(Category::class, 'subject', 'product_addon_relationships');
     }
 
     protected function asJson($value)

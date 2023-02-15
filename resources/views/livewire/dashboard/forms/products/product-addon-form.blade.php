@@ -19,6 +19,10 @@
         selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
 
+        // Relationships
+        selected_products: @js($productAddon->products->pluck('id')),
+        selected_taxonomies: @js($productAddon->category_taxonomy->pluck('id')),
+
         core_meta: @js($core_meta),
         wef: @js($wef),
 
@@ -51,10 +55,10 @@
 @validation-errors.window="console.log($event.detail.errors);" x-cloak>
 
     <div class="w-full relative">
-        <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:target="saveProduct"
+        <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:target="saveProductAddon"
             wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
-        <div class="w-full" wire:loading.class="opacity-30 pointer-events-none" wire:target="saveProduct">
+        <div class="w-full" wire:loading.class="opacity-30 pointer-events-none" wire:target="saveProductAddon">
 
             <div class="sm:grid sm:grid-cols-12 gap-8 mb-10">
                 {{-- Left side --}}
@@ -115,6 +119,45 @@
                         </div>
                     </div>
                     {{-- END Basic --}}
+
+                    {{-- Relationships --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" >
+                        <div class="mb-6 pb-4 border-b border-gray-200">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Addon Relationships') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Attach product addon to products or categories') }}</p>
+                        </div>
+
+                        <div class="sm:mt-3 space-y-6 sm:space-y-5">
+                            <!-- Products -->
+                            <div
+                                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Products') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select :items="\App\Models\Product::published()->get()->keyBy('id')->map(fn($item) => $item->name)"
+                                        selected="selected_products" :multiple="true" :nullable="false" :search="true"></x-dashboard.form.select>
+                                </div>
+                            </div>
+                            <!-- END Products -->
+
+                            <!-- Products -->
+                            <div
+                                class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Category Taxonomy') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select :items="collect(\Categories::getAllFormatted(for_js: true, flat: true))->keyBy('id')->map(fn($item) => $item['name'])"
+                                        selected="selected_taxonomies" :multiple="true" :nullable="false" :search="true"></x-dashboard.form.select>
+                                </div>
+                            </div>
+                            <!-- END Products -->
+                        </div>
+                    </div>
+                    {{-- END Relationships --}}
 
                     {{-- Pricing --}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" >
@@ -909,7 +952,7 @@
                             @endif
 
                             <button type="button" class="btn btn-primary ml-auto btn-sm" @click="onSave()"
-                                wire:click="saveProduct()">
+                                wire:click="saveProductAddon()">
                                 {{ translate('Save') }}
                             </button>
                         </div>

@@ -40,6 +40,8 @@
         $nextTick(() => {
             if(this.multiple) {
                 let args = {
+                    animation: 200,
+                    easing: 'cubic-bezier(1, 0, 0, 1)',
                     onSort: (evt) => {
                         this.reOrder();
                     },

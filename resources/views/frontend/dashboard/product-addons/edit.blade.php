@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Edit Product').': '.$product->getTranslation('name'))
+@section('page_title', translate('Edit Product addon').': '.$productAddon->name)
 
 @push('pre_head_scripts')
 
@@ -12,23 +12,20 @@
 
 @section('panel_content')
     <section>
-        <x-dashboard.section-headers.section-header title="{{ translate('Edit Product') }}" text="">
+        <x-dashboard.section-headers.section-header title="{{ translate('Edit Product Addon') }}" text="">
             <x-slot name="content">
-                <a href="{{ route('product.details', $product->id) }}" class="btn-standard mr-2 relative">
-                    <div class="absolute top-[-15px] left-[-20px] mb-2 px-2 py-1 text-gray-100 text-xs font-semibold bg-indigo-700 rounded-full">
-                        {{ translate('New!') }} 🔖
-                    </div>
+                <a href="{{ route('product-addon.details', $productAddon->id) }}" class="btn-primary mr-2 relative">
                     @svg('heroicon-o-eye', ['class' => 'h-4 h-4 mr-2'])
-                    <span>{{ translate('Product Details') }}</span>
+                    <span>{{ translate('Product addon Details') }}</span>
                 </a>
-                <a href="{{ route('products.index') }}" class="btn-standard">
+                <a href="{{ route('product-addons.index') }}" class="btn-standard">
                     @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
-                    <span>{{ translate('All products') }}</span>
+                    <span>{{ translate('All product addons') }}</span>
                 </a>
             </x-slot>
         </x-dashboard.section-headers.section-header>
 
-        <livewire:dashboard.forms.products.product-form2 :product="$product"></livewire:dashboard.forms.products.product-form2>
+        <livewire:dashboard.forms.products.product-addon-form :product-addon="$productAddon" />
     </section>
 @endsection
 

@@ -1,6 +1,7 @@
 <div class="{{ $class }}" x-data="{
     open_dropdown: false,
     multiple: @js($multiple),
+    {{-- TODO: Ordering of items is changed if numbers(ids) are keys - cuz of Array! --}}
     items: @js($items),
     displayed_items: @js($items),
     placeholder: '{{ $placeholder }}',
@@ -12,9 +13,34 @@
         return {{ $selected }}.length;
       } 
       return 0;
+    },
+    select(key) {
+      if(this.multiple) {
+        if(this.isSelected(key)) {
+          this.deSelect(key);
+        } else {
+          {{ $selected }}.push(key);
+        }
+      } else {
+        {{ $selected }} = key;
+      }
+    },
+    deSelect(key) {
+      {{ $selected }}.splice({{ $selected }}.indexOf(key), 1);
+    },
+    isSelected(key) {
+      if(this.multiple) {
+        return {{ $selected }}.indexOf(key) !== -1;
+      } else {
+        return {{ $selected }} == key;
+      }
     }
 }" 
 x-init="
+  if(this.multiple && !Array.isArray({{ $selected }})) {
+    {{ $selected }} = new Array(0);
+  }
+
   $watch('search_query', (value) => {
     let newItems = {};
     Object.entries(items).filter(entry => {
@@ -35,39 +61,24 @@ wire:ignore.self>
     <div class="relative" wire:ignore.self>
 
       <button type="button" @click="open_dropdown = !open_dropdown" 
-              class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm {{ $selectorClass ?? '' }} @error($errorField) is-invalid @enderror">
-        <span class="block truncate" :class="{'text-gray-600':!items.hasOwnProperty({{ $selected }})}" x-text="items.hasOwnProperty({{ $selected }}) ? items[{{ $selected }}] : placeholder"></span>
+              class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm {{ $selectorClass ?? '' }} @error($errorField) is-invalid @enderror"
+              :class="{'mb-3': multiple}">
+        
+        <template x-if="multiple">
+          <span class="block truncate text-gray-600" x-text="placeholder"></span>
+        </template>
+
+        <template x-if="!multiple">
+          <span class="block truncate" 
+            :class="{'text-gray-600':!items.hasOwnProperty({{ $selected }})}" 
+            x-text="items.hasOwnProperty({{ $selected }}) ? items[{{ $selected }}] : placeholder"></span>
+        </template>
+
         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
           @svg('heroicon-s-chevron-up-down', ['class' => 'h-5 w-5 text-gray-400', 'wire:ignore'])
         </span>
       </button>
 
-      {{-- <template x-if="multiple">
-        <div class="w-full flex flex-wrap">
-            <template x-if="countSelected() > 0">
-                <template x-for="item in items.filter(x => {
-                    return selected_items.indexOf(x.id) !== -1;
-                })">
-                    <div
-                        class="we-select__selector-selected-item rounded mr-2 mb-1 relative">
-                        <span
-                            class="we-select__selector-selected-item-label pl-1 mr-1"
-                            x-text="item.values"></span>
-                        <button type="button"
-                            class="we-select__selector-selected-item-remove px-2"
-                            @click="event.stopPropagation(); select(item.id, item.values)">
-                            <span>×</span>
-                        </button>
-                    </div>
-                </template>
-            </template>
-            <template x-if="countSelected() <= 0">
-                <span class="block pb-1"
-                    x-text="getPlaceholder()"></span>
-            </template>
-        </div>
-      </template> --}}
-  
       <ul wire:ignore class="absolute z-10 mt-1 w-full max-w-lg bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
             x-show="open_dropdown"
             x-transition:enter=""
@@ -85,20 +96,46 @@ wire:ignore.self>
             </template>
 
             <template x-if="nullable">
-              <li @click="{{ $selected }} = null; open_dropdown = false;" class="text-gray-900 cursor-pointer select-none relative py-2 pl-3 pr-9">
+              <li @click="event.stopPropagation(); select(null); if(!multiple) open_dropdown = false;" class="text-gray-900 cursor-pointer select-none relative py-2 pl-3 pr-9">
                 <span class="font-normal block truncate">{{ translate('Not selected') }}</span>
               </li>
             </template>
 
             <template x-for="(item, key) in displayed_items">
-                <li @click="{{ $selected }} = key; open_dropdown = false;" class="text-gray-900 hover:bg-gray-200 cursor-pointer select-none relative py-2 pl-3 pr-9" role="option">
-                    <span class="font-normal block truncate" :class="{'font-semibold': key == {{ $selected }}}" x-text="item"></span>
-                    <span class="text-primary absolute inset-y-0 right-0 flex items-center pr-4" x-show="key == {{ $selected }}">
+                <li @click="event.stopPropagation(); select(key); if(!multiple) open_dropdown = false;" class="text-gray-900 hover:bg-gray-200 cursor-pointer select-none relative py-2 pl-3 pr-9" role="option">
+                    <span class="font-normal block truncate" :class="{'font-semibold': isSelected(key)}" x-text="item"></span>
+                    <span class="text-primary absolute inset-y-0 right-0 flex items-center pr-4" x-show="isSelected(key)">
                       @svg('heroicon-o-check', ['class' => 'h-5 w-5'])
                     </span>
                 </li>
             </template>
       </ul>
+
+      <template x-if="multiple">
+        <div class="w-full flex flex-wrap gap-x-2 gap-y-2">
+            <template x-if="countSelected() > 0">
+                <template x-for="(item, key) in {{ $selected }}">
+                    <div class="bg-gray-400 text-gray-900 rounded relative px-2">
+                        <span
+                            class=""
+                            x-text="items[item]"></span>
+                        <button type="button"
+                            class="px-1"
+                            @click="event.stopPropagation(); deSelect(item)">
+                            <span>×</span>
+                        </button>
+                    </div>
+                </template>
+            </template>
+            <template x-if="countSelected() <= 0">
+                <p class="block pb-2 text-14 text-gray-500">
+                  {{ translate('No items selected...') }}
+                </p>
+            </template>
+        </div>
+      </template>
+  
+      
     </div>
 
     @if(!empty($errorField) && !$hideError)

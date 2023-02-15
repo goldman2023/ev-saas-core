@@ -92,6 +92,7 @@ Route::middleware([
         
         Route::get('/product-addons', [ProductAddonController::class, 'index'])->name('product-addons.index');
         Route::get('/product-addons/create', [ProductAddonController::class, 'create'])->name('product-addon.create');
+        Route::get('/product-addons/details/{id}', [ProductAddonController::class, 'details'])->name('product-addon.details');
         Route::get('/product-addons/edit/{id}', [ProductAddonController::class, 'edit'])->name('product-addon.edit');
         Route::get('/product-addons/edit/{id}/stock-management', [ProductAddonController::class, 'edit_stocks'])->name('product-addon.edit.stocks');
         

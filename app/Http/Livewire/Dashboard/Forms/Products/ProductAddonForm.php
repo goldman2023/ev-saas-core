@@ -52,6 +52,7 @@ class ProductAddonForm extends Component
     use HasAttributes;
 
     public $productAddon;
+    public $is_update;
 
     protected $listeners = [
         'refreshProductAddonForm' => '$refresh'
@@ -149,12 +150,15 @@ class ProductAddonForm extends Component
      */
     public function mount(&$productAddon = null)
     {
+        // dd(collect(\Categories::getAllFormatted(for_js: true, flat: true))->keyBy('id')->map(fn($item) => $item['name']));
         // Set default params
         if ($productAddon) {
             // Update
             $this->productAddon = $productAddon;
+            $this->is_update = true;
         } else {
             // Insert
+            $this->is_update = false;
 
             /* Check if user has shop */
             if (! MyShop::getShop()) {
@@ -195,69 +199,9 @@ class ProductAddonForm extends Component
         return view('livewire.dashboard.forms.products.product-addon-form');
     }
 
-    public function removeAttributeValue($id)
-    {
-        DB::beginTransaction();
-
-        try {
-            // remove the attribute -> this will remove attribute value translations and relationships too!
-            AttributeValue::destroy($id);
-
-            DB::commit();
-
-            $this->toastify(translate('Attribute value successfully removed!'), 'success');
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            $this->dispatchGeneralError(translate('There was an error while removing an attribute value...Please try again.'));
-            $this->toastify(translate('There was an error while removing an attribute value...Please try again. ').$e->getMessage(), 'danger');
-        }
-    }
-
-    public function validateData($set = 'minimum_required')
-    {
-        try {
-            $this->validate($set === 'all' ? $this->rules() : $this->getRuleSet($set));
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            $this->dispatchValidationErrors($e);
-
-            // Reset status to Draft!
-            $this->productAddon->status = StatusEnum::draft()->value;
-            $this->validate($set === 'all' ? $this->rules() : $this->getRuleSet($set));
-        }
-    }
-
-    public function saveMinimumRequired()
-    {
-        // TODO: Check if editor is trying to change status to published if not enough data is present
-
-        if (! $this->is_update) {
-            // Insert
-            $this->productAddon->shop_id = MyShop::getShopID();
-            $this->productAddon->user_id = auth()->user()->id;
-            $this->productAddon->name = $this->productAddon->name;
-            $this->productAddon->unit_price = $this->productAddon->unit_price;
-            $this->productAddon->save();
-
-            // $this->is_update = true; // Change is_update flag to true! From now on, product is being only updated!
-        } else {
-            // Update
-            $this->productAddon->update([
-                'shop_id' => MyShop::getShopID(),
-                'user_id' => auth()->user()->id,
-                'name' => $this->productAddon->name,
-                'unit_price' => $this->productAddon->unit_price,
-            ]); // update only minimum required fields
-        }
-
-        // Set Product Stock
-        $this->setProductStocks();
-    }
-
-    /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
     protected function setProductAddonStocks()
     {
-        $product_stock = ProductStock::firstOrNew(['subject_id' => $this->productAddon->id, 'subject_type' => Product::class]);
+        $product_stock = ProductStock::firstOrNew(['subject_id' => $this->productAddon->id, 'subject_type' => $this->productAddon::class]);
         $product_stock->track_inventory = ($this->productAddon->track_inventory ?? false) === true;
         $product_stock->sku = empty($this->productAddon->sku) ? \UUID::generate(4)->string : $this->productAddon->sku;
         $product_stock->barcode = empty($this->productAddon->barcode) ? null : $this->productAddon->barcode;
@@ -268,24 +212,34 @@ class ProductAddonForm extends Component
         $product_stock->save();
     }
 
-    public function saveProduct()
+    public function saveProductAddon()
     {
-        $this->validateData('all');
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+
+            // Reset status to Draft!
+            $this->productAddon->status = StatusEnum::draft()->value;
+            $this->validate();
+        }
 
         DB::beginTransaction();
 
         try {
             // Causer is Shop, not user
             CauserResolver::setCauser(MyShop::getShop());
-
-            $this->saveMinimumRequired();
-
+            
             // Save product data
-            // $this->productAddon->tags = [];
+            $this->productAddon->user_id = auth()->user()->id; // these are not set in rules, so must be set again here!
+            $this->productAddon->shop_id = MyShop::getShop()->id; // these are not set in rules, so must be set again here!
             $this->productAddon->save();
 
             // Sync Uploads
             $this->productAddon->syncUploads();
+
+            // Save Stocks
+            $this->setProductAddonStocks();
 
             // Save Categories
             $this->setCategories($this->productAddon);
@@ -301,10 +255,10 @@ class ProductAddonForm extends Component
             // Refresh Attributes
             $this->refreshAttributes($this->productAddon);
 
-            $this->inform(translate('Product successfully saved!'), '', 'success');
+            $this->inform(translate('Product Addon successfully saved!'), '', 'success');
 
             if (! $this->is_update) {
-                return redirect()->route('productAddon.edit', $this->productAddon->id);
+                return redirect()->route('product-addon.edit', $this->productAddon->id);
             }
 
             // $this->dispatchBrowserEvent('init-product-form', []);
