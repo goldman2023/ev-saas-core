@@ -74,7 +74,7 @@
 <body class="h-full">
     <div class="main-wrapper h-full">
         {{-- Sidebar (Mobile/Tablet and Laptop/Desktop) --}}
-        @include('frontend.dashboard.partials.sidebar-small')
+        @include('frontend.dashboard.partials.sidebar')
         @include('frontend.dashboard.partials.sidebar-mobile')
 
         <div class="lg:pl-24 flex flex-col">
