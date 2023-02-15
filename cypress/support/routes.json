@@ -1926,7 +1926,7 @@
   "product.single": {
     "name": "product.single",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@show",
+    "action": "App\\Http\\Controllers\\ProductController@show",
     "uri": "product/{slug}",
     "method": [
       "GET",
@@ -1936,7 +1936,7 @@
   "product.single.unlockable_content": {
     "name": "product.single.unlockable_content",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@show_unlockable_content",
+    "action": "App\\Http\\Controllers\\ProductController@show_unlockable_content",
     "uri": "product/{slug}/content",
     "method": [
       "GET",
@@ -1946,7 +1946,7 @@
   "product.generate_checkout_link": {
     "name": "product.generate_checkout_link",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@createProductCheckoutRedirect",
+    "action": "App\\Http\\Controllers\\ProductController@createProductCheckoutRedirect",
     "uri": "product/{id}/checkout-link",
     "method": [
       "GET",
@@ -1956,7 +1956,7 @@
   "course.item.single": {
     "name": "course.item.single",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@course_item_show",
+    "action": "App\\Http\\Controllers\\ProductController@course_item_show",
     "uri": "product/{product_slug}/course/item/{slug}",
     "method": [
       "GET",
@@ -1996,7 +1996,7 @@
   "category.products.index": {
     "name": "category.products.index",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@productsByCategory",
+    "action": "App\\Http\\Controllers\\ProductController@productsByCategory",
     "uri": "products/category/{slug}",
     "method": [
       "GET",
@@ -2757,7 +2757,7 @@
   "products.index": {
     "name": "products.index",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@index",
+    "action": "App\\Http\\Controllers\\ProductController@index",
     "uri": "dashboard/products",
     "method": [
       "GET",
@@ -2767,7 +2767,7 @@
   "product.create": {
     "name": "product.create",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@create2",
+    "action": "App\\Http\\Controllers\\ProductController@create2",
     "uri": "dashboard/products/create",
     "method": [
       "GET",
@@ -2777,7 +2777,7 @@
   "product.edit": {
     "name": "product.edit",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@edit",
+    "action": "App\\Http\\Controllers\\ProductController@edit",
     "uri": "dashboard/products/edit/{id}",
     "method": [
       "GET",
@@ -2787,7 +2787,7 @@
   "product.details": {
     "name": "product.details",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@product_details",
+    "action": "App\\Http\\Controllers\\ProductController@product_details",
     "uri": "dashboard/products/edit/{id}/details",
     "method": [
       "GET",
@@ -2797,7 +2797,7 @@
   "product.activity": {
     "name": "product.activity",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@product_activity",
+    "action": "App\\Http\\Controllers\\ProductController@product_activity",
     "uri": "dashboard/products/edit/{id}/details/activity",
     "method": [
       "GET",
@@ -2807,7 +2807,7 @@
   "product.edit.variations": {
     "name": "product.edit.variations",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@edit_variations",
+    "action": "App\\Http\\Controllers\\ProductController@edit_variations",
     "uri": "dashboard/products/edit/{id}/variations",
     "method": [
       "GET",
@@ -2817,7 +2817,7 @@
   "product.edit.stocks": {
     "name": "product.edit.stocks",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@edit_stocks",
+    "action": "App\\Http\\Controllers\\ProductController@edit_stocks",
     "uri": "dashboard/products/edit/{id}/stock-management",
     "method": [
       "GET",
@@ -2827,7 +2827,7 @@
   "product.thank_you_preview": {
     "name": "product.thank_you_preview",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@thank_you_preview",
+    "action": "App\\Http\\Controllers\\ProductController@thank_you_preview",
     "uri": "dashboard/products/preview/{id}/thank-you",
     "method": [
       "GET",

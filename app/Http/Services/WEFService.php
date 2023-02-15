@@ -174,4 +174,47 @@ class WEFService
 
         return array_key_exists($core_meta_key, self::getWEFDataTypes($model));
     }
+    
+    /**
+     * getWEFFieldTypes
+     * 
+     * Gets possible WEF field types. If any new field is added, it should be set here.
+     * 
+     * @return void
+     */
+    public function getWEFFieldTypes() {
+        return [
+            // basic
+            'text' => 'Text', 
+            'textarea' => 'Textarea', 
+            'number' => 'Number', 
+            'range' => 'Range', 
+            'email' => 'Email', 
+            'url' => 'URL', 
+            'password' => 'Password', 
+            
+            // Content
+            'image' => 'Image', 
+            'file' => 'File',
+            'wysiwyg' => 'Wysiwyg Editor',
+            'oembed' => 'oEmbed',
+            'gallery' => 'Gallery',
+
+            // Choice
+            'select' => 'Select', 
+            'checkbox' => 'Checkbox',
+            'radio' => 'Radio',
+            'button_group' => 'Button Group',
+            'boolean' => 'True/False',
+
+            // Relational
+            'link' => 'Link', 
+            'model' => 'Model',
+
+            // Layout
+            'tab' => 'Tab',
+            'group' => 'Group',
+            'repeater' => 'Repeater', 
+        ];
+    }
 }

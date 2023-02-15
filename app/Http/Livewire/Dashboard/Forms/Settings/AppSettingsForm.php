@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
 use DB;
-use EVS;
+use WE;
 use MyShop;
 use Payments;
 use Purifier;

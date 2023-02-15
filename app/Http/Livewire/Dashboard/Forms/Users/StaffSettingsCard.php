@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Traits\Livewire\RulesSets;
 use Categories;
 use DB;
-use EVS;
+use WE;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Permissions;

@@ -287,7 +287,7 @@ return [
         'AuthService' => App\Facades\AuthService::class,
         'Vendor' => App\Facades\Vendor::class,
         'MediaService' => App\Facades\Media::class,
-        'EVS' => App\Facades\EVS::class,
+        'WE' => App\Facades\WE::class,
         'WEF' => App\Facades\WEF::class,
         'WeTheme' => App\Facades\WeTheme::class,
         'CartService' => App\Facades\CartService::class,

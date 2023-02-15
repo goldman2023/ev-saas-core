@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use EVS;
+use WE;
 use Auth;
 use Stripe;
 use Categories;
@@ -21,13 +21,13 @@ use Spatie\Activitylog\Models\Activity;
 use Laravel\Nova\Notifications\NovaNotification;
 use App\Http\Livewire\Dashboard\Forms\Orders\OrderForm;
 
-class EVProductController extends Controller
+class ProductController extends Controller
 {
     //
     public function index(Request $request)
     {
         if (Auth::user()->user_type == 'admin') {
-            $products = Product::orderBy('created_at', 'desc')->paginate(20);
+            $products = ProductAddon::orderBy('created_at', 'desc')->paginate(20);
         } else {
             $products = Auth::user()->products()->orderBy('created_at', 'desc')->paginate(20);
         }

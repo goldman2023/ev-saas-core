@@ -35,7 +35,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\AizUploadController;
 use App\Http\Controllers\EVAccountController;
-use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVWishlistController;
@@ -158,11 +158,11 @@ Route::middleware([
     // Route::get('/search', [HomeController::class, 'search'])->name('search');
 
     // Products
-    Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::getRouteName());
-    Route::get('/product/{slug}/content', [EVProductController::class, 'show_unlockable_content'])->name(Product::getRouteName() . '.unlockable_content')->middleware('purchased_or_owner');
-    Route::get('/product/{id}/checkout-link', [EVProductController::class, 'createProductCheckoutRedirect'])->name('product.generate_checkout_link');
-    // Route::get('/course/item/{slug}', [EVProductController::class, 'course_item_show'])->name(CourseItem::getRouteName());
-    Route::get('/product/{product_slug}/course/item/{slug}', [EVProductController::class, 'course_item_show'])->name(CourseItem::getRouteName());
+    Route::get('/product/{slug}', [ProductController::class, 'show'])->name(Product::getRouteName());
+    Route::get('/product/{slug}/content', [ProductController::class, 'show_unlockable_content'])->name(Product::getRouteName() . '.unlockable_content')->middleware('purchased_or_owner');
+    Route::get('/product/{id}/checkout-link', [ProductController::class, 'createProductCheckoutRedirect'])->name('product.generate_checkout_link');
+    // Route::get('/course/item/{slug}', [ProductController::class, 'course_item_show'])->name(CourseItem::getRouteName());
+    Route::get('/product/{product_slug}/course/item/{slug}', [ProductController::class, 'course_item_show'])->name(CourseItem::getRouteName());
 
     Route::get('/plan/{slug}', [EVPlanController::class, 'show'])->name(Plan::getRouteName());
     Route::get('/plan/{id}/checkout-link', [EVPlanController::class, 'createPlanCheckoutRedirect'])->name('plan.generate_checkout_link');
@@ -170,8 +170,8 @@ Route::middleware([
 
     // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
-    Route::get('/products/category/{slug}', [EVProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
-    Route::get('/products', [EVProductController::class, 'productsByCategory'])->where('slug', '.+')->name('products.all');
+    Route::get('/products/category/{slug}', [ProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
+    Route::get('/products', [ProductController::class, 'productsByCategory'])->where('slug', '.+')->name('products.all');
     Route::get('/products/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
 
     // Users/Shops single page

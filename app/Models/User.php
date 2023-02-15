@@ -8,6 +8,7 @@ use WEF;
 use Carbon;
 use MailerService;
 use App\Traits\UploadTrait;
+use App\Models\ProductAddon;
 use App\Traits\GalleryTrait;
 use App\Traits\CoreMetaTrait;
 use Laravel\Cashier\Billable;
@@ -194,6 +195,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function product_addons()
+    {
+        return $this->hasMany(ProductAddon::class);
     }
 
     public function shop()

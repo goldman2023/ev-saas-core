@@ -19,7 +19,7 @@ use App\Traits\Livewire\HasCoreMeta;
 use App\Traits\Livewire\HasAttributes;
 use Categories;
 use DB;
-use EVS;
+use WE;
 use Log;
 use Illuminate\Validation\Rule;
 use Livewire\Component;

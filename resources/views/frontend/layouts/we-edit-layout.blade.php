@@ -35,7 +35,7 @@
     <!-- Vendor Styles -->
 
     <!-- Theme styles -->
-    <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
+    <link rel="stylesheet" href="{{ \WE::getThemeStyling() }}">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
     @include('frontend.layouts.global-partials.all')

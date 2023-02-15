@@ -10,28 +10,29 @@ use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\EVPageController;
 use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVShopController;
 use App\Http\Controllers\WeQuizController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WeMediaController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\BlogPostController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WEImagesController;
 use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\WeInvoiceController;
 use App\Http\Controllers\WeSectionController;
-use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\EVCategoryController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\TaskController;
 use App\Http\Controllers\EVDownloadsController;
+use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProductAddonController;
 use App\Http\Controllers\DocumentGalleryController;
-use App\Http\Controllers\EVProductController;
-use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\WeSubscriptionsController;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Http\Controllers\Integrations\WooCommerceController;
@@ -58,9 +59,9 @@ Route::middleware([
         Route::get('/categories/edit/{id}', [EVCategoryController::class, 'edit'])->name('category.edit');
         
         // Tenant blog posts
-        //        Route::get('/tenant/blog/posts', [EVProductController::class, 'index'])->name('blog-posts.index');
-        //        Route::get('/tenant/blog/posts/create', [EVProductController::class, 'create'])->name('blog-posts.create');
-        //        Route::get('/tenant/blog/posts/edit/{slug}', [EVProductController::class, 'edit'])->name('blog-posts.edit');
+        //        Route::get('/tenant/blog/posts', [ProductController::class, 'index'])->name('blog-posts.index');
+        //        Route::get('/tenant/blog/posts/create', [ProductController::class, 'create'])->name('blog-posts.create');
+        //        Route::get('/tenant/blog/posts/edit/{slug}', [ProductController::class, 'edit'])->name('blog-posts.edit');
     });
 
     /* TODO: Make this dashboard group for routes, to prefix for /orders /products etc, to be /dashboard/products / dashboard/orders/ ... */
@@ -78,18 +79,22 @@ Route::middleware([
         // ---------------------------------------------------- //
 
         /* Products & Addons */
-        Route::get('/products', [EVProductController::class, 'index'])->name('products.index');
-        Route::get('/products/create', [EVProductController::class, 'create2'])->name('product.create');
-        // Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('product.create');
-        Route::get('/products/edit/{id}', [EVProductController::class, 'edit'])->name('product.edit');
-        Route::get('/products/edit/{id}/details', [EVProductController::class, 'product_details'])->name('product.details');
-        Route::get('/products/edit/{id}/details/activity', [EVProductController::class, 'product_activity'])->name('product.activity');
-        Route::get('/products/edit/{id}/variations', [EVProductController::class, 'edit_variations'])->name('product.edit.variations');
-        Route::get('/products/edit/{id}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
-        Route::get('/products/edit/{id}/course-management', [EVProductController::class, 'edit_course'])->name('product.edit.course');
-        Route::get('/products/preview/{id}/thank-you', [EVProductController::class, 'thank_you_preview'])->name('product.thank_you_preview');
-        Route::get('/products/addons', [EVProductController::class, 'index_addons'])->name('products.addons.index');
-
+        Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/products/create', [ProductController::class, 'create2'])->name('product.create');
+        // Route::get('/ev-products/create', [ProductController::class, 'create'])->name('product.create');
+        Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+        Route::get('/products/edit/{id}/details', [ProductController::class, 'product_details'])->name('product.details');
+        Route::get('/products/edit/{id}/details/activity', [ProductController::class, 'product_activity'])->name('product.activity');
+        Route::get('/products/edit/{id}/variations', [ProductController::class, 'edit_variations'])->name('product.edit.variations');
+        Route::get('/products/edit/{id}/stock-management', [ProductController::class, 'edit_stocks'])->name('product.edit.stocks');
+        Route::get('/products/edit/{id}/course-management', [ProductController::class, 'edit_course'])->name('product.edit.course');
+        Route::get('/products/preview/{id}/thank-you', [ProductController::class, 'thank_you_preview'])->name('product.thank_you_preview');
+        
+        Route::get('/product-addons', [ProductAddonController::class, 'index'])->name('product-addons.index');
+        Route::get('/product-addons/create', [ProductAddonController::class, 'create'])->name('product-addon.create');
+        Route::get('/product-addons/edit/{id}', [ProductAddonController::class, 'edit'])->name('product-addon.edit');
+        Route::get('/product-addons/edit/{id}/stock-management', [ProductAddonController::class, 'edit_stocks'])->name('product-addon.edit.stocks');
+        
 
         /* Pages & Sections */
         Route::get('/pages', [EVPageController::class, 'index'])->name('pages.index');
@@ -279,8 +284,8 @@ Route::middleware([
     Route::get('/users/search', [EVAccountController::class, 'api_search_users'])->name('users.search');
 
     // Products
-    Route::get('/products/search', [EVProductController::class, 'api_search_products'])->name('products.search');
-    Route::get('/product/addons/search', [EVProductController::class, 'api_search_product_addons'])->name('products.addons.search');
+    Route::get('/products/search', [ProductController::class, 'api_search_products'])->name('products.search');
+    Route::get('/product/addons/search', [ProductController::class, 'api_search_product_addons'])->name('products.addons.search');
 
     // EditorJS endpoints
     Route::post('/images/upload', [WeMediaController::class, 'upload'])->name('images.upload');

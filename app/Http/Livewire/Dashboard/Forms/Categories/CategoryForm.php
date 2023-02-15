@@ -10,7 +10,7 @@ use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\RulesSets;
 use Categories;
 use DB;
-use EVS;
+use WE;
 use Livewire\Component;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;

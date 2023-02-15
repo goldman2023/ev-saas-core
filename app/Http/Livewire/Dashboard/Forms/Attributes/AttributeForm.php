@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Dashboard\Forms\Attributes;
 
 use DB;
 use FX;
-use EVS;
+use WE;
 use Purifier;
 use Categories;
 use Permissions;

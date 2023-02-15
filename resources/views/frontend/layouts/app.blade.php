@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
     <!-- Theme styles -->
-    <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
+    <link rel="stylesheet" href="{{ \WE::getThemeStyling() }}">
 
     @stack('pre_head_scripts')
 

@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Dashboard\Forms\BlogPosts;
 
 use DB;
-use EVS;
+use WE;
 use WEF;
 use Purifier;
 use Categories;

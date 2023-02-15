@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Shop;
 use Cache;
-use EVS;
+use WE;
 use FX;
 use Illuminate\Database\Eloquent\Collection;
 use Session;
