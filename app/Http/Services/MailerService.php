@@ -2,7 +2,7 @@
 
 namespace App\Http\Services;
 
-use EVS;
+use WE;
 use Cache;
 use Session;
 use App\Models\Shop;

@@ -12,7 +12,7 @@ use App\Models\Product;
 use App\Models\Shop;
 use App\Models\ShopDomain;
 use Cache;
-use EVS;
+use WE;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;

@@ -17,7 +17,7 @@ use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
 use Categories;
 use DB;
-use EVS;
+use WE;
 use HasCategories;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;

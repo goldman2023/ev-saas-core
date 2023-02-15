@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use DB;
 use FX;
-use EVS;
+use WE;
 use Log;
 use Cache;
 use Session;

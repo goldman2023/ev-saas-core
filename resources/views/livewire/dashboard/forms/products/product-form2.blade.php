@@ -1607,7 +1607,7 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.select :items="EVS::getMappedVideoProviders()"
+                                        <x-dashboard.form.select :items="WE::getMappedVideoProviders()"
                                             selected="video_provider"></x-dashboard.form.select>
                                     </div>
                                 </div>
@@ -1785,7 +1785,7 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <div class="grid grid-cols-10 gap-3">
                                         <div class="col-span-10">
-                                            <x-dashboard.form.select :items="EVS::getMappedBrands()"
+                                            <x-dashboard.form.select :items="WE::getMappedBrands()"
                                                 selected="brand_id"></x-dashboard.form.select>
                                         </div>
 

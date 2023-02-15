@@ -4,7 +4,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class EVS extends Facade
+class WE extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -13,6 +13,6 @@ class EVS extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'ev';
+        return 'we';
     }
 }

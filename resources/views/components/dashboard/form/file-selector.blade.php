@@ -214,6 +214,6 @@ x-init="makeSortable()"
             @endif
         @endif
 
-        {{-- <x-system.invalid-msg field="{{  }}"></x-system.invalid-msg> --}}
+        <x-system.invalid-msg field="{{ $errorField }}"></x-system.invalid-msg>
     </div>
 </div>

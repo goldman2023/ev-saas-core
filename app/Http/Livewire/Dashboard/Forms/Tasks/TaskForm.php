@@ -15,7 +15,7 @@ use App\Traits\Livewire\RulesSets;
 use Permissions;
 use Purifier;
 use DB;
-use EVS;
+use WE;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Spatie\ValidationRules\Rules\ModelsExist;

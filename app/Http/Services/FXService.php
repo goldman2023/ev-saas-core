@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Currency;
 use Cache;
-use EVS;
+use WE;
 use Illuminate\Support\Facades\Cache as FacadesCache;
 use Session;
 

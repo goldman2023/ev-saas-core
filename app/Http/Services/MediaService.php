@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use Log;
 use DB;
-use EVS;
+use WE;
 use Cache;
 use Session;
 use SplFileInfo;

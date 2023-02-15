@@ -2,7 +2,7 @@
 
 namespace App\Http\Services;
 
-use EVS;
+use WE;
 use Cache;
 use Session;
 use App\Models\Lead;
@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
 use App\Enums\AppSettingsGroupEnum;
 use Illuminate\View\ComponentAttributeBag;
 
-class EVService
+class WeService
 {
     protected $tenantStylePath;
 
@@ -87,8 +87,7 @@ class EVService
     protected function getDashboardMenuTemplate(): array
     {
         // In order to show/hide certain items based on user type and permissions, you need to define user_types and permissions for each item
-        return
-        apply_filters('dashboard.sidebar.menu', [
+        return apply_filters('dashboard.sidebar.menu', [
             [
                 'label' => translate('General'),
                 'items' => [
@@ -169,9 +168,9 @@ class EVService
                             [
                                 'label' => translate('Product Addons'),
                                 'icon' => 'heroicon-o-archive-box',
-                                'route' => route('products.index'),
-                                'route_name' => 'products.index',
-                                'is_active' => areActiveRoutes(['products.index',  'product.details']),
+                                'route' => route('product-addons.index'),
+                                'route_name' => 'product-addons.index',
+                                'is_active' => areActiveRoutes(['product-addons.index',  'product-addon.details']),
                                 'user_types' => User::$non_customer_user_types,
                                 'permissions' => ['browse_products'],
                             ],

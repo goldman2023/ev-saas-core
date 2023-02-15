@@ -222,9 +222,9 @@
 
                                         <x-ev.form.categories-selector error-bag-name="selected_categories" :items="$this->categories" :selected-categories="$this->levelSelectedCategories()" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
 
-                                        <x-ev.form.select name="product.brand_id" :items="EVS::getMappedBrands()" label="{{ translate('Brand') }}" :search="true" placeholder="{{ translate('Select Brand...') }}" />
+                                        <x-ev.form.select name="product.brand_id" :items="WE::getMappedBrands()" label="{{ translate('Brand') }}" :search="true" placeholder="{{ translate('Select Brand...') }}" />
 
-                                        <x-ev.form.select name="product.unit" :items="EVS::getMappedUnits()" label="{{ translate('Unit') }}" :required="true" placeholder="{{ translate('Choose the product unit...') }}" />
+                                        <x-ev.form.select name="product.unit" :items="WE::getMappedUnits()" label="{{ translate('Unit') }}" :required="true" placeholder="{{ translate('Choose the product unit...') }}" />
 
                                         <x-ev.form.select name="product.tags" :tags="true" label="{{ translate('Tags') }}" :multiple="true" placeholder="{{ translate('Type and hit enter to add a tag...') }}">
                                             <small class="text-muted">{{ translate('This is used for search. Input relevant words by which customer can find this product.') }}</small>
@@ -266,7 +266,7 @@
                                         ></x-ev.form.file-selector>
 
                                         <!-- Video -->
-                                        <x-ev.form.select name="product.video_provider" :items="EVS::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
+                                        <x-ev.form.select name="product.video_provider" :items="WE::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
                                         <x-ev.form.input name="product.video_link" type="text" label="{{ translate('Video link') }}" placeholder="{{ translate('Link to the video...') }}" >
                                             <small class="text-muted">{{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}</small>
                                         </x-ev.form.input>
@@ -332,7 +332,7 @@
                                         <x-ev.form.input name="product.low_stock_qty" type="number" label="{{ translate('Low stock quantity warning') }}"  min="0" step="1">
                                         </x-ev.form.input>
 
-                                        <x-ev.form.radio name="product.stock_visibility_state" :items="EVS::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}" value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
+                                        <x-ev.form.radio name="product.stock_visibility_state" :items="WE::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}" value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
 
                                         <x-ev.form.input name="product.unit_price" type="number" label="{{ translate('Unit price') }}" min="0" step="0.01">
                                         </x-ev.form.input>
@@ -349,7 +349,7 @@
                                             </div>
                                         </div>
 
-                                        <x-ev.form.radio name="product.shipping_type" :items="EVS::getMappedShippingTypePerProduct()" label="{{ translate('Shipping type') }}" value="{{ $product->shipping_type ?: '' }}" >
+                                        <x-ev.form.radio name="product.shipping_type" :items="WE::getMappedShippingTypePerProduct()" label="{{ translate('Shipping type') }}" value="{{ $product->shipping_type ?: '' }}" >
                                             <x-slot name="flat_rate">
                                                 <x-ev.form.input name="product.shipping_cost" groupclass="{{ $product->shipping_type === 'flat_rate' ? '':'d-none' }}" type="number"  placeholder="{{ translate('Shipping cost') }}"  min="0" step="0.01"></x-ev.form.input>
                                             </x-slot>

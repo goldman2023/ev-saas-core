@@ -1,30 +1,31 @@
 <?php
 // Because this file is loaded through composer.json file, it cannot use Aliases from `app.php`, like: use Log; Instead full namespaces must be used!
-use App\Facades\TenantSettings;
-use App\Models\Currency;
-use App\Models\TenantSetting;
-use App\Models\Product;
-use App\Models\SubSubCategory;
-use App\Models\Category;
-use App\Models\FlashDealProduct;
-use App\Models\FlashDeal;
-use App\Models\OtpConfiguration;
-use App\Models\Upload;
-use App\Models\Translation;
 use App\Models\City;
-use App\Utility\TranslationUtility;
-use App\Utility\CategoryUtility;
-use App\Utility\MimoUtility;
-use Qirolab\Theme\Theme;
-use Twilio\Rest\Client;
-use App\Models\Attribute;
+use App\Models\Upload;
 use App\Models\Country;
+use App\Models\Product;
+use Twilio\Rest\Client;
+use App\Models\Category;
+use App\Models\Currency;
+use Qirolab\Theme\Theme;
+use App\Models\Attribute;
+use App\Models\FlashDeal;
+use App\Models\Translation;
+use App\Utility\MimoUtility;
+use App\Models\TenantSetting;
 use App\Models\Models\EVLabel;
+use App\Models\SubSubCategory;
+use App\Facades\TenantSettings;
+use App\Models\FlashDealProduct;
+use App\Models\OtpConfiguration;
+use App\Utility\CategoryUtility;
+use Illuminate\Support\Collection;
+use App\Utility\TranslationUtility;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Admin\GeneralTransactionalNotification;
-use Illuminate\Support\Facades\Log;
 
 
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
@@ -85,7 +86,7 @@ if (!function_exists('castValueForSave')) {
         $data_type = $data_types[$key] ?? null;
 
         if($data_type === Upload::class || $data_type === Category::class) {
-            $setting = ctype_digit($setting)|| is_numeric($setting) ? $setting : null;
+            $setting = ctype_digit($setting) || is_numeric($setting) ? $setting : null;
         } else if($data_type === Currency::class) {
             if(!Currency::where('code', $setting)->exists()) {
                 $setting = 'EUR'; // If currency with $setting code does not exist in database, make EUR default
@@ -274,37 +275,46 @@ if (!function_exists('sendAdminNotification')) {
 if (!function_exists('toJSONMedia')) {
     function toJSONMedia($upload = null) {
 
-        if($upload instanceof Upload) {
+        $converter = function($upload) {
+            if($upload instanceof Upload) {
+                return [
+                    'id' => $upload?->id ?? '',
+                    'file_name' => $upload?->file_name ?? '',
+                    'extension' => $upload?->extension ?? '',
+                    'file_size' => $upload?->file_size ?? 0,
+                    'type' => $upload?->type ?? null,
+                    'file_original_name' => $upload?->file_original_name ?? '',
+                    'order' => $upload?->pivot?->order ?? 0,
+                ];
+            } else if(is_array($upload)) {
+                return [
+                    'id' => $upload['id'] ?? '',
+                    'file_name' => $upload['file_name'] ?? '',
+                    'extension' => $upload['extension'] ?? '',
+                    'file_size' => $upload?->file_size ?? 0,
+                    'type' => $upload['type'] ?? null,
+                    'file_original_name' => $upload['file_original_name'] ?? '',
+                    'order' => $upload['order'] ?? 0,
+                ];
+            }
+    
             return [
-                'id' => $upload?->id ?? '',
-                'file_name' => $upload?->file_name ?? '',
-                'extension' => $upload?->extension ?? '',
-                'file_size' => $upload?->file_size ?? 0,
-                'type' => $upload?->type ?? null,
-                'file_original_name' => $upload?->file_original_name ?? '',
-                'order' => $upload?->pivot?->order ?? 0,
+                'id' => null,
+                'file_name' => '',
+                'extension' => '',
+                'file_size' => 0,
+                'type' => null,
+                'file_original_name' => '',
+                'order' => 0,
             ];
-        } else if(is_array($upload)) {
-            return [
-                'id' => $upload['id'] ?? '',
-                'file_name' => $upload['file_name'] ?? '',
-                'extension' => $upload['extension'] ?? '',
-                'file_size' => $upload?->file_size ?? 0,
-                'type' => $upload['type'] ?? null,
-                'file_original_name' => $upload['file_original_name'] ?? '',
-                'order' => $upload['order'] ?? 0,
-            ];
-        }
+        };
 
-        return [
-            'id' => null,
-            'file_name' => '',
-            'extension' => '',
-            'file_size' => 0,
-            'type' => null,
-            'file_original_name' => '',
-            'order' => 0,
-        ];
+        if($upload instanceof Collection) {
+            return collect($upload)->map(fn($item, $key) => toJSONMedia($item));
+        } else {
+            return $converter($upload);
+        }
+        
     }
 }
 

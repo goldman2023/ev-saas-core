@@ -7,7 +7,7 @@ use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Product;
 use App\Models\ProductVariation;
-use EVS;
+use WE;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use Session;

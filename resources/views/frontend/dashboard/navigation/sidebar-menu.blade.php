@@ -1,7 +1,7 @@
 {{-- Dashboard Sidebar Navigation --}}
 <nav class="px-3 mt-6 pb-5">
     <div class="space-y-1 mb-6">
-        @if($menu = \EVS::getDashboardMenu())
+        @if($menu = \WE::getDashboardMenu())
             @foreach($menu as $section)
                 @if($section['label'] === 'hr')
                     <div class="w-full border-t border-gray-300"></div>

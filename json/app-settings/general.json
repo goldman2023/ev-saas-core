@@ -1,0 +1,37 @@
+{
+    "key": "tenant-settings-general",
+    "title": "General",
+    "order": 1,
+    "fields": [
+        {
+            "key": "d16cea37-0e6f-4ec7-a199-a7b1d1bd76d8",
+            "type": "image",
+            "label": "Site logo",
+            "name": "site_logo",
+            "instructions": "",
+            "setter_cast": "\\App\\Models\\Upload",
+            "getter_cast": "\\App\\Models\\Upload",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        }
+    ],
+    "position": "normal",
+    "active": true,
+    "description": "General application settings",
+    "modified": 1676330909
+}
