@@ -217,6 +217,11 @@ class Product extends WeBaseModel
         return $this->hasMany(CourseItem::class);
     }
 
+    public function product_addons() {
+        // TODO: Add support for addons which have All and for addons added to categories!
+        return $this->morphToMany(ProductAddon::class, 'subject', 'product_addon_relationships');
+    }
+
     /* TODO: Implement product condition in backend: new/used/refurbished */
     public function getCondition()
     {
