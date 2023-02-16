@@ -8,7 +8,7 @@ namespace App\Enums;
  * @method static self image()
  * @method static self video()
  */
-class BackgroundTypeEnum extends EVBaseEnum
+class BackgroundTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

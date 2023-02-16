@@ -1022,19 +1022,6 @@
                 </div>
                 {{-- END Card Categories and Tags --}}
 
-                {{-- Card Brand --}}
-                <div class="card mb-3 mb-lg-5" x-data="{}">
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Brand') }}</h5>
-
-                        <div class="w-100">
-                            <x-ev.form.select name="product.brand_id" :items="WE::getMappedBrands()" class="mb-1" :search="true" placeholder="{{ translate('Select Brand...') }}" />
-                        </div>
-                    </div>
-                </div>
-                {{-- END Card Brand --}}
-
-
                 {{-- Card Actions --}}
                 <div class="card mb-3 mb-lg-5" x-data="{}">
                     <div class="card-body position-relative d-flex">

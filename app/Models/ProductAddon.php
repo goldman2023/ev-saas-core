@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use App\Support\Eloquent\Relations\AllFromModelRelation;
 
 /**
  * App\Models\ProductAddon
@@ -66,15 +67,6 @@ class ProductAddon extends WeBaseModel
         'unit_price' => 'float',
         'discount' => 'float',
     ];
-
-    public function getBaseCurrencyAttribute($value)
-    {
-        if (empty($value)) {
-            $value =  get_setting('system_default_currency')->code;
-        }
-
-        return $value;
-    }
 
     /**
      * Replace Eloquent/Builder with ProductsBuilder (an extension of Eloquent/Builder with more features)
@@ -166,13 +158,66 @@ class ProductAddon extends WeBaseModel
     {
         return $this->belongsTo(Shop::class);
     }
+    
+    /**
+     * Products relationship
+     *
+     * @param  mixed $return_real - If this is true, AllFromModelRelation will return fake model with id = 0. Otherwise, it'll return all related models.
+     * @return void
+     */
+    public function products($return_real = false) {
+        // Check if All is present -> subject_id = 0
+        $check_for_all = DB::scalar(
+            "select count(case when subject_id = 0 and product_addon_id = ".($this->id ?? 0)." and subject_type = '".addslashes(Product::class)."' then 1 end) as products from product_addon_relationships"
+        );
 
-    public function products() {
-        return $this->morphedByMany(Product::class, 'subject', 'product_addon_relationship');
+        if($check_for_all > 0) {
+            // This means that relation to all is present in DB
+            return new AllFromModelRelation(Product::class, ['published'], return_real: $return_real);
+        } else {
+            return $this->morphedByMany(Product::class, 'subject', 'product_addon_relationships');
+        }
+    }
+    
+    /**
+     * products_morph
+     *
+     * This is a relation where relation-functions should be performed!
+     * 
+     * @return void
+     */
+    public function products_morph() {
+        return $this->morphedByMany(Product::class, 'subject', 'product_addon_relationships');
     }
 
-    public function taxonomy() {
-        return $this->morphedByMany(Category::class, 'subject', 'product_addon_relationship');
+    /**
+     * Products relationship
+     *
+     * @param  mixed $return_real - If this is true, AllFromModelRelation will return fake model with id = 0. Otherwise, it'll return all related models.
+     * @return void
+     */
+    public function category_taxonomy($return_real = false) {
+        $check_for_all = DB::scalar(
+            "select count(case when subject_id = 0 and product_addon_id = ".($this->id ?? 0)." and subject_type = '".addslashes(Category::class)."' then 1 end) as products from product_addon_relationships"
+        );
+
+        if($check_for_all > 0) {
+            // This means that relation to all is present in DB
+            return new AllFromModelRelation(Category::class, [], return_real: $return_real);
+        } else {
+            return $this->morphedByMany(Category::class, 'subject', 'product_addon_relationships');
+        }
+    }
+
+    /**
+     * category_taxonomy_morph
+     *
+     * This is a relation where relation-functions should be performed!
+     * 
+     * @return void
+     */
+    public function category_taxonomy_morph() {
+        return $this->morphedByMany(Category::class, 'subject', 'product_addon_relationships');
     }
 
     protected function asJson($value)

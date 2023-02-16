@@ -30,6 +30,10 @@ window.objectHasProperty = function(object_var, property) {
             object_var.hasOwnProperty(property);
 }
 
+window.isNumeric = function(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 // WEF
 window.WEF = {};
 window.WEF.getMinValue = function(custom_properties) {

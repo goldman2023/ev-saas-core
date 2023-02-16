@@ -310,7 +310,7 @@ if (!function_exists('toJSONMedia')) {
         };
 
         if($upload instanceof Collection) {
-            return collect($upload)->map(fn($item, $key) => toJSONMedia($item));
+            return collect($upload)->map(fn($item, $key) => $converter($item))->toArray();
         } else {
             return $converter($upload);
         }
@@ -1333,6 +1333,7 @@ if (!function_exists('static_asset')) {
             }
         } catch (\Exception $e) {
         }
+        
         if ($theme) {
             if (config('app.force_https')) {
                 return app('url')->asset('themes/' . Theme::active() . '/' . $path, true) . ($cache_bust ? '?v=' . $filemtime : '');

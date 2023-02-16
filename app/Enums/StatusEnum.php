@@ -9,7 +9,7 @@ namespace App\Enums;
  * @method static self pending()
  * @method static self archived()
  */
-class StatusEnum extends EVBaseEnum
+class StatusEnum extends WeBaseEnum
 {
     public static function values(): array
     {

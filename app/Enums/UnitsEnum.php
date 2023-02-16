@@ -10,7 +10,7 @@ namespace App\Enums;
  * @method static self m()
  * @method static self s()
  */
-class UnitsEnum extends EVBaseEnum
+class UnitsEnum extends WeBaseEnum
 {
     public static function values(): array
     {

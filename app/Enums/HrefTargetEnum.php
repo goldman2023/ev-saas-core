@@ -6,7 +6,7 @@ namespace App\Enums;
  * @method static self _self()
  * @method static self _blank()
  */
-class HrefTargetEnum extends EVBaseEnum
+class HrefTargetEnum extends WeBaseEnum
 {
     public static function values(): array
     {

@@ -713,7 +713,7 @@ class WeService
         $mapped = [];
 
         if ($brands->isNotEmpty()) {
-            foreach (\App\Models\Brand::all() as $brand) {
+            foreach (Brand::all() as $brand) {
                 $mapped[$brand->id] = $brand->name;
             }
         }

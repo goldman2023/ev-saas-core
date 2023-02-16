@@ -8,7 +8,7 @@ namespace App\Enums;
  * @method static self canceled()
  * @method static self paid()
  */
-class PaymentStatusEnum extends EVBaseEnum
+class PaymentStatusEnum extends WeBaseEnum
 {
     public static function values(): array
     {

@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use Spatie\Enum\Enum;
 
-class EVBaseEnum extends Enum
+class WeBaseEnum extends Enum
 {
     // ALWAYS RETURNS EMPTY ARRAY! DON'T USE IT...
     public static function toArray($skip = null): array
@@ -71,5 +71,9 @@ class EVBaseEnum extends Enum
 
     public static function getLabel($key) {
         return static::labels()[$key] ?? null;
+    }
+
+    public static function in($key, $skip = null) {
+        return in_array($key, self::toValues($skip));
     }
 }

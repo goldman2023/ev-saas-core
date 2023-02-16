@@ -2,24 +2,23 @@
 
 namespace App\Http\Services;
 
-use App\Models\Attribute;
-use App\Models\AttributeValue;
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\CategoryRelationship;
-use App\Models\Currency;
-use App\Models\Product;
-use App\Models\Shop;
-use App\Models\ShopDomain;
-use Cache;
 use WE;
-use Illuminate\Container\Container;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Str;
-use Illuminate\View\Compilers\ComponentTagCompiler;
-use Illuminate\View\ComponentAttributeBag;
+use Cache;
 use Session;
+use App\Models\Shop;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Currency;
+use App\Models\Attribute;
+use App\Models\ShopDomain;
+use Illuminate\Support\Str;
+use App\Models\AttributeValue;
+use Illuminate\Container\Container;
+use App\Models\CategoryRelationship;
+use Illuminate\Support\Facades\Request;
 use Symfony\Component\DomCrawler\Crawler;
+use Illuminate\View\ComponentAttributeBag;
+use Illuminate\View\Compilers\ComponentTagCompiler;
 
 class WeBuilderService
 {

@@ -9,7 +9,7 @@ namespace App\Enums;
  * @method static self newsletter()
  * @method static self deals()
  */
-class WeMailingListsEnum extends EVBaseEnum
+class WeMailingListsEnum extends WeBaseEnum
 {
     public static function values(): array
     {

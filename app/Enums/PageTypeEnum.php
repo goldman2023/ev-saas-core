@@ -8,7 +8,7 @@ namespace App\Enums;
  * @method static self html()
  * @method static self wysiwyg()
  */
-class PageTypeEnum extends EVBaseEnum
+class PageTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

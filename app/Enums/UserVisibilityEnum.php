@@ -9,7 +9,7 @@ namespace App\Enums;
  * @method static self subscriber()
  * @method static self non_subscriber()
  */
-class UserVisibilityEnum extends EVBaseEnum
+class UserVisibilityEnum extends WeBaseEnum
 {
     public static function values(): array
     {

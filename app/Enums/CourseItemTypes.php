@@ -8,7 +8,7 @@ namespace App\Enums;
  * @method static self quizz()
  * @method static self livestream()
  */
-class CourseItemTypes extends EVBaseEnum
+class CourseItemTypes extends WeBaseEnum
 {
     public static function values(): array
     {

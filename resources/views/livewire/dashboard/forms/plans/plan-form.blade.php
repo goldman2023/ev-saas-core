@@ -15,7 +15,6 @@
     non_standard: @js($plan->non_standard ?? 'false'),
     discount_type: @js($plan->discount_type),
     yearly_discount_type: @js($plan->yearly_discount_type),
-    tax_type: @js($plan->tax_type),
     features: @js(array_values($plan->features)),
     content: @entangle('plan.content').defer,
     content_structure: @entangle('wef.content_structure').defer,
@@ -32,7 +31,6 @@
         $wire.set('plan.base_currency', this.base_currency, true);
         $wire.set('plan.discount_type', this.discount_type, true);
         $wire.set('plan.yearly_discount_type', this.yearly_discount_type, true);
-        $wire.set('plan.tax_type', this.tax_type, true);
         $wire.set('plan.thumbnail', this.thumbnail.id, true);
         $wire.set('plan.gallery', this.gallery, true);
         $wire.set('plan.cover', this.cover.id, true);
@@ -233,39 +231,6 @@
                             </div>
                         </div>
                         <!-- END Yearly discount and discount type -->
-
-
-                        <!-- Tax and Tax type -->
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="!non_standard">
-                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                {{ translate('Tax') }}
-                            </label>
-
-                            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <div class="grid grid-cols-10 gap-3">
-                                    <div class="col-span-6">
-                                        <input type="number"
-                                                step="0.01"
-                                                class="form-standard @error('plan.tax') is-invalid @enderror"
-                                                placeholder="{{ translate('Subscription specific tax (fixed or percentage)') }}"
-                                                wire:model.defer="plan.tax" />
-                                    </div>
-
-                                    <div class="col-span-4" x-data="{}">
-                                        <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="tax_type"></x-dashboard.form.select>
-                                    </div>
-
-                                    <div class="col-span-10">
-                                        <small class="text-info">
-                                            {{ translate('*Note: This is a subscription plan specific tax/fee/commission, not a VAT') }}
-                                        </small>
-                                    </div>
-
-                                    <x-system.invalid-msg class="col-span-10" field="plan.tax"></x-system.invalid-msg>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END Tax and Tax type  -->
 
                         <!-- Features -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">

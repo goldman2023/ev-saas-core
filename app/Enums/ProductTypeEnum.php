@@ -12,7 +12,7 @@ namespace App\Enums;
  * @method static self bookable_service()
  * @method static self bookable_subscription_service()
  */
-class ProductTypeEnum extends EVBaseEnum
+class ProductTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

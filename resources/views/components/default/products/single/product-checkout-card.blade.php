@@ -44,10 +44,32 @@
 
             {{-- Variations Selector --}}
             @if($product->hasVariations())
-            <livewire:tenant.product.product-variations-selector :product="$product" class="mt-2">
-            </livewire:tenant.product.product-variations-selector>
+                <livewire:tenant.product.product-variations-selector :product="$product" class="mt-2">
+                </livewire:tenant.product.product-variations-selector>
             @endif
 
+            @if($product->product_addons->isNotEmpty())
+                <fieldset class="border-t border-b border-gray-200 my-3">
+                    <div class="divide-y divide-gray-200">
+                        @foreach($product->product_addons as $addon)
+                            <div class="relative flex items-start py-4">
+                                <div class="mr-3 flex h-5 items-center cursor-pointer">
+                                    <input id="comments" aria-describedby="comments-description" name="comments" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                </div>
+
+                                <div class="min-w-0 flex-1 text-sm">
+                                    <label for="comments" class="flex justify-between font-medium text-gray-700">
+                                        <strong>{{ $addon->name }}</strong>
+                                        <strong class="text-gray-600 line-clamp-1">{{ translate('Price') }}: {{ $addon->getTotalPrice(true) }}</strong>
+                                    </label>
+                                    <p id="comments-description" class="text-gray-500 line-clamp-1">{{ $addon->excerpt }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </fieldset>
+            @endif
+            
             @if($product->track_iventory)
                 <p class="py-2 mb-0">
                     <span class="text-18 text-body font-semibold">{{ translate('Stock:') }}</span>
@@ -77,18 +99,18 @@
                     stocks. Hurry up!') }}</p>
             </template> --}}
 
-            {{-- DONE: Disable add to cart button and quantity counter if available stock is <= 0 --}} <div
-                class="w-full flex mt-3">
+            {{-- DONE: Disable add to cart button and quantity counter if available stock is <= 0 --}} 
+            <div class="w-full flex mt-3">
                 <x-system.quantity-counter :model="$product" class="mr-5"></x-system.quantity-counter>
 
                 @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
-                <x-system.buy-now-button :model="$product" class="" label="{{ translate('Buy now') }}"
-                    label-not-in-stock="{{ translate('Not in stock') }}">
-                </x-system.buy-now-button>
+                    <x-system.buy-now-button :model="$product" class="" label="{{ translate('Buy now') }}"
+                        label-not-in-stock="{{ translate('Not in stock') }}">
+                    </x-system.buy-now-button>
                 @else
-                <x-system.add-to-cart-button :model="$product" class="" label="{{ translate('Add to cart') }}"
-                    label-not-in-stock="{{ translate('Not in stock') }}">
-                </x-system.add-to-cart-button>
+                    <x-system.add-to-cart-button :model="$product" class="" label="{{ translate('Add to cart') }}"
+                        label-not-in-stock="{{ translate('Not in stock') }}">
+                    </x-system.add-to-cart-button>
                 @endif
         </div>
 

@@ -7,7 +7,7 @@ namespace App\Enums;
  * @method static self text()
  * @method static self hide()
  */
-class StockVisibilityStateEnum extends EVBaseEnum
+class StockVisibilityStateEnum extends WeBaseEnum
 {
     public static function values(): array
     {

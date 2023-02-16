@@ -8,7 +8,7 @@ namespace App\Enums;
  * @method static self smallest()
  * @method static self largest()
  */
-class SortMediaLibraryEnum extends EVBaseEnum
+class SortMediaLibraryEnum extends WeBaseEnum
 {
     public static function values(): array
     {

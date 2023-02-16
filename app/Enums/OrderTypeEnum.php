@@ -7,7 +7,7 @@ namespace App\Enums;
  * @method static self subscription()
  * @method static self installments()
  */
-class OrderTypeEnum extends EVBaseEnum
+class OrderTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {
