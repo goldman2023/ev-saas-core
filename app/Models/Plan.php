@@ -41,8 +41,7 @@ class Plan extends WeBaseModel
 
     protected $table = 'plans';
 
-    protected $fillable = ['name', 'featured', 'primary', 'non_standard', 'excerpt', 'status', 'features', 'price', 'discount', 'discount_type', 'yearly_discount', 'yearly_discount_type', 'tax', 'tax_type', 'meta_title', 'meta_description', 'meta_keywords'];
-    // protected $cloneable_relations = ['translations', 'variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals', 'core_meta'];
+    protected $fillable = ['name', 'featured', 'primary', 'non_standard', 'excerpt', 'status', 'features', 'price', 'discount', 'discount_type', 'yearly_discount', 'yearly_discount_type', 'meta_title', 'meta_description', 'meta_keywords'];
 
     protected $casts = [
         'features' => 'array',

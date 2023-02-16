@@ -8,7 +8,7 @@ namespace App\Enums;
  * @method static self stripe()
  * @method static self paysera()
  */
-class PaymentGatewaysEnum extends EVBaseEnum
+class PaymentGatewaysEnum extends WeBaseEnum
 {
     public static function values(): array
     {

@@ -206,12 +206,8 @@ class UserSubscription extends WeBaseModel
                 $interval = $this->order->invoicing_period;
                 $subtotal_price = $this->order->subtotal_price;
                 
-                if ($invoice['tax_type'] === AmountPercentTypeEnum::percent()->value) {
-                    $tax = ($this->order->subtotal_price * $this->order->tax) / 100;
-                } elseif ($this->tax_type === AmountPercentTypeEnum::amount()->value) {
-                    $tax = $this->order->tax;
-                }
-
+                // TODO: Add Global Tax or something
+                
                 return $format ? \FX::formatPrice($tax) : $tax;
             }
         }

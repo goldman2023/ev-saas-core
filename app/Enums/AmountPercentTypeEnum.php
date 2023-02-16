@@ -6,7 +6,7 @@ namespace App\Enums;
  * @method static self amount()
  * @method static self percent()
  */
-class AmountPercentTypeEnum extends EVBaseEnum
+class AmountPercentTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

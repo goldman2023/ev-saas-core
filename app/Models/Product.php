@@ -13,7 +13,6 @@ use WEF;
 use App\Models\User;
 use App\Models\Wishlist;
 use App\Traits\HasStatus;
-use App\Models\ProductTax;
 use App\Traits\BrandTrait;
 use App\Traits\PriceTrait;
 use App\Traits\Purchasable;
@@ -96,15 +95,6 @@ class Product extends WeBaseModel
         'unit_price' => 'float',
         'discount' => 'float',
     ];
-
-    public function getBaseCurrencyAttribute($value)
-    {
-        if (empty($value)) {
-            $value =  get_setting('system_default_currency')->code;
-        }
-
-        return $value;
-    }
 
     /**
      * Replace Eloquent/Builder with ProductsBuilder (an extension of Eloquent/Builder with more features)
@@ -221,11 +211,6 @@ class Product extends WeBaseModel
     public function wishlists()
     {
         return $this->morphMany(Wishlist::class, 'subject');
-    }
-
-    public function taxes()
-    {
-        return $this->hasMany(ProductTax::class);
     }
 
     public function course_items() {

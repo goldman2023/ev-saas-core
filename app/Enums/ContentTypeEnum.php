@@ -10,7 +10,6 @@ namespace App\Enums;
  * @method static self user()
  * @method static self category()
  * @method static self blog_post()
- * @method static self brand()
  * @method static self event()
  * @method static self upload()
  * @method static self wishlist()
@@ -23,7 +22,7 @@ namespace App\Enums;
  * @method static self attribute_value()
  * @method static self currency()
  */
-class ContentTypeEnum extends EVBaseEnum
+class ContentTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {
@@ -35,7 +34,6 @@ class ContentTypeEnum extends EVBaseEnum
             'user' => \App\Models\User::class,
             'category' => \App\Models\Category::class,
             'blog_post' => \App\Models\BlogPost::class,
-            'brand' => \App\Models\Brand::class,
             'event' => \App\Models\Event::class,
             'upload' => \App\Models\Upload::class,
             'wishlist' => \App\Models\Wishlist::class,
@@ -60,7 +58,6 @@ class ContentTypeEnum extends EVBaseEnum
             'user' => 'User',
             'category' => 'Category',
             'blog_post' => 'BlogPost',
-            'brand' => 'Brand',
             'event' => 'Event',
             'upload' => 'Upload',
             'wishlist' => 'Wishlist',
@@ -85,7 +82,6 @@ class ContentTypeEnum extends EVBaseEnum
             'User' => \App\Models\User::class,
             'Category' => \App\Models\Category::class,
             'Blog Post' => \App\Models\BlogPost::class,
-            'Brand' => \App\Models\Brand::class,
             'Upload' => \App\Models\Upload::class,
             'Wishlist' => \App\Models\Wishlist::class,
             'Wallet' => \App\Models\Wallet::class,

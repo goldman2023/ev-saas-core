@@ -6,7 +6,7 @@ namespace App\Enums;
  * @method static self Plans()
  * @method static self Trial()
  */
-class WeMailingSubsribersFieldsEnum extends EVBaseEnum
+class WeMailingSubsribersFieldsEnum extends WeBaseEnum
 {
     public static function values(): array
     {

@@ -7,7 +7,7 @@ namespace App\Enums;
  * @method static self two()
  * @method static self three()
  */
-class WeEditLayoutEnum extends EVBaseEnum
+class WeEditLayoutEnum extends WeBaseEnum
 {
     public static function values(): array
     {

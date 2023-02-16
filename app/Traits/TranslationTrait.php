@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use App\Builders\BaseBuilder;
-use App\Models\Brand;
 use App\Models\ProductTranslation;
 use App\Models\ProductVariation;
 

@@ -56,9 +56,7 @@ class PlanForm extends Component
             $this->plan->primary = false;
             $this->plan->featured = false;
             $this->plan->base_currency = FX::getCurrency()->code;
-            $this->plan->discount_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->yearly_discount_type = AmountPercentTypeEnum::amount()->value;
-            $this->plan->tax_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->non_standard = false;
         }
 
@@ -94,8 +92,6 @@ class PlanForm extends Component
             'plan.discount_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
             'plan.yearly_discount' => 'nullable|numeric',
             'plan.yearly_discount_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
-            'plan.tax' => 'nullable|numeric',
-            'plan.tax_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
             'plan.gallery' => ['nullable'],
             'plan.meta_title' => [''],
             'plan.meta_keywords' => [''],
@@ -131,8 +127,6 @@ class PlanForm extends Component
             'plan.price.numeric' => translate('Price must be a valid number'),
             'plan.discount.numeric' => translate('Discount must be a valid number'),
             'plan.discount_type.in' => translate('Discount type must be one of the following:').' '.AmountPercentTypeEnum::implodedLabels(),
-            'plan.tax.numeric' => translate('Tax must be a valid number'),
-            'plan.tax_type.in' => translate('Tax type must be one of the following:').' '.AmountPercentTypeEnum::implodedLabels(),
 
             'plan.features.*.min' => translate('Minimum 4 chars is required for each feature'),
         ];

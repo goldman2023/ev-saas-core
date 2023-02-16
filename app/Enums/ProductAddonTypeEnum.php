@@ -7,7 +7,7 @@ namespace App\Enums;
  * @method static self digital()
  * @method static self event()
  */
-class ProductAddonTypeEnum extends EVBaseEnum
+class ProductAddonTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

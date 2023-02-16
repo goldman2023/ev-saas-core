@@ -13,7 +13,7 @@ namespace App\Enums;
  * @method static self span()
  * @method static self strong()
  */
-class TitleTagEnum extends EVBaseEnum
+class TitleTagEnum extends WeBaseEnum
 {
     public static function values(): array
     {

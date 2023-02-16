@@ -10,7 +10,7 @@ namespace App\Enums;
  * @method static self laptop()
  * @method static self desktop()
  */
-class ResponsiveVisibilityEnum extends EVBaseEnum
+class ResponsiveVisibilityEnum extends WeBaseEnum
 {
     public static function values(): array
     {

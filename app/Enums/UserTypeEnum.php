@@ -9,7 +9,7 @@ namespace App\Enums;
  * @method static self staff()
  * @method static self customer()
  */
-class UserTypeEnum extends EVBaseEnum
+class UserTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

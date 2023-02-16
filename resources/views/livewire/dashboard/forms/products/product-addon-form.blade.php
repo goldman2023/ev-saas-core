@@ -20,8 +20,8 @@
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
 
         // Relationships
-        selected_products: @js($productAddon->products->pluck('id')),
-        selected_taxonomies: @js($productAddon->category_taxonomy->pluck('id')),
+        selected_products: @entangle('selected_products').defer,
+        selected_taxonomies: @entangle('selected_taxonomies').defer,
 
         core_meta: @js($core_meta),
         wef: @js($wef),
@@ -136,7 +136,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select :items="\App\Models\Product::published()->get()->keyBy('id')->map(fn($item) => $item->name)"
+                                    <x-dashboard.form.select :items="\App\Models\Product::published()->get()->keyBy('id')->map(fn($item) => $item->name)->prepend('All', 0)"
                                         selected="selected_products" :multiple="true" :nullable="false" :search="true"></x-dashboard.form.select>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select :items="collect(\Categories::getAllFormatted(for_js: true, flat: true))->keyBy('id')->map(fn($item) => $item['name'])"
+                                    <x-dashboard.form.select :items="collect(\Categories::getAllFormatted(for_js: true, flat: true))->keyBy('id')->map(fn($item) => $item['name'])->prepend('All', 0)"
                                         selected="selected_taxonomies" :multiple="true" :nullable="false" :search="true"></x-dashboard.form.select>
                                 </div>
                             </div>

@@ -8,7 +8,7 @@
     nullable: @js($nullable),
     search: @js($search),
     search_query: '',
-    countSelected() {
+    get countSelected() {
       if(Array.isArray({{ $selected }})) {
         return {{ $selected }}.length;
       } 
@@ -19,21 +19,24 @@
         if(this.isSelected(key)) {
           this.deSelect(key);
         } else {
-          {{ $selected }}.push(key);
+          {{ $selected }}.push(this.castKey(key));
         }
       } else {
-        {{ $selected }} = key;
+        {{ $selected }} = this.castKey(key);
       }
     },
     deSelect(key) {
-      {{ $selected }}.splice({{ $selected }}.indexOf(key), 1);
+      {{ $selected }}.splice({{ $selected }}.indexOf(this.castKey(key)), 1);
     },
     isSelected(key) {
       if(this.multiple) {
-        return {{ $selected }}.indexOf(key) !== -1;
+        return {{ $selected }}.indexOf(this.castKey(key)) !== -1;
       } else {
         return {{ $selected }} == key;
       }
+    },
+    castKey(key) {
+      return window.isNumeric(key) ? Number(key) : key;
     }
 }" 
 x-init="
@@ -58,7 +61,7 @@ x-init="
 {{-- x-effect="items = @js($items); console.log(items)"  --}}
 @if(!empty($xShowIf)) x-show="{!! $xShowIf !!}" @endif
 wire:ignore.self>
-    <div class="relative" wire:ignore.self>
+    <div class="relative" wire:ignore>
 
       <button type="button" @click="open_dropdown = !open_dropdown" 
               class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm {{ $selectorClass ?? '' }} @error($errorField) is-invalid @enderror"
@@ -112,26 +115,25 @@ wire:ignore.self>
       </ul>
 
       <template x-if="multiple">
-        <div class="w-full flex flex-wrap gap-x-2 gap-y-2">
-            <template x-if="countSelected() > 0">
-                <template x-for="(item, key) in {{ $selected }}">
-                    <div class="bg-gray-400 text-gray-900 rounded relative px-2">
-                        <span
-                            class=""
-                            x-text="items[item]"></span>
-                        <button type="button"
-                            class="px-1"
-                            @click="event.stopPropagation(); deSelect(item)">
-                            <span>×</span>
-                        </button>
-                    </div>
-                </template>
-            </template>
-            <template x-if="countSelected() <= 0">
-                <p class="block pb-2 text-14 text-gray-500">
-                  {{ translate('No items selected...') }}
-                </p>
-            </template>
+        <div class="w-full">
+            <div class="w-full flex flex-wrap gap-x-2 gap-y-2" x-show="countSelected > 0">
+              <template x-for="(item, key) in {{ $selected }}">
+                  <div class="bg-gray-400 text-gray-900 rounded relative px-2">
+                      <span
+                          class=""
+                          x-text="items[item]"></span>
+                      <button type="button"
+                          class="px-1"
+                          @click="event.stopPropagation(); deSelect(item)">
+                          <span>×</span>
+                      </button>
+                  </div>
+              </template>
+            </div>
+
+            <p class="block pb-2 text-14 text-gray-500" x-show="countSelected <= 0">
+              {{ translate('No items selected...') }}
+            </p>
         </div>
       </template>
   

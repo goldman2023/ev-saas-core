@@ -9,7 +9,7 @@ namespace App\Enums;
  * @method static self improvement()
  * @method static self other()
  */
-class TaskTypesEnum extends EVBaseEnum
+class TaskTypesEnum extends WeBaseEnum
 {
     public static function values(): array
     {

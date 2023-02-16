@@ -11,7 +11,7 @@ namespace App\Enums;
  * @method static self angry()
  * @method static self insightful()
  */
-class SocialReactionsEnum extends EVBaseEnum
+class SocialReactionsEnum extends WeBaseEnum
 {
     public static function values(): array
     {

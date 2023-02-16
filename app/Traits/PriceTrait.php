@@ -2,11 +2,12 @@
 
 namespace App\Traits;
 
+use FX;
+use App\Models\Plan;
+use App\Models\FlashDeal;
 use App\Builders\BaseBuilder;
 use App\Enums\AmountPercentTypeEnum;
-use App\Models\FlashDeal;
-use App\Models\Plan;
-use FX;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait PriceTrait
 {
@@ -33,7 +34,7 @@ trait PriceTrait
             // Eager Load Flash Deals
             $builder->with(['flash_deals']);
         });
-
+        
         // When model relations data is retrieved, populate model prices data!
         static::relationsRetrieved(function ($model) {
             if (! $model->relationLoaded('flash_deals')) {
@@ -63,6 +64,35 @@ trait PriceTrait
 
         // These calculated prices ARE NOT FILLABLE! They are calculated based on other properties!
         // $this->fillable(array_unique(array_merge($this->fillable, ['total_price', 'discounted_price', 'base_price'])));
+    }
+
+    /**
+     * Get base currency
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function baseCurrency(): Attribute
+    {
+        return Attribute::make(
+            get: function($value) {
+                return !empty($value) ? strtoupper($value) : strtoupper(FX::getDefaultCurrency()->code);
+            },
+        );
+    }
+
+
+    /**
+     * Get discount type
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function discountType(): Attribute
+    {
+        return Attribute::make(
+            get: function($value) {
+                return !empty($value) && AmountPercentTypeEnum::in($value) ? $value : AmountPercentTypeEnum::amount()->value;
+            },
+        );
     }
 
     /************************************
@@ -157,13 +187,7 @@ trait PriceTrait
 
             // TODO: Create tax_relationships table and link it to subjects and taxes!
             // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            if (! empty($this->attributes['tax'])) {
-                if ($this->attributes['tax_type'] === AmountPercentTypeEnum::percent()->value) {
-                    $this->total_price += ($this->total_price * $this->attributes['tax']) / 100;
-                } elseif ($this->attributes['tax_type'] === AmountPercentTypeEnum::amount()->value) {
-                    $this->total_price += $this->attributes['tax'];
-                }
-            }
+            
         }
 
         if ($both_formats) {
@@ -275,16 +299,6 @@ trait PriceTrait
             $this->base_price = 0;
         } elseif (empty($this->base_price)) {
             $this->base_price = $this->attributes[$this->getPriceColumn()];
-
-            // TODO: Create tax_relationship table and link it to subjects and taxes!
-            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            if (! empty($this->attributes['tax'])) {
-                if ($this->attributes['tax_type'] === AmountPercentTypeEnum::percent()->value) {
-                    $this->base_price += ($this->base_price * (float) $this->attributes['tax']) / 100;
-                } elseif ($this->attributes['tax_type'] === AmountPercentTypeEnum::amount()->value) {
-                    $this->base_price += $this->attributes['tax'];
-                }
-            }
         }
 
         if ($both_formats) {
@@ -372,14 +386,7 @@ trait PriceTrait
                 } elseif ($this->yearly_discount_type === AmountPercentTypeEnum::amount()->value) {
                     $this->total_annual_price -= $this->attributes['yearly_discount'];
                 }
-
-                // Then, add Plan specific Tax, if any
-                if ($this->tax_type === AmountPercentTypeEnum::percent()->value) {
-                    $this->total_annual_price += ($this->total_annual_price * $this->attributes['tax']) / 100;
-                } elseif ($this->tax_type === AmountPercentTypeEnum::amount()->value) {
-                    $this->total_annual_price += $this->attributes['tax'];
-                }
-
+                
                 // TODO: Then add global Tax (like VAT)
             } else {
                 // If item is not subscribable, annual price doesn't make sense, so it falls back to one-time total price

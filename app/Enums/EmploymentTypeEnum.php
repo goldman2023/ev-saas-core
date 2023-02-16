@@ -11,7 +11,7 @@ namespace App\Enums;
  * @method static self apprenticeship()
  * @method static self freelance()
  */
-class EmploymentTypeEnum extends EVBaseEnum
+class EmploymentTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

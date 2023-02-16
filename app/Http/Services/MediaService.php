@@ -10,7 +10,6 @@ use Session;
 use SplFileInfo;
 use App\Models\Shop;
 use App\Models\User;
-use App\Models\Brand;
 use App\Models\Upload;
 use App\Models\Product;
 use App\Models\Category;

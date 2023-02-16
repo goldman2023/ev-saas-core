@@ -52,6 +52,9 @@ class ProductAddonForm extends Component
     use HasAttributes;
 
     public $productAddon;
+    public $selected_products;
+    public $selected_taxonomies;
+
     public $is_update;
 
     protected $listeners = [
@@ -101,6 +104,10 @@ class ProductAddonForm extends Component
                 'productAddon.meta_description' => 'nullable',
                 'productAddon.meta_img' => 'nullable',
             ],
+            'relations' => [
+                'selected_products' => 'nullable',
+                'selected_taxonomies' => 'nullable',
+            ],
             'core_meta' => [
                 'core_meta' => [],
             ],
@@ -113,6 +120,7 @@ class ProductAddonForm extends Component
         return $this->getRuleSetsCombined([
             'main',
             'media',
+            'relations',
             'categories',
             'pricing',
             'inventory',
@@ -150,12 +158,13 @@ class ProductAddonForm extends Component
      */
     public function mount(&$productAddon = null)
     {
-        // dd(collect(\Categories::getAllFormatted(for_js: true, flat: true))->keyBy('id')->map(fn($item) => $item['name']));
         // Set default params
         if ($productAddon) {
             // Update
             $this->productAddon = $productAddon;
             $this->is_update = true;
+
+            $this->loadRelations();
         } else {
             // Insert
             $this->is_update = false;
@@ -180,6 +189,9 @@ class ProductAddonForm extends Component
             $this->productAddon->unit_price = 0;
             $this->productAddon->base_currency = FX::getCurrency()->code;
             $this->productAddon->discount_type = AmountPercentTypeEnum::amount()->value;
+
+            $this->selected_products = [];
+            $this->selected_taxonomies = [];
         }
 
         $this->refreshAttributes($this->productAddon);
@@ -238,6 +250,9 @@ class ProductAddonForm extends Component
             // Sync Uploads
             $this->productAddon->syncUploads();
 
+            // Sync Relations
+            $this->syncRelations();
+
             // Save Stocks
             $this->setProductAddonStocks();
 
@@ -259,6 +274,9 @@ class ProductAddonForm extends Component
 
             if (! $this->is_update) {
                 return redirect()->route('product-addon.edit', $this->productAddon->id);
+            } else {
+                // Load relations!
+                $this->loadRelations();
             }
 
             // $this->dispatchBrowserEvent('init-product-form', []);
@@ -268,5 +286,29 @@ class ProductAddonForm extends Component
             $this->dispatchGeneralError(translate('There was an error while saving a product addon.'));
             $this->inform(translate('There was an error while saving a product addon.'), $e->getMessage(), 'fail');
         }
+    }
+
+    protected function syncRelations() {
+        // check if 0 is present which means All
+        if(in_array("0", $this->selected_products)) {
+            $this->productAddon->products_morph()->sync([
+                'all' => []
+            ]);
+        } else {
+            $this->productAddon->products_morph()->sync($this->selected_products ?? []);
+        }
+
+        if(in_array("0", $this->selected_taxonomies)) {
+            $this->productAddon->category_taxonomy_morph()->sync([
+                'all' => []
+            ]);
+        } else {
+            $this->productAddon->category_taxonomy_morph()->sync($this->selected_taxonomies ?? []);
+        }
+    }
+
+    protected function loadRelations() {
+        $this->selected_products = $this->productAddon->products(return_real: true)->get()->pluck('id')->toArray();
+        $this->selected_taxonomies = $this->productAddon->category_taxonomy(return_real: true)->get()->pluck('id')->toArray();
     }
 }

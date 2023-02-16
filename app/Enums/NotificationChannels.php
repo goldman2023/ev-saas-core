@@ -7,7 +7,7 @@ namespace App\Enums;
  * @method static self mail()
  * @method static self sms()
  */
-class NotificationChannelsEnum extends EVBaseEnum
+class NotificationChannelsEnum extends WeBaseEnum
 {
     public static function values(): array
     {
