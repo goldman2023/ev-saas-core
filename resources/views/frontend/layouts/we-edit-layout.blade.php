@@ -77,7 +77,7 @@
         @include('frontend.dashboard.partials.sidebar')
         @include('frontend.dashboard.partials.sidebar-mobile')
 
-        <div class="lg:pl-24 flex flex-col">
+        <div class="flex flex-col">
             @include('frontend.dashboard.navigation.topbar')
 
             <main class="flex-1">
