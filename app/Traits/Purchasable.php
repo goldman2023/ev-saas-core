@@ -4,11 +4,13 @@ namespace App\Traits;
 
 use App\Models\Plan;
 use App\Models\Product;
+use App\Support\Eloquent\Collection;
 
 trait Purchasable
 {
     public bool $is_purchasable = true;
     public $purchase_quantity = 0;
+    public $purchased_addons;
 
     /**
      * Initialize the trait
@@ -17,9 +19,9 @@ trait Purchasable
      */
     public function initializePurchasable(): void
     {
-        $this->appendCoreProperties(['purchase_quantity']);
-        $this->append(['purchase_quantity']);
-        $this->fillable(array_unique(array_merge($this->fillable, ['purchase_quantity'])));
+        $this->appendCoreProperties(['purchase_quantity', 'purchased_addons']);
+        $this->append(['purchase_quantity', 'purchased_addons']);
+        $this->fillable(array_unique(array_merge($this->fillable, ['purchase_quantity', 'addons'])));
     }
 
     /**
@@ -36,6 +38,18 @@ trait Purchasable
     public function getPurchaseQuantityAttribute()
     {
         return $this->purchase_quantity;
+    }
+
+    protected function purchasedAddons(): Attribute
+    {
+        return Attribute::make(
+            get: function($value) {
+                return !empty($value) ? new Collection($value) : new Collection();
+            },
+            set: function($value) {
+                return !empty($value) ? new Collection($value) : new Collection();
+            },
+        );
     }
 
     public function isSubscribable() {

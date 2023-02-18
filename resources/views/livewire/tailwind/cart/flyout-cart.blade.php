@@ -3,6 +3,7 @@
     <div class="h-full flex flex-col relative" x-data="{
             processing: @entangle('processing').defer,
         }">
+
         <x-ev.loaders.spinner class="absolute-center z-10 hidden"
                               wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
@@ -46,22 +47,27 @@
                         @endphp
 
                         <div id="cart-item-{{ $item->id }}-{{ base64_encode($item::class) }}"
-                             class="cart-item border shadow-lg border-gray-200 rounded p-3 flex items-start mb-3"
-                             :class="{ 'pointer-events-none': processing }"
-                             x-data="{
+                            class="cart-item border shadow-lg border-gray-200 rounded p-3 flex items-start mb-3"
+                            :class="{ 'pointer-events-none': processing }"
+                            x-data="{
                                 qty: {{ $item->purchase_quantity }},
                                 model_id: {{ $item->id }},
                                 model_type: '{{ base64_encode($item::class) }}',
-                             }"
-                             x-init="
+                                addons: @js($item->purchased_addons?->map(fn($addon) => [
+                                    'qty' => $addon->purchase_quantity,
+                                    'id' => $addon->id,
+                                    'content_type' => base64_encode($addon::class)
+                                ]) ?? []),
+                            }"
+                            x-init="
                                 $watch('qty', (value, oldValue) => {
                                     if(!processing) {
                                         processing = true;
 
                                         hideWarnings();
-                                        $wire.addToCart(model_id, model_type, value, false);
+                                        $wire.addToCart(model_id, model_type, value, false, addons);
                                     }
-                                 });
+                                });
                             "
                             @cart-processing-end.window="
                                 if(Number($event.detail.id) === Number(model_id) && model_type == $event.detail.model_type) {
@@ -121,6 +127,21 @@
                                         </strong>
                                     </div>
                                 </div>
+
+                                @if($item->purchased_addons->isNotEmpty())
+                                    <ul class="flex flex-col col-span-12 pt-2 mt-2 border-t border-gray-200 gap-y-2">
+                                        @foreach($item->purchased_addons as $addon)
+                                            <li class="flex justify-between ">
+                                                <p class="flex line-clamp-1">
+                                                    <span class="text-14">{{ $addon->name }}</span>
+                                                    <x-system.quantity-counter :parent="$item" :model="$addon" :wired="true" :mini="true"></x-system.quantity-counter>
+                                                    {{-- <span class="text-14">{{ $addon->purchase_quantity }}</span> --}}
+                                                </p>
+                                                <x-system.we-price :model="$addon"></x-system.we-price>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             </div>
 
                         </div>

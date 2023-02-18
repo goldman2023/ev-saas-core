@@ -2,12 +2,13 @@
 
 namespace App\Http\Services;
 
-use App\Models\Shop;
-use Cache;
-use WE;
 use FX;
-use Illuminate\Database\Eloquent\Collection;
+use WE;
+use Cache;
 use Session;
+use App\Models\Shop;
+use App\Models\ProductAddon;
+use Illuminate\Database\Eloquent\Collection;
 
 class CartService
 {
@@ -43,6 +44,8 @@ class CartService
             $this->globalTaxPercentage = 0;
         }
         
+        // Session::put('cart', collect());
+        // dd(Session::put('cart', collect()));
 
         // Refresh cart totals
         $this->refresh();
@@ -105,7 +108,7 @@ class CartService
         return $as_id ? $shop_id : Shop::find($shop_id);
     }
 
-    public function addToCart($model, $model_type, $qty, $append_qty = true)
+    public function addToCart($model, $model_type, $qty, $append_qty = true, $addons = [])
     {
         $warnings = [];
 
@@ -125,7 +128,7 @@ class CartService
             }
 
             // Do only if track_invetory for the product is ENABLED
-            if ($model->track_inventory && $model->current_stock < $qty && ! $model->allow_out_of_stock_purchases) {
+            if ($model->track_inventory && $model->current_stock < $qty && !$model->allow_out_of_stock_purchases) {
                 // Desired qty is bigger than stock qty, add only available amount to cart
 
                 // Add a warning that there was not enough items in stock to fulfill desired QTY
@@ -140,6 +143,7 @@ class CartService
                 'content_type' => $model::class,
                 'id' => $model->id,
                 'qty' => (float) $qty,
+                'addons' => $addons
             ];
 
             if (! empty($desired_item_in_cart)) {
@@ -164,6 +168,7 @@ class CartService
             'model_type' => $model_type,
             'qty' => $qty,
             'append_qty' => $append_qty,
+            'addons' => $addons,
             'warnings' => $warnings,
         ];
     }
@@ -204,6 +209,8 @@ class CartService
                 }
             }
 
+            // Mapped goes through content_type(s)!
+            $mapped_copy = $mapped;
             $mapped = $mapped->map(function ($data, $content_type) use (&$count) {
                 $ids = $data->pluck('id');
 
@@ -211,13 +218,38 @@ class CartService
                 $items = app($content_type)->findMany($ids);
 
                 return $items->map(function ($model, $index) use ($data, &$count) {
+                    $addons = $data->firstWhere('id', $model->id)['addons'] ?? [];
+                    
                     $qty = $data->firstWhere('id', $model->id)['qty'] ?? 1;
                     $model->purchase_quantity = $qty;
                     $count += $qty; // append to total count of all items added to cart
 
+                    // Get product addons (if any) and add them to the Product as relations
+                    if(!empty($addons)) {
+                        $addons = collect($addons)->map(function($addon_data) use(&$count) {
+                            $item = app(base64_decode($addon_data['content_type']))->find($addon_data['id'] ?? 0);
+                            $qty = $addon_data['qty'] ?? 0;
+
+                            if(!empty($item) && $qty > 0) {
+                                $item->purchase_quantity = $qty;
+                                $count += $qty;
+
+                                return $item;
+                            }
+
+                            return null;
+                        })->filter()->values();
+
+                        // Set `purchased_addons` property defined in PurchasableTrait
+                        $model->purchased_addons = $addons;
+                    } else {
+                        $model->purchased_addons = new Collection();
+                    }
+
                     return $model;
                 });
             })->flatten();
+
 
             // sort by initial order and calculate subtotal and total
             $order_items_idx = $cart_items->pluck('id');
@@ -230,15 +262,14 @@ class CartService
                     continue;
 
                 $this->items->push($found_item);
-                
-                $this->originalPrice['raw'] += $found_item->purchase_quantity * $found_item->base_price;
-                $this->discountAmount['raw'] += $found_item->purchase_quantity * ($found_item->base_price - $found_item->total_price);
+                $this->appendToCartTotals($found_item);
 
-                $this->subtotalPrice['raw'] = $this->originalPrice['raw'] - $this->discountAmount['raw']; // Subtotal: Original - Line discounts
-                
-                $this->taxAmount['raw'] = $this->subtotalPrice['raw'] * $this->globalTaxPercentage / 100; // Tax: globalTaxPercentage of Subtotal
-
-                $this->totalPrice['raw'] = $this->subtotalPrice['raw'] + $this->taxAmount['raw']; // Total: Subtotal + Tax
+                // Append addons to cart totals
+                if($found_item->purchased_addons instanceof Collection && $found_item->purchased_addons->isNotEmpty()) {
+                    foreach($found_item->purchased_addons as $addon) {
+                        $this->appendToCartTotals($addon);
+                    }
+                }
             }
 
             $this->originalPrice['display'] = FX::formatPrice($this->originalPrice['raw']);
@@ -251,6 +282,14 @@ class CartService
         } else {
             $this->resetCart();
         }
+    }
+
+    protected function appendToCartTotals($model) {
+        $this->originalPrice['raw'] += $model->purchase_quantity * $model->base_price;
+        $this->discountAmount['raw'] += $model->purchase_quantity * ($model->base_price - $model->total_price);
+        $this->subtotalPrice['raw'] = $this->originalPrice['raw'] - $this->discountAmount['raw']; // Subtotal: Original - Line discounts
+        $this->taxAmount['raw'] = $this->subtotalPrice['raw'] * $this->globalTaxPercentage / 100; // Tax: globalTaxPercentage of Subtotal
+        $this->totalPrice['raw'] = $this->subtotalPrice['raw'] + $this->taxAmount['raw']; // Total: Subtotal + Tax
     }
 
     public function fullCartReset()

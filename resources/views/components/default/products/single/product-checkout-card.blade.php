@@ -12,25 +12,44 @@
             total_price_display: '{{ ($product->hasVariations()) ? $first_variation->getTotalPrice(true) : $product->getTotalPrice(true) }}',
             base_price: {{ ($product->hasVariations()) ? $first_variation->base_price : $product->base_price }},
             base_price_display: '{{ ($product->hasVariations()) ? $first_variation->getBasePrice(true) : $product->getBasePrice(true) }}',
+            addons: [],
+            toggleAddon(addon_id, addon_type, addon_qty) {
+                let addonIndex = this.addons.findIndex((addon) => addon.id == addon_id && addon.content_type == addon_type);
+
+                if(addonIndex >= 0) {
+                    // In addons array already - remove it
+                    this.addons.splice(addonIndex, 1);
+                } else {
+                    // Not in addons array yet - push it
+                    this.addons.push({
+                        content_type: addon_type,
+                        id: addon_id,
+                        qty: addon_qty
+                    });
+                }
+            }
         }" @cart-processing-end.window="
             if(Number($event.detail.id) === Number(model_id) && model_type == $event.detail.model_type) {
                 qty = 1;
+                addons = [];
                 processing = false;
+
                 $dispatch('display-flyout-panel', {'id': 'cart-panel'});
             }
-        " @if($product->hasVariations())
-    @variation-changed.window="
-        qty = 0;
-        current_stock = $event.detail.current_stock;
-        is_low_stock = $event.detail.is_low_stock;
-        model_id = $event.detail.model_id;
-        model_type = $event.detail.model_type;
-        total_price = $event.detail.total_price;
-        total_price_display = $event.detail.total_price_display;
-        base_price = $event.detail.base_price;
-        base_price_display = $event.detail.base_price_display;
-    "
-    @endif
+        " 
+        @if($product->hasVariations())
+            @variation-changed.window="
+                qty = 0;
+                current_stock = $event.detail.current_stock;
+                is_low_stock = $event.detail.is_low_stock;
+                model_id = $event.detail.model_id;
+                model_type = $event.detail.model_type;
+                total_price = $event.detail.total_price;
+                total_price_display = $event.detail.total_price_display;
+                base_price = $event.detail.base_price;
+                base_price_display = $event.detail.base_price_display;
+            "
+        @endif
     >
     <x-ev.loaders.spinner class="absolute-center z-10" x-show="processing_variation_change" x-cloak>
     </x-ev.loaders.spinner>
@@ -48,27 +67,33 @@
                 </livewire:tenant.product.product-variations-selector>
             @endif
 
+            {{-- Product Addons --}}
             @if($product->product_addons->isNotEmpty())
                 <fieldset class="border-t border-b border-gray-200 my-3">
                     <div class="divide-y divide-gray-200">
                         @foreach($product->product_addons as $addon)
                             <div class="relative flex items-start py-4">
                                 <div class="mr-3 flex h-5 items-center cursor-pointer">
-                                    <input id="comments" aria-describedby="comments-description" name="comments" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                    <input id="product-addon-{{ $addon->slug.'-'.$addon->id }}" type="checkbox" value="{{ $addon->id }}"
+                                        x-on:change="toggleAddon({{ $addon->id }}, '{{ base64_encode($addon::class) }}', 1)"
+                                        :checked="addons.findIndex((addon) => addon.id == {{ $addon->id }} && addon.content_type == '{{ base64_encode($addon::class) }}') >= 0"
+                                        class="h-4 w-4 rounded border-gray-300 text-primary">
                                 </div>
 
                                 <div class="min-w-0 flex-1 text-sm">
-                                    <label for="comments" class="flex justify-between font-medium text-gray-700">
+                                    <label for="product-addon-{{ $addon->slug.'-'.$addon->id }}" class="flex justify-between font-medium text-gray-700">
                                         <strong>{{ $addon->name }}</strong>
                                         <strong class="text-gray-600 line-clamp-1">{{ translate('Price') }}: {{ $addon->getTotalPrice(true) }}</strong>
                                     </label>
-                                    <p id="comments-description" class="text-gray-500 line-clamp-1">{{ $addon->excerpt }}</p>
+                                    <p class="text-gray-500 line-clamp-1">{{ $addon->excerpt }}</p>
                                 </div>
                             </div>
                         @endforeach
                     </div>
                 </fieldset>
             @endif
+            {{-- END Product Addons --}}
+
             
             @if($product->track_iventory)
                 <p class="py-2 mb-0">
@@ -119,8 +144,4 @@
             </livewire:actions.social-action-button>
         </div>
     </div>
-
-
-
-
 </div>
