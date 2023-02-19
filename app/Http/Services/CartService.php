@@ -146,10 +146,6 @@ class CartService
         }
     }
 
-    protected function addonsStockChecker(&$addons, &$warnings) {
-
-    }
-
     public function addToCart(&$model, $model_type, $qty, $append_qty = true, $addons = [], $append_addons_qty = true)
     {
         $warnings = [];

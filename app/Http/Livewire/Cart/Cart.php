@@ -100,7 +100,13 @@ class Cart extends Component
         // This is not the case for Add to cart button because qty counter is reset once addToButton is clicked!
         // IMPORTANT: $qty is sent by reference!!!
         
+        // Remove item from cart if qty is 0 and $append_qty is not set
+        if($qty <= 0 && !$append_qty) {
+            return $this->removeFromCart($model, $model_type);
+        }
+
         $new_data = $this->baseEncodeContentTypes(CartService::addToCart($model, $model_type, $qty, $append_qty, $addons, $append_addons_qty));
+
 
         // Refresh Cart Livewire components
         $this->refreshCart();
