@@ -108,11 +108,54 @@ class CartService
         return $as_id ? $shop_id : Shop::find($shop_id);
     }
 
-    public function addToCart($model, $model_type, $qty, $append_qty = true, $addons = [])
+    protected function getDesiredItemFromCart($model, $model_type = '') {
+        $cart_items = collect(Session::get('cart'));
+
+        if(is_numeric($model)) {
+            return $cart_items->first(fn ($item, $key) => $item['id'] === $model && $item['model_type'] === $model_type);
+        } else {
+            return $cart_items->first(fn ($item, $key) => $item['id'] === $model->id && $item['model_type'] === $model::class);
+        }
+    }
+
+    protected function getDesiredAddonFromCart($model, $addon, $model_type = '', $addon_type = '') {
+        $item_in_cart = $this->getDesiredItemFromCart($model, $model_type);
+
+        if(!empty($item_in_cart['addons'] ?? null)) {
+
+            if(is_numeric($addon)) {
+                return collect($item_in_cart['addons'])->first(fn ($item, $key) => $item['id'] === $addon && $item['model_type'] === $addon_type);
+            } else {
+                return collect($item_in_cart['addons'])->first(fn ($item, $key) => $item['id'] === $addon->id && $item['model_type'] === $addon::class);
+            }
+        }
+
+        return null;
+    }
+
+    protected function stockChecker(&$model, &$qty, &$warnings) {
+        // Do only if track_invetory for the model is ENABLED
+        if ($model->track_inventory && $model->current_stock < $qty && !$model->allow_out_of_stock_purchases) {
+            // Desired qty is bigger than stock qty, add only available amount to cart
+
+            // Add a warning that there was not enough items in stock to fulfill desired QTY
+            $model_name = ($model?->is_variation ?? false) ? $model->main->name.' ('.$model->getVariantName(key_by: 'name')->map(fn ($item, $key) => $key.': '.$item)->join(', ').')' : $model->name;
+            $warnings[] = '<strong>'.$model_name.':</strong> '.translate('There are not enough items in stock to fulfill desired quantity. All available items in stock are added to the cart.');
+
+            $qty = $model->current_stock;
+        }
+    }
+
+    protected function addonsStockChecker(&$addons, &$warnings) {
+
+    }
+
+    public function addToCart(&$model, $model_type, $qty, $append_qty = true, $addons = [], $append_addons_qty = true)
     {
         $warnings = [];
 
         if (is_numeric($model)) {
+            $model_type = base64_decode($model_type);
             $model = app($model_type)::find($model);
         }
 
@@ -120,27 +163,55 @@ class CartService
 
         // Add to cart only if Model is purchasable
         if (isset($model->is_purchasable) && $model->is_purchasable) {
-            $desired_item_in_cart = $cart_items->first(fn ($item, $key) => $item['id'] === $model->id && $item['content_type'] === $model::class);
+            $desired_item_in_cart = $this->getDesiredItemFromCart($model);
 
             if (! empty($desired_item_in_cart) && $append_qty) {
-                // Desired item is in cart already, check if there is enough of that item in stock
+                // Desired item is in cart already, append desired $qty to already existing qty of same item in cart
                 $qty += $desired_item_in_cart['qty'];
             }
 
-            // Do only if track_invetory for the product is ENABLED
-            if ($model->track_inventory && $model->current_stock < $qty && !$model->allow_out_of_stock_purchases) {
-                // Desired qty is bigger than stock qty, add only available amount to cart
+            // Check if there's enough items in stock (if tracking_inventory is enabled)
+            $this->stockChecker($model, $qty, $warnings);
 
-                // Add a warning that there was not enough items in stock to fulfill desired QTY
-                $model_name = ($model?->is_variation ?? false) ? $model->main->name.' ('.$model->getVariantName(key_by: 'name')->map(fn ($item, $key) => $key.': '.$item)->join(', ').')' : $model->name;
-                $warnings[] = '<strong>'.$model_name.':</strong> '.translate('There are not enough items in stock to fulfill desired quantity. All available items in stock are added to the cart.');
+            // Addons
+            if(!empty($addons)) {
+                foreach($addons as $index => $addon) {
+                    $addon_type = base64_decode($addon['model_type']);
+                    $addons[$index]['model_type'] = $addon_type; // set addon model_type to be decoded base64!
 
-                $qty = $model->current_stock;
+                    $addon_model = app($addon_type)::find($addon['id']);
+                    $desired_addon_in_cart = $this->getDesiredAddonFromCart(model: $model, addon: $addon_model);
+
+                    if (! empty($desired_addon_in_cart) && $append_addons_qty) {
+                        // Desired addon is in cart already, append desired qty to already existing qty of same addon in cart
+                        $addons[$index]['qty'] += $desired_addon_in_cart['qty'];
+                    }
+
+                    $this->stockChecker($addon_model, $addons[$index]['qty'], $warnings);
+                }
             }
 
+            // Merge existing addons and added addons
+            if(!empty($desired_item_in_cart['addons'])) {
+                foreach($desired_item_in_cart['addons'] as $existing_addon) {
+                    if(collect($addons)->search(function ($item, $key) use($existing_addon) {
+                        return $existing_addon['id'] === $item['id'] && $existing_addon['model_type'] === $item['model_type'];
+                    }) === false) {
+                        array_unshift($addons, $existing_addon);
+                    }
+                }
+            }
+
+            // IMPORTANT: Sorting by ID is a must - due to alpinejs array reordering on FE if no sorting is done in BE
+            usort($addons, function($a, $b) {
+                return strcmp($a['id'], $b['id']);
+            });
+
+            $addons = array_values($addons); // reset keys!
+            
             // Construct $model data for cart session storage
             $data = [
-                'content_type' => $model::class,
+                'model_type' => $model::class,
                 'id' => $model->id,
                 'qty' => (float) $qty,
                 'addons' => $addons
@@ -148,7 +219,7 @@ class CartService
 
             if (! empty($desired_item_in_cart)) {
                 // Update $qty of desired $model in cart_items IF ITEM IS IN CART SESSION
-                $index = $cart_items->search(fn ($item, $key) => $item['id'] === $model->id && $item['content_type'] === $model::class);
+                $index = $cart_items->search(fn ($item, $key) => $item['id'] === $model->id && $item['model_type'] === $model::class);
                 $cart_items->put($index, $data);
             } else {
                 // Push desired $model to cart items IF ITEM IS NOT IN CART SESSION
@@ -180,7 +251,7 @@ class CartService
         }
 
         $cart_items = collect(Session::get('cart'));
-        $index = $cart_items->search(fn ($item, $key) => $item['id'] === $model->id && $item['content_type'] === $model::class);
+        $index = $cart_items->search(fn ($item, $key) => $item['id'] === $model->id && $item['model_type'] === $model::class);
 
         $cart_items->pull($index);
 
@@ -200,22 +271,22 @@ class CartService
             $mapped = collect();
 
             foreach ($cart_items as $item) {
-                if ($mapped->has($item['content_type'])) {
-                    $collection = $mapped->get($item['content_type']);
+                if ($mapped->has($item['model_type'])) {
+                    $collection = $mapped->get($item['model_type']);
                     $collection->push($item);
-                    $mapped->put($item['content_type'], $collection);
+                    $mapped->put($item['model_type'], $collection);
                 } else {
-                    $mapped->put($item['content_type'], collect([$item]));
+                    $mapped->put($item['model_type'], collect([$item]));
                 }
             }
 
-            // Mapped goes through content_type(s)!
+            // Mapped goes through model_type(s)!
             $mapped_copy = $mapped;
-            $mapped = $mapped->map(function ($data, $content_type) use (&$count) {
+            $mapped = $mapped->map(function ($data, $model_type) use (&$count) {
                 $ids = $data->pluck('id');
 
                 // TODO: Eager load translations and parent (if these relations are available) - think of a way to do it
-                $items = app($content_type)->findMany($ids);
+                $items = app($model_type)->findMany($ids);
 
                 return $items->map(function ($model, $index) use ($data, &$count) {
                     $addons = $data->firstWhere('id', $model->id)['addons'] ?? [];
@@ -226,8 +297,8 @@ class CartService
 
                     // Get product addons (if any) and add them to the Product as relations
                     if(!empty($addons)) {
-                        $addons = collect($addons)->map(function($addon_data) use(&$count) {
-                            $item = app(base64_decode($addon_data['content_type']))->find($addon_data['id'] ?? 0);
+                        $addons = (new Collection($addons))->map(function($addon_data) use(&$count) {
+                            $item = app($addon_data['model_type'])->find($addon_data['id'] ?? 0);
                             $qty = $addon_data['qty'] ?? 0;
 
                             if(!empty($item) && $qty > 0) {

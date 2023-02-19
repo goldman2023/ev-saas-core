@@ -14,7 +14,7 @@
             base_price_display: '{{ ($product->hasVariations()) ? $first_variation->getBasePrice(true) : $product->getBasePrice(true) }}',
             addons: [],
             toggleAddon(addon_id, addon_type, addon_qty) {
-                let addonIndex = this.addons.findIndex((addon) => addon.id == addon_id && addon.content_type == addon_type);
+                let addonIndex = this.addons.findIndex((addon) => addon.id == addon_id && addon.model_type == addon_type);
 
                 if(addonIndex >= 0) {
                     // In addons array already - remove it
@@ -22,7 +22,7 @@
                 } else {
                     // Not in addons array yet - push it
                     this.addons.push({
-                        content_type: addon_type,
+                        model_type: addon_type,
                         id: addon_id,
                         qty: addon_qty
                     });
@@ -57,6 +57,7 @@
     <div class="w-full" :class="{'opacity-3':processing_variation_change}">
 
         <div class="w-full flex flex-col pb-5 border-b border-gray-200">
+            {{-- TODO: use we-price instead or something like that... --}}
             <livewire:tenant.product.price :model="$product" :with_label="true" :with-discount-label="true"
                 original-price-class="text-body text-16" total-price-class="text-24 fw-700 text-primary">
             </livewire:tenant.product.price>
@@ -69,15 +70,25 @@
 
             {{-- Product Addons --}}
             @if($product->product_addons->isNotEmpty())
-                <fieldset class="border-t border-b border-gray-200 my-3">
+                <fieldset class="border-t border-b border-gray-200 my-3" wire:ignore>
                     <div class="divide-y divide-gray-200">
                         @foreach($product->product_addons as $addon)
-                            <div class="relative flex items-start py-4">
+                            <div class="relative flex items-start py-4" x-data="{
+                                reactiveChecked($el) {
+                                    {{-- Reason for not using alpine's `:checked` and using x-effect instead, is that :checked doesn't work as expected and is not reactive when addons = [] is done somewhere in code - it doesn't deselect. --}}
+                                    {{-- x-effect is alpine's core reactivity function, so it has to work! --}}
+                                    if(addons.findIndex((addon) => addon.id == {{ $addon->id }} && addon.model_type == '{{ base64_encode($addon::class) }}') >= 0) {
+                                        $el.checked = true;
+                                    } else {
+                                        $el.checked = false;
+                                    }
+                                }
+                            }">
                                 <div class="mr-3 flex h-5 items-center cursor-pointer">
                                     <input id="product-addon-{{ $addon->slug.'-'.$addon->id }}" type="checkbox" value="{{ $addon->id }}"
                                         x-on:change="toggleAddon({{ $addon->id }}, '{{ base64_encode($addon::class) }}', 1)"
-                                        :checked="addons.findIndex((addon) => addon.id == {{ $addon->id }} && addon.content_type == '{{ base64_encode($addon::class) }}') >= 0"
-                                        class="h-4 w-4 rounded border-gray-300 text-primary">
+                                        x-effect="reactiveChecked($el)"
+                                        class="h-4 w-4 rounded border-gray-300 text-primary" wire:ignore.self>
                                 </div>
 
                                 <div class="min-w-0 flex-1 text-sm">

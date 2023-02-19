@@ -56,23 +56,22 @@
                                 addons: @js($item->purchased_addons?->map(fn($addon) => [
                                     'qty' => $addon->purchase_quantity,
                                     'id' => $addon->id,
-                                    'content_type' => base64_encode($addon::class)
-                                ]) ?? []),
-                            }"
-                            x-init="
-                                $watch('qty', (value, oldValue) => {
+                                    'model_type' => base64_encode($addon::class),
+                                ])?->sortBy('id', SORT_NATURAL)?->values() ?? []),
+                                setQtyInCart() {
                                     if(!processing) {
                                         processing = true;
 
                                         hideWarnings();
-                                        $wire.addToCart(model_id, model_type, value, false, addons);
+                                        $wire.addToCart(this.model_id, this.model_type, this.qty, false, this.addons, false);
                                     }
-                                });
-                            "
+                                }
+                            }"
                             @cart-processing-end.window="
                                 if(Number($event.detail.id) === Number(model_id) && model_type == $event.detail.model_type) {
                                     {{-- TODO: Find a way to prevent $watch of qty property here - cuz we are setting it again! --}}
                                     qty = $event.detail.qty;
+                                    addons = $event.detail.addons;
                                 }
                             "
                              @cart-item-warnings.window="
