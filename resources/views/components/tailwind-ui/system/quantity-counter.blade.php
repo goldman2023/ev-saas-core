@@ -6,9 +6,16 @@
         class="inline-flex flex-row items-center justify-center"
         x-data="{
             disabled: @js($disabled),
+            reactiveValue($el) {
+                addons.forEach((addon) => {
+                    if(Number(addon.id) === Number({{ $model->id }}) && addon.model_type === '{{ base64_encode($model::class) }}') {
+                        $el.value = addon.qty;
+                    }
+                });
+            }
         }"
         x-ref="quantity-counter-mini-input-{{ $model->id }}-{{ base64_encode($model::class) }}"
-        x-init="$watch('{{ $qtyField }}', function(value) { if(Number(value) < 0) { {{ $qtyField }} = 0; } })"
+        {{-- x-init="$watch('{{ $qtyField }}', function(value) { if(Number(value) < 0) { {{ $qtyField }} = 0; } })" --}}
         :class="{'pointer-events-none opacity-60': disabled}"
         @if(method_exists($model, 'hasVariations') && $model?->hasVariations() ?? false)
             @variation-changed.window="
@@ -30,7 +37,12 @@
                     wire:key="quantity-counter-mini-input-form-{{ $model->id }}-{{ base64_encode($model::class) }}"
                     :key="quantity-counter-mini-input-form-{{ $model->id }}-{{ base64_encode($model::class) }}"
                     x-on:change.lazy="{{ $qtyField }} = Number($el.value); setQtyInCart();"
-                    :value="{{ $qtyField }}">
+                    @if($parent)
+                        x-effect="reactiveValue($el)"
+                    @else
+                        :value="{{ $qtyField }}"
+                    @endif
+                    >
             </div>
             <button @click="{{ $qtyField }}++; setQtyInCart();" class="inline-flex items-center p-1 text-sm font-medium text-gray-500 bg-white rounded-full border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" type="button">
                 @svg('heroicon-o-plus', ['class' => 'w-4 h-4'])

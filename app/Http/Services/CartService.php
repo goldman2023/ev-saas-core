@@ -198,6 +198,16 @@ class CartService
                 }
             }
 
+            // Search for addons that have qty 0, and remove them from addons array!
+            if(!empty($addons)) {
+                foreach($addons as $index => $addon) {
+                    if($addon['qty'] === 0) {
+                        unset($addons[$index]);
+                    }
+                }
+            }
+            $addons = array_values($addons); // reset keys!
+
             // IMPORTANT: Sorting by ID is a must - due to alpinejs array reordering on FE if no sorting is done in BE
             usort($addons, function($a, $b) {
                 return strcmp($a['id'], $b['id']);
