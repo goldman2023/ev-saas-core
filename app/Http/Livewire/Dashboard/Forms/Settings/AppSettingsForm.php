@@ -67,6 +67,7 @@ class AppSettingsForm extends Component
                 'settings.company_vat' => [''],
                 'settings.company_email' => [''],
                 'settings.company_tax_rate' => ['required', 'numeric'],
+                'settings.include_tax' => [],
             ]),
             /* TODO: Enable disable specific product types in app settings */
             /* WARNING THIS OPTION IS WORK IN PROGRESS */

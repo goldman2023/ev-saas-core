@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Builders\CteBuilder;
 use App\Traits\UploadTrait;
-use App\Builders\CteBuilder;
 use App\Traits\GalleryTrait;
 use App\Traits\AttributeTrait;
 use Illuminate\Database\Eloquent\Model;

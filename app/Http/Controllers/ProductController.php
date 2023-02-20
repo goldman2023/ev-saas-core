@@ -213,8 +213,6 @@ class ProductController extends Controller
         }
 
 
-
-
         return view('frontend.product.single.' . $template, $data);
     }
 

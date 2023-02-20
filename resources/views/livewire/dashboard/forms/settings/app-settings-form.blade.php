@@ -305,6 +305,19 @@
                                 </div>
                                 <!-- END Company tax rate  -->
 
+                                <!-- Include Tax -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Include Tax') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.toggle field="settings.include_tax" />
+                                    </div>
+                                </div>
+                                <!-- END Include Tax  -->
+
                                 <!-- Company email -->
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
                                     x-data="{}">
@@ -468,6 +481,7 @@
                                         $wire.set('settings.seo_meta_image', settings.seo_meta_image?.id, true);
                                         $wire.set('settings.maintenance_mode', settings.maintenance_mode, true);
                                         $wire.set('settings.brands_ct_enabled', settings.brands_ct_enabled, true);
+                                        $wire.set('settings.include_tax', settings.include_tax, true);
                                         @do_action('view.app-settings-form.general.wire_set')
                                     " wire:click="saveGeneral()">
                                         {{ translate('Save') }}

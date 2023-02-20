@@ -2,27 +2,25 @@
 
 namespace App\Http\Livewire\Dashboard\Tables;
 
-use App\Enums\ProductTypeEnum;
-use App\Enums\StatusEnum;
-use App\Facades\MyShop;
+use DB;
+use StripeService;
 use App\Models\Order;
 use App\Models\Orders;
+use App\Facades\MyShop;
 use App\Models\Product;
+use App\Enums\StatusEnum;
+use App\Enums\ProductTypeEnum;
 use App\Traits\Livewire\CanDelete;
 use App\Traits\Livewire\DispatchSupport;
-use DB;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
-use StripeService;
+use Rappasoft\LaravelLivewireTables\DataTableComponent;
 
 class ProductsTable extends DataTableComponent
 {
     use DispatchSupport;
     use CanDelete;
-
-    public $for = 'me';
 
     public ?int $searchFilterDebounce = 800;
 
@@ -102,8 +100,8 @@ class ProductsTable extends DataTableComponent
     public function query(): Builder
     {
         return Product::query()
-            ->when($this->for === 'me', fn ($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
-            ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
+            // ->when($this->for === 'me', fn ($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
+            // ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status))
             ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type));

@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use FX;
 use WE;
+use TaxService;
 use Cache;
 use Session;
 use App\Models\Shop;
@@ -26,7 +27,6 @@ class CartService
 
     protected $totalPrice;
 
-    protected $globalTaxPercentage; // TODO: Make tax system in taxes table which depend on country! For now we are just adding global tax to everyone...
 
     public function __construct($app)
     {
@@ -34,26 +34,8 @@ class CartService
             Session::put('cart', collect());
         }
 
-        // Taxes
-        try {
-            $this->globalTaxPercentage = (float) get_tenant_setting('company_tax_rate');
-            if(empty($this->globalTaxPercentage)) {
-                $this->globalTaxPercentage = 0;
-            }
-        } catch(\Exception $e)  {
-            $this->globalTaxPercentage = 0;
-        }
-        
-        // Session::put('cart', collect());
-        // dd(Session::put('cart', collect()));
-
         // Refresh cart totals
         $this->refresh();
-    }
-
-    public function getGlobalTaxPercentage()
-    {
-        return $this->globalTaxPercentage;
     }
 
     public function getItems()
@@ -365,8 +347,15 @@ class CartService
         $this->originalPrice['raw'] += $model->purchase_quantity * $model->base_price;
         $this->discountAmount['raw'] += $model->purchase_quantity * ($model->base_price - $model->total_price);
         $this->subtotalPrice['raw'] = $this->originalPrice['raw'] - $this->discountAmount['raw']; // Subtotal: Original - Line discounts
-        $this->taxAmount['raw'] = $this->subtotalPrice['raw'] * $this->globalTaxPercentage / 100; // Tax: globalTaxPercentage of Subtotal
-        $this->totalPrice['raw'] = $this->subtotalPrice['raw'] + $this->taxAmount['raw']; // Total: Subtotal + Tax
+        $this->taxAmount['raw'] = $this->subtotalPrice['raw'] * TaxService::getGlobalTaxPercentage() / 100; // Tax: globalTaxPercentage of Subtotal
+
+        if(TaxService::isTaxIncluded()) {
+            // Tax Included
+            $this->totalPrice['raw'] =  $this->subtotalPrice['raw'];
+        } else {
+            // Tax Excluded
+            $this->totalPrice['raw'] = $this->subtotalPrice['raw'] + $this->taxAmount['raw']; // Total: Subtotal + Tax
+        }
     }
 
     public function fullCartReset()

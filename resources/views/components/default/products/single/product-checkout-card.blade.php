@@ -94,8 +94,9 @@
                                 <div class="min-w-0 flex-1 text-sm">
                                     <label for="product-addon-{{ $addon->slug.'-'.$addon->id }}" class="flex justify-between font-medium text-gray-700">
                                         <strong>{{ $addon->name }}</strong>
-                                        <strong class="text-gray-600 line-clamp-1">{{ translate('Price') }}: {{ $addon->getTotalPrice(true) }}</strong>
+                                        <x-system.we-price :model="$addon"></x-system.we-price>
                                     </label>
+                                    
                                     <p class="text-gray-500 line-clamp-1">{{ $addon->excerpt }}</p>
                                 </div>
                             </div>

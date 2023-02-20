@@ -290,6 +290,7 @@ return [
         'WE' => App\Facades\WE::class,
         'WEF' => App\Facades\WEF::class,
         'WeTheme' => App\Facades\WeTheme::class,
+        'TaxService' => App\Facades\TaxService::class,
         'CartService' => App\Facades\CartService::class,
         'TenantSettings' => App\Facades\TenantSettings::class,
         'Payments' => App\Facades\Payments::class,

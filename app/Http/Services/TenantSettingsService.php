@@ -148,7 +148,9 @@ class TenantSettingsService
             'company_vat' => 'string',
             'company_email' => 'string',
 
+            // TAX
             'company_tax_rate' => 'decimal',
+            'include_tax' => 'boolean',
 
             // SEO
             'seo_meta_image' => Upload::class,
