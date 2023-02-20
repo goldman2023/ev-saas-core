@@ -43,6 +43,7 @@ class Order extends WeBaseModel
         'same_billing_shipping' => 'boolean',
         'viewed' => 'boolean',
         'buyers_consent' => 'boolean',
+        'tax_incl' => 'boolean',
         // 'created_at' => 'datetime:d.m.Y H:i',
         // 'updated_at' => 'datetime:d.m.Y H:i',
     ];
@@ -52,7 +53,7 @@ class Order extends WeBaseModel
         'phone_numbers', 'same_billing_shipping',
         'shipping_first_name', 'shipping_last_name', 'shipping_company', 'shipping_address', 'shipping_country', 'shipping_state', 'shipping_city', 'shipping_zip',
         'note', 'terms', 'number_of_invoices', 'invoicing_period', 'invoice_grace_period', 'invoicing_start_date',
-        'shipping_method', 'shipping_cost', 'tax', 'payment_status', 'shipping_status', 'tracking_number', 'viewed', 'buyers_consent'
+        'shipping_method', 'shipping_cost', 'tax', 'tax_incl', 'payment_status', 'shipping_status', 'tracking_number', 'viewed', 'buyers_consent'
     ];
 
     public mixed $base_price;

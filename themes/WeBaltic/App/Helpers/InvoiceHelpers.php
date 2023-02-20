@@ -258,8 +258,9 @@ if (!function_exists('generateInvoicePDF')) {
             'via_payment_method' => function() use($invoice) {
                 return Payments::getViaLabel($invoice);
             },
-            'taxable_amount' => TaxService::isTaxIncluded() ? ($invoice->total_price - TaxService::calculateTaxAmount($invoice->total_price)) : null,
-            'taxes_amount' => TaxService::isTaxIncluded() ? TaxService::calculateTaxAmount($invoice->total_price) : null,
+            'tax_incl' => $invoice->tax_incl,
+            'taxable_amount' => $invoice->tax_incl ? ($invoice->total_price - $invoice->tax) : null,
+            'taxes_amount' => $invoice->tax_incl ? $invoice->tax : null,
         ];
         
         // Create PDF with $invoice data and stream it
@@ -298,7 +299,7 @@ if (!function_exists('generateInvoicePDF')) {
             return $invoice_path.'.pdf';
         }
 
-        if($invoice->tax > 0 && !TaxService::isTaxIncluded()) {
+        if($invoice->tax > 0 && !$invoice->tax_incl) {
             $pdf->totalTaxes($invoice->tax);
         }
 

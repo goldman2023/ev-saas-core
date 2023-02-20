@@ -342,14 +342,14 @@
                 </tr>
             @endif
 
-            @if($invoice->taxable_amount || TaxService::isTaxIncluded())
+            @if($invoice->taxable_amount || $invoice->getCustomData()['tax_incl'])
             <tr>
                 <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
                 <td class="text-right pl-0">{{ __('invoices::invoice.taxable_amount') }}</td>
                 <td class="text-right pr-0">
                     @if(!empty($invoice->taxable_amount))
                         {{ $invoice->formatCurrency($invoice->taxable_amount) }}
-                    @elseif(TaxService::isTaxIncluded() && !empty($invoice->getCustomData()['taxable_amount']))
+                    @elseif(!empty($invoice->getCustomData()['taxable_amount']))
                         {{ $invoice->formatCurrency($invoice->getCustomData()['taxable_amount']) }}
                     @endif
                 </td>
@@ -367,7 +367,7 @@
 
             
 
-            @if($invoice->hasItemOrInvoiceTax() || TaxService::isTaxIncluded())
+            @if($invoice->hasItemOrInvoiceTax() || $invoice->getCustomData()['tax_incl'])
             <tr>
                 <td colspan="{{ $invoice->table_columns - 2 }}" class="border-0"></td>
                 @if(!empty($invoice->getCustomData()['total_taxes_label'] ?? null))
@@ -377,7 +377,7 @@
                 @endif
 
                 <td class="text-right pr-0">
-                    @if(TaxService::isTaxIncluded() && !empty($invoice->getCustomData()['taxes_amount']))
+                    @if($invoice->getCustomData()['tax_incl'] && !empty($invoice->getCustomData()['taxes_amount']))
                         {{ $invoice->formatCurrency($invoice->getCustomData()['taxes_amount']) }}
                     @else
                         {{ $invoice->formatCurrency($invoice->total_taxes) }}
