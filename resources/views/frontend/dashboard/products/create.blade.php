@@ -9,8 +9,9 @@
 @endpush
 
 @push('head_scripts')
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<script src="{{ mix('js/editor.js', 'themes/WeTailwind') }}" defer></script>
 @endpush
+
 
 @section('panel_content')
     <section id="app">
