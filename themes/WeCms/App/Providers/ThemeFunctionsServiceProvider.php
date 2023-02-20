@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Log;
 
 class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
+
+    protected function setNotificationsFilters() {
+        // add_filter('notifications.user-welcome.subject', fn($subject) => translate('Hello from Nium'));
+    }
+
+
     protected function getTenantAppSettings(): array
     {
         return [

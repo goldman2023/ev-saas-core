@@ -9,6 +9,14 @@
     .gjs-editor {
         min-height: 100vh;
     }
+    .gjs-block svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .gjs-block {
+        width: 100% !important;
+    }
 </style>
 
 <link rel="stylesheet" href="{{ static_asset('bp-assets/grape/grape.min.css') }}">
@@ -29,10 +37,19 @@
 @section('content')
 
 <div class="w-full" x-data="grapeEditor" x-init="initGrapeEditor()">
-    <div id="gjs" style="min-height: 100vh;">
+    <div class="bg-gray-600 text-xs"
+        style="width: 250px; position: absolute; left: 0; top: 0; height: 100vh; overflow-y:scoll; z-index: 9999;"
+        id="blocks">
+        <h2 class="text-xl text-white mb-2 w-full p-3">Sections</h2>
+        </div>
+
+    <div id="gjs" style="padding-left: 250px; min-height: 100vh;">
         <div data-gjs-editable="false">
             {!! $content !!}
         </div>
+    </div>
+
+    <div id="styles-manager">
     </div>
 
     <div class="w-full flex justify-between">
@@ -70,6 +87,9 @@
                 container: '#gjs',
                 height: '90%',
                 selectorManager: { escapeName },
+                blockManager: {
+                    appendTo: '#blocks',
+                },
                 plugins: ['gjs-blocks-basic', 'grapesjs-preset-webpage', 'grapesjs-component-code-editor', 'grapesjs-tailwind'],
                 pluginsOpts: {
                     'grapesjs-custom-code': {

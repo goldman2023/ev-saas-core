@@ -89,13 +89,13 @@ Route::middleware([
         Route::get('/products/edit/{id}/stock-management', [ProductController::class, 'edit_stocks'])->name('product.edit.stocks');
         Route::get('/products/edit/{id}/course-management', [ProductController::class, 'edit_course'])->name('product.edit.course');
         Route::get('/products/preview/{id}/thank-you', [ProductController::class, 'thank_you_preview'])->name('product.thank_you_preview');
-        
+
         Route::get('/product-addons', [ProductAddonController::class, 'index'])->name('product-addons.index');
         Route::get('/product-addons/create', [ProductAddonController::class, 'create'])->name('product-addon.create');
         Route::get('/product-addons/details/{id}', [ProductAddonController::class, 'details'])->name('product-addon.details');
         Route::get('/product-addons/edit/{id}', [ProductAddonController::class, 'edit'])->name('product-addon.edit');
         Route::get('/product-addons/edit/{id}/stock-management', [ProductAddonController::class, 'edit_stocks'])->name('product-addon.edit.stocks');
-        
+
 
         /* Pages & Sections */
         Route::get('/pages', [EVPageController::class, 'index'])->name('pages.index');
@@ -253,7 +253,7 @@ Route::middleware([
 
     /* IMPORTANT: Last set of routes! To define missing pages and routes */
     /* Catch All Routes: If nothing is matched, try to find a page or throw 404 */
-    // Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
+    Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
     // Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 
 

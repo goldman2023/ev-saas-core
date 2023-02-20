@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Builders\CteBuilder;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 use App\Traits\AttributeTrait;

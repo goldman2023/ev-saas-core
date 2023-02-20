@@ -98,10 +98,12 @@
                 {{-- END Divider --}}
 
                 <div class="w-full flex flex-shrink-0 justify-between pt-4 mb-6">
-                    <a target="_blank" href="{{ route('grape.section-editor', [ $section->id ]) }}" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-100 py-2 px-4 text-sm font-medium text-indigo-900 shadow-sm hover:bg-indigo-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        {{ translate('Visual editor') }}
-                        @svg('heroicon-o-eye', ['class' => 'h-4 h-4 ml-2'])
-                    </a>
+                    @isset($section->id)
+                        <a target="_blank" href="{{ route('grape.section-editor', [ $section->id ]) }}" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-100 py-2 px-4 text-sm font-medium text-indigo-900 shadow-sm hover:bg-indigo-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            {{ translate('Visual editor') }}
+                            @svg('heroicon-o-eye', ['class' => 'h-4 h-4 ml-2'])
+                        </a>
+                    @endisset
 
                     <button type="button" @click="saveSection()"  class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         {{ translate('Save') }}
