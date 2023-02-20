@@ -68,9 +68,12 @@
                                     <ul class="w-full flex flex-col gap-y-2 mt-2">
                                         @foreach($model->purchased_addons as $addon)
                                             <li class="w-full flex items-center border border-gray-200 rounded px-2 py-1">
-                                                <span class="pr-2">+</span>
-                                                <strong class="text-12 line-clamp-1 pr-2">{{ $addon->name }}</strong>
-                                                <span class="text-12 line-clamp-1">{{ translate('Quantity:') }} {{ $addon->purchase_quantity }}</span>
+                                                <div class="flex items-center ">
+                                                    <span class="pr-2">+</span>
+                                                    <strong class="text-12 line-clamp-1 pr-2">{{ $addon->name }}</strong>
+                                                    <span class="text-12 line-clamp-1">{{ translate('Quantity:') }} {{ $addon->purchase_quantity }}</span>
+                                                </div>
+
                                                 <x-system.we-price :model="$addon" :with-qty="true" class="ml-auto"></x-system.we-price>
                                             </li>
                                         @endforeach

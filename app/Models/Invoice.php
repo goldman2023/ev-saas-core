@@ -43,11 +43,12 @@ class Invoice extends WeBaseModel
     protected $connection = 'tenant'; // Don't understand why this is necessary but it is! It should pick up tenant connection from Builder, but that's not working for Invoice model o_0
 
     protected $fillables = ['is_temp', 'mode', 'order_id', 'shop_id', 'user_id', 'payment_method_type', 'payment_method_id', 'invoice_number', 'email', 'billing_first_name','billing_last_name','billing_company', 'billing_address', 'billing_country',
-                'billing_state', 'billing_city', 'billing_zip', 'base_price', 'discount_amount', 'subtotal_price', 'total_price','shipping_cost', 'tax', 'payment_status',
+                'billing_state', 'billing_city', 'billing_zip', 'base_price', 'discount_amount', 'subtotal_price', 'total_price','shipping_cost', 'tax', 'tax_incl', 'payment_status',
                 'start_date', 'end_date', 'due_date', 'grace_period', 'viewed_by_customer', 'meta', 'note', 'created_at', 'updated_at'];
 
     protected $casts = [
         'viewed_by_customer' => 'boolean',
+        'tax_incl' => 'boolean',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
         'deleted_at' => 'datetime:d.m.Y H:i',
@@ -143,7 +144,7 @@ class Invoice extends WeBaseModel
             'percentage_of_total_order_price' => 'decimal',
         ]));
     }
-
+    
     /*
      * This functions determines if current Invoice is actually the last invoice of an Order this invoice is related to.
      *
@@ -229,14 +230,15 @@ class Invoice extends WeBaseModel
      */
     public function setInvoiceNumber($payment_method = null) {
         $payment_method = $payment_method instanceof PaymentMethodUniversal ? $payment_method : $this->payment_method()->first();
+        $this->real_invoice_prefix = !empty(get_tenant_setting('invoice_prefix')) ? get_tenant_setting('invoice_prefix') : 'invoice-';
 
         if($payment_method->isPaymentProcessorGateway()) {
             // Payment-processor method
             // IMPORTANT: We are making draft-invoice here because if payment method is payment-processor - Webhooks will determine the invoice_number and real_invoice_number!
             $this->invoice_number = 'invoice-draft-'.Uuid::generate(4)->string;
+            $this->real_invoice_number = null;
         } else {
             // Non-payment-processor method -> 1) set real_invoice_prefx and number and make invoice_number combination of the previous two.
-            $this->real_invoice_prefix = !empty(get_tenant_setting('invoice_prefix')) ? get_tenant_setting('invoice_prefix') : 'invoice-';
 
             if($this->mode === 'live') {
                 $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'live')->where('is_temp', 0)->where('id', '!=', $this->id)->latest()->first()?->real_invoice_number ?? 0) + 1;
