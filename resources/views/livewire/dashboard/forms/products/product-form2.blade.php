@@ -1,7 +1,6 @@
 @push('head_scripts')
-<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+<script src="{{ mix('js/editor.js', 'themes/WeTailwind') }}" defer></script>
 @endpush
-
 <div class="lw-form container-fluid" x-data="{
         thumbnail: @js(toJSONMedia($product->thumbnail)),
         cover: @js(toJSONMedia($product->cover)),
