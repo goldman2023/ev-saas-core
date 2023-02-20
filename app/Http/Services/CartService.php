@@ -346,16 +346,9 @@ class CartService
     protected function appendToCartTotals($model) {
         $this->originalPrice['raw'] += $model->purchase_quantity * $model->base_price;
         $this->discountAmount['raw'] += $model->purchase_quantity * ($model->base_price - $model->total_price);
-        $this->subtotalPrice['raw'] = $this->originalPrice['raw'] - $this->discountAmount['raw']; // Subtotal: Original - Line discounts
-        $this->taxAmount['raw'] = $this->subtotalPrice['raw'] * TaxService::getGlobalTaxPercentage() / 100; // Tax: globalTaxPercentage of Subtotal
-
-        if(TaxService::isTaxIncluded()) {
-            // Tax Included
-            $this->totalPrice['raw'] =  $this->subtotalPrice['raw'];
-        } else {
-            // Tax Excluded
-            $this->totalPrice['raw'] = $this->subtotalPrice['raw'] + $this->taxAmount['raw']; // Total: Subtotal + Tax
-        }
+        $this->subtotalPrice['raw'] = $this->originalPrice['raw'] - $this->discountAmount['raw']; // Subtotal: Original(s) - Line discounts
+        $this->taxAmount['raw'] = TaxService::calculateTaxAmount($this->subtotalPrice['raw']);
+        $this->totalPrice['raw'] =  TaxService::calculatePriceWithTax($this->subtotalPrice['raw']);
     }
 
     public function fullCartReset()

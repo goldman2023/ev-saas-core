@@ -229,14 +229,15 @@ class Invoice extends WeBaseModel
      */
     public function setInvoiceNumber($payment_method = null) {
         $payment_method = $payment_method instanceof PaymentMethodUniversal ? $payment_method : $this->payment_method()->first();
+        $this->real_invoice_prefix = !empty(get_tenant_setting('invoice_prefix')) ? get_tenant_setting('invoice_prefix') : 'invoice-';
 
         if($payment_method->isPaymentProcessorGateway()) {
             // Payment-processor method
             // IMPORTANT: We are making draft-invoice here because if payment method is payment-processor - Webhooks will determine the invoice_number and real_invoice_number!
             $this->invoice_number = 'invoice-draft-'.Uuid::generate(4)->string;
+            $this->real_invoice_number = null;
         } else {
             // Non-payment-processor method -> 1) set real_invoice_prefx and number and make invoice_number combination of the previous two.
-            $this->real_invoice_prefix = !empty(get_tenant_setting('invoice_prefix')) ? get_tenant_setting('invoice_prefix') : 'invoice-';
 
             if($this->mode === 'live') {
                 $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'live')->where('is_temp', 0)->where('id', '!=', $this->id)->latest()->first()?->real_invoice_number ?? 0) + 1;

@@ -133,7 +133,7 @@ class Order extends WeBaseModel
         static::relationsRetrieved(function ($order) {
             // 1. base_price in our DB should represent order_item's unit_price
             // 2. quantity is ...quantity
-            // 3. subtotal_price = (base_price * quantity)
+            // 3. subtotal_price = (base_price * quantity) - discount_amount
             // 4. tax_amount = sum of order items tax
             // 4. total_price = subtotal_price - discount(didn't add it yet) + shipping_cost + tax
 

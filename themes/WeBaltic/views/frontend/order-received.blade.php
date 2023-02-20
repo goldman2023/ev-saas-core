@@ -1,7 +1,7 @@
 @extends('frontend.layouts.' . $globalLayout)
 
 @php
-  $first_item = $order->order_items->first()->subject;
+  $first_item = $order_items->first()->subject;
 @endphp
 
 @section('meta_title'){{ translate('Your order is received').' - '.\TenantSettings::get('site_name').' | '.\TenantSettings::get('site_motto') }}@stop
@@ -50,8 +50,12 @@
 
       <div class="border-t border-gray-200">
 
-        @if($order->order_items->isNotEmpty())
-            @foreach($order->order_items as $item)
+        @php
+          $flushed_addons = [];
+        @endphp
+
+        @if($order_items->isNotEmpty())
+            @foreach($order_items as $item)
               <div class="w-full flex flex-col">
                 <div class="py-10 border-b border-gray-200 flex space-x-6">
                   @if(!empty($item->subject))
@@ -65,6 +69,23 @@
                         <p class="mt-2 text-sm text-gray-600 line-clamp-3">
                             {!! $item->excerpt !!}
                         </p>
+
+                        
+                        @if($item->descendants->isNotEmpty())
+                          <ul class="w-full flex flex-col gap-y-2 mt-2">
+                              @foreach($item->descendants as $addon_item)
+                                  <li class="w-full flex items-center justify-between border border-gray-200 rounded px-2 py-1">
+                                      <div class="flex items-center ">
+                                        <span class="pr-2">+</span>
+                                        <strong class="text-12 line-clamp-1 pr-2">{{ $addon_item->name }}</strong>
+                                        <span class="text-12 line-clamp-1">{{ translate('Quantity:') }} {{ $addon_item->quantity }}</span>
+                                      </div>
+                                      
+                                      <strong class="text-12 text-gray-900">{{ \FX::formatPrice($addon_item->total_price) }}</strong>
+                                  </li>
+                              @endforeach
+                          </ul>
+                        @endif
                     </div>
                     <div class="mt-6 flex-1 flex items-end">
                         <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6">
@@ -80,8 +101,20 @@
                             </div>
                             <div class="pl-4 flex sm:pl-6">
                                 <dt class="font-semibold text-gray-900">{{ translate('Total price') }}:</dt>
-                                <dd class="ml-2 text-gray-700">
-                                  {{ FX::formatPrice($item->total_price) }} {{ $order->type === 'subscription' ? ' / ' . $order->invoicing_period : '' }}</dd>
+
+                                @if($item->descendants->isNotEmpty())
+                                  @php
+                                    $addons_total_sum = $item->descendants->reduce(function ($carry, $addon) {
+                                        return $carry + $addon->total_price;
+                                    });
+                                  @endphp
+                                  <dd class="ml-2 text-gray-700">
+                                    {{ FX::formatPrice($item->total_price + $addons_total_sum) }} {{ $order->type === 'subscription' ? ' / ' . $order->invoicing_period : '' }}</dd>
+                                @else
+                                  <dd class="ml-2 text-gray-700">
+                                    {{ FX::formatPrice($item->total_price) }} {{ $order->type === 'subscription' ? ' / ' . $order->invoicing_period : '' }}</dd>
+                                @endif
+                                
                             </div>
                         </dl>
                     </div>
@@ -108,7 +141,7 @@
                 @endif
               {{-- @endif --}}
 
-              @if($order->order_items?->first()?->subject?->isSubscribable() ?? false)
+              @if($order_items?->first()?->subject?->isSubscribable() ?? false)
                 <a href="{{ route('stripe.portal_session') }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
                   {{ translate('Billing portal') }}
                 </a>
@@ -180,7 +213,7 @@
             @if($order->tax_amount > 0)
               <div class="flex justify-between">
                 <dt class="font-medium text-gray-900">{{ translate('Tax') }}</dt>
-                <dd class="text-gray-700">{{  \FX::formatPrice($order->tax_amount) }}</dd>
+                <dd class="text-gray-700">{{  TaxService::isTaxIncluded() ? '('.\FX::formatPrice($order->tax_amount).')' : \FX::formatPrice($order->total_price) }}</dd>
               </div>
             @endif
 

@@ -50,4 +50,21 @@ class TaxService
 
         return $price;
     }
+
+    public function calculateTaxAmount($amount) {
+        if($this->isTaxIncluded()) {
+            return ($amount * 100 / (100 + $this->getGlobalTaxPercentage())) * $this->getGlobalTaxPercentage() / 100;
+        } else {
+            return $amount * $this->getGlobalTaxPercentage() / 100;
+        }
+    }
+
+    public function calculatePriceWithTax($price) {
+        // Add tax to price only if tax is not already included in price itself!
+        if(!$this->isTaxIncluded()) {
+            $price = $price + $this->calculateTaxAmount($price);
+        }
+
+        return $price;
+    }
 }
