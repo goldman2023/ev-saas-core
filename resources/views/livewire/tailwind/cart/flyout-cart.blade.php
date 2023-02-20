@@ -92,7 +92,7 @@
                                     <img src="{{ $item->getThumbnail(['w'=>100,'h'=>100]) }}" class="border w-[100px] h-[100px] rounded-lg fit-cover" />
                                 </div>
 
-                                <div class="flex flex-col col-span-9 pl-3 pr-3 mt-1">
+                                <div class="flex flex-col col-span-9 pl-3 pr-0 mt-1">
 
                                     <div class="flex flex-col grow">
                                         <div class="flex flex-row justify-between items-center mb-1">
@@ -136,7 +136,7 @@
                                                     <x-system.quantity-counter :parent="$item" :model="$addon" :wired="true" :mini="true"></x-system.quantity-counter>
                                                     {{-- <span class="text-14">{{ $addon->purchase_quantity }}</span> --}}
                                                 </p>
-                                                <x-system.we-price :model="$addon"></x-system.we-price>
+                                                <x-system.we-price :model="$addon" :with-qty="true"></x-system.we-price>
                                             </li>
                                         @endforeach
                                     </ul>

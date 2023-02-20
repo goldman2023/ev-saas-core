@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use FX;
+use TaxService;
 use App\Models\Plan;
 use App\Models\FlashDeal;
 use App\Builders\BaseBuilder;
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait PriceTrait
 {
+    protected $prices_loaded = false;
+
     public mixed $total_price;
 
     public mixed $discounted_price;
@@ -41,14 +44,19 @@ trait PriceTrait
                 $model->load('flash_deals');
             }
 
-            $model->getTotalPrice();
-            $model->getDiscountedPrice();
-            $model->getBasePrice();
+            if(!$model->prices_loaded) {
+                $model->getTotalPrice();
+                $model->getDiscountedPrice();
+                $model->getBasePrice();
+    
+                if($model->isSubscribable()) {
+                    $model->getBaseAnnualPrice();
+                    $model->getTotalAnnualPrice();
+                }
 
-            if($model->isSubscribable()) {
-                $model->getBaseAnnualPrice();
-                $model->getTotalAnnualPrice();
+                $model->prices_loaded = true;
             }
+            
         });
     }
 
@@ -196,9 +204,10 @@ trait PriceTrait
                 }
             }
 
+            // Taxes
             // TODO: Create tax_relationships table and link it to subjects and taxes!
             // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            
+            $this->total_price = TaxService::appendTaxToPrice($this->total_price);
         }
 
         if ($both_formats) {
@@ -260,7 +269,6 @@ trait PriceTrait
                     }
                 }
             } else {
-
                 // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
                 if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
                     $flash_deal = $this->flash_deals->first();
@@ -279,6 +287,8 @@ trait PriceTrait
                 }
             }
         }
+
+        $this->discounted_price = TaxService::appendTaxToPrice($this->discounted_price);
 
         if ($both_formats) {
             return [
@@ -306,9 +316,11 @@ trait PriceTrait
     {
         if (empty($this->attributes[$this->getPriceColumn()])) {
             $this->base_price = 0;
-        } elseif (empty($this->base_price)) {
+        } else {
             $this->base_price = $this->attributes[$this->getPriceColumn()];
         }
+
+        $this->base_price = TaxService::appendTaxToPrice($this->base_price);
 
         if ($both_formats) {
             return [
@@ -336,16 +348,7 @@ trait PriceTrait
      */
     public function getOriginalPrice(bool $display = false, bool $both_formats = false, $decimals = null): mixed
     {
-        $price_column = $this->getPriceColumn();
-
-        if ($both_formats) {
-            return [
-                'raw' => $this->attributes[$price_column] ?? 0,
-                'display' => FX::formatPrice($this->attributes[$price_column] ?? 0, $decimals),
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->attributes[$price_column] ?? 0, $decimals) : $this->attributes[$price_column] ?? 0;
+        return $this->getBasePrice($display, $both_formats, $decimals);
     }
 
     // Annual Prices (only for subscribable models)
@@ -359,6 +362,8 @@ trait PriceTrait
             } else {
                 return 0;
             }
+
+            $this->base_annual_price = TaxService::appendTaxToPrice($this->base_annual_price);
 
             if ($both_formats) {
                 return [
@@ -401,6 +406,8 @@ trait PriceTrait
                 // If item is not subscribable, annual price doesn't make sense, so it falls back to one-time total price
                 $this->total_annual_price = $this->attributes[$this->getPriceColumn()];
             }
+
+            $this->total_annual_price = TaxService::appendTaxToPrice($this->total_annual_price);
 
             if ($both_formats) {
                 return [
