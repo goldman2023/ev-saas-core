@@ -109,11 +109,22 @@ trait PriceTrait
     }
 
     // TODO: Add Tax Relation Function!
+    
+    /**
+     * isDiscounted
+     * 
+     * Checks if price is discounted or not.
+     * 
+     * @return boolean
+     */
+    public function isDiscounted() {
+        return $this->getBasePrice() - $this->getTotalPrice() > 0;
+    }
 
     /**
      * Get the Total price
      *
-     * NOTE: Total price is a price of the product after all discounts and with Tax included
+     * NOTE: Total price is a price of the product after all discounts
      *
      * @param bool $display
      * @param bool $both_formats
@@ -285,9 +296,7 @@ trait PriceTrait
     }
 
     /**
-     * Get Base price
-     *
-     * NOTE: Base price is the price of the product with product related taxes
+     * Get Base price (same as OriginalPrice)
      *
      * @param bool $display
      * @param bool $both_formats

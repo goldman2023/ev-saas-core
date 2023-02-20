@@ -2,9 +2,10 @@
 
 namespace App\Http\Livewire\Cart;
 
+use Session;
 use CartService;
 use Livewire\Component;
-use Session;
+use App\Models\ProductAddon;
 
 class Cart extends Component
 {
@@ -24,7 +25,11 @@ class Cart extends Component
 
     public $processing;
 
-    protected $listeners = ['refreshCart', 'addToCart'];
+    protected $listeners = [
+        'refreshCart' => 'refreshCart', 
+        'addToCart' => 'addToCart', 
+        'refreshCartComponent' => '$refresh'
+    ];
 
     /*
      * Cart Livewire components depend fully on CartService singleton.
@@ -41,9 +46,19 @@ class Cart extends Component
         $this->refreshCart();
     }
 
+    public function rules() {
+        return [
+            'items.*.purchase_quantity' => ''
+        ];
+    }
+
     public function startCartProcessing()
     {
         $this->processing = true;
+    }
+
+    public function updatedItems($values) {
+
     }
 
     public function refreshCart()
@@ -59,7 +74,7 @@ class Cart extends Component
         $this->dispatchBrowserEvent('refresh-cart-items-count', ['count' => $this->totalItemsCount]);
     }
 
-    public function addToCart($model, $model_type, $qty, $append_qty = true)
+    public function addToCart($model, $model_type, $qty, $append_qty = true, $addons = [], $append_addons_qty = true)
     {
         $qty = (float) $qty;
 
@@ -74,12 +89,6 @@ class Cart extends Component
 
         $this->processing = true;
 
-        // If passed $model is actually $model_id => Find the desired model
-        if (is_numeric($model)) {
-            $model_type = base64_decode($model_type);
-            $model = app($model_type)::find($model);
-        }
-
         // activity('ecommerce_log')
         //     ->performedOn($model)
         //     ->causedBy(auth()->user())
@@ -91,20 +100,26 @@ class Cart extends Component
         // This is not the case for Add to cart button because qty counter is reset once addToButton is clicked!
         // IMPORTANT: $qty is sent by reference!!!
         
-        $new_data = CartService::addToCart($model, $model_type, $qty, $append_qty);
-        
+        // Remove item from cart if qty is 0 and $append_qty is not set
+        if($qty <= 0 && !$append_qty) {
+            return $this->removeFromCart($model, $model_type);
+        }
+
+        $new_data = $this->baseEncodeContentTypes(CartService::addToCart($model, $model_type, $qty, $append_qty, $addons, $append_addons_qty));
+
+
         // Refresh Cart Livewire components
         $this->refreshCart();
 
         $this->processing = false;
 
-        // Init cart item warnings
-        $this->dispatchBrowserEvent('cart-item-warnings', ['id' => $model->id, 'model_type' => base64_encode($model_type), 'warnings' => $new_data['warnings']]);      
+        // // Init cart item warnings
+        $this->dispatchBrowserEvent('cart-item-warnings', ['id' => $new_data['id'], 'model_type' => $new_data['model_type'], 'warnings' => $new_data['warnings']]);      
 
-        // Dispatch cart_processing_ending Event
-        $this->dispatchBrowserEvent('cart-processing-end', ['id' => $model->id, 'model_type' => base64_encode($model_type), 'qty' => $new_data['qty']]);
+        // // Dispatch cart_processing_ending Event
+        $this->dispatchBrowserEvent('cart-processing-end', ['id' => $new_data['id'], 'model_type' => $new_data['model_type'], 'qty' => $new_data['qty'], 'addons' => $new_data['addons']]);
 
-        // Dispatch total cart items count update
+        // // Dispatch total cart items count update
         $this->dispatchBrowserEvent('cart-total-items-count-update', ['count' => \CartService::getTotalItemsCount()]);
     }
 
@@ -125,10 +140,19 @@ class Cart extends Component
 
     public function render()
     {
-        if (session('style_framework') === 'tailwind') {
-            return view('livewire.tailwind.cart.'.$this->template);
-        }
+        return view('livewire.tailwind.cart.'.$this->template);
 
-        return view('livewire.bootstrap.cart.'.$this->template);
+    }
+
+    protected function baseEncodeContentTypes($data) {
+        $data['model_type'] = base64_encode($data['model_type']);
+
+        if(!empty($data['addons'])) {
+            foreach($data['addons'] as $index => $addon_data) {
+                $data['addons'][$index]['model_type'] = base64_encode($addon_data['model_type']);
+            }
+        }
+        
+        return $data;
     }
 }

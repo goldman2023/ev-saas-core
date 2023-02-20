@@ -2,27 +2,28 @@
 
 namespace App\Models;
 
-use App\Events\Products\ProductVariationDeleting;
-use App\Models\Central\Tenant;
-use App\Traits\AttributeTrait;
-use App\Traits\Caching\RegeneratesCache;
-use App\Traits\Caching\SavesToCache;
-use App\Traits\GalleryTrait;
-use App\Traits\PermalinkTrait;
+use App;
+use Str;
 use App\Traits\PriceTrait;
 use App\Traits\Purchasable;
-use App\Traits\StockManagementTrait;
+use App\Traits\ReviewTrait;
 use App\Traits\UploadTrait;
+use App\Models\ProductAddon;
+use App\Traits\GalleryTrait;
+use Spatie\Sluggable\HasSlug;
+use App\Models\Central\Tenant;
+use App\Traits\AttributeTrait;
+use App\Traits\PermalinkTrait;
 use App\Traits\VariationTrait;
 use App\Traits\IsVariationTrait;
+use App\Traits\Caching\SavesToCache;
+use App\Traits\StockManagementTrait;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\ReviewTrait;
-use App;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Caching\RegeneratesCache;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Sluggable\HasSlug;
-use Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Events\Products\ProductVariationDeleting;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Casts\Attribute as AttributeCast;
 
 /**
@@ -95,6 +96,11 @@ class ProductVariation extends WeBaseModel
     public function getPriceColumn(): string
     {
         return 'price';
+    }
+
+    public function product_addons() {
+        // TODO: Add support for addons which have All and for addons added to categories!
+        return $this->morphToMany(ProductAddon::class, 'subject', 'product_addon_relationships');
     }
 
     public function getDynamicModelUploadProperties(): array
