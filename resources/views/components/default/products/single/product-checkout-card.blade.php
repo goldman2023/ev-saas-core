@@ -12,7 +12,7 @@
             total_price_display: '{{ ($product->hasVariations()) ? $first_variation->getTotalPrice(true) : $product->getTotalPrice(true) }}',
             base_price: {{ ($product->hasVariations()) ? $first_variation->base_price : $product->base_price }},
             base_price_display: '{{ ($product->hasVariations()) ? $first_variation->getBasePrice(true) : $product->getBasePrice(true) }}',
-            addons: [],
+            addons: [], // TODO: Addons should be object with keys as following: {model_id}-{base64_model_type}
             toggleAddon(addon_id, addon_type, addon_qty) {
                 let addonIndex = this.addons.findIndex((addon) => addon.id == addon_id && addon.model_type == addon_type);
 
