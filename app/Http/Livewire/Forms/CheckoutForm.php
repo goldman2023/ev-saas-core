@@ -224,6 +224,7 @@ class CheckoutForm extends Component
 
         /* TODO: This is temp workaround before implementing bellow option fully  */
         $this->order->shop_id = 1;
+        $this->order->tax_incl = TaxService::isTaxIncluded();
 
         // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
         // $this->order->shop_id = ($this->items->first()?->shop_id ?? 1);
@@ -315,6 +316,7 @@ class CheckoutForm extends Component
             }
 
             // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
+            $this->order->tax_incl = TaxService::isTaxIncluded();
             $this->order->shop_id = $this->items->first()->shop_id;
             $this->order->user_id = $user->id ?? null;
 
@@ -481,6 +483,7 @@ class CheckoutForm extends Component
             $invoice->discount_amount = CartService::getDiscountAmount()['raw'];
             $invoice->subtotal_price = CartService::getSubtotalPrice()['raw'];
             $invoice->tax = CartService::getTaxAmount()['raw'];
+            $invoice->tax_incl = TaxService::isTaxIncluded();
             $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
             $invoice->total_price = CartService::getTotalPrice()['raw'];
 

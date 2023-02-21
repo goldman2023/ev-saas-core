@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Dashboard\Forms\Orders;
 use Log;
 use Uuid;
 use Payments;
+use TaxService;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Address;
@@ -198,6 +199,7 @@ class OrderForm extends Component
         try {
             $this->invoicing_period = null;
 
+            $this->order->tax_incl = TaxService::isTaxIncluded();
             $this->order->phone_numbers = [];
             $this->order->is_temp = false;
             $this->order->save();

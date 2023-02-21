@@ -213,7 +213,7 @@
             @if($order->tax_amount > 0)
               <div class="flex justify-between">
                 <dt class="font-medium text-gray-900">{{ translate('Tax') }}</dt>
-                <dd class="text-gray-700">{{  $order->tax_incl ? '('.\FX::formatPrice($order->tax_amount).')' : \FX::formatPrice($order->total_price) }}</dd>
+                <dd class="text-gray-700">{{  $order->tax_incl ? '('.\FX::formatPrice($order->tax_amount).')' : \FX::formatPrice($order->tax_amount) }}</dd>
               </div>
             @endif
 
