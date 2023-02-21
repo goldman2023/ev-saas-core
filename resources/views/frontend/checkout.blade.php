@@ -14,8 +14,8 @@
 @endpush
 
 @section('content')
-<div class="flex justify-center after:content-[''] after:fixed after:w-1/2 after:right-0 after:bg-white after:z-[1] after:h-full after:shadow-xl
-                before:content-[''] before:fixed before:w-1/2 before:left-0 before:bg-white before:z-0 before:h-full">
+<div class="mb-6 px-4 md:px-0 flex justify-center after:content-[''] after:fixed md:after:w-1/2 after:right-0 after:bg-white after:z-[1] after:h-full after:shadow-xl
+                before:content-[''] md:before:fixed md:before:w-1/2 md:before:left-0 before:bg-white before:z-0 before:h-full">
 
     {{-- <div class="w-1/2 flex flex-col justify-center items-end pl-3 md:pl-0 bg-white">
 
@@ -32,8 +32,8 @@
 
             @if($models->isNotEmpty())
 
-                <div class="item-summary w-full flex-col">
-                    <div class="pb-1 mb-3 border-b border-gray-200">
+                <div class="item-summary w-full flex-col mb">
+                    <div class="pb-1 mb-3 border-b border-gray-200 mb-3">
                         <strong class="flex">{{ translate('Checkout summary') }}</strong>
                         <span class="text-36 tracking-[-0.03rem]">
                             {{ CartService::getTotalPrice()['display'] ?? '' }}
@@ -85,7 +85,7 @@
 
                     <ul class="flex flex-col list-none border-t border-gray-200 mt-3 pl-[74px]">
                         {{-- Original Price --}}
-                        <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
+                        <li class="hidden sm:flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
                             <span class="text-14">{{ translate('Items') }}</span>
                             <span class="tracking-[-0.03rem] text-14">{{ CartService::getOriginalPrice()['display'] ?? '' }}</span>
                         </li>
@@ -99,13 +99,13 @@
                         @endif
 
                         {{-- Subtotal --}}
-                        <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
+                        <li class="hidden sm:flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
                             <span class="text-14">{{ translate('Subtotal') }}</span>
                             <span class="tracking-[-0.03rem] text-14">{{ CartService::getSubtotalPrice()['display'] ?? '' }}</span>
                         </li>
 
                         {{-- Tax --}}
-                        @if(CartService::getTaxAmount()['raw'] > 0)
+                        @if(CartService::getTaxAmount()['raw'] > 0 && TaxService::isTaxIncluded())
                             <li class="flex justify-between border-b border-gray-500 pt-[16px] pb-[12px]">
                                 <span class="{{ TaxService::isTaxIncluded() ? 'text-12' : 'text-14' }}">{{ translate('Tax') }} {{ TaxService::isTaxIncluded() ? '('.translate('included').')' : '' }}</span>
                                 <span class="tracking-[-0.03rem] {{ TaxService::isTaxIncluded() ? 'text-12' : 'text-14' }}">
@@ -118,37 +118,13 @@
                         </li> --}}
 
                         {{-- Total --}}
-                        <li class="flex justify-between pt-[16px] pb-[12px]">
+                        <li class="hidden sm:flex justify-between pt-[16px] pb-[12px]">
                             <span class="text-14">{{ translate('Total due') }}</span>
                             <strong class="tracking-[-0.03rem] text-14">{{ CartService::getTotalPrice()['display'] ?? '' }}</strong>
                         </li>
                     </ul>
 
-                    <div class="mt-1 pt-2 flex justify-start border-t border-gray-200">
-                        <div
-                            class="flex flex-row items-center pr-4 relative after:content-[''] after:absolute after:right-0 after:bg-gray-300 after:h-[15px] after:top-[8px] after:w-[1px]">
-                            <span class="text-12 mr-1 pt-1">{{ translate('Powered by') }}</span>
 
-                            <a style="max-width: 120px !important;" class="navbar-brand p-0 mw-100"
-                                href="https://we-saas.com/" aria-label="">
-                                <img src="https://images.we-saas.com/insecure/fill/0/0/ce/0/plain/https://we-saas.com/wp-content/uploads/2021/12/cropped-Screenshot_2021-12-22_at_15.12.45-removebg-preview.png"
-                                    style="max-width: 100%;" height="auto" alt="">
-                            </a>
-                            {{-- <x-default.system.tenant.logo style="max-width: 50px !important;">
-                            </x-default.system.tenant.logo> --}}
-                        </div>
-                        <ul class="flex flex-row list-none pl-5">
-                            <li class="flex pt-1 px-1 mr-1 items-center">
-                                <a href="#" class="text-12 text-gray-500">{{ translate('Terms') }}</a>
-                            </li>
-                            <li class="flex pt-1 px-1 mr-1 items-center">
-                                <a href="#" class="text-12 text-gray-500">{{ translate('Privacy') }}</a>
-                            </li>
-                            <li class="flex pt-1 px-1 mr-1 items-center">
-                                <a href="#" class="text-12 text-gray-500">{{ translate('Contact') }}</a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
 
             @endif

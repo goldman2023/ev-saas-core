@@ -23,7 +23,7 @@
         </div>
 
 
-        <div class="grid sm:grid-cols-3 gap-8">
+        <div class="sm:grid sm:grid-cols-3 gap-8">
 
             <div class="sm:col-span-2">
                 <div class="mb-6">

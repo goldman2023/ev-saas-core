@@ -28,7 +28,7 @@
     </div>
     <div class="px-3 py-3 sm:px-3">
         <li class="flow-root">
-            <div class="grid grid-cols-3">
+            <div class="grid grid-cols-1">
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
                     {{ translate('Action') }}
                 </label>

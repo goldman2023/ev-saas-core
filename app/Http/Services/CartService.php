@@ -196,7 +196,7 @@ class CartService
             });
 
             $addons = array_values($addons); // reset keys!
-            
+
             // Construct $model data for cart session storage
             $data = [
                 'model_type' => $model::class,
@@ -278,7 +278,7 @@ class CartService
 
                 return $items->map(function ($model, $index) use ($data, &$count) {
                     $addons = $data->firstWhere('id', $model->id)['addons'] ?? [];
-                    
+
                     $qty = $data->firstWhere('id', $model->id)['qty'] ?? 1;
                     $model->purchase_quantity = $qty;
                     $count += $qty; // append to total count of all items added to cart
@@ -317,7 +317,7 @@ class CartService
             foreach ($order_items_idx as $id) {
                 $found_item = $mapped->firstWhere('id', $id);
 
-                if(empty($found_item)) 
+                if(empty($found_item))
                     continue;
 
                 $this->items->push($found_item);

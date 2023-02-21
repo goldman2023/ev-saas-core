@@ -20,7 +20,7 @@
                         @svg('heroicon-o-building-office-2', ['class' => 'mr-2 w-4 h-4'])
                     @else
                         @svg('heroicon-o-user', ['class' => 'mr-2 w-4 h-4'])
-                        
+
                     @endif
 
                     @if($user->entity === 'company')
@@ -87,6 +87,7 @@
                 <div class="flex space-x-3">
                     <div class="w-full grid grid-cols-1 gap-3">
                         <button type="button"
+                        data-modal-target="notification-modal" data-modal-toggle="notification-modal"
                             class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
                             <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" x-description="Heroicon name: mini/envelope"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -100,6 +101,11 @@
                                 {{ translate('Email') }}
                             </span>
                         </button>
+
+    <livewire:notification-modal />
+
+
+
 
                         <a type="button"
                         href="tel::{{ $user->phone }}"
@@ -130,5 +136,5 @@
             </div>
         @endadmin
     @endme
-    
+
 </div>

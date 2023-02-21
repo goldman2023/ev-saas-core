@@ -25,7 +25,7 @@
             this.wef.billing_entity = 'individual';
         }
     }
-}" 
+}"
 @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
 x-init="setDefaults();"
 x-cloak
@@ -43,7 +43,7 @@ x-cloak
             </div>
 
             <div class="flex items-center">
-                <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="company" 
+                <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="company"
                     input-id="entity_company_radio" class="w-auto flex items-center" />
 
                 <label for="entity_company_radio" class="pl-3 block text-sm font-medium text-gray-700">
@@ -72,10 +72,10 @@ x-cloak
                         {{ translate('Password') }}
                         <span class="text-red-700 ml-1">*</span>
                     </label>
-                    <input type="password" name="account_password" 
+                    <input type="password" name="account_password"
                             id="account_password"
-                            wire:model.defer="account_password" 
-                            class="form-standard @error('account_password') is-invalid @enderror"       
+                            wire:model.defer="account_password"
+                            class="form-standard @error('account_password') is-invalid @enderror"
                     />
                 </div>
                 <div class="">
@@ -83,10 +83,10 @@ x-cloak
                         {{ translate('Confirm password') }}
                         <span class="text-red-700 ml-1">*</span>
                     </label>
-                    <input type="password" name="account_password_confirmation" 
+                    <input type="password" name="account_password_confirmation"
                             id="account_password_confirmation"
-                            wire:model.defer="account_password_confirmation" 
-                            class="form-standard @error('account_password') is-invalid @enderror"       
+                            wire:model.defer="account_password_confirmation"
+                            class="form-standard @error('account_password') is-invalid @enderror"
                     />
                 </div>
             </div>
@@ -120,7 +120,7 @@ x-cloak
         <label class="w-full block mb-2 text-12 font-medium text-gray-900 dark:text-gray-300">
             {{ translate('Company') }}
         </label>
-        
+
         <x-dashboard.form.input field="order.billing_company" />
     </div>
     <!-- END Company -->
@@ -184,7 +184,7 @@ x-cloak
                 <fieldset>
                     <div class="mt-2 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4" >
                         <template x-for="address in addresses" :key="address">
-                            <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none" 
+                            <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
                                     :class="{'border-transparent ring-2 ring-primary':selected_billing_address_id === address.id  , 'border-gray-300':selected_billing_address_id !== address.id}"
                                     @click="selected_billing_address_id = address.id; manual_mode_billing = false;">
                                 <div class="flex-1 flex">
@@ -193,20 +193,20 @@ x-cloak
                                         <span class="mt-1 flex items-center text-sm text-gray-700" x-text="address.address+', '+address.city+', '+address.zip_code"></span>
                                     </div>
                                 </div>
-    
+
                                 @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-primary', ':class' => '{\'hidden\': selected_billing_address_id !== address.id}'])
                                 {{-- <svg class=" text-indigo-600" :class="{ 'hidden ' : selected_billing_address_id === address.id }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                 </svg> --}}
-        
+
                                 <div class="absolute -inset-px rounded-lg border-2 pointer-events-none" aria-hidden="true"
                                     :class="{ 'border border-primary': (selected_billing_address_id === address.id), 'border-2 border-transparent': (selected_billing_address_id !== address.id) }">
                                 </div>
                             </label>
                         </template>
-    
+
                         {{-- Manual billing address --}}
-                        <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none" 
+                        <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
                                 :class="{'border-transparent ring-2 ring-primary':selected_billing_address_id === -1, 'border-gray-300':selected_billing_address_id !== -1}"
                                 @click="selected_billing_address_id = -1; manual_mode_billing = true;">
                             <div class="flex-1 flex">
@@ -214,20 +214,20 @@ x-cloak
                                     <span class="text-left text-14">{{ translate('Add billing address manually') }}</span>
                                 </div>
                             </div>
-    
+
                             @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-primary', ':class' => '{\'hidden\': selected_billing_address_id !== -1}'])
-    
+
                             <div class="absolute -inset-px rounded-lg border-2 pointer-events-none" aria-hidden="true"
                                 :class="{ 'border border-primary': (selected_billing_address_id === -1), 'border-2 border-transparent': (selected_billing_address_id !== -1) }">
                             </div>
                         </label>
                         {{-- END Manual billing address --}}
-    
+
                     </div>
                 </fieldset>
             </template>
         </div>
-        
+
 
         <template x-if="show_addresses">
             <input type="hidden" name="selected_billing_address_id" x-model="selected_billing_address_id">
@@ -244,8 +244,8 @@ x-cloak
                     <input name="order.billing_address"
                             id="order.billing_address"
                             type="text"
-                            wire:model.defer="order.billing_address" 
-                            class="form-standard @error('order.billing_address') is-invalid @enderror"       
+                            wire:model.defer="order.billing_address"
+                            class="form-standard @error('order.billing_address') is-invalid @enderror"
                     />
 
                     <x-system.invalid-msg field="order.billing_address" ></x-system.invalid-msg>
@@ -256,26 +256,26 @@ x-cloak
                         {{ translate('Country') }}
                         <span class="text-red-500 ml-1">*</span>
                     </label>
-                    <x-dashboard.form.select field="billingCountry" 
-                        :search="true" 
-                        error-field="order.billing_country" 
-                        :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" 
-                        selected="billingCountry" 
+                    <x-dashboard.form.select field="billingCountry"
+                        :search="true"
+                        error-field="order.billing_country"
+                        :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)"
+                        selected="billingCountry"
                         :nullable="false"></x-dashboard.form.select>
 
                     {{-- <input name="order.billing_country"
                             id="order.billing_country"
                             type="text"
-                            wire:model.defer="order.billing_country" 
-                            class="form-standard @error('order.billing_country') is-invalid @enderror"       
+                            wire:model.defer="order.billing_country"
+                            class="form-standard @error('order.billing_country') is-invalid @enderror"
                     />--}}
                 </div>
                 <!-- End Col -->
             </div>
             <!-- End Col -->
 
-            
-            <div class="grid grid-cols-3 gap-4 mt-3">
+
+            <div class="grid sm:grid-cols-3 gap-4 mt-3">
                 <div class="">
                     <label for="order.billing_state" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                         {{ translate('State') }}
@@ -284,10 +284,10 @@ x-cloak
                     <input name="order.billing_state"
                             id="order.billing_state"
                             type="text"
-                            wire:model.defer="order.billing_state" 
-                            class="form-standard @error('order.billing_state') is-invalid @enderror"       
+                            wire:model.defer="order.billing_state"
+                            class="form-standard @error('order.billing_state') is-invalid @enderror"
                     />
-    
+
                     <x-system.invalid-msg field="order.billing_state" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
@@ -300,10 +300,10 @@ x-cloak
                     <input name="order.billing_city"
                             id="order.billing_city"
                             type="text"
-                            wire:model.defer="order.billing_city" 
-                            class="form-standard @error('order.billing_city') is-invalid @enderror"       
+                            wire:model.defer="order.billing_city"
+                            class="form-standard @error('order.billing_city') is-invalid @enderror"
                     />
-    
+
                     <x-system.invalid-msg field="order.billing_city" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
@@ -316,10 +316,10 @@ x-cloak
                     <input name="order.billing_zip"
                             id="order.billing_zip"
                             type="text"
-                            wire:model.defer="order.billing_zip" 
-                            class="form-standard @error('order.billing_zip') is-invalid @enderror"       
+                            wire:model.defer="order.billing_zip"
+                            class="form-standard @error('order.billing_zip') is-invalid @enderror"
                     />
-    
+
                     <x-system.invalid-msg field="order.billing_zip" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
@@ -346,7 +346,7 @@ x-cloak
                 <fieldset>
                     <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4" >
                         <template x-for="address in addresses">
-                            <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none" 
+                            <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
                                     :class="{'border-transparent ring-2 ring-primary':selected_shipping_address_id === address.id  , 'border-gray-300':selected_shipping_address_id !== address.id}"
                                     @click="selected_shipping_address_id = address.id; manual_mode_shipping = false;">
                                 <div class="flex-1 flex">
@@ -355,24 +355,24 @@ x-cloak
                                         <span class="mt-1 flex items-center text-sm text-gray-700" x-text="address.address+', '+address.city+', '+address.zip_code"></span>
                                     </div>
                                 </div>
-    
+
                                 @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-primary', ':class' => '{\'hidden\': selected_shipping_address_id !== address.id}'])
-        
+
                                 <div class="absolute -inset-px rounded-lg border-2 pointer-events-none" aria-hidden="true"
                                     :class="{ 'border border-primary': (selected_shipping_address_id === address.id), 'border-2 border-transparent': (selected_shipping_address_id !== address.id) }">
                                 </div>
                             </label>
-                        
+
                             {{-- <div class="col-12 col-md-6 col-lg-4 mb-3 px-2">
                                 <div class="card w-100 pointer h-100 position-relative"
                                         :class="{ 'border-primary shadow' : selected_billing_address_id === address.id }"
                                         @click="selected_billing_address_id = address.id; manual_mode_shipping = false;">
                                     <div class="card-body position-relative">
-    
+
                                         <h6 class="card-subtitle" x-text="address.country"></h6>
                                         <h3 class="card-title text-18" x-text="address.address"></h3>
                                         <p class="card-text mb-2" x-text="address.city+', '+address.zip_code"></p>
-    
+
                                         <template x-if="address.phones != null && address.phones.length > 0">
                                             <div class="d-flex align-items-center flex-wrap">
                                                 <template x-for="phone in address.phones">
@@ -384,8 +384,8 @@ x-cloak
                                 </div>
                             </div> --}}
                         </template>
-    
-                        <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none" 
+
+                        <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
                                 :class="{'border-transparent ring-2 ring-primary':selected_shipping_address_id === -1, 'border-gray-300':selected_shipping_address_id !== -1}"
                                 @click="selected_shipping_address_id = -1; manual_mode_shipping = true;">
                             <div class="flex-1 flex">
@@ -393,9 +393,9 @@ x-cloak
                                     <span class="text-left text-14">{{ translate('Add shipping address manually') }}</span>
                                 </div>
                             </div>
-    
+
                             @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-primary', ':class' => '{\'hidden\': selected_shipping_address_id !== -1}'])
-    
+
                             <div class="absolute -inset-px rounded-lg border-2 pointer-events-none" aria-hidden="true"
                                 :class="{ 'border border-primary': (selected_shipping_address_id === -1), 'border-2 border-transparent': (selected_shipping_address_id !== -1) }">
                             </div>
@@ -403,12 +403,12 @@ x-cloak
                     </div>
                 </fieldset>
             </template>
-    
+
             <template x-if="show_addresses">
                 <input type="hidden" name="selected_shipping_address_id" x-model="selected_shipping_address_id">
             </template>
         </div>
-        
+
 
         <div class="flex-wrap mt-3" :class="{'flex':manual_mode_shipping}" x-show="manual_mode_shipping">
             <div class="grid grid-cols-2 gap-4">
@@ -420,8 +420,8 @@ x-cloak
                     <input name="order.shipping_address"
                             id="order.shipping_address"
                             type="text"
-                            wire:model.defer="order.shipping_address" 
-                            class="form-standard @error('order.shipping_address') is-invalid @enderror"       
+                            wire:model.defer="order.shipping_address"
+                            class="form-standard @error('order.shipping_address') is-invalid @enderror"
                     />
 
                     <x-system.invalid-msg field="order.shipping_address" ></x-system.invalid-msg>
@@ -433,21 +433,21 @@ x-cloak
                         <span class="text-red-500 ml-1">*</span>
                     </label>
                     <x-dashboard.form.select field="shippingCountry" error-field="order.shipping_country" :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" selected="shippingCountry" :nullable="true"></x-dashboard.form.select>
-{{-- 
+{{--
                     <input name="order.shipping_country"
                             id="order.shipping_country"
                             type="text"
-                            wire:model.defer="order.shipping_country" 
-                            class="form-standard @error('order.shipping_country') is-invalid @enderror"       
+                            wire:model.defer="order.shipping_country"
+                            class="form-standard @error('order.shipping_country') is-invalid @enderror"
                     />
-    
+
                     <x-system.invalid-msg field="order.shipping_country" ></x-system.invalid-msg> --}}
                 </div>
                 <!-- End Col -->
             </div>
             <!-- End Col -->
 
-            
+
             <div class="grid grid-cols-3 gap-4 mt-3">
                 <div class="">
                     <label for="order.shipping_state" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
@@ -457,10 +457,10 @@ x-cloak
                     <input name="order.shipping_state"
                             id="order.shipping_state"
                             type="text"
-                            wire:model.defer="order.shipping_state" 
-                            class="form-standard @error('order.shipping_state') is-invalid @enderror"       
+                            wire:model.defer="order.shipping_state"
+                            class="form-standard @error('order.shipping_state') is-invalid @enderror"
                     />
-    
+
                     <x-system.invalid-msg field="order.shipping_state" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
@@ -473,10 +473,10 @@ x-cloak
                     <input name="order.shipping_city"
                             id="order.shipping_city"
                             type="text"
-                            wire:model.defer="order.shipping_city" 
-                            class="form-standard @error('order.shipping_city') is-invalid @enderror"       
+                            wire:model.defer="order.shipping_city"
+                            class="form-standard @error('order.shipping_city') is-invalid @enderror"
                     />
-    
+
                     <x-system.invalid-msg field="order.shipping_city" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
@@ -489,10 +489,10 @@ x-cloak
                     <input name="order.shipping_zip"
                             id="order.shipping_zip"
                             type="text"
-                            wire:model.defer="order.shipping_zip" 
-                            class="form-standard @error('order.shipping_zip') is-invalid @enderror"       
+                            wire:model.defer="order.shipping_zip"
+                            class="form-standard @error('order.shipping_zip') is-invalid @enderror"
                     />
-    
+
                     <x-system.invalid-msg field="order.shipping_zip" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
@@ -514,10 +514,10 @@ x-cloak
         </h4> --}}
         <fieldset class="w-full mt-2 grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-2 md:grid-cols-3" >
             <template x-for="(payment_method_name, payment_method_gateway) in available_payment_methods">
-                <label class="relative flex flex-col items-center bg-white rounded-lg border shadow-sm p-3 cursor-pointer focus:outline-none mb-0" 
+                <label class="relative flex flex-col items-center bg-white rounded-lg border shadow-sm p-3 cursor-pointer focus:outline-none mb-0"
                     :class="{'!border-2 !border-primary ':payment_method_gateway === selected_payment_method  , 'border-gray-300':payment_method_gateway !== selected_payment_method}"
                     @click="clearErrors(); selected_payment_method = payment_method_gateway; ">
-                    
+
                     <template x-if="payment_method_gateway === 'wire_transfer'">
                         @svg('lineawesome-university-solid', ['class' => 'w-[60px] h-[60px]'])
                     </template>
@@ -564,13 +564,13 @@ x-cloak
                                 <input name="cc_name"
                                         id="cc_name"
                                         type="text"
-                                        x-model="cc_name" 
-                                        class="form-standard @error('cc_name') is-invalid @enderror"       
+                                        x-model="cc_name"
+                                        class="form-standard @error('cc_name') is-invalid @enderror"
                                 />
-            
+
                                 <x-system.invalid-msg field="cc_name" ></x-system.invalid-msg>
                             </div>
-            
+
                             <div class="w-full mb-2">
                                 <label for="cc_number" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                                     {{ translate('Card number') }}
@@ -580,12 +580,12 @@ x-cloak
                                         id="cc_number"
                                         type="number"
                                         x-model="cc_number"
-                                        class="form-standard @error('cc_number') is-invalid @enderror"       
+                                        class="form-standard @error('cc_number') is-invalid @enderror"
                                 />
-            
+
                                 <x-system.invalid-msg field="cc_number" ></x-system.invalid-msg>
                             </div>
-        
+
                             <div class="w-full grid grid-cols-2 gap-4">
                                 <div x-data="{
                                     formatString(e) {
@@ -595,7 +595,7 @@ x-cloak
                                         if (allowedKeys.indexOf(code) !== -1) {
                                             return;
                                         }
-                                        
+
                                         event.target.value = event.target.value.replace(
                                             /^([1-9]\/|[2-9])$/g, '0$1/' // 3 > 03/
                                         ).replace(
@@ -625,12 +625,12 @@ x-cloak
                                             placeholder="MM/YY"
                                             maxlength="5"
                                             @keyup="formatString(event)"
-                                            class="form-standard @error('cc_expiration_date') is-invalid @enderror"       
+                                            class="form-standard @error('cc_expiration_date') is-invalid @enderror"
                                     />
-            
+
                                     <x-system.invalid-msg field="cc_expiration_date" ></x-system.invalid-msg>
                                 </div>
-            
+
                                 <div class="">
                                     <label for="cc_cvc" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
                                         {{ translate('CVC') }}
@@ -639,13 +639,13 @@ x-cloak
                                     <input name="cc_cvc"
                                             id="cc_cvc"
                                             x-model="cc_cvc"
-                                            pattern="\d*" 
+                                            pattern="\d*"
                                             maxlength="4"
                                             type="number"
                                             min="0"
-                                            class="form-standard @error('cc_cvc') is-invalid @enderror"       
+                                            class="form-standard @error('cc_cvc') is-invalid @enderror"
                                     />
-                    
+
                                     <x-system.invalid-msg field="cc_cvc" ></x-system.invalid-msg>
                                 </div>
                                 <!-- End Col -->
@@ -656,9 +656,9 @@ x-cloak
                 @endforeach
             </div>
         </template>
-        
+
     </div>
-    
+
     <hr class="mt-4" />
 
     <div class="flex flex-col mt-3">
@@ -695,7 +695,7 @@ x-cloak
 
 
     <div class="mt-4">
-        <button class="btn-primary text-center justify-center w-full bg-red-500 text-white" 
+        <button class="btn-primary text-center justify-center w-full bg-red-500 text-white"
                 @click="
                     $wire.set('order.phone_numbers', phoneNumbers, true);
                     $wire.set('order.billing_country', billingCountry, true);

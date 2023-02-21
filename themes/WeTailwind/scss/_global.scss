@@ -3,6 +3,11 @@
     @apply hidden;
 }
 
+/* Global modal backdrop blur */
+[modal-backdrop], [x-show="displayModal"] {
+    backdrop-filter: blur(3px);
+}
+
 /* Typography styles & utility classes h1/h6 */
 
 .text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6 {

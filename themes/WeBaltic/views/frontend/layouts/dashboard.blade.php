@@ -94,7 +94,7 @@
                 }
             ">
                 @foreach(\Payments::getPaymentMethodsForSelect() as $gateway => $label)
-                    <a :href="'{{ route('checkout.execute.custom.payment', ['invoice_id' => '%d', 'payment_gateway' => $gateway]) }}'.replace('%d', invoice_id)" 
+                    <a :href="'{{ route('checkout.execute.custom.payment', ['invoice_id' => '%d', 'payment_gateway' => $gateway]) }}'.replace('%d', invoice_id)"
                         target="_blank" class="col-span-1 p-4 flex flex-col items-center justify-center gap-y-2 rounded-lg border border-gray-200">
 
                         @if($gateway == 'wire_transfer')
@@ -110,7 +110,7 @@
             </div>
         </x-system.form-modal>
     @endif
-   
+
 
     @stack('modal')
 

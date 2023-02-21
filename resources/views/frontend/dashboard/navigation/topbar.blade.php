@@ -9,7 +9,7 @@
     <div class="flex-1 px-4 flex justify-between">
       <div class="flex-1 flex text-center justify-center">
         <a class="sm:hidden flex-1 flex text-center justify-center" href="{{ route('dashboard') }}">
-            <img class="px-2 sm:hidden inline-block" src="{{ get_site_logo() }}" />
+            <img class="px-2 sm:hidden inline-block w-auto" src="{{ get_site_logo() }}" />
         </a>
         <nav class="hidden md:flex space-x-[32px] items-center">
             @if(!empty($header_menu_items) && $header_menu_items->isNotEmpty())
