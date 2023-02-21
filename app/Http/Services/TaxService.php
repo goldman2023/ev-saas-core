@@ -55,7 +55,7 @@ class TaxService
         if($this->isTaxIncluded()) {
             return ($amount * 100 / (100 + $this->getGlobalTaxPercentage())) * $this->getGlobalTaxPercentage() / 100;
         } else {
-            return 0;
+            return $amount * $this->getGlobalTaxPercentage() / 100;
         }
     }
 
