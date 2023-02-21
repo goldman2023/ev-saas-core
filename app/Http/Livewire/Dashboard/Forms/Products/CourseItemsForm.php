@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Dashboard\Forms\Products;
 
 use DB;
 use FX;
-use EVS;
+use WE;
 use Str;
 use MyShop;
 use Purifier;

@@ -42,28 +42,44 @@
 
                     <ul class="flex flex-col list-none space-y-4">
                         @foreach($models as $model)
-                        <li class="w-full flex flex-col justify-left">
-                            <div class="w-full flex justify-left">
-                                <div class="w-[60px] h-[60px] shrink-0">
-                                    <img class="w-[60px] h-[60px] object-cover rounded border"
-                                        src="{{ $model->getThumbnail() }}" />
+                            <li class="w-full flex flex-col justify-left">
+                                <div class="w-full flex justify-left">
+                                    <div class="w-[60px] h-[60px] shrink-0">
+                                        <img class="w-[60px] h-[60px] object-cover rounded border"
+                                            src="{{ $model->getThumbnail() }}" />
+                                    </div>
+                                    <div class="w-full flex flex-col">
+                                        <div class="w-full flex justify-between items-center pl-4">
+                                            <strong class="line-clamp-1 pr-2">{{ $model->getTranslation('title') ?:
+                                                $model->getTranslation('name') }}</strong>
+
+                                                <x-system.we-price :model="$model" :with-qty="true" class="text-14"></x-system.we-price>
+                                        </div>
+                                        <div class="w-full leading-4 pl-4">
+                                            <small class="line-clamp-1">{{ $model->getTranslation('excerpt') }}</small>
+                                        </div>
+                                        <div class="w-full leading-4 pl-4 mt-1">
+                                            <small class="line-clamp-1">{{ translate('Quantity:') }} {{ $model->purchase_quantity }}</small>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="w-full flex flex-col">
-                                    <div class="w-full flex justify-between pl-4">
-                                        <strong class="line-clamp-1 pr-2">{{ $model->getTranslation('title') ?:
-                                            $model->getTranslation('name') }}</strong>
-                                        <strong>{{ FX::formatPrice($model->base_price * $model->purchase_quantity)
-                                            }}</strong>
-                                    </div>
-                                    <div class="w-full leading-4 pl-4">
-                                        <small class="line-clamp-1">{{ $model->getTranslation('excerpt') }}</small>
-                                    </div>
-                                    <div class="w-full leading-4 pl-4 mt-1">
-                                        <small class="line-clamp-1">{{ translate('Quantity:') }} {{ $model->purchase_quantity }}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+
+                                @if(isset($model['purchased_addons']) && $model?->purchased_addons?->isNotEmpty() ?? [])
+                                    <ul class="w-full flex flex-col gap-y-2 mt-2">
+                                        @foreach($model->purchased_addons as $addon)
+                                            <li class="w-full flex items-center border border-gray-200 rounded px-2 py-1">
+                                                <div class="flex items-center ">
+                                                    <span class="pr-2">+</span>
+                                                    <strong class="text-12 line-clamp-1 pr-2">{{ $addon->name }}</strong>
+                                                    <span class="text-12 line-clamp-1">{{ translate('Quantity:') }} {{ $addon->purchase_quantity }}</span>
+                                                </div>
+
+                                                <x-system.we-price :model="$addon" :with-qty="true" class="ml-auto"></x-system.we-price>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
                         @endforeach
                     </ul>
 
@@ -91,8 +107,10 @@
                         {{-- Tax --}}
                         @if(CartService::getTaxAmount()['raw'] > 0)
                             <li class="flex justify-between border-b border-gray-500 pt-[16px] pb-[12px]">
-                                <span class="text-14">{{ translate('Tax') }}</span>
-                                <span class="tracking-[-0.03rem] text-14">{{ CartService::getTaxAmount()['display'] ?? '' }}</span>
+                                <span class="{{ TaxService::isTaxIncluded() ? 'text-12' : 'text-14' }}">{{ translate('Tax') }} {{ TaxService::isTaxIncluded() ? '('.translate('included').')' : '' }}</span>
+                                <span class="tracking-[-0.03rem] {{ TaxService::isTaxIncluded() ? 'text-12' : 'text-14' }}">
+                                    {{ TaxService::isTaxIncluded() ? '('.(CartService::getTaxAmount()['display'] ?? '').')' : (CartService::getTaxAmount()['display'] ?? '') }}
+                                </span>
                             </li>
                         @endif
                         {{-- <li class="flex justify-between border-b border-gray-200 py-[16px]">

@@ -3,8 +3,9 @@
 namespace App\Providers;
 
 use App\WeEngine\WeEngine;
-use App\Http\Services\EVService;
 use App\Http\Services\FXService;
+use App\Http\Services\WeService;
+use App\Http\Services\TaxService;
 use App\Http\Services\CartService;
 use Illuminate\Support\Collection;
 use App\Http\Services\MediaService;
@@ -82,13 +83,17 @@ class WeServiceProvider extends ServiceProvider
         });
 
         // Register EV Singleton
-        $this->app->singleton('ev', function() {
-            return new EVService(fn () => Container::getInstance());
+        $this->app->singleton('we', function() {
+            return new WeService(fn () => Container::getInstance());
         });
 
         // Register Vendor Singleton
         $this->app->singleton('vendor', function() {
             return new VendorService(fn () => Container::getInstance());
+        });
+
+        $this->app->singleton('tax_service', function() {
+            return new TaxService(fn () => Container::getInstance());
         });
 
         // Register Cart Singleton

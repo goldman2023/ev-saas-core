@@ -2,13 +2,13 @@
 
 namespace WeThemes\WeBaltic\App\Enums;
 
-use App\Enums\EVBaseEnum;
+use App\Enums\WeBaseEnum;
 
 /**
  * @method static self printing()
  * @method static self delivery()
  */
-class TaskTypesEnum extends EVBaseEnum
+class TaskTypesEnum extends WeBaseEnum
 {
     public static function values(): array
     {

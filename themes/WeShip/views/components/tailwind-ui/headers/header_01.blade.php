@@ -35,8 +35,7 @@
                     </button>
                 </div>
 
-                {{-- TODO: Create Dashboard button (similar to 'Try for free') if user is authenticated, otherwise
-                display Login and Try for free --}}
+
 
 
             </div>

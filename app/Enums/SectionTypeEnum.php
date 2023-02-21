@@ -8,7 +8,7 @@ namespace App\Enums;
  * @method static self block()
  * @method static self wysiwyg()
  */
-class SectionTypeEnum extends EVBaseEnum
+class SectionTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

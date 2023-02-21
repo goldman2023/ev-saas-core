@@ -2,20 +2,20 @@
 
 namespace App\Http\Services;
 
-use App\Models\Attribute;
-use App\Models\AttributeValue;
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\CategoryRelationship;
-use App\Models\Currency;
-use App\Models\Product;
-use App\Models\Shop;
-use App\Models\ShopDomain;
+use WE;
 use Cache;
-use EVS;
+use Session;
+use App\Models\Shop;
+use App\Models\Brand;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Currency;
+use App\Models\Attribute;
+use App\Models\ShopDomain;
+use App\Models\AttributeValue;
+use App\Models\CategoryRelationship;
 use Illuminate\Support\Facades\Request;
 use Illuminate\View\ComponentAttributeBag;
-use Session;
 
 class VendorService
 {

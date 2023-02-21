@@ -35,13 +35,8 @@ $header_menu_items = $header_menu['menuItems'] ?? null;
                     @guest
                     <div class="cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
                         @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
-                        {{ translate('Login') }}
+                        {{ translate('Login / Register') }}
                     </div>
-
-                    <a href="{{ route('custom-pages.show_custom_page', ['pricing']) }}"
-                        class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
-                        {{ translate('Try for free') }}
-                    </a>
                     @else
                     <button @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'});" type="button"
                         class="p-1 rounded-full text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">

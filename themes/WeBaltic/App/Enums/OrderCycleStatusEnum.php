@@ -2,9 +2,9 @@
 
 namespace WeThemes\WeBaltic\App\Enums;
 
-use App\Enums\EVBaseEnum;
+use App\Enums\WeBaseEnum;
 
-class OrderCycleStatusEnum extends EVBaseEnum
+class OrderCycleStatusEnum extends WeBaseEnum
 {
     public static function values(): array
     {

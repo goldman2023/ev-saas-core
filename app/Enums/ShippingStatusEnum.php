@@ -7,7 +7,7 @@ namespace App\Enums;
  * @method static self sent()
  * @method static self delivered()
  */
-class ShippingStatusEnum extends EVBaseEnum
+class ShippingStatusEnum extends WeBaseEnum
 {
     public static function values(): array
     {

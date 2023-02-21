@@ -7,7 +7,7 @@ use App\Models\ShopSetting;
 use App\Models\TenantSetting;
 use App\Models\User;
 use Cache;
-use EVS;
+use WE;
 use FX;
 use Illuminate\Database\Eloquent\Collection;
 use Session;

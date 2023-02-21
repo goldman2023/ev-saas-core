@@ -6,26 +6,31 @@ use DB;
 use FX;
 use App;
 use IMG;
+use WEF;
 use Auth;
 use Cache;
 use Vendor;
-use WEF;
 use App\Models\User;
+use App\Models\Category;
 use App\Traits\HasStatus;
 use App\Traits\PriceTrait;
 use App\Traits\Purchasable;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 use App\Builders\BaseBuilder;
+use App\Traits\CategoryTrait;
 use App\Traits\CoreMetaTrait;
 use Spatie\Sluggable\HasSlug;
+use App\Traits\AttributeTrait;
 use App\Traits\PermalinkTrait;
+use App\Traits\HasContentColumn;
 use Spatie\Sluggable\SlugOptions;
 use App\Traits\StockManagementTrait;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use App\Support\Eloquent\Relations\AllFromModelRelation;
 
 /**
  * App\Models\ProductAddon
@@ -41,7 +46,10 @@ class ProductAddon extends WeBaseModel
     use Purchasable;
     use LogsActivity;
     use CoreMetaTrait;
+    use HasContentColumn;
 
+    use AttributeTrait; // <-- This trait must be declared before VariationTrait!
+    use CategoryTrait;
     use UploadTrait;
     use GalleryTrait;
     use PriceTrait;
@@ -50,7 +58,7 @@ class ProductAddon extends WeBaseModel
     protected $table = 'product_addons';
 
     protected $fillable = [
-        'name', 'description', 'excerpt', 'user_id', 'unit_price', 'discount', 'discount_type', 'status',
+        'name', 'description', 'excerpt', 'user_id', 'unit_price', 'discount', 'discount_type', 'status', 'type',
         'base_currency', 'unit', 'slug', 'meta_title', 'meta_description', 'shop_id'
     ];
 
@@ -59,15 +67,6 @@ class ProductAddon extends WeBaseModel
         'unit_price' => 'float',
         'discount' => 'float',
     ];
-
-    public function getBaseCurrencyAttribute($value)
-    {
-        if (empty($value)) {
-            $value =  get_setting('system_default_currency')->code;
-        }
-
-        return $value;
-    }
 
     /**
      * Replace Eloquent/Builder with ProductsBuilder (an extension of Eloquent/Builder with more features)
@@ -115,6 +114,11 @@ class ProductAddon extends WeBaseModel
         return 'unit_price';
     }
 
+    public static function getContentColumnName()
+    {
+        return 'description';
+    }
+
     /*
      * Scope searchable parameters
      */
@@ -154,7 +158,67 @@ class ProductAddon extends WeBaseModel
     {
         return $this->belongsTo(Shop::class);
     }
+    
+    /**
+     * Products relationship
+     *
+     * @param  mixed $return_real - If this is true, AllFromModelRelation will return fake model with id = 0. Otherwise, it'll return all related models.
+     * @return void
+     */
+    public function products($return_real = false) {
+        // Check if All is present -> subject_id = 0
+        $check_for_all = DB::scalar(
+            "select count(case when subject_id = 0 and product_addon_id = ".($this->id ?? 0)." and subject_type = '".addslashes(Product::class)."' then 1 end) as products from product_addon_relationships"
+        );
 
+        if($check_for_all > 0) {
+            // This means that relation to all is present in DB
+            return new AllFromModelRelation(Product::class, ['published'], return_real: $return_real);
+        } else {
+            return $this->morphedByMany(Product::class, 'subject', 'product_addon_relationships');
+        }
+    }
+    
+    /**
+     * products_morph
+     *
+     * This is a relation where relation-functions should be performed!
+     * 
+     * @return void
+     */
+    public function products_morph() {
+        return $this->morphedByMany(Product::class, 'subject', 'product_addon_relationships');
+    }
+
+    /**
+     * Products relationship
+     *
+     * @param  mixed $return_real - If this is true, AllFromModelRelation will return fake model with id = 0. Otherwise, it'll return all related models.
+     * @return void
+     */
+    public function category_taxonomy($return_real = false) {
+        $check_for_all = DB::scalar(
+            "select count(case when subject_id = 0 and product_addon_id = ".($this->id ?? 0)." and subject_type = '".addslashes(Category::class)."' then 1 end) as products from product_addon_relationships"
+        );
+
+        if($check_for_all > 0) {
+            // This means that relation to all is present in DB
+            return new AllFromModelRelation(Category::class, [], return_real: $return_real);
+        } else {
+            return $this->morphedByMany(Category::class, 'subject', 'product_addon_relationships');
+        }
+    }
+
+    /**
+     * category_taxonomy_morph
+     *
+     * This is a relation where relation-functions should be performed!
+     * 
+     * @return void
+     */
+    public function category_taxonomy_morph() {
+        return $this->morphedByMany(Category::class, 'subject', 'product_addon_relationships');
+    }
 
     protected function asJson($value)
     {
@@ -164,13 +228,6 @@ class ProductAddon extends WeBaseModel
     public function getDynamicModelUploadProperties(): array
     {
         return [];
-        // return [
-        //     [
-        //         'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
-        //         'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
-        //         'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
-        //     ]
-        // ];
     }
 
     /* TODO: @vukasin Implement checkbox in product.create for enabling units display, by default it's disabled */

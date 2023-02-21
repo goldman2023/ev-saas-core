@@ -11,6 +11,8 @@ use Str;
 
 trait VariationTrait
 {
+    protected $variations_loaded = false;
+
     /*
      * Gets the class of the Variations Model (e.g. For Product Model, ProductVariation is the variation model class)
      */
@@ -35,20 +37,24 @@ trait VariationTrait
                 $model->load('variations');
             }
             
-            /** 
-             * In order to reduce number of queries when variation calls for main (->main) and loading all main relations again,
-             * We'll SET main PROPERTY of each variant to current $model.
-             * Reason is that it has all needed relations that variant may use (as attributes/att_values/att_relations, since they are needed for variant name construction and other important things) 
-             * Also, we'll remove all unnecessary relations from $cloned_model and leave only those variations will use (like custom_attributes)
-             */
-            $only_custom_attributes_rel = array_intersect_key($cloned_model->getRelations(), array_flip(['custom_attributes']) );
-            $cloned_model->setRelations($only_custom_attributes_rel);
-            
-            // Inject main model to `main` core property and generate variation name
-            $model->variations->map(function($variation) use($cloned_model) {
-                $variation->main = $cloned_model;
-                $variation->name = $variation->getVariantName(slugified: true);
-            });
+            if(!$model->variations_loaded) {
+                /** 
+                 * In order to reduce number of queries when variation calls for main (->main) and loading all main relations again,
+                 * We'll SET main PROPERTY of each variant to current $model.
+                 * Reason is that it has all needed relations that variant may use (as attributes/att_values/att_relations, since they are needed for variant name construction and other important things) 
+                 * Also, we'll remove all unnecessary relations from $cloned_model and leave only those variations will use (like custom_attributes)
+                 */
+                $only_custom_attributes_rel = array_intersect_key($cloned_model->getRelations(), array_flip(['custom_attributes']) );
+                $cloned_model->setRelations($only_custom_attributes_rel);
+                
+                // Inject main model to `main` core property and generate variation name
+                $model->variations->map(function($variation) use($cloned_model) {
+                    $variation->main = $cloned_model;
+                    $variation->name = $variation->getVariantName(slugified: true);
+                });
+
+                $model->variations_loaded = true;
+            }
             
         });
     }

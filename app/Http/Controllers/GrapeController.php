@@ -25,7 +25,7 @@ class GrapeController extends Controller
             $page_html = json_encode($page_html);
         }
 
-        $sections = [];
+        $sections = Section::all();
         $content = $page_html;
 
         return view('grape.index', [
@@ -51,6 +51,8 @@ class GrapeController extends Controller
 
 
         $sections = [];
+
+        $sections = Section::all();
         $content = $page_html;
 
         // foreach($sections as $section) {

@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Dashboard\Forms\Products;
 
 use DB;
 use FX;
-use EVS;
+use WE;
 use Str;
 use MyShop;
 use Purifier;
@@ -96,8 +96,6 @@ class ProductForm2 extends Component
                 'product.purchase_price' => 'nullable|numeric',
                 'product.discount' => 'nullable|numeric',
                 'product.discount_type' => 'nullable|in:amount,percent',
-                'product.tax' => 'nullable|numeric',
-                'product.tax_type' => 'nullable|in:amount,percent',
             ],
             'inventory' => [
                 'product.unit' => 'nullable',
@@ -214,17 +212,12 @@ class ProductForm2 extends Component
             $this->product->is_quantity_multiplied = 1;
             $this->product->shipping_type = 'product_wise';
             $this->product->stock_visibility_state = 'quantity';
-            $this->product->discount_type = 'amount';
             $this->product->discount = 0;
             $this->product->tags = [];
             $this->product->low_stock_qty = 0;
             $this->product->min_qty = 1;
             $this->product->unit_price = 0;
             $this->product->brand_id = null;
-
-            $this->product->base_currency = FX::getCurrency()->code;
-            $this->product->discount_type = AmountPercentTypeEnum::amount()->value;
-            $this->product->tax_type = AmountPercentTypeEnum::amount()->value;
         }
 
         $this->refreshAttributes($this->product);
@@ -449,7 +442,6 @@ class ProductForm2 extends Component
             $this->product->update([
                 'unit_price' => $this->product->unit_price,
                 'discount' => $this->product->discount,
-                'tax' => $this->product->tax,
                 'purchase_price' => $this->product->purchase_price,
             ]);
 

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\IsPaymentMethod;
 use Closure;
+use App\Traits\IsPaymentMethod;
 use Illuminate\Database\Eloquent\Model;
 
 /**

@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
+use App\Builders\CteBuilder;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 use App\Traits\AttributeTrait;
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 /**
  * App\Models\OrderItem
  */
 class OrderItem extends WeBaseModel
 {
+    use HasRecursiveRelationships;
+    use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
     use AttributeTrait;
     use UploadTrait;
     use GalleryTrait;
@@ -29,6 +33,36 @@ class OrderItem extends WeBaseModel
         'variant' => 'array',
     ];
 
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return CteBuilder|static
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new CteBuilder($query);
+    }
+
+    public function getParentKeyName() {
+        return 'parent_id';
+    }
+
+    public function getLocalKeyName() {
+        return 'id';
+    }
+
+    public function getPathName()
+    {
+        return 'path';
+    }
+
+    public function getPathSeparator()
+    {
+        return '.';
+    }
+
+
     public function order()
     {
         return $this->belongsTo(Order::class);
@@ -43,19 +77,4 @@ class OrderItem extends WeBaseModel
     {
         return [];
     }
-
-//    public function pickup_point()
-//    {
-//        return $this->belongsTo(PickupPoint::class);
-//    }
-//
-//    public function refund_request()
-//    {
-//        return $this->hasOne(RefundRequest::class);
-//    }
-
-//    public function affiliate_log()
-//    {
-//        return $this->hasMany(AffiliateLog::class);
-//    }
 }

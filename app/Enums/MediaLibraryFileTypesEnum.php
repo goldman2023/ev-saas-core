@@ -7,7 +7,7 @@ namespace App\Enums;
  * @method static self images()
  * @method static self documents()
  */
-class MediaLibraryFileTypesEnum extends EVBaseEnum
+class MediaLibraryFileTypesEnum extends WeBaseEnum
 {
     public static function values(): array
     {

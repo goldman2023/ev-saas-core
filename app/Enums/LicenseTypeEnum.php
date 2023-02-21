@@ -7,7 +7,7 @@ namespace App\Enums;
  * @method static self trial()
  * @method static self manual()
  */
-class LicenseTypeEnum extends EVBaseEnum
+class LicenseTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

@@ -4,7 +4,7 @@ namespace App\Http\Services\Stripe;
 
 use DB;
 use FX;
-use EVS;
+use WE;
 use Log;
 use Uuid;
 use Cache;

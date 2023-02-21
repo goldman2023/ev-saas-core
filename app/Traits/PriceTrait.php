@@ -2,14 +2,18 @@
 
 namespace App\Traits;
 
+use FX;
+use TaxService;
+use App\Models\Plan;
+use App\Models\FlashDeal;
 use App\Builders\BaseBuilder;
 use App\Enums\AmountPercentTypeEnum;
-use App\Models\FlashDeal;
-use App\Models\Plan;
-use FX;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait PriceTrait
 {
+    protected $prices_loaded = false;
+
     public mixed $total_price;
 
     public mixed $discounted_price;
@@ -33,21 +37,26 @@ trait PriceTrait
             // Eager Load Flash Deals
             $builder->with(['flash_deals']);
         });
-
+        
         // When model relations data is retrieved, populate model prices data!
         static::relationsRetrieved(function ($model) {
             if (! $model->relationLoaded('flash_deals')) {
                 $model->load('flash_deals');
             }
 
-            $model->getTotalPrice();
-            $model->getDiscountedPrice();
-            $model->getBasePrice();
+            if(!$model->prices_loaded) {
+                $model->getTotalPrice();
+                $model->getDiscountedPrice();
+                $model->getBasePrice();
+    
+                if($model->isSubscribable()) {
+                    $model->getBaseAnnualPrice();
+                    $model->getTotalAnnualPrice();
+                }
 
-            if($model->isSubscribable()) {
-                $model->getBaseAnnualPrice();
-                $model->getTotalAnnualPrice();
+                $model->prices_loaded = true;
             }
+            
         });
     }
 
@@ -65,6 +74,35 @@ trait PriceTrait
         // $this->fillable(array_unique(array_merge($this->fillable, ['total_price', 'discounted_price', 'base_price'])));
     }
 
+    /**
+     * Get base currency
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function baseCurrency(): Attribute
+    {
+        return Attribute::make(
+            get: function($value) {
+                return !empty($value) ? strtoupper($value) : strtoupper(FX::getDefaultCurrency()->code);
+            },
+        );
+    }
+
+
+    /**
+     * Get discount type
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function discountType(): Attribute
+    {
+        return Attribute::make(
+            get: function($value) {
+                return !empty($value) && AmountPercentTypeEnum::in($value) ? $value : AmountPercentTypeEnum::amount()->value;
+            },
+        );
+    }
+
     /************************************
      * Price Relation Functions *
      ************************************/
@@ -79,11 +117,22 @@ trait PriceTrait
     }
 
     // TODO: Add Tax Relation Function!
+    
+    /**
+     * isDiscounted
+     * 
+     * Checks if price is discounted or not.
+     * 
+     * @return boolean
+     */
+    public function isDiscounted() {
+        return $this->getBasePrice() - $this->getTotalPrice() > 0;
+    }
 
     /**
      * Get the Total price
      *
-     * NOTE: Total price is a price of the product after all discounts and with Tax included
+     * NOTE: Total price is a price of the product after all discounts
      *
      * @param bool $display
      * @param bool $both_formats
@@ -155,15 +204,10 @@ trait PriceTrait
                 }
             }
 
+            // Taxes
             // TODO: Create tax_relationships table and link it to subjects and taxes!
             // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            if (! empty($this->attributes['tax'])) {
-                if ($this->attributes['tax_type'] === AmountPercentTypeEnum::percent()->value) {
-                    $this->total_price += ($this->total_price * $this->attributes['tax']) / 100;
-                } elseif ($this->attributes['tax_type'] === AmountPercentTypeEnum::amount()->value) {
-                    $this->total_price += $this->attributes['tax'];
-                }
-            }
+            $this->total_price = TaxService::appendTaxToPrice($this->total_price);
         }
 
         if ($both_formats) {
@@ -225,7 +269,6 @@ trait PriceTrait
                     }
                 }
             } else {
-
                 // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
                 if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
                     $flash_deal = $this->flash_deals->first();
@@ -245,6 +288,8 @@ trait PriceTrait
             }
         }
 
+        $this->discounted_price = TaxService::appendTaxToPrice($this->discounted_price);
+
         if ($both_formats) {
             return [
                 'raw' => $this->discounted_price,
@@ -261,9 +306,7 @@ trait PriceTrait
     }
 
     /**
-     * Get Base price
-     *
-     * NOTE: Base price is the price of the product with product related taxes
+     * Get Base price (same as OriginalPrice)
      *
      * @param bool $display
      * @param bool $both_formats
@@ -273,19 +316,11 @@ trait PriceTrait
     {
         if (empty($this->attributes[$this->getPriceColumn()])) {
             $this->base_price = 0;
-        } elseif (empty($this->base_price)) {
+        } else {
             $this->base_price = $this->attributes[$this->getPriceColumn()];
-
-            // TODO: Create tax_relationship table and link it to subjects and taxes!
-            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            if (! empty($this->attributes['tax'])) {
-                if ($this->attributes['tax_type'] === AmountPercentTypeEnum::percent()->value) {
-                    $this->base_price += ($this->base_price * (float) $this->attributes['tax']) / 100;
-                } elseif ($this->attributes['tax_type'] === AmountPercentTypeEnum::amount()->value) {
-                    $this->base_price += $this->attributes['tax'];
-                }
-            }
         }
+
+        $this->base_price = TaxService::appendTaxToPrice($this->base_price);
 
         if ($both_formats) {
             return [
@@ -313,16 +348,7 @@ trait PriceTrait
      */
     public function getOriginalPrice(bool $display = false, bool $both_formats = false, $decimals = null): mixed
     {
-        $price_column = $this->getPriceColumn();
-
-        if ($both_formats) {
-            return [
-                'raw' => $this->attributes[$price_column] ?? 0,
-                'display' => FX::formatPrice($this->attributes[$price_column] ?? 0, $decimals),
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->attributes[$price_column] ?? 0, $decimals) : $this->attributes[$price_column] ?? 0;
+        return $this->getBasePrice($display, $both_formats, $decimals);
     }
 
     // Annual Prices (only for subscribable models)
@@ -336,6 +362,8 @@ trait PriceTrait
             } else {
                 return 0;
             }
+
+            $this->base_annual_price = TaxService::appendTaxToPrice($this->base_annual_price);
 
             if ($both_formats) {
                 return [
@@ -372,19 +400,14 @@ trait PriceTrait
                 } elseif ($this->yearly_discount_type === AmountPercentTypeEnum::amount()->value) {
                     $this->total_annual_price -= $this->attributes['yearly_discount'];
                 }
-
-                // Then, add Plan specific Tax, if any
-                if ($this->tax_type === AmountPercentTypeEnum::percent()->value) {
-                    $this->total_annual_price += ($this->total_annual_price * $this->attributes['tax']) / 100;
-                } elseif ($this->tax_type === AmountPercentTypeEnum::amount()->value) {
-                    $this->total_annual_price += $this->attributes['tax'];
-                }
-
+                
                 // TODO: Then add global Tax (like VAT)
             } else {
                 // If item is not subscribable, annual price doesn't make sense, so it falls back to one-time total price
                 $this->total_annual_price = $this->attributes[$this->getPriceColumn()];
             }
+
+            $this->total_annual_price = TaxService::appendTaxToPrice($this->total_annual_price);
 
             if ($both_formats) {
                 return [

@@ -6,7 +6,7 @@ namespace App\Enums;
  * @method static self general()
  * @method static self notifications()
  */
-class AppSettingsGroupEnum extends EVBaseEnum
+class AppSettingsGroupEnum extends WeBaseEnum
 {
     public static function values(): array
     {

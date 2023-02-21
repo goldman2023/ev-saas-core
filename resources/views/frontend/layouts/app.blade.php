@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
     <!-- Theme styles -->
-    <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
+    <link rel="stylesheet" href="{{ \WE::getThemeStyling() }}">
 
     @stack('pre_head_scripts')
 
@@ -112,7 +112,7 @@
     echo get_setting('footer_script');
 @endphp
 
-<script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
+<script src="{{ mix('js/app.js', 'themes/WeTailwind', true, true) }}"></script>
 <!-- Vendor Scripts -->
 @stack('footer_scripts')
 

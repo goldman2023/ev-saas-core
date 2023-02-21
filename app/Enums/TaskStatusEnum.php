@@ -9,7 +9,7 @@ namespace App\Enums;
  * @method static self review()
  * @method static self done()
  */
-class TaskStatusEnum extends EVBaseEnum
+class TaskStatusEnum extends WeBaseEnum
 {
     public static function values(): array
     {

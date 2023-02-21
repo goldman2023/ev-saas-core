@@ -3,15 +3,17 @@
 namespace App\Http\Livewire\Forms;
 
 use DB;
-use EVS;
+use WE;
 use Str;
 use Auth;
+use Uuid;
 use Carbon;
+use Payments;
 use Purifier;
 use Categories;
-use CartService;
-use Payments;
+use TaxService;
 use AuthService;
+use CartService;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Address;
@@ -381,7 +383,7 @@ class CheckoutForm extends Component
 
             $this->order->shipping_method = 'free'; // TODO: Change this to use shipping methods and calculations when the shipping logic is added in BE
             $this->order->shipping_cost = 0;
-            $this->order->tax = CartService::getGlobalTaxPercentage();
+            $this->order->tax = TaxService::getGlobalTaxPercentage(); // set Order tax in percentage! TODO: Make it depend on country through TaxService singleton and selected country in checkout list!
 
             // payment_status - `unpaid` by default (this should be changed on payment processor callback before Thank you page is shown - if payment goes through of course)
             // shipping_status - `not_sent` by default (this is changed manually in Order management pages by company staff)
@@ -392,9 +394,9 @@ class CheckoutForm extends Component
             /*
              * Create OrderItem(s)
              */
-            foreach ($this->items as $item) {
+            $order_item_creation_method = function($item, $parent = null) {
                 if(empty($item->purchase_quantity))
-                    continue; // Skip item if purchase quantity is something other than > 0
+                    return; // Skip item if purchase quantity is something other than > 0
 
                 $order_item = new OrderItem();
                 $order_item->order_id = $this->order->id;
@@ -404,6 +406,11 @@ class CheckoutForm extends Component
                 $order_item->excerpt = ($item?->is_variation ?? false) ? $item->main->excerpt : $item->excerpt;
                 $order_item->variant = ($item?->is_variation ?? false) ? $item->getVariantName(key_by: 'name') : null;
                 $order_item->quantity = ! empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
+
+                // Attach Addon OrderItem to parent OrderItem
+                if(!empty($parent)) {
+                    $order_item->parent_id = $parent->id;
+                }
 
                 // Check if $item has stock and reduce it if it does (ONLY IF TRACK_INVENTORY is TRUE)
                 if ($item->track_inventory && method_exists($item, 'stock')) {
@@ -422,10 +429,24 @@ class CheckoutForm extends Component
                 $order_item->base_price = $item->base_price; // it's like a unit_price
                 $order_item->discount_amount = $order_item->quantity * ($item->base_price - $item->total_price);
                 $order_item->subtotal_price = ($order_item->quantity * $item->base_price) - $order_item->discount_amount;
-                $order_item->tax = $order_item->subtotal_price * CartService::getGlobalTaxPercentage() / 100;
-                $order_item->total_price = $order_item->subtotal_price + $order_item->tax;
+                $order_item->tax = TaxService::calculateTaxAmount($order_item->subtotal_price);
+                $order_item->total_price = TaxService::calculatePriceWithTax($order_item->subtotal_price);
 
                 $order_item->save();
+
+                return $order_item;
+            };
+
+            foreach ($this->items as $item) {
+                // Create OrderItem
+                $order_item = $order_item_creation_method($item);
+
+                // Create Addons
+                if(!empty($item->purchased_addons)) {
+                    foreach($item->purchased_addons as $addon) {
+                        $order_item_creation_method($addon, $order_item);
+                    }
+                }
             }
 
             $this->order->load(['order_items', 'user']);
@@ -443,7 +464,6 @@ class CheckoutForm extends Component
             $invoice->payment_method_type = PaymentMethodUniversal::class;
             $invoice->payment_method_id = $payment_method->id ?? null;
             $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
-            
             $invoice->setInvoiceNumber($payment_method);
 
             $invoice->email = $this->order->email;
@@ -471,11 +491,11 @@ class CheckoutForm extends Component
 
             $invoice->save();
 
+            $invoice->setRealInvoiceNumber();
+
             do_action('checkout.process', $this->order, $invoice);
 
             DB::commit();
-
-            $invoice->setRealInvoiceNumber();
 
             // Full cart reset
             CartService::fullCartReset();

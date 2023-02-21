@@ -68,7 +68,6 @@
             <!-- Product info -->
             <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
 
-
                 <div class="mt-3">
                     <h2 class="sr-only">Product information</h2>
                     <span class="font-md font-medium">
@@ -77,8 +76,6 @@
                     <p class="text-3xl tracking-tight text-gray-900">{{ FX::formatPrice($product->getBasePrice()) }}
                     </p>
                 </div>
-
-
 
                 <div class="mt-6">
                     <h3 class="sr-only">{{ translate('Description') }}</h3>
@@ -89,6 +86,7 @@
                         </p>
                     </div>
                 </div>
+                
                 <x-default.products.single.product-checkout-card :product="$product">
                 </x-default.products.single.product-checkout-card>
 

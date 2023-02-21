@@ -11,7 +11,7 @@ namespace App\Enums;
  * @method static self dribble()
  * @method static self soundcloud()
  */
-class AvailableSocialFieldsEnum extends EVBaseEnum
+class AvailableSocialFieldsEnum extends WeBaseEnum
 {
     public static function values(): array
     {

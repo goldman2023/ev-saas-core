@@ -2,28 +2,28 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
-use App\Enums\AppSettingsGroupEnum;
+use DB;
+use WE;
+use MyShop;
+use Payments;
+use Purifier;
+use Categories;
+use TenantSettings;
+use App\Models\Shop;
 use App\Models\Product;
+use Livewire\Component;
+use App\Rules\UniqueSKU;
+use App\Models\ShopSetting;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
-use App\Models\Shop;
-use App\Models\ShopSetting;
 use App\Models\TenantSetting;
-use App\Rules\UniqueSKU;
-use App\Traits\Livewire\DispatchSupport;
-use DB;
-use EVS;
-use MyShop;
-use Categories;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Purifier;
-use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
+use App\Enums\AppSettingsGroupEnum;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use TenantSettings;
-use Payments;
+use App\Traits\Livewire\DispatchSupport;
+use Spatie\ValidationRules\Rules\ModelsExist;
 
 class AppSettingsForm extends Component
 {
@@ -67,6 +67,7 @@ class AppSettingsForm extends Component
                 'settings.company_vat' => [''],
                 'settings.company_email' => [''],
                 'settings.company_tax_rate' => ['required', 'numeric'],
+                'settings.include_tax' => [],
             ]),
             /* TODO: Enable disable specific product types in app settings */
             /* WARNING THIS OPTION IS WORK IN PROGRESS */

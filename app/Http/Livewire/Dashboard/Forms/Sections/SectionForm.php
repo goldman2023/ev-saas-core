@@ -11,7 +11,7 @@ use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\RulesSets;
 use Categories;
 use DB;
-use EVS;
+use WE;
 use FX;
 use Illuminate\Validation\Rule;
 use Livewire\Component;

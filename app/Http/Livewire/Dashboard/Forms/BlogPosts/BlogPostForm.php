@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Dashboard\Forms\BlogPosts;
 
 use DB;
-use EVS;
+use WE;
 use WEF;
 use Purifier;
 use Categories;
@@ -65,35 +65,27 @@ class BlogPostForm extends Component
 
     protected function rules()
     {
-        return $this->overrideRulesBasedOnStatus([
-            'default' => [
-                'selected_categories' => 'nullable',
-                'blogPost.type' => [Rule::in(BlogPostTypeEnum::toValues('archived'))],
-                'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
-                'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-                'blogPost.name' => 'required|min:10',
-                'blogPost.subscription_only' => [],
-                'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
-                'blogPost.excerpt' => 'required|min:10',
-                'blogPost.content' => 'required|min:10',
-                'blogPost.gallery' => [''],
-                'blogPost.meta_title' => [''],
-                'blogPost.meta_keywords' => [''],
-                'blogPost.meta_description' => [''],
-                'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
-            ],
-            StatusEnum::published()->value => [
-                'selected_categories' => 'required',
-            ]
-        ], $this->blogPost);
-
-        // if($this->blogPost?->status === StatusEnum::published()->value) {
-        //     return ;
-        // } else {
-        //     return [
-        //         'selected_categories' => 'required',
+        return [
+            'selected_categories' => 'nullable',
+            'blogPost.type' => [Rule::in(BlogPostTypeEnum::toValues('archived'))],
+            'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
+            'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
+            'blogPost.name' => 'required|min:10',
+            'blogPost.subscription_only' => [],
+            'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
+            'blogPost.excerpt' => 'required|min:10',
+            'blogPost.content' => 'required|min:10',
+            'blogPost.gallery' => [''],
+            'blogPost.meta_title' => [''],
+            'blogPost.meta_keywords' => [''],
+            'blogPost.meta_description' => [''],
+            'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
+        ];
+        // return $this->overrideRulesBasedOnStatus([
+        //     'default' => [
+        //         'selected_categories' => 'nullable',
         //         'blogPost.type' => [Rule::in(BlogPostTypeEnum::toValues('archived'))],
-        //         'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
+        //         'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
         //         'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
         //         'blogPost.name' => 'required|min:10',
         //         'blogPost.subscription_only' => [],
@@ -105,7 +97,16 @@ class BlogPostForm extends Component
         //         'blogPost.meta_keywords' => [''],
         //         'blogPost.meta_description' => [''],
         //         'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
-        //     ];
+        //     ],
+        //     StatusEnum::published()->value => [
+        //         'selected_categories' => 'required',
+        //     ]
+        // ], $this->blogPost);
+
+        // if($this->blogPost?->status === StatusEnum::published()->value) {
+        //     return ;
+        // } else {
+            
         // }
     }
 

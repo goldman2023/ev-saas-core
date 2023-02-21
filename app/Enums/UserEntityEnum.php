@@ -6,7 +6,7 @@ namespace App\Enums;
  * @method static self individual()
  * @method static self company()
  */
-class UserEntityEnum extends EVBaseEnum
+class UserEntityEnum extends WeBaseEnum
 {
     public static function values(): array
     {

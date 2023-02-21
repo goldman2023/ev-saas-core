@@ -9,6 +9,14 @@
     .gjs-editor {
         min-height: 100vh;
     }
+    .gjs-block svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .gjs-block {
+        width: 100% !important;
+    }
 </style>
 
 <link rel="stylesheet" href="{{ static_asset('bp-assets/grape/grape.min.css') }}">
@@ -18,9 +26,10 @@
 <script src="{{ static_asset('bp-assets/grape/grape.min.js') }}"></script>
 <script src="https://unpkg.com/grapesjs-component-code-editor"></script>
 <script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage"></script>
-<script src="/bp-assets/grapesjs-custom-code.min.js">
+<script src="/bp-assets/grape/grapesjs-custom-code.min.js">
     <link href="https://unpkg.com/grapesjs-component-code-editor/dist/grapesjs-component-code-editor.min.css" rel="stylesheet">
-<script src="https://unpkg.com/grapesjs-component-code-editor"></script>
+<script src="https://unpkg.com/grapesjs-component-code-editor">
+</script>
 <script src="https://unpkg.com/grapesjs-tailwind"></script>
 
 @endpush
@@ -28,10 +37,19 @@
 @section('content')
 
 <div class="w-full" x-data="grapeEditor" x-init="initGrapeEditor()">
-    <div id="gjs" style="min-height: 100vh;">
+    <div class="bg-gray-600 text-xs"
+        style="width: 250px; position: absolute; left: 0; top: 0; height: 100vh; overflow-y:scoll; z-index: 9999;"
+        id="blocks">
+        <h2 class="text-xl text-white mb-2 w-full p-3">Sections</h2>
+        </div>
+
+    <div id="gjs" style="padding-left: 250px; min-height: 100vh;">
         <div data-gjs-editable="false">
             {!! $content !!}
         </div>
+    </div>
+
+    <div id="styles-manager">
     </div>
 
     <div class="w-full flex justify-between">
@@ -69,6 +87,9 @@
                 container: '#gjs',
                 height: '90%',
                 selectorManager: { escapeName },
+                blockManager: {
+                    appendTo: '#blocks',
+                },
                 plugins: ['gjs-blocks-basic', 'grapesjs-preset-webpage', 'grapesjs-component-code-editor', 'grapesjs-tailwind'],
                 pluginsOpts: {
                     'grapesjs-custom-code': {
@@ -95,75 +116,31 @@ panelViews.get("buttons").add([
 
               /* Custom Blocks refference: https://jsfiddle.net/fcsa6z75/7/  */
               // Add blocks
-this.editor.BlockManager.add('collection-1', {
-	label: 'Collection 1',
-  content: { type: 'collection', category: 'SET-1' },
-});
-this.editor.BlockManager.add('collection-2', {
-	label: 'Collection 2',
-  content: { type: 'collection', category: 'SET-2' },
-});
-              // Add the custom component
-this.editor.DomComponents.addType('collection', {
-  content: { type: 'collection', category: 'SET-1' },
-    label: 'Recently viewed',
-	model: {
-  	defaults: {
-    	category: 'basic',
-    },
-    // Customize the export HTML
-    toHTML() {
-    	const category = this.get('category');
-    	return `<x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>`
-    },
-  },
-  view: {
-  	onRender() {
-     	const { $el, model } = this;
-        const category = model.get('category');
-			$el.empty();
-    	// eg. you can make some ajax request and then...
-      const products = [
-      	'recently viewed',
-       ];
-       products.forEach(product => {
-       	// If you append to the element, products will be static
-        // and you won't be able to select/edit them.
-        // So this approach is to use when you want kind
-        // of placeholders elements.
-       	$el.append(product);
-
-        // If actually need to select/edit them, append the HTML
-        // to the model
-        // model.append(product);
-       });
-    }
-  }
-});
-
-
-
               this.editor.on('component:add', (model) => {
                 // alert('Add');
               });
 
-              var components = [
+
+              var components = [];
                   @foreach($sections as $item)
-                    {
-                      'id' : '{{ $item->getRelativePathName() }}',
+                    var data = {
+                      'id' : '{{ $item->id }}',
                       'data' : {
-                          label: `{{ $item->getRelativePathName() }}`,
-                          content: `{!! strip_comments(file_get_contents($item->getPathName())) !!}`,
+                          label: `{{ $item->title }}`,
+                          content: `{!! strip_comments($item->html_blade) !!}`,
                         attributes: {
                         class: "fa 0001",
-                        id: '{{ $item->getRelativePathName() }}'
+                        id: '{{ $item->id }}'
                         },
-                        category: '{{ $item->getRelativePath() }}'
+                        category: 'Global Components',
+                        removable: false,
+                        editable: false,
                       }
-                    },
-                    @endforeach
-              ]
+                    };
 
+                    components.push(data);
+                @endforeach
+                    console.log(components);
               for (i=0;i<components.length;i++) {
                 if(components[i].id && components[i].data){
                     console.log(components[i].data);
@@ -195,5 +172,4 @@ this.editor.DomComponents.addType('collection', {
       }))
   })
 </script>
-
 @endsection

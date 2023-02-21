@@ -2,25 +2,25 @@
 
 namespace App\Models;
 
-use App\Builders\BaseBuilder;
-use App\Builders\CteBuilder;
-use App\Facades\Categories;
-use App\Traits\GalleryTrait;
-use App\Traits\TranslationTrait;
-use App\Traits\UploadTrait;
-use App\Traits\SocialFollowingTrait;
-use DateTimeInterface;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use App;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 use Str;
 use Vendor;
+use DateTimeInterface;
+use App\Facades\Categories;
+use App\Traits\UploadTrait;
+use App\Builders\CteBuilder;
+use App\Traits\GalleryTrait;
+use App\Builders\BaseBuilder;
+use Spatie\Sluggable\HasSlug;
+use App\Traits\TranslationTrait;
+use Spatie\Sluggable\SlugOptions;
+use App\Traits\SocialFollowingTrait;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Models\Activity;
+use Illuminate\Database\Eloquent\Builder;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 /**
  * App\Models\Category

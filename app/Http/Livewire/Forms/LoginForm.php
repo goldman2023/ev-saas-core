@@ -13,7 +13,7 @@ use Auth;
 use Carbon;
 use Categories;
 use DB;
-use EVS;
+use WE;
 use MailerService;
 use Payments;
 use StripeService;

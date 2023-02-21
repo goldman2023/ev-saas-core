@@ -9,7 +9,7 @@ namespace App\Enums;
  * @method static self active_until_end()
  * @method static self trial()
  */
-class UserSubscriptionStatusEnum extends EVBaseEnum
+class UserSubscriptionStatusEnum extends WeBaseEnum
 {
     public static function values(): array
     {

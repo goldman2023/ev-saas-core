@@ -2,11 +2,10 @@
 
 namespace App\Http\Services;
 
-use EVS;
+use WE;
 use Cache;
 use Session;
 use App\Models\Shop;
-use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Currency;

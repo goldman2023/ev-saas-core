@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Dashboard\Forms\FileManager;
 
 use DB;
-use EVS;
+use WE;
 use Purifier;
 use App\Models\Upload;
 use Livewire\Component;

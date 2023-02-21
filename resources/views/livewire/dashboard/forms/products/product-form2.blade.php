@@ -1,7 +1,6 @@
 @push('head_scripts')
-<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+<script src="{{ mix('js/editor.js', 'themes/WeTailwind') }}" defer></script>
 @endpush
-
 <div class="lw-form container-fluid" x-data="{
         thumbnail: @js(toJSONMedia($product->thumbnail)),
         cover: @js(toJSONMedia($product->cover)),
@@ -18,7 +17,6 @@
         use_serial: {{ $product->use_serial === true ? 'true' : 'false' }},
         allow_out_of_stock_purchases: {{ $product->allow_out_of_stock_purchases === true ? 'true' : 'false' }},
         discount_type: @js($product->discount_type),
-        tax_type: @js($product->tax_type),
         description: @entangle('product.description').defer,
         description_structure: @entangle('wef.content_structure').defer,
 
@@ -44,7 +42,6 @@
             $wire.set('product.video_provider', this.video_provider, true);
             $wire.set('product.base_currency', this.base_currency, true);
             $wire.set('product.discount_type', this.discount_type, true);
-            $wire.set('product.tax_type', this.tax_type, true);
             $wire.set('product.track_inventory', this.track_inventory, true);
             $wire.set('product.use_serial', this.use_serial, true);
             $wire.set('product.allow_out_of_stock_purchases', this.allow_out_of_stock_purchases, true);
@@ -324,13 +321,10 @@
 
 
                     {{-- Card Pricing --}}
-                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{
-                            show_tax: {{ !empty($product->tax) ? 'true':'false' }},
-                        }">
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8">
                         <div>
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Pricing') }}</h3>
-                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Product pricing details') }}
-                            </p>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Product pricing details') }}</p>
                         </div>
 
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
@@ -390,58 +384,6 @@
                                 </div>
                             </div>
                             <!-- END Discount and Discount type -->
-
-                            {{-- Additional fee/tax --}}
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
-                                x-data="{}">
-                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                    <span class="text-sm font-medium text-gray-900">{{ translate('Has additional fee?')
-                                        }}</span>
-                                </div>
-
-                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-
-                                    <button type="button" @click="show_tax = !show_tax"
-                                        :class="{'bg-primary':show_tax, 'bg-gray-200':!show_tax}"
-                                        class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                        role="switch">
-                                        <span :class="{'translate-x-5':show_tax, 'translate-x-0':!show_tax}"
-                                            class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="w-full mt-4" x-show="show_tax">
-                                <!-- Tax and Tax type -->
-                                <div
-                                    class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Additional Fee') }}
-                                    </label>
-
-                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <div class="grid grid-cols-10 gap-3">
-                                            <div class="col-span-6">
-                                                <input type="number" step="0.01" min="0"
-                                                    class="form-standard @error('product.tax') is-invalid @enderror"
-                                                    placeholder="{{ translate('Additional fee (fixed or percentage)') }}"
-                                                    wire:model.defer="product.tax" />
-                                            </div>
-
-                                            <div class="col-span-4" x-data="{}">
-                                                <x-dashboard.form.select
-                                                    :items="\App\Enums\AmountPercentTypeEnum::toArray()"
-                                                    selected="tax_type" :nullable="false"></x-dashboard.form.select>
-                                            </div>
-
-                                            <x-system.invalid-msg class="col-span-10" field="product.tax">
-                                            </x-system.invalid-msg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- END Tax and Tax type -->
-                            </div>
-                            {{-- Additional fee/tax --}}
 
                             <!-- Cost per item -->
                             <div
@@ -1607,7 +1549,7 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.select :items="EVS::getMappedVideoProviders()"
+                                        <x-dashboard.form.select :items="WE::getMappedVideoProviders()"
                                             selected="video_provider"></x-dashboard.form.select>
                                     </div>
                                 </div>
@@ -1785,7 +1727,7 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <div class="grid grid-cols-10 gap-3">
                                         <div class="col-span-10">
-                                            <x-dashboard.form.select :items="EVS::getMappedBrands()"
+                                            <x-dashboard.form.select :items="WE::getMappedBrands()"
                                                 selected="brand_id"></x-dashboard.form.select>
                                         </div>
 

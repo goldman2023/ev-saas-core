@@ -31,6 +31,7 @@
 @endif
 @endif
 
+
 @if($page->type === 'wysiwyg')
 <div class="container py-10">
     {!! $page->content !!}

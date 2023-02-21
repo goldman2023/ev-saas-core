@@ -1,9 +1,6 @@
 <!DOCTYPE html>
-@if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
-    <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
-@else
-    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
-@endif
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+
 <head>
     {{ seo()->render() }}
 
@@ -18,24 +15,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
-    <meta name="description" content="@yield('meta_description', get_setting('meta_description') )"/>
+    <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
     <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
 
     @yield('meta')
 
 
-    <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
 
     @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
-        <x-default.system.og-meta>
-        </x-default.system.og-meta>
+    <x-default.system.og-meta>
+    </x-default.system.og-meta>
     @endif
 
 
     <!-- Vendor Styles -->
 
     <!-- Theme styles -->
-    <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
+    <link rel="stylesheet" href="{{ \WE::getThemeStyling() }}">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
     @include('frontend.layouts.global-partials.all')
@@ -43,7 +42,17 @@
 
     @stack('pre_head_scripts')
 
-    <script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
+    @themefilexists('js/alpine.js')
+        <script src="{{ mix('js/alpine.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
+
+    @themefilexists('js/app.min.js')
+        <script src="{{ mix('js/app.min.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    @else
+        <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
+    @endthemefilexists
     <!-- Vendor Scripts -->
 
     <x-default.system.tracking-pixels>
@@ -60,15 +69,15 @@
         }
     </style>
 
-    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 </head>
+
 <body class="h-full">
     <div class="main-wrapper h-full">
         {{-- Sidebar (Mobile/Tablet and Laptop/Desktop) --}}
         @include('frontend.dashboard.partials.sidebar')
         @include('frontend.dashboard.partials.sidebar-mobile')
 
-        <div class="lg:pl-64 flex flex-col">
+        <div class="flex flex-col">
             @include('frontend.dashboard.navigation.topbar')
 
             <main class="flex-1">
@@ -90,4 +99,5 @@
 
     @stack('footer_scripts')
 </body>
+
 </html>

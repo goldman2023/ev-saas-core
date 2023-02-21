@@ -6,7 +6,7 @@ namespace App\Enums;
  * @method static self blog()
  * @method static self portfolio()
  */
-class BlogPostTypeEnum extends EVBaseEnum
+class BlogPostTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {

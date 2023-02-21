@@ -26,7 +26,9 @@
                 <h3 class="text-lg leading-6 font-medium text-gray-900 mb-3">
                     {{ translate('Preview') }}
                 </h3>
-                <iframe class="rounded-md bg-white w-full min-h-[600px]" src="{{ $page->getPermalink() }}?preview=true"> </iframe>
+                <div style="transform: scale(0.5); width: 200%; transform-origin: top left;">
+                <iframe class="rounded-md bg-white w-full min-h-[1200px]" src="{{ $page->getPermalink() }}?preview=true"> </iframe>
+                </div>
             </div>
         </div>
     </section>

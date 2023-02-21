@@ -5,6 +5,7 @@ use App\Models\Upload;
 use App\Models\Invoice;
 use App\Facades\Payments;
 use App\Facades\Countries;
+use App\Facades\TaxService;
 use App\Enums\OrderTypeEnum;
 use App\Enums\UserEntityEnum;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -252,11 +253,14 @@ if (!function_exists('generateInvoicePDF')) {
 
         // Set custom invoice data
         $custom_data = [
-            'total_discount' => $order_level_discount,
+            'total_discount' => $order_level_discount > 0.5 ? $order_level_discount : 0,
             'total_taxes_label' => $total_taxes_label,
             'via_payment_method' => function() use($invoice) {
                 return Payments::getViaLabel($invoice);
-            }
+            },
+            'tax_incl' => $invoice->tax_incl,
+            'taxable_amount' => $invoice->tax_incl ? ($invoice->total_price - $invoice->tax) : null,
+            'taxes_amount' => $invoice->tax_incl ? $invoice->tax : null,
         ];
         
         // Create PDF with $invoice data and stream it
@@ -295,7 +299,7 @@ if (!function_exists('generateInvoicePDF')) {
             return $invoice_path.'.pdf';
         }
 
-        if($invoice->tax > 0) {
+        if($invoice->tax > 0 && !$invoice->tax_incl) {
             $pdf->totalTaxes($invoice->tax);
         }
 

@@ -16,7 +16,7 @@ namespace App\Enums;
  * @method static self text_list()
  * @method static self wysiwyg()
  */
-class AttributeTypeEnum extends EVBaseEnum
+class AttributeTypeEnum extends WeBaseEnum
 {
     public static function values(): array
     {
