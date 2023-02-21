@@ -51,8 +51,8 @@
                                 </div>
                             @else
                             {{-- TODO: create a propper active class name for identfying  --}}
-                            <div class="{{ $key > 0 ? 'space-y-1':'' }} {{ $item['is_active'] }} @if($item['is_active']) bg-gray-200 rounded @endif" >
-                                <a href="{{ $item['route'] }}" class="@if($item['is_active']) text-black rounded @else text-gray-700 @endif hover:text-gray-900 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
+                            <div class="{{ $key > 0 ? 'space-y-1':'' }} {{ $item['is_active'] }} @if($item['is_active']) bg-black text-white rounded @endif" >
+                                <a href="{{ $item['route'] }}" class="@if($item['is_active']) text-white rounded @else text-gray-700 @endif hover:text-gray-800 hover:bg-gray-200 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
 
                                     @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6 '])
 

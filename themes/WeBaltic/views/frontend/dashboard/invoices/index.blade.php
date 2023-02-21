@@ -21,7 +21,7 @@
     <x-dashboard.widgets.business.quick-actions>
     </x-dashboard.widgets.business.quick-actions>
     <div class="sm:grid sm:grid-cols-12 gap-6">
-        <div class="sm:col-span-8">
+        <div class="sm:col-span-9">
             @if($invoices_count > 0)
             <livewire:dashboard.tables.invoices-table :per-page="10" />
             @else
@@ -32,7 +32,7 @@
             </x-dashboard.empty-states.no-items-in-collection>
             @endif
         </div>
-        <div class="sm:col-span-4">
+        <div class="sm:col-span-3">
             <x-dashboard.widgets.invoices.export>
             </x-dashboard.widgets.invoices.export>
         </div>
