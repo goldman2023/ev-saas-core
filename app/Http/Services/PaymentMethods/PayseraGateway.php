@@ -59,13 +59,12 @@ class PayseraGateway
     public function pay()
     {
         try {
-            dd($this->invoice);
             // TODO: check Paysera
             WebToPay::redirectToPayment([
                 'projectid' => $this->payment_method->paysera_project_id,
                 'sign_password' => $this->payment_method->paysera_project_password,
                 'orderid' => $this->invoice->id,
-                'amount' => $this->invoice->total_price, // in cents, hence x100
+                'amount' => $this->invoice->total_price * 100, // in cents, hence x100
                 'currency' => 'EUR', // 3-char notation - EUR, USD, RSD, JPY etc. TODO: Add currency column to `orders` table
                 'country' => $this->invoice->billing_country, // 2-char notation - LT, GB, US, DE, PL, RS etc.
                 'lang' => $this->lang,
