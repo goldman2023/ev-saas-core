@@ -14,7 +14,6 @@
         "ammardev/laravel-wp-hash-driver": "^1.0",
         "asantibanez/livewire-charts": "^2.4",
         "barryvdh/laravel-dompdf": "^2.0",
-        "bavix/laravel-wallet": "^8.3",
         "bkwld/cloner": "^3.10",
         "blade-ui-kit/blade-heroicons": "^2.0",
         "blade-ui-kit/blade-icons": "^1.2",

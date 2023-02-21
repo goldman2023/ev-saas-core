@@ -57,7 +57,7 @@ Route::middleware([
         Route::get('/categories', [EVCategoryController::class, 'index'])->name('categories.index');
         Route::get('/categories/create', [EVCategoryController::class, 'create'])->name('category.create');
         Route::get('/categories/edit/{id}', [EVCategoryController::class, 'edit'])->name('category.edit');
-        
+
         // Tenant blog posts
         //        Route::get('/tenant/blog/posts', [ProductController::class, 'index'])->name('blog-posts.index');
         //        Route::get('/tenant/blog/posts/create', [ProductController::class, 'create'])->name('blog-posts.create');
@@ -89,18 +89,19 @@ Route::middleware([
         Route::get('/products/edit/{id}/stock-management', [ProductController::class, 'edit_stocks'])->name('product.edit.stocks');
         Route::get('/products/edit/{id}/course-management', [ProductController::class, 'edit_course'])->name('product.edit.course');
         Route::get('/products/preview/{id}/thank-you', [ProductController::class, 'thank_you_preview'])->name('product.thank_you_preview');
-        
+
         Route::get('/product-addons', [ProductAddonController::class, 'index'])->name('product-addons.index');
         Route::get('/product-addons/create', [ProductAddonController::class, 'create'])->name('product-addon.create');
         Route::get('/product-addons/details/{id}', [ProductAddonController::class, 'details'])->name('product-addon.details');
         Route::get('/product-addons/edit/{id}', [ProductAddonController::class, 'edit'])->name('product-addon.edit');
         Route::get('/product-addons/edit/{id}/stock-management', [ProductAddonController::class, 'edit_stocks'])->name('product-addon.edit.stocks');
-        
+
 
         /* Pages & Sections */
         Route::get('/pages', [EVPageController::class, 'index'])->name('pages.index');
         Route::get('/pages/create', [EVPageController::class, 'create'])->name('page.create');
         Route::get('/pages/edit/{id}', [EVPageController::class, 'edit'])->name('page.edit');
+        Route::get('/pages/details/{id}', [EVPageController::class, 'details'])->name('page.details');
         Route::get('/sections', [WeSectionController::class, 'index'])->name('sections.index');
         Route::get('/sections/create', [WeSectionController::class, 'create'])->name('section.create');
         Route::get('/sections/edit/{id}', [WeSectionController::class, 'edit'])->name('section.edit');
@@ -129,7 +130,7 @@ Route::middleware([
         Route::post('/orders/details', [OrderController::class, 'order_details'])->name('orders.details');
         Route::post('/orders/update_delivery_status', [OrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
         Route::post('/orders/update_payment_status', [OrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
-        
+
         Route::get('/invoices', [WeInvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoice/{id}/download', [WeInvoiceController::class, 'download_invoice'])->name('invoice.download');
         Route::get('/order/{order_id}/upcoming-invoice/download', [WeInvoiceController::class, 'download_upcoming_invoice'])->name('invoice.upcoming.download');
@@ -252,10 +253,10 @@ Route::middleware([
 
     /* IMPORTANT: Last set of routes! To define missing pages and routes */
     /* Catch All Routes: If nothing is matched, try to find a page or throw 404 */
-    // Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
+    Route::get('/{data1}', [PageController::class, 'show_custom_page'])->name('custom-pages.show');
     // Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 
-    
+
     Route::fallback(function () {
         abort(404);
     });

@@ -112,7 +112,7 @@
     echo get_setting('footer_script');
 @endphp
 
-<script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
+<script src="{{ mix('js/app.js', 'themes/WeTailwind', true, true) }}"></script>
 <!-- Vendor Scripts -->
 @stack('footer_scripts')
 

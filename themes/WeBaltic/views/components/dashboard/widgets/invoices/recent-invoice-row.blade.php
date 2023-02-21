@@ -10,10 +10,19 @@
 
 <x-livewire-tables::table.cell class="align-middle text-left">
     @if(auth()->user()->isAdmin())
+
+    @isset( $row->user)
     <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user_id]) }}">
-       <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
-        {{ $row->user->email }}
-    </a>
+        <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
+         {{ $row->user->email }}
+     </a>
+    @else
+    <div class="text-14">
+        <strong> {{ translate('Guest: ') }}  </strong> {{ $row->billing_first_name }} {{ $row->billing_last_naem }} <br>
+      {{ $row->email }}
+    </div>
+    @endisset
+
     @else
     <span class="media align-items-center text-14">
         <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>

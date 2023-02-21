@@ -37,7 +37,7 @@
 
     @stack('pre_head_scripts')
 
-    <script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
+    <script src="{{ mix('js/app.js', false, true, true) }}"></script>
     <!-- Vendor Scripts -->
 
     <x-default.system.tracking-pixels>

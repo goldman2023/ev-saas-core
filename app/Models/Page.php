@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App;
+use App\Traits\CoreMetaTrait;
+use WEF;
 use App\Traits\GalleryTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
@@ -24,6 +26,8 @@ class Page extends WeBaseModel implements Sitemapable
     use GalleryTrait;
     use HasStatus;
     use LogsActivity;
+    use CoreMetaTrait;
+
 
     protected $table = 'pages';
 
@@ -45,7 +49,7 @@ class Page extends WeBaseModel implements Sitemapable
 
     public function toSitemapTag(): Url | string | array
     {
-        return route('custom-pages.show_custom_page', $this->slug);
+        return route('custom-pages.show', $this->slug);
     }
 
     public function getRouteKeyName()
@@ -55,7 +59,15 @@ class Page extends WeBaseModel implements Sitemapable
 
     public static function getRouteName()
     {
-        return 'custom-pages.show_custom_page';
+        return 'custom-pages.show';
+    }
+
+    public function getWEFDataTypes() {
+        return WEF::bundleWithGlobalWEF(apply_filters('page.wef.data-types', [
+            'hide_header' => 'boolean',
+            'include_in_sitemap' => 'boolean',
+            'hide_footer' => 'boolean',
+        ]));
     }
 
     /*

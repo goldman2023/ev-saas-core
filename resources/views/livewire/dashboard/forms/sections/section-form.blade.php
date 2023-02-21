@@ -97,15 +97,26 @@
                 </div>
                 {{-- END Divider --}}
 
+                <div class="w-full flex flex-shrink-0 justify-between pt-4 mb-6">
+                    @isset($section->id)
+                        <a target="_blank" href="{{ route('grape.section-editor', [ $section->id ]) }}" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-100 py-2 px-4 text-sm font-medium text-indigo-900 shadow-sm hover:bg-indigo-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            {{ translate('Visual editor') }}
+                            @svg('heroicon-o-eye', ['class' => 'h-4 h-4 ml-2'])
+                        </a>
+                    @endisset
+
+                    <button type="button" @click="saveSection()"  class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        {{ translate('Save') }}
+                    </button>
+
+
+                </div>
+
                 {{-- ACE editor --}}
                 <div id="ace_editor" class="w-full h-full grow-0 overflow-y-auto" wire:ignore></div>
                 {{-- END ACE editor --}}
 
-                <div class="w-full flex flex-shrink-0 justify-end pt-4">
-                    <button type="button" @click="saveSection()"  class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                        {{ translate('Save') }}
-                    </button>
-                </div>
+
 
             </div>
 
@@ -114,7 +125,7 @@
                     <div id="section-preview relative" class="w-100" wire:key="{{ mt_rand() }}">
                         <iframe
 
-                        src="{{ route('section.preview', $section->id) }}" class="left-[-40%] scale-75 w-full min-w-[1200px] min-h-[700px]"></iframe>
+                        src="{{ route('section.preview', $section->id) }}" style="transform-origin: top left;" class="left-[-40%] scale-75 w-full min-w-[1200px] min-h-[700px]"></iframe>
                     </div>
                 </div>
             @endif

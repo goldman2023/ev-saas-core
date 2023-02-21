@@ -36,7 +36,7 @@ use App\Notifications\EmailVerificationNotification;
 use App\Notifications\UserPasswordChangedNotification;
 
 
-class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, HasApiTokens;
     use SoftDeletes;
@@ -47,7 +47,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use GalleryTrait;
     use OwnershipTrait;
     use SocialAccounts;
-    use HasWalletFloat;
     use PermalinkTrait;
     use CoreMetaTrait;
     use SocialReactionsTrait;
@@ -234,12 +233,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function purchasedProducts()
     {
+        /* TODO: add purchased products relationship here */
         // return DB::table('products')->;
-    }
-
-    public function wallets()
-    {
-        return $this->hasMany(Wallet::class)->orderBy('created_at', 'desc');
     }
 
     public function reviews()
@@ -504,12 +499,12 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function toArray(){
         $user = parent::toArray();
-        
+
         if(isset($user['user_meta'])) {
             $user_meta_formatted = collect($user['user_meta'])->keyBy('key')->map(fn($item) => $item['value'])->toArray();
             $user['user_meta'] = $user_meta_formatted;
         }
-        
+
         return $user;
     }
 }

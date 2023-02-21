@@ -1,6 +1,6 @@
-<nav aria-label="Progress" class="mb-6 bg-white md:sticky top-[65px] z-[1000]">
+<nav aria-label="Progress" class="mb-6 bg-white md:sticky top-[65px] z-[99]">
     <ol role="list"
-        class="divide-y divide-gray-300 overflow-x-scroll rounded-md border border-gray-300 md:flex md:divide-y-0">
+        class="divide-y divide-gray-300 overflow-x-scroll rounded-md border border-gray-300 flex divide-y-0">
         @foreach($steps as $key => $step)
         @if($key < $order_cycle_status)
             <li class="relative md:flex md:flex-1">

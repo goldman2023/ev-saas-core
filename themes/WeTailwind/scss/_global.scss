@@ -3,6 +3,42 @@
     @apply hidden;
 }
 
+/* Global modal backdrop blur */
+[modal-backdrop], [x-show="displayModal"] {
+    backdrop-filter: blur(3px);
+}
+
+/* Typography styles & utility classes h1/h6 */
+
+.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6 {
+    @apply font-bold;
+    margin-bottom: 0.5rem;
+}
+
+.text-h1 {
+    @apply text-5xl font-bold;
+}
+
+.text-h2 {
+    @apply text-4xl font-bold;
+}
+
+.text-h3 {
+    @apply text-3xl font-bold;
+}
+
+.text-h4 {
+    @apply text-2xl font-bold;
+}
+
+.text-h5 {
+    @apply text-xl font-bold;
+}
+
+.text-h6 {
+    @apply text-base font-bold;
+}
+
 /* Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
 display: none;
