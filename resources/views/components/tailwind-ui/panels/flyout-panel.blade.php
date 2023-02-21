@@ -3,7 +3,7 @@
         id: '{{ $id }}',
      }"
      x-cloak
-{{-- TODO: @vukasin add non jquery version for esc key --}}
+        {{-- TODO: @vukasin add non jquery version for esc key --}}
      id="{{ $id }}">
     <section
         class="c-flyout-panel h-[100%] overflow-y-auto fixed top-0 bg-white shadow-lg z-[1010]"

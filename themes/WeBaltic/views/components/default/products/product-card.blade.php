@@ -45,8 +45,8 @@
                         @endauth
                     </p>
                 </div>
-                <div class="col-span-5 text-right">
-                    <div class="col-span-3 p-6 pt-0">
+                <div class="col-span-12 sm:col-span-5 text-right">
+                    <div class="col-span-12 sm:col-span-3 p-6 pt-0">
                         <span class="text-right px-3 py-2 text-gray-800 text-2xl font-medium  rounded-full">
                             {{ $product->getTotalPrice(true) }}
                         </span>

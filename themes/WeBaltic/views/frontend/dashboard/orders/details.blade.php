@@ -107,7 +107,6 @@
                     {{ translate('By scanning this QA code you can open this page on mobile') }}
                 </p>
             </div>
-
             {!! QrCode::size(200)->generate(URL::current()) !!}
         </div>
 

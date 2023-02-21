@@ -6,9 +6,6 @@
         width: 100%;
         max-height: 60px;
         z-index: 12;
-        background: #FFFFFF;
-        -webkit-box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.2);
-        box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.2);
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -61,7 +58,7 @@
         margin-top: -20px;
     } */
 </style>
-<nav class="nav-bottom text-dark" id="ev-app-bar">
+<nav class="nav-bottom text-dark pt-1 !shadow-lg !bg-gray-100" id="ev-app-bar">
 
 
     {{-- TODO: Update this to use rout name --}}
@@ -88,7 +85,7 @@
         <span class="text">{{ translate('Menu') }}</span>
     </span>
 
-    <a href="/" class="nav-link text-dark">
+    <a href="/kontaktai" class="nav-link text-dark">
         @svg('heroicon-s-phone', ['class' => 'icon', 'style' => 'width: 24px;'])
         <span class="text">{{ translate('Contact us') }}</span>
     </a>
