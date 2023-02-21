@@ -1145,7 +1145,7 @@ x-cloak>
 
                                     <div class="flex justify-between">
                                       <dt x-text="'{{ translate('Tax') }} ('+tax+'%)'"></dt>
-                                      <dd class="text-gray-900" x-text="taxAmount"></dd>
+                                      <dd class="text-gray-900" x-text="tax_incl ? '('+taxAmount+')' : taxAmount"></dd>
                                     </div>
 
                                     <div class="flex items-center justify-between border-t border-gray-200 pt-4 text-gray-900">

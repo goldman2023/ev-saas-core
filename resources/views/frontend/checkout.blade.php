@@ -40,9 +40,9 @@
                         </span>
                     </div>
 
-                    <ul class="flex flex-col list-none space-y-4">
+                    <ul class="flex flex-col list-none space-y-3">
                         @foreach($models as $model)
-                            <li class="w-full flex flex-col justify-left">
+                            <li class="w-full flex flex-col justify-left p-3 border rounded border-gray-200">
                                 <div class="w-full flex justify-left">
                                     <div class="w-[60px] h-[60px] shrink-0">
                                         <img class="w-[60px] h-[60px] object-cover rounded border"
