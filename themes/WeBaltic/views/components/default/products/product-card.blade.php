@@ -34,7 +34,7 @@
                         @endif
                     </p>
                     <p class="text-gray-600 text-xs whitespace-nowrap flex">
-                        {{ translate('2 year waranty') }} / {{ translate('Made in Lithuania') }}
+                        {{ translate('2 year waranty') }} / {{ translate('Made in Lithuania') }} 🇱🇹
 
                         @auth
                         @if(auth()->user()->isAdmin())
