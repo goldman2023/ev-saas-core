@@ -120,4 +120,10 @@ class FXService
     {
         return 100 - ($part * 100 / $full);
     }
+
+    public function formatDecimals($price, $decimals = null) {
+        $decimals = is_int($decimals) ? $decimals : get_tenant_setting('no_of_decimals');
+
+        return round($price, $decimals);
+    }
 }

@@ -207,7 +207,7 @@ trait PriceTrait
             // Taxes
             // TODO: Create tax_relationships table and link it to subjects and taxes!
             // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            $this->total_price = TaxService::appendTaxToPrice($this->total_price);
+            // $this->total_price = TaxService::appendTaxToPrice($this->total_price);
         }
 
         if ($both_formats) {
@@ -288,7 +288,7 @@ trait PriceTrait
             }
         }
 
-        $this->discounted_price = TaxService::appendTaxToPrice($this->discounted_price);
+        // $this->discounted_price = TaxService::appendTaxToPrice($this->discounted_price);
 
         if ($both_formats) {
             return [
@@ -320,7 +320,7 @@ trait PriceTrait
             $this->base_price = $this->attributes[$this->getPriceColumn()];
         }
 
-        $this->base_price = TaxService::appendTaxToPrice($this->base_price);
+        // $this->base_price = TaxService::appendTaxToPrice($this->base_price);
 
         if ($both_formats) {
             return [
@@ -363,7 +363,7 @@ trait PriceTrait
                 return 0;
             }
 
-            $this->base_annual_price = TaxService::appendTaxToPrice($this->base_annual_price);
+            // $this->base_annual_price = TaxService::appendTaxToPrice($this->base_annual_price);
 
             if ($both_formats) {
                 return [
@@ -407,7 +407,7 @@ trait PriceTrait
                 $this->total_annual_price = $this->attributes[$this->getPriceColumn()];
             }
 
-            $this->total_annual_price = TaxService::appendTaxToPrice($this->total_annual_price);
+            // $this->total_annual_price = TaxService::appendTaxToPrice($this->total_annual_price);
 
             if ($both_formats) {
                 return [

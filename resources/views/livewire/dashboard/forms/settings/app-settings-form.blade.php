@@ -308,8 +308,9 @@
                                 <!-- Include Tax -->
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
                                     x-data="{}">
-                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
-                                        {{ translate('Include Tax') }}
+                                    <label class="flex flex-col text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        <span>{{ translate('Include tax in prices') }}</span>
+                                        <p class="text-gray-500 text-sm">{{ translate('If enabled, all prices across the site will be treated as prices with included tax. This means that product that costs 1000$ actually costs: X + tax. Otherwise, it costs 1000$ and tax will be appended to subtotal in checkout!') }}</p>
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
