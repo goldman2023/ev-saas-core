@@ -32,14 +32,9 @@ yarn-error.log
 updates/
 resources/lang/en.json
 .env
-updates.zip
-ecommerce.zip
-install.zip
-/nbproject/private/
-/nbproject
+
 /public/vendor/nova/fonts
 
-#Eim Solutions Updates
 /public/js/app.js
 /storage/logs/*.log
 storage/framework/maintenance.php
