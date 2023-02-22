@@ -1,6 +1,6 @@
 <div class="bg-gray-100">
     <div class="py-16 sm:py-24 xl:mx-auto xl:max-w-7xl xl:px-8">
-        <div class="px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8 xl:px-0">
+        <div class="px-4 sm:flex sm:items-center sm:justify-between sm:px-6 sm:px-8 xl:px-0">
             <h2 class="text-2xl font-bold tracking-tight text-gray-900">
                {{ translate('Product categories') }}
             </h2>
@@ -15,7 +15,7 @@
             <div class="-my-2">
                 <div class="relative box-content overflow-x-auto py-2 sm:overflow-visible">
                     <div
-                        class="min-w-screen-xl flex  gap-8 px-4 sm:px-6 lg:px-8 sm:relative sm:grid sm:grid-cols-3 sm:gap-x-8 sm:space-x-0 xl:px-0">
+                        class="min-w-screen-xl flex  gap-8 px-4 sm:px-6 sm:px-8 sm:relative sm:grid sm:grid-cols-3 sm:gap-x-8 sm:space-x-0 xl:px-0">
                         @foreach ($categories as $category)
 
                         <a href="{{ $category->getPermalink() }}"
