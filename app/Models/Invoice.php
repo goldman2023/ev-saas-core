@@ -246,6 +246,8 @@ class Invoice extends WeBaseModel
                 $this->real_invoice_number = (Invoice::where('total_price', '>', 0)->where('mode', 'test')->where('is_temp', 0)->where('id', '!=', $this->id)->latest()->first()?->real_invoice_number ?? 0) + 1;
             }
 
+            // TODO: Add check if invoice_number with  $this->real_invoice_prefix . $this->real_invoice_number exists in DB already, and if it does, change to random generated Uuid or something so it doesn't rise exception!
+
             $this->invoice_number = $this->real_invoice_prefix . $this->real_invoice_number;
         }
     }

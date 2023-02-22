@@ -59,7 +59,7 @@ class BlogPostForm extends Component
         $this->initCategories($this->blogPost);
         $this->initCoreMeta($this->blogPost);
         $this->setOriginalStatus($this->blogPost);
- 
+
         $this->selectedPlans = $this->blogPost->plans->keyBy('id')->map(fn ($item) => $item->title);
     }
 
@@ -106,7 +106,7 @@ class BlogPostForm extends Component
         // if($this->blogPost?->status === StatusEnum::published()->value) {
         //     return ;
         // } else {
-            
+
         // }
     }
 
@@ -115,15 +115,15 @@ class BlogPostForm extends Component
         return [
             'selected_categories.required' => translate('At least one category is required.'),
 
-            'blogPost.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
-            'blogPost.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
-            'blogPost.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
+            // 'blogPost.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
+            // 'blogPost.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
+            // 'blogPost.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
 
             'blogPost.name.required' => translate('Title is required'),
             'blogPost.name.min' => translate('Minimum title length is :min'),
 
-            'blogPost.excerpt.required' => translate('Excerpt is required'),
-            'blogPost.excerpt.min' => translate('Minimum excerpt length is :min'),
+            // 'blogPost.excerpt.required' => translate('Excerpt is required'),
+            // 'blogPost.excerpt.min' => translate('Minimum excerpt length is :min'),
 
             'blogPost.content.required' => translate('Content is required'),
             'blogPost.content.min' => translate('Minimum content length is :min'),
@@ -139,7 +139,7 @@ class BlogPostForm extends Component
             'wef.portfolio_link' => 'nullable'
         ];
     }
-    
+
     public function getWEFMessages() {
         return [];
     }
@@ -233,5 +233,5 @@ class BlogPostForm extends Component
     }
 
     // TODO: Move this to Trait and replace this function in PlanForm and in ProductForm
-    
+
 }

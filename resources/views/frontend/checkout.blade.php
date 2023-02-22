@@ -40,9 +40,9 @@
                         </span>
                     </div>
 
-                    <ul class="flex flex-col list-none space-y-4">
+                    <ul class="flex flex-col list-none space-y-3">
                         @foreach($models as $model)
-                            <li class="w-full flex flex-col justify-left">
+                            <li class="w-full flex flex-col justify-left p-3 border rounded border-gray-200">
                                 <div class="w-full flex justify-left">
                                     <div class="w-[60px] h-[60px] shrink-0">
                                         <img class="w-[60px] h-[60px] object-cover rounded border"
@@ -105,7 +105,7 @@
                         </li>
 
                         {{-- Tax --}}
-                        @if(CartService::getTaxAmount()['raw'] > 0 && TaxService::isTaxIncluded())
+                        @if(CartService::getTaxAmount()['raw'] > 0)
                             <li class="flex justify-between border-b border-gray-500 pt-[16px] pb-[12px]">
                                 <span class="{{ TaxService::isTaxIncluded() ? 'text-12' : 'text-14' }}">{{ translate('Tax') }} {{ TaxService::isTaxIncluded() ? '('.translate('included').')' : '' }}</span>
                                 <span class="tracking-[-0.03rem] {{ TaxService::isTaxIncluded() ? 'text-12' : 'text-14' }}">
@@ -124,6 +124,31 @@
                         </li>
                     </ul>
 
+                    {{-- <div class="mt-1 pt-2 flex justify-start border-t border-gray-200">
+                        <div
+                            class="flex flex-row items-center pr-4 relative after:content-[''] after:absolute after:right-0 after:bg-gray-300 after:h-[15px] after:top-[8px] after:w-[1px]">
+                            <span class="text-12 mr-1 pt-1">{{ translate('Powered by') }}</span>
+
+                            <a style="max-width: 120px !important;" class="navbar-brand p-0 mw-100"
+                                href="https://we-saas.com/" aria-label="">
+                                <img src="https://images.we-saas.com/insecure/fill/0/0/ce/0/plain/https://we-saas.com/wp-content/uploads/2021/12/cropped-Screenshot_2021-12-22_at_15.12.45-removebg-preview.png"
+                                    style="max-width: 100%;" height="auto" alt="">
+                            </a>
+                            <x-default.system.tenant.logo style="max-width: 50px !important;">
+                            </x-default.system.tenant.logo>
+                        </div>
+                        <ul class="flex flex-row list-none pl-5">
+                            <li class="flex pt-1 px-1 mr-1 items-center">
+                                <a href="#" class="text-12 text-gray-500">{{ translate('Terms') }}</a>
+                            </li>
+                            <li class="flex pt-1 px-1 mr-1 items-center">
+                                <a href="#" class="text-12 text-gray-500">{{ translate('Privacy') }}</a>
+                            </li>
+                            <li class="flex pt-1 px-1 mr-1 items-center">
+                                <a href="#" class="text-12 text-gray-500">{{ translate('Contact') }}</a>
+                            </li>
+                        </ul>
+                    </div> --}}
 
                 </div>
 

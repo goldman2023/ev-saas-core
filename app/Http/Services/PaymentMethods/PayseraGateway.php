@@ -2,20 +2,20 @@
 
 namespace App\Http\Services\PaymentMethods;
 
-use App\Enums\OrderTypeEnum;
-use App\Enums\PaymentStatusEnum;
-use App\Enums\ShippingStatusEnum;
-use App\Models\Invoice;
-use App\Models\Order;
-use App\Models\PaymentMethod;
-use App\Models\PaymentMethodUniversal;
-use Cache;
-use WE;
 use FX;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use WE;
+use Cache;
 use Session;
 use WebToPay;
+use App\Models\Order;
+use App\Models\Invoice;
+use App\Enums\OrderTypeEnum;
+use Illuminate\Http\Request;
+use App\Models\PaymentMethod;
+use App\Enums\PaymentStatusEnum;
+use App\Enums\ShippingStatusEnum;
+use Illuminate\Support\Facades\Log;
+use App\Models\PaymentMethodUniversal;
 
 class PayseraGateway
 {
@@ -64,7 +64,7 @@ class PayseraGateway
                 'projectid' => $this->payment_method->paysera_project_id,
                 'sign_password' => $this->payment_method->paysera_project_password,
                 'orderid' => $this->invoice->id,
-                'amount' => $this->invoice->total_price * 100, // in cents, hence x100
+                'amount' => (int) (FX::formatDecimals($this->invoice->total_price, 2) * 100), // in cents, hence x100
                 'currency' => 'EUR', // 3-char notation - EUR, USD, RSD, JPY etc. TODO: Add currency column to `orders` table
                 'country' => $this->invoice->billing_country, // 2-char notation - LT, GB, US, DE, PL, RS etc.
                 'lang' => $this->lang,

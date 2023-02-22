@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 /**
  * WeThemeService
- * 
+ *
  * This class has all important information about the the tenant theme currently used
  */
 class WeThemeService
@@ -33,8 +33,9 @@ class WeThemeService
         $this->theme_root_routes_path = $theme_data['theme_root_routes_path'] ?? '';
 
         $this->theme_controllers_class = $theme_data['theme_root_class'] . '\App\Http\Controllers\\';
-
-        $this->bootstrap_cache_tenant_routes_path = base_path('bootstrap/cache/tenants/routes/tenant-'.tenancy()->tenant->id.'-routes.php');
+        if(tenant()) {
+            $this->bootstrap_cache_tenant_routes_path = base_path('bootstrap/cache/tenants/routes/tenant-'.tenancy()->tenant->id.'-routes.php');
+        }
 
         $this->all_themes = collect(array_values(array_diff(scandir(base_path().'/themes'), ['..', '.'])))->keyBy(function ($item) {
             return $item;

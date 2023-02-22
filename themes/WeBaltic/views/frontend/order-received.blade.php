@@ -151,7 +151,7 @@
               @if($order->same_billing_shipping || !empty($order->shipping_address))
                 <div>
                   @if($order->same_billing_shipping)
-                    <dt class="font-medium text-gray-900">{{ translate('Shipping address') }}</dt>
+                    <dt class="font-medium text-gray-900">{{ translate('Billing address') }}</dt>
                     <dd class="mt-2 text-gray-700">
                       <address class="not-italic">
                         <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
@@ -213,7 +213,7 @@
             @if($order->tax_amount > 0)
               <div class="flex justify-between">
                 <dt class="font-medium text-gray-900">{{ translate('Tax') }}</dt>
-                <dd class="text-gray-700">{{  $order->tax_incl ? '('.\FX::formatPrice($order->tax_amount).')' : \FX::formatPrice($order->total_price) }}</dd>
+                <dd class="text-gray-700">{{  $order->tax_incl ? '('.\FX::formatPrice($order->tax_amount).')' : \FX::formatPrice($order->tax_amount) }}</dd>
               </div>
             @endif
 

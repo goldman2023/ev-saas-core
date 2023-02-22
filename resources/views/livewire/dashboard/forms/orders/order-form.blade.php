@@ -1,5 +1,6 @@
 <div class="w-full" x-data="{
     type: @js($order->type ?? \App\Enums\OrderTypeEnum::standard()->value),
+    tax_incl: @js($order->tax_incl),
     payment_status: @js($order->payment_status ?? \App\Enums\PaymentStatusEnum::unpaid()->value),
     shipping_status: @js($order->shipping_status ?? \App\Enums\ShippingStatusEnum::not_sent()->value),
     shop_id: @js($order->shop_id),
@@ -16,6 +17,15 @@
 
     subtotal: 0,
     total: 0,
+    get taxAmount() {
+        let subtotal = this.subtotal + this.shipping_cost;
+
+        if(this.tax_incl) {
+            return FX.formatPrice((subtotal * 100 / (100 + this.tax)) * this.tax / 100);
+        } else {
+            return FX.formatPrice(subtotal * this.tax / 100);
+        }
+    },
     global_installments_deposit_amount: @js(empty(get_tenant_setting('installments_deposit_amount')) ? 0 : get_tenant_setting('installments_deposit_amount')),
 
     calculateTotals() {
@@ -36,7 +46,10 @@
         }
 
         this.total = Number(this.subtotal) + Number(this.shipping_cost);
-        this.total += this.total * this.tax / 100;
+
+        if(! this.tax_incl) {
+            this.total += this.total * this.tax / 100;
+        }
     },
     save() {
         $wire.set('order.type', this.type, true);
@@ -215,12 +228,14 @@ x-cloak>
                                         <div class="flex-shrink-0" x-show="item?.thumbnail">
                                             <img class="h-10 w-10 rounded-full" :src="window.WE.IMG.url(item?.thumbnail)" alt="">
                                         </div>
+
                                         <div class="min-w-0 flex-1">
                                             <div class="outline-none">
                                                 <p class="text-sm font-medium text-gray-900" x-text="item.name"></p>
                                                 <p class="truncate text-sm text-gray-500 line-clamp-1" x-text="item.excerpt"></p>
                                             </div>
                                         </div>
+
                                         <div class="flex-shrink-0 flex items-center gap-x-4">
                                             <span x-text="FX.formatPrice(item.total_price)"></span>
                                             <input type="number" min="0" x-model="item.qty" class="form-standard max-w-[90px]" />
@@ -1130,7 +1145,7 @@ x-cloak>
 
                                     <div class="flex justify-between">
                                       <dt x-text="'{{ translate('Tax') }} ('+tax+'%)'"></dt>
-                                      <dd class="text-gray-900" x-text="FX.formatPrice((subtotal + shipping_cost) * tax / 100)"></dd>
+                                      <dd class="text-gray-900" x-text="tax_incl ? '('+taxAmount+')' : taxAmount"></dd>
                                     </div>
 
                                     <div class="flex items-center justify-between border-t border-gray-200 pt-4 text-gray-900">

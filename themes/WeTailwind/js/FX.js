@@ -60,5 +60,6 @@ window.FX = {
         }).format(price);
 
         return formatted_price;
-    }
+    },
+
 };

@@ -4,7 +4,7 @@ TODO: you can overide it with data from a database a sa setting --}}
 @php
 $colors = TenantSettings::get('colors');
 @endphp
-
+@if(tenant())
 <style>
     /* Custom variables to overide colors and other css parameters */
     :root {
@@ -12,7 +12,7 @@ $colors = TenantSettings::get('colors');
         --secondary-color: {{ $colors['secondary'] }};
     }
 </style>
-
+@endif
 <script>
     tailwind.config = {
           darkMode: 'class',

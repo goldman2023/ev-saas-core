@@ -200,6 +200,16 @@ Route::middleware([
         Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
         Route::post('/checkout', [CheckoutController::class, 'process_checkout'])->name('checkout.process');
 
+        // Execute payment routes
+        Route::post('/checkout/execute/payment/{invoice_id}', [CheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
+        Route::get('/checkout/execute/payment/{invoice_id}/{payment_gateway}', [CheckoutController::class, 'executePayment'])->name('checkout.execute.custom.payment');
+        Route::post('/checkout/execute/payment/{invoice_id}/{payment_gateway}', [CheckoutController::class, 'executePayment'])->name('checkout.execute.custom.payment.post');
+
+        // Paysera callback routes
+        Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
+        Route::get('/checkout/paysera/canceled/{invoice_id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
+        Route::get('/checkout/paysera/callback/{invoice_id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
+
         Route::get('/order/{id}/canceled', [CheckoutController::class, 'orderCanceled'])->name('checkout.order.canceled');
         Route::get('/order/{id}/paid', [CheckoutController::class, 'orderPaid'])->name('checkout.order.paid');
     });
