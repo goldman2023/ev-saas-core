@@ -1,5 +1,5 @@
 <aside aria-label="Related articles" class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
-    <div class="px-4 mx-auto max-w-screen-xl">
+    <div class="px-4 mx-auto container">
         <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
             {{ translate('Trending Articles') }}
         </h2>
@@ -16,7 +16,7 @@
                 <p class="mb-4 font-light text-gray-500 dark:text-gray-400">
                     {{ $post->excerpt }}
                 </p>
-                <a href="#"
+                <a href="{{ $post->getPermalink() }}"
                     class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
                     {{ Str::readDuration($post->content) }} {{ translate('min read') }}
 

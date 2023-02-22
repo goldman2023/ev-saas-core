@@ -337,7 +337,7 @@ class WeService
                         'icon' => 'heroicon-o-newspaper',
                         'route' => route('blog.posts.index'),
                         'route_name' => 'blog.posts.index',
-                        'is_active' => areActiveRoutes(['blog.posts.index']),
+                        'is_active' => areActiveRoutes(['blog.posts.index', 'blog.post.edit']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_posts', 'browse_posts'],
                         'badge' => [
