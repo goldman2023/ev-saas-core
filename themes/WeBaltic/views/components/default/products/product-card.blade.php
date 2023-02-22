@@ -1,4 +1,8 @@
-<div class="lg:max-h-[230px] bg-white lg:grid lg:grid-cols-12 w-full rounded-lg bg-white shadow-lg">
+<div class="relative lg:max-h-[230px] bg-white lg:grid lg:grid-cols-12 w-full rounded-lg bg-white shadow-lg">
+    <div class="absolute right-3 top-3">
+        <livewire:actions.social-action-button action="wishlist" template="wishlist-button" :object="$product">
+        </livewire:actions.social-action-button>
+    </div>
     <div class="lg:col-span-12 lg:grid lg:grid-cols-12">
         <div class="col-span-4">
             <a href="{{ $product->getPermalink() }}">
@@ -54,6 +58,7 @@
                             <a class="btn btn-primary my-3" href="{{ $product->getPermalink() }}">
                                 {{ translate('View product') }}
                             </a>
+
                         </div>
                         @if(!$product->isInStock())
                         <span class="text-red-600 text-sm">
