@@ -178,7 +178,9 @@ if (!function_exists('castValuesForGet')) {
 
                     if(isset($settings[$key]) && !$isEmpty($setting)) {
                         if($data_type === Upload::class) {
-                            $setting = Upload::find($setting);
+                            $setting = Cache::remember('settings_' . $key, 60, function() use ($setting) {
+                                return Upload::find($setting);
+                            });
                         } else if($data_type === Currency::class) {
                             $setting = Cache::remember('currency_' . $setting, 60 * 60 * 24, function() use ($setting) {
                                 return Currency::where('code', $setting)?->first() ?? Currency::where('code', 'EUR')?->first();
@@ -297,7 +299,7 @@ if (!function_exists('toJSONMedia')) {
                     'order' => $upload['order'] ?? 0,
                 ];
             }
-    
+
             return [
                 'id' => null,
                 'file_name' => '',
@@ -314,7 +316,7 @@ if (!function_exists('toJSONMedia')) {
         } else {
             return $converter($upload);
         }
-        
+
     }
 }
 
@@ -1333,7 +1335,7 @@ if (!function_exists('static_asset')) {
             }
         } catch (\Exception $e) {
         }
-        
+
         if ($theme) {
             if (config('app.force_https')) {
                 return app('url')->asset('themes/' . Theme::active() . '/' . $path, true) . ($cache_bust ? '?v=' . $filemtime : '');
