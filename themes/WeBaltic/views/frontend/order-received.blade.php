@@ -70,7 +70,6 @@
                             {!! $item->excerpt !!}
                         </p>
 
-                        
                         @if($item->descendants->isNotEmpty())
                           <ul class="w-full flex flex-col gap-y-2 mt-2">
                               @foreach($item->descendants as $addon_item)

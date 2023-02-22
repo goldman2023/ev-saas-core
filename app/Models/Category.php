@@ -162,6 +162,14 @@ class Category extends WeBaseModel
         return $this->morphedByMany(Product::class, 'subject', 'category_relationships');
     }
 
+    public function product_addons() {
+        return $this->morphToMany(ProductAddon::class, 'subject', 'product_addon_relationships')
+            ->orWhere([
+                ['product_addon_relationships.subject_id', '=', 0],
+                ['product_addon_relationships.subject_type', '=', $this::class],
+            ]);
+    }
+
     public function shops()
     {
         return $this->morphedByMany(Shop::class, 'subject', 'category_relationships');

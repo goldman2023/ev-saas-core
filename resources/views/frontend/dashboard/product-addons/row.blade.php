@@ -5,7 +5,7 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle" style="width: 150px; box-sizing: content-box;">
-    <a class="media flex justify-center items-center text-14" href="{{ route('product.details', $row->id) }}">
+    <a class="media flex justify-center items-center text-14" href="{{ route('product-addon.edit', $row->id) }}">
         <x-tenant.system.image alt="{{ $row->name }}" class="rounded sm:min-w-[100px] sm:w-[100px] h-[100px] min-h-[100px] object-contain" 
             :image="$row->getThumbnail()">
         </x-tenant.system.image>
@@ -13,7 +13,7 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-left" style="min-width: 200px;">
-    <a href="{{ route('product.details', $row->id) }}" class="font-bold text-lg">
+    <a href="{{ route('product-addon.edit', $row->id) }}" class="font-bold text-lg">
         {{ $row->name }} <br>
         <small class="block font-medium text-ellipsi overflow-hidden whitespace-wrap line-clamp-1">
             {{ $row->excerpt }}

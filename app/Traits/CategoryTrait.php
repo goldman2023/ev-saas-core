@@ -53,6 +53,11 @@ trait CategoryTrait
         return $this->morphToMany(Category::class, 'subject', 'category_relationships', 'subject_id');
     }
 
+    public function hasCategories()
+    {
+        return $this->categories->count() > 0;
+    }
+
     /************************************
      * Category Attributes Getters/Setters *
      ************************************/
