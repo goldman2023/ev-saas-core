@@ -36,6 +36,8 @@ trait HasCategories
             }
 
             $model->categories()->sync($categories_idx->toArray());
+        } else {
+            $model->categories()->sync([]); // remove all categories relations!
         }
     }
 

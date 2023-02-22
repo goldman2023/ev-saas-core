@@ -218,8 +218,25 @@ class Product extends WeBaseModel
     }
 
     public function product_addons() {
-        // TODO: Add support for addons which have All and for addons added to categories!
-        return $this->morphToMany(ProductAddon::class, 'subject', 'product_addon_relationships');
+        $query = $this->morphToMany(ProductAddon::class, 'subject', 'product_addon_relationships')
+            ->orWhere([
+                ['product_addon_relationships.subject_id', '=', 0],
+                ['product_addon_relationships.subject_type', '=', $this::class],
+            ]);
+
+        if($this->hasCategories()) {
+            $query
+                ->orWhere(function($query) {
+                    $query->where('product_addon_relationships.subject_type', Category::class)
+                        ->whereIn('product_addon_relationships.subject_id', $this->categories->pluck('id')->toArray());
+                })
+                ->orWhere([
+                    ['product_addon_relationships.subject_id', '=', 0],
+                    ['product_addon_relationships.subject_type', '=', Category::class],
+                ]);
+        }
+
+        return $query->orderBy('product_addons.id', 'ASC');
     }
 
     /* TODO: Implement product condition in backend: new/used/refurbished */

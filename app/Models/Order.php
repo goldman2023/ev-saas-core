@@ -17,6 +17,7 @@ use Spatie\ModelStatus\HasStatuses;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Support\Eloquent\Relations\OrderItemsRelation;
 
 
 /**
@@ -105,7 +106,7 @@ class Order extends WeBaseModel
 
     public function order_items()
     {
-        return $this->hasMany(OrderItem::class, 'order_id', 'id');
+        return new OrderItemsRelation($this, OrderItem::class, 'order_id', 'id');
     }
 
     public function user_subscription()
