@@ -40,7 +40,7 @@
             <figcaption class="mt-10 flex gap-x-6 mb-6">
               <img src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=96&h=96&q=80" alt="" class="h-12 w-12 flex-none rounded-full bg-gray-50">
               <div>
-                <div class="text-base font-semibold text-gray-900">Klientų aptarnavimas</div>
+                <div class="text-base font-semibold text-gray-900">{{ translate('Klientų aptarnavimas') }}</div>
                 <div class="text-sm leading-6 text-gray-600">{{ translate('8 (671) 81007') }}</div>
                 {{-- TODO: Add tenant setting for opening hours --}}
                 <small>{{ translate('Darbo dienomis 8h - 18h') }} </small>
@@ -48,7 +48,7 @@
             </figcaption>
 
             <div>
-                <a class="btn-primary w-full" href="/dashboard/">
+                <a target="blank" class="btn-primary w-full" href="/dashboard/">
                     {{ translate('Klientų savitarna') }}
                 </a>
             </div>
