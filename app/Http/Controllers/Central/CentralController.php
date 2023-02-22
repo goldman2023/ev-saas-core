@@ -12,4 +12,9 @@ class CentralController extends Controller
     {
         return view('central.landing-pages.landing');
     }
+
+    public function page($slug)
+    {
+        return view('central.landing-pages.' . $slug);
+    }
 }

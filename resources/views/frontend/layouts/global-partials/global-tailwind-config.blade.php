@@ -4,15 +4,15 @@ TODO: you can overide it with data from a database a sa setting --}}
 @php
 $colors = TenantSettings::get('colors');
 @endphp
-
+@if(tenant())
 <style>
     /* Custom variables to overide colors and other css parameters */
     :root {
         --primary-color: {{ $colors['primary'] }};
-        --secondary-color: {{ $colors['secondary'] }};
+        --secondary-color: #333333;
     }
 </style>
-
+@endif
 <script>
     tailwind.config = {
           darkMode: 'class',
@@ -83,24 +83,24 @@ $colors = TenantSettings::get('colors');
                     'danger': '{{ ($colors['danger'] ?? null) ?: '#FF4E3E' }}',
                     'danger-light': '{{ ($colors['danger-light'] ?? null) ?: '#FFEDEC' }}',
                     'sidebar-bg': '{{ ($colors['sidebar-bg'] ?? null) ?: '#000000' }}',
-                    'indigo-100': '{{ ($colors['indigo-100'] ?? null) ?: '#f40000' }}',
-                    'indigo-200': '{{( $colors['indigo-200'] ?? null) ?: '#f40000' }}',
-                    'indigo-300': '{{ ($colors['indigo-300'] ?? null) ?: '#f40000' }}',
-                    'indigo-400': '{{ ($colors['indigo-400'] ?? null) ?: '#f40000' }}',
-                    'indigo-500': '{{ ($colors['indigo-500'] ?? null) ?: '#f40000' }}',
-                    'indigo-600': '{{ ($colors['indigo-600'] ?? null) ?: '#f40000' }}',
-                    'indigo-700': '{{ ($colors['indigo-700'] ?? null) ?: '#f40000' }}',
-                    'indigo-800': '{{ ($colors['indigo-800'] ?? null) ?: '#f40000' }}',
-                    'indigo-900': '{{ ($colors['indigo-900'] ?? null) ?: '#f40000' }}',
-                    'primary-100': '{{ ($colors['indigo-100'] ?? null) ?: '#f40000' }}',
-                    'primary-200': '{{( $colors['indigo-200'] ?? null) ?: '#f40000' }}',
-                    'primary-300': '{{ ($colors['indigo-300'] ?? null) ?: '#f40000' }}',
-                    'primary-400': '{{ ($colors['indigo-400'] ?? null) ?: '#f40000' }}',
-                    'primary-500': '{{ ($colors['indigo-500'] ?? null) ?: '#f40000' }}',
-                    'primary-600': '{{ ($colors['indigo-600'] ?? null) ?: '#f40000' }}',
-                    'primary-700': '{{ ($colors['indigo-700'] ?? null) ?: '#f40000' }}',
-                    'primary-800': '{{ ($colors['indigo-800'] ?? null) ?: '#f40000' }}',
-                    'primary-900': '{{ ($colors['indigo-900'] ?? null) ?: '#f40000' }}',
+                    'indigo-100': '{{ ($colors['indigo-100'] ?? null) ?: '#000000' }}',
+                    'indigo-200': '{{( $colors['indigo-200'] ?? null) ?: '#000000' }}',
+                    'indigo-300': '{{ ($colors['indigo-300'] ?? null) ?: '#000000' }}',
+                    'indigo-400': '{{ ($colors['indigo-400'] ?? null) ?: '#000000' }}',
+                    'indigo-500': '{{ ($colors['indigo-500'] ?? null) ?: '#000000' }}',
+                    'indigo-600': '{{ ($colors['indigo-600'] ?? null) ?: '#000000' }}',
+                    'indigo-700': '{{ ($colors['indigo-700'] ?? null) ?: '#000000' }}',
+                    'indigo-800': '{{ ($colors['indigo-800'] ?? null) ?: '#000000' }}',
+                    'indigo-900': '{{ ($colors['indigo-900'] ?? null) ?: '#000000' }}',
+                    'primary-100': '{{ ($colors['indigo-100'] ?? null) ?: '#000000' }}',
+                    'primary-200': '{{( $colors['indigo-200'] ?? null) ?: '#000000' }}',
+                    'primary-300': '{{ ($colors['indigo-300'] ?? null) ?: '#000000' }}',
+                    'primary-400': '{{ ($colors['indigo-400'] ?? null) ?: '#000000' }}',
+                    'primary-500': '{{ ($colors['indigo-500'] ?? null) ?: '#000000' }}',
+                    'primary-600': '{{ ($colors['indigo-600'] ?? null) ?: '#000000' }}',
+                    'primary-700': '{{ ($colors['indigo-700'] ?? null) ?: '#000000' }}',
+                    'primary-800': '{{ ($colors['indigo-800'] ?? null) ?: '#000000' }}',
+                    'primary-900': '{{ ($colors['indigo-900'] ?? null) ?: '#000000' }}',
                 }
             }
           }
