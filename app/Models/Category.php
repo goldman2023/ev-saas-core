@@ -167,7 +167,7 @@ class Category extends WeBaseModel
             ->orWhere([
                 ['product_addon_relationships.subject_id', '=', 0],
                 ['product_addon_relationships.subject_type', '=', $this::class],
-            ]);
+            ])->orderBy('product_addons.id', 'ASC')->groupBy('product_addons.id');
     }
 
     public function shops()

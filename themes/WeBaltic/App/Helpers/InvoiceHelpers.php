@@ -234,7 +234,7 @@ if (!function_exists('generateInvoicePDF')) {
         $percentage_of_total_order_price = $invoice->getWEF('percentage_of_total_order_price', ad_hoc_data_type: 'decimal') ?? 100;
 
         if(!empty($invoice->order->order_items)) {
-            foreach($invoice->order->order_items as $item) {
+            $add_order_item_method = function(&$item) use(&$invoice_items, &$sum_invoice_items_discounts, $percentage_of_total_order_price) {
                 $invoice_items[] = (new InvoiceItem())
                     ->title($item->name)
                     ->description($item->excerpt ?? '')
@@ -244,6 +244,16 @@ if (!function_exists('generateInvoicePDF')) {
                     ->subTotalPrice((($item->base_price * $percentage_of_total_order_price / 100) * $item->quantity) - $item->discount_amount);
     
                 $sum_invoice_items_discounts += ($item->discount_amount ?? 0) * $percentage_of_total_order_price / 100;
+            };
+
+            foreach($invoice->order->order_items as $item) {
+                $add_order_item_method($item);
+
+                if($item->descendants->isNotEmpty()) {
+                    foreach($item->descendants as $addon) {
+                        $add_order_item_method($addon);
+                    }
+                }
             }
         }
 
