@@ -70,7 +70,14 @@
 
                 </div>
             </div>
-            <a href="{{ route('dashboard.order.change-status', $order->id) }}" class="btn-primary !px-10 text-center !py-3 ml-3">
+            <div
+            x-data="
+            {
+                add() {
+                    $dispatch('display-modal', {'id': 'order-status-change-modal'})
+                }
+            }">
+            <button @click="add()" class="btn-primary !px-10 text-center !py-3 ml-3">
 
                 <span>
                     {{ translate('Next status') }}
@@ -78,7 +85,8 @@
 
                 @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 ml-3'])
 
-            </a>
+            </button>
+            </div>
         </div>
 
     </x-slot>
@@ -404,5 +412,6 @@
 @endsection
 
 @push('footer_scripts')
+<livewire:modals.order-status-change-modal :order="$order" />
 
 @endpush

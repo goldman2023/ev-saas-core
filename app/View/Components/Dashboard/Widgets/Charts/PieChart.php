@@ -44,8 +44,8 @@ class PieChart extends Component
 
         $this->pieChartModel = $pieChartModel;
 
-        $startDate = \Carbon::createFromFormat('Y-m-d', '2022-01-01');
-        $endDate = \Carbon::createFromFormat('Y-m-d', '2023-01-30');
+        $startDate = \Carbon::parse('Now -30 days');
+        $endDate = \Carbon::now();
 
         $data = Cache::remember('dashboard_orders_stats', 600, function () use ($startDate, $endDate) {
             return Order::whereBetween('created_at', [$startDate, $endDate])

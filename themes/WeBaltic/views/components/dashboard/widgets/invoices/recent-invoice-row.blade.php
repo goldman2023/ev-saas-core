@@ -77,7 +77,7 @@
         </a> --}}
 
         <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ route('invoice.download', $row->id) }}">
-            @svg('heroicon-o-arrow-down-tray', ['class' => 'w-[18px] h-[18px] '])
+            @svg('heroicon-o-arrow-down-tray', ['class' => 'w-[18px] h-[18px] mr-2'])
             {{ translate('Download') }}
         </a>
 

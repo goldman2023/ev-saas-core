@@ -4,8 +4,8 @@
       <div class="border-t border-b border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border mb-5">
         {{-- <h3 class="sr-only">{{ translate('Order placed on') }} <time datetime="2021-07-06">{{ $order->created_at->format('d M, Y H:i') }}</time></h3> --}}
 
-        <div class="flex items-center flex-wrap gap-y-2 border-b border-gray-200 p-4 sm:grid sm:grid-cols-6 sm:gap-x-6 sm:p-6">
-          <dl class="grid flex-1 grid-cols-5 gap-x-6 text-sm sm:col-span-5 sm:grid-cols-5 lg:col-span-5">
+        <div class="flex items-center flex-wrap gap-y-2 border-b border-gray-200 p-4 sm:grid sm:grid-cols-5 sm:gap-x-3 sm:p-6">
+          <dl class="grid flex-1 grid-cols-4 gap-x-6 text-sm sm:col-span-4 sm:grid-cols-4">
             <div>
               <dt class="font-medium text-gray-900">{{ translate('Order ID') }}</dt>
               <dd class="mt-1 text-gray-500">#{{ $order->id }}</dd>
@@ -16,16 +16,14 @@
                 <time datetime="{{ $order->created_at->format('Y-m-d') }}">{{ $order->created_at->format('d M, Y') }}</time>
               </dd>
             </div>
-            <div>
-              <dt class="font-medium text-gray-900">{{ translate('Total (with tax)') }}</dt>
-              <dd class="mt-1 font-medium text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
-            </div>
+
             <div>
               <dt class="font-medium text-gray-900">{{ translate('Status') }}</dt>
               <dd class="mt-1 font-medium {{ get_order_cycle_status_color($order->getWEF('cycle_status')) }}">
                 {{ \WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum::getPublicStatusesLabels()[$order->getWEF('cycle_status')] ?? \WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum::labels()[2] }}
               </dd>
             </div>
+
             <div>
               <dt class="font-medium text-gray-900">{{ translate('Payment status') }}</dt>
               <dd class="mt-1 font-medium text-gray-900">
@@ -69,7 +67,7 @@
                     <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt="{{ $item->name }}" class="h-full w-full object-cover object-center">
                   </div>
                 @endif
-                
+
                 <div class="ml-6 flex-1 text-sm">
                   <div class="font-medium text-gray-900 sm:flex sm:justify-between">
                     <h5>{{ $item->name }}</h5>
