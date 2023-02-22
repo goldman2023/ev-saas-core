@@ -467,16 +467,7 @@ class CheckoutController extends Controller
             }
         }
 
-        $order_items_full = $order->order_items()->with(['descendants'])->get();
-        $order_items = new \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection();
-
-        if(!empty($order_items_full)) {
-            foreach($order_items_full as $index => $item) {
-                if(empty($item->parent_id)) {
-                    $order_items->push($item);
-                }
-            }
-        }
+        $order_items = $order->order_items;
 
         return view('frontend.order-received', compact('order', 'order_items', 'ghost_user'));
     }

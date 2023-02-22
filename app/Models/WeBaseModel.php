@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Builders\BaseBuilder;
-use App\Traits\Eloquent\Base\Model\HasCoreProperties;
-use Illuminate\Database\Eloquent\Model;
 use Str;
+use App\Builders\BaseBuilder;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
+use App\Traits\Eloquent\Base\Model\HasCoreProperties;
 
 
 class WeBaseModel extends Model
