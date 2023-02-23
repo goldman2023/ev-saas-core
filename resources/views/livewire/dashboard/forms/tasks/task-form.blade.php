@@ -40,7 +40,6 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <x-dashboard.form.input field="task.name" placeholder="Name of Task" />
-
                                 </div>
                             </div>
                             <!-- END Task Name -->

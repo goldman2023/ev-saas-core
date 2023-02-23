@@ -68,6 +68,10 @@ class OrdersObserver
      */
     public function updated(Order $order)
     {
+        if (function_exists('orderUpdatedObserved')) {
+            return orderUpdatedObserved($order);
+        }
+
         // If order is not temp AND email is not yet sent, send it
         // if(!$order->is_temp && !($order->meta['email_sent']??null)) {
         //     try {

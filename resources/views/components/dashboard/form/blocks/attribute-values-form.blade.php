@@ -1,5 +1,5 @@
 @if(!empty($attribute->id) && $attribute->is_predefined)
-    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
+    <div id="attribute-values-form" class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
             open: true,
             attribute_values: @entangle('attribute_values').defer,
             sortableList: null,
@@ -82,7 +82,7 @@
             }
         }" 
         :class="{'p-4': open}"
-        x-init="count(); reOrder();"
+        x-init="count(); "
         wire:ignore
         x-cloak
     >
@@ -110,24 +110,24 @@
                         </template>
                         <template x-if="count() > 1">
                             <template
-                                x-for="[key, attribute_value] of Object.entries(attribute_values)">
-                                <div class="attribute-values__list-item flex items-center pt-2" x-bind:data-att-value-id="attribute_values[key]['id']">
+                                x-for="(attribute_value, index) in attribute_values">
+                                <div class="attribute-values__list-item flex items-center pt-2" x-bind:data-att-value-id="attribute_values[index]['id']">
                                     <span class="flex items-center cursor-grab mr-2">
                                         @svg('heroicon-m-bars-3', ['class' => 'w-[22px] h-[22px] text-gray-900'])
                                     </span>
 
                                     <input disabled type="text" class="form-standard"
-                                        x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
+                                        x-bind:placeholder="'{{ translate('Value') }} '+(Number(index)+1)"
                                         x-model="attribute_value.values" />
 
                                     <div class="flex items-center gap-x-2">
                                         <span class="ml-2 flex items-center cursor-pointer"
-                                            @click="$dispatch('display-modal', {'id': 'attribute-value-form-modal', 'att_val_index': key})">
+                                            @click="$dispatch('display-modal', {'id': 'attribute-value-form-modal', 'att_val_index': index})">
                                             @svg('heroicon-o-pencil-square', ['class' => 'w-[22px] h-[22px] text-info'])
                                         </span>
 
                                         <span class="ml-2 flex items-center cursor-pointer"
-                                            @click="remove(key)">
+                                            @click="remove(index)">
                                             @svg('heroicon-o-trash', ['class' => 'w-[22px] h-[22px] text-danger'])
                                         </span>
                                     </div>
@@ -152,7 +152,8 @@
             <div class="w-full flex justify-end">
                 <button type="button" class="btn btn-primary ml-auto" @click="
                         $wire.set('attribute_values', attribute_values, true);
-                    " wire:click="saveAttributeValues()">
+                        $wire.saveAttributeValues();
+                    ">
                     {{ translate('Save') }}
                 </button>
             </div>
@@ -161,13 +162,13 @@
         {{-- Attribute Value Modal --}}
         <x-system.form-modal id="attribute-value-form-modal" title="Attribute Value" class="!max-w-3xl" :prevent-close="true">
             <div class="w-full" x-data="{
-                key: null,
+                index: null,
             }" @display-modal.window="
                 if($event.detail.id === id) {
                     if(_.get($event.detail, 'att_val_index', false)) {
                         modal_title = '{{ translate('Edit Attribute Value') }}';
 
-                        key = $event.detail.att_val_index;
+                        index = $event.detail.att_val_index;
                     } else {
                         modal_title = '{{ translate('New Attribute Value') }}';
 
@@ -176,22 +177,26 @@
                             values: '',
                             ordering: 0,
                         });
-                        key = attribute_values.length - 1;
+                        index = attribute_values.length - 1;
 
-                        reOrder();
+                        {{-- reOrder(); --}}
                     }
                 }
-            " 
+            "
+            wire:ignore
             wire:loading.class="opacity-30 pointer-events-none"
             x-init="$watch('show', show_value => {
                 {{-- If attribute value is empty, remove it on close --}}
-                if(!show_value && (_.get(attribute_values[key], 'values', null) == '' || _.get(attribute_values[key], 'values', null) === null)) {
+                if(!show_value && (_.get(attribute_values[index], 'values', null) == '' || _.get(attribute_values[index], 'values', null) === null)) {
                     attribute_values.splice(attribute_values.length - 1, 1);
                 }
             })">
-                <input type="text" class="form-standard"
-                    x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
-                    x-model="attribute_values[key].values" />
+                <template x-if="attribute_values[index] !== undefined">
+                    <input type="text" class="form-standard"
+                        x-bind:placeholder="'{{ translate('Value') }} '+(Number(index)+1)"
+                        x-model="attribute_values[index].values" />
+                </template>
+                
 
                 <div class="grid grid-cols-1 gap-y-3 mt-4">
                     @php
@@ -202,7 +207,8 @@
                 <div class="w-full flex justify-end mt-4 pt-4 border-t border-gray-200">
                     <button type="button" class="btn btn-primary ml-auto" @click="
                             $wire.set('attribute_values', attribute_values, true);
-                        " wire:click="saveAttributeValues()">
+                            $wire.saveAttributeValues();
+                        ">
                         {{ translate('Save') }}
                     </button>
                 </div>

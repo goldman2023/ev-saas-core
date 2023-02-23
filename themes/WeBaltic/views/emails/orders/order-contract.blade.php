@@ -101,7 +101,7 @@
 															<td class="pad" style="padding-bottom:15px;padding-left:10px;padding-right:10px;padding-top:55px;">
 																<div style="font-family: sans-serif">
 																	<div class style="font-size: 14px; mso-line-height-alt: 16.8px; color: #000000; line-height: 1.2; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;">
-																		<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:38px;">{{ translate('Signed contract for order') }} #{{ $order->id }}</span></strong></p>
+																		<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:38px;">{{ translate('Unsigned contract for order') }} #{{ $order->id }}</span></strong></p>
 																	</div>
 																</div>
 															</td>
