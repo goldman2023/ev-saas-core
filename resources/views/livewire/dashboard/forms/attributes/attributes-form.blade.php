@@ -103,7 +103,7 @@
                                     <span class="text-sm font-medium text-gray-900" id="availability-label">{{
                                         translate('Is admin') }}</span>
                                     <span class="text-sm text-gray-500" id="availability-description">{{
-                                        translate('Lorem ipsum olor sit amet') }}</span>
+                                        translate('Visible only for admin') }}</span>
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
