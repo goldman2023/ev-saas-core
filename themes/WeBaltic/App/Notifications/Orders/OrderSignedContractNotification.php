@@ -13,7 +13,7 @@ use App\Notifications\WeNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Notifications\Messages\WeMailMessage;
 
-class OrderContractNotification extends WeNotification
+class OrderSignedContractNotification extends WeNotification
 {
     public $order;
     public $contract;
@@ -44,12 +44,12 @@ class OrderContractNotification extends WeNotification
     {
         try {
             return (new WeMailMessage)
-                ->subject(apply_filters('notifications.order-contract.subject', translate('Unsigned order contract').' | '.get_tenant_setting('site_name')))
+                ->subject(apply_filters('notifications.order-contract-signed.subject', translate('Order contract signed').' | '.get_tenant_setting('site_name')))
                 ->attachData($this->contract->rawData(), basename($this->contract->file_name), [
                     'mime' => 'application/pdf',
                 ])
                 ->view(
-                    'emails.orders.order-contract',
+                    'emails.orders.order-contract-signed',
                     [
                         'user' => $notifiable,
                         'order' => $this->order,

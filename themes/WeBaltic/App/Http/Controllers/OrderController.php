@@ -47,7 +47,7 @@ class OrderController extends Controller
 
         try {
             if ($new_status == 1) { // contract
-                $reason = translate('Proposal Created');
+                $reason = translate('Proposal & Contract Created');
                 
                 baltic_generate_order_document($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
             } else if ($new_status == 2) { // approved
@@ -103,7 +103,22 @@ class OrderController extends Controller
                 ])
                 ->log( 'Changed Order(#'.$order->id.') cycle status from <b>'.$current_status_label.'</b> to <b>'.$new_status_label.'</b>. '. $reason);
 
+            $order->save();
+
             DB::commit();
+
+            // Send notification to customer about the cycle status change
+            if(in_array($new_status, OrderCycleStatusEnum::getPublicStatuses()) && $order->getWEF('order_cycle_status_changed_to_'.$new_status.'_email_sent_timestamp', 'unix_timestamp') === null) {
+                try {
+                    // Send signed contract for order email
+                    MailerService::notify($order->user, new OrderCycleStatusChangedNotification($order, $current_status, $new_status, throw_error: true));
+
+                    // Set $order core_meta `order_contract_email_sent_timestamp` to current time
+                    $order->setWEF('order_cycle_status_changed_to_'.$new_status.'_email_sent_timestamp', time(), 'unix_timestamp');
+                } catch(\Exception $e) {
+                    Log::error($e->getMessage());
+                }
+            }
 
             if($standalone) {
                 return $order;
