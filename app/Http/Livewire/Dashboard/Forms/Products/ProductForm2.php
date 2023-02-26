@@ -322,7 +322,7 @@ class ProductForm2 extends Component
         $this->validateData('all');
 
         DB::beginTransaction();
-
+        // dd(\Str::replaceArray('?', $this->product->custom_attributes()->getBindings(), $this->product->custom_attributes()->toSql()) );
         try {
             // Causer is Shop, not user
             CauserResolver::setCauser(MyShop::getShop());

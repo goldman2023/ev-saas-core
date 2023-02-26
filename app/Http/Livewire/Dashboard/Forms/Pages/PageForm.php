@@ -2,28 +2,28 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Pages;
 
-use App\Enums\AmountPercentTypeEnum;
-use App\Enums\StatusEnum;
+use DB;
+use FX;
+use WE;
+use File;
+use Theme;
+use Purifier;
+use Categories;
+use Permissions;
+use App\Models\Page;
+use App\Models\User;
 use App\Facades\MyShop;
 use App\Models\Address;
-use App\Models\Category;
-use App\Models\Page;
-use App\Models\ShopAddress;
-use App\Models\User;
-use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\RulesSets;
-use Categories;
-use DB;
-use WE;
-use FX;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
-use Permissions;
-use Purifier;
-use Spatie\ValidationRules\Rules\ModelsExist;
+use App\Models\Category;
+use App\Enums\StatusEnum;
 use App\Enums\PageTypeEnum;
-use Theme;
-use File;
+use App\Models\ShopAddress;
+use Illuminate\Validation\Rule;
+use App\Traits\Livewire\RulesSets;
+use App\Enums\AmountPercentTypeEnum;
+use App\Traits\Livewire\DispatchSupport;
+use Spatie\ValidationRules\Rules\ModelsExist;
 
 class PageForm extends Component
 {

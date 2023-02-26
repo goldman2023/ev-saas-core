@@ -120,6 +120,32 @@ trait AttributeTrait
         //         ->withOnly(['attribute_value', 'attribute']);
     }
 
+    public function scopeWhereCustomAttributes($query, $selected_attributes = []) {
+        if(empty($selected_attributes)) {
+            $selected_attributes = AttributesService::castFilterableProductAttributesFromQueryParams(remove_inactive: true)['selected_attributes'] ?? [];
+        }
+
+        // dd(AttributesService::removeNonActiveAttributes($selected_attributes));
+
+        if(!empty($selected_attributes)) {
+            $query->whereHas('custom_attributes', function($query) use($selected_attributes) {
+                foreach($selected_attributes as $slug => $value) {
+                    $query->where(function($query) use($slug, $value) {
+                        return $query->where('slug', $slug)
+                            ->when(is_array($value), function ($q) use ($value) {
+                                return $q->whereIn('attribute_relationships.attribute_value_id', $value);
+                            })
+                            ->when(!is_array($value), function ($q) use ($value) {
+                                return $q->where('attribute_relationships.attribute_value_id', $value);
+                            });
+                    });
+                }
+            });
+        }
+        // dd(\Str::replaceArray('?', $query->getBindings(), $query->toSql()));
+
+    }
+
     public function getAttr($slug_or_id = null, $content_type = null) {
         if(empty($slug_or_id)) return null;
         if(empty($content_type)) $content_type =  $this::class;
