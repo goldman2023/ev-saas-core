@@ -18,7 +18,7 @@ use App\Support\Eloquent\Relations\AttributeValuesRelation;
 class Attribute extends WeBaseModel
 {
     use HasSlug;
-    use TranslationTrait;
+    // use TranslationTrait;
     use CoreMetaTrait;
 
     // protected $with = ['attribute_relationships', 'attributes_values'];

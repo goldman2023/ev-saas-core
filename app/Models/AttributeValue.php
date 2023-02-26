@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class AttributeValue extends WeBaseModel
 {
     use HasFactory;
-    use TranslationTrait;
+    // use TranslationTrait;
     use CoreMetaTrait;
 
     public $selected;

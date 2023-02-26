@@ -31,7 +31,6 @@ trait HasAttributes
 
     public function refreshAttributes(&$model)
     {
-        
         self::initAttributes($model, $this->custom_attributes, $this->selected_predefined_attribute_values);
     }
 

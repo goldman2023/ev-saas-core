@@ -232,6 +232,11 @@ class ProductForm2 extends Component
         $this->dispatchBrowserEvent('init-form');
     }
 
+    // public function hydrate()
+    // {
+    //     dd($this->product->custom_attributes);
+    // }
+
     public function render()
     {
         return view('livewire.dashboard.forms.products.product-form2');
