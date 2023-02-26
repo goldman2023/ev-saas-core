@@ -57,6 +57,45 @@
     </template>
     {{-- END Plain Text --}}
 
+    {{-- Toggle --}}
+    <template x-if="form_type === 'toggle'">
+        <div class="{{ $form_element_wrapper_class }}"
+            x-data="{
+                toggle() {
+                    wef_value = !wef_value;
+                },
+                get isChecked() {
+                    return wef_value === true;
+                }
+            }">
+
+            <label class="flex items-center flex-wrap text-sm font-medium text-gray-700 {{ $form_element_label_class }}" >
+                <span x-text="wef_label"></span>
+
+                <button class="text-underline ml-2 text-sky-500 hover:text-sky-800 text-12 mt-0.5"
+                    @click="show_form = !show_form" x-show="!show_form">({{ translate('Edit') }})</button>
+
+                <button class="text-underline ml-2 text-red-500 hover:text-red-800 text-12 mt-0.5"
+                    @click="show_form = !show_form" x-show="show_form">({{ translate('Close') }})</button>
+            </label>
+
+            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                <template x-if="show_form">
+                    <button type="button"  class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-0"
+                        :class="{'bg-primary': isChecked, 'bg-gray-200': !isChecked}" @click="toggle()">
+                        <span aria-hidden="true" class=" pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                            :class="{'translate-x-5': isChecked, 'translate-x-0': !isChecked}"></span>
+                    </button>
+                </template>
+
+                <template x-if="!show_form">
+                    <p class="text-14 " x-text="wef_value"></p>
+                </template>
+            </div>
+        </div>
+    </template>
+    {{-- END Toggle --}}
+
     {{-- Textarea --}}
     <template x-if="form_type === 'textarea'">
         <div class="{{ $form_element_wrapper_class }}" x-data="{}">

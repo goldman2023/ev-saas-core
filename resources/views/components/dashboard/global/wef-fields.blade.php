@@ -23,12 +23,6 @@
                         :custom-properties="$wef_field['custom_properties'] ?? []"
                         :positioning="$wef_field['positioning'] ?? 'vertical'"
                         key="{{ \UUID::generate(4)->string }}" />
-
-                    {{-- <livewire:dashboard.forms.wef.single-wef-form
-                    :subject="$model"
-                    wef-key="{{ $modelField }}"
-                    wef-label="Hide header" data-type="boolean" form-type="plain_text" positioning="vertical"
-                    key="{{ \UUID::generate(4)->string }}" /> --}}
                 </div>
             @endforeach
         @endif
