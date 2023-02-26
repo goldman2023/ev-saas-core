@@ -21,7 +21,7 @@ class VendorMode
     {
         if (Vendor::isVendorSite()) {
             $globalShop = Vendor::getVendorShop();
-            $globalLayout = 'white-label';
+            $globalLayout = 'app';
         } else {
             $globalShop = null;
             $globalLayout = 'app';
