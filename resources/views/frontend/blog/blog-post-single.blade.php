@@ -17,10 +17,13 @@ URL: https://flowbite.com/docs/components/typography/
             class="absolute top-20 left-1/2 !px-6 mx-auto w-full container -translate-x-1/2 xl:top-1/2 xl:-translate-y-1/2 xl:px-0">
             <div class="grid grid-cols-12 gap-8">
                 <div class="col-span-8">
-                    <span class="block mb-4 text-gray-300">{{ translate('Category:') }} <a href="#"
-                            class="font-semibold text-white hover:underline">
+                    @isset($blog_post->categories[0])
+                    <span class="block mb-4 text-gray-300">{{ translate('Category:') }}
+                        <a href="{{ $blog_post->categories[0]->getPermalink() }}" class="font-semibold text-white hover:underline">
                             {{ $blog_post->categories[0]->name }}
-                        </a></span>
+                        </a>
+                    </span>
+                    @endisset
                     <h1 class="mb-4 max-w-4xl text-2xl font-extrabold leading-none text-white sm:text-3xl lg:text-4xl">
                         {{ $blog_post->name }}
                     </h1>
@@ -74,38 +77,40 @@ URL: https://flowbite.com/docs/components/typography/
             <div class="lg:mt-6 lg:w-80 lg:flex-none">
                 <img class="h-12 w-auto" src="{{ get_site_logo() }}" alt="{{ get_site_name() }}">
                 <figure class="mt-10">
-                  <blockquote class="text-lg font-semibold leading-8 text-gray-900">
+                    <blockquote class="text-lg font-semibold leading-8 text-gray-900">
+                        <p>
+                            {{ get_tenant_setting('company_name') }}
+
+                        </p>
+                    </blockquote>
                     <p>
-                      {{ get_tenant_setting('company_name') }}
+                        {{ get_tenant_setting('company_email') }}
+                    </p>
+                    <p>
+                        {{ get_tenant_setting('company_address') }}, {{ get_tenant_setting('company_city') }}, {{
+                        get_tenant_setting('company_country') }} <br>
+                        {{ translate('Company Code') }}: {{ get_tenant_setting('company_number') }} <br>
+                        {{ translate('Company VAT Code') }}: {{ get_tenant_setting('company_vat') }}
 
                     </p>
-                  </blockquote>
-                  <p>
-                      {{ get_tenant_setting('company_email') }}
-                  </p>
-                  <p>
-                      {{ get_tenant_setting('company_address') }}, {{ get_tenant_setting('company_city') }}, {{ get_tenant_setting('company_country') }} <br>
-                      {{ translate('Company Code') }}:  {{ get_tenant_setting('company_number') }} <br>
-                      {{ translate('Company VAT Code') }}:  {{ get_tenant_setting('company_vat') }}
+                    <figcaption class="mt-10 flex gap-x-6 mb-6">
+                        <img src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=96&h=96&q=80"
+                            alt="" class="h-12 w-12 flex-none rounded-full bg-gray-50">
+                        <div>
+                            <div class="text-base font-semibold text-gray-900">{{ translate('Customer Support') }}</div>
+                            <div class="text-sm leading-6 text-gray-600">{{ get_tenant_setting('company_phone') }}</div>
+                            {{-- TODO: Add tenant setting for opening hours --}}
+                            <small>{{ get_tenant_setting('company_working_hours') }}</small>
+                        </div>
+                    </figcaption>
 
-                  </p>
-                  <figcaption class="mt-10 flex gap-x-6 mb-6">
-                    <img src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=96&h=96&q=80" alt="" class="h-12 w-12 flex-none rounded-full bg-gray-50">
                     <div>
-                      <div class="text-base font-semibold text-gray-900">{{ translate('Customer Support') }}</div>
-                      <div class="text-sm leading-6 text-gray-600">{{ get_tenant_setting('company_phone') }}</div>
-                      {{-- TODO: Add tenant setting for opening hours --}}
-                      <small>{{ get_tenant_setting('company_working_hours') }}</small>
+                        <a target="_blank" class="btn-primary w-full" href="/dashboard/">
+                            {{ translate('Customer portal') }}
+                        </a>
                     </div>
-                  </figcaption>
-
-                  <div>
-                      <a target="_blank" class="btn-primary w-full" href="/dashboard/">
-                          {{ translate('Customer portal') }}
-                      </a>
-                  </div>
                 </figure>
-              </div>
+            </div>
 
         </aside>
     </div>
