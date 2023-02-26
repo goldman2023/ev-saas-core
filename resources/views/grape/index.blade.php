@@ -133,6 +133,27 @@
                 // alert('Add');
               });
 
+              // Define a new custom component
+this.editor.Components.addType('comp-with-js', {
+  model: {
+    defaults: {
+      // Add some style, just to make the component visible
+      style: {
+        width: '100px',
+        height: '100px',
+        background: 'red',
+      }
+    }
+  }
+});
+
+// Create a block for the component, so we can drop it easily
+this.editor.Blocks.add('test-block', {
+  label: 'Test block',
+  attributes: { class: 'fa fa-text' },
+  content: { type: 'comp-with-js' },
+});
+
 
               var components = [];
                   @foreach($sections as $item)
@@ -169,7 +190,6 @@
             });
           },
           save() {
-
             document.getElementById('custom_html').value = this.getHTML();
             document.getElementById('grape-form').submit();
           }
