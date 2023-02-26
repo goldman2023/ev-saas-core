@@ -46,18 +46,6 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Display users login page
-     */
-    public function business_login()
-    {
-        if (Auth::check()) {
-            return redirect()->route('home');
-        }
-
-        return view('auth.login');
-    }
-
     // -------------------------------------------- //
     /**
      * Redirect the user to the Google authentication page.

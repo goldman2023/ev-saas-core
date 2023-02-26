@@ -106,8 +106,6 @@ Route::middleware([
 
     // User/Business/Admin login/register routes
     Route::get('/admin/login', [LoginController::class, 'admin_login'])->name('admin.login');
-    Route::get('/business/login', [LoginController::class, 'business_login'])->name('business.login');
-    Route::get('/business/register', [RegisterController::class, 'business_registration'])->name('business.registration');
     Route::get('/users/login', [LoginController::class, 'user_login'])->name('user.login');
     Route::get('/users/register', [RegisterController::class, 'user_registration'])->name('user.registration');
     Route::get('/users/register/{token}', [RegisterController::class, 'user_registration'])->name('user.invite.registration'); // invite user route
@@ -152,11 +150,6 @@ Route::middleware([
     Route::get('/social-connect/redirect/{provider}', [SocialController::class, 'redirectConnectToProvider'])->name('social.connect');
     Route::get('/social-connect/{provider}/callback', [SocialController::class, 'handleProviderConnectCallback'])->name('social.connect.callback');
 
-    Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
-    Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
-
-    // Route::get('/search', [HomeController::class, 'search'])->name('search');
-
     // Products
     Route::get('/product/{slug}', [ProductController::class, 'show'])->name(Product::getRouteName());
     Route::get('/product/{slug}/content', [ProductController::class, 'show_unlockable_content'])->name(Product::getRouteName() . '.unlockable_content')->middleware('purchased_or_owner');
@@ -172,7 +165,6 @@ Route::middleware([
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
     Route::get('/products/category/{slug}', [ProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
     Route::get('/products', [ProductController::class, 'productsByCategory'])->where('slug', '.+')->name('products.all');
-    Route::get('/products/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
 
     // Users/Shops single page
     Route::get('/users/{id}', [EVAccountController::class, 'frontend_user_profile'])->name('user.profile.single');
@@ -228,7 +220,6 @@ Route::middleware([
 
     // Route::resource('subscribers', 'SubscriberController');
     /* TODO: Move some logic to brand, category, seller controllers as home controller holds too much logic*/
-    Route::get('/brands', [HomeController::class, 'all_brands'])->name('brands.all');
     Route::get('/categories', [HomeController::class, 'all_categories'])->name('categories.all');
 
     // Chat
@@ -245,11 +236,8 @@ Route::middleware([
         Route::get('/settings/application/invoice/{id}/download', [DownloadInvoiceController::class])->name('tenant.invoice.download');
     });
 
-    Route::get('/integrations/pix', [PixProLicenseController::class, 'index']);
-
-    //Custom page
+    // Example: Custom page
     // Route::get('/page/privacy-policy', [\App\Http\Controllers\PageController::class, 'privacy_policy_page'])->name('custom-pages.privacy-policy');
-
 });
 
 /**
