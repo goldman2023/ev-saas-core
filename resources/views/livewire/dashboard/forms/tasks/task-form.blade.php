@@ -1,5 +1,5 @@
 @push('head_scripts')
-    <script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+<script src="{{ mix('js/editor.js', 'themes/WeTailwind') }}" defer></script>
 @endpush
 <div class="w-full" x-data="{
     type: @js($task->type ?? App\Enums\TaskTypesEnum::issue()->value),
@@ -40,7 +40,6 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <x-dashboard.form.input field="task.name" placeholder="Name of Task" />
-
                                 </div>
                             </div>
                             <!-- END Task Name -->

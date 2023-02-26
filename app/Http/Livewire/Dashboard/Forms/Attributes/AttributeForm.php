@@ -95,7 +95,7 @@ class AttributeForm extends Component
             'attribute.content_type' => '',
             'attribute.type' => [Rule::in(AttributeTypeEnum::toValues())],
             'attribute.filterable' => 'required|boolean',
-            'attribute.is_admin' => 'required|boolean',
+            // 'attribute.is_admin' => 'required|boolean',
             'attribute.is_schema' => 'required|boolean',
             'attribute.schema_key' => 'nullable',
             'attribute.schema_value' => 'nullable',
@@ -117,7 +117,7 @@ class AttributeForm extends Component
             'attribute.name.min' => translate('Minimum title length is :min'),
             'attribute.type.in' => translate('Type must be one of the following:').' '.AttributeTypeEnum::implodedLabels(),
             'attribute.filterable.required' => translate('Filterable is required'),
-            'attribute.is_admin.required' => translate('Is admin is required'),
+            // 'attribute.is_admin.required' => translate('Is admin is required'),
             'attribute.is_schema.required' => translate('Is schema is required'),
         ];
     }
@@ -266,12 +266,12 @@ class AttributeForm extends Component
 
             DB::commit();
 
-            $this->toastify(translate('Attribute value successfully removed!'), 'success');
+            $this->inform(translate('Attribute value successfully removed!'), '', 'success');
         } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while removing an attribute value...Please try again.'));
-            $this->toastify(translate('There was an error while removing an attribute value...Please try again. ').$e->getMessage(), 'danger');
+            $this->inform(translate('There was an error while removing an attribute value...Please try again!'), $e->getMessage(), 'success');
         }
     }
 

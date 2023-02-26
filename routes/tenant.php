@@ -231,12 +231,6 @@ Route::middleware([
     Route::get('/brands', [HomeController::class, 'all_brands'])->name('brands.all');
     Route::get('/categories', [HomeController::class, 'all_categories'])->name('categories.all');
 
-
-    //Blog Section
-    Route::get('/news', [BlogController::class, 'all_blog'])->name('news');
-    Route::get('/news/{slug}', [BlogController::class, 'blog_details'])->name('news.details');
-    Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
-
     // Chat
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
 
@@ -244,10 +238,6 @@ Route::middleware([
     Route::get('/impersonate/{token}', function ($token) {
         return UserImpersonation::makeResponse($token);
     })->name('tenant.impersonate');
-
-    Route::get('/settings/user', [UserSettingsController::class, 'show'])->name('tenant.settings.user');
-    Route::post('/settings/user/personal', [UserSettingsController::class, 'personal'])->name('tenant.settings.user.personal');
-    Route::post('/settings/user/password', [UserSettingsController::class, 'password'])->name('tenant.settings.user.password');
 
     Route::middleware(OwnerOnly::class)->group(function () {
         Route::get('/settings/application', [ApplicationSettingsController::class, 'show'])->name('tenant.settings.application');
@@ -259,7 +249,7 @@ Route::middleware([
 
     //Custom page
     // Route::get('/page/privacy-policy', [\App\Http\Controllers\PageController::class, 'privacy_policy_page'])->name('custom-pages.privacy-policy');
-    
+
 });
 
 /**

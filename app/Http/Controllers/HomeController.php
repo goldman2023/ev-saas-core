@@ -50,7 +50,7 @@ class HomeController extends Controller
 {
     use LoggingTrait;
 
-    
+
 
     public function login_users()
     {
@@ -73,7 +73,7 @@ class HomeController extends Controller
         ]);
     }
 
-    
+
 
     /**
      * Create a new controller instance.
@@ -92,7 +92,7 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
-        
+
         if (auth()->user()->isSeller()) {
             return view('frontend.user.seller.dashboard');
         } elseif (auth()->user()->isStaff()) {
@@ -125,35 +125,34 @@ class HomeController extends Controller
         // $products = Product::fromCache()->paginate(12);
 
         /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
-        if (Vendor::isVendorSite()) {
-            $shop = Vendor::getVendorShop();
 
-            return view('frontend.company.profile', compact('shop'));
-        } else {
-
-            /* Check if feed is disabled for this tenant */
-
-            /* Example usage of TenantSetting for feature detection */
-            if (get_tenant_setting('feed_enabled', true)) {
-                if (auth()->user()) {
-                    return redirect()->route('feed.index');
-                } else {
-                    return view('frontend.index');
-                }
+        /* Check if feed is disabled for this tenant */
+        $page = Page::where('slug', 'home')->first();
+        $sections = $page->content;
+        /* Example usage of TenantSetting for feature detection */
+        if (get_tenant_setting('feed_enabled', true)) {
+            if (auth()->user()) {
+                return redirect()->route('feed.index');
             } else {
-                $page = Page::where('slug', 'home')->first();
-                $sections = $page->content;
-
                 if ($page != null) {
                     return view('frontend.custom_page', [
                         'page' => $page,
                         'sections' => $sections,
                     ]);
+                } else {
+                    return view('frontend.index');
                 }
             }
-
-            return view('frontend.index');
+        } else {
+            if ($page != null) {
+                return view('frontend.custom_page', [
+                    'page' => $page,
+                    'sections' => $sections,
+                ]);
+            }
         }
+
+        return view('frontend.index');
     }
 
     public function trackOrder(Request $request)
@@ -186,14 +185,14 @@ class HomeController extends Controller
     public function ajax_search(Request $request)
     {
         $keywords = [];
-        $products = Product::where('tags', 'like', '%'.$request->search.'%')->get();
+        $products = Product::where('tags', 'like', '%' . $request->search . '%')->get();
         foreach ($products as $key => $product) {
             foreach (explode(',', $product->tags) as $key => $tag) {
                 if (stripos($tag, $request->search) !== false) {
                     if (count($keywords) > 5) {
                         break;
                     } else {
-                        if (! in_array(strtolower($tag), $keywords)) {
+                        if (!in_array(strtolower($tag), $keywords)) {
                             array_push($keywords, strtolower($tag));
                         }
                     }
@@ -201,13 +200,13 @@ class HomeController extends Controller
             }
         }
 
-        $products = filter_products(Product::where('name', 'like', '%'.$request->search.'%'))->get()->take(3);
+        $products = filter_products(Product::where('name', 'like', '%' . $request->search . '%'))->get()->take(3);
 
-        $categories = Category::where('name', 'like', '%'.$request->search.'%')->get()->take(3);
+        $categories = Category::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
-        $shops = Shop::where('name', 'like', '%'.$request->search.'%')->get()->take(3);
+        $shops = Shop::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
-        $events = Event::where('title', 'like', '%'.$request->search.'%')->orWhere('description', 'like', '%'.$request->search.'%')->get()->take(3);
+        $events = Event::where('title', 'like', '%' . $request->search . '%')->orWhere('description', 'like', '%' . $request->search . '%')->get()->take(3);
 
         if (count($keywords) > 0 || count($categories) > 0 || count($products) > 0 || count($shops) > 0) {
             return view('frontend.partials.search_content', compact('products', 'categories', 'keywords', 'shops', 'events'));
@@ -224,7 +223,7 @@ class HomeController extends Controller
     public function listingByCategory(Request $request, $category_slug)
     {
         $selected_categories = Category::where('slug', $category_slug)->with('children')->get();
-        if (! empty($selected_categories) && $selected_categories->isNotEmpty()) {
+        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
             return $this->search($request, $selected_categories);
         }
 
@@ -236,7 +235,7 @@ class HomeController extends Controller
     public function listingByBrand(Request $request, $brand_slug)
     {
         $brand = Brand::where('slug', $brand_slug)->first();
-        if (! empty($brand)) {
+        if (!empty($brand)) {
             return $this->search($request, null, $brand->id);
         }
         abort(404);
@@ -262,7 +261,7 @@ class HomeController extends Controller
             $products->where('brand_id', $brand_id);
         }
 
-        if (! empty($selected_categories) && $selected_categories->isNotEmpty()) {
+        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
             $products->restrictByCategories($selected_categories);
 
             /* TODO Check verification for shops */
@@ -275,8 +274,8 @@ class HomeController extends Controller
         if ($query != null) {
             $searchController = new SearchController;
             $searchController->store($request);
-            $products = $products->where('name', 'like', '%'.$query.'%');
-            $shops = $shops->where('name', 'like', '%'.$query.'%');
+            $products = $products->where('name', 'like', '%' . $query . '%');
+            $shops = $shops->where('name', 'like', '%' . $query . '%');
         }
 
         $attributes = [];
@@ -299,11 +298,11 @@ class HomeController extends Controller
             $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
 
             foreach ($attributes as $attribute) {
-                if ($request->has('attribute_'.$attribute['id']) && $request['attribute_'.$attribute['id']] != '-1' && $request['attribute_'.$attribute['id']] != null) {
-                    $filters[$attribute['id']] = $request['attribute_'.$attribute['id']];
+                if ($request->has('attribute_' . $attribute['id']) && $request['attribute_' . $attribute['id']] != '-1' && $request['attribute_' . $attribute['id']] != null) {
+                    $filters[$attribute['id']] = $request['attribute_' . $attribute['id']];
                     switch ($attribute->type) {
                         case 'number':
-                            $range_arr = explode(';', $request['attribute_'.$attribute['id']]);
+                            $range_arr = explode(';', $request['attribute_' . $attribute['id']]);
                             $min_val = floatval($range_arr[0]);
                             $max_val = floatval($range_arr[1]);
                             if ($min_val != null && $max_val != null) {
@@ -315,7 +314,7 @@ class HomeController extends Controller
                             }
                             break;
                         case 'date':
-                            $arr_date_range = explode(' to ', $request['attribute_'.$attribute['id']]);
+                            $arr_date_range = explode(' to ', $request['attribute_' . $attribute['id']]);
                             if (count($arr_date_range) > 0) {
                                 $date_query = "STR_TO_DATE(`values`, '%d-%m-%Y') >= STR_TO_DATE(?, '%d-%m-%Y') AND STR_TO_DATE(`values`, '%d-%m-%Y') <= STR_TO_DATE(?, '%d-%m-%Y')";
                                 $contents = $contents->whereHas('attributes', function ($relation) use ($date_query, $arr_date_range) {
@@ -326,13 +325,13 @@ class HomeController extends Controller
                             }
                             break;
                         case 'checkbox':
-                            $checked_arr = $request['attribute_'.$attribute['id']];
+                            $checked_arr = $request['attribute_' . $attribute['id']];
                             $contents = $contents->whereHas('attributes', function ($q) use ($checked_arr) {
                                 $q->whereIn('attribute_value_id', $checked_arr);
                             });
                             break;
                         case 'country':
-                            $code = $request['attribute_'.$attribute['id']];
+                            $code = $request['attribute_' . $attribute['id']];
                             $contents = $contents->whereHas('attributes', function ($relation) use ($code) {
                                 $relation->whereHas('attribute_value', function ($value) use ($code) {
                                     $value->where('values', $code);
@@ -340,7 +339,7 @@ class HomeController extends Controller
                             });
                             break;
                         default:
-                            $val_id = $request['attribute_'.$attribute['id']];
+                            $val_id = $request['attribute_' . $attribute['id']];
                             $contents = $contents->whereHas('attributes', function ($q) use ($val_id) {
                                 $q->where('attribute_value_id', $val_id);
                             });
@@ -353,7 +352,7 @@ class HomeController extends Controller
         $products = $products->paginate(12);
         $shops = $shops->paginate(10)->appends(request()->query());
 
-        $selected_category = ! empty($selected_categories) ? $selected_categories->first() : null;
+        $selected_category = !empty($selected_categories) ? $selected_categories->first() : null;
 
         return view('frontend.product_listing', compact('products', 'shops', 'attributes', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
@@ -391,7 +390,7 @@ class HomeController extends Controller
         $array['subject'] = 'Email Verification';
         $array['from'] = env('MAIL_USERNAME');
         $array['content'] = 'Verify your account';
-        $array['link'] = route('email_change.callback').'?new_email_verificiation_code='.$verification_code.'&email='.$email;
+        $array['link'] = route('email_change.callback') . '?new_email_verificiation_code=' . $verification_code . '&email=' . $email;
         $array['sender'] = auth()->user()->name;
         $array['details'] = 'Email Second';
 
@@ -500,7 +499,7 @@ class HomeController extends Controller
                             break;
                         }
                     }
-                    if (! $flag) {
+                    if (!$flag) {
                         $item['id'] = $value;
                         $item['values'] = [];
                         foreach (json_decode($product->choice_options) as $choice_option) {
@@ -514,7 +513,7 @@ class HomeController extends Controller
                         foreach (json_decode($product->choice_options) as $choice_option) {
                             if ($choice_option->attribute_id == $value) {
                                 foreach ($choice_option->values as $value) {
-                                    if (! in_array($value, $attributes[$pos]['values'])) {
+                                    if (!in_array($value, $attributes[$pos]['values'])) {
                                         array_push($attributes[$pos]['values'], $value);
                                     }
                                 }
@@ -527,13 +526,13 @@ class HomeController extends Controller
 
         $selected_attributes = [];
         foreach ($attributes as $attribute) {
-            if ($request->has('attributes_'.$attribute['id'])) {
-                foreach ($request['attributes_'.$attribute['id']] as $value) {
-                    $str = '"'.$value.'"';
-                    $shops = $shops->where('choice_options', 'like', '%'.$str.'%');
+            if ($request->has('attributes_' . $attribute['id'])) {
+                foreach ($request['attributes_' . $attribute['id']] as $value) {
+                    $str = '"' . $value . '"';
+                    $shops = $shops->where('choice_options', 'like', '%' . $str . '%');
                 }
                 $item['id'] = $attribute['id'];
-                $item['values'] = $request['attributes_'.$attribute['id']];
+                $item['values'] = $request['attributes_' . $attribute['id']];
                 array_push($selected_attributes, $item);
             }
         }

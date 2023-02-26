@@ -236,7 +236,7 @@ class Product extends WeBaseModel
                 ]);
         }
 
-        return $query->orderBy('product_addons.id', 'ASC');
+        return $query->orderBy('product_addons.id', 'ASC')->groupBy('product_addons.id');
     }
 
     /* TODO: Implement product condition in backend: new/used/refurbished */

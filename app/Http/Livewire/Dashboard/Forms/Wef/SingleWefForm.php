@@ -38,7 +38,8 @@ class SingleWefForm extends Component
     {
         return [
             'subject' => ['required'],
-            'wef' => ['required'],
+            'wefKey' => ['required'],
+            'wefValue' => ['nullable'],
             'dataType' => ['required']
         ];
     }
@@ -47,7 +48,8 @@ class SingleWefForm extends Component
     {
         return [
             'subject.required' => translate('Subject related to meta field is required'),
-            'wef.required' => translate('Meta field is required'),
+            'wefKey.required' => translate('Meta field is required'),
+            // 'wefKey.required' => translate('Meta field is required'),
             'dataType.required' => translate('Meta field data type is requried'),
         ];
     }
@@ -91,12 +93,14 @@ class SingleWefForm extends Component
     }
 
     public function saveWEF() {
+        
+
         if($this->formType === 'text_list') {
             // For text lists, remove empty items in array
             $this->wefValue = array_values(array_filter($this->wefValue));
         }
-
-        if($this->wefValue == 'null') {
+        
+        if($this->wefValue === 'null') {
             $this->wefValue = null;
         }
 

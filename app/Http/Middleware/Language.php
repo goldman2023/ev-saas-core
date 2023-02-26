@@ -19,7 +19,6 @@ class Language
      */
     public function handle($request, Closure $next)
     {
-
          $domain =  ExtendedDomainTenantResolver::$currentDomain;
 
         if(auth()->user()) {
@@ -44,9 +43,7 @@ class Language
             }
         }
 
-
-
-
+        $locale = 'en';
         App::setLocale($locale);
         $request->session()->put('locale', $locale);
 

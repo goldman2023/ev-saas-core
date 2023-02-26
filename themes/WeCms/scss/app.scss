@@ -25,9 +25,6 @@
     animation-delay: -0.16s;
 }
 
-// @import "vendor/line-awesome.min.css";
-// @import 'swiper/swiper-bundle.css';
-
 /* EV Saas Class Shortenings */
 
 .ev-button {
@@ -163,7 +160,7 @@
     &__sections-list {
         .sortable-chosen {
             @apply bg-blue-500 text-white;
-            
+
         }
     }
 }
