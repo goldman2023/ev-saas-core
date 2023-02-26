@@ -10,8 +10,8 @@ use App\Models\AttributeValueTranslation;
 
 trait HasAttributes
 {
-    public $selected_predefined_attribute_values;
     public $custom_attributes;
+    public $selected_predefined_attribute_values;
 
     public function initializeHasAttributes()
     {
@@ -40,6 +40,7 @@ trait HasAttributes
      */
     protected function setAttributes(&$model, $custom_attributes = null, $selected_predefined_attribute_values = null)
     {
+        
         if(empty($custom_attributes)) {
             $custom_attributes = $this->custom_attributes;
         }
@@ -63,9 +64,9 @@ trait HasAttributes
                     // while other types have only one item in values array - with an ID (existing value) or without ID (not yet added value, just default template)
                     if (! $att->is_predefined) {
                         // Freestyle attributes
-
+                        
                         foreach ($att_values as $key => $att_value) {
-                            if (empty($att_value['values'] ?? null)) {
+                            if ($att_value['values'] === null) { // Reason for this comparison is that values can be 1 or 0 for boolean - so we cannot use empty() function!!!
                                 // If value is empty, unset it and later on reset array_values
                                 unset($att_values[$key]);
                                 continue;

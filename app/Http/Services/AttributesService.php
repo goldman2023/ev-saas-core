@@ -2,15 +2,16 @@
 
 namespace App\Http\Services;
 
-use App\Models\AttributeGroup;
-use App\Models\Category;
-use App\Models\CategoryRelationship;
-use App\Models\Product;
-use App\Models\Shop;
-use Cache;
-use Illuminate\Support\Collection;
 use Str;
+use Cache;
 use Vendor;
+use App\Models\Shop;
+use App\Models\Product;
+use App\Models\Attribute;
+use App\Models\Category;
+use App\Models\AttributeGroup;
+use Illuminate\Support\Collection;
+use App\Models\CategoryRelationship;
 
 class AttributesService
 {
@@ -75,5 +76,60 @@ class AttributesService
         $instance->custom_attributes = $custom_attributes;
 
         return $instance;
+    }
+
+    public function getFilterableProductAttrbiutes() {
+        return Attribute::forProduct()->filterable()->get();
+
+        return $attributes;
+    }
+
+    public function castFilterableProductAttributesFromQueryParams(&$attributes = null, $remove_inactive = false) {
+        $selected_attributes = [];
+        $count_active_filters = 0;
+        $query_params = request()->query();
+
+        if(empty($attributes)) {
+            $attributes = AttributesService::getFilterableProductAttrbiutes();
+        }
+        
+        foreach($attributes as $attribute) {
+            if(in_array($attribute['type'], ['dropdown', 'checkbox'])) {
+                $selected_attributes[$attribute->slug] = [];
+            } else {
+                $selected_attributes[$attribute->slug] = null;
+            }
+
+            if(isset($query_params[$attribute->slug])) {
+                if($attribute['type'] === 'toggle') {
+                    $query_params[$attribute->slug] = (boolean) $query_params[$attribute->slug];
+                }
+
+                if($query_params[$attribute->slug] !== 'all' && $query_params[$attribute->slug] !== false) {
+                    $count_active_filters += 1;
+                }
+
+                $selected_attributes[$attribute->slug] = $query_params[$attribute->slug];
+            }
+        }
+
+        return [
+            'selected_attributes' => $remove_inactive ? $this->removeInactiveFilteredAttributes($selected_attributes) : $selected_attributes,
+            'count_active_filters' => $count_active_filters
+        ];
+    }
+
+    public function removeInactiveFilteredAttributes(&$selected_attributes = []) {
+        $attributes = AttributesService::getFilterableProductAttrbiutes();
+
+        foreach($selected_attributes as $selected_att_slug => $selected_att_value) {
+            $att = $attributes->firstWhere('slug', $selected_att_slug);
+            
+            if(empty($selected_att_value) || $selected_att_value === 'all') {
+                unset($selected_attributes[$selected_att_slug]);
+            }
+        }
+
+        return $selected_attributes;
     }
 }

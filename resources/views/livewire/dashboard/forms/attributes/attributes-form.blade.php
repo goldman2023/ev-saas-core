@@ -4,6 +4,7 @@
     slug: @js($attribute->slug),
     filterable: @js($attribute->filterable),
     is_schema: @js($attribute->is_schema),
+    filterable_types: @js($attribute->getFilterableTypes()),
     {{-- is_admin: @js($attribute->is_admin), --}}
     custom_properties: {...{
         'multiple': false,
@@ -64,7 +65,7 @@
                             <!-- END Type -->
 
                             <!-- Filterable -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-show="filterable_types.includes(type)">
                                 <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                     <span class="text-sm font-medium text-gray-900" id="availability-label">{{
                                         translate('Filterable') }}</span>

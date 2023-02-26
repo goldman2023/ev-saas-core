@@ -26,7 +26,6 @@
     To Use Site name globaly, use helper function get_site_name() - it's an alias fo get_setting('site_name')
     --}}
 
-
     <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
@@ -34,6 +33,8 @@
     <script id="img-proxy-data" type="application/json">
         @json(\IMG::getIMGProxyData())
     </script>
+
+    <script defer async src="{{ static_asset('/bp-assets/vendor/flowbite/flowbite.js') }}"></script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeBaltic') }}">

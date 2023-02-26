@@ -232,6 +232,11 @@ class ProductForm2 extends Component
         $this->dispatchBrowserEvent('init-form');
     }
 
+    // public function hydrate()
+    // {
+    //     dd($this->product->custom_attributes);
+    // }
+
     public function render()
     {
         return view('livewire.dashboard.forms.products.product-form2');
@@ -322,7 +327,7 @@ class ProductForm2 extends Component
         $this->validateData('all');
 
         DB::beginTransaction();
-
+        // dd(\Str::replaceArray('?', $this->product->custom_attributes()->getBindings(), $this->product->custom_attributes()->toSql()) );
         try {
             // Causer is Shop, not user
             CauserResolver::setCauser(MyShop::getShop());

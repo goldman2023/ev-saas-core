@@ -63,7 +63,7 @@ class ProductController extends Controller
     public function edit(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
+        
         return view('frontend.dashboard.products.edit')->with('product', $product);
     }
 
@@ -119,23 +119,29 @@ class ProductController extends Controller
         if($slug) {
             $selected_category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
             $products = $selected_category
-            ->products()
-            ->withCount('activities')
-            ->orderBy('activities_count', 'desc')
-            ->published()
-            ->where('unit_price' , '>', 0)
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10);
+                ->products()
+                ->with(['shop'])
+                ->withCount('activities')
+                ->orderBy('activities_count', 'desc')
+                ->published()
+                ->where('unit_price' , '>', 0)
+                ->orderBy('created_at', 'DESC')
+                ->paginate(10);
             $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
         } else {
             $products = Product::published()
-            ->where('unit_price' , '>', 0)
-            ->withCount('activities')
-            ->orderBy('activities_count', 'desc')
-            ->orderBy('created_at', 'DESC')->paginate(10);
+                ->with(['shop'])
+                ->where('unit_price' , '>', 0)
+                ->withCount('activities')
+                ->orderBy('activities_count', 'desc')
+                ->orderBy('created_at', 'DESC')
+                ->paginate(10);
             $shops = [];
             $selected_category = "";
         }
+
+        $filterable_attributes = \AttributesService::getFilterableProductAttrbiutes();
+
 
 
         // TODO: Init Filters here
@@ -149,7 +155,7 @@ class ProductController extends Controller
         //
         //        abort(404); // TODO: Maybe a redirect to All Categories?
         //        return null;
-        return view('frontend.products.archive', compact('products', 'shops', 'selected_category'));
+        return view('frontend.products.archive', compact('products', 'shops', 'selected_category', 'filterable_attributes'));
     }
 
     public function show(Request $request, $slug)
