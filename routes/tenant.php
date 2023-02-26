@@ -239,10 +239,6 @@ Route::middleware([
         return UserImpersonation::makeResponse($token);
     })->name('tenant.impersonate');
 
-    Route::get('/settings/user', [UserSettingsController::class, 'show'])->name('tenant.settings.user');
-    Route::post('/settings/user/personal', [UserSettingsController::class, 'personal'])->name('tenant.settings.user.personal');
-    Route::post('/settings/user/password', [UserSettingsController::class, 'password'])->name('tenant.settings.user.password');
-
     Route::middleware(OwnerOnly::class)->group(function () {
         Route::get('/settings/application', [ApplicationSettingsController::class, 'show'])->name('tenant.settings.application');
         Route::post('/settings/application/configuration', [ApplicationSettingsController::class, 'storeConfiguration'])->name('tenant.settings.application.configuration');
