@@ -2,49 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use DB;
-use Auth;
 use Hash;
-use Mail;
-use Cookie;
-use Vendor;
-use Session;
-use Exception;
-use Categories;
-use ImageOptimizer;
 use App\Models\Page;
-use App\Models\Shop;
 use App\Models\User;
-use App\Models\Brand;
-use App\Models\Color;
-use App\Models\Event;
 use App\Models\Order;
-use App\Models\Seller;
-use function foo\func;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Attribute;
-use App\Models\FlashDeal;
-use App\Models\PickupPoint;
-use Illuminate\Support\Str;
-use App\Traits\LoggingTrait;
 use Illuminate\Http\Request;
-use App\Models\TenantSetting;
-use App\Facades\MailerService;
-use App\Models\AttributeValue;
-use App\Models\CustomerPackage;
-use App\Utility\CategoryUtility;
-use Illuminate\Support\Collection;
-use App\Http\Requests\LoginRequest;
-use App\Notifications\CompanyVisit;
-use App\Models\CategoryRelationship;
-use App\Models\AttributeRelationship;
 use Illuminate\Auth\Events\PasswordReset;
-use App\Http\Requests\UpdateSellerRequest;
-use App\Mail\SecondEmailVerifyMailManager;
-use App\Notifications\UserWelcomeNotification;
-use App\Notifications\UserFinalizeRegistration;
-use App\Notifications\UserEmailVerificationNotification;
 
 class HomeController extends Controller
 {
