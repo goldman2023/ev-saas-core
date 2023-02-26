@@ -231,12 +231,6 @@ Route::middleware([
     Route::get('/brands', [HomeController::class, 'all_brands'])->name('brands.all');
     Route::get('/categories', [HomeController::class, 'all_categories'])->name('categories.all');
 
-
-    //Blog Section
-    Route::get('/news', [BlogController::class, 'all_blog'])->name('news');
-    Route::get('/news/{slug}', [BlogController::class, 'blog_details'])->name('news.details');
-    Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
-
     // Chat
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
 
@@ -259,7 +253,7 @@ Route::middleware([
 
     //Custom page
     // Route::get('/page/privacy-policy', [\App\Http\Controllers\PageController::class, 'privacy_policy_page'])->name('custom-pages.privacy-policy');
-    
+
 });
 
 /**
