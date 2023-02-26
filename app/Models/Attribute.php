@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App;
 use WEF;
-use App\Models\Product;
+use App;
 use App\Traits\CoreMetaTrait;
 use Spatie\Sluggable\HasSlug;
 use App\Models\AttributeGroup;
@@ -13,17 +12,15 @@ use App\Traits\TranslationTrait;
 use Spatie\Sluggable\SlugOptions;
 use App\Models\AttributeTranslation;
 use Illuminate\Database\Eloquent\Model;
-use App\Support\Eloquent\Relations\AttributeValuesRelation;
 
 class Attribute extends WeBaseModel
 {
     use HasSlug;
-    // use TranslationTrait;
+    use TranslationTrait;
     use CoreMetaTrait;
 
+    // TODO: Think about uncommenting this because Attribute inherits WeBaseModel
     // protected $with = ['attribute_relationships', 'attributes_values'];
-    public static $predefinedTypes = ['dropdown', 'checkbox', 'radio'];
-    public static $filterableTypes = ['toggle', 'dropdown', 'checkbox', 'radio', 'number', 'date'];
 
     protected $fillable = ['name', 'type', 'group', 'filterable', 'content_type', 'is_admin', 'is_default', 'is_schema', 'schema_key', 'schema_value', 'custom_properties'];
 
@@ -35,7 +32,7 @@ class Attribute extends WeBaseModel
         'is_default' => 'boolean',
     ];
 
-    protected $appends = ['identificator', 'is_predefined', 'is_filterable'];
+    protected $appends = ['identificator', 'is_predefined'];
 
     public function getSlugOptions(): SlugOptions
     {
@@ -61,20 +58,6 @@ class Attribute extends WeBaseModel
     {
         return $query->where(
             fn ($query) =>  $query->where('name', 'like', '%'.$term.'%')
-        );
-    }
-
-    public function scopeFilterable($query)
-    {
-        return $query->where(
-            fn ($query) =>  $query->where('filterable', true)->whereIn('type', self::$filterableTypes)
-        );
-    }
-
-    public function scopeForProduct($query)
-    {
-        return $query->where(
-            fn ($query) =>  $query->where('content_type', Product::class)
         );
     }
 
@@ -109,17 +92,7 @@ class Attribute extends WeBaseModel
      */
     public function getIsPredefinedAttribute()
     {
-        return in_array($this->type, self::$predefinedTypes);
-    }
-
-    /**
-     * Checks if attribute is filterable
-     *
-     * @return bool
-     */
-    public function getIsFilterableAttribute()
-    {
-        return in_array($this->type, self::$filterableTypes);
+        return $this->type === 'dropdown' || $this->type === 'checkbox' || $this->type === 'radio';
     }
 
     public function attribute_relationships()
@@ -129,35 +102,16 @@ class Attribute extends WeBaseModel
 
     public function attribute_values()
     {
-        // return new AttributeValuesRelation(
-        //     model: $this, 
-        //     hasMany: [
-        //         'related' => AttributeValue::class, 
-        //         'foreignKey' => 'attribute_id', 
-        //         'localKey' => 'id'
-        //     ],
-        //     hasManyThrough: [
-        //         'farParent' => AttributeValue::class, 
-        //         'throughParent' => AttributeRelationship::class, 
-        //         'firstKey' => 'attribute_id', 
-        //         'secondKey' => 'id',
-        //         'localKey' => 'id',
-        //         'secondLocalKey' => 'attribute_value_id'
-        //     ]
-        // );
-
         return $this->hasManyThrough(AttributeValue::class, AttributeRelationship::class, 'attribute_id', 'id', 'id', 'attribute_value_id');
     }
 
-    // TODO: IMPORTANT! With and Load functions for eager and non-eager load DO NOT WORK cuz parent model in that case has no attributes and is_predefined is null!!!!!
     public function attribute_predefined_values() {
         if ($this->is_predefined) {
             // If attribute is predefined, there is only strict amount of values that it should return from DB,
             // it should not use hasManyThrough relationship, but hasMany, because it does not depend on any AttributeRelationship
             return $this->hasMany(AttributeValue::class, 'attribute_id', 'id')
                 ->orderByRaw("CASE WHEN ordering = 0 THEN 0 ELSE 1 END DESC") // If ordering is 0, then put it after all other...
-                ->orderBy('ordering', 'ASC')
-                ->groupBy('id');
+                ->orderBy('ordering', 'ASC');
         }
 
         return $this->attribute_values();
@@ -170,15 +124,15 @@ class Attribute extends WeBaseModel
 
     public function getWEFDataTypes() {
         return WEF::bundleWithGlobalWEF(apply_filters('attributes.wef.data-types', [
-            
+
         ]));
     }
-    
+
     /**
      * getAttrVal
      *
      * Gets the value of the attribute
-     * 
+     *
      * @return void
      */
     public function getAttrVal() {
@@ -207,9 +161,5 @@ class Attribute extends WeBaseModel
             'attribute_id',
             'category_id'
         );
-    }
-
-    public function getFilterableTypes() {
-        return self::$filterableTypes;
     }
 }
