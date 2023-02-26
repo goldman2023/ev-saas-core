@@ -1,43 +1,94 @@
-@extends('frontend.layouts.' . $globalLayout)
+@extends('frontend.layouts.app')
 
-@section('meta_title'){{ $page->meta_title }}@stop
+@section('meta_title'){{ $page->getPageMeta()['title'] }} | {{ get_site_name() }}@stop
 
-@section('meta_description'){{ $page->meta_description }}@stop
-
-@section('meta_keywords'){{ $page->tags }}@stop
-
+@section('meta_description'){{ $page->getPageMeta()['description'] }}@stop
 @section('meta')
-    <!-- Schema.org markup for Google+ -->
-    <meta itemprop="name" content="{{ $page->meta_title }}">
-    <meta itemprop="description" content="{{ $page->meta_description }}">
-    <meta itemprop="image" content="{{ uploaded_asset($page->meta_img) }}">
+<meta property="og:title" content="{{ $page->getPageMeta()['title'] }}" />
+<meta property="og:type" content="article" />
+<meta property="og:article:author" content="article" />
+<meta property="og:article:published_time" content="{{ $page->created_at }}" />
+<meta property="og:article:modified_time" content="{{ $page->updated_at }}" />
+<meta property="og:image" content="{{ $page->getPageMeta()['image'] }}" />
+<meta property="og:description" content="{{ $page->getPageMeta()['description'] }}" />
+<meta property="og:site_name" content="{{ get_site_name() }}" />
 
-    <!-- Twitter Card data -->
-    <meta name="twitter:card" content="product">
-    <meta name="twitter:site" content="@publisher_handle">
-    <meta name="twitter:title" content="{{ $page->meta_title }}">
-    <meta name="twitter:description" content="{{ $page->meta_description }}">
-    <meta name="twitter:creator" content="@author_handle">
-    <meta name="twitter:image" content="{{ uploaded_asset($page->meta_img) }}">
-    <meta name="twitter:data1" content="{{ single_price($page->unit_price) }}">
-    <meta name="twitter:label1" content="Price">
+<meta property="twitter:image" content="{{ $page->getPageMeta()['image'] }}" />
+<meta property="twitter:title" content="{{ $page->getPageMeta()['title'] }}" />
+<meta property="twitter:description" content="{{ $page->getPageMeta()['description'] }}" />
+<meta property="twitter:card" content="summary_large_image" />
 
-    <!-- Open Graph data -->
-    <meta property="og:title" content="{{ $page->meta_title }}" />
-    <meta property="og:type" content="product" />
-    <meta property="og:url" content="" />
-    <meta property="og:image" content="{{ uploaded_asset($page->meta_img) }}" />
-    <meta property="og:description" content="{{ $page->meta_description }}" />
-    <meta property="og:site_name" content="{{ env('APP_NAME') }}" />
-    <meta property="og:price:amount" content="{{ single_price($page->unit_price) }}" />
+
+<link rel="preload" href="https://cdn.tailwindcss.com" as="script" />
+<script src="https://cdn.tailwindcss.com"></script>
+
 @endsection
 
 @section('content')
+@if($page->slug != 'home')
+@if(get_tenant_setting('breadcrumbs_feature', false))
+{{ Breadcrumbs::render('home', $page) }}
+@endif
+@endif
+
+
+@if($page->type === 'wysiwyg')
+<div class="container py-10">
+    {!! $page->content !!}
+</div>
+@elseif($page->type === 'html')
+<div class="w-full relative">
+    @auth
+    @if (auth()->user()->isAdmin())
+    @if( $page->id )
+
+    <a target="_blank" href="{{ route('grape.index', [ $page->id]) }}" class="absolute top-0 right-0 btn-primary"
+        style="z-index: 99999;">
+        {{ translate('Edit Page') }}
+    </a>
+    @endif
+    @endif
+    @endauth
+
+    {!! $page->content !!}
+</div>
+@elseif($page->type === 'system')
+@if(!empty($page->template) && \File::exists(Theme::path($path =
+'/views/frontend/page-templates').'/'.$page->template.'.blade.php'))
+@include('frontend.page-templates.'.$page->template)
+@endif
+@else
 @if(!empty($sections))
-@php
-@endphp
 @foreach ($sections as $key => $section)
-    <x-dynamic-component :component="$section['id']" :dataOverides="$section['data']" class="mt-4" />
+@if($section['id'] === 'html' && !empty($section['html'] ?? null))
+{!! $section['html'] !!}
+@else
+<section class="relative">
+    <x-dynamic-component :component="$section['id'] ?? ''" :we-data="$section['data'] ?? []"
+        :settings="$section['settings'] ?? []" {{-- :uuid="$section['uuid'] ?? ''" --}} class="mt-4" />
+
+    @auth
+    @if (auth()->user()->isAdmin())
+    @php
+    if(isset($section['data']['hero_info_slot']['components']['hero_info_label']['data']['label'])) {
+    $dynamic_section_id = $section['data']['hero_info_slot']['components']['hero_info_label']['data']['label'];
+    }
+    @endphp
+
+    @if( $dynamic_section_id )
+    <a target="_blank" href="{{ route('grape.section-editor', [ $dynamic_section_id]) }}"
+        class="text-xs text-primary-700 absolute top-6 right-6 flex py-2 px-3 bg-primary-200 hover:text-white hover:bg-primary-600 rounded">
+        {{ translate('Edit Section') }}
+        @svg('heroicon-o-pencil', ['class' => 'h-4 h-4 ml-2'])
+    </a>
+    @endif
+    @endif
+    @endauth
+</section>
+@endif
+
 @endforeach
 @endif
+@endif
+
 @endsection

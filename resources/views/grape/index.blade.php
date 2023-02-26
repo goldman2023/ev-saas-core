@@ -151,7 +151,8 @@ this.editor.Components.addType('comp-with-js', {
 this.editor.Blocks.add('test-block', {
   label: 'Test block',
   attributes: { class: 'fa fa-text' },
-  content: { type: 'comp-with-js' },
+  content: { type: 'comp-with-js',
+ },
 });
 
 
