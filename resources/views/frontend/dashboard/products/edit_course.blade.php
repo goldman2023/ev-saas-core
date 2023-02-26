@@ -7,7 +7,7 @@
 @endpush
 
 @push('head_scripts')
-<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+<script src="{{ mix('js/editor.js', 'themes/WeTailwind') }}" defer></script>
 @endpush
 
 @section('panel_content')

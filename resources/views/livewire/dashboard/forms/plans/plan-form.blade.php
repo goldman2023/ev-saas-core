@@ -1,5 +1,5 @@
 @push('head_scripts')
-<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+<script src="{{ mix('js/editor.js', 'themes/WeTailwind') }}" defer></script>
 
 @endpush
 
@@ -398,7 +398,7 @@
                             </label>
 
                             <div class="mt-1 sm:mt-0">
-                                <x-dashboard.form.file-selector 
+                                <x-dashboard.form.file-selector
                                     id="plan-gallery"
                                     field="gallery"
                                     :file-type="\App\Enums\FileTypesEnum::image()->value"

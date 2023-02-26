@@ -1,7 +1,7 @@
 @extends('frontend.layouts.' . $globalLayout)
 
 @section('content')
-<script src="{{ static_asset('js/editor.js', false, true, true) }}"></script>
+<script src="{{ mix('js/editor.js', 'themes/WeTailwind') }}" defer></script>
 
 @if(auth()->user()->isAdmin())
 <div>

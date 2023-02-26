@@ -2,12 +2,7 @@
 @section('page_title', translate('Leads'))
 
 @section('panel_content')
-    <div class="row">
-        <div class="col-sm-4 col-10  mb-3">
-            <x-default.dashboard.widgets.leads-widget></x-default.dashboard.widgets.leads-widget>
-         </div>
-
-    </div>
+    {{-- TODO: Create propper leads --}}
     <!-- Card -->
     <div class="card">
         <!-- Header -->
