@@ -161,9 +161,21 @@
                     </div>
                     {{-- END Actions --}}
 
+                   <x-dashboard.global.wef-fields :model="$page" :wef-fields="[
+                       [
+                           'wef_key' => 'hide_header',
+                           'wef_label' => translate('Hide header'),
+                           'data_type' => 'boolean',
+                           'form_type' => 'toggle',
+                        ],
+                        [
+                           'wef_key' => 'hide_footer',
+                           'wef_label' => translate('Hide footer'),
+                           'data_type' => 'boolean',
+                           'form_type' => 'toggle',
+                       ]
+                   ]"></x-dashboard.global.wef-fields>
 
-
-                   <x-dashboard.global.wef-fields model-field="page" :model="$page"></x-dashboard.global.wef-fields>
                    <x-dashboard.global.meta-fields model-field="page" :model="$page"></x-dashboard.global.meta-fields>
                 </div>
             </div>

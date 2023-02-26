@@ -7,18 +7,18 @@ use Illuminate\View\Component;
 class WefFields extends Component
 {
     public $model;
-    public $modelField;
+    public $wefFields;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($model, $modelField)
+    public function __construct($model, $wefFields)
     {
         //
         $this->model = $model;
-        $this->modelField = $modelField;
+        $this->wefFields = $wefFields;
     }
 
     /**
