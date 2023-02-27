@@ -45,9 +45,13 @@ trait EagerLoadPivotRelations
         if (!method_exists($model->newInstance(), $name)) {
             return;
         }
-
-        $relation = $model->newInstance()->$name();
-
+        
+        if(isset($model->id) && $name === 'custom_attributes') {
+            $relation = $model->$name();
+        } else {
+            $relation = $model->newInstance()->$name();
+        }
+       
         if ($relation instanceof BelongsToMany) {
             static::$knownPivotAccessors[] = $relation->getPivotAccessor();
         }

@@ -73,7 +73,7 @@
                 </form>
 
                 <!-- Products archive -->
-                <livewire:tenant.product.products-archive class="sm:grid-cols-1" />
+                <livewire:tenant.product.products-archive class="sm:!grid-cols-1" />
             </div>
         </section>
     </main>
