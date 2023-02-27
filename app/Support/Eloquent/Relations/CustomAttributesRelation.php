@@ -213,10 +213,6 @@ class CustomAttributesRelation extends Relation
         return $attributes;
     }
 
-    public function setRelation() {
-
-    }
-
     protected function getSelectFields() {
         return array_merge($this->attributes_cols, $this->attribute_relationships_cols, $this->attribute_values_cols);
     }

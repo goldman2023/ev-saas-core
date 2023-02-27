@@ -13,7 +13,7 @@ class AttributeRelationship extends MorphPivot //implements \OwenIt\Auditing\Con
 
     protected $table = 'attribute_relationships';
 
-    protected $fillable = ['subject_type', 'subject_id', 'attribute_id', 'attribute_value_id'];
+    protected $fillable = ['subject_type', 'subject_id', 'attribute_id', 'attribute_value_id', 'for_variations', 'order'];
 
     protected $casts = [
         'for_variations' => 'boolean',

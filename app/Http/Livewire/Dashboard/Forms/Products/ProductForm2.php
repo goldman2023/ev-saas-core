@@ -319,7 +319,6 @@ class ProductForm2 extends Component
 
     public function saveProduct()
     {
-        // dd($this->product);
         $this->validateData('all');
 
         DB::beginTransaction();
@@ -360,7 +359,7 @@ class ProductForm2 extends Component
             // $this->dispatchBrowserEvent('init-product-form', []);
         } catch (\Exception $e) {
             DB::rollBack();
-
+            dd($e);
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
             $this->inform(translate('There was an error while saving a product.'), $e->getMessage(), 'fail');
         }
