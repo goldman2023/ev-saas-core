@@ -11,6 +11,7 @@ use App\Http\Middleware\SetDashboard;
 use App\Http\Services\WeThemeService;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\UnsetDashboard;
 use Illuminate\Support\ServiceProvider;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
@@ -149,6 +150,7 @@ abstract class WeThemeFunctionsServiceProvider extends ServiceProvider
                     'web',
                     InitializeTenancyByDomainAndVendorDomains::class,
                     PreventAccessFromCentralDomains::class,
+                    UnsetDashboard::class,
                     VendorMode::class,
                 ])
                 ->group($this->theme_routes.'/tenant.php');

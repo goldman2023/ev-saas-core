@@ -41,7 +41,7 @@ if (!function_exists('predefined_attributes_form_friendly_mapping')) {
                     // edit product
                     $product_attribute = $model->custom_attributes->firstWhere('id', $attribute->id);
                     // dd($model->id);
-                    
+
                     if ($product_attribute instanceof Attribute) {
                         $selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck('id')->toArray();
                     } else if(is_array($product_attribute) && !empty($product_attribute) && !empty($product_attribute?->custom_attributes ?? [])) {
@@ -55,7 +55,6 @@ if (!function_exists('predefined_attributes_form_friendly_mapping')) {
                 }
             }
         }
-
     }
 }
 
