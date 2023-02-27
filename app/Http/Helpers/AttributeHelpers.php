@@ -34,14 +34,15 @@ if (!function_exists('attributes_form_friendly_mapping')) {
 if (!function_exists('predefined_attributes_form_friendly_mapping')) {
     function predefined_attributes_form_friendly_mapping(&$model, &$custom_attributes, &$selected_predefined_attribute_values)
     {
+        $product_attributes = $model->custom_attributes()->get();
+
         // Set predefined attribute values AND select specific values if it's necessary
         foreach ($custom_attributes as $attribute) {
             if ($attribute->is_predefined) {
                 if (isset($model->id) && ! empty($model->id)) {
-                    // edit product
-                    $product_attribute = $model->custom_attributes->firstWhere('id', $attribute->id);
-                    // dd($model->id);
                     
+                    $product_attribute = $product_attributes->firstWhere('id', $attribute->id);
+
                     if ($product_attribute instanceof Attribute) {
                         $selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck('id')->toArray();
                     } else if(is_array($product_attribute) && !empty($product_attribute) && !empty($product_attribute?->custom_attributes ?? [])) {
@@ -55,7 +56,6 @@ if (!function_exists('predefined_attributes_form_friendly_mapping')) {
                 }
             }
         }
-
     }
 }
 

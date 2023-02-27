@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\View;
 use App\Http\Middleware\SetDashboard;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\UnsetDashboard;
 use App\Listeners\Tenancy\BootstrapWEF;
 use Illuminate\Support\ServiceProvider;
 use Stancl\Tenancy\Features\TenantConfig;
@@ -171,6 +172,7 @@ class TenancyServiceProvider extends ServiceProvider
             Route::namespace(static::$controllerNamespace)
                 ->middleware([
                     \Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains::class,
+                    UnsetDashboard::class,
                 ])
                 ->group(base_path('routes/tenant.php'));
         }

@@ -20,8 +20,8 @@
         description: @entangle('product.description').defer,
         description_structure: @entangle('wef.content_structure').defer,
 
-        attributes: @js($custom_attributes),
-        selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
+        attributes: @entangle('custom_attributes').defer,
+        selected_predefined_attribute_values:  @entangle('selected_predefined_attribute_values').defer,
         selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
         track_inventory: @js($product->track_inventory),

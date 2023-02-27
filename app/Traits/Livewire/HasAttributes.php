@@ -40,11 +40,10 @@ trait HasAttributes
      */
     protected function setAttributes(&$model, $custom_attributes = null, $selected_predefined_attribute_values = null)
     {
-        
         if(empty($custom_attributes)) {
             $custom_attributes = $this->custom_attributes;
         }
-
+        
         $selected_attributes = collect($custom_attributes)->filter(function ($att, $key) {
             $att = (object) $att;
 
@@ -53,11 +52,11 @@ trait HasAttributes
 
         if ($selected_attributes) {
             foreach ($selected_attributes as $att) {
-                $attribute = new Attribute();
+                // $attribute = new Attribute();
 
                 $att = (object) $att;
                 $att_values = $att->attribute_values;
-
+                
                 if (! empty($att_values)) {
 
                     // Is-predefined attributes are dropdown/radio/checkbox and they have predefined values
@@ -79,11 +78,6 @@ trait HasAttributes
                             $attribute_value_row->values = $att_value['values'] ?? null;
                             $attribute_value_row->selected = true;
                             $attribute_value_row->save();
-
-                            // // Set attribute value translations for non-predefined attributes
-                            // $attribute_value_translation = AttributeValueTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $attribute_value_row->id]);
-                            // $attribute_value_translation->name = $att_value['values'] ?? null;
-                            // $attribute_value_translation->save();
 
                             $att_values[$key] = $attribute_value_row;
                         }
@@ -112,10 +106,10 @@ trait HasAttributes
                     }
 
                     $att_values = array_values($att_values);
-
+                   
                     foreach ($att_values as $key => $att_value) {
                         if ($att_value->id ?? null) {
-
+                            
                             if ($att_value->selected ?? null) {
                                 // Create or find product-attribute relationship, but don't yet persist anything to DB (hence firstOrNew, not firstOrCreate)
                                 $att_rel = AttributeRelationship::firstOrNew([
@@ -124,12 +118,12 @@ trait HasAttributes
                                     'attribute_id' => $att->id,
                                     'attribute_value_id' => $att_value->id,
                                 ]);
-                                $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
-                                
+                                $att_rel->for_variations = ($att->type === 'dropdown') ? $att->for_variations : false;
+
                                 if ($att->type === 'text_list') {
                                     $att_rel->order = $key; // respect order for the text_list
                                 }
-
+                                
                                 $att_rel->save();
                             } else {
                                 // Remove attribute relationship if "selected" is false/null

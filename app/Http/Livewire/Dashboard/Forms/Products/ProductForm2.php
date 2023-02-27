@@ -232,11 +232,6 @@ class ProductForm2 extends Component
         $this->dispatchBrowserEvent('init-form');
     }
 
-    // public function hydrate()
-    // {
-    //     dd($this->product->custom_attributes);
-    // }
-
     public function render()
     {
         return view('livewire.dashboard.forms.products.product-form2');
@@ -364,7 +359,7 @@ class ProductForm2 extends Component
             // $this->dispatchBrowserEvent('init-product-form', []);
         } catch (\Exception $e) {
             DB::rollBack();
-
+            dd($e);
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
             $this->inform(translate('There was an error while saving a product.'), $e->getMessage(), 'fail');
         }
