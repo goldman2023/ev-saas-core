@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Edit Attribute').': '.$attribute->getTranslation('name'))
+@section('page_title', translate('Edit Attribute').': '.$attribute->name)
 
 @push('head_scripts')
 
