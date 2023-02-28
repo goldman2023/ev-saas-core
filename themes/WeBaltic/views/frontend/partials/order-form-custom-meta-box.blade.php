@@ -24,7 +24,7 @@
                 <span class="text-md bg-gray-100 leading-6 font-medium text-gray-900 border px-2 py-1 rounded-md">{{ $current_cycle_status_label }}</span>
             </h3>
 
-            <div class="w-full flex gap-x-1 text-16 items-center flex-[1_0_100%] mb-3 mt-1 justify-between flex-wrap">
+            <div class="w-full flex gap-x-1 text-16 items-center flex-[1_0_100%] mt-1 justify-between flex-wrap">
                 <p class="flex items-center text-sm text-gray-700">
                     @svg('heroicon-o-calendar-days', ['class' => 'mr-1.5 h-5 w-5 flex-shrink-0 text-gray-600'])
                     @if($current_cycle_status_date !== $order->created_at->timestamp)
@@ -35,7 +35,7 @@
                 </p>
 
                 @if($next_cycle_status_label)
-                    <p class="mt-3">
+                    <p class="">
                         {{ translate('Next cycle step is:') }}
                         <b>{{ $next_cycle_status_label }}</b>
                     </p>
