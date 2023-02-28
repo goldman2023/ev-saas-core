@@ -132,25 +132,44 @@ trait AttributeTrait
             $selected_attributes = AttributesService::castFilterableProductAttributesFromQueryParams(remove_inactive: true)['selected_attributes'] ?? [];
         }
 
-        // dd(AttributesService::removeNonActiveAttributes($selected_attributes));
-
         if(!empty($selected_attributes)) {
-            $query->whereHas('custom_attributes', function($query) use($selected_attributes) {
-                foreach($selected_attributes as $slug => $value) {
-                    $query->where(function($query) use($slug, $value) {
-                        return $query->where('slug', $slug)
-                            ->when(is_array($value), function ($q) use ($value) {
-                                return $q->whereIn('attribute_relationships.attribute_value_id', $value);
-                            })
-                            ->when(!is_array($value), function ($q) use ($value) {
-                                return $q->where('attribute_relationships.attribute_value_id', $value);
-                            });
-                    });
+            foreach($selected_attributes as $slug => $value) {
+                // New approach when custom_attributes are CustomAttributesRelation: CustomAttributesRelation class
+                if(is_array($value) || is_numeric($value) || ctype_digit($value)) {
+                    // TODO: check for SQL injection here ssince we are using RAW
+                    $exists_string = \Str::replaceArray('?', [
+                        addslashes($this::class),
+                        $slug,
+                        implode(',', !is_array($value) ? [$value] : $value)
+                    ], 'exists (select * from `attributes` inner join `attribute_relationships` on `attributes`.`id` = `attribute_relationships`.`attribute_id` where `products`.`id` = `attribute_relationships`.`subject_id` and `attribute_relationships`.`subject_type` = \'?\' and (`slug` = \'?\' and `attribute_relationships`.`attribute_value_id` in (?)))');
+                } else {
+                    $exists_string = \Str::replaceArray('?', [
+                        addslashes($this::class),
+                        $slug,
+                        is_bool($value) ? ((int) $value) : ('\''.$value.'\'')
+                    ], 'exists (select * from `attributes` inner join `attribute_relationships` on `attributes`.`id` = `attribute_relationships`.`attribute_id` inner join `attribute_values` on `attribute_relationships`.`attribute_value_id` = `attribute_values`.`id` where `products`.`id` = `attribute_relationships`.`subject_id` and `attribute_relationships`.`subject_type` = \'?\' and (`slug` = \'?\' and `attribute_values`.`values` = ?))');
                 }
-            });
-        }
-        // dd(\Str::replaceArray('?', $query->getBindings(), $query->toSql()));
 
+                $query->whereRaw($exists_string);
+            }
+
+            // dd(\Str::replaceArray('?', $query->getBindings(), $query->toSql()));
+
+            // OLD APPROACH with Eloquent Query!
+            // dd($query->whereHas('custom_attributes', function($query) use($selected_attributes) {
+            //     foreach($selected_attributes as $slug => $value) {
+            //         $query->where(function($query) use($slug, $value) {
+            //             return $query->where('slug', $slug)
+            //                 ->when(is_array($value), function ($q) use ($value) {
+            //                     return $q->whereIn('attribute_relationships.attribute_value_id', $value);
+            //                 })
+            //                 ->when(!is_array($value), function ($q) use ($value) {
+            //                     return $q->where('attribute_relationships.attribute_value_id', $value);
+            //                 });
+            //         });
+            //     }
+            // })->toSql());
+        }
     }
 
     public function getAttr($slug_or_id = null, $content_type = null) {
