@@ -93,32 +93,9 @@ class OrderController extends Controller
             $current_status_label = OrderCycleStatusEnum::labels()[$current_status];
             $new_status_label = OrderCycleStatusEnum::labels()[$new_status];
 
-            activity()
-                ->performedOn($order)
-                ->causedBy(auth()->user())
-                ->event('changed_order_cycle_status')
-                ->withProperties([
-                    'action' => 'changed_order_cycle_status',
-                    'action_title' => 'Updated cycle status of order(#'.$order->id.') to: ' . $new_status_label.' ('.$reason.')',
-                ])
-                ->log( 'Changed Order(#'.$order->id.') cycle status from <b>'.$current_status_label.'</b> to <b>'.$new_status_label.'</b>. '. $reason);
-
-            $order->save();
+            event('eloquent.updated: '.$order::class, $order); // send model `updated` event manually
 
             DB::commit();
-
-            // Send notification to customer about the cycle status change
-            if(in_array($new_status, OrderCycleStatusEnum::getPublicStatuses()) && $order->getWEF('order_cycle_status_changed_to_'.$new_status.'_email_sent_timestamp', 'unix_timestamp') === null) {
-                try {
-                    // Send signed contract for order email
-                    MailerService::notify($order->user, new OrderCycleStatusChangedNotification($order, $current_status, $new_status, throw_error: true));
-
-                    // Set $order core_meta `order_contract_email_sent_timestamp` to current time
-                    $order->setWEF('order_cycle_status_changed_to_'.$new_status.'_email_sent_timestamp', time(), 'unix_timestamp');
-                } catch(\Exception $e) {
-                    Log::error($e->getMessage());
-                }
-            }
 
             if($standalone) {
                 return $order;

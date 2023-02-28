@@ -14,10 +14,10 @@ use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Models\TenantSetting;
 use App\Models\AttributeValue;
-use App\Observers\UsersObserver;
 use App\Models\ProductVariation;
 use App\Models\UserSubscription;
 use App\Observers\PlansObserver;
+use App\Observers\UsersObserver;
 use App\Observers\OrdersObserver;
 use App\Observers\InvoicesObserver;
 use App\Observers\ProductsObserver;
@@ -43,6 +43,8 @@ use App\Listeners\Eloquent\CustomAttributesEagerLoad;
 use App\Listeners\Plans\CancelStripePlanSubscription;
 
 use App\Listeners\Plans\ReviveStripePlanSubscription;
+use Illuminate\Notifications\Events\NotificationSent;
+use App\Listeners\Notifications\ActivityLogNotification;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -62,6 +64,11 @@ class EventServiceProvider extends ServiceProvider
         ItemsQueried::class => [
             CustomAttributesEagerLoad::class
         ],
+
+        // Notifications
+        NotificationSent::class => [
+            ActivityLogNotification::class,
+        ],    
 
         // Plans Events
         PlanSubscriptionCancel::class => [CancelStripePlanSubscription::class],
