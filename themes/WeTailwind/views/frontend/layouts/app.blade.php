@@ -37,9 +37,9 @@
 
     <!-- Styles -->
     @themefilexists('css/app.css')
-        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/'.\WeTheme::getThemeName()) }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/'.\WeTheme::getThemeName()) }}">
     @else
-        <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/WeTailwind') }}">
     @endthemefilexists
 
     @include('frontend.layouts.global-partials.all')
@@ -56,20 +56,36 @@
     <div class="min-h-screen">
         {{-- <x-system.promo-banner></x-system.promo-banner> --}}
         {{-- <x-system.promo-banner-bottom></x-system.promo-banner-bottom> --}}
-
+        @isset($page)
+        @if($page->getWEF('hide_header'))
+        {{-- Dont Show header if true --}}
+        @else
         <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
+        @endif
+        @else
+        <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
+        @endif
+
 
         <!-- Page Content -->
         <main>
             @yield('content')
         </main>
 
-        <x-tailwind-ui.footers.footer>
-        </x-tailwind-ui.footers.footer>
+        @isset($page)
+        @if($page->getWEF('hide_footer')))
+        {{-- Dont Show Footer if true --}}
+        @else
+        <x-default.footers.app-bar>
+        </x-default.footers.app-bar>
+        @endif
+        @else
+        <x-default.footers.app-bar>
+        </x-default.footers.app-bar>
+        @endif
     </div>
 
-    <x-default.footers.app-bar>
-    </x-default.footers.app-bar>
+
 
 
     <!-- Carts -->
@@ -102,17 +118,16 @@
     <x-system.validation-errors-toast timeout="5000"></x-system.validation-errors-toast>
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
-
     @themefilexists('js/app.min.js')
-        <script src="{{ mix('js/app.min.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    <script src="{{ mix('js/app.min.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
     @else
-        <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
+    <script src="{{ mix('js/app.min.js', 'themes/WeTailwind') }}" defer></script>
     @endthemefilexists
 
     @themefilexists('js/alpine.js')
-        <script src="{{ mix('js/alpine.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/'.\WeTheme::getThemeName()) }}" defer></script>
     @else
-        <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/WeTailwind') }}" defer></script>
     @endthemefilexists
 
     <!-- Scripts -->
