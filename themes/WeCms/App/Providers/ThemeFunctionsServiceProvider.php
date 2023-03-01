@@ -97,6 +97,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'file-manager.index',
                     'pages.index',
                     'crm.all_customers',
+                    'sections.index',
                     'my.account.settings',
                     'settings.staff_settings',
                     'settings.app_settings',
