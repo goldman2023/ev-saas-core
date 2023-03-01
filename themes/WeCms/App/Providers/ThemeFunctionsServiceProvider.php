@@ -79,89 +79,25 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 return $rulesSets;
             }, 10, 1);
 
-            // Add pix-pro general rules
-            add_filter('app-settings-general-rules', function ($rules_array) {
-                return array_merge($rules_array, [
-                    'settings.pix_pro_software_download_url' => 'nullable',
-                    'settings.pix_pro_downloads' => 'nullable',
-                    'settings.pix_pro_dataset_samples' => 'nullable',
-                ]);
-            }, 10, 1);
 
-            // Download License Response
-            add_filter('license.download', function ($license) {
-                return pix_pro_download_license_logic($license);
-            }, 20, 1);
 
-            // Set editable License data properties
-            add_filter('license.get.data.editable.keys', function () {
-                return [
-                    'license_image_limit' => [
-                        'type' => 'int',
-                    ],
-                    'cloud_service' => [
-                        'type' => 'boolean',
-                    ],
-                    'offline_service' => [
-                        'type' => 'boolean',
-                    ],
-                    'hardware_id' => [
-                        'type' => 'string',
-                    ],
-                    'license_subscription_type' => [
-                        'type' => 'string',
-                    ],
-                    'expiration_date' => [
-                        'default' => 'now',
-                        'type' => 'datetime',
-                        'format' => 'Y-m-d H:i:s'
-                    ]
-                ];
-            }, 20, 1);
 
-            // Add custom WEFs to Plans
-            add_filter('plan.wef.data-types', function ($plan_meta) {
-                return array_merge($plan_meta, [
-                    'includes_cloud' => 'boolean',
-                    'includes_offline' => 'boolean',
-                    'number_of_images' => 'number',
-                ]);
-            }, 10, 1);
 
-            // Add WEFs to UserSubscription
-            add_filter('user-subscription.wef.data-types', function ($user_subscription_meta) {
-                return array_merge($user_subscription_meta, [
-                    'includes_cloud' => 'boolean',
-                    'includes_offline' => 'boolean',
-                    'number_of_images' => 'number',
-                ]);
-            }, 10, 1);
 
-            add_filter('dashboard.plan-form.rules.wef', function ($meta) {
-                return array_merge($meta, [
-                    'wef.number_of_images' => 'nullable',
-                    'wef.includes_cloud' => 'nullable',
-                    'wef.includes_offline' => 'nullable',
-                ]);
-            });
+
+
+
+
 
             add_filter('dashboard.sidebar.menu', function ($menu) {
                 $included_items = [
                     'dashboard',
-                    'stripe.portal_session',
-                    'plans.index',
-                    'attributes.index',
                     'categories.index',
-                    'orders.index',
-                    'invoices.index',
                     'blog.posts.index',
                     'file-manager.index',
                     'pages.index',
                     'crm.all_customers',
-                    'crm.licenses',
                     'my.account.settings',
-                    'my.plans.management',
-                    'my.orders.all',
                     'settings.staff_settings',
                     'settings.app_settings',
                     'settings.super_admin'
