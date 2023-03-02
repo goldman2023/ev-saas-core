@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notification;
 use App\Notifications\Messages\WeMailMessage;
 
 
-class UserEmailVerificationNotification extends Notification
+class UserEmailVerificationNotification extends WeNotification
 {
     use Queueable;
 
@@ -26,7 +26,14 @@ class UserEmailVerificationNotification extends Notification
 
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
+    }
+
+    public function toDatabase($notifiable) {
+        return [
+            'type' => translate('Email verification sent to user (#'.$notifiable->id.')'),
+            'data' => ['action' => 'user_email_verification_email', 'user_id' => $notifiable->id]
+        ];
     }
 
     public function toMail($notifiable)

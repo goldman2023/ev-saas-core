@@ -14,7 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Notifications\Messages\WeMailMessage;
 
 
-class UserWelcomeNotification extends Notification
+class UserWelcomeNotification extends WeNotification
 {
 
     public function __construct()
@@ -30,7 +30,7 @@ class UserWelcomeNotification extends Notification
     public function toDatabase($notifiable) {
         return [
             'type' => translate('User Welcome Notification'),
-            'data' => json_encode($notifiable)
+            'data' => ['action' => 'user_welcome', 'user_id' => $notifiable->id]
         ];
     }
 

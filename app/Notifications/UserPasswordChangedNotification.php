@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 
-class UserPasswordChangedNotification extends Notification
+class UserPasswordChangedNotification extends WeNotification
 {
 
     public function __construct()
@@ -24,7 +24,14 @@ class UserPasswordChangedNotification extends Notification
 
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
+    }
+
+    public function toDatabase($notifiable) {
+        return [
+            'type' => translate('User changed the password'),
+            'data' => ['action' => 'user_password_change', 'user_id' => $notifiable->id]
+        ];
     }
 
     public function toMail($notifiable)

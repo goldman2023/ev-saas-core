@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Notifications\Messages\WeMailMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class PasswordResetRequest extends Notification
+class PasswordResetRequest extends WeNotification
 {
     use Queueable;
 
@@ -23,23 +23,18 @@ class PasswordResetRequest extends Notification
 
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
+    public function toDatabase($notifiable) {
+        return [
+            'type' => translate('User requested a password change (ID: #'.$notifiable->id.')'),
+            'data' => ['action' => 'user_password_reset_request', 'user_id' => $notifiable->id]
+        ];
+    }
+
     public function toMail($notifiable)
     {
         return (new WeMailMessage)
