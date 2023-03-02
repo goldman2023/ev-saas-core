@@ -64,6 +64,13 @@ class AttributesFilterForm extends Component
         // dd($this->selected_attributes);
     }
 
+    // TODO: Remove this once the predefined attributes are fixed
+    public function dehydrate() {
+        foreach($this->attributes as $index => $attribute) {
+            $this->attributes[$index]->setRelation('attribute_predefined_values', $attribute->attribute_predefined_values()->get());
+        }
+    }
+
     public function render()
     {
         return view('livewire.forms.attributes-filter-form');
