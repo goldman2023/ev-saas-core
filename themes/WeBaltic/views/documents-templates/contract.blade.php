@@ -6,9 +6,6 @@
         vertical-align: top;
     }
 </style>
-<div class="logo">
-    <img src="{{ get_site_logo() }}" style="width: 100px; " />
-</div>
 <h1 class="text-center text-2xl font-bold w-full">
     SUTARTIS Nr. {{ $order->created_at->format('Y-m-j') }}
 </h1>
