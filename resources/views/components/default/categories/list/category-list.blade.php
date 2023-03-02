@@ -1,50 +1,45 @@
-<div class="bg-gray-100">
-    <div class="py-16 xl:mx-auto container">
-        <div class="px-4 sm:flex sm:items-center sm:justify-between">
-            <h2 class="text-2xl font-bold tracking-tight text-gray-900">
-               {{ translate('Product categories') }}
+<aside aria-label="Related articles" class="py-8 bg-white lg:py-16 dark:bg-gray-900">
+    <div class="px-4 mx-auto max-w-screen-xl">
+        <div class="flex">
+            <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
+                {{ translate('Our products') }}
             </h2>
-            <a href="{{ route('products.all') }}"
-                class="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
-                {{ translate('Browse all categories') }}
-                <span aria-hidden="true"> &rarr;</span>
-            </a>
-        </div>
-
-        <div class="mt-4 flow-root">
-            <div class="-my-2">
-                <div class="relative box-content overflow-x-auto py-2 sm:overflow-visible">
-                    <div
-                        class="min-w-screen-xl flex  gap-8 px-4  sm:relative sm:grid sm:grid-cols-3 sm:gap-x-8 sm:space-x-0 ">
-                        @foreach ($categories as $category)
-
-                        <a href="{{ $category->getPermalink() }}"
-                            class="relative flex h-60 min-w-[190px] flex-col overflow-hidden rounded-lg p-6 hover:opacity-75 xl:w-auto">
-                            <span aria-hidden="true" class="absolute inset-0 bg-white">
-                                <img src="{{ $category->getThumbnail() }}" alt=""
-                                    class="h-full w-full object-contain object-center">
-                            </span>
-                            <span aria-hidden="true"
-                                class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-gray-800 opacity-50"></span>
-                            <span class="relative mt-auto text-center text-xl font-bold text-white">
-                                {{ $category->name }}
-                            </span>
-                        </a>
-                        @endforeach
-
-
-
-                    </div>
-                </div>
+            <div class="mt-6 px-4 sm:hidden">
+                <a href="{{ route('products.all') }}"
+                    class="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+                    {{ translate('Browse all categories') }}
+                    <span aria-hidden="true"> &rarr;</span>
+                </a>
             </div>
         </div>
-
-        <div class="mt-6 px-4 sm:hidden">
-            <a href="{{ route('products.all') }}"
-                class="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
-                {{ translate('Browse all categories') }}
-                <span aria-hidden="true"> &rarr;</span>
+        <div class="grid gap-8 sm:grid-cols-6">
+            @foreach ($categories as $category)
+            <article>
+                <a href="{{ $category->getPermalink() }}">
+                    <img src="{{ $category->getThumbnail() }}" alt="" class="mb-5 w-full max-w-full rounded-lg">
+                    {{-- <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/articles/wordpress/image-1.jpg"
+                        class="" alt="Image 1"> --}}
+                </a>
+                <h3 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
+                    <a href="{{ $category->getPermalink() }}">
+                        {{ $category->name }}
+                    </a>
+                </h3>
+                <a href="{{ $category->getPermalink() }}"
+                    class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
+                    {{ translate('Peržiūrėti') }}
+                </a>
+            </article>
+            @endforeach
+            <a href="{{ translate('/priekabu-gamyba') }}" type="button"
+                class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <img class="mx-auto h-24 text-gray-400" loading="lazy"
+                    src="https://businesspress.fra1.digitaloceanspaces.com/uploads/fff40500-0cca-4b32-8500-92dbfff35e36/1677768657_priekabu-gamyba.gif" />
+                <span class="mt-2 block text-sm font-semibold text-gray-900">
+                    {{ translate('Individualūs užsakymai') }}
+                </span>
             </a>
+
         </div>
     </div>
-</div>
+</aside>

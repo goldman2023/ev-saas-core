@@ -7,9 +7,9 @@
         <div class="flex items-baseline justify-between border-b border-gray-200 pb-6">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900">
                 @isset($selected_category->name)
-                    {{ $selected_category->name }}
+                {{ $selected_category->name }}
                 @else
-                    {{ translate('All products') }}
+                {{ translate('All products') }}
                 @endisset
             </h1>
         </div>
@@ -44,8 +44,10 @@
                         @foreach(\App\Models\Category::where('parent_id', null)->whereHas('products')->get() as $category)
                         <li>
                             @isset($selected_category->id)
-                            {{-- TODO: Add a  new method to CategoryService which checks if first cat. is second cat. or if first cat. is second cat. child (or sub-sub--child etc.)  --}}
-                            <a href="{{ $category->getPermalink() }}" class="{{ ($selected_category->id === $category->id) ? 'text-primary': '' }}">
+                            {{-- TODO: Add a new method to CategoryService which checks if first cat. is second cat. or
+                            if first cat. is second cat. child (or sub-sub--child etc.) --}}
+                            <a href="{{ $category->getPermalink() }}"
+                                class="{{ ($selected_category->id === $category->id) ? 'text-primary': '' }}">
                                 {{ $category->name }}
                             </a>
                             @else
@@ -63,26 +65,38 @@
                         <livewire:forms.attributes-filter-form :attributes="$filterable_attributes" />
                         @endisset
                     </div>
-
-
-
-                    {{-- Promo block --}}
-                    <a href="#" class="group block mt-6">
-
-                        <h3 class="mt-4 text-base font-semibold text-gray-900">
-                            {{ translate('Individual Orders') }}
-                        </h3>
-                        <p class="mt-2 text-sm text-gray-500">
-                            {{ translate('We can make you a custom made order. Reach out to us and we will send you a
-                            price quote in 1 working day.') }}
-                        </p>
-
-                    </a>
-
                 </form>
 
                 <!-- Products archive -->
                 <livewire:tenant.product.products-archive class="sm:!grid-cols-1" :category="$selected_category" />
+
+                <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+                </div>
+
+                <div class="w-full grid sm:grid-cols-12 gap-y-10 gap-x-6 lg:col-span-3 lg:gap-x-8">
+                    <a href="{{ translate('/priekabu-gamyba') }}" type="button"
+                        class="w-full col-span-6 bg-white relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <img class="mx-auto h-24 text-gray-400"
+                        loading="lazy"
+                            src="https://businesspress.fra1.digitaloceanspaces.com/uploads/fff40500-0cca-4b32-8500-92dbfff35e36/1677768657_priekabu-gamyba.gif" />
+
+                        <span class="mt-2 block text-sm font-semibold text-gray-900">
+                            {{ translate('Individualūs užsakymai') }}
+                        </span>
+                    </a>
+
+                    <a href="{{ translate('/priekabu-gamyba') }}" type="button"
+                        class="w-full col-span-6 bg-white relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <img class="mx-auto h-24 text-gray-400"
+                        loading="lazy"
+                            src="{{ get_site_logo() }}" />
+
+                        <span class="mt-2 block text-sm font-semibold text-gray-900">
+                            {{ translate('Reikia konsultacijos? Susisiekite') }}
+                        </span>
+                    </a>
+
+                </div>
             </div>
         </section>
     </main>

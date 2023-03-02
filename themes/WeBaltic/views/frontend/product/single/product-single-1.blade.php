@@ -166,7 +166,7 @@
                 </div>
 
                 <div class="mt-6">
-                    <iframe src="https://api.mokilizingas.lt/api/16ac3af4dcd38b40e422ca630b4adb8e/calc/deals.html?amount_advance=0&layout=ml-004&amount_total=6.5&term=24" style="border: none; width: 100%; height: 100%;" title="Moki lizingas"></iframe>
+                    <iframe loading="lazy" src="https://api.mokilizingas.lt/api/16ac3af4dcd38b40e422ca630b4adb8e/calc/deals.html?amount_advance=0&layout=ml-004&amount_total=6.5&term=24" style="border: none; width: 100%; height: 100%;" title="Moki lizingas"></iframe>
                 </div>
 
                 <form class="hidden mt-6">
