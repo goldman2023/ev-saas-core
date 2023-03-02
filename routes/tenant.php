@@ -147,7 +147,7 @@ Route::middleware([
 
     // Cart page
     Route::get('/cart', [EVCartController::class, 'index'])->name('cart');
-    Route::get('/wishlist', [EVWishlistController::class, 'index'])->name('wishlist');
+    Route::get('/wishlist', [EVWishlistController::class, 'index'])->name('wishlist.index');
     Route::get('/wishlist/views', [EVWishlistController::class, 'views'])->name('wishlist.views');
 
     // Checkout Routes

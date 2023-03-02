@@ -1,73 +1,29 @@
 @extends('frontend.layouts.user_panel')
 
 @section('panel_content')
+<x-dashboard.section-headers.section-header title="{{ translate('Your saved items') }}" text="">
+    <x-slot name="content">
+
+    </x-slot>
+</x-dashboard.section-headers.section-header>
 <div class="container mb-3">
-    <div class="row">
-        <div class="col-sm-3 d-none">
-            <!-- CTA Section -->
-            @guest
-            <div class="text-center py-6 bg-white card"
-                style="background: url(https://htmlstream.com/preview/front-v3.1.1/assets/svg/components/abstract-shapes-19.svg) center no-repeat;">
-                <h2>{{ translate('Do not lose your saved items!') }}</h2>
-                <p>{{ translate('Create an account and get notified about discounts and updates about your liked
-                    products') }}</p>
-                <span class="d-block mt-5">
-                    <a class="btn btn-primary transition-3d-hover" href="{{ route('user.registration') }}">{{ 'Create an
-                        account' }}</a>
-                </span>
-            </div>
-            <!-- End CTA Section -->
-            @else
-            @endif
-        </div>
-        <div class="col-sm-12">
+    <div class="w-full">
+
+        <div class="w-full">
             @foreach ($wishlists as $key => $wishlist)
-
-
             @if($wishlist->count() > 0)
-            <div class="card mb-3">
-                <div class="card-header">
-
-                    <h5>
-                        {{ translate('Your Wishlist') }} : {{ $key }}
-                    </h5>
+            <div class="grid gap-6 grid-cols-12">
+                @foreach($wishlist as $item)
+                @if($item->subject_type == 'App\Models\Product')
+                <div class="col-span-12 mb-3">
+                    <x-default.products.product-card :product="$item->subject"></x-default.products.product-card>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        @foreach($wishlist as $item)
+                @endif
 
-                        <div class="col-sm-4 mb-3">
-                            @if($item->subject->getMorphClass() == 'App\Models\Product')
-                            <x-default.products.cards.product-card :product="$item->subject"
-                                style="{{ ev_dynamic_translate('product-card', true)->value }}">
-                            </x-default.products.cards.product-card>
-                            @endif
-                        </div>
-                        @endforeach
-
-                    </div>
-
-
-                </div>
+                @endforeach
             </div>
             @else
-            <div class="card">
-                <div class="card-body text-center pt-3">
-                    <div class="text-center mx-md-auto">
-                        @svg('heroicon-o-heart', ['class' => 'text-dark', 'style' => 'width: 72px;'])
 
-                        <div class="mb-5">
-                            <h3 class="h3">{{ translate('Your wishlist is currently empty') }}</h3>
-                            <p>{{ translate('Before you can see your liked items you must add some products to your
-                                wishlist.') }}</p>
-                        </div>
-                        <a class="btn btn-primary btn-pill transition-3d-hover px-5"
-                            href="{{ route('feed.products') }}">
-                            {{ translate('Explore Products') }}
-                        </a>
-                    </div>
-                </div>
-            </div>
             @endif
             @endforeach
         </div>

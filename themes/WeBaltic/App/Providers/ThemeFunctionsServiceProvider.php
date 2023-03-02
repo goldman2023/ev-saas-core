@@ -114,7 +114,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'settings.staff_settings',
                     'settings.app_settings',
                     'settings.super_admin',
-                    'we-edit.index'
+                    'we-edit.index',
+                    'wishlist.index'
                 ];
 
                 /* TODO: Use this approach for overiding child themes, menu */

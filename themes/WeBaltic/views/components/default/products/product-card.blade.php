@@ -1,3 +1,4 @@
+@if($product)
 <div class="relative lg:max-h-[230px] bg-white lg:grid lg:grid-cols-12 w-full rounded-lg bg-white shadow-lg">
     <div class="absolute right-3 top-3">
         <livewire:actions.social-action-button action="save" template="wishlist-button" :object="$product">
@@ -85,3 +86,4 @@
 
     </div>
 </div>
+@endif
