@@ -60,7 +60,8 @@
 
                     <div class="mt-3">
                         <h2 class="sr-only">Product information</h2>
-                        <p class="text-3xl tracking-tight text-gray-900">{{ FX::formatPrice($product->getBasePrice()) }}
+                        <p class="text-3xl tracking-tight text-gray-900">
+                            {{ FX::formatPrice($product->getBasePrice()) }}
                         </p>
                     </div>
 

@@ -8,14 +8,7 @@
 <div class="bg-gray-100">
     <main class="container sm:px-6 sm:pt-16 lg:px-8">
         <div class="mx-auto max-w-2xl lg:max-w-none">
-            <div class="mb-6 pt-12 sm:pt-0">
-                <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-2">
-                    {{ $product->name }}
-                </h1>
-                <span class="font-medium block text-gray-600 text-[16px] line-clamp-1">
-                    {{ $product->excerpt }}
-                </span>
-            </div>
+
         </div>
     </main>
     <div class="hidden sm:block mb-6">
@@ -27,8 +20,33 @@
         <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-12">
             <!-- Image gallery -->
             <div class="flex flex-col-reverse">
-                {{-- <x-product.single.support-box></x-product.single.support-box> --}}
+                <section aria-labelledby="details-heading" class="mt-8">
+                    <h2 id="details-heading" class="sr-only">Additional details</h2>
 
+                    <div class="divide-y divide-gray-200">
+                        <div>
+                            <h3>
+                                <!-- Expand/collapse question button -->
+                                <button type="button"
+                                    class="group relative flex w-full items-center justify-between py-3 text-left"
+                                    >
+                                    <!-- Open: "text-indigo-600", Closed: "text-gray-900" -->
+                                    <span class="text-gray-900 text-xl font-medium">
+                                        {{ translate('Product specification') }}
+                                    </span>
+
+                                </button>
+                            </h3>
+                            <div class="prose prose-sm pb-6" id="product-specification">
+
+                                <x-default.products.single.product-specification-table :product="$product">
+                                </x-default.products.single.product-specification-table>
+                            </div>
+                        </div>
+
+                        <!-- More sections... -->
+                    </div>
+                </section>
                 <!-- Image selector -->
                 <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
                     <div class="grid grid-cols-4 gap-6" aria-orientation="horizontal" role="tablist">
@@ -66,17 +84,23 @@
 
             <!-- Product info -->
             <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+                <div class="mb-6 pt-12 sm:pt-0">
+                    <div class="flex w-full">
+                    <h1 class="w-full text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-2">
+                        {{ $product->name }}
+                    </h1>
+                    <livewire:actions.social-action-button action="save_detailed" template="wishlist-button-detailed" :object="$product">
+                    </livewire:actions.social-action-button>
+                    </div>
 
-                <div class="mt-3">
-                    <h2 class="sr-only">Product information</h2>
-                    <span class="font-md font-medium">
-                        {{ translate('Price') }}:
+                    <span class="font-medium block text-gray-600 text-[16px] line-clamp-1">
+                        {{ $product->excerpt }}
                     </span>
-                    <p class="text-3xl tracking-tight text-gray-900">{{ FX::formatPrice($product->getBasePrice()) }}
-                    </p>
                 </div>
 
+
                 <div class="mt-6">
+
                     <h3 class="sr-only">{{ translate('Description') }}</h3>
 
                     <div class="space-y-6 text-base text-gray-700">
@@ -89,9 +113,7 @@
                 <x-default.products.single.product-checkout-card :product="$product">
                 </x-default.products.single.product-checkout-card>
 
-                <div class="mt-6">
-                    <iframe src="https://api.mokilizingas.lt/api/16ac3af4dcd38b40e422ca630b4adb8e/calc/deals.html?amount_advance=0&amp;layout=ml-004&amp;amount_total=6.5&amp;term=24" style="border: none; width: 100%; height: 100%;" title="Moki lizingas"></iframe>
-                </div>
+
                 <div class="mt-4"><a href="#" class="group inline-flex text-sm text-gray-500 hover:text-gray-700"><span
                             id="i72hhgh">
                             {{ translate('Reikia pagalbos?') }} +37065455654
@@ -141,6 +163,10 @@
                     </div>
                 </div>
 
+                <div class="mt-6">
+                    <iframe src="https://api.mokilizingas.lt/api/16ac3af4dcd38b40e422ca630b4adb8e/calc/deals.html?amount_advance=0&layout=ml-004&amount_total=6.5&term=24" style="border: none; width: 100%; height: 100%;" title="Moki lizingas"></iframe>
+                </div>
+
                 <form class="hidden mt-6">
                     <div class="mt-10 flex">
                         <button type="submit"
@@ -161,55 +187,7 @@
                     </div>
                 </form>
 
-                <section aria-labelledby="details-heading" class="mt-8">
-                    <h2 id="details-heading" class="sr-only">Additional details</h2>
 
-                    <div class="divide-y divide-gray-200">
-                        <div>
-                            <h3>
-                                <!-- Expand/collapse question button -->
-                                <button type="button"
-                                    class="group relative flex w-full items-center justify-between py-6 text-left"
-                                    aria-controls="disclosure-1" aria-expanded="false">
-                                    <!-- Open: "text-indigo-600", Closed: "text-gray-900" -->
-                                    <span class="text-gray-900 text-lg font-medium">
-                                        {{ translate('Product specification') }}
-                                    </span>
-                                    <span class="ml-6 flex items-center">
-                                        <!--
-                                                Heroicon name: outline/plus
-
-                                                Open: "hidden", Closed: "block"
-                                                -->
-                                        <svg class="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
-                                        <!--
-                                                Heroicon name: outline/minus
-
-                                                Open: "block", Closed: "hidden"
-                                                -->
-                                        <svg class="hidden h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
-                                        </svg>
-                                    </span>
-                                </button>
-                            </h3>
-                            <div class="prose prose-sm pb-6" id="disclosure-1">
-
-                                <x-default.products.single.product-specification-table :product="$product">
-                                </x-default.products.single.product-specification-table>
-                            </div>
-                        </div>
-
-                        <!-- More sections... -->
-                    </div>
-                </section>
 
 
             </div>
@@ -220,8 +198,11 @@
 </x-products.single.technical-specification-section> --}}
 
 
-<x-products.single.related-products :products="$product->relatedProducts()">
+<x-products.single.related-products :product="$product">
 </x-products.single.related-products>
+
+<x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
+
 </main>
 </div>
 @endsection

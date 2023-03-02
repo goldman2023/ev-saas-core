@@ -52,10 +52,12 @@
                     </ul>
 
                     <div class="w-full mt-3 mb-3">
+                        @isset($filterable_attributes)
                         <livewire:forms.attributes-filter-form :attributes="$filterable_attributes" />
+                        @endisset
                     </div>
 
-                    
+
 
                     {{-- Promo block --}}
                     <a href="#" class="group block mt-6">

@@ -36,7 +36,7 @@
 
                 $dispatch('display-flyout-panel', {'id': 'cart-panel'});
             }
-        " 
+        "
         @if($product->hasVariations())
             @variation-changed.window="
                 qty = 0;
@@ -96,7 +96,7 @@
                                         <strong>{{ $addon->name }}</strong>
                                         <x-system.we-price :model="$addon"></x-system.we-price>
                                     </label>
-                                    
+
                                     <p class="text-gray-500 line-clamp-1">{{ $addon->excerpt }}</p>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
             @endif
             {{-- END Product Addons --}}
 
-            
+
             @if($product->track_iventory)
                 <p class="py-2 mb-0">
                     <span class="text-18 text-body font-semibold">{{ translate('Stock:') }}</span>
@@ -136,7 +136,7 @@
                     stocks. Hurry up!') }}</p>
             </template> --}}
 
-            {{-- DONE: Disable add to cart button and quantity counter if available stock is <= 0 --}} 
+            {{-- DONE: Disable add to cart button and quantity counter if available stock is <= 0 --}}
             <div class="w-full flex mt-3">
                 <x-system.quantity-counter :model="$product" class="mr-5"></x-system.quantity-counter>
 
@@ -152,8 +152,7 @@
         </div>
 
         <div class="w-full">
-            <livewire:actions.social-action-button action="wishlist" template="wishlist-button-detailed" :object="$product">
-            </livewire:actions.social-action-button>
+
         </div>
     </div>
 </div>

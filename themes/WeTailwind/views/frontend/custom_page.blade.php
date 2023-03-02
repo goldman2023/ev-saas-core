@@ -21,6 +21,7 @@
 
 <link rel="preload" href="https://cdn.tailwindcss.com" as="script" />
 <script src="https://cdn.tailwindcss.com"></script>
+@include('frontend.layouts.global-partials.global-tailwind-config')
 
 @endsection
 

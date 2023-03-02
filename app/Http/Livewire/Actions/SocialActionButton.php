@@ -27,58 +27,7 @@ class SocialActionButton extends Component
     public $action_text = null;
     public $action_text_success = null;
 
-    public $available_actions = [
-        'reaction' => [
-            'action' => 'Reaction',
-            'action_success' => 'Reacted',
-            'icon' => 'heroicon-o-hand-thumb-up',
-            'icon_success' => 'heroicon-s-hand-thumb-up',
-            'view' => 'livewire.actions.social-buttons.like-button',
-            'class' => SocialReaction::class,
-            'log_description' => 'reacted',
-            'log_description_inverse' => 'reaction_revoked',
-        ],
-        'wishlist' => [
-            'action' => 'Add to wishlist',
-            'action_success' => 'Remove from wishlist',
-            'icon' => 'heroicon-o-heart',
-            'icon_success' => 'heroicon-s-heart',
-            'view' => 'livewire.actions.social-buttons.wishlist-button-detailed',
-            'class' => Wishlist::class,
-            'log_description' => 'added_to_wishlist',
-            'log_description_inverse' => 'removed_from_wishlist',
-        ],
-        'follow' => [
-            'action' => 'Follow',
-            'action_success' => 'Following',
-            'icon' => 'heroicon-o-user-add',
-            'icon_success' => 'heroicon-s-check-circle',
-            'view' => 'livewire.actions.social-buttons.follow-button',
-            'class' => Follow::class,
-            'log_description' => 'followed',
-            'log_description_inverse' => 'unfollowed',
-        ],
-        'save' => [
-            'action' => 'Save',
-            'action_success' => 'Saved',
-            'icon' => 'heroicon-o-bookmark',
-            'icon_success' => 'heroicon-s-bookmark',
-            'view' => 'livewire.actions.wishlist-button',
-            'class' => Wishlist::class,
-            'log_description' => 'saved',
-            'log_description_inverse' => 'unsaved',
-        ],
-        'notify' => [
-            'action' => 'Enable notification',
-            'action_success' => 'Notification enabled',
-            'icon' => 'heroicon-o-bell',
-            'icon_success' => 'heroicon-s-bell',
-            'view' => 'livewire.actions.wishlist-button',
-            'class' => Wishlist::class, // TODO: Fix this!
-            'log_description' => 'notify',
-            'log_description_inverse' => 'unnotify',
-        ],
-    ];
+    public $available_actions = [];
 
     public $iconDefault = 'heroicon-o-heart';
 
@@ -96,6 +45,69 @@ class SocialActionButton extends Component
 
     public function mount($object, $action = 'reaction', $type = '', $class = '', $action_text = null, $action_text_success = null)
     {
+        $this->available_actions = [
+            'reaction' => [
+                'action' => translate('Reaction'),
+                'action_success' => translate('Reacted'),
+                'icon' => 'heroicon-o-hand-thumb-up',
+                'icon_success' => 'heroicon-s-hand-thumb-up',
+                'view' => 'livewire.actions.social-buttons.like-button',
+                'class' => SocialReaction::class,
+                'log_description' => 'reacted',
+                'log_description_inverse' => 'reaction_revoked',
+            ],
+            'wishlist' => [
+                'action' => translate('Add to wishlist'),
+                'action_success' => '',
+                'icon' => 'heroicon-o-heart',
+                'icon_success' => 'heroicon-s-heart',
+                'view' => 'livewire.actions.social-buttons.wishlist-button-detailed',
+                'class' => Wishlist::class,
+                'log_description' => 'added_to_wishlist',
+                'log_description_inverse' => 'removed_from_wishlist',
+            ],
+            'follow' => [
+                'action' => translate('Follow'),
+                'action_success' => translate('Following'),
+                'icon' => 'heroicon-o-user-add',
+                'icon_success' => 'heroicon-s-check-circle',
+                'view' => 'livewire.actions.social-buttons.follow-button',
+                'class' => Follow::class,
+                'log_description' => 'followed',
+                'log_description_inverse' => 'unfollowed',
+            ],
+            'save' => [
+                'action' => '',
+                'action_success' => '',
+                'icon' => 'heroicon-o-bookmark',
+                'icon_success' => 'heroicon-s-bookmark',
+                'view' => 'livewire.actions.wishlist-button',
+                'class' => Wishlist::class,
+                'log_description' => 'saved',
+                'log_description_inverse' => 'unsaved',
+            ],
+            'save_detailed' => [
+                'action' => translate('Save'),
+                'action_success' => translate('Saved'),
+                'icon' => 'heroicon-o-bookmark',
+                'icon_success' => 'heroicon-s-bookmark',
+                'view' => 'livewire.actions.wishlist-button',
+                'class' => Wishlist::class,
+                'log_description' => 'saved',
+                'log_description_inverse' => 'unsaved',
+            ],
+            'notify' => [
+                'action' => translate('Enable notification'),
+                'action_success' => translate('Notification enabled'),
+                'icon' => 'heroicon-o-bell',
+                'icon_success' => 'heroicon-s-bell',
+                'view' => 'livewire.actions.wishlist-button',
+                'class' => Wishlist::class, // TODO: Fix this!
+                'log_description' => 'notify',
+                'log_description_inverse' => 'unnotify',
+            ],
+        ];
+
         $this->object = $object;
         $this->model_class = $object::class;
         $this->selectedAction = $action;
