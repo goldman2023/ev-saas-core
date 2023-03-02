@@ -429,6 +429,15 @@ class WeService
                         'permissions' => [],
                     ],
                     [
+                        'label' => translate('Saved items'),
+                        'icon' => 'heroicon-o-arrow-path',
+                        'route' => route('wishlist.index'),
+                        'route_name' => 'wishlist.index',
+                        'is_active' => areActiveRoutes(['wishlist.index']),
+                        'user_types' => User::$user_types,
+                        'permissions' => [],
+                    ],
+                    [
                         'label' => translate('Orders'),
                         'icon' => 'heroicon-o-shopping-cart',
                         'route' => route('my.orders.all'),

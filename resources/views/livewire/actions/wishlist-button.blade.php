@@ -1,17 +1,20 @@
 <div
+wire:loading.class="opacity-30 pointer-events-none"
     class="relative w-full block items-center text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
 
-    <div wire:click="addToWishlist()">
+    <div wire:click="fireSocialAction()">
 
         <button
             class="relative w-auto whitespace-nowrap flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
             @if($added)
-            {{ svg($action['icon_success'], ['class'=> 'w-5 h-5']) }}
             {{ $action['action_success'] }}
 
+            {{ svg($action['icon_success'], ['class'=> 'w-8 h-8']) }}
+
             @else
-            {{ svg($action['icon'], ['class'=> 'w-5 text-gray-900 mr-2']) }}
             {{ $action['action'] }}
+
+            {{ svg($action['icon'], ['class'=> 'w-8 text-gray-900 mr-2']) }}
 
             @endif
         </button>

@@ -10,7 +10,7 @@ $header_menu_items = $header_menu['menuItems'] ?? null;
         <div class="bg-gray-900">
             <div class="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                 <!-- Currency selector -->
-                <form class="hidden lg:block lg:flex-1">
+                <form class="lg:block lg:flex-1">
                     <div class="flex">
                         <label for="desktop-currency" class="sr-only">Currency</label>
                         <div
@@ -39,13 +39,13 @@ $header_menu_items = $header_menu['menuItems'] ?? null;
                     {{ translate(' ') }}
                 </p>
 
-                <div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                <div class="lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                     <a href="#" class="flex items-center	 text-sm font-medium text-white hover:text-gray-100">
                         @svg('heroicon-o-phone-arrow-down-left', ['class' => 'h-4 h-4 mr-2'])
                         Tel.: 8 (671) 81007
                     </a>
                     <span class="h-6 w-px bg-gray-600" aria-hidden="true"></span>
-                    <a href="#" class="flex items-center	 text-sm font-medium text-white hover:text-gray-100">
+                    <a href="#" class="hidden sm:flex items-center	 text-sm font-medium text-white hover:text-gray-100">
                         @svg('heroicon-o-envelope', ['class' => 'h-4 h-4 mr-2'])
                         info@baltic-priekabos.lt
                     </a>

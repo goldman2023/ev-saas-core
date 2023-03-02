@@ -38,7 +38,7 @@
         <section aria-labelledby="products-heading" class="pt-6 pb-24">
             <h2 id="products-heading" class="sr-only">Products</h2>
 
-            <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+            <div class="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-4">
                 <!-- Filters -->
                 <div>
                     <form class="hidden lg:block">

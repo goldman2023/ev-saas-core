@@ -16,13 +16,18 @@ class OrderSteps extends Component
      *
      * @return void
      */
-    public function __construct($order)
+    public function __construct($order = null)
     {
-        //
-        $this->order = $order;
         $this->steps = OrderCycleStatusEnum::labels();
 
-        $this->order_cycle_status = $this->order->getWEF('cycle_status');
+        if ($order) {
+            $this->order = $order;
+
+            $this->order_cycle_status = $this->order->getWEF('cycle_status');
+        } else {
+            $this->order_cycle_status = 0;
+
+        }
     }
 
     /**

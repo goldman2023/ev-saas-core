@@ -30,7 +30,7 @@ class WishlistButton extends Component
         ],
         'Wishlist' => [
             'action' => 'Add to wishlist',
-            'action_success' => 'Remove from wishlist',
+            'action_success' => '',
             'icon' => 'heroicon-o-heart',
             'icon_success' => 'heroicon-s-heart',
             'view' => 'livewire.actions.wishlist-buttons.wishlist-button-detailed',
@@ -126,7 +126,7 @@ class WishlistButton extends Component
                 $item->guest_id = session()->getId();
             }
             $item->save();
-            
+
             activity()
                 ->performedOn($item->subject)
                 ->causedBy(auth()->user())
