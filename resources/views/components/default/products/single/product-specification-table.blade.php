@@ -11,7 +11,7 @@
                     @if($attribute->attribute_values->isNotEmpty() && !empty($att_values_plucked = $attribute->attribute_values->pluck('values')))
                         <li class="list-group-item py-1 border-b-1">
                             <label class="font-bold">{{ translate($attribute->name) }}: </label>
-                            <span>{{ $att_values_plucked[0] }} {{  $attribute->unit }}</span>
+                            <span>{{ translate($att_values_plucked[0]) }} {{  $attribute->unit }}</span>
                             @isset($attribute->custom_properties->unit)
                                 {{ $attribute->custom_properties->unit }}
                             @endisset
