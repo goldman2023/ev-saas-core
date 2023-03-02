@@ -1,13 +1,28 @@
 .c-flyout-panel {
     @apply mobile:w-full mobile:right-[-100%] tablet-portrait-up:w-full tablet-portrait-up:right-[-100%] tablet-landscape-up:w-[450px] tablet-landscape-up:right-[-451px];
 
+    // @include mobile {
+    //     width: 100%;
+    //     right: -100%;
+    // }
+
+    // @include tablet-portrait-up {
+    //     width: 100%;
+    //     right: -100%;
+    // }
+
+    // @include tablet-landscape-up {
+    //     width: 450px;
+    //     right: -451px;
+    // }
+
     &.show {
-        left: 0;
+        right: 0;
     }
 
     &__close {
         top: 15px;
-        left: 15px;
+        right: 15px;
     }
 
     &__items {

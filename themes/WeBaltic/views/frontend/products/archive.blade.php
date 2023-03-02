@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="bg-gray-100 pt-12">
+<div class="bg-gray-100 pt-16">
     <div class="container !px-6 mx-auto">
         <div class="flex items-baseline justify-between border-b border-gray-200 pb-6">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900">
@@ -14,7 +14,7 @@
             </h1>
         </div>
     </div>
-    <div class="w-full mb-8">
+    <div>
         @isset($selected_category)
         <div>
             {{ Breadcrumbs::render('category', $selected_category) }}
@@ -34,31 +34,36 @@
             <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                 <!-- Filters -->
                 <form class="lg:block">
-                    <h3 class="sr-only">{{ translate('Categories') }}</h3>
+
+                    <div class="bg-white border rounded-lg border-gray-300 px-3 py-2">
+                    <h3 class="w-full flex items-center justify-between pb-2 mb-2 text-xl font-semibold text-gray-900 border-b border-gray-300 px-2 pt-1">
+                        {{ translate('Categories') }}
+                    </h3>
                     <ul role="list" class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
-                        <li>
+                        <li class="px-4 py-2 hover:bg-white rounded">
                             <a href="{{ route('products.all') }}">
                                 {{ translate('All Products') }}
                             </a>
                         </li>
                         @foreach(\App\Models\Category::where('parent_id', null)->whereHas('products')->get() as $category)
-                        <li>
+                        <li class="w-full">
                             @isset($selected_category->id)
                             {{-- TODO: Add a new method to CategoryService which checks if first cat. is second cat. or
                             if first cat. is second cat. child (or sub-sub--child etc.) --}}
                             <a href="{{ $category->getPermalink() }}"
-                                class="{{ ($selected_category->id === $category->id) ? 'text-primary': '' }}">
-                                {{ $category->name }}
+                                class="{{ ($selected_category->id === $category->id) ? 'text-primary bg-gray-200': '' }} w-full block bg-white px-4 py-2 hover:bg-gray-200 rounded">
+                                {{ $category->name }} ({{ $category->products()->count() }})
                             </a>
                             @else
-                            <a href="{{ $category->getPermalink() }}">
+                            <a href="{{ $category->getPermalink() }}"
+                                class="w-full block bg-white px-4 py-2 hover:bg-gray-200 rounded">
                                 {{ $category->name }}
                             </a>
                             @endisset
                         </li>
                         @endforeach
-
                     </ul>
+                    </div>
 
                     <div class="w-full mt-3 mb-3">
                         @isset($filterable_attributes)
