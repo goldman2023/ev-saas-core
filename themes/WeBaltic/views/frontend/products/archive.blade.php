@@ -75,7 +75,7 @@
                 </form>
 
                 <!-- Products archive -->
-                <livewire:tenant.product.products-archive class="sm:!grid-cols-1" />
+                <livewire:tenant.product.products-archive class="sm:!grid-cols-1" :category="$selected_category" />
             </div>
         </section>
     </main>
