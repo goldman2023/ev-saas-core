@@ -1,7 +1,7 @@
 <div class="w-full flex flex-col bg-white border rounded-lg border-gray-300 px-3 py-2" x-data="{
     attributes: @entangle('attributes').defer,
     selected_attributes: @entangle('selected_attributes').defer,
-}" id="attributes-filter-form" wire:key="attributes-filter-form" :key="'attributes-filter-form'" x-cloak>
+}" id="attributes-filter-form" :key="'attributes-filter-form'" wire:ignore x-cloak>
 
     <h3 class="w-full flex items-center justify-between pb-2 mb-2 text-base font-semibold text-gray-900 border-b border-gray-300 px-2 pt-1">
         {{ translate('Filters') }}
@@ -17,19 +17,20 @@
             <template x-for="(attribute, index) in attributes">
                 <div class="w-full">
                     <h2 :id="attribute.slug+'-attribute-heading'">
-                        <button type="button"
+                        <div type="button"
                           class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
-                          x-bind:data-accordion-target="'#'+attribute.slug+'-attribute-body'" aria-expanded="false" x-bind:aria-controls="attribute.slug+'-attribute-body'">
+                          >
+                          {{-- x-bind:data-accordion-target="'#'+attribute.slug+'-attribute-body'" aria-expanded="false" x-bind:aria-controls="attribute.slug+'-attribute-body'" --}}
                             <span x-text="attribute.name"></span>
-                            <svg data-accordion-icon class="w-5 h-5 rotate-180 shrink-0" fill="currentColor"
+                            {{-- <svg data-accordion-icon class="w-5 h-5 rotate-180 shrink-0" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z">
                                 </path>
-                            </svg>
-                        </button>
+                            </svg> --}}
+                        </div>
                     </h2>
-                    <div :id="attribute.slug+'-attribute-body'" class="hidden">
+                    <div :id="attribute.slug+'-attribute-body'" class="">
                         <div class="py-2 font-light border-b border-gray-200 dark:border-gray-600">
 
                             {{-- Toggle --}}
