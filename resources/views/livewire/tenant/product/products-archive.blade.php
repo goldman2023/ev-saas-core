@@ -19,5 +19,4 @@
             <p class="mt-1 text-sm text-gray-500">{{ translate('There are curently no products under specified parameters.') }}</p>
         </div>      
     @endif
-    
 </div>
