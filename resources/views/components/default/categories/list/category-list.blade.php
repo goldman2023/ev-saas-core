@@ -1,7 +1,7 @@
-<aside aria-label="Related articles" class="py-8 bg-white lg:py-16 dark:bg-gray-900">
-    <div class="px-4 mx-auto max-w-screen-xl">
+<aside aria-label="Related articles" class="py-8 bg-gray-50 lg:py-16 dark:bg-gray-900">
+    <div class="px-4 mx-auto container">
         <div class="flex">
-            <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 class="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
                 {{ translate('Our products') }}
             </h2>
             <div class="mt-6 px-4 sm:hidden">
@@ -32,7 +32,7 @@
             </article>
             @endforeach
             <a href="{{ translate('/priekabu-gamyba') }}" type="button"
-                class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                class="relative bg-white block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 <img class="mx-auto h-24 text-gray-400" loading="lazy"
                     src="https://businesspress.fra1.digitaloceanspaces.com/uploads/fff40500-0cca-4b32-8500-92dbfff35e36/1677768657_priekabu-gamyba.gif" />
                 <span class="mt-2 block text-sm font-semibold text-gray-900">
