@@ -63,8 +63,8 @@
             <li class="p-4 sm:p-6">
               <div class="flex items-center sm:items-start">
                 @if(!empty($item?->subject))
-                  <div class="w-[160px] h-[100px] flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 sm:w-[160px] sm:h-[100px]">
-                    <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt="{{ $item->name }}" class="h-full w-full object-cover object-center">
+                  <div class="bg-white w-[160px] h-[100px] flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 sm:w-[160px] sm:h-[100px]">
+                    <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt="{{ $item->name }}" class="h-full w-full object-contain object-center">
                   </div>
                 @endif
 
@@ -88,7 +88,7 @@
                                   <strong class="text-12 line-clamp-1 pr-2">{{ $addon_item->name }}</strong>
                                   <span class="text-12 line-clamp-1">{{ translate('Quantity:') }} {{ $addon_item->quantity }}</span>
                                 </div>
-                                
+
                                 <strong class="text-12 text-gray-900">{{ \FX::formatPrice($addon_item->total_price) }}</strong>
                             </li>
                         @endforeach
