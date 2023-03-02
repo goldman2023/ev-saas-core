@@ -85,12 +85,14 @@
             <!-- Product info -->
             <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
                 <div class="mb-6 pt-12 sm:pt-0">
-                    <div class="flex w-full">
+                    <div class="flex w-full items-center justify-center">
                     <h1 class="w-full text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-2">
                         {{ $product->name }}
                     </h1>
+                    <div class="text-right">
                     <livewire:actions.social-action-button action="save_detailed" template="wishlist-button-detailed" :object="$product">
                     </livewire:actions.social-action-button>
+                    </div>
                     </div>
 
                     <span class="font-medium block text-gray-600 text-[16px] line-clamp-1">

@@ -8,6 +8,7 @@
 
             <ul class="specification-list list-group list-group-flush p-0 grid-cols-2 grid gap-x-6 pl-4">
                 @foreach($group->custom_attributes as $attribute)
+                @if($attribute->id != 28)
                     @if($attribute->attribute_values->isNotEmpty() && !empty($att_values_plucked = $attribute->attribute_values->pluck('values')))
                         <li class="list-group-item py-1 border-b-1">
                             <label class="font-bold">{{ translate($attribute->name) }}: </label>
@@ -17,6 +18,7 @@
                             @endisset
                         </li>
                     @endisset
+                    @endif
                 @endforeach
             </ul>
         </div>

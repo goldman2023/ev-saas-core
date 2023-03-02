@@ -5,16 +5,16 @@ wire:loading.class="opacity-30 pointer-events-none"
     <div wire:click="fireSocialAction()">
 
         <button
-            class="relative w-auto whitespace-nowrap flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
+            class="relative w-auto whitespace-nowrap flex-1 inline-flex items-center justify-center py-2 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
             @if($added)
             {{ $action['action_success'] }}
 
-            {{ svg($action['icon_success'], ['class'=> 'w-8 h-8']) }}
+            {{ svg($action['icon_success'], ['class'=> 'w-8 h-8 ml-2']) }}
 
             @else
             {{ $action['action'] }}
 
-            {{ svg($action['icon'], ['class'=> 'w-8 text-gray-900 mr-2']) }}
+            {{ svg($action['icon'], ['class'=> 'w-8 text-gray-900 ml-2']) }}
 
             @endif
         </button>

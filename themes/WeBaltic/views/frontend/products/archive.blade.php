@@ -26,7 +26,7 @@
     </div>
     <main class="container !px-6 mx-auto">
 
-        <section aria-labelledby="products-heading" class="pt-6 pb-24">
+        <section aria-labelledby="products-heading" class="pt-6 pb-12">
             <h2 id="products-heading" class="sr-only">
                 {{ translate('Products') }}
             </h2>
@@ -76,7 +76,12 @@
 
                 <!-- Products archive -->
                 <livewire:tenant.product.products-archive class="sm:!grid-cols-1" />
+
+
             </div>
+            <div class="col-span-12">
+                <x-default.categories.category-list></x-default.categories.category-list>
+                </div>
         </section>
     </main>
 </div>
