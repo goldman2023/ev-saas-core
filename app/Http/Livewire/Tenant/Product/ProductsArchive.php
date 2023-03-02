@@ -44,6 +44,8 @@ class ProductsArchive extends Component
         $selected_product_attributes = AttributesService::castFilterableProductAttributesFromQueryParams($this->filterable_attributes, remove_inactive: true);
         $this->selected_attributes = $selected_product_attributes['selected_attributes'];
         $this->count_active_filters = $selected_product_attributes['count_active_filters'];
+
+        // dd($this->selected_attributes);
     }
 
 //    public function changeVariation(ProductVariation $variation) {
@@ -55,6 +57,7 @@ class ProductsArchive extends Component
         if(!empty($this->category)) {
             $products = $this->category
                 ->products()
+                ->whereCustomAttributes($this->selected_attributes)
                 ->with(['shop'])
                 ->withCount('activities')
                 ->orderBy('activities_count', 'desc')
