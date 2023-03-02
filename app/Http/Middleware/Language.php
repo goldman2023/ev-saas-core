@@ -43,7 +43,7 @@ class Language
             }
         }
 
-        $locale = 'en';
+        // $locale = 'en';
         App::setLocale($locale);
         $request->session()->put('locale', $locale);
 
