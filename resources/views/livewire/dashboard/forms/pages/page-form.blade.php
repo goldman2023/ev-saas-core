@@ -78,7 +78,6 @@
                     </div>
                 </div>
 
-
                 {{-- Right side --}}
                 <div class="col-span-12 sm:col-span-12">
 

@@ -134,7 +134,6 @@
                 </x-ev.button>
             </div>
 
-            <x-default.products.single.product-benefits> </x-default.products.single.product-benefits>
 
 
             <!-- Help Link -->

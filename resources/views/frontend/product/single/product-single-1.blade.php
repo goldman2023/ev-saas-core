@@ -26,8 +26,8 @@
                         <!-- More images... -->
                     </div>
 
-                     <!-- Image selector -->
-                     <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
+                    <!-- Image selector -->
+                    <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
                         <div class="grid grid-cols-4 gap-6" aria-orientation="horizontal" role="tablist">
                             @foreach($product->gallery as $image)
                             <button id="tabs-2-tab-1"
@@ -49,7 +49,6 @@
                         </div>
                     </div>
 
-                    <x-products.single.product-benefits></x-products.single.product-benefits>
 
                 </div>
 
@@ -173,13 +172,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- <x-products.single.technical-specification-section :product="$product">
-        </x-products.single.technical-specification-section> --}}
-
-
-        <x-products.single.related-products :products="$product->relatedProducts()">
-        </x-products.single.related-products>
 </div>
 </main>
 </div>

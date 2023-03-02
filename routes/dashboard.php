@@ -3,7 +3,6 @@
 use App\Models\User;
 use App\Http\Controllers\App;
 use App\Http\Middleware\VendorMode;
-use App\Http\Middleware\SetDashboard;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CRMController;
 use App\Http\Controllers\FeedController;

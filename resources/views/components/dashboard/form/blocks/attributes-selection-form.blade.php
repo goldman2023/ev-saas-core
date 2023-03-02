@@ -230,6 +230,36 @@
                 </div>
             </template>
             {{-- END Number --}}
+
+            {{-- Toggle --}}
+            <template x-if="{{ $attribute }}.type === 'toggle'">
+                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5"
+                    x-data="{
+                        toggle() {
+                            if(_.get({{ $attribute }}.attribute_values[0], 'values', false) == 1) { 
+                                {{-- delete selected_attributes[attribute.slug]; --}}
+                                {{ $attribute }}.attribute_values[0].values = 0;
+                            } else {
+                                {{ $attribute }}.attribute_values[0].values = 1;
+                            }
+                        },
+                        get isChecked() {
+                            return {{ $attribute }}.attribute_values[0].values == 1;
+                        }
+                    }">
+    
+                    <label class="block text-sm font-medium text-gray-700" x-text="{{ $attribute }}.name"></label>
+    
+                    <div class="mt-1 sm:mt-0 sm:col-span-2 flex rounded-md shadow-sm" @click="toggle()">
+                        <button type="button"  class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-0"
+                            :class="{'bg-primary': isChecked, 'bg-gray-200': !isChecked}">
+                        <span aria-hidden="true" class=" pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                            :class="{'translate-x-5': isChecked, 'translate-x-0': !isChecked}"></span>
+                        </button>
+                    </div>
+                </div>
+            </template>
+            {{-- END Toggle --}}
             
             {{-- Date --}}
             <template x-if="{{ $attribute }}.type === 'date'">

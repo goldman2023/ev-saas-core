@@ -2,13 +2,14 @@
 
 namespace App\Traits;
 
-use App\Builders\BaseBuilder;
-use App\Models\Attribute;
-use App\Models\AttributeRelationship;
-use App\Models\AttributeValue;
-use App\Models\Product;
 use AttributesService;
+use App\Models\Product;
+use App\Models\Attribute;
+use App\Builders\BaseBuilder;
+use App\Models\AttributeValue;
+use App\Models\AttributeRelationship;
 use Illuminate\Database\Eloquent\Collection;
+use App\Support\Eloquent\Relations\CustomAttributesRelation;
 
 trait AttributeTrait
 {
@@ -31,16 +32,21 @@ trait AttributeTrait
      */
     protected static function bootAttributeTrait()
     {
-        static::addGlobalScope('withCustomAttributes', function (mixed $builder) {
-            // Load all custom attributes along with theirs relations and values!
-            $builder->with(['custom_attributes']);
-        });
+        // static::addGlobalScope('withCustomAttributes', function (mixed $builder) {
+        //     // Load all custom attributes along with theirs relations and values!
+        //     $builder->with(['custom_attributes']);
+        // });
 
         // When model data is retrieved, populate custom_attributes!
         static::relationsRetrieved(function ($model) {
 
+            // custom_attributes are LAZY LOADED after relations are retrieved! But use on query to get all attributes for now!
+            // TODO: Create eager loading somehow through CustomAttributesRelation addEagerConstraints() and match()!
             if (!$model->relationLoaded('custom_attributes')) {
-                $model->load('custom_attributes');
+                $model->setRelation(
+                    'custom_attributes',
+                    $model->custom_attributes()->get()
+                );
             }
 
             /**
@@ -50,44 +56,44 @@ trait AttributeTrait
              * 2. To: Attribute -> 1) AttributeRelationships, 2) AttributeValues
              */
 
-            $attributes = new \Illuminate\Database\Eloquent\Collection();
+            // $attributes = new \Illuminate\Database\Eloquent\Collection();
 
-            if(($model->custom_attributes?->isNotEmpty() ?? false)) {
+            // if(($model->custom_attributes?->isNotEmpty() ?? false)) {
 
-                foreach($model->custom_attributes as $key => $att) {
-                    $att_rel = $att->pivot;
+            //     foreach($model->custom_attributes as $key => $att) {
+            //         $att_rel = $att->pivot;
 
-                    // Insert attribute from $att_rel to $attributes if attribute being inserted is not in it
-                    if(! $attributes->contains(fn($item) => ($item?->id ?? null) === $att->id)) {
-                        $attributes->push($att);
-                    }
+            //         // Insert attribute from $att_rel to $attributes if attribute being inserted is not in it
+            //         if(! $attributes->contains(fn($item) => ($item?->id ?? null) === $att->id)) {
+            //             $attributes->push($att);
+            //         }
 
-                    // Find attribute by key in $attributes collection
-                    // try {
-                        $att_key = $attributes->search(fn($item) => ($item?->id ?? null) === $att->id);
-                        $main_att = $attributes->get($att_key);
-                    // } catch(\Throwable $e) {
-                    //     dd($model->custom_attributes);
-                    // }
+            //         // Find attribute by key in $attributes collection
+            //         // try {
+            //             $att_key = $attributes->search(fn($item) => ($item?->id ?? null) === $att->id);
+            //             $main_att = $attributes->get($att_key);
+            //         // } catch(\Throwable $e) {
+            //         //     dd($model->custom_attributes);
+            //         // }
 
-                    // Push $att_rel to attribute's attribute_relationships relationship
-                    if($main_att->relationLoaded('attribute_relationships')) {
-                        $main_att->setRelation('attribute_relationships', $main_att->attribute_relationships->push($att->pivot));
-                    } else {
-                        $main_att->setRelation('attribute_relationships', new \Illuminate\Database\Eloquent\Collection([$att->pivot]));
-                    }
+            //         // Push $att_rel to attribute's attribute_relationships relationship
+            //         if($main_att->relationLoaded('attribute_relationships')) {
+            //             $main_att->setRelation('attribute_relationships', $main_att->attribute_relationships->push($att->pivot));
+            //         } else {
+            //             $main_att->setRelation('attribute_relationships', new \Illuminate\Database\Eloquent\Collection([$att->pivot]));
+            //         }
 
-                    // Push attribute_value to attribute's attribute_values relationship
-                    if($main_att->relationLoaded('attribute_values')) {
-                        $main_att->setRelation('attribute_values', $main_att->attribute_values->push($att->pivot->attribute_value));
-                    } else {
-                        $main_att->setRelation('attribute_values', new \Illuminate\Database\Eloquent\Collection([$att->pivot->attribute_value]));
-                    }
-                }
+            //         // Push attribute_value to attribute's attribute_values relationship
+            //         if($main_att->relationLoaded('attribute_values')) {
+            //             $main_att->setRelation('attribute_values', $main_att->attribute_values->push($att->pivot->attribute_value));
+            //         } else {
+            //             $main_att->setRelation('attribute_values', new \Illuminate\Database\Eloquent\Collection([$att->pivot->attribute_value]));
+            //         }
+            //     }
 
-                // Set custom_attributes relation with changed data structure
-                $model->setRelation('custom_attributes', $attributes);
-            }
+            //     // Set custom_attributes relation with changed data structure
+            //     $model->setRelation('custom_attributes', $attributes);
+            // }
         });
     }
 
@@ -111,13 +117,59 @@ trait AttributeTrait
 
     public function custom_attributes()
     {
-        return $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
-            ->with('pivot.attribute_value')
-            ->withPivot('for_variations', 'attribute_value_id', 'order')
-            ->using('App\Models\AttributeRelationship');
+        return new CustomAttributesRelation($this);
+        // return $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+        //     ->with('pivot.attribute_value')
+        //     ->withPivot('for_variations', 'attribute_value_id', 'order')
+        //     ->using('App\Models\AttributeRelationship');
 
         // return $this->hasMany(AttributeRelationship::class, 'subject_id')->where('subject_type', $this::class)
         //         ->withOnly(['attribute_value', 'attribute']);
+    }
+
+    public function scopeWhereCustomAttributes($query, $selected_attributes = []) {
+        if(empty($selected_attributes)) {
+            $selected_attributes = AttributesService::castFilterableProductAttributesFromQueryParams(remove_inactive: true)['selected_attributes'] ?? [];
+        }
+
+        if(!empty($selected_attributes)) {
+            foreach($selected_attributes as $slug => $value) {
+                // New approach when custom_attributes are CustomAttributesRelation: CustomAttributesRelation class
+                if(is_array($value) || is_numeric($value) || ctype_digit($value)) {
+                    // TODO: check for SQL injection here ssince we are using RAW
+                    $exists_string = \Str::replaceArray('?', [
+                        addslashes($this::class),
+                        $slug,
+                        implode(',', !is_array($value) ? [$value] : $value)
+                    ], 'exists (select * from `attributes` inner join `attribute_relationships` on `attributes`.`id` = `attribute_relationships`.`attribute_id` where `products`.`id` = `attribute_relationships`.`subject_id` and `attribute_relationships`.`subject_type` = \'?\' and (`slug` = \'?\' and `attribute_relationships`.`attribute_value_id` in (?)))');
+                } else {
+                    $exists_string = \Str::replaceArray('?', [
+                        addslashes($this::class),
+                        $slug,
+                        is_bool($value) ? ((int) $value) : ('\''.$value.'\'')
+                    ], 'exists (select * from `attributes` inner join `attribute_relationships` on `attributes`.`id` = `attribute_relationships`.`attribute_id` inner join `attribute_values` on `attribute_relationships`.`attribute_value_id` = `attribute_values`.`id` where `products`.`id` = `attribute_relationships`.`subject_id` and `attribute_relationships`.`subject_type` = \'?\' and (`slug` = \'?\' and `attribute_values`.`values` = ?))');
+                }
+
+                $query->whereRaw($exists_string);
+            }
+
+            // dd(\Str::replaceArray('?', $query->getBindings(), $query->toSql()));
+
+            // OLD APPROACH with Eloquent Query!
+            // dd($query->whereHas('custom_attributes', function($query) use($selected_attributes) {
+            //     foreach($selected_attributes as $slug => $value) {
+            //         $query->where(function($query) use($slug, $value) {
+            //             return $query->where('slug', $slug)
+            //                 ->when(is_array($value), function ($q) use ($value) {
+            //                     return $q->whereIn('attribute_relationships.attribute_value_id', $value);
+            //                 })
+            //                 ->when(!is_array($value), function ($q) use ($value) {
+            //                     return $q->where('attribute_relationships.attribute_value_id', $value);
+            //                 });
+            //         });
+            //     }
+            // })->toSql());
+        }
     }
 
     public function getAttr($slug_or_id = null, $content_type = null) {
@@ -211,7 +263,7 @@ trait AttributeTrait
     public function variant_attributes($key_by = null)
     {
         $attributes = $this->custom_attributes->filter(function ($att, $index) {
-            return $att->pivot->for_variations === true;
+            return $att->attribute_relationships->first()->for_variations === true;
         })->values();
 
         if (!empty($key_by)) {

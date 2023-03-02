@@ -21,10 +21,11 @@ class OrderCycleStatusChangedNotification extends WeNotification
     public $old_status_label;
     public $new_status;
     public $new_status_label;
+    public $current_timestamp;
 
-    public function __construct($order, $old_status, $new_status, $throw_error = false)
+    public function __construct($order, $old_status, $new_status, $current_timestamp = null, $throw_error = false)
     {
-        parent::__construct($throw_error);
+        parent::__construct(throw_error: $throw_error, activity_log_causer: $order);
 
         $this->order = $order;
         $this->old_status = $old_status;
@@ -32,6 +33,8 @@ class OrderCycleStatusChangedNotification extends WeNotification
 
         $this->old_status_label = OrderCycleStatusEnum::labels()[$old_status] ?? '';
         $this->new_status_label = OrderCycleStatusEnum::labels()[$new_status] ?? '';
+
+        $this->current_timestamp = empty($current_timestamp) ? time() : $current_timestamp;
     }
 
     public function via($notifiable)
@@ -41,8 +44,8 @@ class OrderCycleStatusChangedNotification extends WeNotification
 
     public function toDatabase($notifiable) {
         return [
-            'title' => translate('Order ('.$this->order->id.') cycle status update from '.$this->old_status_label.' to '.$this->new_status_label),
-            'data' => ['user' => $notifiable->attributesToArray(), 'order' => $this->order->attributesToArray(), 'old_status' => $this->old_status, 'new_status' => $this->new_status]
+            'title' => translate('Order ('.$this->order->id.') cycle status updated from '.$this->old_status_label.' to '.$this->new_status_label),
+            'data' => ['action' => 'order_cycle_status_changed', 'old_status' => $this->old_status, 'new_status' => $this->new_status, 'changed_on' => $this->current_timestamp, 'user' => $notifiable->attributesToArray(), 'order' => $this->order->attributesToArray()]
         ];
     }
 
@@ -55,6 +58,7 @@ class OrderCycleStatusChangedNotification extends WeNotification
                     'emails.orders.order-cycle-status-changed',
                     [
                         'user' => $notifiable,
+                        'order' => $this->order,
                         'old_status' => $this->old_status,
                         'old_status_label' => $this->old_status_label,
                         'new_status' => $this->new_status,

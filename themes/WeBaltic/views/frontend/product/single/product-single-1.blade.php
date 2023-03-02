@@ -29,7 +29,6 @@
             <div class="flex flex-col-reverse">
                 {{-- <x-product.single.support-box></x-product.single.support-box> --}}
 
-                <x-products.single.product-benefits></x-products.single.product-benefits>
                 <!-- Image selector -->
                 <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
                     <div class="grid grid-cols-4 gap-6" aria-orientation="horizontal" role="tablist">
@@ -86,7 +85,7 @@
                         </p>
                     </div>
                 </div>
-                
+
                 <x-default.products.single.product-checkout-card :product="$product">
                 </x-default.products.single.product-checkout-card>
 

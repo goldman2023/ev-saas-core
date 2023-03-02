@@ -322,7 +322,7 @@ class ProductForm2 extends Component
         $this->validateData('all');
 
         DB::beginTransaction();
-
+        // dd(\Str::replaceArray('?', $this->product->custom_attributes()->getBindings(), $this->product->custom_attributes()->toSql()) );
         try {
             // Causer is Shop, not user
             CauserResolver::setCauser(MyShop::getShop());
@@ -359,7 +359,7 @@ class ProductForm2 extends Component
             // $this->dispatchBrowserEvent('init-product-form', []);
         } catch (\Exception $e) {
             DB::rollBack();
-
+            dd($e);
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
             $this->inform(translate('There was an error while saving a product.'), $e->getMessage(), 'fail');
         }

@@ -51,71 +51,11 @@
 
                     </ul>
 
-                    <div class="flex mt-3 mb-3">
-                        <div class="flex items-center h-5">
-                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" value=""
-                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        </div>
-                        <div class="ml-2 text-sm">
-                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">
-                                Stabdžiai
-                            </label>
-                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">
-
-                            </p>
-                        </div>
+                    <div class="w-full mt-3 mb-3">
+                        <livewire:forms.attributes-filter-form :attributes="$filterable_attributes" />
                     </div>
 
-                    <h3 class="font-bold mt-3">
-                        Ašys
-                    </h3>
-                    <div class="flex mt-3 mb-3">
-                        <div class="flex items-center h-5">
-                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" value=""
-                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        </div>
-                        <div class="ml-2 text-sm">
-                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">
-                                1 Ašis
-                            </label>
-                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">
-
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="flex mt-3 mb-3">
-                        <div class="flex items-center h-5">
-                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" value=""
-                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        </div>
-                        <div class="ml-2 text-sm">
-                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">
-                                2 Ašys
-                            </label>
-                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">
-
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="flex mt-3 mb-3">
-                        <div class="flex items-center h-5">
-                            <input id="helper-checkbox" aria-describedby="helper-checkbox-text" type="checkbox" value=""
-                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        </div>
-                        <div class="ml-2 text-sm">
-                            <label for="helper-checkbox" class="font-medium text-gray-900 dark:text-gray-300">
-                                3 Ašys
-                            </label>
-                            <p id="helper-checkbox-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">
-
-                            </p>
-                        </div>
-
-                    </div>
+                    
 
                     {{-- Promo block --}}
                     <a href="#" class="group block mt-6">
@@ -132,25 +72,8 @@
 
                 </form>
 
-                <!-- Product grid -->
-                <div class="grid sm:grid-cols-12 gap-y-10 gap-x-6 sm:grid-cols-1 lg:col-span-3 lg:gap-x-8">
-                    @foreach ($products as $item)
-                    @if($item instanceof \App\Models\Product)
-                    <x-default.products.product-card :product="$item"></x-default.products.product-card>
-                    {{-- <x-feed.elements.product-card :product="$item"></x-feed.elements.product-card> --}}
-                    @endif
-                    @endforeach
-
-                    @if($products->hasPages())
-                    <div class="w-full">
-                        {{ $products->onEachSide(3)->links('pagination::tailwind') }}
-                    </div>
-                    @endif
-
-
-
-                    <!-- More products... -->
-                </div>
+                <!-- Products archive -->
+                <livewire:tenant.product.products-archive class="sm:!grid-cols-1" />
             </div>
         </section>
     </main>

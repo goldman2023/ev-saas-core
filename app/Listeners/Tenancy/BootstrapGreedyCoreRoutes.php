@@ -7,6 +7,7 @@ use WeTheme;
 use Qirolab\Theme\Theme;
 use App\Http\Middleware\SetDashboard;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\UnsetDashboard;
 use Stancl\Tenancy\Events\TenancyBootstrapped;
 
 /**
@@ -30,6 +31,7 @@ class BootstrapGreedyCoreRoutes
             Route::namespace(static::$controllerNamespace)
                 ->middleware([
                     \Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains::class,
+                    UnsetDashboard::class,
                 ])
                 ->group(base_path('routes/greedy-tenant.php'));
         }
