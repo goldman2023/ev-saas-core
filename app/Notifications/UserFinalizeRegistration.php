@@ -26,6 +26,14 @@ class UserFinalizeRegistration extends Notification
         return ['mail'];
     }
 
+    public function toDatabase($notifiable)
+    {
+        return [
+            'title' => translate('New ghost user created (ID: '.$notifiable->id.'). Notification for registration finalization is sent.'),
+            'data' => ['action' => 'finalize_ghost_user_registration', 'user' => $notifiable->attributesToArray()]
+        ];
+    }
+
     public function toMail($notifiable)
     {
         $notifiable->verification_code = sha1($notifiable->id.'_'.$notifiable->email);
