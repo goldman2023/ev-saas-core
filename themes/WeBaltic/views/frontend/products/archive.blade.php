@@ -85,7 +85,7 @@
                         </span>
                     </a>
 
-                    <a href="{{ translate('/priekabu-gamyba') }}" type="button"
+                    <a href="{{ translate('/kontaktai') }}" type="button"
                         class="w-full col-span-6 bg-white relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         <img class="mx-auto h-24 text-gray-400"
                         loading="lazy"
