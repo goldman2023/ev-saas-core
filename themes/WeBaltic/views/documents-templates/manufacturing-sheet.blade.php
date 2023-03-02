@@ -1,5 +1,21 @@
 @extends('documents-templates.global-pdf-layout.pdf-layout')
 @section('content')
+
+@php
+$product = $order->get_primary_order_item()->subject;
+
+
+if ($product->getAttr('asiu-kiekis')) {
+    $axel_count = $product->getAttr('asiu-kiekis')->attribute_values->first()->values;
+} else {
+    $axel_count = 0;
+}
+
+$vehicle_category = "O1";
+if($product->getAttrValue('stabdziai') == 'mechanical') {
+    $vehicle_category = "O2";
+}
+@endphp
 <style>
     table {
         border-collapse: collapse;
@@ -57,18 +73,18 @@
         </tr>
         <tr>
             <td colspan="2">Trailer Category:</td>
-            <td colspan="2">O - O1</td>
-            <td rowspan="2" colspan="2">Number of axles:</td>
-            <td colspan="2">O - 1 axle</td>
+            <td colspan="2">{{ $vehicle_category }}</td>
+            <td rowspan="2" colspan="2">{{ translate('Number of axles') }}:</td>
+            <td colspan="2">O - {{ $axel_count }} axle</td>
         </tr>
         <tr>
-            <td colspan="2">Length:</td>
-            <td colspan="2">_______mm</td>
+            <td colspan="2">{{ translate('Length') }}:</td>
+            <td colspan="2">{{ $product->getAttrValue('kraunamo-pavirsiaus-ilgis') }} mm</td>
             <td colspan="2"></td>
         </tr>
         <tr>
-            <td colspan="2">Width:</td>
-            <td colspan="2">_______mm</td>
+            <td colspan="2">{{ translte('Width') }}:</td>
+            <td colspan="2">{{ $product->getAttrValue('kraunamo-pavirsiaus-plotis') }} mm</td>
             <td colspan="2"></td>
             <td colspan="2"></td>
         </tr>

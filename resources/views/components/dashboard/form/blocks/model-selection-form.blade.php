@@ -141,16 +141,16 @@
                         <li class="py-4">
                             <div class="flex items-center space-x-4">
                                 <div class="flex-shrink-0">
-                                <img class="h-8 w-8 rounded-full" :src="window.WE.IMG.url(item.thumbnail?.file_name)" alt="">
+                                    <img class="h-8 w-8 rounded-full" :src="window.WE.IMG.url(item.thumbnail?.file_name)" alt="">
                                 </div>
                                 <div class="min-w-0 flex-1">
                                 <p class="truncate text-sm font-medium text-gray-900" x-text="constructTitle(item)"></p>
                                 <p class="truncate text-sm text-gray-500" x-text="constructSubtitle(item)"></p>
                                 </div>
                                 <div>
-                                <div @click="select(item); reset(); show = false;" class="cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
-                                    {{ translate('Select') }}
-                                </div>
+                                    <div @click="select(item); reset(); show = false;" class="cursor-pointer inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
+                                        {{ translate('Select') }}
+                                    </div>
                                 </div>
                             </div>
                         </li>

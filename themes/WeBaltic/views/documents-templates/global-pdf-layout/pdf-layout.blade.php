@@ -46,6 +46,9 @@
 </head>
 
 <body style="position: relative;">
+    <div class="logo">
+        <img src="{{ get_site_logo() }}" style="width: 100px; " />
+    </div>
     @yield('content')
 </body>
 
