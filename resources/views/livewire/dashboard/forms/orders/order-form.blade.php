@@ -58,6 +58,24 @@
         $wire.set('core_meta', this.core_meta, true);
         $wire.set('wef', this.wef, true);
 
+        $wire.set('order.billing_first_name', this.billing_first_name, true);
+        $wire.set('order.billing_last_name', this.billing_last_name, true);
+        $wire.set('order.billing_company', this.billing_company || '', true);
+        $wire.set('order.billing_address', this.billing_address || '', true);
+        $wire.set('order.billing_state', this.billing_state || '', true);
+        $wire.set('order.billing_city', this.billing_city || '', true);
+        $wire.set('order.billing_zip', this.billing_zip || '', true);
+
+        if(this.same_billing_shipping) {
+            $wire.set('order.shipping_first_name', this.shipping_first_name, true);
+            $wire.set('order.shipping_last_name', this.shipping_last_name, true);
+            $wire.set('order.shipping_company', this.user_meta?.shipping_company || '', true);
+            $wire.set('order.shipping_address', this.shipping_address || '', true);
+            $wire.set('order.shipping_state', this.shipping_state || '', true);
+            $wire.set('order.shipping_city', this.shipping_city || '', true);
+            $wire.set('order.shipping_zip', this.shipping_zip || '', true);
+        }
+
         @do_action('view.order-form.wire_set');
     },
     setDefaults() {
@@ -202,14 +220,6 @@ x-cloak>
                                         billing_city = address?.city || '';
                                         billing_zip = address?.zip_code || '';
 
-                                        $wire.set('order.billing_first_name', item?.name, true);
-                                        $wire.set('order.billing_last_name', item?.surname, true);
-                                        $wire.set('order.billing_company', item?.user_meta?.company_name || '', true);
-                                        $wire.set('order.billing_address', address?.address || '', true);
-                                        $wire.set('order.billing_state', address?.state || '', true);
-                                        $wire.set('order.billing_city', address?.city || '', true);
-                                        $wire.set('order.billing_zip', address?.zip_code || '', true);
-
                                         if(same_billing_shipping) {
                                             shipping_first_name = item?.name || '';
                                             shipping_last_name = item?.surname || '';
@@ -219,14 +229,6 @@ x-cloak>
                                             shipping_state = address?.state || '';
                                             shipping_city = address?.city || '';
                                             shipping_zip = address?.zip_code || '';
-
-                                            $wire.set('order.shipping_first_name', item?.name, true);
-                                            $wire.set('order.shipping_last_name', item?.surname, true);
-                                            $wire.set('order.shipping_company', item?.user_meta?.company_name || '', true);
-                                            $wire.set('order.shipping_address', address?.address || '', true);
-                                            $wire.set('order.shipping_state', address?.state || '', true);
-                                            $wire.set('order.shipping_city', address?.city || '', true);
-                                            $wire.set('order.shipping_zip', address?.zip_code || '', true);
                                         }
 
                                         save(); // set other parameters!

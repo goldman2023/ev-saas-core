@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Notifications\Messages\WeMailMessage;
 
-class UserInviteNotification extends Notification
+class UserInviteNotification extends WeNotification
 {
     use Queueable;
 
@@ -27,23 +27,18 @@ class UserInviteNotification extends Notification
         $this->user = $invite->user;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
+    public function toDatabase($notifiable) {
+        return [
+            'type' => translate('New user invited'),
+            'data' => ['action' => 'new_user_invited', 'user_id' => $notifiable->id]
+        ];
+    }
+
     public function toMail($notifiable)
     {
         try {

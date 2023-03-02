@@ -6,10 +6,10 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 
 if (!function_exists('baltic_generate_order_document')) {
-    function baltic_generate_order_document(&$order, $template, $upload_tag, $display_name = '', $data = []) {
+    function baltic_generate_order_document(&$order, $template, $upload_tag, $display_name = '', $data = [], $regenerate = false) {
         // Get order and generate the document
         $data = array_merge(['order' => $order], $data);
-
+        
         $pdf_not_loaded_flag = false;
 
         try {
@@ -24,20 +24,36 @@ if (!function_exists('baltic_generate_order_document')) {
             $pdf_not_loaded_flag = true;
         }
         
-
-        // Upload generated pdf as file in storage and create Upload and Relationship to $order
-        $upload = MediaService::uploadAndStore(
-            model: $order,
-            contents: !$pdf_not_loaded_flag ? $pdf->output() : '',
-            path: 'orders/'.$order->id,
-            name: $upload_tag.'-'.$order->id,
-            extension: 'pdf',
-            property_name: 'documents',
-            with_hash: false,
-            file_display_name: $display_name,
-            upload_tag: $upload_tag,
-            headers: [ 'CacheControl' => 'no-cache', 'Expires' => 'Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time())]
-        );
+        if($regenerate) {
+            // Upload generated pdf as file in storage and create Upload and Relationship to $order
+            $upload = MediaService::uploadAndStore(
+                model: $order,
+                contents: !$pdf_not_loaded_flag ? $pdf->output() : '',
+                path: 'orders/'.$order->id,
+                name: $upload_tag.'-'.$order->id,
+                extension: 'pdf',
+                property_name: 'documents',
+                with_hash: false,
+                file_display_name: $display_name,
+                upload_tag: $upload_tag,
+                headers: [ 'CacheControl' => 'no-cache', 'Expires' => 'Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time())],
+                regenerate: true,
+                upload: $data['upload'] ?? null
+            );
+        } else {
+            $upload = MediaService::uploadAndStore(
+                model: $order,
+                contents: !$pdf_not_loaded_flag ? $pdf->output() : '',
+                path: 'orders/'.$order->id,
+                name: $upload_tag.'-'.$order->id,
+                extension: 'pdf',
+                property_name: 'documents',
+                with_hash: false,
+                file_display_name: $display_name,
+                upload_tag: $upload_tag,
+                headers: [ 'CacheControl' => 'no-cache', 'Expires' => 'Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time())]
+            );
+        }
 
         // CHeck if not_loaded flag is TRUE
         if($pdf_not_loaded_flag) {
@@ -51,18 +67,37 @@ if (!function_exists('baltic_generate_order_document')) {
                     $pdf = Pdf::loadView($template, $data);
                 }
 
-                $upload = MediaService::uploadAndStore(
-                    model: $order,
-                    contents: $pdf->output(),
-                    path: 'orders/'.$order->id,
-                    name: $upload_tag.'-'.$order->id,
-                    extension: 'pdf',
-                    property_name: 'documents',
-                    with_hash: false,
-                    file_display_name: $display_name,
-                    upload_tag: $upload_tag,
-                    headers: [ 'CacheControl' => 'no-cache', 'Expires' => 'Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time())]
-                );
+                if($regenerate) {
+                    // Upload generated pdf as file in storage and create Upload and Relationship to $order
+                    $upload = MediaService::uploadAndStore(
+                        model: $order,
+                        contents: $pdf->output(),
+                        path: 'orders/'.$order->id,
+                        name: $upload_tag.'-'.$order->id,
+                        extension: 'pdf',
+                        property_name: 'documents',
+                        with_hash: false,
+                        file_display_name: $display_name,
+                        upload_tag: $upload_tag,
+                        headers: [ 'CacheControl' => 'no-cache', 'Expires' => 'Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time())],
+                        regenerate: true,
+                        upload: $data['upload'] ?? null
+                    );
+                } else {
+                    $upload = MediaService::uploadAndStore(
+                        model: $order,
+                        contents: $pdf->output(),
+                        path: 'orders/'.$order->id,
+                        name: $upload_tag.'-'.$order->id,
+                        extension: 'pdf',
+                        property_name: 'documents',
+                        with_hash: false,
+                        file_display_name: $display_name,
+                        upload_tag: $upload_tag,
+                        headers: [ 'CacheControl' => 'no-cache', 'Expires' => 'Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time())]
+                    );
+                }
+                
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
                 return $upload;
