@@ -58,6 +58,8 @@ class EVCategoryController extends Controller
         }
 
 
-        return view('frontend.products.archive', compact('selected_category', 'products', 'shops'));
+        $filterable_attributes = \AttributesService::getFilterableProductAttrbiutes();
+
+        return view('frontend.products.archive', compact('selected_category', 'products', 'shops', 'filterable_attributes'));
     }
 }

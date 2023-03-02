@@ -26,7 +26,7 @@
     </div>
     <main class="container !px-6 mx-auto">
 
-        <section aria-labelledby="products-heading" class="pt-6 pb-12">
+        <section aria-labelledby="products-heading" class="pt-6 pb-24">
             <h2 id="products-heading" class="sr-only">
                 {{ translate('Products') }}
             </h2>
@@ -43,7 +43,8 @@
                         </li>
                         @foreach(\App\Models\Category::where('parent_id', null)->whereHas('products')->get() as $category)
                         <li>
-                            <a href="{{ $category->getPermalink() }}">
+                            {{-- TODO: Add a  new method to CategoryService which checks if first cat. is second cat. or if first cat. is second cat. child (or sub-sub--child etc.)  --}}
+                            <a href="{{ $category->getPermalink() }}" class="{{ ($selected_category->id === $category->id) ? 'text-primary': '' }}">
                                 {{ $category->name }}
                             </a>
                         </li>
@@ -75,13 +76,8 @@
                 </form>
 
                 <!-- Products archive -->
-                <livewire:tenant.product.products-archive class="sm:!grid-cols-1" />
-
-
+                <livewire:tenant.product.products-archive class="sm:!grid-cols-1" :category="$selected_category" />
             </div>
-            <div class="col-span-12">
-                <x-default.categories.category-list></x-default.categories.category-list>
-                </div>
         </section>
     </main>
 </div>
