@@ -302,6 +302,10 @@ trait UploadTrait
      */
     public function getUploadsWhere($property_name, $base_params = [], $wef_params = [], $return_all = false) {
         $uploads = $this->{$property_name}->filter(function($upload) use($base_params, $wef_params) {
+            if(!($upload instanceof Upload)) {
+                return false;
+            }
+
             $pass = true;
 
             if(!empty($base_params)) {

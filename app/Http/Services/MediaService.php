@@ -409,9 +409,8 @@ class MediaService
         return $file_path;
    }
 
-   public function uploadAndStore(&$model, $contents, $path, $name, $extension, $property_name, $with_hash = true, $file_display_name = '', $upload_tag = null, $user_id = null, $shop_id = null, $headers = []) {
+   public function uploadAndStore(&$model, $contents, $path, $name, $extension, $property_name, $with_hash = true, $file_display_name = '', $upload_tag = null, $user_id = null, $shop_id = null, $headers = [], $regenerate = false, $upload = null) {
         DB::beginTransaction();
-        $upload = null;
 
         try {
             $file_path = MediaService::uploadToStorage($contents, $path, $name, $extension, $with_hash, $headers);
@@ -421,15 +420,22 @@ class MediaService
                 throw new Exception('File could not be written to Storage.');
             }
 
-            // Create Upload record based on file_path in Storage and sync $model->{$property_name} property (aka create UploadRelationship)
-            $upload = MediaService::storeAsUploadFromFile(
-                model: $model, 
-                file: $file_path, 
-                property_name: $property_name, 
-                file_display_name: $file_display_name, 
-                user_id: $user_id,
-                shop_id: $shop_id
-            );
+            if($regenerate && $upload instanceof Upload) {
+                // If file is just being regenerated, then just save the $file_path into existing $regenerated_upload
+                $upload->file_name = $file_path;
+                $upload->save();
+            } else {
+                // Create Upload record based on file_path in Storage and sync $model->{$property_name} property (aka create UploadRelationship)
+                $upload = MediaService::storeAsUploadFromFile(
+                    model: $model, 
+                    file: $file_path, 
+                    property_name: $property_name, 
+                    file_display_name: $file_display_name, 
+                    user_id: $user_id,
+                    shop_id: $shop_id
+                );
+            }
+            
 
             if($upload_tag) {
                 $upload->setWEF('upload_tag', $upload_tag);

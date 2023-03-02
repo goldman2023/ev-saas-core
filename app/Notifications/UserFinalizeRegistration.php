@@ -14,7 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Notifications\Messages\WeMailMessage;
 
 
-class UserFinalizeRegistration extends Notification
+class UserFinalizeRegistration extends WeNotification
 {
     public function __construct()
     {
@@ -23,7 +23,7 @@ class UserFinalizeRegistration extends Notification
 
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     public function toDatabase($notifiable)
