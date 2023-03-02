@@ -44,7 +44,7 @@
                         @foreach(\App\Models\Category::where('parent_id', null)->whereHas('products')->get() as $category)
                         <li>
                             {{-- TODO: Add a  new method to CategoryService which checks if first cat. is second cat. or if first cat. is second cat. child (or sub-sub--child etc.)  --}}
-                            <a href="{{ $category->getPermalink() }}" class="{{ ($selected_category->id === $category->id) ? 'text-primary': '' }}">
+                            <a href="{{ $category->getPermalink() }}" class="{{ (isset($selected_category->id) && $selected_category->id === $category->id) ? 'text-primary': '' }}">
                                 {{ $category->name }}
                             </a>
                         </li>
