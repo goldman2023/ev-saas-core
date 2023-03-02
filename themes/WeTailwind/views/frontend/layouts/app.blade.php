@@ -92,7 +92,8 @@
     <livewire:cart.cart template="flyout-cart" />
     <!-- Wishlist -->
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
-    <livewire:flyout.wishlist />
+    {{-- <livewire:flyout.wishlist /> --}}
+
 
 
     @guest
@@ -132,14 +133,7 @@
 
     <!-- Scripts -->
     @livewireScripts
-    <!-- Scripts -->
-
     @yield('script')
-
     @stack('footer_scripts')
-
-    {{-- <x-integrations.mix-panel></x-integrations.mix-panel> --}}
-    {{-- <x-integrations.open-replay></x-integrations.open-replay> --}}
 </body>
-
 </html>
