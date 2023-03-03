@@ -54,6 +54,7 @@
         $wire.set('order.shipping_country', this.shipping_country, true);
         $wire.set('order.same_billing_shipping', this.same_billing_shipping, true);
         $wire.set('order.shipping_cost', this.shipping_cost, true);
+        console.log(this.tax);
         $wire.set('order.tax', this.tax, true);
         $wire.set('core_meta', this.core_meta, true);
         $wire.set('wef', this.wef, true);
@@ -112,6 +113,12 @@ x-cloak>
     
                 this.order_items.forEach((item, index) => {
                     subtotal += item.total_price;
+                    
+                    if(_.get(item, 'addons.length', 0) > 0) {
+                        item['addons'].forEach((addon) => {
+                            subtotal += addon.total_price;
+                        });
+                    }
                 });
             } else {
                 subtotal = 0;
@@ -136,13 +143,23 @@ x-cloak>
                 for(index in order_items) {
                     order_items[index].base_price = Number(order_items[index].unit_price);
                     order_items[index].qty = Number(order_items[index].qty);
-                    order_items[index].subtotal_price = Number(order_items[index].qty) * order_items[index].unit_price;
-                    order_items[index].total_price = Number(order_items[index].qty) * order_items[index].unit_price;
+                    order_items[index].subtotal_price = order_items[index].qty * order_items[index].base_price;
+                    order_items[index].total_price = order_items[index].qty * order_items[index].base_price;
+
+                    if(_.get(order_items[index], 'addons.length', 0) > 0) {
+                        for(addon_index in order_items[index]['addons']) {
+                            order_items[index]['addons'][addon_index].base_price = Number(order_items[index]['addons'][addon_index].unit_price);
+                            order_items[index]['addons'][addon_index].qty = Number(order_items[index]['addons'][addon_index].qty);
+                            order_items[index]['addons'][addon_index].subtotal_price = order_items[index]['addons'][addon_index].qty * order_items[index]['addons'][addon_index].base_price;
+                            order_items[index]['addons'][addon_index].total_price = order_items[index]['addons'][addon_index].qty * order_items[index]['addons'][addon_index].base_price;
+                        }
+                    }
                 }
             }
         
             calculateTotals();
         });
+
         $watch('tax', order_items => calculateTotals());
         $watch('shipping_cost', order_items => calculateTotals());
         calculateTotals();
@@ -272,34 +289,67 @@ x-cloak>
                             <template x-if="orderItemsCount > 0">
                                 <ul class="w-full flex flex-col gap-y-4">
                                     <template x-for="(item, index) in order_items" :key="'order-items-'+index">
-
-                                        <li class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm "
-                                            >
-                                            <div class="flex-shrink-0" x-show="item?.thumbnail">
-                                                <img class="h-10 w-10 rounded-full" :src="window.WE.IMG.url(item?.thumbnail)" alt="">
-                                            </div>
-
-                                            <div class="min-w-0 flex-1">
-                                                <div class="outline-none">
-                                                    <p class="text-sm font-medium text-gray-900" x-text="item.name"></p>
-                                                    <p class="truncate text-sm text-gray-500 line-clamp-1" x-text="item.excerpt"></p>
+                                        <li class="relative flex flex-col rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm ">
+                                            <div class="flex items-center space-x-3" :class="{'mb-2 pb-2 border-b border-gray-200': _.get(item, 'addons.length', 0) > 0}">
+                                                <div class="flex-shrink-0" x-show="item?.thumbnail">
+                                                    <img class="h-10 w-10 rounded-full" :src="window.WE.IMG.url(item?.thumbnail)" alt="">
+                                                </div>
+    
+                                                <div class="min-w-0 flex-1">
+                                                    <div class="outline-none">
+                                                        <p class="text-sm font-medium text-gray-900" x-text="item.name"></p>
+                                                        <p class="truncate text-sm text-gray-500 line-clamp-1" x-text="item.excerpt"></p>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="flex-shrink-0 flex items-center gap-x-4">
+                                                    <span x-text="FX.formatPrice(item.total_price)"></span>
+                                                    <input type="number" min="0" x-model="item.qty" class="form-standard max-w-[90px]" />
+                                                </div>
+    
+                                                {{-- <template x-if="_.get(item, 'subject_id', null) === null && _.get(item, 'subject_type', null) === null"> --}}
+                                                <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-editor-modal', 'order_item_index': index })" >
+                                                    {{ translate('Edit') }}
+                                                </button>
+                                                {{-- </template> --}}
+    
+                                                <div class="flex-shrink-0 flex items-center " @click="order_items.splice(index, 1);">
+                                                    @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
                                                 </div>
                                             </div>
+                                            <template x-if="_.get(item, 'addons.length', 0) > 0">
+                                                <div class="w-full flex flex-col pl-3">
+                                                    <div class="w-full flex items-center pb-2">
+                                                        <strong class="text-14">{{ translate('Addons') }}</strong>
+                                                    </div>
+                                                    <template x-for="(addon, addon_index) in item.addons" :key="'order-items-'+addon_index">
+                                                        <div class="w-full flex items-center space-x-3" :class="{'mt-2 pt-3 border-t border-gray-200': addon_index !== 0}">
+                                                            <div class="min-w-0 flex-1 items-center flex">
+                                                                <span class="pr-2">+</span>
+                                                                <div class="outline-none">
+                                                                    <p class="text-sm font-medium text-gray-900" x-text="addon.name"></p>
+                                                                    <p class="truncate text-sm text-gray-500 line-clamp-1" x-text="addon.excerpt"></p>
+                                                                </div>
+                                                            </div>
+                
+                                                            <div class="flex-shrink-0 flex items-center gap-x-4">
+                                                                <span x-text="FX.formatPrice(addon.total_price)"></span>
+                                                                <input type="number" min="0" x-model="addon.qty" class="form-standard max-w-[90px]" />
+                                                            </div>
 
-                                            <div class="flex-shrink-0 flex items-center gap-x-4">
-                                                <span x-text="FX.formatPrice(item.total_price)"></span>
-                                                <input type="number" min="0" x-model="item.qty" class="form-standard max-w-[90px]" />
-                                            </div>
-
-                                            {{-- <template x-if="_.get(item, 'subject_id', null) === null && _.get(item, 'subject_type', null) === null"> --}}
-                                            <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-editor-modal', 'order_item_index': index })" >
-                                                {{ translate('Edit') }}
-                                            </button>
-                                            {{-- </template> --}}
-
-                                            <div class="flex-shrink-0 flex items-center " @click="order_items.splice(index, 1);">
-                                                @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
-                                            </div>
+                                                            {{-- <template x-if="_.get(addon, 'subject_id', null) === null && _.get(addon, 'subject_type', null) === null"> --}}
+                                                            <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-editor-modal', 'order_item_index': index, 'addon_index': addon_index })" >
+                                                                {{ translate('Edit') }}
+                                                            </button>
+                                                            {{-- </template> --}}
+                
+                                                            <div class="flex-shrink-0 flex items-center " @click="item.addons.splice(addon_index, 1);">
+                                                                @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
                                         </li>
                                     </template>
                                 </ul>
@@ -324,6 +374,7 @@ x-cloak>
                             {{-- OrderItem selector modal --}}
                             {{-- TODO: Repalce with:  --}}
                             <x-system.form-modal id="order-item-selector-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
+                                {{-- TODO: Add logic for addons --}}
                                 <div class="w-full flex flex-col" x-data="{
                                         q: '',
                                         results: [],
@@ -1107,13 +1158,30 @@ x-cloak>
                             <template x-if="orderItemsCount > 0">
                                 <ul class="w-full flex flex-col gap-y-2">
                                     <template x-for="(item, index) in order_items" :key="'summary-order-item-'+index">
-                                        <li class="relative flex items-center">
-                                            <div class="min-w-0 flex-1 pr-7">
-                                                <p class="text-sm font-medium text-gray-900" x-text="item.qty+' x '+item.name"></p>
+                                        <li class="relative flex flex-col">
+                                            <div class="w-full flex items-center">
+                                                <div class="min-w-0 flex-1 pr-7">
+                                                    <p class="text-sm font-medium text-gray-900" x-text="item.qty+' x '+item.name"></p>
+                                                </div>
+                                                <div class="flex-shrink-0 flex items-center gap-x-4">
+                                                    <span x-text="FX.formatPrice(item.total_price)"></span>
+                                                </div>
                                             </div>
-                                            <div class="flex-shrink-0 flex items-center gap-x-4">
-                                                <span x-text="FX.formatPrice(item.total_price)"></span>
-                                            </div>
+                                            <template x-if="_.get(item, 'addons.length', 0) > 0">
+                                                <div class="w-full flex flex-col pl-3">
+                                                    <template x-for="(addon, addon_index) in item.addons" :key="'order-items-'+addon_index">
+                                                        <div class="w-full flex items-center space-x-3">
+                                                            <div class="flex items-center min-w-0 flex-1 pr-7">
+                                                                <span class="pr-2">+</span>
+                                                                <p class="text-sm font-medium text-gray-900" x-text="addon.qty+' x '+addon.name"></p>
+                                                            </div>
+                                                            <div class="flex-shrink-0 flex items-center gap-x-4 text-14">
+                                                                <span x-text="FX.formatPrice(addon.total_price)"></span>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
                                         </li>
                                     </template>
                                 </ul>
@@ -1139,12 +1207,15 @@ x-cloak>
                                 @endif
 
                                 {{-- TAX --}}
-                                <div class="sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 pt-2">
-                                    <label for="first-name" class="block text-sm font-medium text-gray-700">
+                                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 pt-2">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700 pt-2">
                                         {{ translate('Tax(percent)') }}
                                     </label>
                                     <div class="mt-1 sm:col-span-2 sm:mt-0">
-                                        <x-dashboard.form.input disabled type="number" field="tax" :x="true" min="0" max="100" />
+                                        <x-dashboard.form.input :disabled="true" type="number" field="tax" :x="true" min="0" max="100" class="text-right">
+                                            <div class="w-full text-12 pt-1 cursor-pointer text-success" x-show="disabled" @click="disabled = false;">{{ translate('Unlock') }}</div>
+                                            <div class="w-full text-12 pt-1 cursor-pointer text-danger" x-show="!disabled" @click="disabled = true;">{{ translate('Lock') }}</div>
+                                        </x-dashboard.form.input>
                                     </div>
                                 </div>
                                 {{-- END TAX --}}

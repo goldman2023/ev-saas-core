@@ -12,7 +12,6 @@ use App\Builders\CteBuilder;
 use App\Traits\GalleryTrait;
 use App\Builders\BaseBuilder;
 use Spatie\Sluggable\HasSlug;
-use App\Traits\TranslationTrait;
 use Spatie\Sluggable\SlugOptions;
 use App\Traits\SocialFollowingTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +32,6 @@ class Category extends WeBaseModel
     use HasRecursiveRelationships;
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
-    use TranslationTrait;
     use UploadTrait;
     use GalleryTrait;
     use SocialFollowingTrait;
@@ -223,11 +221,6 @@ class Category extends WeBaseModel
         }
 
         return Categories::getRoute($this, $content_type);
-    }
-
-    public function getTranslationModel(): ?string
-    {
-        return CategoryTranslation::class;
     }
 
     public function getFollowers() {

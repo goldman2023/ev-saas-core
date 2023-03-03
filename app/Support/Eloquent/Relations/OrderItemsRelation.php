@@ -62,6 +62,7 @@ class OrderItemsRelation extends HasMany
     {
         $order_items_full = $this->query->with(['descendants'])->get($columns);
         $order_items = new \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection();
+        
 
         if(!empty($order_items_full)) {
             foreach($order_items_full as $index => $item) {
