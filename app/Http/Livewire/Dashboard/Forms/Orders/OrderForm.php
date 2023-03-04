@@ -70,7 +70,7 @@ class OrderForm extends Component
                 $custom_attributes = [];
                 $selected_predefined_attribute_values = [];
                 self::initAttributes($item, $custom_attributes, $selected_predefined_attribute_values, \App\Models\Product::class);
-
+                
                 if(!empty($item->subject_type)) {
                     $this->order_items[] = [
                         'id' => $item->id,
@@ -87,7 +87,34 @@ class OrderForm extends Component
                         'thumbnail' => !empty($item->subject) ? ($item->subject?->thumbnail->file_name ?? null) : '',
                         'custom_attributes' => $custom_attributes,
                         'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
+                        'addons' => []
                     ];
+
+                    // Product Addons
+                    if($item->descendants?->isNotEmpty() ?? null) {
+                        foreach($item->descendants as $addon) {
+                            $custom_attributes = [];
+                            $selected_predefined_attribute_values = [];
+                            self::initAttributes($addon, $custom_attributes, $selected_predefined_attribute_values, \App\Models\ProductAddon::class);
+
+                            $this->order_items[count($this->order_items) - 1]['addons'][] = [
+                                'id' => $addon->id,
+                                'subject_type' => base64_encode($addon->subject_type ?? ''),
+                                'subject_id' => $addon->subject_id ?? null,
+                                'name' => $addon->name,
+                                'excerpt' => $addon->excerpt,
+                                'qty' => $addon->quantity,
+                                'unit_price' => $addon->base_price,
+                                'base_price' => $addon->base_price,
+                                'subtotal_price' => $addon->subtotal_price,
+                                'total_price' => $addon->total_price,
+                                'tax' => $addon->tax,
+                                'thumbnail' => !empty($addon->subject) ? ($addon->subject?->thumbnail->file_name ?? null) : '',
+                                'custom_attributes' => $custom_attributes,
+                                'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
+                            ];
+                        }
+                    }
                 } else {
                     $this->order_items[] = [
                         'id' => $item->id,
@@ -106,7 +133,6 @@ class OrderForm extends Component
                         'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
                     ];
                 }
-                
             }
         }
     }
@@ -187,12 +213,15 @@ class OrderForm extends Component
     }
 
     public function saveOrder() {
+        
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatchValidationErrors($e);
             $this->validate();
         }
+
+        
 
         DB::beginTransaction();
 
