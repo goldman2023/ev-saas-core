@@ -90,11 +90,6 @@ class Plan extends WeBaseModel
         return 'price';
     }
 
-    public function getTranslationModel(): ?string
-    {
-        return PlanTranslation::class;
-    }
-
     public function getDynamicModelUploadProperties(): array
     {
         return [];

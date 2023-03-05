@@ -54,7 +54,6 @@
         $wire.set('order.shipping_country', this.shipping_country, true);
         $wire.set('order.same_billing_shipping', this.same_billing_shipping, true);
         $wire.set('order.shipping_cost', this.shipping_cost, true);
-        console.log(this.tax);
         $wire.set('order.tax', this.tax, true);
         $wire.set('core_meta', this.core_meta, true);
         $wire.set('wef', this.wef, true);
@@ -290,7 +289,7 @@ x-cloak>
                                 <ul class="w-full flex flex-col gap-y-4">
                                     <template x-for="(item, index) in order_items" :key="'order-items-'+index">
                                         <li class="relative flex flex-col rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm ">
-                                            <div class="flex items-center space-x-3" :class="{'mb-2 pb-2 border-b border-gray-200': _.get(item, 'addons.length', 0) > 0}">
+                                            <div class="flex items-center space-x-3 mb-3 pb-2 border-b border-gray-200">
                                                 <div class="flex-shrink-0" x-show="item?.thumbnail">
                                                     <img class="h-10 w-10 rounded-full" :src="window.WE.IMG.url(item?.thumbnail)" alt="">
                                                 </div>
@@ -317,11 +316,16 @@ x-cloak>
                                                     @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
                                                 </div>
                                             </div>
+                                            <div class="w-full flex items-center pl-2 gap-x-2">
+                                                <strong class="text-14" x-text="'{{ translate('Addons') }} ('+_.get(item, 'addons.length', 0)+')'"></strong>
+                                                <button class="btn btn-primary !py-0.5 !px-2 !text-10 !leading-[1.5]" 
+                                                    @click="$dispatch('display-modal', {'id': 'order-item-selector-modal', 'skip_content_types': ['product', 'custom'], 'parent_product_index': index  })">
+                                                    {{ translate('Add addon') }}
+                                                </button>
+                                            </div>
+
                                             <template x-if="_.get(item, 'addons.length', 0) > 0">
-                                                <div class="w-full flex flex-col pl-3">
-                                                    <div class="w-full flex items-center pb-2">
-                                                        <strong class="text-14">{{ translate('Addons') }}</strong>
-                                                    </div>
+                                                <div class="w-full flex flex-col pt-2 pl-3">
                                                     <template x-for="(addon, addon_index) in item.addons" :key="'order-items-'+addon_index">
                                                         <div class="w-full flex items-center space-x-3" :class="{'mt-2 pt-3 border-t border-gray-200': addon_index !== 0}">
                                                             <div class="min-w-0 flex-1 items-center flex">
@@ -366,13 +370,12 @@ x-cloak>
 
                             {{-- Add new item --}}
                             <div class="w-full flex pt-4 mt-4 border-t">
-                                <button type="button" class="btn btn-primary btn-sm w-full !font-medium !text-lg" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal' })" >
+                                <button type="button" class="btn btn-primary btn-sm w-full !font-medium !text-lg" @click="$dispatch('display-modal', {'id': 'order-item-selector-modal', 'skip_content_types': ['product_addon'] })" >
                                     {{ translate('Add new item') }}
                                 </button>
                             </div>
 
                             {{-- OrderItem selector modal --}}
-                            {{-- TODO: Repalce with:  --}}
                             <x-system.form-modal id="order-item-selector-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
                                 {{-- TODO: Add logic for addons --}}
                                 <div class="w-full flex flex-col" x-data="{
@@ -397,6 +400,7 @@ x-cloak>
                                             }
                                         ],
                                         hide_content_selector: false,
+                                        skip_content_types: [],
                                         order_item_index: null,
                                         custom_order_item: {
                                             id: null,
@@ -410,6 +414,7 @@ x-cloak>
                                             custom_attributes: @js($custom_attributes),
                                             selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
                                         },
+                                        parent_product_index: null,
                                         getCurrentContentTypeOptions() {
                                             return this.available_content_types.find(item => item.slug === this.content_type);
                                         },
@@ -418,8 +423,6 @@ x-cloak>
 
                                             if(this.content_type === 'product') {
                                                 fetch_route = '{{ route('api.dashboard.products.search') }}';
-                                            } else if(this.content_type === 'product_addons') {
-                                                fetch_route = '{{ route('api.dashboard.products.addons.search') }}';
                                             }
 
                                             if(fetch_route) {
@@ -454,33 +457,67 @@ x-cloak>
                                             $dispatch('reset-attributes-form', {form_id: 'custom-order-item-form'});
                                         },
                                         select(item) {
-                                            let existing_item_index = order_items.findIndex(order_item => {
-                                                return order_item.subject_type == this.getCurrentContentTypeOptions().model_class && order_item.subject_id == item.id;
-                                            });
-
-                                            if(existing_item_index !== -1) {
-                                                order_items[existing_item_index].qty = Number(order_items[existing_item_index].qty) + 1;
-                                                order_items[existing_item_index].base_price = Number(order_items[existing_item_index].unit_price);
-                                                order_items[existing_item_index].subtotal_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
-                                                order_items[existing_item_index].total_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
-                                            } else {
-                                                order_items.push({
-                                                    id: null,
-                                                    subject_type: this.getCurrentContentTypeOptions().model_class,
-                                                    subject_id: item.id,
-                                                    name: item.name,
-                                                    excerpt: item.excerpt,
-                                                    qty: 1,
-                                                    unit_price: item.unit_price,
-                                                    base_price: item.unit_price,
-                                                    subtotal_price: item.unit_price * 1,
-                                                    total_price: item.unit_price * 1,
-                                                    tax: 0,
-                                                    thumbnail: item.thumbnail?.file_name,
-                                                    custom_attributes: item.custom_attributes,
-                                                    selected_predefined_attribute_values: item.selected_predefined_attribute_values,
+                                            if(_.get(this, 'parent_product_index', null) !== null && _.get(order_items, this.parent_product_index, null) !== null) {
+                                                // Addon (Parent Product exists)
+                                                let existing_addon_index = order_items[this.parent_product_index]['addons'].findIndex(addon => {
+                                                    return addon.subject_type == this.getCurrentContentTypeOptions().model_class && addon.subject_id == item.id;
                                                 });
+
+                                                if(existing_addon_index !== -1) {
+                                                    order_items[this.parent_product_index]['addons'][existing_addon_index].qty = Number(order_items[this.parent_product_index]['addons'][existing_addon_index].qty) + 1;
+                                                    order_items[this.parent_product_index]['addons'][existing_addon_index].base_price = Number(order_items[this.parent_product_index]['addons'][existing_addon_index].unit_price);
+                                                    order_items[this.parent_product_index]['addons'][existing_addon_index].subtotal_price = Number(order_items[this.parent_product_index]['addons'][existing_addon_index].qty) * order_items[this.parent_product_index]['addons'][existing_addon_index].unit_price;
+                                                    order_items[this.parent_product_index]['addons'][existing_addon_index].total_price = Number(order_items[this.parent_product_index]['addons'][existing_addon_index].qty) * order_items[this.parent_product_index]['addons'][existing_addon_index].unit_price;
+                                                } else {
+                                                    order_items[this.parent_product_index]['addons'].push({
+                                                        id: null,
+                                                        subject_type: this.getCurrentContentTypeOptions().model_class,
+                                                        subject_id: item.id,
+                                                        name: item.name,
+                                                        excerpt: item.excerpt,
+                                                        qty: 1,
+                                                        unit_price: item.unit_price,
+                                                        base_price: item.unit_price,
+                                                        subtotal_price: item.unit_price * 1,
+                                                        total_price: item.unit_price * 1,
+                                                        tax: 0,
+                                                        thumbnail: item.thumbnail?.file_name,
+                                                        custom_attributes: item.custom_attributes,
+                                                        selected_predefined_attribute_values: item.selected_predefined_attribute_values,
+                                                    });
+                                                }
+                                            } else {
+                                                // Product
+                                                let existing_item_index = order_items.findIndex(order_item => {
+                                                    return order_item.subject_type == this.getCurrentContentTypeOptions().model_class && order_item.subject_id == item.id;
+                                                });
+    
+                                                if(existing_item_index !== -1) {
+                                                    order_items[existing_item_index].qty = Number(order_items[existing_item_index].qty) + 1;
+                                                    order_items[existing_item_index].base_price = Number(order_items[existing_item_index].unit_price);
+                                                    order_items[existing_item_index].subtotal_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
+                                                    order_items[existing_item_index].total_price = Number(order_items[existing_item_index].qty) * order_items[existing_item_index].unit_price;
+                                                } else {
+                                                    order_items.push({
+                                                        id: null,
+                                                        subject_type: this.getCurrentContentTypeOptions().model_class,
+                                                        subject_id: item.id,
+                                                        name: item.name,
+                                                        excerpt: item.excerpt,
+                                                        qty: 1,
+                                                        unit_price: item.unit_price,
+                                                        base_price: item.unit_price,
+                                                        subtotal_price: item.unit_price * 1,
+                                                        total_price: item.unit_price * 1,
+                                                        tax: 0,
+                                                        thumbnail: item.thumbnail?.file_name,
+                                                        custom_attributes: item.custom_attributes,
+                                                        selected_predefined_attribute_values: item.selected_predefined_attribute_values,
+                                                    });
+                                                }
                                             }
+
+                                            
                                         },
                                         selectContentType(content_type) {
                                             this.content_type = content_type;
@@ -515,20 +552,38 @@ x-cloak>
                                         }
                                     }"
                                     @display-modal.window="
-                                        if($event.detail.id === id && _.get($event, 'detail.order_item_index', null) !== null ) {
-                                            setCustomOrderItem(Number($event.detail.order_item_index));
-                                        } else if($event.detail.id === id) {
-                                            reset();
+                                        if($event.detail.id === id) {
+                                            skip_content_types = _.get($event, 'detail.skip_content_types', []);
+
+                                            // Select 'parent_product_index' if it's set in event
+                                            if(_.get($event, 'detail.parent_product_index', null) !== null) {
+                                                parent_product_index = $event.detail.parent_product_index;
+                                            } else {
+                                                parent_product_index = null;
+                                            }
+
+                                            if(_.get($event, 'detail.order_item_index', null) !== null) {
+                                                setCustomOrderItem(Number($event.detail.order_item_index));
+                                            } else {
+                                                let left_content_types = available_content_types.filter((type) => !skip_content_types.includes(type.slug));
+                                                
+                                                if(left_content_types.length >= 1) {
+                                                    content_type = left_content_types[0].slug;
+                                                }
+    
+                                                reset();
+                                            }
                                         }
                                     "
                                     wire:ignore
                                 >
+                                    {{-- Content Selector --}}
                                     <div class="w-full" x-show="!hide_content_selector">
                                         <fieldset>
                                             <legend class="text-base font-medium text-gray-900">{{ translate('Select a content type') }}</legend>
 
                                             <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
-                                                <template x-for="type in available_content_types">
+                                                <template x-for="type in available_content_types.filter((type) => !skip_content_types.includes(type.slug))">
                                                     <div class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
                                                         :class="{'border-success ring-2 ring-success': content_type === type.slug, 'border-gray-300': content_type !== type.slug}"
                                                         @click="content_type = type.slug; reset()">
@@ -548,14 +603,15 @@ x-cloak>
                                         </fieldset>
                                     </div>
 
-                                    <template x-if="content_type == 'product' || content_type == 'product_addon'">
+                                    {{-- Products --}}
+                                    <template x-if="content_type == 'product'">
                                         <div class="mt-4">
                                             {{-- Products --}}
                                             <x-dashboard.form.blocks.model-selection-form
                                                 :inline="true"
                                                 :hide-reset="true"
-                                                model-class="{{ \App\Models\Product::class }}"
-                                                api-route="{{ route('api.dashboard.products.search') }}"
+                                                :model-class="\App\Models\Product::class"
+                                                :api-route="route('api.dashboard.products.search')"
                                                 custom-select-logic="select(item);"
                                                 custom-deselect-logic=""
                                             ></x-dashboard.form.blocks.model-selection-form>
@@ -563,7 +619,7 @@ x-cloak>
                                         </div>
                                         
                                     
-                                        <div class="w-full pt-3 mt-5 border-t">
+                                        {{-- <div class="w-full pt-3 mt-5 border-t">
                                             <template x-if="results">
                                                 <div class="w-full mt-3">
                                                     <ul role="list" class="-my-1 divide-y divide-gray-200 max-h-[545px] overflow-y-auto overflow-x-hidden">
@@ -588,9 +644,26 @@ x-cloak>
                                                     </ul>
                                                 </div>
                                             </template>
+                                        </div> --}}
+                                    </template>
+
+                                    {{-- Product Addons --}}
+                                    <template x-if="content_type == 'product_addon'">
+                                        <div class="mt-4">
+                                            {{-- Products --}}
+                                            <x-dashboard.form.blocks.model-selection-form
+                                                :inline="true"
+                                                :hide-reset="true"
+                                                :model-class="\App\Models\ProductAddon::class"
+                                                :api-route="route('api.dashboard.products.addons.search')"
+                                                custom-select-logic="select(item);"
+                                                custom-deselect-logic=""
+                                            ></x-dashboard.form.blocks.model-selection-form>
+                                            {{-- END Products --}}
                                         </div>
                                     </template>
 
+                                    {{-- Custom --}}
                                     <template x-if="content_type == 'custom'">
                                         <div class="w-full " :class="{hide_content_selector: 'pt-3 mt-5 border-t'}">
                                             <div class="grid grid-cols-12 gap-x-3">
@@ -1213,8 +1286,8 @@ x-cloak>
                                     </label>
                                     <div class="mt-1 sm:col-span-2 sm:mt-0">
                                         <x-dashboard.form.input :disabled="true" type="number" field="tax" :x="true" min="0" max="100" class="text-right">
-                                            <div class="w-full text-12 pt-1 cursor-pointer text-success" x-show="disabled" @click="disabled = false;">{{ translate('Unlock') }}</div>
-                                            <div class="w-full text-12 pt-1 cursor-pointer text-danger" x-show="!disabled" @click="disabled = true;">{{ translate('Lock') }}</div>
+                                            <div class="w-full text-12 pt-1 cursor-pointer text-danger" x-show="disabled" @click="disabled = false;">{{ translate('Unlock') }}</div>
+                                            <div class="w-full text-12 pt-1 cursor-pointer text-success" x-show="!disabled" @click="disabled = true;">{{ translate('Lock') }}</div>
                                         </x-dashboard.form.input>
                                     </div>
                                 </div>

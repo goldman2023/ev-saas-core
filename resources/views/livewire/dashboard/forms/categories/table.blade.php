@@ -60,7 +60,7 @@
                                     {{ $category->getPermalink('products') }}
                                 </td>
                                 <td >
-                                    {{ (str_repeat('-', $category->level)).$category?->getTranslation('name') ?? $category->name }}
+                                    {{ (str_repeat('-', $category->level)).$category?->name ?? $category->name }}
                                 </td>
                                 <td class="hidden md:table-cell">
                                     @if($category->featured)

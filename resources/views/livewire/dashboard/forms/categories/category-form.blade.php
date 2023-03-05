@@ -52,7 +52,7 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     @php
-                                        $cats = Categories::getAll(true)->keyBy('id')->map(fn($item) => str_repeat('-', $item->level).$item->getTranslation('name'));
+                                        $cats = Categories::getAll(true)->keyBy('id')->map(fn($item) => str_repeat('-', $item->level).$item->name);
                                     @endphp
                                     <x-dashboard.form.select :items="$cats" selected="parent_id"></x-dashboard.form.select>
                                 </div>

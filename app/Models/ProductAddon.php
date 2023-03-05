@@ -23,6 +23,7 @@ use App\Traits\CoreMetaTrait;
 use Spatie\Sluggable\HasSlug;
 use App\Traits\AttributeTrait;
 use App\Traits\PermalinkTrait;
+use App\Traits\VariationTrait;
 use App\Traits\HasContentColumn;
 use Spatie\Sluggable\SlugOptions;
 use App\Traits\StockManagementTrait;
@@ -38,7 +39,7 @@ use App\Support\Eloquent\Relations\AllFromModelRelation;
 
 class ProductAddon extends WeBaseModel
 {
-    use \Bkwld\Cloner\Cloneable;
+    // use \Bkwld\Cloner\Cloneable;
     use HasSlug;
     use SoftDeletes;
     use PermalinkTrait;
@@ -54,6 +55,7 @@ class ProductAddon extends WeBaseModel
     use GalleryTrait;
     use PriceTrait;
     use StockManagementTrait;
+    use VariationTrait; // <-- Should be after PriceTrait and StockManagementTrait
 
     protected $table = 'product_addons';
 
@@ -119,16 +121,22 @@ class ProductAddon extends WeBaseModel
         return 'description';
     }
 
+    public function getVariationModelClass() {
+        return null;
+    }
+
     /*
      * Scope searchable parameters
      */
     public function scopeSearch($query, $term)
     {
         return $query->where(
-            fn ($query) =>  $query
-                ->where('name', 'like', '%' . $term . '%')
-                ->orWhere('excerpt', 'like', '%' . $term . '%')
-                ->orWhere('description', 'like', '%' . $term . '%')
+            fn ($query) =>  $query->where(function($query) use($term) {
+                $query
+                    ->where('name', 'like', '%' . $term . '%')
+                    ->orWhere('excerpt', 'like', '%' . $term . '%')
+                    ->orWhere('description', 'like', '%' . $term . '%');
+            })
         );
     }
 
@@ -236,7 +244,9 @@ class ProductAddon extends WeBaseModel
     }
 
     public function getWEFDataTypes() {
-        return WEF::bundleWithGlobalWEF(apply_filters('product-addon.wef.data-types', []));
+        return WEF::bundleWithGlobalWEF(apply_filters('product-addon.wef.data-types', [
+            
+        ]));
     }
 
 }

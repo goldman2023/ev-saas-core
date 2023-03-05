@@ -56,7 +56,7 @@
                         <ul class="list-group list-group-raw">
                             @foreach ($categories as $key => $category)
                                 <li class="list-group-item py-1 px-3">
-                                    <a class="text-[14px]" href="{{ route('category.products.index', $category->slug) }}">{{ $category->getTranslation('name') }}</a>
+                                    <a class="text-[14px]" href="{{ route('category.products.index', $category->slug) }}">{{ $category->name }}</a>
                                 </li>
                             @endforeach
                         </ul>
@@ -75,7 +75,7 @@
                                             </div>
                                             <div class="flex-grow overflow--hidden min-w-0">
                                                 <div class="product-name text-truncate text-[14px] mb-5px">
-                                                    {{  $product->getTranslation('name')  }}
+                                                    {{  $product->name  }}
                                                 </div>
                                                 <div class="">
                                                     @if($product->getBasePrice() != $product->getTotalPrice())
@@ -104,13 +104,13 @@
                                             </div>
                                             <div class="flex-grow overflow--hidden min-w-0">
                                                 <div class="product-name text-truncate text-[14px] mb-5px">
-                                                    {{  $event->getTranslation('title')  }}
+                                                    {{  $event->name  }}
                                                 </div>
                                                 <div class="">
-                                                    @if (strlen($event->getTranslation('description'))>60)
-                                                        {{substr($event->getTranslation('description'), 0, 58)."..."}}
+                                                    @if (strlen($event->description)>60)
+                                                        {{substr($event->description, 0, 58)."..."}}
                                                     @else
-                                                        {{$event->getTranslation('description')}}
+                                                        {{$event->description}}
                                                     @endif
 
                                                 </div>

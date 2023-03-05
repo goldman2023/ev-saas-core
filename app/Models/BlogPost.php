@@ -139,11 +139,6 @@ class BlogPost extends WeBaseModel implements Sitemapable
         return [];
     }
 
-    public function getTranslationModel(): ?string
-    {
-        return BlogPostTranslation::class;
-    }
-
     public function getWEFDataTypes() {
         return WEF::bundleWithGlobalWEF(apply_filters('blog-post.wef.data-types', [
             'portfolio_link' => 'string', // TODO: Should probably go to dynamic WEFs for each tenant, and not be here a core...(not everyone need portoflio_link wef -_-)

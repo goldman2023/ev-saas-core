@@ -50,13 +50,12 @@
                                     </div>
                                     <div class="w-full flex flex-col">
                                         <div class="w-full flex justify-between items-center pl-4">
-                                            <strong class="line-clamp-1 pr-2">{{ $model->getTranslation('title') ?:
-                                                $model->getTranslation('name') }}</strong>
+                                            <strong class="line-clamp-1 pr-2">{{ $model->name }}</strong>
 
                                                 <x-system.we-price :model="$model" :with-qty="true" class="text-14"></x-system.we-price>
                                         </div>
                                         <div class="w-full leading-4 pl-4">
-                                            <small class="line-clamp-1">{{ $model->getTranslation('excerpt') }}</small>
+                                            <small class="line-clamp-1">{{ $model->excerpt }}</small>
                                         </div>
                                         <div class="w-full leading-4 pl-4 mt-1">
                                             <small class="line-clamp-1">{{ translate('Quantity:') }} {{ $model->purchase_quantity }}</small>

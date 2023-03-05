@@ -8,7 +8,7 @@ docs: https://htmlstream.com/front/documentation/sticky-block.html
       ">
           <div class="col-7 text-white align-items-center
           ">
-            <h4 class="text-white">{{ $product->getTranslation('name') }}</h4>
+            <h4 class="text-white">{{ $product->name }}</h4>
           </div>
           <div class="col-5 text-right flex-nowrap">
             <a href="#" class="mr-2 text-secondary ">  {{ svg('heroicon-o-heart', ['class' => 'ev-icon__small']) }} </a>

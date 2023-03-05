@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Edit Course Material').': '.$product->getTranslation('name'))
+@section('page_title', translate('Edit Course Material').': '.$product->name)
 
 @push('pre_head_scripts')
 

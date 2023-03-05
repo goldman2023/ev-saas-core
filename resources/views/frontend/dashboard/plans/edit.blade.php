@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Edit Plan').': '.$plan->getTranslation('title'))
+@section('page_title', translate('Edit Plan').': '.$plan->name)
 
 @push('head_scripts')
 <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
@@ -9,7 +9,7 @@
 
 @section('panel_content')
     <section>
-        <x-dashboard.section-headers.section-header title="{{ translate('Edit') }}: {{ $plan->getTranslation('name') }}" text="">
+        <x-dashboard.section-headers.section-header title="{{ translate('Edit') }}: {{ $plan->name }}" text="">
             <x-slot name="content">
                 <a href="{{ route('plans.index') }}" class="btn-standard">
                     @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])

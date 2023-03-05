@@ -9,7 +9,7 @@
                     {{ translate('New arrival!') }}
                 </span>
             </div> --}}
-            <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"
+            <x-tenant.system.image alt="{{ $product->name }}"
                 class="w-full h-50 object-center object-cover sm:w-full sm:h-full" fit="cover"
                 :image="$product->getThumbnail()">
             </x-tenant.system.image>
@@ -20,7 +20,7 @@
         <h3 class="text-sm font-medium text-gray-900">
             <a href="{{ $product->getPermalink() }}">
                 <span aria-hidden="true" class="absolute inset-0"></span>
-                {{ $product->getTranslation('name') }}
+                {{ $product->name }}
             </a>
 
         </h3>

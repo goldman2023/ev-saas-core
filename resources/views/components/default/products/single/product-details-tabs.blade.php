@@ -1,7 +1,7 @@
 <div class="mb-9 mb-lg-0  p-3 ">
     <div class="row justify-content-lg-between mb-7">
         <div class="col-12 col-sm-7 mb-5 mb-sm-0">
-            <h1 class="h2 mb-0">{{ $product->getTranslation('name') }}</h1>
+            <h1 class="h2 mb-0">{{ $product->name }}</h1>
             <span class="d-block text-dark mb-3">
                 <div class="d-flex ml-auto">
                     @for ($i = 0; $i < 5; $i++)
@@ -115,7 +115,7 @@
                     <h4 class="mb-4">Description</h4>
 
                     <div class="c-product-description">
-                        {!! $product->getTranslation('description') !!}
+                        {!! $product->description !!}
                     </div>
                     <hr>
                     <div class="mt-3">
@@ -135,7 +135,7 @@
                 </div>
                 <div class="col-sm-6">
                     <h4 class="mb-0">{{ translate('Product Details') }}:
-                        {{ $product->getTranslation('name') }}</h4>
+                        {{ $product->name }}</h4>
 
                     <x-default.products.single.product-specification-table :product="$product">
                     </x-default.products.single.product-specification-table>

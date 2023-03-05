@@ -33,7 +33,7 @@
                     </div>
                     <h3
                         class="category_name font-normal mb-0 text-sm md:text-base 2xl:text-sm 3xl:text-base text-heading capitalize pl-2.5 md:pl-4 2xl:pl-3 3xl:pl-4">
-                        {{ $category->getTranslation('name') }}
+                        {{ $category->name }}
                     </h3>
                 </div>
                 <div class="flex items-center">

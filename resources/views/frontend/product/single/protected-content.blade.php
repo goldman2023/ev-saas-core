@@ -18,7 +18,7 @@
                 </div>
                 <div class="w-full mt-3 flex flex-col">
                     <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl mb-3">
-                        {{ $product->getTranslation('name') }}
+                        {{ $product->name }}
                     </h1>
 
                     @if($product->isEvent())

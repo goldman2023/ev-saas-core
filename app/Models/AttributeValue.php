@@ -47,11 +47,6 @@ class AttributeValue extends WeBaseModel
         return $this->selected;
     }
 
-    public function getTranslationModel(): ?string
-    {
-        return AttributeValueTranslation::class;
-    }
-
     public function getWEFDataTypes() {
         return WEF::bundleWithGlobalWEF(apply_filters('attribute_values.wef.data-types', [
             
