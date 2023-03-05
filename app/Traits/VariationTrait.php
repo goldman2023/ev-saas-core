@@ -8,6 +8,7 @@ use App\Models\ProductVariation;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Str;
+use App\Support\Eloquent\Relations\EmptyRelation;
 
 trait VariationTrait
 {
@@ -84,6 +85,10 @@ trait VariationTrait
 
     public function variations()
     {
+        if (empty($this->getVariationModelClass())) {
+            return new EmptyRelation($this);
+        }
+        
         return $this->hasMany($this->getVariationModelClass()['class'] ?? null);
     }
 

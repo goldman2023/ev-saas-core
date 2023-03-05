@@ -14,7 +14,7 @@
             @endif
 
             <h4 class="text-18 font-medium tracking-tight text-gray-900 line-clamp-1 mb-3">
-                {{ $blogPost->getTranslation('name') }}
+                {{ $blogPost->name }}
             </h4>
 
             <p class="text-14 text-gray-500 line-clamp-3 mb-5">

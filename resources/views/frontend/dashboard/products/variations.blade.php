@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', $product->getTranslation('name').' - '.translate('Edit Variations'))
+@section('page_title', $product->name.' - '.translate('Edit Variations'))
 
 @push('head_scripts')
 @endpush

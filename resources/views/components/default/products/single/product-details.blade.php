@@ -29,7 +29,7 @@
 
             <!-- Title -->
             <div class="mb-3">
-                <h1 class="h2">{{ $product->getTranslation('name') }}</h1>
+                <h1 class="h2">{{ $product->name }}</h1>
                 @if (!empty($product->excerpt))
                     <p>
                         {!! $product->excerpt !!}

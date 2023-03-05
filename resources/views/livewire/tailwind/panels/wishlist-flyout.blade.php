@@ -35,7 +35,7 @@
                                     {{ $item->primary_category?->name ?? ($item->primary_category?->name ?? translate('Unknown')) }}
                                 </span>
                                 <span class="block text-14">
-                                    {{ $item->getTranslation('name') }}
+                                    {{ $item->name }}
                                 </span>
                                 <div class="w-full inline">
                                     <strong class="text-gray-800 mr-1 mb-0">{{ $item->getTotalPrice(true) }}</strong>

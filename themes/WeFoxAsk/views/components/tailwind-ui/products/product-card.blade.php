@@ -12,7 +12,7 @@
             @endif
 
             <h4 class="text-14 font-semibold tracking-tight text-typ-2 line-clamp-2 mb-2">
-                {{ $product->getTranslation('name') }}
+                {{ $product->name }}
             </h4>
 
             <p class="text-14 text-primary font-semibold line-clamp-3 mb-2">

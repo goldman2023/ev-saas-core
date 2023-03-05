@@ -34,14 +34,6 @@ class FlashDeal extends Model
     // use Cachable;
     use SoftDeletes;
 
-    public function getTranslation($field = '', $lang = false)
-    {
-        $lang = $lang == false ? App::getLocale() : $lang;
-        $flash_deal_translation = $this->hasMany(FlashDealTranslation::class)->where('lang', $lang)->first();
-
-        return $flash_deal_translation != null ? $flash_deal_translation->$field : $this->$field;
-    }
-
     public function business()
     {
         return $this->belongsTo(Shop::class, 'business_id', 'id');

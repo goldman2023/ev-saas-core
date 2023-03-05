@@ -49,11 +49,6 @@ class Attribute extends WeBaseModel
         return 'slug';
     }
 
-    public function getTranslationModel(): ?string
-    {
-        return AttributeTranslation::class;
-    }
-
     /*
      * Scope searchable parameters
      */

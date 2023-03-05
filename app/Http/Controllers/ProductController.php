@@ -27,7 +27,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if (Auth::user()->user_type == 'admin') {
-            $products = ProductAddon::orderBy('created_at', 'desc')->paginate(20);
+            $products = Product::orderBy('created_at', 'desc')->paginate(20);
         } else {
             $products = Auth::user()->products()->orderBy('created_at', 'desc')->paginate(20);
         }
@@ -324,21 +324,4 @@ class ProductController extends Controller
 
         // throw new WeAPIException(message: translate('Cannot search products if not admin or moderator'), type: 'WeApiException', code: 403);
     }
-
-    public function api_search_product_addons(Request $request) {
-        // if(auth()->user()->isAdmin()) {
-            $q = $request->q;
-
-            $results = ProductAddon::published()->search($q)->get();
-
-            // TODO: Return this as an API RESOURCE!
-            return response()->json([
-                'status' => 'success',
-                'results' => $results
-            ]);
-        // }
-
-        // throw new WeAPIException(message: translate('Cannot search product addons if not admin or moderator'), type: 'WeApiException', code: 403);
-    }
-
 }

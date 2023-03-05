@@ -1,7 +1,7 @@
 <a href="{{ $blogPost->getPermalink() }}" class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg h-full pb-4">
     <div class="w-full">
         <div class="w-full aspect-[350/130] inline-flex items-center justify-center rounded-t-md border-b border-gray-200 mb-5 overflow-hidden">
-            <img src="{{ $blogPost->getThumbnail() }}" width="350px" height="131" alt="{{ $blogPost->getTranslation('name') }}" loading="lazy" class="w-full h-auto object-contain">
+            <img src="{{ $blogPost->getThumbnail() }}" width="350px" height="131" alt="{{ $blogPost->name }}" loading="lazy" class="w-full h-auto object-contain">
         </div>
 
         <div class="w-full text-left px-6">
@@ -12,7 +12,7 @@
             @endif
 
             <h4 class="text-18 font-medium tracking-tight text-gray-900 line-clamp-3 mb-3">
-                {{ $blogPost->getTranslation('name') }}
+                {{ $blogPost->name }}
             </h4>
 
             <p class="text-14 text-gray-500 line-clamp-3 mb-5">

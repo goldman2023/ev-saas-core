@@ -111,10 +111,10 @@ class Page extends WeBaseModel implements Sitemapable
         }
     }
 
-    public function getTranslation($field = '', $lang = false)
-    {
-        return $this->name;
-    }
+    // public function getTranslation($field = '', $lang = false)
+    // {
+    //     return $this->name;
+    // }
 
     public function getDynamicModelUploadProperties(): array
     {

@@ -1,4 +1,4 @@
-<div class="fixed z-[100] inset-0 overflow-y-auto" x-data="{
+<div id="{{ $id }}" class="fixed z-[100] inset-0 overflow-y-auto" x-data="{
         show: false,
         modal_title: @js($title),
         id: @js($id),

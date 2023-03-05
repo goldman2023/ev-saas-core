@@ -46,7 +46,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Product extends WeBaseModel
 {
-    use \Bkwld\Cloner\Cloneable;
+    // use \Bkwld\Cloner\Cloneable;
     use HasSlug;
     use SoftDeletes;
     use RegeneratesCache;
@@ -79,7 +79,7 @@ class Product extends WeBaseModel
      *
      * @var array
      */
-    protected $cloneable_relations = ['translations', 'variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals']; // TODO: Which core_met to clone???
+    protected $cloneable_relations = ['variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals']; // TODO: Which core_met to clone???
     //public static $defaultEagerLoads = ['variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
     protected $fillable = [
@@ -256,11 +256,6 @@ class Product extends WeBaseModel
         return 'unit_price';
     }
 
-
-    public function getTranslationModel(): ?string
-    {
-        return ProductTranslation::class;
-    }
 
     public function getDynamicModelUploadProperties(): array
     {

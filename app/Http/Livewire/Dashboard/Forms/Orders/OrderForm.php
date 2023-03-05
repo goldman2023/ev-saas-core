@@ -85,8 +85,8 @@ class OrderForm extends Component
                         'total_price' => $item->total_price,
                         'tax' => $item->tax,
                         'thumbnail' => !empty($item->subject) ? ($item->subject?->thumbnail->file_name ?? null) : '',
-                        'custom_attributes' => $custom_attributes,
-                        'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
+                        'custom_attributes' => (object) $custom_attributes,
+                        'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
                         'addons' => []
                     ];
 
@@ -110,8 +110,8 @@ class OrderForm extends Component
                                 'total_price' => $addon->total_price,
                                 'tax' => $addon->tax,
                                 'thumbnail' => !empty($addon->subject) ? ($addon->subject?->thumbnail->file_name ?? null) : '',
-                                'custom_attributes' => $custom_attributes,
-                                'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
+                                'custom_attributes' => (object) $custom_attributes,
+                                'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
                             ];
                         }
                     }
@@ -221,8 +221,6 @@ class OrderForm extends Component
             $this->validate();
         }
 
-        
-
         DB::beginTransaction();
 
         try {
@@ -237,24 +235,45 @@ class OrderForm extends Component
             $this->saveAllCoreMeta($this->order);
 
             // Remove missing previous order_items (if any)
-            $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')?->filter() ?? [];
-            $previous_order_items_idx_from_db = $this->order->order_items?->pluck('id')?->filter() ?? [];
+            $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')?->filter()->values() ?? [];
+            $previous_order_items_idx_from_db = $this->order->order_items?->pluck('id')?->filter()->values() ?? [];
 
             $order_items_idx_for_removal = $previous_order_items_idx_from_db->diff($current_order_items_idx_from_db)->values();
-
-            // Remove missing order items
+            
+            // Remove missing/deleted order items
             if($order_items_idx_for_removal->isNotEmpty()) {
                 OrderItem::destroy($order_items_idx_for_removal->all());
             }
 
-            foreach($this->order_items as $index => $item) {
+            // Remove missing/deleted addon order items
+            if(collect($this->order_items)->isNotEmpty()) {
+                foreach($this->order_items as $order_item) {
+                    $current_order_item_addons_idx_from_db = collect($order_item['addons'])->pluck('id')?->filter()?->values() ?? [];
+                    $previous_order_item_addons_idx_from_db = $this->order->order_items->firstWhere('id', $order_item['id']) ?? [];
 
+                    if(!empty($previous_order_item_addons_idx_from_db)) {
+                        $previous_order_item_addons_idx_from_db = $previous_order_item_addons_idx_from_db->descendants->pluck('id')?->filter()?->values() ?? [];
+                        
+                        $order_item_addons_idx_for_removal = $previous_order_item_addons_idx_from_db->diff($current_order_item_addons_idx_from_db)->values();
+
+                        if($order_item_addons_idx_for_removal->isNotEmpty()) {
+                            OrderItem::destroy($order_item_addons_idx_for_removal->all());
+                        }
+                    }
+                }
+            }
+
+            $save_order_item_method = function($item, $parent_id = null) {
                 if(!empty($item['id'])) {
                     $order_item = OrderItem::find($item['id'])->fill($item);
                 } else {
                     $order_item = (new OrderItem())->fill($item);
                 }
 
+                if(!empty($parent_id)) {
+                    $order_item->parent_id = $parent_id;
+                }
+                
                 $order_item->order_id = $this->order->id;
 
                 if(!empty($item['subject_type'] ?? null)) {
@@ -265,10 +284,21 @@ class OrderForm extends Component
                 }
 
                 $order_item->quantity = (float) $item['qty'];
-
+                
                 $order_item->save();
 
                 $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_predefined_attribute_values']); // set attributes to OrderItem
+            };
+            
+            foreach($this->order_items as $index => $item) {
+                $save_order_item_method($item);
+
+                // Save addons OrderItems
+                if(!empty($item['addons'])) {
+                    foreach($item['addons'] as $addon_index => $addon_item) {
+                        $save_order_item_method($addon_item, parent_id: $item['id']);
+                    }
+                }
             }
 
             $this->order->load('order_items'); // load order items
@@ -331,6 +361,7 @@ class OrderForm extends Component
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e);
+            dd($e);
 
             if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating an order...Please try again.'));

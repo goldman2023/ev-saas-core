@@ -7,7 +7,7 @@
                     <li class="py-4">
                         <div class="flex items-center space-x-4">
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-900 truncate">{{ $category->getTranslation('name') }}</p>
+                                <p class="text-sm font-medium text-gray-900 truncate">{{ $category->name }}</p>
                                 <p class="text-12 text-gray-500 truncate">{{ '@'.$category->slug }}</p>
                             </div>
                             <div class="flex items-center">

@@ -13,7 +13,7 @@
 
 <x-livewire-tables::table.cell class="align-start font-medium text-md">
     <div class="max-w-[250px] text-left whitespace-normal">
-        {{ $row->getTranslation('name') }}
+        {{ $row->name }}
     </div>
 </x-livewire-tables::table.cell>
 

@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Edit Blog Post').': '.$blog_post->getTranslation('name'))
+@section('page_title', translate('Edit Blog Post').': '.$blog_post->name)
 
 @push('head_scripts')
 {{-- <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
