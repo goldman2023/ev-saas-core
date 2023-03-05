@@ -341,10 +341,11 @@ x-cloak>
                                                                 <input type="number" min="0" x-model="addon.qty" class="form-standard max-w-[90px]" />
                                                             </div>
 
+                                                            {{-- TODO: Fix addons Edit! --}}
                                                             {{-- <template x-if="_.get(addon, 'subject_id', null) === null && _.get(addon, 'subject_type', null) === null"> --}}
-                                                            <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-editor-modal', 'order_item_index': index, 'addon_index': addon_index })" >
+                                                            {{-- <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-editor-modal', 'order_item_index': index, 'addon_index': addon_index })" >
                                                                 {{ translate('Edit') }}
-                                                            </button>
+                                                            </button> --}}
                                                             {{-- </template> --}}
                 
                                                             <div class="flex-shrink-0 flex items-center " @click="item.addons.splice(addon_index, 1);">
@@ -745,6 +746,7 @@ x-cloak>
                             <x-system.form-modal id="order-item-editor-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
                                 <div class="w-full flex flex-col" x-data="{
                                         order_item_index: null,
+                                        addon_index: null,
                                         order_item: {
                                             id: null,
                                             subject_id: '',
@@ -761,6 +763,7 @@ x-cloak>
                                         },
                                         reset() {
                                             this.order_item_index = null;
+                                            this.addon_index = null;
 
                                             this.order_item.id = null;
                                             this.order_item.subject_id = '';
@@ -776,12 +779,17 @@ x-cloak>
                                             {{-- Send event to reset attributes form --}}
                                             $dispatch('reset-attributes-form', {form_id: 'order-item-attributes-form'});
                                         },
-                                        setOrderItem(order_item_index) {
+                                        setOrderItem(order_item_index, addon_index = null) {
                                             this.order_item_index = order_item_index;
+                                            this.addon_index = addon_index;
 
                                             modal_title = '{{ translate('Edit Order item') }}';
-
+                                            
                                             let order_item_copy = order_items[order_item_index];
+
+                                            if(this.addon_index != null) {
+                                                order_item_copy = order_items[order_item_index]['addons'][this.addon_index];
+                                            }
 
                                             if(order_item_copy !== undefined) {
                                                 this.order_item = deep_copy(order_item_copy);
@@ -805,7 +813,7 @@ x-cloak>
                                     }"
                                     @display-modal.window="
                                         if($event.detail.id === id && _.get($event, 'detail.order_item_index', null) !== null ) {
-                                            setOrderItem(Number($event.detail.order_item_index));
+                                            setOrderItem(Number($event.detail.order_item_index), _.get($event.detail, 'addon_index', null));
                                         }
                                     "
                                     wire:ignore
@@ -852,27 +860,32 @@ x-cloak>
                                                 </div>
                                             </div>
 
-                                            {{-- Attributes Divider --}}
-                                            <div class="col-span-12 relative py-5">
-                                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                                    <div class="w-full border-t border-gray-300"></div>
-                                                </div>
-                                                <div class="relative flex justify-center">
-                                                    <button type="button" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
-                                                        <span>{{ translate('Attributes') }}</span>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            <template x-if="addon_index === null">
+                                                <div class="col-span-12 grid grid-cols-12 gap-x-3">
+                                                    {{-- Attributes Divider --}}
+                                                    <div class="col-span-12 relative py-5">
+                                                        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                                            <div class="w-full border-t border-gray-300"></div>
+                                                        </div>
+                                                        <div class="relative flex justify-center">
+                                                            <button type="button" class="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50">
+                                                                <span>{{ translate('Attributes') }}</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
 
-                                            <div class="col-span-12 ">
-                                                <x-dashboard.form.blocks.attributes-selection-form
-                                                    form-id="order-item-attributes-form"
-                                                    attributes-field="order_item.custom_attributes"
-                                                    selected-attributes-field="order_item.selected_predefined_attribute_values"
-                                                    :no-variations="true">
-
-                                                </x-dashboard.form.blocks.attributes-selection-form>
-                                            </div>
+                                                    <div class="col-span-12 ">
+                                                        <x-dashboard.form.blocks.attributes-selection-form
+                                                            form-id="order-item-attributes-form"
+                                                            attributes-field="order_item.custom_attributes"
+                                                            selected-attributes-field="order_item.selected_predefined_attribute_values"
+                                                            :no-variations="true">
+        
+                                                        </x-dashboard.form.blocks.attributes-selection-form>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            
 
                                             <div class="col-span-12 flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2">
                                                 <button type="button" class="btn btn-primary ml-auto btn-sm" @click="saveOrderItem(order_item_index)" >

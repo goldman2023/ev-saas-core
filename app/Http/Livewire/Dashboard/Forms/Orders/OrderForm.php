@@ -85,8 +85,8 @@ class OrderForm extends Component
                         'total_price' => $item->total_price,
                         'tax' => $item->tax,
                         'thumbnail' => !empty($item->subject) ? ($item->subject?->thumbnail->file_name ?? null) : '',
-                        'custom_attributes' => $custom_attributes,
-                        'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
+                        'custom_attributes' => (object) $custom_attributes,
+                        'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
                         'addons' => []
                     ];
 
@@ -110,8 +110,8 @@ class OrderForm extends Component
                                 'total_price' => $addon->total_price,
                                 'tax' => $addon->tax,
                                 'thumbnail' => !empty($addon->subject) ? ($addon->subject?->thumbnail->file_name ?? null) : '',
-                                'custom_attributes' => $custom_attributes,
-                                'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
+                                'custom_attributes' => (object) $custom_attributes,
+                                'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
                             ];
                         }
                     }
