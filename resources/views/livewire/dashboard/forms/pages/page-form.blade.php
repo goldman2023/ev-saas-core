@@ -36,43 +36,43 @@
                             <!-- END Title -->
 
                             @if($is_update)
-                                <!-- Slug -->
-                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                    x-data="{}">
+                            <!-- Slug -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
 
-                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Slug') }}
-                                    </label>
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Slug') }}
+                                </label>
 
-                                    <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
-                                        <x-dashboard.form.input field="page.slug" class="mb-2" />
-                                        <div class="text-12">
-                                            {{ translate('Link').': ' }}
-                                            <a href="{{ $page->getPermalink() }}" class="ml-1 text-primary"
-                                                target="_blank">{{ $page->getPermalink() }}</a>
-                                        </div>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col">
+                                    <x-dashboard.form.input field="page.slug" class="mb-2" />
+                                    <div class="text-12">
+                                        {{ translate('Link').': ' }}
+                                        <a href="{{ $page->getPermalink() }}" class="ml-1 text-primary"
+                                            target="_blank">{{ $page->getPermalink() }}</a>
                                     </div>
                                 </div>
-                                <!-- END Slug -->
+                            </div>
+                            <!-- END Slug -->
                             @endif
 
                             @if($page->type === \App\Enums\PageTypeEnum::wysiwyg()->value)
-                                <!-- Content -->
-                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                    x-data="{}" wire:ignore>
+                            <!-- Content -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}" wire:ignore>
 
-                                    <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Content') }}
-                                    </label>
+                                <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Content') }}
+                                </label>
 
-                                    <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                        <x-dashboard.form.froala field="content" id="plan-content-wysiwyg">
-                                        </x-dashboard.form.froala>
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                    <x-dashboard.form.froala field="content" id="plan-content-wysiwyg">
+                                    </x-dashboard.form.froala>
 
-                                        <x-system.invalid-msg class="w-full" field="plan.content"></x-system.invalid-msg>
-                                    </div>
+                                    <x-system.invalid-msg class="w-full" field="plan.content"></x-system.invalid-msg>
                                 </div>
-                                <!-- END Content -->
+                            </div>
+                            <!-- END Content -->
                             @endif
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                     </div>
                     {{-- END Actions --}}
 
-                   <x-dashboard.global.wef-fields :model="$page" :wef-fields="[
+                    <x-dashboard.global.wef-fields :model="$page" :wef-fields="[
                        [
                            'wef_key' => 'hide_header',
                            'wef_label' => translate('Hide header'),
@@ -172,10 +172,22 @@
                            'wef_label' => translate('Hide footer'),
                            'data_type' => 'boolean',
                            'form_type' => 'toggle',
+                ],
+                [
+                           'wef_key' => 'include_tailwindcdn',
+                           'wef_label' => translate('Include Tailwind CDN'),
+                           'data_type' => 'boolean',
+                           'form_type' => 'toggle',
+                ],
+                [
+                           'wef_key' => 'include_in_sitemap',
+                           'wef_label' => translate('Include in sitemap'),
+                           'data_type' => 'boolean',
+                           'form_type' => 'toggle',
                        ]
                    ]"></x-dashboard.global.wef-fields>
 
-                   <x-dashboard.global.meta-fields model-field="page" :model="$page"></x-dashboard.global.meta-fields>
+                    <x-dashboard.global.meta-fields model-field="page" :model="$page"></x-dashboard.global.meta-fields>
                 </div>
             </div>
         </div>

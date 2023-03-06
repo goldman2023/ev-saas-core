@@ -23,7 +23,6 @@ class Shop extends WeBaseModel
     use HasSlug;
     use RegeneratesCache;
 
-    use AttributeTrait;
     use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
