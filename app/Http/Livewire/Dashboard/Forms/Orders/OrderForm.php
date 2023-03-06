@@ -224,6 +224,7 @@ class OrderForm extends Component
 
                 $order_item->save();
 
+                
                 $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_predefined_attribute_values']); // set attributes to OrderItem
 
                 return $order_item;
@@ -471,12 +472,13 @@ class OrderForm extends Component
     public function refreshOrderItems() {
         $this->order_items = [];
 
-        if(!empty($this->order->order_items)) {
-            foreach($this->order->order_items as $item) {
+        $order_items = $this->order->order_items()->get();
+        if(!empty($order_items)) {
+            foreach($order_items as $item) {
                 $custom_attributes = [];
                 $selected_predefined_attribute_values = [];
                 self::initAttributes($item, $custom_attributes, $selected_predefined_attribute_values, \App\Models\Product::class);
-
+                
                 if(!empty($item->subject_type)) {
                     $this->order_items[] = [
                         'id' => $item->id,
