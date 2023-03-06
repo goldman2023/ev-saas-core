@@ -150,6 +150,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_filter('order.wef.data-types', function ($data_types) {
                 return array_merge($data_types, [
                     'cycle_status' => 'int',
+                    'is_manufacturing_order' => 'boolean',
                 ]);
             }, 10, 1);
 
@@ -157,6 +158,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_filter('dashboard.order-form.rules.wef', function ($meta) {
                 return array_merge($meta, [
                     'wef.cycle_status' => 'required',
+                    'wef.is_manufacturing_order' => 'required',
                 ]);
             });
 
@@ -192,16 +194,27 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 1);
 
             add_action('order.insert', function (&$order) {
-                $order->setWEF('cycle_status', 0); // 0 is 'request'
-                $order->setWEF('cycle_step_date_request', time());
+                // Logic for Order insert is different for Regular order and Manufacturing order
+                if($order->getWEF('is_manufacturing_order', true, null)) {
+                    $order->setWEF('cycle_status', 2); // 0 is 'approved'
+                    $order->setWEF('cycle_step_date_approved', time());
 
-                baltic_generate_order_document(
-                    order: $order,
-                    template: 'documents-templates.proposal',
-                    upload_tag: 'proposal',
-                    display_name: translate('Proposal for Order #').$order->id,
-                    data: ['user' => $order->user]
-                );
+                    // TODO: Generate docs for manufacturing order: certificate, manufacturing order etc.
+
+                         
+                } else {
+                    $order->setWEF('cycle_status', 0); // 0 is 'request'
+                    $order->setWEF('cycle_step_date_request', time());
+    
+                    baltic_generate_order_document(
+                        order: $order,
+                        template: 'documents-templates.proposal',
+                        upload_tag: 'proposal',
+                        display_name: translate('Proposal for Order #').$order->id,
+                        data: ['user' => $order->user]
+                    );
+                }
+                
             }, 10, 1);
 
             // In standard checkout flow, cycle_status is approved and we should generate certificate, proposal and contract
@@ -239,6 +252,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             add_action('view.order-form.wire_set', function () {
                 js_wire_set('wef.cycle_status', 'wef.cycle_status');
+                js_wire_set('wef.is_manufacturing_order', 'wef.is_manufacturing_order');
             });
 
             // View actions
@@ -263,7 +277,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
             // Add Order Cycle Status metabox at the TOP RIGHT side of the order-form
             add_action('view.dashboard.form.order.right.start', function ($order) {
-                if (\View::exists('frontend.partials.order-form-custom-meta-box')) {
+                if (\View::exists('frontend.partials.orders.order-form-custom-meta-box')) {
                     $current_cycle_status_label = OrderCycleStatusEnum::labels()[$order->getWEF('cycle_status') ?? 0] ?? OrderCycleStatusEnum::labels()[0];
                     $current_cycle_status_value = is_string(OrderCycleStatusEnum::values()[$order->getWEF('cycle_status')] ?? -1) ? $order->getWEF('cycle_status') : 0;
                     $current_cycle_status_date = $order->getWEF('cycle_step_date_'.(OrderCycleStatusEnum::values()[$order->getWEF('cycle_status')] ?? -1), false, 'int') ?? ($order->created_at?->timestamp ?? null);
@@ -278,13 +292,21 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                         $next_cycle_status_label = OrderCycleStatusEnum::labels()[($order->getWEF('cycle_status') ?? 0) + 1];
                     }
 
-                    echo view('frontend.partials.order-form-custom-meta-box',
+                    echo view('frontend.partials.orders.order-form-custom-meta-box',
                         compact('order', 'current_cycle_status_label', 'current_cycle_status_value', 'default_cycle_status_value', 'next_cycle_status_label', 'current_cycle_status_date'));
                 }
             });
 
+            add_action('view.dashboard.form.order.actions-box.end', function(&$form) {
+                if (\View::exists('frontend.partials.orders.order-form-actions')) {
+                    echo view('frontend.partials.orders.order-form-actions', compact('form'));
+                }
+            }, 10, 2);
+
             add_action('view.dashboard.form.order.generate-invoice-btn', function($order, $html) {
-                if(!empty($order->id) && $order->invoices->isEmpty() && $order->getWEF('cycle_status') === array_flip(OrderCycleStatusEnum::values())['approved'] ?? false) {
+                if(!empty($order->id) && $order->invoices->isEmpty() && 
+                    ($order->getWEF('cycle_status') === array_flip(OrderCycleStatusEnum::values())['approved'] ?? false) && 
+                    !$order->getWEF('is_manufacturing_order', false, true)) {
                     echo $html;
                 } else {
                     echo ' ';

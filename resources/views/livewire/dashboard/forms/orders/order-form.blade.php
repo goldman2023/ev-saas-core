@@ -1214,6 +1214,8 @@ x-cloak>
                             </div>
                             {{-- END Tracking number --}}
 
+                            @do_action('view.dashboard.form.order.actions-box.end', $this)
+
                             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                                 @if(!empty($order->id) && $order->invoices->isEmpty())
                                     @ob_start()
