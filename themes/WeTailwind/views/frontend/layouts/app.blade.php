@@ -46,6 +46,12 @@
     @livewireStyles
 
     @stack('head_scripts')
+
+    @isset($page)
+    @if($page->getWEF('include_tailwindcdn'))
+        <script src="https://cdn.tailwindcss.com"></script>
+    @endif
+    @endisset
 </head>
 
 <body class="relative font-sans antialiased {{ Route::currentRouteName() }}" x-data="{
@@ -92,7 +98,8 @@
     <livewire:cart.cart template="flyout-cart" />
     <!-- Wishlist -->
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
-    {{-- <livewire:flyout.wishlist /> --}}
+    {{--
+    <livewire:flyout.wishlist /> --}}
 
 
 
@@ -136,6 +143,8 @@
     @yield('script')
     @stack('footer_scripts')
 
-    <script defer data-domain="{{ tenant()->domains()->first()->domain }}" src="https://stats.businesspress.io/js/script.js"></script>
+    <script defer data-domain="{{ tenant()->domains()->first()->domain }}"
+        src="https://stats.businesspress.io/js/script.js"></script>
 </body>
+
 </html>
