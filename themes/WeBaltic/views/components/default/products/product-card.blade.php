@@ -34,7 +34,7 @@
                         {{ translate('Keliamoji galia:') }} <span class="font-bold">{{ $product->getAttrValue('bendra-krova') }} kg </span>
 
                         <br>
-                        @if($product->getAttrValue('stabdziai'))
+                        @if($product->getAttrValue('stabdziai') == 'mechanical')
                         {{ translate('Su stabdžiais') }}
                         @endif
                     </p>
