@@ -36,13 +36,26 @@
           <p class="mb-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('We are processing the order!') }}</p>
           <p class="mb-2 text-base text-gray-500">{{ str_replace('%d%', $order->id, 'Your order #%d% has been received and will be processed asap.') }}</p>
 
-          <div class="badge-info py-2 mb-2 text-18">{{ translate('processing') }}</div>
+          <div class="flex flex-col space-y-1 mt-4 pt-4 border-t border-gray-200">
+            <div class="flex gap-x-2">
+              <dt class="text-gray-900">{{ translate('Due:') }}</dt>
+              <dd class="font-medium text-gray-900">{{ translate('Now') }}</dd>
+            </div>
+            <div class="flex gap-x-2">
+              <dt class="text-gray-900">{{ translate('Payment Method:') }}</dt>
+              <dd class="font-medium text-gray-900">{{ $order->invoices->first()?->payment_method?->name ?? '' }}</dd>
+            </div>
+            <div class="flex gap-x-2 items-center">
+              <dt class="text-gray-900">{{ translate('Status:') }}</dt>
+              <dd class="badge-info py-2 text-18">{{ translate('processing') }}</dd>
+            </div>
+          </div>
 
           @auth
-            <div class="w-full mt-2">
-              <a href="{{ route('order.details', $order->id) }}" class="btn-primary">
-                {{ translate('View Order') }}
-              </a>
+            <div class="block space-y-1 mt-1.5 pt-1.5">
+                <a href="{{ route('order.details', $order->id) }}" class="btn-primary">
+                  {{ translate('View Order') }}
+                </a>
             </div>
           @endauth
         @endif
@@ -125,10 +138,12 @@
 
         @do_action('view.order-received.items.end', $order)
 
-        <div class="grid grid-cols-3">
+        <div class="grid grid-cols-3 gap-x-8">
           @if(!$order->is_temp)
             <div class="col-span-3 md:col-span-1 py-4 md:py-6 space-y-0 space-x-3 md:space-x-0 md:space-y-3 border-b border-gray-200 md:border-none">
-              {{-- @if(!empty($order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? null)) --}}
+              
+              <div class="flex flex-col space-y-3">
+                {{-- @if(!empty($order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? null)) --}}
                 @if($order->invoices->first())
                   <a href="{{ route('invoice.download', $order->invoices->first()->id) }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
                       @if($order->invoices->first()->isForStandard())
@@ -138,14 +153,16 @@
                       @endif
                   </a>
                 @endif
-              {{-- @endif --}}
+                {{-- @endif --}}
 
-              @if($order_items?->first()?->subject?->isSubscribable() ?? false)
-                <a href="{{ route('stripe.portal_session') }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
-                  {{ translate('Billing portal') }}
-                </a>
-              @endif
+                @if($order_items?->first()?->subject?->isSubscribable() ?? false)
+                  <a href="{{ route('stripe.portal_session') }}" target="_blank" class="btn-primary min-w-[130px] justify-center">
+                    {{ translate('Billing portal') }}
+                  </a>
+                @endif
+              </div>
             </div>
+
             <dl class="grid grid-cols-2 col-span-3 md:col-span-2 gap-x-6 text-sm py-6">
               @if($order->same_billing_shipping || !empty($order->shipping_address))
                 <div>
@@ -211,7 +228,7 @@
 
             @if($order->tax_amount > 0)
               <div class="flex justify-between">
-                <dt class="font-medium text-gray-900">{{ translate('Tax') }}</dt>
+                <dt class="font-medium text-gray-900">{{ translate('Tax') }} {{ \TaxService::isTaxIncluded() ? translate('(included)') : '' }}</dt>
                 <dd class="text-gray-700">{{  $order->tax_incl ? '('.\FX::formatPrice($order->tax_amount).')' : \FX::formatPrice($order->tax_amount) }}</dd>
               </div>
             @endif
@@ -220,6 +237,17 @@
               <dt class="font-semibold text-gray-900">{{ translate('Total') }}</dt>
               <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
             </div>
+
+            @if($order->type === \App\Enums\OrderTypeEnum::installments()->value && $order->invoices->isNotEmpty())
+              <div class="flex flex-col gap-y-2 pt-3 !mt-2 border-t border-gray-200 pl-5">
+                @foreach($order->invoices as $index => $invoice)
+                  <div class="flex justify-between ">
+                    <dt class="font-semibold text-gray-900">- {{ sprintf(translate('Invoice (%d):'), $index+ 1) }}</dt>
+                    <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($invoice->total_price) }}</dd>
+                  </div>
+                @endforeach
+              </div>
+            @endif
 
           </dl>
         </div>

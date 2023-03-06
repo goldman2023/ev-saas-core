@@ -229,6 +229,8 @@ class TenantSettingsService
             // Payments
             'invoice_prefix' => 'string',
             'installments_deposit_amount' => 'decimal',
+            'allow_installments_in_checkout_flow' => 'boolean',
+            'are_installments_default_in_checkout_flow' => 'boolean',
 
             // Design
             'product_page_style' => 'string',

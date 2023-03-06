@@ -24,7 +24,14 @@
 
     </div> --}}
 
-    <div class="relative w-full md:max-w-[920px] flex flex-wrap justify-between items-start self-center z-10 py-[60px]">
+    <div class="relative w-full md:max-w-[920px] flex flex-wrap justify-between items-start self-center z-10 py-[60px]" x-data="{
+        totalPrice: @js(CartService::getTotalPrice()['raw'] ?? 0),
+        depositInstallmentPercentage: @js(get_setting('installments_deposit_amount')),
+        show_installments_totals: @js(get_setting('allow_installments_in_checkout_flow') && get_setting('are_installments_default_in_checkout_flow')),
+    }"
+    @display-installments-totals.window="show_installments_totals = true;"
+    @hide-installments-totals.window="show_installments_totals = false;"
+    >
         <div class="w-full md:max-w-[400px]">
             <x-tenant.system.image alt="{{ get_site_name() }} logo"
             class="block p-0 mb-6 max-w-[160px]" :image="get_site_logo()">
@@ -33,7 +40,7 @@
             @if($models->isNotEmpty())
 
                 <div class="item-summary w-full flex-col mb">
-                    <div class="pb-1 mb-3 border-b border-gray-200 mb-3">
+                    <div class="pb-1 mb-3 border-b border-gray-200">
                         <strong class="flex">{{ translate('Checkout summary') }}</strong>
                         <span class="text-36 tracking-[-0.03rem]">
                             {{ CartService::getTotalPrice()['display'] ?? '' }}
@@ -51,8 +58,7 @@
                                     <div class="w-full flex flex-col">
                                         <div class="w-full flex justify-between items-center pl-4">
                                             <strong class="line-clamp-1 pr-2">{{ $model->name }}</strong>
-
-                                                <x-system.we-price :model="$model" :with-qty="true" class="text-14"></x-system.we-price>
+                                            <x-system.we-price :model="$model" :with-qty="true" class="text-14"></x-system.we-price>
                                         </div>
                                         <div class="w-full leading-4 pl-4">
                                             <small class="line-clamp-1">{{ $model->excerpt }}</small>
@@ -84,7 +90,7 @@
 
                     <ul class="flex flex-col list-none border-t border-gray-200 mt-3 pl-[74px]">
                         {{-- Original Price --}}
-                        <li class="hidden sm:flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
+                        <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
                             <span class="text-14">{{ translate('Items') }}</span>
                             <span class="tracking-[-0.03rem] text-14">{{ CartService::getOriginalPrice()['display'] ?? '' }}</span>
                         </li>
@@ -98,7 +104,7 @@
                         @endif
 
                         {{-- Subtotal --}}
-                        <li class="hidden sm:flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
+                        <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
                             <span class="text-14">{{ translate('Subtotal') }}</span>
                             <span class="tracking-[-0.03rem] text-14">{{ CartService::getSubtotalPrice()['display'] ?? '' }}</span>
                         </li>
@@ -117,10 +123,23 @@
                         </li> --}}
 
                         {{-- Total --}}
-                        <li class="hidden sm:flex justify-between pt-[16px] pb-[12px]">
+                        <li class="flex justify-between pt-[16px] pb-[12px]">
                             <span class="text-14">{{ translate('Total due') }}</span>
                             <strong class="tracking-[-0.03rem] text-14">{{ CartService::getTotalPrice()['display'] ?? '' }}</strong>
                         </li>
+
+                        @if(get_setting('allow_installments_in_checkout_flow'))
+                            <div class="w-full border-t border-gray-200 pl-5" x-show="show_installments_totals">
+                                <div class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
+                                    <span class="text-14">- {{ translate('Deposit:') }}</span>
+                                    <strong class="tracking-[-0.03rem] text-14" x-text="window.FX.formatPrice(totalPrice * depositInstallmentPercentage / 100, 2)"></strong>
+                                </div>
+                                <div class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
+                                    <span class="text-14">- {{ translate('Main:') }}</span>
+                                    <strong class="tracking-[-0.03rem] text-14" x-text="window.FX.formatPrice(totalPrice - (totalPrice * depositInstallmentPercentage / 100), 2)"></strong>
+                                </div>
+                            </div>
+                        @endif
                     </ul>
 
                     {{-- <div class="mt-1 pt-2 flex justify-start border-t border-gray-200">

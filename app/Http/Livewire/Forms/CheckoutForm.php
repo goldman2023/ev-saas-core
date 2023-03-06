@@ -66,6 +66,8 @@ class CheckoutForm extends Component
 
     public $selected_payment_method = 'wire_transfer';
 
+    public $pay_in_installments = false;
+
     public $cc_number;
 
     public $cc_name;
@@ -119,6 +121,9 @@ class CheckoutForm extends Component
             'selected_shipping_address' => [
                 'selected_shipping_address_id' => 'required|if_id_exists:App\Models\Address,id',
             ],
+            'installments' => [
+                'pay_in_installments' => ['boolean']
+            ],
             'cc' => [
                 'cc_number' => ['required', new CardNumber],
                 'cc_name' => 'required|min:3',
@@ -151,6 +156,7 @@ class CheckoutForm extends Component
                     if(Auth::check() && $this->selected_shipping_address_id !== -1) return true;
                 }
             },
+            'installments'
         ]);
     }
 
@@ -274,6 +280,11 @@ class CheckoutForm extends Component
         if ($this->selected_shipping_address_id === -1) {
             $this->manual_mode_shipping = true;
         }
+
+        // Installments
+        if(get_setting('allow_installments_in_checkout_flow') && get_setting('are_installments_default_in_checkout_flow')) {
+            $this->pay_in_installments = true;
+        }
     }
 
     public function dehydrate()
@@ -294,6 +305,11 @@ class CheckoutForm extends Component
     public function pay()
     {
         $this->items = CartService::getItems();
+
+        // Prevent payming in installments if not allowed in app settings
+        if(!get_setting('allow_installments_in_checkout_flow')) {
+            $this->pay_in_installments = false;
+        }
         
         try {
             $this->validate();
@@ -332,8 +348,15 @@ class CheckoutForm extends Component
                 $this->order->invoice_grace_period = 0;
                 $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
             } else {
-                $this->order->type = OrderTypeEnum::standard()->value;
-                $this->order->number_of_invoices = 1; // 1 for one-time payment
+                // Check if checkout is in installments
+                if($this->pay_in_installments) {
+                    $this->order->type = OrderTypeEnum::installments()->value;
+                    $this->order->number_of_invoices = 2; // more for two (is this needed at all when we have count??)
+                } else {
+                    $this->order->type = OrderTypeEnum::standard()->value;
+                    $this->order->number_of_invoices = 1; // 1 for one-time payment
+                }
+
                 $this->order->invoicing_period = null;
                 $this->order->invoice_grace_period = $default_grace_period;
                 $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts? NOW!
@@ -453,48 +476,122 @@ class CheckoutForm extends Component
 
             $this->order->load(['order_items', 'user']);
 
-            /*
-             * Create Invoice
-             */
-            $invoice = new Invoice();
 
-            $invoice->order_id = $this->order->id;
-            $invoice->shop_id = $this->order->shop_id;
-            $invoice->user_id = $this->order->user_id;
-            $invoice->is_temp = false;
-            $invoice->mode = 'live';
-            $invoice->payment_method_type = PaymentMethodUniversal::class;
-            $invoice->payment_method_id = $payment_method->id ?? null;
-            $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
-            $invoice->setInvoiceNumber($payment_method);
+            // Installments logic
+            if($this->pay_in_installments) {
+                $deposit_amount = get_setting('installments_deposit_amount');
+                $this->order->setWEF('deposit_amount', $deposit_amount);
 
-            $invoice->email = $this->order->email;
-            $invoice->billing_first_name = $this->order->billing_first_name;
-            $invoice->billing_last_name = $this->order->billing_last_name;
-            $invoice->billing_company = $this->order->billing_company;
-            $invoice->billing_address = $this->order->billing_address;
-            $invoice->billing_country = $this->order->billing_country;
-            $invoice->billing_state = $this->order->billing_state;
-            $invoice->billing_city = $this->order->billing_city;
-            $invoice->billing_zip = $this->order->billing_zip;
+                $deposit_totals = [
+                    'base_price' => CartService::getOriginalPrice()['raw'] * $deposit_amount / 100,
+                    'discount_amount' => CartService::getDiscountAmount()['raw'] * $deposit_amount / 100,
+                    'subtotal_price' => CartService::getSubtotalPrice()['raw'] * $deposit_amount / 100,
+                    'total_price' => CartService::getTotalPrice()['raw'] * $deposit_amount / 100,
+                    'shipping_cost' => $this->order->shipping_cost * $deposit_amount / 100,
+                    'tax' => CartService::getTaxAmount()['raw'] * $deposit_amount / 100,
+                ];
 
-            // Take invoice totals from Cart
-            $invoice->base_price = CartService::getOriginalPrice()['raw'];
-            $invoice->discount_amount = CartService::getDiscountAmount()['raw'];
-            $invoice->subtotal_price = CartService::getSubtotalPrice()['raw'];
-            $invoice->tax = CartService::getTaxAmount()['raw'];
-            $invoice->tax_incl = TaxService::isTaxIncluded();
-            $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
-            $invoice->total_price = CartService::getTotalPrice()['raw'];
+                $main_totals = [
+                    'base_price' => CartService::getOriginalPrice()['raw'] * (100 - $deposit_amount) / 100,
+                    'discount_amount' => CartService::getDiscountAmount()['raw'] * (100 - $deposit_amount) / 100,
+                    'subtotal_price' => CartService::getSubtotalPrice()['raw'] * (100 - $deposit_amount) / 100,
+                    'total_price' => CartService::getTotalPrice()['raw'] * (100 - $deposit_amount) / 100,
+                    'shipping_cost' => $this->order->shipping_cost * (100 - $deposit_amount) / 100,
+                    'tax' => CartService::getTaxAmount()['raw'] * (100 - $deposit_amount) / 100,
+                ];
+            } else {
+                $deposit_amount = 0;
+                $deposit_totals = [];
+                $main_totals = [
+                    'base_price' => CartService::getOriginalPrice()['raw'],
+                    'discount_amount' => CartService::getDiscountAmount()['raw'],
+                    'subtotal_price' => CartService::getSubtotalPrice()['raw'],
+                    'total_price' => CartService::getTotalPrice()['raw'],
+                    'shipping_cost' => $this->order->shipping_cost,
+                    'tax' => CartService::getTaxAmount()['raw'],
+                ];
+            }
 
-            // TODO: Add Shop Settings for general due_date and grace_period
-            $invoice->start_date = $this->order->invoicing_start_date; // current unix_timestamp (for non-trial plans)
-            $invoice->due_date = null; // Default due_date is NULL days for subscription (if not trial mode, if it's trial it's null)
-            $invoice->grace_period = $this->order->invoice_grace_period; // NULL; or 5 days grace_period by default
+            $all_totals = [
+                (string) $deposit_amount => $deposit_totals, 
+                (string) (100 - (float) $deposit_amount) => $main_totals
+            ];
 
-            $invoice->save();
+            foreach($all_totals as $percentage_of_total => $totals) {
+                if(!empty($totals)) {
+                    /*
+                    * Create Invoice
+                    */
+                    $percentage_of_total = (float) $percentage_of_total;
 
-            $invoice->setRealInvoiceNumber();
+                    $invoice = new Invoice();
+
+                    $invoice->mode = 'live';
+                    $invoice->is_temp = false;
+    
+                    $invoice->order_id = $this->order->id;
+                    $invoice->shop_id = $this->order->shop_id;
+                    $invoice->user_id = $this->order->user_id;
+
+                    $invoice->payment_method_type = PaymentMethodUniversal::class;
+                    $invoice->payment_method_id = $payment_method->id ?? null;
+                    $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
+                    $invoice->setInvoiceNumber($payment_method);
+        
+                    $invoice->email = $this->order->email;
+                    $invoice->billing_first_name = $this->order->billing_first_name;
+                    $invoice->billing_last_name = $this->order->billing_last_name;
+                    $invoice->billing_company = $this->order->billing_company;
+                    $invoice->billing_address = $this->order->billing_address;
+                    $invoice->billing_country = $this->order->billing_country;
+                    $invoice->billing_state = $this->order->billing_state;
+                    $invoice->billing_city = $this->order->billing_city;
+                    $invoice->billing_zip = $this->order->billing_zip;
+                
+                    $invoice->start_date = $this->order->invoicing_start_date; // current unix_timestamp (for non-trial plans)
+                    $invoice->due_date = null; // Default due_date is NULL days for subscription (if not trial mode, if it's trial it's null)
+                    $invoice->grace_period = $this->order->invoice_grace_period;
+                
+                    $invoice->base_price = $totals['base_price'];
+                    $invoice->discount_amount = $totals['discount_amount'];
+                    $invoice->subtotal_price = $totals['subtotal_price'];
+                    $invoice->total_price = $totals['total_price'];
+                    $invoice->shipping_cost = $totals['shipping_cost'];
+                    $invoice->tax = $totals['tax'];
+                
+                    $user = $this->order->user;
+
+                    $customer_entity = $this->wef['billing_entity'] ?? $user->entity;
+
+                    if($customer_entity === 'company') {
+                        $invoice->mergeData([
+                            'customer' => [
+                                'entity' => $customer_entity,
+                                'vat' => $this->wef['billing_company_vat'] ?? $user->getUserMeta('company_vat'),
+                                'company_registration_number' => $this->wef['billing_company_code'] ?? $user->getUserMeta('company_registration_number'),
+                            ]
+                        ]);
+                    } else {
+                        $invoice->mergeData([
+                            'customer' => [
+                                'entity' => $customer_entity,
+                            ]
+                        ]);
+                    }
+
+                    // Save pecentage to data column just in case...
+                    $invoice->mergeData([
+                        'percentage_of_total_order_price' => $percentage_of_total,
+                    ]);
+        
+                    $invoice->save();
+    
+                    $invoice->setRealInvoiceNumber();
+
+                    // Set invoice WEF to have `percentage_of_total_order_price`
+                    $invoice->setWEF('percentage_of_total_order_price', $percentage_of_total);
+                }
+            }
 
             do_action('checkout.process', $this->order, $invoice);
 

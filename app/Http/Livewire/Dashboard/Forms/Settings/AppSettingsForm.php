@@ -167,6 +167,8 @@ class AppSettingsForm extends Component
             'payments' => [
                 'settings.invoice_prefix' => [''],
                 'settings.installments_deposit_amount' => ['nullable'],
+                'settings.allow_installments_in_checkout_flow' => ['boolean'],
+                'settings.are_installments_default_in_checkout_flow' => ['boolean'],
             ],
             'design' => [
                 'settings.colors' => [''],
