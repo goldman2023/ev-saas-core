@@ -1,6 +1,7 @@
 
 
 <x-livewire-tables::table.cell class="align-middle text-left">
+    @isset($row->order)
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->order->id]) }}">
         #{{ $row->getRealInvoiceNumber() }}
 
@@ -10,6 +11,7 @@
             @endif
         @endisset
     </a>
+    @endisset
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-left">
