@@ -106,13 +106,13 @@ x-cloak>
         },
         calculateTotals() {
             tax = Number(tax);
-    
+
             if(this.order_items) {
                 subtotal = 0;
-    
+
                 this.order_items.forEach((item, index) => {
                     subtotal += item.total_price;
-                    
+
                     if(_.get(item, 'addons.length', 0) > 0) {
                         item['addons'].forEach((addon) => {
                             subtotal += addon.total_price;
@@ -122,13 +122,13 @@ x-cloak>
             } else {
                 subtotal = 0;
             }
-    
+
             if(tax < 0 || tax > 100) {
                 tax = 0;
             }
-    
+
             total = Number(subtotal) + Number(shipping_cost);
-    
+
             if(!tax_incl) {
                 total += total * tax / 100;
             }
@@ -155,7 +155,7 @@ x-cloak>
                     }
                 }
             }
-        
+
             calculateTotals();
         });
 
@@ -183,7 +183,7 @@ x-cloak>
                         <div class="w-full">
                             <div class="grid grid-cols-12 gap-x-7">
                                 {{-- Vendor/Shop --}}
-                                <x-dashboard.form.blocks.model-selection-form 
+                                <x-dashboard.form.blocks.model-selection-form
                                     field="shop_id"
                                     modal-id="vendor-selection-modal"
                                     :defaultModel="$order->shop"
@@ -200,7 +200,7 @@ x-cloak>
                                 {{-- END Vendor/Shop --}}
 
                                 {{-- Customer --}}
-                                <x-dashboard.form.blocks.model-selection-form 
+                                <x-dashboard.form.blocks.model-selection-form
                                     field="user_id"
                                     modal-id="customer-selector-modal"
                                     :defaultModel="$order->user"
@@ -220,7 +220,7 @@ x-cloak>
                                         wef.billing_entity = item?.entity;
                                         wef.billing_company_vat = item?.user_meta?.company_vat || '';
                                         wef.billing_company_code = item?.user_meta?.company_registration_number || '';
-                                        
+
                                         let address = item?.addresses.find(address => address.is_billing === true);
 
                                         if(address === undefined) {
@@ -256,7 +256,7 @@ x-cloak>
                                         wef.billing_entity = 'individual';
                                         wef.billing_company_vat = '';
                                         wef.billing_company_code = '';
-                                        
+
                                         $wire.set('order.billing_first_name', '');
                                         $wire.set('order.billing_last_name', '');
                                         $wire.set('order.billing_company', '');
@@ -293,32 +293,32 @@ x-cloak>
                                                 <div class="flex-shrink-0" x-show="item?.thumbnail">
                                                     <img class="h-10 w-10 rounded-full" :src="window.WE.IMG.url(item?.thumbnail)" alt="">
                                                 </div>
-    
+
                                                 <div class="min-w-0 flex-1">
                                                     <div class="outline-none">
                                                         <p class="text-sm font-medium text-gray-900" x-text="item.name"></p>
                                                         <p class="truncate text-sm text-gray-500 line-clamp-1" x-text="item.excerpt"></p>
                                                     </div>
                                                 </div>
-    
+
                                                 <div class="flex-shrink-0 flex items-center gap-x-4">
                                                     <span x-text="FX.formatPrice(item.total_price)"></span>
                                                     <input type="number" min="0" x-model="item.qty" class="form-standard max-w-[90px]" />
                                                 </div>
-    
+
                                                 {{-- <template x-if="_.get(item, 'subject_id', null) === null && _.get(item, 'subject_type', null) === null"> --}}
                                                 <button type="button" class="btn btn-primary btn-sm" @click="$dispatch('display-modal', {'id': 'order-item-editor-modal', 'order_item_index': index })" >
                                                     {{ translate('Edit') }}
                                                 </button>
                                                 {{-- </template> --}}
-    
+
                                                 <div class="flex-shrink-0 flex items-center " @click="order_items.splice(index, 1);">
                                                     @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
                                                 </div>
                                             </div>
                                             <div class="w-full flex items-center pl-2 gap-x-2">
                                                 <strong class="text-14" x-text="'{{ translate('Addons') }} ('+_.get(item, 'addons.length', 0)+')'"></strong>
-                                                <button class="btn btn-primary !py-0.5 !px-2 !text-10 !leading-[1.5]" 
+                                                <button class="btn btn-primary !py-0.5 !px-2 !text-10 !leading-[1.5]"
                                                     @click="$dispatch('display-modal', {'id': 'order-item-selector-modal', 'skip_content_types': ['product', 'custom'], 'parent_product_index': index  })">
                                                     {{ translate('Add addon') }}
                                                 </button>
@@ -335,7 +335,7 @@ x-cloak>
                                                                     <p class="truncate text-sm text-gray-500 line-clamp-1" x-text="addon.excerpt"></p>
                                                                 </div>
                                                             </div>
-                
+
                                                             <div class="flex-shrink-0 flex items-center gap-x-4">
                                                                 <span x-text="FX.formatPrice(addon.total_price)"></span>
                                                                 <input type="number" min="0" x-model="addon.qty" class="form-standard max-w-[90px]" />
@@ -347,7 +347,7 @@ x-cloak>
                                                                 {{ translate('Edit') }}
                                                             </button> --}}
                                                             {{-- </template> --}}
-                
+
                                                             <div class="flex-shrink-0 flex items-center " @click="item.addons.splice(addon_index, 1);">
                                                                 @svg('heroicon-o-x-mark', ['class' => 'w-5 h-5 text-danger cursor-pointer'])
                                                             </div>
@@ -377,7 +377,7 @@ x-cloak>
                             </div>
 
                             {{-- OrderItem selector modal --}}
-                            <x-system.form-modal id="order-item-selector-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
+                            <x-system.form-modal id="order-item-selector-modal" title="{{ translate('Add New Order Item') }}" class="!max-w-xl" :prevent-close="true">
                                 {{-- TODO: Add logic for addons --}}
                                 <div class="w-full flex flex-col" x-data="{
                                         q: '',
@@ -492,7 +492,7 @@ x-cloak>
                                                 let existing_item_index = order_items.findIndex(order_item => {
                                                     return order_item.subject_type == this.getCurrentContentTypeOptions().model_class && order_item.subject_id == item.id;
                                                 });
-    
+
                                                 if(existing_item_index !== -1) {
                                                     order_items[existing_item_index].qty = Number(order_items[existing_item_index].qty) + 1;
                                                     order_items[existing_item_index].base_price = Number(order_items[existing_item_index].unit_price);
@@ -518,7 +518,7 @@ x-cloak>
                                                 }
                                             }
 
-                                            
+
                                         },
                                         selectContentType(content_type) {
                                             this.content_type = content_type;
@@ -567,11 +567,11 @@ x-cloak>
                                                 setCustomOrderItem(Number($event.detail.order_item_index));
                                             } else {
                                                 let left_content_types = available_content_types.filter((type) => !skip_content_types.includes(type.slug));
-                                                
+
                                                 if(left_content_types.length >= 1) {
                                                     content_type = left_content_types[0].slug;
                                                 }
-    
+
                                                 reset();
                                             }
                                         }
@@ -618,8 +618,8 @@ x-cloak>
                                             ></x-dashboard.form.blocks.model-selection-form>
                                             {{-- END Products --}}
                                         </div>
-                                        
-                                    
+
+
                                         {{-- <div class="w-full pt-3 mt-5 border-t">
                                             <template x-if="results">
                                                 <div class="w-full mt-3">
@@ -743,7 +743,7 @@ x-cloak>
                             {{-- END OrderItem selector modal --}}
 
                             {{-- OrderItem editor modal --}}
-                            <x-system.form-modal id="order-item-editor-modal" title="Add New Order Item" class="!max-w-xl" :prevent-close="true">
+                            <x-system.form-modal id="order-item-editor-modal" title="{{ translate('Add New Order Item') }}" class="!max-w-xl" :prevent-close="true">
                                 <div class="w-full flex flex-col" x-data="{
                                         order_item_index: null,
                                         addon_index: null,
@@ -784,7 +784,7 @@ x-cloak>
                                             this.addon_index = addon_index;
 
                                             modal_title = '{{ translate('Edit Order item') }}';
-                                            
+
                                             let order_item_copy = order_items[order_item_index];
 
                                             if(this.addon_index != null) {
@@ -880,12 +880,12 @@ x-cloak>
                                                             attributes-field="order_item.custom_attributes"
                                                             selected-attributes-field="order_item.selected_predefined_attribute_values"
                                                             :no-variations="true">
-        
+
                                                         </x-dashboard.form.blocks.attributes-selection-form>
                                                     </div>
                                                 </div>
                                             </template>
-                                            
+
 
                                             <div class="col-span-12 flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2">
                                                 <button type="button" class="btn btn-primary ml-auto btn-sm" @click="saveOrderItem(order_item_index)" >
@@ -933,16 +933,16 @@ x-cloak>
                                                     {{ translate('Individual') }}
                                                 </label>
                                             </div>
-                    
+
                                             <div class="flex items-center">
-                                                <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="company" 
+                                                <x-dashboard.form.input field="wef.billing_entity" :x="true" type="radio" value="company"
                                                     input-id="entity_company_radio" class="w-auto flex items-center" />
 
                                                 <label for="entity_company_radio" class="pl-3 block text-sm font-medium text-gray-700">
                                                     {{ translate('Company') }} </label>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
 
                                     <div class="grid grid-cols-12 gap-x-3">
@@ -1218,7 +1218,7 @@ x-cloak>
                             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                                 @if(!empty($order->id) && $order->invoices->isEmpty())
                                     @ob_start()
-                                        <button type="button" class="btn btn-warning btn-sm" 
+                                        <button type="button" class="btn btn-warning btn-sm"
                                             @click="save()"
                                             wire:click="generateInvoice()">
 
@@ -1315,7 +1315,7 @@ x-cloak>
                                     <div class="mt-1 sm:col-span-2 sm:mt-0">
                                         <x-dashboard.form.input type="number" field="wef.deposit_amount" :x="true" min="0" max="100" :disabled="true" class="flex flex-col">
                                             <div class="flex justify-end items-center mt-1">
-                                                <button type="button" class="text-12 hover:underline" :class="{'text-primary': disabled, 'text-success': !disabled}" 
+                                                <button type="button" class="text-12 hover:underline" :class="{'text-primary': disabled, 'text-success': !disabled}"
                                                     x-text="disabled ? '{{ translate('Change') }}' : '{{ translate('Lock') }}'" @click="disabled = !disabled;"></button>
                                             </div>
                                         </x-dashboard.form.input>

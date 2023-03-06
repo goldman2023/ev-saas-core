@@ -70,7 +70,7 @@ class OrderForm extends Component
                 $custom_attributes = [];
                 $selected_predefined_attribute_values = [];
                 self::initAttributes($item, $custom_attributes, $selected_predefined_attribute_values, \App\Models\Product::class);
-                
+
                 if(!empty($item->subject_type)) {
                     $this->order_items[] = [
                         'id' => $item->id,
@@ -97,22 +97,25 @@ class OrderForm extends Component
                             $selected_predefined_attribute_values = [];
                             self::initAttributes($addon, $custom_attributes, $selected_predefined_attribute_values, \App\Models\ProductAddon::class);
 
-                            $this->order_items[count($this->order_items) - 1]['addons'][] = [
-                                'id' => $addon->id,
-                                'subject_type' => base64_encode($addon->subject_type ?? ''),
-                                'subject_id' => $addon->subject_id ?? null,
-                                'name' => $addon->name,
-                                'excerpt' => $addon->excerpt,
-                                'qty' => $addon->quantity,
-                                'unit_price' => $addon->base_price,
-                                'base_price' => $addon->base_price,
-                                'subtotal_price' => $addon->subtotal_price,
-                                'total_price' => $addon->total_price,
-                                'tax' => $addon->tax,
-                                'thumbnail' => !empty($addon->subject) ? ($addon->subject?->thumbnail->file_name ?? null) : '',
-                                'custom_attributes' => (object) $custom_attributes,
-                                'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
-                            ];
+                            if(isset($this->order_items[count($this->order_items) - 1]['addons'])) {
+                                $this->order_items[count($this->order_items) - 1]['addons'][] = [
+                                    'id' => $addon->id,
+                                    'subject_type' => base64_encode($addon->subject_type ?? ''),
+                                    'subject_id' => $addon->subject_id ?? null,
+                                    'name' => $addon->name,
+                                    'excerpt' => $addon->excerpt,
+                                    'qty' => $addon->quantity,
+                                    'unit_price' => $addon->base_price,
+                                    'base_price' => $addon->base_price,
+                                    'subtotal_price' => $addon->subtotal_price,
+                                    'total_price' => $addon->total_price,
+                                    'tax' => $addon->tax,
+                                    'thumbnail' => !empty($addon->subject) ? ($addon->subject?->thumbnail->file_name ?? null) : '',
+                                    'custom_attributes' => (object) $custom_attributes,
+                                    'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
+                                ];
+                            }
+
                         }
                     }
                 } else {
@@ -170,7 +173,7 @@ class OrderForm extends Component
             'order.tracking_number' => ['nullable'],
             'order.note' => ['nullable'],
             'order.terms' => ['nullable'],
-            
+
             'order_items' => ['nullable'],
         ]);
 
@@ -213,7 +216,7 @@ class OrderForm extends Component
     }
 
     public function saveOrder() {
-        
+
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -239,7 +242,7 @@ class OrderForm extends Component
             $previous_order_items_idx_from_db = $this->order->order_items?->pluck('id')?->filter()->values() ?? [];
 
             $order_items_idx_for_removal = $previous_order_items_idx_from_db->diff($current_order_items_idx_from_db)->values();
-            
+
             // Remove missing/deleted order items
             if($order_items_idx_for_removal->isNotEmpty()) {
                 OrderItem::destroy($order_items_idx_for_removal->all());
@@ -248,18 +251,21 @@ class OrderForm extends Component
             // Remove missing/deleted addon order items
             if(collect($this->order_items)->isNotEmpty()) {
                 foreach($this->order_items as $order_item) {
-                    $current_order_item_addons_idx_from_db = collect($order_item['addons'])->pluck('id')?->filter()?->values() ?? [];
-                    $previous_order_item_addons_idx_from_db = $this->order->order_items->firstWhere('id', $order_item['id']) ?? [];
+                    if(isset($order_item['addons'])) {
+                        $current_order_item_addons_idx_from_db = collect($order_item['addons'])->pluck('id')?->filter()?->values() ?? [];
+                        $previous_order_item_addons_idx_from_db = $this->order->order_items->firstWhere('id', $order_item['id']) ?? [];
 
-                    if(!empty($previous_order_item_addons_idx_from_db)) {
-                        $previous_order_item_addons_idx_from_db = $previous_order_item_addons_idx_from_db->descendants->pluck('id')?->filter()?->values() ?? [];
-                        
-                        $order_item_addons_idx_for_removal = $previous_order_item_addons_idx_from_db->diff($current_order_item_addons_idx_from_db)->values();
+                        if(!empty($previous_order_item_addons_idx_from_db)) {
+                            $previous_order_item_addons_idx_from_db = $previous_order_item_addons_idx_from_db->descendants->pluck('id')?->filter()?->values() ?? [];
 
-                        if($order_item_addons_idx_for_removal->isNotEmpty()) {
-                            OrderItem::destroy($order_item_addons_idx_for_removal->all());
+                            $order_item_addons_idx_for_removal = $previous_order_item_addons_idx_from_db->diff($current_order_item_addons_idx_from_db)->values();
+
+                            if($order_item_addons_idx_for_removal->isNotEmpty()) {
+                                OrderItem::destroy($order_item_addons_idx_for_removal->all());
+                            }
                         }
                     }
+
                 }
             }
 
@@ -273,7 +279,7 @@ class OrderForm extends Component
                 if(!empty($parent_id)) {
                     $order_item->parent_id = $parent_id;
                 }
-                
+
                 $order_item->order_id = $this->order->id;
 
                 if(!empty($item['subject_type'] ?? null)) {
@@ -284,12 +290,12 @@ class OrderForm extends Component
                 }
 
                 $order_item->quantity = (float) $item['qty'];
-                
+
                 $order_item->save();
 
                 $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_predefined_attribute_values']); // set attributes to OrderItem
             };
-            
+
             foreach($this->order_items as $index => $item) {
                 $save_order_item_method($item);
 
@@ -352,7 +358,7 @@ class OrderForm extends Component
             DB::commit();
 
             $this->inform(translate('Order successfully saved!'), '', 'success');
-            
+
             // $this->emitSelf('refreshComponent');
 
             if (!$this->is_update) {
@@ -415,7 +421,7 @@ class OrderForm extends Component
             }
 
             $all_totals = [
-                (string) $deposit_amount => $deposit_totals, 
+                (string) $deposit_amount => $deposit_totals,
                 (string) (100 - (float) $deposit_amount) => $main_totals
             ];
 
@@ -434,17 +440,17 @@ class OrderForm extends Component
 
                             $invoice->mode = 'live';
                             $invoice->is_temp = false;
-            
+
                             // Make this changable in modal (when generate invoice is clicked)
                             $invoice->payment_method_type = (Payments::wire_transfer())::class;
                             $invoice->payment_method_id = Payments::wire_transfer()->id;
-                
+
                             $invoice->order_id = $this->order->id;
                             $invoice->shop_id = $this->order->shop_id;
                             $invoice->user_id = $this->order->user_id;
                             $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
                             $invoice->setInvoiceNumber();
-                
+
                             $invoice->email = $this->order->email;
                             $invoice->billing_first_name = $this->order->billing_first_name;
                             $invoice->billing_last_name = $this->order->billing_last_name;
@@ -454,25 +460,25 @@ class OrderForm extends Component
                             $invoice->billing_state = $this->order->billing_state;
                             $invoice->billing_city = $this->order->billing_city;
                             $invoice->billing_zip = $this->order->billing_zip;
-                
+
                             // TODO: add base_currency for invoice! and take it from stripe!
-                
+
                             $invoice->start_date = $this->order->created_at->timestamp;
                             $invoice->end_date = 0;
-                
+
                             $invoice->base_price = $totals['base_price'];
                             $invoice->discount_amount = $totals['discount_amount'];
                             $invoice->subtotal_price = $totals['subtotal_price'];
                             $invoice->total_price = $totals['total_price'];
                             $invoice->shipping_cost = $totals['shipping_cost'];
                             $invoice->tax = $totals['tax'];
-                
+
                             $invoice->note = $this->order->note;
-                
+
                             $user = $this->order->user;
                             if($user->entity === 'company') {
                                 $invoice->billing_company = $user->getUserMeta('company_name');
-                
+
                                 $invoice->mergeData([
                                     'customer' => [
                                         'entity' => $user->entity,
@@ -490,18 +496,18 @@ class OrderForm extends Component
                                     ]
                                 ]);
                             }
-                
+
                             $invoice->save();
-            
+
                             $invoice->setRealInvoiceNumber();
 
                             $invoice->setWEF('percentage_of_total_order_price', $percentage_of_total);
-            
-                            // generateInvoicePDF - generate invoice document and 
+
+                            // generateInvoicePDF - generate invoice document and
                             $filepath = $invoice->generateInvoicePDF(save: true);
-            
+
                             \MediaService::storeAsUploadFromFile($invoice, $filepath, 'invoice_document', file_display_name: translate('Invoice').' '.$invoice->getRealInvoiceNumber());
-            
+
                             // if($this->order->type !== OrderTypeEnum::installments()->value) {
                             //     return redirect()->route('invoice.download', $invoice->id);
                             // }
