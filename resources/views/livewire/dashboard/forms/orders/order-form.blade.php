@@ -1317,7 +1317,7 @@ x-cloak>
                                         <x-dashboard.form.input type="number" field="wef.deposit_amount" :x="true" min="0" max="100" :disabled="true" class="flex flex-col">
                                             <div class="flex justify-end items-center mt-1">
                                                 <button type="button" class="text-12 hover:underline" :class="{'text-primary': disabled, 'text-success': !disabled}"
-                                                    x-text="disabled ? '{{ translate('Change') }}' : '{{ translate('Lock') }}'" @click="disabled = !disabled;"></button>
+                                                    x-text="disabled ? '{{ translate('Unlock') }}' : '{{ translate('Lock') }}'" @click="disabled = !disabled;"></button>
                                             </div>
                                         </x-dashboard.form.input>
                                     </div>
