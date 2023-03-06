@@ -6,10 +6,9 @@
         vertical-align: top;
     }
 </style>
-
-<div class="strong">
+<h1 class="text-center text-2xl font-bold w-full">
     SUTARTIS Nr. {{ $order->created_at->format('Y-m-j') }}
-</div>
+</h1>
 <div>
     Kaunas, du tūkstančiai dvidešimtų antrųjų metų lapkričio mėnesio 3 diena
 </div>

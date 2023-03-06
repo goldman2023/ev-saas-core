@@ -1,44 +1,48 @@
-
-
 <x-livewire-tables::table.cell class="align-middle text-left">
+    @isset($row->order)
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->order->id]) }}">
-        #{{ $row->getRealInvoiceNumber() }}  @if(!$row->viewed_by_customer && $row->user->id === auth()->user()->id)
+        #{{ $row->getRealInvoiceNumber() }}
+
+        @isset($row->user)
+        @if(!$row->viewed_by_customer && $row->user->id === auth()->user()->id)
         <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
-    @endif
+        @endif
+        @endisset
     </a>
+    @endisset
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-left">
     @if(auth()->user()->isAdmin())
     <a class="media align-items-center text-14" href="{{ route('user.details', ['id' => $row->user->id]) }}">
-       <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
+        <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
         {{ $row->user->email }}
     </a>
     @else
     <span class="media align-items-center text-14">
         <strong> {{ $row->user->name }} {{ $row->user->surname }} </strong> <br>
-         {{ $row->user->email }}
+        {{ $row->user->email }}
     </span>
     @endif
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-left">
     @if($row->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
-        <span class="badge-success">
-            {{ ucfirst($row->payment_status) }}
-        </span>
+    <span class="badge-success">
+        {{ ucfirst($row->payment_status) }}
+    </span>
     @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
-        <span class="badge-info">
-            {{ ucfirst($row->payment_status) }}
-        </span>
+    <span class="badge-info">
+        {{ ucfirst($row->payment_status) }}
+    </span>
     @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
-        <span class="badge-danger">
-            {{ ucfirst($row->payment_status) }}
-        </span>
+    <span class="badge-danger">
+        {{ ucfirst($row->payment_status) }}
+    </span>
     @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value)
-        <span class="badge-warning">
-            {{ ucfirst($row->payment_status) }}
-        </span>
+    <span class="badge-warning">
+        {{ ucfirst($row->payment_status) }}
+    </span>
     @endif
 </x-livewire-tables::table.cell>
 
@@ -61,7 +65,8 @@
 
 <x-livewire-tables::table.cell class="align-middle text-center">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        {{-- <a class="btn btn-primary flex items-center mr-2" target="_blank" href="{{ $row->meta[stripe_prefix('stripe_hosted_invoice_url')] ?? '#' }}">
+        {{-- <a class="btn btn-primary flex items-center mr-2" target="_blank"
+            href="{{ $row->meta[stripe_prefix('stripe_hosted_invoice_url')] ?? '#' }}">
             {{ route('order.details', ['id' => $row->id]) }}
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] '])
             {{ translate('View') }}
@@ -72,22 +77,17 @@
             {{ translate('Download') }}
         </a>
 
-        {{-- <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ $row->meta[stripe_prefix('stripe_invoice_pdf_url')] ?? '#' }} ">
+        {{-- <a class="btn btn-info flex items-center mr-2" target="_blank"
+            href="{{ $row->meta[stripe_prefix('stripe_invoice_pdf_url')] ?? '#' }} ">
             @svg('heroicon-o-arrow-down-tray', ['class' => 'w-[18px] h-[18px] '])
             {{ translate('Download') }}
         </a> --}}
 
-        {{-- <button
-            @click="isOpen = !isOpen"
-            @keydown.escape="isOpen = false"
-            class="flex items-center btn"
-        >
+        {{-- <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="flex items-center btn">
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
-        <ul x-show="isOpen"
-            @click.outside="isOpen = false"
-            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow"
-        >
+        <ul x-show="isOpen" @click.outside="isOpen = false"
+            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow">
             <li>
                 <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="{{ $row->getPermalink() }} "
                     target="_blank">

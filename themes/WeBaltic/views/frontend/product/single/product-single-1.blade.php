@@ -85,12 +85,14 @@
             <!-- Product info -->
             <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
                 <div class="mb-6 pt-12 sm:pt-0">
-                    <div class="flex w-full">
+                    <div class="flex w-full items-center justify-center">
                     <h1 class="w-full text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-2">
                         {{ $product->name }}
                     </h1>
+                    <div class="text-right">
                     <livewire:actions.social-action-button action="save_detailed" template="wishlist-button-detailed" :object="$product">
                     </livewire:actions.social-action-button>
+                    </div>
                     </div>
 
                     <span class="font-medium block text-gray-600 text-[16px] line-clamp-1">
@@ -164,7 +166,7 @@
                 </div>
 
                 <div class="mt-6">
-                    <iframe src="https://api.mokilizingas.lt/api/16ac3af4dcd38b40e422ca630b4adb8e/calc/deals.html?amount_advance=0&layout=ml-004&amount_total=6.5&term=24" style="border: none; width: 100%; height: 100%;" title="Moki lizingas"></iframe>
+                    <iframe loading="lazy" src="https://api.mokilizingas.lt/api/16ac3af4dcd38b40e422ca630b4adb8e/calc/deals.html?amount_advance=0&layout=ml-004&amount_total=6.5&term=24" style="border: none; width: 100%; height: 100%;" title="Moki lizingas"></iframe>
                 </div>
 
                 <form class="hidden mt-6">

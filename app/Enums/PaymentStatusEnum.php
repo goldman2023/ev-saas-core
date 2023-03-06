@@ -23,10 +23,10 @@ class PaymentStatusEnum extends WeBaseEnum
     public static function labels(): array
     {
         return [
-            'unpaid' => 'Unpaid',
-            'pending' => 'Pending',
-            'canceled' => 'Canceled',
-            'paid' => 'Paid',
+            'unpaid' => translate('Unpaid'),
+            'pending' => translate('Pending'),
+            'canceled' => translate('Canceled'),
+            'paid' => translate('Paid'),
         ];
     }
 }

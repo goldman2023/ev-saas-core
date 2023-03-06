@@ -75,6 +75,17 @@
         <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
+                    {{ translate('Inspection notes') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="Inspection Notes" type="string" form_type="textarea" key="inspection_notes"></x-wef.field>
+            </dd>
+        </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
                     {{ translate('Serial Number') }}
                 </span>
             </dt>

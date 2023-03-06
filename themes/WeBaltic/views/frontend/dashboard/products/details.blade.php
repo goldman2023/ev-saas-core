@@ -7,7 +7,7 @@
 <div class="min-h-full">
 
     <main class="pb-8">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-0">
+        <div class="max-w-3xl mx-auto px-0 sm:px-6 lg:max-w-7xl lg:px-0">
             <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
                 <!-- Left column -->
                 <div class="grid grid-cols-1 gap-4 lg:col-span-2">
@@ -92,32 +92,10 @@
                         <x-dashboard.widgets.business.quick-actions>
                         </x-dashboard.widgets.business.quick-actions>
                     </section>
-                    <section>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <a class="btn btn-primary w-full !p-4 !bg-indigo-900 !block text-center"
-                                    href="{{ route('order.create') }}?product={{ $product->id }}">
-                                    {{ translate('New order') }} <br>
-                                    <div>
-                                        <small> {{ translate('Create new order with this product') }} </small>
-                                    </div>
-                                </a>
-                            </div>
 
-                            <div>
-                                <a class="btn btn-primary w-full !p-4 !bg-indigo-900 !block text-center"
-                                    href="{{ route('order.create') }}?product={{ $product->id }}">
-                                    {{ translate('New order') }} <br>
-                                    <div>
-                                        <small> {{ translate('Create new order with this product') }} </small>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </section>
                     <section>
                         <div class="card">
-                            <div class="grid grid-cols-2">
+                            <div class="grid sm:grid-cols-2">
                                 <div class="">
                                     <h3 class="font-medium text-xl mb-3">
                                         {{ translate('Product speficiation') }}
@@ -171,7 +149,7 @@
                         <div
                             class="rounded-lg p-6 bg-white overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-1 sm:gap-px">
 
-                            <h3 class="text-lg font-medium">
+                            <h3 class="relative text-lg font-medium">
 
                                 <a href="{{ route('product.single', $product->slug) }}" target="_blank"
                                     class="focus:outline-none">
@@ -211,9 +189,6 @@
                                 </a>
                                 @endif
 
-
-
-
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit', $product->id) }}">
                                     {{ translate('Edit') }} @svg('heroicon-o-pencil-square', ['style' => 'height:
@@ -228,7 +203,6 @@
 
                                 </a>
 
-
                                 @if($product->useVariations())
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.edit.variations', $product->id) }}">
@@ -237,8 +211,6 @@
 
                                 </a>
                                 @endif
-
-
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
                                     href="{{ route('product.activity', $product->id) }}">
@@ -252,17 +224,8 @@
                                     'class' => 'ml-2'])
                                 </a>
                             </div>
-
-
-
                         </div>
-                        <div class="mt-6">
-
-                        </div>
-
                     </section>
-
-
                 </div>
 
                 <!-- Right column -->
@@ -302,6 +265,18 @@
                     </section>
 
                     <div class="rounded-lg bg-white overflow-hidden shadow">
+                        <div>
+                            <a class="btn btn-primary w-full !p-4 !bg-indigo-900 !block text-center"
+                                href="{{ route('order.create') }}?product={{ $product->id }}">
+                                {{ translate('New order') }} <br>
+                                <div>
+                                    <small> {{ translate('Create new order with this product') }} </small>
+                                </div>
+                            </a>
+                        </div>
+                </div>
+
+                    <div class="rounded-lg bg-white overflow-hidden shadow">
                         <div class="p-6 relative">
                             <h3 class="text-base font-medium text-gray-900 relative">
                                 {{ translate('Product Activity') }}
@@ -322,6 +297,8 @@
                             <livewire:product-activity type="product" :product="$product" />
                         </div>
                     </div>
+
+
 
                     <!-- Announcements -->
                     <section aria-labelledby="announcements-title">

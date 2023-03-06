@@ -109,9 +109,7 @@
     @yield('script')
 
     @stack('footer_scripts')
-
-    {{-- <x-integrations.open-replay></x-integrations.open-replay> --}}
-
+    <script defer data-domain="{{ tenant()->domains()->first()->domain }}" src="https://stats.businesspress.io/js/script.js"></script>
 </body>
 
 </html>
