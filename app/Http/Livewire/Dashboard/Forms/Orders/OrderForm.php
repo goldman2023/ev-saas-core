@@ -244,10 +244,15 @@ class OrderForm extends Component
             if($order_items_idx_for_removal->isNotEmpty()) {
                 OrderItem::destroy($order_items_idx_for_removal->all());
             }
-
+            
             // Remove missing/deleted addon order items
             if(collect($this->order_items)->isNotEmpty()) {
-                foreach($this->order_items as $order_item) {
+                foreach($this->order_items as $index => $order_item) {
+                    // If addons are not set for some reason most probably alpinejs fucked it somewhere in the form itself) -> create addons as empty array property
+                    if(!isset($order_item['addons'])) {
+                        $this->order_items[$index]['addons'] = [];
+                    }
+
                     $current_order_item_addons_idx_from_db = collect($order_item['addons'])->pluck('id')?->filter()?->values() ?? [];
                     $previous_order_item_addons_idx_from_db = $this->order->order_items->firstWhere('id', $order_item['id']) ?? [];
 
@@ -288,15 +293,17 @@ class OrderForm extends Component
                 $order_item->save();
 
                 $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_predefined_attribute_values']); // set attributes to OrderItem
+
+                return $order_item;
             };
             
             foreach($this->order_items as $index => $item) {
-                $save_order_item_method($item);
+                $parent = $save_order_item_method($item);
 
                 // Save addons OrderItems
                 if(!empty($item['addons'])) {
                     foreach($item['addons'] as $addon_index => $addon_item) {
-                        $save_order_item_method($addon_item, parent_id: $item['id']);
+                        $save_order_item_method($addon_item, parent_id: $parent?->id ?? null);
                     }
                 }
             }

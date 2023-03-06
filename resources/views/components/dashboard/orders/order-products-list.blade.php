@@ -15,7 +15,7 @@
                     </div>
 
                     <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6 flex-grow">
-                        <h3 class="flex item-center justify-between text-base font-bold text-lg text-gray-900">
+                        <h3 class="flex item-center justify-between font-bold text-lg text-gray-900">
                             @empty($item->subject?->getPermalink() ?? null)
                                 <span>{{ $item->name }}</span>
                             @else
@@ -28,7 +28,8 @@
                                 {{ FX::formatPrice($item->total_price) }} {{ $order->type === 'subscription' ? ' / ' . $order->invoicing_period : '' }}</dd>
                             </span>
                         </h3>
-                        <p class="mt-3 text-sm text-gray-500">
+
+                        <p class="mt-1 text-sm text-gray-500">
                             {{ translate('Serial number: ')}}
 
                             {!! sprintf("%06d", $item->order->id) !!}
