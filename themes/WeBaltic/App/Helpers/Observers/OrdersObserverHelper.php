@@ -11,7 +11,7 @@ use WeThemes\WeBaltic\App\Notifications\Orders\OrderCycleStatusChangedNotificati
 
 if (!function_exists('orderCreatedObserved')) {
     function orderCreatedObserved(Order $order) {
-        if(!$order->is_temp && !empty($order->user)) {
+        if(!$order->is_temp && !empty($order->user) && !$order->getWEF('is_manufacturing_order', true, null)) {
 
             $order_cycle_status = $order->getWEF('cycle_status');
 
@@ -52,7 +52,7 @@ if (!function_exists('orderCreatedObserved')) {
 
 if (!function_exists('orderUpdatedObserved')) {
     function orderUpdatedObserved(Order $order) {
-        if(!$order->is_temp && !empty($order->user)) {
+        if(!$order->is_temp && !empty($order->user) && !$order->getWEF('is_manufacturing_order', true, null)) {
 
             $order_cycle_status = $order->getWEF('cycle_status');
             $current_timestamp = time();
