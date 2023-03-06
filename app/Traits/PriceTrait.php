@@ -35,14 +35,14 @@ trait PriceTrait
     {
         static::addGlobalScope('withPricesAndTaxAndFlashDeals', function (mixed $builder) {
             // Eager Load Flash Deals
-            $builder->with(['flash_deals']);
+            // $builder->with(['flash_deals']);
         });
         
         // When model relations data is retrieved, populate model prices data!
         static::relationsRetrieved(function ($model) {
-            if (! $model->relationLoaded('flash_deals')) {
-                $model->load('flash_deals');
-            }
+            // if (! $model->relationLoaded('flash_deals')) {
+            //     $model->load('flash_deals');
+            // }
 
             if(!$model->prices_loaded) {
                 $model->getTotalPrice();
@@ -106,15 +106,15 @@ trait PriceTrait
     /************************************
      * Price Relation Functions *
      ************************************/
-    public function flash_deals()
-    {
-        return $this->morphToMany(FlashDeal::class, 'subject', 'flash_deal_relationships', 'subject_id', 'flash_deal_id')
-            ->where([
-                ['status', '=', 1],
-                ['start_date', '<=', time()],
-                ['end_date', '>', time()],
-            ])->orderBy('created_at', 'desc')->withPivot('include_variations');
-    }
+    // public function flash_deals()
+    // {
+    //     return $this->morphToMany(FlashDeal::class, 'subject', 'flash_deal_relationships', 'subject_id', 'flash_deal_id')
+    //         ->where([
+    //             ['status', '=', 1],
+    //             ['start_date', '<=', time()],
+    //             ['end_date', '>', time()],
+    //         ])->orderBy('created_at', 'desc')->withPivot('include_variations');
+    // }
 
     // TODO: Add Tax Relation Function!
     
@@ -170,38 +170,38 @@ trait PriceTrait
                 // TODO: We need to create a column which will determine flash_deal "stacking" type. Stacking type can be:
                 // TODO: ~ 1) 'compound' (stacks with others), 2) 'single' (does not stack)
 
-                if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
-                    $flash_deal = $this->flash_deals->first();
+                // if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                //     $flash_deal = $this->flash_deals->first();
 
-                    if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
-                        $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
-                        $this->total_price -= $flash_deal->discount;
-                    }
-                } else {
+                //     if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
+                //         $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
+                //     } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
+                //         $this->total_price -= $flash_deal->discount;
+                //     }
+                // } else {
                     if ($this->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
                     } elseif ($this->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->total_price -= $this->attributes['discount'];
                     }
-                }
+                // }
             } else {
                 // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
-                if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
-                    $flash_deal = $this->flash_deals->first();
+                // if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                //     $flash_deal = $this->flash_deals->first();
 
-                    if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
-                        $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
-                        $this->total_price -= $flash_deal->discount;
-                    }
-                } else {
+                //     if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
+                //         $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
+                //     } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
+                //         $this->total_price -= $flash_deal->discount;
+                //     }
+                // } else {
                     if ($this->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
                     } elseif ($this->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->total_price -= $this->attributes['discount'];
                     }
-                }
+                // }
             }
 
             // Taxes
@@ -253,38 +253,38 @@ trait PriceTrait
                     $highest_price -= $flash_deal_product->discount;
                 }*/
 
-                if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
-                    $flash_deal = $this->flash_deals->first();
+                // if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                //     $flash_deal = $this->flash_deals->first();
 
-                    if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
-                        $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
-                        $this->discounted_price -= $flash_deal->discount;
-                    }
-                } else {
+                //     if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
+                //         $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
+                //     } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
+                //         $this->discounted_price -= $flash_deal->discount;
+                //     }
+                // } else {
                     if ($this->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
                     } elseif ($this->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->discounted_price -= $this->attributes['discount'];
                     }
-                }
+                // }
             } else {
                 // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
-                if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
-                    $flash_deal = $this->flash_deals->first();
+                // if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                //     $flash_deal = $this->flash_deals->first();
 
-                    if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
-                        $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
-                        $this->discounted_price -= $flash_deal->discount;
-                    }
-                } else {
+                //     if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
+                //         $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
+                //     } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
+                //         $this->discounted_price -= $flash_deal->discount;
+                //     }
+                // } else {
                     if ($this->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
                     } elseif ($this->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->discounted_price -= $this->attributes['discount'];
                     }
-                }
+                // }
             }
         }
 
