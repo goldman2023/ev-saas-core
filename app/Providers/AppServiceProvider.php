@@ -151,6 +151,24 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });
 
+        \Blade::directive('we_svg', function($arguments) {
+            try {
+                list($path, $class) = array_pad(explode(',', trim($arguments, "() ")), 2, '');
+                $path = trim($path, "' ");
+                $class = trim($class, "' ");
+
+                // Create the dom document as per the other answers
+                $svg = new \DOMDocument();
+                $svg->load(public_path($path));
+                $svg->documentElement->setAttribute("class", $class);
+                $output = $svg->saveXML($svg->documentElement);
+
+                return $output;
+            } catch(\Throwable $e) {
+
+            }
+        });
+
         // Hooks system
         // TODO: Make $arg into ...$args and check if everything works as expected...
         Blade::directive('do_action', function ($args) {
