@@ -25,44 +25,25 @@
                     @endphp
 
                     @if($last_invoice)
-                    @if($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
-                    <span class="badge-success !py-1 !px-3 mr-3">
-                        {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
-                    </span>
-                    @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
-                    <span class="badge-warning  !py-1 !px-3 mr-3">
-                        {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
-                    </span>
-                    @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
-                    <span class="badge-danger  !py-1 !px-3 mr-3">
-                        {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
-                    </span>
-                    @endif
-                    @endif
-
-                    {{-- Shipping status (only for Standard Products) --}}
-                    @if($order_items->filter(fn($item) => ($item->subject?->isProduct() ?? false) &&
-                    ($item->subject?->isShippable() ?? false))->count() > 0)
-                    @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
-                    <span class="badge-success !py-1 !px-3 mr-2">
-                        {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                    </span>
-                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
-                    <span class="badge-warning !py-1 !px-3 mr-2">
-                        {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                    </span>
-                    @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
-                    <span class="badge-danger !py-1 !px-3 mr-2">
-                        {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
-                    </span>
+                        @if($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
+                            <span class="badge-success !py-1 !px-3 mr-3">
+                                {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
+                            </span>
+                        @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
+                            <span class="badge-warning  !py-1 !px-3 mr-3">
+                                {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
+                            </span>
+                        @elseif($last_invoice->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
+                            <span class="badge-danger  !py-1 !px-3 mr-3">
+                                {{ ucfirst(\Str::replace('_', ' ', $last_invoice->payment_status)) }}
+                            </span>
+                        @endif
                     @endif
 
-                    {{-- Tracking number (only for Standard Products) --}}
-                    @if(empty($order->tracking_number))
-                    <span class="!hidden badge-danger !py-1 !px-3 mr-2">
-                        {{ translate('Tracking number not added') }}
-                    </span>
-                    @endif
+                    @if($order->getWEF('is_manufacturing_order', false, null))
+                        <span class="badge-warning  !py-1 !px-3 mr-3">
+                            {{ translate('Manufacturing Order') }}
+                        </span>
                     @endif
                 </div>
 
