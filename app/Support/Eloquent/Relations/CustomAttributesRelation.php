@@ -3,6 +3,7 @@
 namespace App\Support\Eloquent\Relations;
 
 use App\Models\Attribute;
+use App\Models\OrderItem;
 use App\Models\WeBaseModel;
 use App\Models\AttributeValue;
 use App\Models\AttributeRelationship;
@@ -74,7 +75,12 @@ class CustomAttributesRelation extends Relation
             ->join('attribute_values', function (JoinClause $join) {
                 $join->on('attribute_values.id', '=', 'attribute_relationships.attribute_value_id');
             })
-            ->where('attributes.content_type', $this->model::class)
+
+            // Only if $this->model is NOT OrderItem, restrict custom_attributes by content_type.
+            // Reason is that OrderItem inherits all Attributes of any other content_type!!!
+            ->when(!($this->model instanceof OrderItem), function ($q) {
+                return $q->where('attributes.content_type', $this->model::class);
+            })
             ->select($this->getSelectFields());
     }
 
@@ -107,6 +113,8 @@ class CustomAttributesRelation extends Relation
 
     public function match(array $attributes, Collection $attribute_values, $relation)
     {
+        // TODO: Create proper eager loading for this relation!
+
         // if ($attribute_values->isEmpty()) {
         //     return $attributes;
         // }
@@ -147,7 +155,7 @@ class CustomAttributesRelation extends Relation
     {
         $data = $this->query->getQuery()->get();
         $attributes = new Collection();
-        
+
         if(!empty($data)) {
 
             foreach($data as $index => $attribute_object) {
