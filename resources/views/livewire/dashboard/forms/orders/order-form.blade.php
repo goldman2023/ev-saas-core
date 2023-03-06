@@ -132,13 +132,6 @@ x-cloak>
             if(!tax_incl) {
                 total += total * tax / 100;
             }
-        },
-        saveOrderItems() {
-            $wire.set('order_items', this.order_items, true);
-        },
-        setCheckoutForm() {
-            this.saveOrderItems(); 
-            save();
         }
     }" x-init="
         $watch('order_items', order_items => {
@@ -166,8 +159,7 @@ x-cloak>
         $watch('tax', order_items => calculateTotals());
         $watch('shipping_cost', order_items => calculateTotals());
         calculateTotals();
-    "
-    @set-checkout-form.window="setCheckoutForm()">
+    ">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden"
                               wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
@@ -252,7 +244,7 @@ x-cloak>
                                             shipping_zip = address?.zip_code || '';
                                         }
 
-                                        $dispatch('set-checkout-form');
+                                        save();
                                     "
                                     custom-deselect-logic="
                                         email = null;
@@ -271,7 +263,7 @@ x-cloak>
                                         $wire.set('order.billing_city', '');
                                         $wire.set('order.billing_zip', '');
 
-                                        $dispatch('set-checkout-form');
+                                        save();
                                     "
                                 ></x-dashboard.form.blocks.model-selection-form>
                                 {{-- END Customer --}}
@@ -1226,7 +1218,7 @@ x-cloak>
                                 @if(!empty($order->id) && $order->invoices->isEmpty())
                                     @ob_start()
                                         <button type="button" class="btn btn-warning btn-sm" 
-                                            @click="$dispatch('set-checkout-form')"
+                                            @click="save()"
                                             wire:click="generateInvoice()">
 
                                             {{ translate('Generate Invoice') }}
@@ -1234,7 +1226,7 @@ x-cloak>
                                     @ob_do_action('view.dashboard.form.order.generate-invoice-btn', $order)
                                 @endif
 
-                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="$dispatch('set-checkout-form');" wire:click="saveOrder()" >
+                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="save()" wire:click="saveOrder()" >
                                     {{ translate('Save') }}
                                 </button>
                             </div>
