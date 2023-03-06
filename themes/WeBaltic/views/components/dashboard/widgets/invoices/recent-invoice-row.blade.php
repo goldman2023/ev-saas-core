@@ -2,9 +2,13 @@
 
 <x-livewire-tables::table.cell class="align-middle text-left">
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->order->id]) }}">
-        #{{ $row->getRealInvoiceNumber() }}  @if(!$row->viewed_by_customer && $row->user_id === auth()->user()->id)
-        <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
-    @endif
+        #{{ $row->getRealInvoiceNumber() }}
+
+        @isset($row->user)
+            @if(!$row->viewed_by_customer && $row->user_id === auth()->user()->id)
+            <span class="ml-2 badge badge-warning">{{ translate('New') }}</span>
+            @endif
+        @endisset
     </a>
 </x-livewire-tables::table.cell>
 
