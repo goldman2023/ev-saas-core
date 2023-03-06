@@ -430,7 +430,7 @@ class WeService
                     ],
                     [
                         'label' => translate('Saved items'),
-                        'icon' => 'heroicon-o-arrow-path',
+                        'icon' => 'heroicon-o-bookmark',
                         'route' => route('wishlist.index'),
                         'route_name' => 'wishlist.index',
                         'is_active' => areActiveRoutes(['wishlist.index']),
