@@ -135,6 +135,10 @@ x-cloak>
         },
         saveOrderItems() {
             $wire.set('order_items', this.order_items, true);
+        },
+        setCheckoutForm() {
+            this.saveOrderItems(); 
+            save();
         }
     }" x-init="
         $watch('order_items', order_items => {
@@ -162,7 +166,8 @@ x-cloak>
         $watch('tax', order_items => calculateTotals());
         $watch('shipping_cost', order_items => calculateTotals());
         calculateTotals();
-    ">
+    "
+    @set-checkout-form.window="setCheckoutForm()">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden"
                               wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
@@ -247,7 +252,7 @@ x-cloak>
                                             shipping_zip = address?.zip_code || '';
                                         }
 
-                                        save(); // set other parameters!
+                                        $dispatch('set-checkout-form');
                                     "
                                     custom-deselect-logic="
                                         email = null;
@@ -266,7 +271,7 @@ x-cloak>
                                         $wire.set('order.billing_city', '');
                                         $wire.set('order.billing_zip', '');
 
-                                        save();
+                                        $dispatch('set-checkout-form');
                                     "
                                 ></x-dashboard.form.blocks.model-selection-form>
                                 {{-- END Customer --}}
@@ -414,6 +419,7 @@ x-cloak>
                                             total_price: 0,
                                             custom_attributes: @js($custom_attributes),
                                             selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
+                                            addons: [],
                                         },
                                         parent_product_index: null,
                                         getCurrentContentTypeOptions() {
@@ -514,6 +520,7 @@ x-cloak>
                                                         thumbnail: item.thumbnail?.file_name,
                                                         custom_attributes: item.custom_attributes,
                                                         selected_predefined_attribute_values: item.selected_predefined_attribute_values,
+                                                        addons: [],
                                                     });
                                                 }
                                             }
@@ -1218,8 +1225,8 @@ x-cloak>
                             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                                 @if(!empty($order->id) && $order->invoices->isEmpty())
                                     @ob_start()
-                                        <button type="button" class="btn btn-warning btn-sm"
-                                            @click="save()"
+                                        <button type="button" class="btn btn-warning btn-sm" 
+                                            @click="$dispatch('set-checkout-form')"
                                             wire:click="generateInvoice()">
 
                                             {{ translate('Generate Invoice') }}
@@ -1227,7 +1234,7 @@ x-cloak>
                                     @ob_do_action('view.dashboard.form.order.generate-invoice-btn', $order)
                                 @endif
 
-                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="save()" wire:click="saveOrder()" >
+                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="$dispatch('set-checkout-form');" wire:click="saveOrder()" >
                                     {{ translate('Save') }}
                                 </button>
                             </div>
