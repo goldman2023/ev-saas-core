@@ -50,11 +50,6 @@ class Brand extends WeBaseModel
         return $this->hasMany(Product::class);
     }
 
-    public function getTranslationModel(): ?string
-    {
-        return BrandTranslation::class;
-    }
-
     /* public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
       $brand_translation = $this->hasMany(BrandTranslation::class)->where('lang', $lang)->first();

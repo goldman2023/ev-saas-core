@@ -32,10 +32,10 @@
                         <div class="flyout-wishlist__item-right">
                             <div class="mb-1 ml-2">
                                 <span class="inline-block text-gray-500 text-12" href="#">
-                                    {{ $item->primary_category?->getTranslation('name') ?? ($item->primary_category?->name ?? translate('Unknown')) }}
+                                    {{ $item->primary_category?->name ?? ($item->primary_category?->name ?? translate('Unknown')) }}
                                 </span>
                                 <span class="block text-14">
-                                    {{ $item->getTranslation('name') }}
+                                    {{ $item->name }}
                                 </span>
                                 <div class="w-full inline">
                                     <strong class="text-gray-800 mr-1 mb-0">{{ $item->getTotalPrice(true) }}</strong>

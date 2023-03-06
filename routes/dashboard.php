@@ -277,7 +277,7 @@ Route::middleware([
 
     // Products
     Route::get('/products/search', [ProductController::class, 'api_search_products'])->name('products.search');
-    Route::get('/product/addons/search', [ProductController::class, 'api_search_product_addons'])->name('products.addons.search');
+    Route::get('/product/addons/search', [ProductAddonController::class, 'api_search_product_addons'])->name('products.addons.search');
 
     // EditorJS endpoints
     Route::post('/images/upload', [WeMediaController::class, 'upload'])->name('images.upload');

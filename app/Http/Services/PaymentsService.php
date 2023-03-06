@@ -31,6 +31,8 @@ class PaymentsService
 
     protected $wire_transfer;
 
+    protected $cash_on_delivery;
+
     protected $paysera;
 
     public function __construct($app)
@@ -40,8 +42,9 @@ class PaymentsService
 
         $this->stripe = $this->payment_methods_all->where('gateway', 'stripe')->first();
         $this->paypal = $this->payment_methods_all->where('gateway', 'paypal')->first();
-        $this->wire_transfer = $this->payment_methods_all->where('gateway', 'wire_transfer')->first();
         $this->paysera = $this->payment_methods_all->where('gateway', 'paysera')->first();
+        $this->wire_transfer = $this->payment_methods_all->where('gateway', 'wire_transfer')->first();
+        $this->cash_on_delivery = $this->payment_methods_all->where('gateway', 'cash_on_delivery')->first();
 
         // TODO: This should be done in some new admin middleware (maybe inside IsAdmin)
         $all_possible_gateways = \App\Enums\PaymentGatewaysEnum::labels();
@@ -87,6 +90,12 @@ class PaymentsService
     public function getPaymentMethodsAll()
     {
         return $this->payment_methods_all;
+    }
+
+    // Cash on Delivery
+    public function cash_on_delivery()
+    {
+        return $this->cash_on_delivery;
     }
 
     // Wire Transfer
@@ -161,6 +170,8 @@ class PaymentsService
 
             // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
             if ($payment_gateway === 'wire_transfer') {
+                return redirect()->route('checkout.order.received', $invoice->order_id);
+            } else if ($payment_gateway === 'cash_on_delivery') {
                 return redirect()->route('checkout.order.received', $invoice->order_id);
             } else if ($payment_gateway === 'stripe') {
 

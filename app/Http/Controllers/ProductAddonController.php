@@ -31,6 +31,7 @@ class ProductAddonController extends Controller
             $product_addons_count = Auth::user()->product_addons()->count();
         }
 
+
         return view('frontend.dashboard.product-addons.index', compact('product_addons_count'));
     }
 
@@ -74,37 +75,20 @@ class ProductAddonController extends Controller
     }
 
     // API routes
-    public function api_search_products(Request $request) {
-        // if(auth()->user()->isAdmin()) {
-            $q = $request->q;
-
-            $results = ProductAddon::published()->search($q)->get();
-            $results_array = [];
-
-            foreach($results as $index => $product) {
-                $results_array[] = serialize_with_form_friendly_custom_attributes($product);
-            }
-
-            // TODO: Return this as an API RESOURCE!
-            return response()->json([
-                'status' => 'success',
-                'results' => $results_array
-            ]);
-        // }
-
-        // throw new WeAPIException(message: translate('Cannot search products if not admin or moderator'), type: 'WeApiException', code: 403);
-    }
-
     public function api_search_product_addons(Request $request) {
         // if(auth()->user()->isAdmin()) {
             $q = $request->q;
 
             $results = ProductAddon::published()->search($q)->get();
 
+            foreach($results as $index => $product_addon) {
+                $results_array[] = serialize_with_form_friendly_custom_attributes($product_addon);
+            }
+
             // TODO: Return this as an API RESOURCE!
             return response()->json([
                 'status' => 'success',
-                'results' => $results
+                'results' => $results_array
             ]);
         // }
 

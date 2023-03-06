@@ -42,8 +42,8 @@
                     @foreach($items as $item)
                         @php
                             $hasVariations = ($item?->is_variation ?? false) ? $item->main->hasVariations() : $item->hasVariations();
-                            $name = ($item?->is_variation ?? false) ? $item->main->getTranslation('name') : $item->getTranslation('name');
-                            $excerpt = ($item?->is_variation ?? false) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
+                            $name = ($item?->is_variation ?? false) ? $item->main->name : $item->name;
+                            $excerpt = ($item?->is_variation ?? false) ? $item->main->excerpt : $item->excerpt;
                         @endphp
 
                         <div id="cart-item-{{ $item->id }}-{{ base64_encode($item::class) }}"

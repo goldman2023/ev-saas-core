@@ -177,9 +177,23 @@ class Order extends WeBaseModel
                     $order->subtotal_price += $item->subtotal_price;
                     $order->tax_amount += $item->tax;
                     $order->total_price += $item->total_price;
+
+                    // Include OrderItem children into order totals calculation
+                    if($item->descendants->isNotEmpty()) {
+                        foreach($item->descendants as $addon) {
+                            $order->base_price += $addon->quantity * $addon->base_price;
+                            $order->discount_amount += $addon->discount_amount;
+                            $order->subtotal_price += $addon->subtotal_price;
+                            $order->tax_amount += $addon->tax;
+                            $order->total_price += $addon->total_price;
+                        }
+                    }
                 }
             }
+
         });
+
+
     }
 
     /*

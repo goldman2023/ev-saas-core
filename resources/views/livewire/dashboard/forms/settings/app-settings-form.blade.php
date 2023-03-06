@@ -1446,6 +1446,38 @@
                                 </div>
                                 {{-- END Installments deposit amount --}}
 
+                                {{-- Allow installments in checkout flow --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2"
+                                    x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Allow installments in checkout flow') }}</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('If this setting is enabled, paying in installments in regular checkout flow will be available') }}
+                                        </p>
+                                    </div>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.toggle field="settings.allow_installments_in_checkout_flow" />
+                                    </div>
+                                </div>
+                                {{-- END Allow installments in checkout flow --}}
+
+                                {{-- Allow installments in checkout flow --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-2"
+                                    x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Make paying in installments default option in standard checkout flow') }}</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('If this setting is enabled, paying in installments will be selected by default in standard checkout flow') }}
+                                        </p>
+                                    </div>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.toggle field="settings.are_installments_default_in_checkout_flow" />
+                                    </div>
+                                </div>
+                                {{-- END Allow installments in checkout flow --}}
+
 
                                 {{-- Invoice numbering --}}
                                 <div class="mt-2 text-20 font-semibold sm:pt-5 sm:mt-2">
@@ -1468,7 +1500,10 @@
                                 {{-- Save Payments --}}
                                 <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4"
                                     x-data="{}">
-                                    <button type="button" class="btn btn-primary ml-auto btn-sm" @click=""
+                                    <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                        $wire.set('settings.allow_installments_in_checkout_flow', settings.allow_installments_in_checkout_flow, true);
+                                        $wire.set('settings.are_installments_default_in_checkout_flow', settings.are_installments_default_in_checkout_flow, true);
+                                    "
                                         wire:click="savePayments()">
                                         {{ translate('Save') }}
                                     </button>

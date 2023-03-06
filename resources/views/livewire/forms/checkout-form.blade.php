@@ -13,6 +13,9 @@
     phoneNumbers: @js($order->phone_numbers),
     shippingCountry: @js($order->shipping_country),
     billingCountry: @js($order->billing_country),
+    @if(get_setting('allow_installments_in_checkout_flow'))
+        pay_in_installments: @entangle('pay_in_installments').defer,
+    @endif
     cc_name: @js($cc_name),
     cc_number: @js($cc_number),
     cc_expiration_date: @js($cc_expiration_date),
@@ -24,6 +27,16 @@
         if(this.wef.billing_entity !== 'individual' && this.wef.billing_entity !== 'company') {
             this.wef.billing_entity = 'individual';
         }
+
+        @if(get_setting('allow_installments_in_checkout_flow'))
+            $watch('pay_in_installments', (newValue) => {
+                if(newValue) {
+                    $dispatch('display-installments-totals');
+                } else {
+                    $dispatch('hide-installments-totals');
+                }
+            });
+        @endif
     }
 }"
 @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
@@ -183,10 +196,12 @@ x-cloak
             <template x-if="show_addresses">
                 <fieldset>
                     <div class="mt-2 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4" >
-                        <template x-for="address in addresses" :key="address">
+                        <template x-for="(address, index) in addresses" :key="address">
                             <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
                                     :class="{'border-transparent ring-2 ring-primary':selected_billing_address_id === address.id  , 'border-gray-300':selected_billing_address_id !== address.id}"
-                                    @click="selected_billing_address_id = address.id; manual_mode_billing = false;">
+                                    @click="selected_billing_address_id = address.id; manual_mode_billing = false;"
+                                    x-data="{}"
+                                    x-init="if(index === 0) { selected_billing_address_id = address.id; manual_mode_billing = false; }">
                                 <div class="flex-1 flex">
                                     <div class="flex flex-col">
                                         <span class="block text-sm font-medium text-gray-900" x-text="address.country"></span>
@@ -345,10 +360,12 @@ x-cloak
             <template x-if="show_addresses">
                 <fieldset>
                     <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4" >
-                        <template x-for="address in addresses">
+                        <template x-for="(address, index) in addresses">
                             <label class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
                                     :class="{'border-transparent ring-2 ring-primary':selected_shipping_address_id === address.id  , 'border-gray-300':selected_shipping_address_id !== address.id}"
-                                    @click="selected_shipping_address_id = address.id; manual_mode_shipping = false;">
+                                    @click="selected_shipping_address_id = address.id; manual_mode_shipping = false;"
+                                    x-data="{}"
+                                    x-init="if(index === 0) { selected_shipping_address_id = address.id; manual_mode_shipping = false; }">
                                 <div class="flex-1 flex">
                                     <div class="flex flex-col">
                                         <span class="block text-sm font-medium text-gray-900" x-text="address.country"></span>
@@ -514,32 +531,25 @@ x-cloak
         </h4> --}}
         <fieldset class="w-full mt-2 grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-2 md:grid-cols-3" >
             <template x-for="(payment_method_name, payment_method_gateway) in available_payment_methods">
-                <label class="relative flex flex-col items-center bg-white rounded-lg border shadow-sm p-3 cursor-pointer focus:outline-none mb-0"
-                    :class="{'!border-2 !border-primary ':payment_method_gateway === selected_payment_method  , 'border-gray-300':payment_method_gateway !== selected_payment_method}"
+                <label class="relative flex flex-col items-center rounded-xl bg-white cursor-pointer focus:outline-none mb-0"
+                    :class="{'!border-2 !border-primary !border-[inset]':payment_method_gateway === selected_payment_method  , 'border-gray-300':payment_method_gateway !== selected_payment_method}"
                     @click="clearErrors(); selected_payment_method = payment_method_gateway; ">
 
+                    <template x-if="payment_method_gateway === 'cash_on_delivery'">
+                        @we_svg('themes/WeTailwind/images/cash-on-delivery.svg', 'w-[120px] h-[82px]')
+                    </template>
                     <template x-if="payment_method_gateway === 'wire_transfer'">
-                        @svg('lineawesome-university-solid', ['class' => 'w-[60px] h-[60px]'])
+                        @we_svg('themes/WeTailwind/images/wire-transfer.svg', 'w-[120px] h-[82px]')
                     </template>
                     <template x-if="payment_method_gateway === 'paypal'">
-                        @svg('lineawesome-cc-paypal', ['class' => 'w-[60px] h-[60px]'])
+                        @we_svg('themes/WeTailwind/images/paypal.svg', 'w-[120px] h-[82px]')
                     </template>
                     <template x-if="payment_method_gateway === 'stripe'">
-                        @svg('lineawesome-cc-stripe', ['class' => 'w-[60px] h-[60px]'])
+                        @we_svg('themes/WeTailwind/images/stripe.svg', 'w-[120px] h-[82px]')
                     </template>
                     <template x-if="payment_method_gateway === 'paysera'">
-                        @svg('lineawesome-money-bill-wave-solid', ['class' => 'w-[60px] h-[60px]'])
+                        @we_svg('themes/WeTailwind/images/paysera.svg', 'w-[120px] h-[82px]')
                     </template>
-
-                    {{-- <img class="img-fluid w-[60px]" x-bind:src="'{{ static_assets_root(path:'images', theme: true) }}/'+payment_method_gateway.replace('_','-')+'-logo-transparent.png'" alt="SVG" > --}}
-
-                    {{-- @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-indigo-600 absolute top-[7px] right-[7px]', ':class' => '{\'hidden\': payment_method_name !== selected_payment_method}']) --}}
-
-                    <p class="w-full text-center text-12" x-text="payment_method_name"></p>
-
-                    <div class="absolute -inset-px rounded-lg border-2 pointer-events-none" aria-hidden="true"
-                        :class="{ 'border border-primary': (payment_method_gateway === selected_payment_method), 'border-2 border-transparent': (payment_method_gateway !==selected_payment_method) }">
-                    </div>
                 </label>
             </template>
         </fieldset>
@@ -657,6 +667,24 @@ x-cloak
             </div>
         </template>
 
+    @if(get_setting('allow_installments_in_checkout_flow'))
+        {{-- Pay in installments --}}
+        <div class="flex flex-col list-none border-t border-gray-200 mt-4">
+            <div class="flex flex-col mt-3">
+                <div class="flex items-center cursor-pointer">
+                    <input type="checkbox" class="form-checkbox-standard" id="checkbox-pay_in_installments" name="pay_in_installments" x-model="pay_in_installments" />
+                    <div class="ml-2">
+                        <label for="checkbox-pay_in_installments" class="text-12 font-medium text-gray-500 mb-0 cursor-pointer select-none">
+                            {{ sprintf(translate('Pay in installments: deposit (%d%%) + main (%d%%)'), get_setting('installments_deposit_amount'), 100 - (get_setting('installments_deposit_amount') ?? 0)) }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- END Pay in installments --}}
+    @endif
+        
+
     </div>
 
     <hr class="mt-4" />
@@ -697,6 +725,9 @@ x-cloak
     <div class="mt-4">
         <button class="btn-primary text-center justify-center w-full bg-red-500 text-white"
                 @click="
+                    @if(get_setting('allow_installments_in_checkout_flow'))
+                        $wire.set('pay_in_installments', pay_in_installments, true);
+                    @endif
                     $wire.set('order.phone_numbers', phoneNumbers, true);
                     $wire.set('order.billing_country', billingCountry, true);
                     $wire.set('order.shipping_country', shippingCountry, true);

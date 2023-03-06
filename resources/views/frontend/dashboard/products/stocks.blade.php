@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Stock Management - ').$product->getTranslation('name'))
+@section('page_title', translate('Stock Management - ').$product->name)
 
 @push('head_scripts')
 @endpush

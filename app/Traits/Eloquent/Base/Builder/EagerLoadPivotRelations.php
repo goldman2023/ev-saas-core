@@ -20,8 +20,12 @@ trait EagerLoadPivotRelations
      * @param  \Closure  $constraints
      * @return array
      */
-    protected function eagerLoadRelation(array $models, $name, \Closure $constraints)
+    protected function eagerLoadRelation(?array $models, $name, \Closure $constraints)
     {
+        if(empty($models)) {
+            return parent::eagerLoadRelation([], $name, $constraints);
+        }
+
         $this->watchForPivotAccessors($name);
 
         if ($this->isPivotAccessor($name)) {

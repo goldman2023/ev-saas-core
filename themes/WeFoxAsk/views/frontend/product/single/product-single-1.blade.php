@@ -27,7 +27,7 @@
                     </div>
                     <div class="w-full mt-1 flex flex-col">
                         <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl mb-3">
-                            {{ $product->getTranslation('name') }}
+                            {{ $product->name }}
                         </h1>
 
                         @if($product->isEvent())
@@ -58,7 +58,7 @@
                 </div>
 
                 <p class="text-gray-500 mt-4">
-                    {!! $product->getTranslation('excerpt') !!}
+                    {!! $product->excerpt !!}
                 </p>
                 <div class="w-full">
 

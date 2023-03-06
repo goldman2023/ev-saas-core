@@ -6,7 +6,7 @@ use Closure;
 
 trait IsPaymentMethod
 {
-    public static $available_gateways = ['wire_transfer', 'paypal', 'stripe', 'paysera'];
+    public static $available_gateways = ['cash_on_delivery', 'wire_transfer', 'paypal', 'stripe', 'paysera'];
     public static $payment_processor_gateways = ['paypal', 'stripe', 'paysera'];
 
     /**

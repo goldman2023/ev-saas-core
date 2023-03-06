@@ -13,10 +13,18 @@ trait RetrievedRelationsEvent
      * @param  array  $models
      * @return array
      */
-    public function eagerLoadRelations(array $models)
+    public function eagerLoadRelations(?array $models)
     {
+        // if(empty($models)) {
+        //     return [];
+        // }
+
         if (tenant()) {
             $models = parent::eagerLoadRelations($models);
+
+            if(empty($models)) {
+                return [];
+            }
         
             // Fire a custom event when all relations are retrieved
             foreach ($models as $model) {

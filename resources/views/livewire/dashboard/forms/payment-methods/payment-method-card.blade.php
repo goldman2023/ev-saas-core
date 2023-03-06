@@ -118,7 +118,17 @@
             </div>
         </div> --}}
 
-        @if($paymentMethod->gateway === 'wire_transfer')
+        @if($paymentMethod->gateway === 'cash_on_delivery')
+            <div class="w-full mt-6">
+                <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                    <button type="button" class="btn btn-primary ml-auto btn-sm"
+                        @click=""
+                        wire:click="save()">
+                    {{ translate('Save') }}
+                    </button>
+                </div>
+            </div>
+        @elseif($paymentMethod->gateway === 'wire_transfer')
             <div class="w-full mt-6">
                 <div class="relative">
                     <div class="absolute inset-0 flex items-center" aria-hidden="true">
