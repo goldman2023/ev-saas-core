@@ -65,79 +65,7 @@ class OrderForm extends Component
         $fake_product = new Product();
         $this->refreshAttributes($fake_product);
 
-        if(!empty($this->order->order_items)) {
-            foreach($this->order->order_items as $item) {
-                $custom_attributes = [];
-                $selected_predefined_attribute_values = [];
-                self::initAttributes($item, $custom_attributes, $selected_predefined_attribute_values, \App\Models\Product::class);
-
-                if(!empty($item->subject_type)) {
-                    $this->order_items[] = [
-                        'id' => $item->id,
-                        'subject_type' => base64_encode($item->subject_type ?? ''),
-                        'subject_id' => $item->subject_id ?? null,
-                        'name' => $item->name,
-                        'excerpt' => $item->excerpt,
-                        'qty' => $item->quantity,
-                        'unit_price' => $item->base_price,
-                        'base_price' => $item->base_price,
-                        'subtotal_price' => $item->subtotal_price,
-                        'total_price' => $item->total_price,
-                        'tax' => $item->tax,
-                        'thumbnail' => !empty($item->subject) ? ($item->subject?->thumbnail->file_name ?? null) : '',
-                        'custom_attributes' => (object) $custom_attributes,
-                        'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
-                        'addons' => []
-                    ];
-
-                    // Product Addons
-                    if($item->descendants?->isNotEmpty() ?? null) {
-                        foreach($item->descendants as $addon) {
-                            $custom_attributes = [];
-                            $selected_predefined_attribute_values = [];
-                            self::initAttributes($addon, $custom_attributes, $selected_predefined_attribute_values, \App\Models\ProductAddon::class);
-
-                            if(isset($this->order_items[count($this->order_items) - 1]['addons'])) {
-                                $this->order_items[count($this->order_items) - 1]['addons'][] = [
-                                    'id' => $addon->id,
-                                    'subject_type' => base64_encode($addon->subject_type ?? ''),
-                                    'subject_id' => $addon->subject_id ?? null,
-                                    'name' => $addon->name,
-                                    'excerpt' => $addon->excerpt,
-                                    'qty' => $addon->quantity,
-                                    'unit_price' => $addon->base_price,
-                                    'base_price' => $addon->base_price,
-                                    'subtotal_price' => $addon->subtotal_price,
-                                    'total_price' => $addon->total_price,
-                                    'tax' => $addon->tax,
-                                    'thumbnail' => !empty($addon->subject) ? ($addon->subject?->thumbnail->file_name ?? null) : '',
-                                    'custom_attributes' => (object) $custom_attributes,
-                                    'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
-                                ];
-                            }
-
-                        }
-                    }
-                } else {
-                    $this->order_items[] = [
-                        'id' => $item->id,
-                        'subject_type' => null,
-                        'subject_id' => null,
-                        'name' => $item->name,
-                        'excerpt' => $item->excerpt,
-                        'qty' => $item->quantity,
-                        'unit_price' => $item->base_price,
-                        'base_price' => $item->base_price,
-                        'subtotal_price' => $item->subtotal_price,
-                        'total_price' => $item->total_price,
-                        'tax' => 0,
-                        'thumbnail' => '',
-                        'custom_attributes' => $custom_attributes,
-                        'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
-                    ];
-                }
-            }
-        }
+        $this->refreshOrderItems();
     }
 
     protected function rules()
@@ -236,37 +164,40 @@ class OrderForm extends Component
 
             /* Save all meta attributes */
             $this->saveAllCoreMeta($this->order);
+            
+            // Remove missing/deleted addon order items
+            // TODO: Fix: when parent is removed, addons stay in DB
+            if(collect($this->order_items)->isNotEmpty()) {
+                foreach($this->order_items as $index => $order_item) {
+                    // If addons are not set for some reason most probably alpinejs fucked it somewhere in the form itself) -> create addons as empty array property
+                    if(!isset($this->order_items[$index]['addons'])) {
+                        $this->order_items[$index]['addons'] = [];
+                    }
+
+                    $current_order_item_addons_idx_from_db = collect($order_item['addons'])->pluck('id')?->filter()?->values() ?? collect([]);
+                    $fresh_order_item = $this->order->order_items()->where('id', $order_item['id'])->first();
+                    // dd($order_item['id']);
+                    if(!empty($fresh_order_item) && $fresh_order_item->descendants->isNotEmpty()) {
+                        $previous_order_item_addons_idx_from_db = $fresh_order_item->descendants->pluck('id')?->filter()->values() ?? collect([]);
+
+                        $order_item_addons_idx_for_removal = $previous_order_item_addons_idx_from_db->diff($current_order_item_addons_idx_from_db)->values();
+
+                        if($order_item_addons_idx_for_removal->isNotEmpty()) {
+                            OrderItem::destroy($order_item_addons_idx_for_removal->all());
+                        }
+                    }
+                }
+            }
 
             // Remove missing previous order_items (if any)
-            $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')?->filter()->values() ?? [];
-            $previous_order_items_idx_from_db = $this->order->order_items?->pluck('id')?->filter()->values() ?? [];
+            $current_order_items_idx_from_db = collect($this->order_items)->pluck('id')?->filter()->values() ?? collect([]);
+            $previous_order_items_idx_from_db = $this->order->order_items?->pluck('id')?->filter()->values() ?? collect([]);
 
             $order_items_idx_for_removal = $previous_order_items_idx_from_db->diff($current_order_items_idx_from_db)->values();
 
             // Remove missing/deleted order items
             if($order_items_idx_for_removal->isNotEmpty()) {
                 OrderItem::destroy($order_items_idx_for_removal->all());
-            }
-
-            // Remove missing/deleted addon order items
-            if(collect($this->order_items)->isNotEmpty()) {
-                foreach($this->order_items as $order_item) {
-                    if(isset($order_item['addons'])) {
-                        $current_order_item_addons_idx_from_db = collect($order_item['addons'])->pluck('id')?->filter()?->values() ?? [];
-                        $previous_order_item_addons_idx_from_db = $this->order->order_items->firstWhere('id', $order_item['id']) ?? [];
-
-                        if(!empty($previous_order_item_addons_idx_from_db)) {
-                            $previous_order_item_addons_idx_from_db = $previous_order_item_addons_idx_from_db->descendants->pluck('id')?->filter()?->values() ?? [];
-
-                            $order_item_addons_idx_for_removal = $previous_order_item_addons_idx_from_db->diff($current_order_item_addons_idx_from_db)->values();
-
-                            if($order_item_addons_idx_for_removal->isNotEmpty()) {
-                                OrderItem::destroy($order_item_addons_idx_for_removal->all());
-                            }
-                        }
-                    }
-
-                }
             }
 
             $save_order_item_method = function($item, $parent_id = null) {
@@ -294,15 +225,17 @@ class OrderForm extends Component
                 $order_item->save();
 
                 $this->setAttributes($order_item, $item['custom_attributes'], $item['selected_predefined_attribute_values']); // set attributes to OrderItem
+
+                return $order_item;
             };
 
             foreach($this->order_items as $index => $item) {
-                $save_order_item_method($item);
+                $parent = $save_order_item_method($item);
 
                 // Save addons OrderItems
                 if(!empty($item['addons'])) {
                     foreach($item['addons'] as $addon_index => $addon_item) {
-                        $save_order_item_method($addon_item, parent_id: $item['id']);
+                        $save_order_item_method($addon_item, parent_id: $parent?->id ?? null);
                     }
                 }
             }
@@ -360,6 +293,8 @@ class OrderForm extends Component
             $this->inform(translate('Order successfully saved!'), '', 'success');
 
             // $this->emitSelf('refreshComponent');
+            $this->refreshOrderItems();
+
 
             if (!$this->is_update) {
                 return redirect()->route('order.details', $this->order->id);
@@ -531,5 +466,84 @@ class OrderForm extends Component
 
         $this->dispatchGeneralError(translate('Invoice(s) for this order is already generated.'));
         $this->inform(translate('Invoice(s) for this order is already generated.'), '', 'fail');
+    }
+
+    public function refreshOrderItems() {
+        $this->order_items = [];
+
+        if(!empty($this->order->order_items)) {
+            foreach($this->order->order_items as $item) {
+                $custom_attributes = [];
+                $selected_predefined_attribute_values = [];
+                self::initAttributes($item, $custom_attributes, $selected_predefined_attribute_values, \App\Models\Product::class);
+
+                if(!empty($item->subject_type)) {
+                    $this->order_items[] = [
+                        'id' => $item->id,
+                        'subject_type' => base64_encode($item->subject_type ?? ''),
+                        'subject_id' => $item->subject_id ?? null,
+                        'name' => $item->name,
+                        'excerpt' => $item->excerpt,
+                        'qty' => $item->quantity,
+                        'unit_price' => $item->base_price,
+                        'base_price' => $item->base_price,
+                        'subtotal_price' => $item->subtotal_price,
+                        'total_price' => $item->total_price,
+                        'tax' => $item->tax,
+                        'thumbnail' => !empty($item->subject) ? ($item->subject?->thumbnail->file_name ?? null) : '',
+                        'custom_attributes' => (object) $custom_attributes,
+                        'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
+                        'addons' => []
+                    ];
+
+                    // Product Addons
+                    if($item->descendants?->isNotEmpty() ?? null) {
+                        foreach($item->descendants as $addon) {
+                            $custom_attributes = [];
+                            $selected_predefined_attribute_values = [];
+                            self::initAttributes($addon, $custom_attributes, $selected_predefined_attribute_values, \App\Models\ProductAddon::class);
+
+                            if(isset($this->order_items[count($this->order_items) - 1]['addons'])) {
+                                $this->order_items[count($this->order_items) - 1]['addons'][] = [
+                                    'id' => $addon->id,
+                                    'subject_type' => base64_encode($addon->subject_type ?? ''),
+                                    'subject_id' => $addon->subject_id ?? null,
+                                    'name' => $addon->name,
+                                    'excerpt' => $addon->excerpt,
+                                    'qty' => $addon->quantity,
+                                    'unit_price' => $addon->base_price,
+                                    'base_price' => $addon->base_price,
+                                    'subtotal_price' => $addon->subtotal_price,
+                                    'total_price' => $addon->total_price,
+                                    'tax' => $addon->tax,
+                                    'thumbnail' => !empty($addon->subject) ? ($addon->subject?->thumbnail->file_name ?? null) : '',
+                                    'custom_attributes' => (object) $custom_attributes,
+                                    'selected_predefined_attribute_values' => (object) $selected_predefined_attribute_values,
+                                ];
+                            }
+
+                        }
+                    }
+                } else {
+                    $this->order_items[] = [
+                        'id' => $item->id,
+                        'subject_type' => null,
+                        'subject_id' => null,
+                        'name' => $item->name,
+                        'excerpt' => $item->excerpt,
+                        'qty' => $item->quantity,
+                        'unit_price' => $item->base_price,
+                        'base_price' => $item->base_price,
+                        'subtotal_price' => $item->subtotal_price,
+                        'total_price' => $item->total_price,
+                        'tax' => 0,
+                        'thumbnail' => '',
+                        'custom_attributes' => $custom_attributes,
+                        'selected_predefined_attribute_values' => $selected_predefined_attribute_values,
+                        'addons' => []
+                    ];
+                }
+            }
+        }
     }
 }

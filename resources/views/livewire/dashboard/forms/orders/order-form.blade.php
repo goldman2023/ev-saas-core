@@ -132,9 +132,6 @@ x-cloak>
             if(!tax_incl) {
                 total += total * tax / 100;
             }
-        },
-        saveOrderItems() {
-            $wire.set('order_items', this.order_items, true);
         }
     }" x-init="
         $watch('order_items', order_items => {
@@ -247,7 +244,7 @@ x-cloak>
                                             shipping_zip = address?.zip_code || '';
                                         }
 
-                                        save(); // set other parameters!
+                                        save();
                                     "
                                     custom-deselect-logic="
                                         email = null;
@@ -414,6 +411,7 @@ x-cloak>
                                             total_price: 0,
                                             custom_attributes: @js($custom_attributes),
                                             selected_predefined_attribute_values: @js($selected_predefined_attribute_values),
+                                            addons: [],
                                         },
                                         parent_product_index: null,
                                         getCurrentContentTypeOptions() {
@@ -514,6 +512,7 @@ x-cloak>
                                                         thumbnail: item.thumbnail?.file_name,
                                                         custom_attributes: item.custom_attributes,
                                                         selected_predefined_attribute_values: item.selected_predefined_attribute_values,
+                                                        addons: [],
                                                     });
                                                 }
                                             }
@@ -1218,7 +1217,7 @@ x-cloak>
                             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                                 @if(!empty($order->id) && $order->invoices->isEmpty())
                                     @ob_start()
-                                        <button type="button" class="btn btn-warning btn-sm"
+                                        <button type="button" class="btn btn-warning btn-sm" 
                                             @click="save()"
                                             wire:click="generateInvoice()">
 
