@@ -21,9 +21,9 @@ class OrderTypeEnum extends WeBaseEnum
     public static function labels(): array
     {
         return [
-            'standard' => 'Standard',
-            'subscription' => 'Subscription',
-            'installments' => 'Installments',
+            'standard' => translate('Standard'),
+            'subscription' => translate('Subscription'),
+            'installments' => translate('Installments'),
         ];
     }
 }
