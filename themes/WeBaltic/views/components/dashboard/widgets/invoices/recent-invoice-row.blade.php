@@ -75,20 +75,32 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
-    <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
+    <div class="flex static justify-center gap-x-2" role="group" x-data="{ isOpen: false }" x-cloak>
         {{-- <a class="btn btn-primary flex items-center mr-2" target="_blank" href="{{ $row->meta[stripe_prefix('stripe_hosted_invoice_url')] ?? '#' }}">
             {{ route('order.details', ['id' => $row->id]) }}
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] '])
             {{ translate('View') }}
         </a> --}}
 
-        <a class="btn btn-info flex items-center mr-2" target="_blank" href="{{ route('invoice.download', $row->id) }}">
+        <a class="btn btn-info flex items-center" target="_blank" href="{{ route('invoice.download', $row->id) }}">
             @svg('heroicon-o-arrow-down-tray', ['class' => 'w-[18px] h-[18px] mr-2'])
             {{ translate('Download') }}
         </a>
 
         @if($row->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
-            <button @click="$dispatch('display-modal', {'id': 'invoice-payment-options-modal', 'invoice_id': {{ $row->id }} })"" type="button" class="inline-flex w-full justify-center rounded-md border border-primary bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary">
+            <button @click="$dispatch('display-modal', {'id': 'mark-invoice-as-paid-confirmation-modal', 'invoice_id': {{ $row->id }} })" type="button" 
+                class="inline-flex w-full justify-center rounded-md border border-success bg-success px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-success"
+                x-data="{
+                    markAsPaid(invoice_id) {
+                        $wire.markInvoiceAsPaid(invoice_id);
+                        $dispatch('mark-invoice-as-paid-end');
+                    }
+                }"
+                @mark-invoice-as-paid-start.window="markAsPaid($event.detail.invoice_id)">
+                {{ translate('Mark as paid') }}
+                @endpush
+            </button>
+            <button @click="$dispatch('display-modal', {'id': 'invoice-payment-options-modal', 'invoice_id': {{ $row->id }} })" type="button" class="inline-flex w-full justify-center rounded-md border border-primary bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary">
                 {{ translate('Pay') }}
             </button>
         @endif
