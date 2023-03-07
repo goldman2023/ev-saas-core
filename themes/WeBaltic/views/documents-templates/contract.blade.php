@@ -154,7 +154,7 @@ $order->billing_first_name }} {{ $order->billing_last_name }}
                 {{ $order->billing_company }} <br>
                 {{ $order->billing_first_name }} {{ $order->billing_first_name }}
                 <br>
-                į.k 153094528PVM k. <br>
+                {{-- TODO: add company address/vat here --}}
                 {{ $order->billing_address }}, {{ $order->billing_city }}, {{ $order->billing_country }} <br>
             </td>
             <td>
@@ -167,13 +167,9 @@ $order->billing_first_name }} {{ $order->billing_last_name }}
                 A/s LT66 7044 0600 0785 7947 <br>
                 Tel.: <br>
                 Mob. tel. 8 (671) 81007 <br>
-
-
                 El. paštas: eduardas@baltictrailer.eu <br>
-
                 Direktorius <br>
-
-                Eduard Terechov <br>
+                {{ get_setting('company_ceo_name') }} <br>
                 A.V.<br>
             </td>
         </tr>

@@ -68,6 +68,7 @@
     Įgaliojimas galioja iki: {{ $order->created_at }}
 </div>
 
+<div style="margin-top: 40px;">
 (parašas)
 
 
@@ -77,4 +78,5 @@
 
 
 A.V.
+</div>
 @endsection
