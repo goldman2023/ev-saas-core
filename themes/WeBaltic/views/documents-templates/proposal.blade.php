@@ -7,7 +7,10 @@
 @endpush
 
 @php
-$product = $order->order_items->first();
+$product = $order->get_primary_order_item()->subject;
+if(empty($product)) {
+    $product = $order->get_primary_order_item();
+}
 @endphp
 @section('content')
 

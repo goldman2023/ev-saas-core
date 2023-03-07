@@ -38,29 +38,13 @@
         .table td {
             padding: 5px;
         }
-
-        .watermark {
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 200px;
-            height: 200px;
-            background: url('{{ get_site_logo() }}') no-repeat;
-            opacity: 0.5;
-            background-size: contain;
-            background-position: center center;
-            z-index: -1;
-        }
-
     </style>
 
     @stack('styles')
 </head>
 
 <body style="position: relative;">
-    <div class="logo">
-        <img src="{{ get_site_logo() }}" style="width: 100px; " />
-    </div>
+
     @yield('content')
 </body>
 
