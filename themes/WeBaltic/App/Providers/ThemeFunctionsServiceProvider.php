@@ -80,6 +80,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
         // Orders
         Livewire::component('dashboard.orders.order-queues', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Orders\OrderQueues::class);
+        Livewire::component('dashboard.orders.order-documents', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Orders\OrderDocuments::class);
         Livewire::component('dashboard.tasks.latest-printing-tasks-batch', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tasks\LatestPrintingTasksBatch::class);
         Livewire::component('dashboard.tasks.latest-delivery-task', \WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tasks\LatestDeliveryTask::class);
     }

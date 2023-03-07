@@ -99,6 +99,8 @@
             {!! QrCode::size(200)->generate(URL::current()) !!}
         </div>
 
+        <livewire:dashboard.orders.order-documents :order="$order" />
+
     </div>
 
 
