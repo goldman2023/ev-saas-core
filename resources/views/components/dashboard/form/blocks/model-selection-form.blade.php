@@ -141,7 +141,7 @@
                         <li class="py-4">
                             <div class="flex items-center space-x-4">
                                 <div class="flex-shrink-0">
-                                    <img class="h-8 w-8 rounded-full" :src="window.WE.IMG.url(item.thumbnail?.file_name)" alt="">
+                                    <img loading="lazy" class="h-8 w-8 rounded-full" :src="window.WE.IMG.url(item.thumbnail?.file_name)" alt="">
                                 </div>
                                 <div class="min-w-0 flex-1">
                                 <p class="truncate text-sm font-medium text-gray-900" x-text="constructTitle(item)"></p>

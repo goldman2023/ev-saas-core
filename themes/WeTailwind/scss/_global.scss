@@ -66,7 +66,7 @@ body::-webkit-scrollbar { width: 5px !important }
 
 
 .card {
-    @apply relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden;
+    @apply w-full flex flex-col bg-white border border-gray-300 p-4 mb-3 rounded-lg
 }
 
 @media(max-width: 768px) {
@@ -145,10 +145,6 @@ scrollbar-width: none; /* Firefox */
 *::-webkit-scrollbar { width: 0 !important }
 
 body::-webkit-scrollbar { width: 5px !important }
-
-.card {
-    @apply relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden;
-}
 
 @media(max-width: 768px) {
     .we-horizontal-slider {

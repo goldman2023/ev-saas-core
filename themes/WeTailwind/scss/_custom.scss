@@ -12,10 +12,6 @@
     @apply rounded-full inline-flex text-center text-12 whitespace-nowrap px-2 py-[0.125rem];
 }
 
-.card {
-    @apply rounded border shadow-md;
-}
-
 .btn {
     @apply inline-flex rounded border px-4 py-2 items-center justify-center;
 

@@ -104,8 +104,8 @@
 
     <div class="sm:col-span-8">
 
-        <div class="bg-white rounded shadow mb-3">
-            <div class="max-w-2xl mx-auto pt-8 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8">
+        <div class="card">
+            <div class="max-w-4xl mx-auto pt-3">
                 <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 mb-3">
 
                     {{-- <span class="badge-dark ml-2">
@@ -175,7 +175,7 @@
                                 class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
                                 id="order-documents-tab" data-tabs-target="#order-documents-content" type="button" role="tab"
                                 aria-controls="order-documents-content" aria-selected="false">
-                                {{ translate('Documents') }}
+                                {{ translate('Documents') }} ({{ count($order->documents) }})
                             </button>
                         </li>
 
