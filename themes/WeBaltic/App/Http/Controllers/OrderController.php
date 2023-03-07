@@ -43,7 +43,6 @@ class OrderController extends Controller
         DB::beginTransaction();
 
 
-        baltic_generate_order_document($order, 'documents-templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
 
         try {
             if ($new_status == 1) { // contract
@@ -87,7 +86,7 @@ class OrderController extends Controller
             baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
             baltic_generate_order_document($order, 'documents-templates.authenticity-certificate', 'authenticity-certificate', translate('Tapatumo pažyma for Order #').$order->id);
             baltic_generate_order_document($order, 'documents-templates.warrant', 'warrant', translate('Įgaliojimas for Order #').$order->id);
-
+            baltic_generate_order_document($order, 'documents-templates.certificate', 'certificate', translate('Certificate for Order #').$order->id);
 
             // Change order cycle status
             $order->setWEF('cycle_status', $new_status);
