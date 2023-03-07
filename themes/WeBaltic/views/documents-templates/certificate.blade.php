@@ -11,7 +11,7 @@ $product = $order->get_primary_order_item()->subject;
 
 $vehicle_category = "O1";
 if($product->getAttrValue('stabdziai') == 'mechanical') {
-$vehicle_category = "O2";
+    $vehicle_category = "O2";
 }
 
 
@@ -23,6 +23,12 @@ $axel_count = $product->getAttr('asiu-kiekis')->attribute_values->first()->value
 } else {
 $axel_count = 0;
 }
+
+$variant = $order->getAttr('variant_custom');
+
+$version = $order->getAttr('version_custom');
+
+$vehicle_type = "TERO1";
 @endphp
 
 
@@ -36,12 +42,12 @@ $axel_count = 0;
 
 <strong>Part 1</strong>
 <p>
-    The undersigned: <strong>Director Eduard Terechov</strong> <br>
+    The undersigned: <strong>Director {{ get_setting('company_ceo_name') }}</strong> <br>
     hereby certifies that the vehicle:
 </p>
 
 0.1. Make: <strong>TERO</strong> <br>
-0.2. Type: <strong>TERO1</strong> <br>
+0.2. Type: <strong>{{ $vehicle_type }}</strong> <br>
 Variant: S <br>
 Version: - <br>
 <div>

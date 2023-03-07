@@ -32,6 +32,7 @@
         }
 
         .table, .table td, .table th {
+            width: 100%;
             border: 1px solid black;
         }
 
@@ -39,17 +40,10 @@
             padding: 5px;
         }
 
-        .watermark {
+        .logo {
             position: absolute;
-            right: 0;
-            top: 0;
-            width: 200px;
-            height: 200px;
-            background: url('{{ get_site_logo() }}') no-repeat;
-            opacity: 0.5;
-            background-size: contain;
-            background-position: center center;
-            z-index: -1;
+            top: 20px;
+            left: 20px;
         }
 
     </style>

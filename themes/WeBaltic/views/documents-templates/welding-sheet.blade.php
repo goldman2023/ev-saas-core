@@ -42,7 +42,7 @@ if($product->getAttrValue('stabdziai') == 'mechanical') {
     <thead>
         <tr>
             <th colspan="8">
-                {{ translate('Assembly Sheet') }}
+                {{ translate('Welding Sheet') }}
             </th>
         </tr>
     </thead>
