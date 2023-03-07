@@ -21,6 +21,10 @@ function generate_vin_code($item)
     // Since each OrderItem has copies of attributes of each linked product or "custom product", we should get the attributes from OrderItem itself - that's the main source of truth
 
     $order_item = $item->get_primary_order_item()->subject;
+
+    if (empty($order_item)) {
+        $order_item = $item->get_primary_order_item();
+    }
     if (empty($order_item)) {
         return null;
     }
@@ -211,6 +215,10 @@ function generate_serial_number($order_item, $order)
         $serial_number = $order->id;
     }
 
+    // dd($order_item);
+    // if(empty($order_item)) {
+    //     $order_item->
+    // }
     $serial_number = sprintf("%06d", $serial_number + 1); // 001234
     $order_item->setWEF('serial_order_number', $serial_number, 'string'); // set WEF
 
@@ -233,7 +241,7 @@ function define_livewire_dynamic_actions()
 function generate_static_mass_on_decoupling($certificate)
 {
     $string = $certificate;
-    
+
     try {
         if($certificate) {
             $string = explode(')', (explode('(', $string)[1]))[0];

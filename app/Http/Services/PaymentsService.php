@@ -205,6 +205,8 @@ class PaymentsService
             'paypal' => translate('Via Paypal'),
             'paysera' => translate('Via Paysera'),
             'wire_transfer' => translate('Via Bank Transfer'),
+            'cash_on_delivery' => translate('Via Cash on delivery'),
+            default => translate('Via ?')
         };
     }
 }

@@ -35,7 +35,7 @@
                 </p>
 
                 @if($next_cycle_status_label)
-                    <p class="">
+                    <p class="mt-1">
                         {{ translate('Next cycle step is:') }}
                         <b>{{ $next_cycle_status_label }}</b>
                     </p>

@@ -18,7 +18,7 @@ use LaravelDaily\Invoices\Invoice as LaravelInvoice;
 
 if (!function_exists('generateInvoice')) {
     function generateInvoice(&$form) {
-        if($form->order->invoices->isEmpty()) {
+        if($form->order->invoices->isEmpty() && !$form->order->getWEF('is_manufacturing_order', false, null)) {
             if($form->order->type === OrderTypeEnum::installments()->value) {
                 // For installments create multiple invoices (deposit and main invoice)
                 $deposit_amount = $form->order->getWEF('deposit_amount');

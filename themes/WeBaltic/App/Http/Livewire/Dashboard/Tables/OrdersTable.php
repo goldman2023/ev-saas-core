@@ -133,6 +133,10 @@ class OrdersTable extends DataTableComponent
             Column::make('Customer', 'user_id')
                 ->excludeFromSelectable()
                 ->addClass('text-left max-w-[300px]'),
+            
+            Column::make('Man. order')
+                ->excludeFromSelectable()
+                ->addClass('text-left whitespace-nowrap'),
 
             Column::make('Actions')
                 ->excludeFromSelectable(),

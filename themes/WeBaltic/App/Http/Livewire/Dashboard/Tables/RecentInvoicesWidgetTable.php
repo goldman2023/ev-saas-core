@@ -2,6 +2,8 @@
 
 namespace WeThemes\WeBaltic\App\Http\Livewire\Dashboard\Tables;
 
+use DB;
+use Log;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusEnum;
@@ -113,5 +115,28 @@ class RecentInvoicesWidgetTable extends DataTableComponent
     public function rowView(): string
     {
         return 'components.dashboard.widgets.invoices.recent-invoice-row';
+    }
+
+    public function markInvoiceAsPaid($invoice_id) {
+        DB::beginTransaction();
+
+        try {
+            $invoice = Invoice::findOrFail($invoice_id);
+
+            $invoice->setInvoiceAsPaid();
+            $invoice->save();
+
+            // Maybe: Add this logic to setInvoiceAsPaid() in side Invoice model itself...
+            $invoice->order->setOrderAsPaid();
+            $invoice->order->save();
+
+            DB::commit();
+            
+            $this->emit('refreshDatatables');
+        } catch(\Exception $e) {
+            DB::rollback();
+            Log::error($e);
+            $this->inform(translate('There was an error while marking invoice as paid.'), '', 'fail');
+        }
     }
 }

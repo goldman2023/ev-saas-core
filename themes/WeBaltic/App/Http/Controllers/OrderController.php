@@ -48,7 +48,7 @@ class OrderController extends Controller
         try {
             if ($new_status == 1) { // contract
                 $reason = translate('Proposal & Contract Created');
-                
+
                 baltic_generate_order_document($order, 'documents-templates.contract', 'contract', translate('Contract for Order #').$order->id);
             } else if ($new_status == 2) { // approved
                 $reason = translate('Contract Created');
@@ -58,7 +58,7 @@ class OrderController extends Controller
 
             } else if ($new_status == 3) { // welding
                 $reason = translate('Approved for manufacturing');
-                baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
+
             } else if ($new_status == 6) { // delivery_to_warehouse
                 $reason = translate('Delivering to warehouse');
 
@@ -84,6 +84,11 @@ class OrderController extends Controller
                 $new_task->save();
             }
 
+            baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
+            baltic_generate_order_document($order, 'documents-templates.authenticity-certificate', 'authenticity-certificate', translate('Tapatumo pažyma for Order #').$order->id);
+            baltic_generate_order_document($order, 'documents-templates.warrant', 'warrant', translate('Įgaliojimas for Order #').$order->id);
+
+
             // Change order cycle status
             $order->setWEF('cycle_status', $new_status);
 
@@ -108,7 +113,7 @@ class OrderController extends Controller
             }
         }
 
-       
+
         session()->flash('message', translate('Order cycle status updated'));
         return redirect()->back();
     }

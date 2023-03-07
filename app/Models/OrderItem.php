@@ -6,8 +6,10 @@ use App\Builders\CteBuilder;
 use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 use App\Traits\AttributeTrait;
+use App\Traits\CoreMetaTrait;
 use Illuminate\Database\Eloquent\Model;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+use WEF;
 
 /**
  * App\Models\OrderItem
@@ -19,6 +21,8 @@ class OrderItem extends WeBaseModel
     use AttributeTrait;
     use UploadTrait;
     use GalleryTrait;
+    use CoreMetaTrait;
+
 
     protected $table = 'order_items';
 
@@ -44,11 +48,13 @@ class OrderItem extends WeBaseModel
         return new CteBuilder($query);
     }
 
-    public function getParentKeyName() {
+    public function getParentKeyName()
+    {
         return 'parent_id';
     }
 
-    public function getLocalKeyName() {
+    public function getLocalKeyName()
+    {
         return 'id';
     }
 
@@ -74,6 +80,11 @@ class OrderItem extends WeBaseModel
     }
 
     public function getDynamicModelUploadProperties(): array
+    {
+        return [];
+    }
+
+    public function getWEFDataTypes()
     {
         return [];
     }

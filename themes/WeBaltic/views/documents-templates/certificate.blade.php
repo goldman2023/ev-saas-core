@@ -25,15 +25,13 @@ $axel_count = 0;
 }
 @endphp
 
-<div class="logo">
-    <img src="{{ get_site_logo() }}" style="width: 100px; " />
-</div>
+
 <h1 class="text-center text-2xl font-bold w-full">
-    CERTIFICATE OF CONFORMITY
+    {{ translate('CERTIFICATE OF CONFORMITY') }}
 </h1>
 
 <p class="text-center text-xl font-medium w-full">
-    COMPLETE VEHICLES
+    {{ translate('COMPLETE VEHICLES') }}
 </p>
 
 <strong>Part 1</strong>
@@ -47,30 +45,31 @@ $axel_count = 0;
 Variant: S <br>
 Version: - <br>
 <div>
-0.2.1 Commercial name(s): Spec
+    0.2.1 Commercial name(s): {{ $product->name }}
 </div>
 <div>
-0.2.2.1 Allowed Parameter Values for multistage type approval to use the base vehicle emission values
-(insert range where applicable)
+    0.2.2.1 Allowed Parameter Values for multistage type approval to use the base vehicle emission values
+    (insert range where applicable)
 </div>
-<div>
-Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-mase') }} kg </strong>
-</div>
-<div>
-    Final Vehicle technically permissible maximum laden mass (in kg):
-    <strong>{{ $product->getAttrValue('priekabos-bendroji-mase') }} kg </strong>
-</div>
-<div>
-    Frontal area for final vehicle (in cm2): <strong> N/A </strong>
-</div>
-<div>
-    Rolling resistance (kg/t): <strong>N/A</strong>
+<div style="padding-left: 40px;">
+    <div>
+        Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-mase') }} kg </strong>
+    </div>
+    <div>
+        Final Vehicle technically permissible maximum laden mass (in kg):
+        <strong>{{ $product->getAttrValue('priekabos-bendroji-mase') }} kg </strong>
+    </div>
+    <div>
+        Frontal area for final vehicle (in cm2): <strong> N/A </strong>
+    </div>
+    <div>
+        Rolling resistance (kg/t): <strong>N/A</strong>
 
+    </div>
 </div>
 
 <div>
     Cross-sectional area of air entrance of the front grille (in cm2): <strong>N/A</strong>
-
 </div>
 <div>
     0.2.3. Identifiers: <strong>N/A </strong>
@@ -111,7 +110,7 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
         {{ get_tenant_setting('company_address') }}
     </div>
     <div>
-        {{ get_tenant_setting('company_city') }},   {{ get_tenant_setting('company_country') }}
+        {{ get_tenant_setting('company_city') }}, {{ get_tenant_setting('company_country') }}
     </div>
 </div>
 
@@ -138,7 +137,7 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
         @endif
     </strong>
     <div>
-    granted on: <strong>{{ $order->created_at }}</strong>
+        granted on: <strong>{{ $order->created_at }}</strong>
     </div>
     and can be permanently registered in Member States having right/ left hand traffic and using metric/
     imperial
@@ -153,17 +152,17 @@ Final Vehicle actual mass: <strong>{{ $product->getAttrValue('priekabos-nuosava-
 
 
 <p>
-    <div>
-        <strong>
-            General construction characteristics
-        </strong>
-    </div>
-    <div>
+<div>
+    <strong>
+        General construction characteristics
+    </strong>
+</div>
+<div>
     1. Number of axles: 1 and wheels: 2
-    </div>
-    <div>
+</div>
+<div>
     1.1. Number and position of axles with twin wheels: N/A
-    </div>
+</div>
 <div>
     <strong>Main dimensions</strong>
 </div>

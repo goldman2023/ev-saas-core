@@ -1,3 +1,4 @@
+{{-- ID --}}
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
     <a class="media align-items-center text-14" href="{{ route('order.details', ['id' => $row->id]) }}">
         <input type="checkbox" value="{{ $row->id }}" class="p-3 rounded mr-2" name="orders"
@@ -8,11 +9,7 @@
     </a>
 </x-livewire-tables::table.cell>
 
-{{-- <x-livewire-tables::table.cell class="align-middle text-center">
-    <span
-        class="d-block text-14 mb-0 {{ $row->type === \App\Enums\OrderTypeEnum::subscription()->value ? 'text-info':'' }} {{ $row->type === App\Enums\OrderTypeEnum::installments()->value ? 'text-warning':'' }}">{{
-        $row->type }}</span>
-</x-livewire-tables::table.cell> --}}
+{{-- Product --}}
 <x-livewire-tables::table.cell class="align-middle min-w-[300px] max-w-[300px]">
     <div class="flex">
         <a class="py-2 flex media whitespace-normal align-items-center text-14"
@@ -22,7 +19,6 @@
             <img src="{{ $row->get_primary_order_item()->subject->getThumbnail() }}"
                 class="w-[75px] h-auto rounded mr-2" width="50" height="50" alt="" />
             <strong class="text-md">
-
                 {{ $row->get_primary_order_item()->name }}
                 <span class="font-normal"> <br> {{ translate('Order') }} #{{ $row->id }} </span>
             </strong>
@@ -38,6 +34,7 @@
     </div>
 </x-livewire-tables::table.cell>
 
+{{-- Customer --}}
 <x-livewire-tables::table.cell class="min-h-[100px] align-middle max-w-[300px]">
     @isset($row->user)
     <div class="py-2">
@@ -50,6 +47,18 @@
     @endisset
 </x-livewire-tables::table.cell>
 
+{{-- Is Manufacturing Order --}}
+<x-livewire-tables::table.cell class="text-center min-h-[100px] align-middle max-w-[300px]">
+    @if($row->getWEF('is_manufacturing_order', false, false))
+        <span class="badge-warning  !py-1 !px-3 mr-3">
+            {{ translate('Yes') }}
+        </span>
+    @else
+        <span class="badge-dark  !py-1 !px-3 mr-3">
+            {{ translate('No') }}
+        </span>
+    @endif
+</x-livewire-tables::table.cell>
 
 
 {{-- Actions --}}

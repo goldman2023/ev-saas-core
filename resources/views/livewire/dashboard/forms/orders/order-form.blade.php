@@ -1214,6 +1214,8 @@ x-cloak>
                             </div>
                             {{-- END Tracking number --}}
 
+                            @do_action('view.dashboard.form.order.actions-box.end', $this)
+
                             <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                                 @if(!empty($order->id) && $order->invoices->isEmpty())
                                     @ob_start()
@@ -1315,7 +1317,7 @@ x-cloak>
                                         <x-dashboard.form.input type="number" field="wef.deposit_amount" :x="true" min="0" max="100" :disabled="true" class="flex flex-col">
                                             <div class="flex justify-end items-center mt-1">
                                                 <button type="button" class="text-12 hover:underline" :class="{'text-primary': disabled, 'text-success': !disabled}"
-                                                    x-text="disabled ? '{{ translate('Change') }}' : '{{ translate('Lock') }}'" @click="disabled = !disabled;"></button>
+                                                    x-text="disabled ? '{{ translate('Unlock') }}' : '{{ translate('Lock') }}'" @click="disabled = !disabled;"></button>
                                             </div>
                                         </x-dashboard.form.input>
                                     </div>
