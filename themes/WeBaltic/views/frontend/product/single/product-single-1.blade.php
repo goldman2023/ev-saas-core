@@ -199,9 +199,10 @@
 {{-- <x-products.single.technical-specification-section :product="$product">
 </x-products.single.technical-specification-section> --}}
 
-
+<div class="mb-9">
 <x-products.single.related-products :product="$product">
 </x-products.single.related-products>
+</div>
 
 <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
 
