@@ -9,6 +9,10 @@ function lda_regenerate_document(&$form) {
         $order = $form->upload->orders->first();
     }
 
+    // TODO: Sets the custom attributes -> FIX THIS SHIT!
+    $order->get_primary_order_item()->custom_attributes()->get();
+
+
     if($upload_tag === 'proposal') {
         baltic_generate_order_document(
             order: $order, 

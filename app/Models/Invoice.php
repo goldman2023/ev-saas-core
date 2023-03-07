@@ -255,9 +255,22 @@ class Invoice extends WeBaseModel
             }
 
             // TODO: Add check if invoice_number with  $this->real_invoice_prefix . $this->real_invoice_number exists in DB already, and if it does, change to random generated Uuid or something so it doesn't rise exception!
-
-            $this->invoice_number = $this->real_invoice_prefix . $this->real_invoice_number;
+            // recursively check if invoice number is taken and increment if yes
+            $this->setInvoiceNumberRecursively($this->real_invoice_prefix . $this->real_invoice_number);
         }
+    }
+
+    public function setInvoiceNumberRecursively($invoice_number) {
+        if(Invoice::withoutGlobalScopes()->where('invoice_number', $invoice_number)->count() > 0) {
+            $this->real_invoice_number += 1;
+            $invoice_number = $this->real_invoice_prefix . $this->real_invoice_number;
+
+            $this->setInvoiceNumberRecursively($invoice_number);
+
+            return false;
+        }
+
+        $this->invoice_number = $invoice_number;
     }
 
     public function generateInvoicePDF($custom_title = null, $save = false) {
