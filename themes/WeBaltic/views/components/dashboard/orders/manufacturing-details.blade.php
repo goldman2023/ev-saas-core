@@ -99,6 +99,74 @@
                 <x-wef.field :subject="$order" label="Serial Number (Custom)" type="string" form_type="plain_text" key="serial_number_custom"></x-wef.field>
             </dd>
         </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Pakabos vieta') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="Pakabos vieta" type="string" form_type="plain_text" key="pakabos_vieta_custom"></x-wef.field>
+            </dd>
+        </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Brėžinių skaičius') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="Brėžinių skaičius" type="string" form_type="plain_text" key="breziniu_skaicius_custom"></x-wef.field>
+            </dd>
+        </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Axle make') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="Axle make" type="string" form_type="plain_text" key="axle_make_custom"></x-wef.field>
+            </dd>
+        </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Wheels') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="{{ translate('Wheels') }}" type="string" form_type="plain_text" key="wheels_custom"></x-wef.field>
+            </dd>
+        </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Lights') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="{{ translate('Lights') }}" type="string" form_type="plain_text" key="lights_custom"></x-wef.field>
+            </dd>
+        </div>
+
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Coupling') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="{{ translate('Coupling') }}" type="string" form_type="plain_text" key="lights_custom"></x-wef.field>
+            </dd>
+        </div>
+
+
     </dl>
 </div>
 </div>

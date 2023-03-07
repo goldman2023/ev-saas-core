@@ -24,12 +24,12 @@
                     @php
 
                     if(empty($order_item)) {
-                    $total_weight = 'Missing data';
+                    $total_weight = 'Missing Weight data ';
                     } else {
                     if( $order_item->getAttr('priekabos-bendroji-mase')) {
                     $total_weight = $order_item->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
                     } else {
-                        $total_weight = 'Missing data';
+                        $total_weight = 'Missing Weight data';
                     }
                     }
 

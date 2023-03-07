@@ -233,6 +233,24 @@
                             </x-dashboard.orders.order-details-card>
                         </div>
 
+                        <div class="card">
+                            <div class="flex justify-between">
+                            <h3 class="text-xl mb-6 font-medium leading-6 text-gray-900">
+                                {{ translate('Techniniai duomenys')
+                            }}</h3>
+                            <div>
+                                <a target="_blank" href="{{ route('order.edit', $order->id) }}" type="button"
+                                    class="inline-flex items-center rounded-full bg-rose-50 px-3 py-0.5 text-sm font-medium text-rose-700 hover:bg-rose-100">
+                                    @svg('heroicon-o-pencil', ['class' => 'h-4 h-4 mr-2'])
+
+                                    <span>{{ translate('Edit') }}</span>
+                                </a>
+                            </div>
+                            </div>
+                            <x-default.products.single.product-specification-table :product="$order->get_primary_order_item()">
+                            </x-default.products.single.product-specification-table>
+                        </div>
+
                     </div>
 
                     <div class="rounded-lg dark:bg-gray-800" id="order-specification-content" role="tabpanel" aria-labelledby="order-specification-tab">
