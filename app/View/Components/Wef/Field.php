@@ -6,7 +6,7 @@ use Illuminate\View\Component;
 
 class Field extends Component
 {
-    public $wef_id;
+    public $wefId;
     public $subject;
     public $key;
     public $type;
@@ -24,7 +24,7 @@ class Field extends Component
         $this->key = $key;
         $this->label = $label;
         $this->subject = $subject;
-        $this->wef_id = 'wef-'.$this->subject->id.'-'.$this->key;
+        $this->wefId = 'wef-'.$this->subject->id.'-'.$this->key;
         $this->type = $type;
         $this->form_type = $form_type;
 
