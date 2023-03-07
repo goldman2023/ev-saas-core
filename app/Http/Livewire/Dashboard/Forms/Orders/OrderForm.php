@@ -195,9 +195,12 @@ class OrderForm extends Component
 
             $order_items_idx_for_removal = $previous_order_items_idx_from_db->diff($current_order_items_idx_from_db)->values();
 
-            // Remove missing/deleted order items
+            // Remove missing/deleted order items and all of their addons
             if($order_items_idx_for_removal->isNotEmpty()) {
                 OrderItem::destroy($order_items_idx_for_removal->all());
+
+                // Remove all addons
+                OrderItem::whereIn('parent_id', $order_items_idx_for_removal)->delete();
             }
 
             $save_order_item_method = function($item, $parent_id = null) {
