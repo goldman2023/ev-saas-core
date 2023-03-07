@@ -306,7 +306,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_action('view.dashboard.form.order.generate-invoice-btn', function($order, $html) {
                 if(!empty($order->id) && $order->invoices->isEmpty() && 
                     ($order->getWEF('cycle_status') === array_flip(OrderCycleStatusEnum::values())['approved'] ?? false) && 
-                    !$order->getWEF('is_manufacturing_order', false, true)) {
+                    !$order->getWEF('is_manufacturing_order', false, false)) {
                     echo $html;
                 } else {
                     echo ' ';
