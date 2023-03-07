@@ -9,11 +9,12 @@ if (!function_exists('baltic_generate_order_document')) {
     function baltic_generate_order_document(&$order, $template, $upload_tag, $display_name = '', $data = [], $regenerate = false) {
         // Get order and generate the document
         $data = array_merge(['order' => $order], $data);
-        
+
         $pdf_not_loaded_flag = false;
 
         try {
-            if($template == 'manufacturing-sheet') {
+
+            if($template == 'documents-templates.manufacturing-sheet' || $template == 'documents-templates.welding-sheet') {
                 $pdf = Pdf::loadView($template, $data)->setPaper('a4', 'landscape');
             } else {
                 $pdf = Pdf::loadView($template, $data);
@@ -23,7 +24,7 @@ if (!function_exists('baltic_generate_order_document')) {
             // catch this and rise a flag
             $pdf_not_loaded_flag = true;
         }
-        
+
         if($regenerate) {
             // Upload generated pdf as file in storage and create Upload and Relationship to $order
             $upload = MediaService::uploadAndStore(
@@ -97,7 +98,7 @@ if (!function_exists('baltic_generate_order_document')) {
                         headers: [ 'CacheControl' => 'no-cache', 'Expires' => 'Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time())]
                     );
                 }
-                
+
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
                 return $upload;
