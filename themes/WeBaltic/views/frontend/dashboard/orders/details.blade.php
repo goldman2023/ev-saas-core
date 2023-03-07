@@ -233,11 +233,15 @@
                             </x-dashboard.orders.order-details-card>
                         </div>
 
+                        <div class="card">
+                            <x-default.products.single.product-specification-table :product="$order->get_primary_order_item()">
+                            </x-default.products.single.product-specification-table>
+                        </div>
+
                     </div>
 
                     <div class="rounded-lg dark:bg-gray-800" id="order-specification-content" role="tabpanel" aria-labelledby="order-specification-tab">
                        Specification.
-
                     </div>
 
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="order-documents-content" role="tabpanel"

@@ -9,7 +9,7 @@ use Illuminate\View\Component;
 
 class ProductSpecificationTable extends Component
 {
-    public Product $product;
+    public $product;
 
     public $product_grouped_attributes;
 
@@ -18,7 +18,7 @@ class ProductSpecificationTable extends Component
      *
      * @return void
      */
-    public function __construct(Product $product)
+    public function __construct($product)
     {
         $this->product = $product;
         $this->product_grouped_attributes = $this->product->custom_attributes_grouped();

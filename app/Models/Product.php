@@ -69,8 +69,6 @@ class Product extends WeBaseModel
     use StockManagementTrait;
     use VariationTrait; // <-- Should be after PriceTrait and StockManagementTrait
 
-    use BrandTrait;
-
     protected $table = 'products';
 
     /**
