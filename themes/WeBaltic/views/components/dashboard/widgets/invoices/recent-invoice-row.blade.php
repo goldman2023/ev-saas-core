@@ -98,7 +98,6 @@
                 }"
                 @mark-invoice-as-paid-start.window="markAsPaid($event.detail.invoice_id)">
                 {{ translate('Mark as paid') }}
-                @endpush
             </button>
             <button @click="$dispatch('display-modal', {'id': 'invoice-payment-options-modal', 'invoice_id': {{ $row->id }} })" type="button" class="inline-flex w-full justify-center rounded-md border border-primary bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary">
                 {{ translate('Pay') }}
