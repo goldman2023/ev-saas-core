@@ -13,7 +13,7 @@
   </div>
 
   <div class="w-full pb-1">
-    <span class="font-bold">{{ transalte('Delivery No:') }}</span> {{ get_delivery_document_number($upload) }}
+    <span class="font-bold">{{ translate('Delivery No:') }}</span> {{ get_delivery_document_number($upload) }}
   </div>
   <div class="w-full pb-1">
     <span class="font-bold">{{ translate('Delivery initiated:') }}</span>

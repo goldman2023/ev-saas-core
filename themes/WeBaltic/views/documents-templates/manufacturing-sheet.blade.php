@@ -4,6 +4,10 @@
 @php
 $product = $order->get_primary_order_item()->subject;
 
+if(empty($product)) {
+    $product = $order->get_primary_order_item();
+}
+
 
 if ($product->getAttr('asiu-kiekis')) {
     $axel_count = $product->getAttr('asiu-kiekis')->attribute_values->first()->values;
@@ -83,7 +87,7 @@ if($product->getAttrValue('stabdziai') == 'mechanical') {
             <td colspan="2"></td>
         </tr>
         <tr>
-            <td colspan="2">{{ translte('Width') }}:</td>
+            <td colspan="2">{{ translate('Width') }}:</td>
             <td colspan="2">{{ $product->getAttrValue('kraunamo-pavirsiaus-plotis') }} mm</td>
             <td colspan="2"></td>
             <td colspan="2"></td>

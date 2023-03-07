@@ -58,7 +58,6 @@ class OrderController extends Controller
 
             } else if ($new_status == 3) { // welding
                 $reason = translate('Approved for manufacturing');
-                baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
 
             } else if ($new_status == 6) { // delivery_to_warehouse
                 $reason = translate('Delivering to warehouse');
@@ -85,8 +84,8 @@ class OrderController extends Controller
                 $new_task->save();
             }
 
+            baltic_generate_order_document($order, 'documents-templates.manufacturing-sheet', 'manufacturing-details', translate('Manufacturing card for Order #').$order->id);
             baltic_generate_order_document($order, 'documents-templates.authenticity-certificate', 'authenticity-certificate', translate('Tapatumo pažyma for Order #').$order->id);
-
             baltic_generate_order_document($order, 'documents-templates.warrant', 'warrant', translate('Įgaliojimas for Order #').$order->id);
 
 
