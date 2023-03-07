@@ -88,12 +88,37 @@
         <x-system.form-modal id="invoice-payment-options-modal" title="{{ translate('Choose payment option') }}" class="!max-w-lg">
             <div class="py-1 grid grid-cols-3 gap-x-3" x-data="{
                 invoice_id: null,
+                available_payment_methods: @js(\Payments::getPaymentMethodsForSelect()),
             }" @display-modal.window="
                 if($event.detail.id === id) {
                     invoice_id = $event.detail.invoice_id;
                 }
             ">
-                @foreach(\Payments::getPaymentMethodsForSelect() as $gateway => $label)
+                <template x-for="(payment_method_name, payment_method_gateway) in available_payment_methods">
+                    <a class="relative flex flex-col items-center rounded-xl bg-white cursor-pointer focus:outline-none mb-0"
+                        {{-- :class="{'!border-2 !border-primary !border-[inset]':payment_method_gateway === selected_payment_method  , 'border-gray-300':payment_method_gateway !== selected_payment_method}" --}}
+                        @click="selected_payment_method = payment_method_gateway;"
+                        :href="'{{ route('checkout.execute.custom.payment', ['invoice_id' => '%d', 'payment_gateway' => '%s']) }}'.replace('%d', invoice_id).replace('%s', payment_method_gateway)"
+                        target="_blank">
+
+                        <template x-if="payment_method_gateway === 'cash_on_delivery'">
+                            @we_svg('themes/WeTailwind/images/cash-on-delivery.svg', 'w-[120px] h-[82px]')
+                        </template>
+                        <template x-if="payment_method_gateway === 'wire_transfer'">
+                            @we_svg('themes/WeTailwind/images/wire-transfer.svg', 'w-[120px] h-[82px]')
+                        </template>
+                        <template x-if="payment_method_gateway === 'paypal'">
+                            @we_svg('themes/WeTailwind/images/paypal.svg', 'w-[120px] h-[82px]')
+                        </template>
+                        <template x-if="payment_method_gateway === 'stripe'">
+                            @we_svg('themes/WeTailwind/images/stripe.svg', 'w-[120px] h-[82px]')
+                        </template>
+                        <template x-if="payment_method_gateway === 'paysera'">
+                            @we_svg('themes/WeTailwind/images/paysera.svg', 'w-[120px] h-[82px]')
+                        </template>
+                    </a>
+                </template>
+                {{-- @foreach(\Payments::getPaymentMethodsForSelect() as $gateway => $label)
                     <a :href="'{{ route('checkout.execute.custom.payment', ['invoice_id' => '%d', 'payment_gateway' => $gateway]) }}'.replace('%d', invoice_id)"
                         target="_blank" class="col-span-1 p-4 flex flex-col items-center justify-center gap-y-2 rounded-lg border border-gray-200">
 
@@ -106,7 +131,34 @@
 
                         <span>{{ $label }}</span>
                     </a>
-                @endforeach
+                @endforeach --}}
+            </div>
+        </x-system.form-modal>
+
+        <x-system.form-modal id="mark-invoice-as-paid-confirmation-modal" title="{{ translate('Confirmation window') }}" class="!max-w-lg">
+            <div class="w-full flex flex-col gap-y-2" x-data="{
+                processing: false;
+                invoice_id: null,
+                markAsPaid() {
+                    this.processing = true;
+                    $dispatch('mark-invoice-as-paid-start', ['invoice_id': this.invoice_id })]);
+                }
+            }" @display-modal.window="
+                if($event.detail.id === id) {
+                    invoice_id = $event.detail.invoice_id;
+                }
+            " @mark-invoice-as-paid-end.window="
+                if($event.detail.id === id) {
+                    processing = false;
+                    show = false;
+                }
+            ">
+                <p class="w-full">{{ translate('Are you sure you want to mark this invoice as paid?') }}</p>
+                <div class="w-full">
+                    <button class="btn-primary" @click="markAsPaid()">
+                        {{ translate('Mark as paid') }}
+                    </button>
+                </div>
             </div>
         </x-system.form-modal>
     @endif

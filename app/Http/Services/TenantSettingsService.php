@@ -138,7 +138,6 @@ class TenantSettingsService
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
 
-
             'company_name' => 'string',
             'company_address' => 'string',
             'company_city' => 'string',
@@ -147,6 +146,11 @@ class TenantSettingsService
             'company_number' => 'string',
             'company_vat' => 'string',
             'company_email' => 'string',
+            'company_phones' => 'array',
+            'company_ceo_name' => 'string',
+            'company_bank_name' => 'string',
+            'company_bank_account_number' => 'string',
+            'company_bank_swift_number' => 'string',
 
             // TAX
             'company_tax_rate' => 'decimal',

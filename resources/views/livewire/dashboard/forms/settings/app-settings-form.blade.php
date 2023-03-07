@@ -384,6 +384,71 @@
                                 </div>
                                 <!-- END Company country -->
 
+                                <!-- Company Phones -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company phones') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.text-repeater field="settings.company_phones" error-field="settings.company_phones" placeholder="{{ translate('Phone') }}"  limit="3"></x-dashboard.form.text-repeater>
+                                    </div>
+                                </div>
+                                <!-- END Company Phones -->
+
+                                <!-- Company CEO Name -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company CEO name') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_ceo_name" />
+                                    </div>
+                                </div>
+                                <!-- Company CEO Name -->
+
+                                <!-- Company Bank Name -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company Bank Name') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_bank_name" />
+                                    </div>
+                                </div>
+                                <!-- Company Bank Name -->
+
+                                <!-- Company Bank Account Number -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company Bank Account Number') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_bank_account_number" />
+                                    </div>
+                                </div>
+                                <!-- END Company Bank Account Number -->
+
+                                <!-- Company Bank SWIFT -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5"
+                                    x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ translate('Company Bank SWIFT') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.company_bank_swift_number" />
+                                    </div>
+                                </div>
+                                <!-- END Company Bank SWIFT -->
+
                                 {{-- END Company Information --}}
 
 
@@ -483,6 +548,7 @@
                                         $wire.set('settings.maintenance_mode', settings.maintenance_mode, true);
                                         $wire.set('settings.brands_ct_enabled', settings.brands_ct_enabled, true);
                                         $wire.set('settings.include_tax', settings.include_tax, true);
+                                        $wire.set('settings.company_phones', settings.company_phones, true);
                                         @do_action('view.app-settings-form.general.wire_set')
                                     " wire:click="saveGeneral()">
                                         {{ translate('Save') }}
