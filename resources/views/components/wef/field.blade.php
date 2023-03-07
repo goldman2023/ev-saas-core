@@ -1,7 +1,7 @@
 <div class="flex items-center font-semibold"
-    id="{{ $wef_id }}"
+    id="{{ $wefId }}"
     @click="$dispatch('display-wef-editor-modal', {
-        'target': '{{ $wef_id }}',
+        'target': '{{ $wefId }}',
         'subject_id': {{ $subject->id }},
         'subject_type': '{{ base64_encode($subject::class) }}',
         'wef_key': '{{ $key }}',
