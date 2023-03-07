@@ -23,7 +23,8 @@ class SingleWefForm extends Component
     public $wefKey;
     public $wefValue;
     public $wefLabel;
-    public $dataType; // this data type of wef used for get/st casting from.to database
+    public $setType; // this data type of wef used for get/st casting from.to database
+    public $getType;
     public $formType; // this is form type of wef used for display (e.g. check AttributeTypeEnum )
     public $template; // inline, form
     public $positioning; // horizontal, vertical
@@ -40,7 +41,8 @@ class SingleWefForm extends Component
             'subject' => ['required'],
             'wefKey' => ['required'],
             'wefValue' => ['nullable'],
-            'dataType' => ['required']
+            'setType' => ['required'],
+            'getType' => ['required'],
         ];
     }
 
@@ -50,7 +52,8 @@ class SingleWefForm extends Component
             'subject.required' => translate('Subject related to meta field is required'),
             'wefKey.required' => translate('Meta field is required'),
             // 'wefKey.required' => translate('Meta field is required'),
-            'dataType.required' => translate('Meta field data type is requried'),
+            'setType.required' => translate('Meta field SET type is requried'),
+            'getType.required' => translate('Meta field GET type is requried'),
         ];
     }
 
@@ -61,12 +64,13 @@ class SingleWefForm extends Component
      * @param string $class
      * @return void
      */
-    public function mount($subject, $wefKey, $wefLabel = '', $dataType = 'string', $formType = 'plain_text', $template = 'form', $positioning = 'horizontal', $customProperties = [], $showForm = true, $predefinedItems = [], $target = null, $class = '') {
+    public function mount($subject, $wefKey, $wefLabel = '', $setType = 'string', $getType = 'string', $formType = 'plain_text', $template = 'form', $positioning = 'horizontal', $customProperties = [], $showForm = true, $predefinedItems = [], $target = null, $class = '') {
         $this->showForm = $showForm;
         $this->subject = $subject;
         $this->wefKey = $wefKey;
         $this->wefLabel = $wefLabel;
-        $this->dataType = $dataType;
+        $this->setType = $setType;
+        $this->getType = $getType;
         $this->formType = $formType;
         $this->template = $template;
         $this->positioning = $positioning;
@@ -76,12 +80,12 @@ class SingleWefForm extends Component
         $this->class = $class;
 
         if(!empty($subject) && $subject instanceof WeBaseModel && !empty($wefKey)) {
-            $this->wefValue = $subject->getWEF($wefKey, true, $dataType);
+            $this->wefValue = $subject->getWEF($wefKey, true, $this->getType);
 
             // If desired wefValue is not found in database for given $subject and $key, create it!
             if(empty($this->wefValue)) {
-                $subject->setWEF($wefKey, null, $dataType); // Create wef for given $key and $subject
-                $this->wefValue = $subject->getWEF($wefKey, true, $dataType); // fetch the wef now
+                $subject->setWEF($wefKey, null, $this->setType); // Create wef for given $key and $subject
+                $this->wefValue = $subject->getWEF($wefKey, true, $this->getType); // fetch the wef now
             }
 
         }
@@ -94,7 +98,6 @@ class SingleWefForm extends Component
 
     public function saveWEF() {
         
-
         if($this->formType === 'text_list') {
             // For text lists, remove empty items in array
             $this->wefValue = array_values(array_filter($this->wefValue));
@@ -104,14 +107,16 @@ class SingleWefForm extends Component
             $this->wefValue = null;
         }
 
-        $this->subject->setWEF($this->wefKey, $this->wefValue, $this->dataType); // set WEF
+        $this->subject->setWEF($this->wefKey, $this->wefValue, $this->setType); // set WEF
+
         $this->showForm = false;
 
         // If $target is not empty, dispatch Browser event to update frontend
         if(!empty($this->target)) {
+
             $this->dispatchBrowserEvent('wef-replace-value-on-frontend', [
                 'target' => $this->target,
-                'wef_value' => $this->subject->getWEF($this->wefKey, true, $this->dataType)
+                'wef_value' => $this->subject->getWEF($this->wefKey, true, $this->getType)
             ]);
         }
     }

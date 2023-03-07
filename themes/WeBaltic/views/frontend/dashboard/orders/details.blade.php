@@ -133,7 +133,8 @@
                                 'subject_type': '{{ base64_encode($order::class) }}',
                                 'wef_key': 'order_delivery_deadline',
                                 'wef_label': '{{ translate('Order delivery deadline') }}',
-                                'data_type': 'date',
+                                'set_type': 'unix_timestamp',
+                                'get_type': 'date',
                                 'form_type': 'date',
                                 'custom_properties': {'range': false, 'with_time': false},
                             })" >
