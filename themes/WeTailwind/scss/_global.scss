@@ -66,7 +66,7 @@ body::-webkit-scrollbar { width: 5px !important }
 
 
 .card {
-    @apply w-full flex flex-col bg-white border border-gray-300 p-4 mb-3 rounded-lg
+    @apply w-full bg-white border border-gray-300 p-4 mb-3 rounded-lg
 }
 
 @media(max-width: 768px) {

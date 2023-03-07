@@ -1,4 +1,4 @@
-<div class="flex items-center font-semibold"
+<div class="flex items-center font-semibold cursor-pointer"
     id="{{ $wefId }}"
     @click="$dispatch('display-wef-editor-modal', {
         'target': '{{ $wefId }}',

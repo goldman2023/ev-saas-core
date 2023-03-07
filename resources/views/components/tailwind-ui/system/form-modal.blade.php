@@ -45,7 +45,7 @@
         </div>
 
         <div class="w-full">
-          <h4 class="w-full text-18 pb-1 mb-3 border-b border-gray-200 {{ $titleClass }}" x-show="modal_title" x-text="modal_title"></h4>
+          <h4 class="w-full text-xl pb-1 font-medium mb-6 block border-b border-gray-200 {{ $titleClass }}" x-show="modal_title" x-text="modal_title"></h4>
 
           {{ $slot }}
 

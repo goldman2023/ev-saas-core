@@ -156,7 +156,9 @@
                                 @svg('heroicon-o-document-text', ['class' => 'h-6 w-6 flex-shrink-0 text-primary-600'])
 
                                 <div class="ml-2 text-sm text-gray-500">
-                                    {{ translate('Download User Guide') }} (.pdf)
+                                    <a target="_blank" href={{ get_setting('documentation_url') }}>
+                                        {{ translate('Download User Guide') }} (.pdf)
+                                    </a>
                                 </div>
                             </a>
 

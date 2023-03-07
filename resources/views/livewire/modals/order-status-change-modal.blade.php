@@ -1,17 +1,30 @@
-<x-system.form-modal id="order-status-change-modal" title="Confirm Selection" :prevent-close="true">
-
-    <div class="btn-primary w-full" wire:click="incrementOrderCycleStatus({{ $order->id }})">
+<x-system.form-modal id="order-status-change-modal" title="{{ translate('Confirm Selection') }}" :prevent-close="true">
+    <div class="mb-6 text-base">
+        @php
+        $next_cycle_status_label =
+        \WeThemes\WeBaltic\App\Enums\OrderCycleStatusEnum::labels()[($order->getWEF('cycle_status') ?? 0) + 1];
+        @endphp
+        {{ translate('Next order status:') }} <strong>{{ $next_cycle_status_label }} </strong>
+    </div>
+    <div class="btn-primary !py-6 flex w-full" wire:click="incrementOrderCycleStatus({{ $order->id }})">
 
         <span wire:loading.remove wire.target="incrementOrderCycleStatus">
-            {{ translate('Next status') }}
+              {{ translate('Next status') }}
+
         </span>
 
         <span wire:loading wire.target="incrementOrderCycleStatus">
             {{ translate('Updating order status...') }}
         </span>
+
+        @svg('heroicon-o-arrow-right', ['class' => 'h-4 h-4 ml-3'])
+
     </div>
 
     <div>
+        <div class="mt-3 text-sm text-gray-600">
+            {{ translate('Updating as: ') }} {{ auth()->user()->name }} {{ auth()->user()->surname }}
+        </div>
         @if($order->getWEF('cycle_status') > 1)
 
         <fieldset class="space-y-5">

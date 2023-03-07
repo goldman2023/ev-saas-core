@@ -125,7 +125,7 @@
                         @php
                             $wef_id = 'wef-order-'.$order->id.'-order_delivery_deadline';
                         @endphp
-                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="flex items-center font-semibold text-red-600"
+                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="cursor-pointer flex items-center font-semibold text-red-600"
                             id="{{ $wef_id }}"
                             @click="$dispatch('display-wef-editor-modal', {
                                 'target': '{{ $wef_id }}',

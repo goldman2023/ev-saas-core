@@ -8,7 +8,7 @@
     Įgaliojimas
 </div>
 <div class="center">
-    2022 m. _______________ d.
+    {{ date('Y' )}} m. _______________ d.
 </div>
 <div class="center">
     Kaunas,

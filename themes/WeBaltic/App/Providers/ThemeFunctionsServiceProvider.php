@@ -169,6 +169,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'bendroji_mase' => 'string',
                     'variantas' => 'string',
                     'kebulo_kodas' => 'string',
+                    'vin_kodo_raide' => 'string',
                     'modifikacija' => 'string',
                 ]);
             }, 10, 1);
@@ -201,11 +202,11 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 
                     // TODO: Generate docs for manufacturing order: certificate, manufacturing order etc.
 
-                         
+
                 } else {
                     $order->setWEF('cycle_status', 0); // 0 is 'request'
                     $order->setWEF('cycle_step_date_request', time());
-    
+
                     baltic_generate_order_document(
                         order: $order,
                         template: 'documents-templates.proposal',
@@ -214,7 +215,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                         data: ['user' => $order->user]
                     );
                 }
-                
+
             }, 10, 1);
 
             // In standard checkout flow, cycle_status is approved and we should generate certificate, proposal and contract
@@ -304,8 +305,8 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             }, 10, 2);
 
             add_action('view.dashboard.form.order.generate-invoice-btn', function($order, $html) {
-                if(!empty($order->id) && $order->invoices->isEmpty() && 
-                    ($order->getWEF('cycle_status') === array_flip(OrderCycleStatusEnum::values())['approved'] ?? false) && 
+                if(!empty($order->id) && $order->invoices->isEmpty() &&
+                    ($order->getWEF('cycle_status') === array_flip(OrderCycleStatusEnum::values())['approved'] ?? false) &&
                     !$order->getWEF('is_manufacturing_order', false, false)) {
                     echo $html;
                 } else {

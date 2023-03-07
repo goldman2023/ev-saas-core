@@ -21,11 +21,14 @@ function generate_vin_code($item)
     // Since each OrderItem has copies of attributes of each linked product or "custom product", we should get the attributes from OrderItem itself - that's the main source of truth
 
     $order_item = $item->get_primary_order_item()->subject;
+    $error = null;
+
 
     if (empty($order_item)) {
         $order_item = $item->get_primary_order_item();
     }
     if (empty($order_item)) {
+        $error = "No primary product found";
         return null;
     }
 
@@ -61,6 +64,7 @@ function generate_vin_code($item)
     if ($order_item->getAttr('priekabos-bendroji-mase')) {
         $total_weight = $order_item->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
     } else {
+        $error = "Missing weight data";
         $total_weight = 0;
     }
 
@@ -79,6 +83,7 @@ function generate_vin_code($item)
         $axel_count = $order_item->getAttr('asiu-kiekis')->attribute_values->first()->values;
     } else {
         $axel_count = 0;
+        $error = "Missing axle data";
     }
 
     if ($axel_count == 1) {
@@ -133,7 +138,7 @@ function generate_vin_code($item)
         $controll_number = vin_control_number($vin_code);
         $vin_code[8] = $controll_number;
     } else {
-        return 'Incomplete Data';
+        return $error;
     }
 
     return $vin_code;

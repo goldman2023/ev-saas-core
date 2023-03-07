@@ -63,7 +63,7 @@ class Order extends WeBaseModel
     public mixed $discount_amount;
 
     public mixed $subtotal_price;
-    
+
     public mixed $tax_amount;
 
     public mixed $total_price;
