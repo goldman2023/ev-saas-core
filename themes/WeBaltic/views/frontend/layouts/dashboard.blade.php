@@ -137,22 +137,22 @@
 
         <x-system.form-modal id="mark-invoice-as-paid-confirmation-modal" title="{{ translate('Confirmation window') }}" class="!max-w-lg">
             <div class="w-full flex flex-col gap-y-2" x-data="{
-                processing: false;
+                processing: false,
                 invoice_id: null,
                 markAsPaid() {
                     this.processing = true;
-                    $dispatch('mark-invoice-as-paid-start', ['invoice_id': this.invoice_id })]);
+                    $dispatch('mark-invoice-as-paid-start', {'invoice_id': this.invoice_id });
                 }
             }" @display-modal.window="
                 if($event.detail.id === id) {
                     invoice_id = $event.detail.invoice_id;
                 }
             " @mark-invoice-as-paid-end.window="
-                if($event.detail.id === id) {
+                {{-- if($event.detail.id === id) { --}}
                     processing = false;
                     show = false;
-                }
-            ">
+                {{-- } --}}
+            " :class="{'pointer-events-none opacity-40': processing}">
                 <p class="w-full">{{ translate('Are you sure you want to mark this invoice as paid?') }}</p>
                 <div class="w-full">
                     <button class="btn-primary" @click="markAsPaid()">

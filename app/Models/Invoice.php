@@ -144,6 +144,14 @@ class Invoice extends WeBaseModel
             'percentage_of_total_order_price' => 'decimal',
         ]));
     }
+
+    public function setInvoiceAsPaid() {
+        $this->payment_status = PaymentStatusEnum::paid()->value;
+    }
+
+    public function isPaid() {
+        return $this->payment_status === PaymentStatusEnum::paid()->value;
+    }
     
     /*
      * This functions determines if current Invoice is actually the last invoice of an Order this invoice is related to.

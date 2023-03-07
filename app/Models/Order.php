@@ -13,6 +13,7 @@ use App\Traits\CoreMetaTrait;
 use App\Traits\HasDataColumn;
 use App\Traits\PermalinkTrait;
 use App\Traits\TemporaryTrait;
+use App\Enums\PaymentStatusEnum;
 use Spatie\ModelStatus\HasStatuses;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -282,6 +283,23 @@ class Order extends WeBaseModel
             'billing_company_code' => 'string',
             'billing_company_vat' => 'string',
         ]));
+    }
+
+    public function setOrderAsPaid() {
+         if($this->invoices->isNotEmpty()) {
+             $paid = true;
+
+             foreach($this->invoices as $invoice) {
+                if(!$invoice->isPaid()) {
+                    $paid = false;
+                }
+             }
+
+             if($paid) {
+                $this->payment_status = PaymentStatusEnum::paid()->value;
+                // $this->save();
+             }
+         }
     }
 
     // Stripe
