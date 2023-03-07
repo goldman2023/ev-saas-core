@@ -8,8 +8,8 @@
     </p>
 </div>
 <div class="mt-5 border-t border-gray-200">
-    <dl class="divide-y divide-gray-200">
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+    <dl class="divide-y divide-gray-200 sm:grid sm:grid-cols-2">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>{{ translate('Assembly Notes') }}</span>
             </dt>
@@ -18,7 +18,7 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>{{ translate('Assembler') }}</span>
             </dt>
@@ -28,7 +28,7 @@
         </div>
 
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Date of Assembly') }}
@@ -36,16 +36,16 @@
             </dt>
             <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 <x-wef.field
-                    :subject="$order" 
-                    label="Date of Assembly" 
-                    type="date" 
+                    :subject="$order"
+                    label="Date of Assembly"
+                    type="date"
                     form_type="date"
                     data_type="date"
                     key="cycle_step_date_assembly"></x-wef.field>
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Date of Welding') }}
@@ -56,7 +56,7 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Date of Inspection') }}
@@ -67,7 +67,7 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Inspected by') }}
@@ -78,7 +78,7 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Inspection notes') }}
@@ -89,18 +89,28 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Serial Number') }}
                 </span>
             </dt>
             <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                <x-wef.field :subject="$order" label="Serial Number (Custom)" type="string" form_type="plain_text" key="serial_number_custom"></x-wef.field>
+                <x-wef.field :subject="$order" label="{{ translate('Serial Number (Custom)') }}" type="string" form_type="plain_text" key="serial_number_custom"></x-wef.field>
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Version') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field :subject="$order" label="{{ translate('Version') }}" type="string" form_type="plain_text" key="version_custom"></x-wef.field>
+            </dd>
+        </div>
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Pakabos vieta') }}
@@ -111,7 +121,7 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Brėžinių skaičius') }}
@@ -122,7 +132,7 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Axle make') }}
@@ -133,7 +143,7 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Wheels') }}
@@ -144,7 +154,7 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Lights') }}
@@ -155,7 +165,7 @@
             </dd>
         </div>
 
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+        <div class="py-4 sm:grid  sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
                 <span>
                     {{ translate('Coupling') }}
