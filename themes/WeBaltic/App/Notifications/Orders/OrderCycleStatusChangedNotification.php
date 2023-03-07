@@ -44,7 +44,7 @@ class OrderCycleStatusChangedNotification extends WeNotification
 
     public function toDatabase($notifiable) {
         return [
-            'title' => translate('Order ('.$this->order->id.') cycle status updated from '.$this->old_status_label.' to '.$this->new_status_label),
+            'title' => translate('Order) ') . '('.$this->order->id.') '. translate('Cycle status updated from') .' '. $this->old_status_label. translate(' to ') .$this->new_status_label,
             'data' => ['action' => 'order_cycle_status_changed', 'old_status' => $this->old_status, 'new_status' => $this->new_status, 'changed_on' => $this->current_timestamp, 'user' => $notifiable->attributesToArray(), 'order' => $this->order->attributesToArray()]
         ];
     }

@@ -24,7 +24,8 @@ class WefEditorModal extends Component
 
     public $wefKey;
     public $wefLabel;
-    public $dataType;
+    public $setType;
+    public $getType;
     public $formType;
     public $predefinedItems;
     public $customProperties;
@@ -64,7 +65,8 @@ class WefEditorModal extends Component
         $this->target = $data['target'] ?? '';
         $this->wefKey = $data['wef_key'] ?? '';
         $this->wefLabel = $data['wef_label'] ?? '';
-        $this->dataType = $data['data_type'] ?? 'string';
+        $this->setType = $data['set_type'] ?? 'string';
+        $this->getType = $data['get_type'] ?? 'string';
         $this->formType = $data['form_type'] ?? 'plain_text';
         $this->customProperties = $data['custom_properties'] ?? [];
         $this->predefinedItems = $data['predefined_items'] ?? [];

@@ -8,19 +8,19 @@
     Įgaliojimas
 </div>
 <div class="center">
-    2022 m. _______________ d.
+    {{ date('Y' )}} m. _______________ d.
 </div>
 <div class="center">
     Kaunas,
 </div>
 
-<div class="center" style="border-bottom: 1px solid black;">
+<div class="center" style="">
     {{ get_setting('company_name') }}, įmonės kodas {{ get_setting('company_code') }}, registruota adresu {{ get_setting('company_address') }}, {{ get_setting('company_city') }}
     atstovaujama direktoriaus {{ get_setting('company_ceo_name') }}, įgalioja
 </div>
 
 
-<div class="table" style="margin-bottom: 50px;">
+<div class="table" style="width: 100%; margin-top: 40px; margin-bottom: 50px;">
     <table>
         {{-- Table Header --}}
         <tr>
@@ -37,21 +37,21 @@
         </tr>
         {{-- Data --}}
         <tr>
-            <td>
+            <td style="padding: 20px;">
             </td>
-            <td>
+            <td style="padding: 20px;">
             </td>
-            <td>
+            <td style="padding: 20px;">
             </td>
 
         </tr>
 
         <tr>
-            <td>
+            <td style="padding: 20px;">
             </td>
-            <td>
+            <td style="padding: 20px;">
             </td>
-            <td>
+            <td style="padding: 20px;">
             </td>
         </tr>
     </table>

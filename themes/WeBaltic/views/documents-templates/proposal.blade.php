@@ -7,13 +7,10 @@
 @endpush
 
 @php
-$product = $order->get_primary_order_item()->subject;
-if(empty($product)) {
-    $product = $order->get_primary_order_item();
-}
+$order_item = $order->get_primary_order_item();
 @endphp
-@section('content')
 
+@section('content')
 <div class="text-sm py-3">
     <div class="w-full">
         p. {{ $order->billing_first_name }} {{ $order->billing_last_name }}
@@ -49,15 +46,15 @@ if(empty($product)) {
 
     {{-- Add OrderItem attributes here --}}
     <div class="w-full pb-3">
-        <div class="w-full font-bold">Ilgis: {{ $product->getAttrValue('kraunamo-pavirsiaus-ilgis') }} mm </div>
-        <div class="w-full font-bold">Plotis: {{ $product->getAttrValue('kraunamo-pavirsiaus-plotis') }} mm </div>
-        <div class="w-full font-bold">Bortai: {{ $product->getAttrValue('bortu-aukstis') }} mm </div>
+        <div class="w-full font-bold">Ilgis: {{ $order_item->getAttrValue('kraunamo-pavirsiaus-ilgis') }} mm </div>
+        <div class="w-full font-bold">Plotis: {{ $order_item->getAttrValue('kraunamo-pavirsiaus-plotis') }} mm </div>
+        <div class="w-full font-bold">Bortai: {{ $order_item->getAttrValue('bortu-aukstis') }} mm </div>
     </div>
 
     <div class="w-full pb-3">
-        <div class="w-full font-bold">Bendroji masė: {{ $product->getAttrValue('priekabos-bendroji-mase') }} kg</div>
-        <div class="w-full font-bold">Ašis: {{ $product->getAttrValue('asiu-kiekis') }}</div>
-        <div class="w-full font-bold">Ratai: {{ $product->getAttrValue('padangos') }}</div>
+        <div class="w-full font-bold">Bendroji masė: {{ $order_item->getAttrValue('priekabos-bendroji-mase') }} kg</div>
+        <div class="w-full font-bold">Ašis: {{ $order_item->getAttrValue('asiu-kiekis') }}</div>
+        <div class="w-full font-bold">Ratai: {{ $order_item->getAttrValue('padangos') }}</div>
     </div>
 
 

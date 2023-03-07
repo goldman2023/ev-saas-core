@@ -29,8 +29,8 @@
                 <div class="col-span-7">
 
                     <p class="text-gray-700  text-sm mb-4">
-                       {{ translate('Krovinių dėžės ilgis:') }} <span class="font-bold">{{ $product->getAttrValue('kraunamo-pavirsiaus-ilgis') }} cm </span><br>
-                        {{ translate('Krovinių dėžės plotis:') }} <span class="font-bold">{{ $product->getAttrValue('kraunamo-pavirsiaus-plotis') }} cm </span><br>
+                       {{ translate('Krovinių dėžės ilgis:') }} <span class="font-bold">{{ $product->getAttrValue('kraunamo-pavirsiaus-ilgis') / 10 }} cm </span><br>
+                        {{ translate('Krovinių dėžės plotis:') }} <span class="font-bold">{{ $product->getAttrValue('kraunamo-pavirsiaus-plotis') / 10 }} cm </span><br>
                         {{ translate('Keliamoji galia:') }} <span class="font-bold">{{ $product->getAttrValue('bendra-krova') }} kg </span>
 
                         <br>

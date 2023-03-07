@@ -104,8 +104,8 @@
 
     <div class="sm:col-span-8">
 
-        <div class="bg-white rounded shadow mb-3">
-            <div class="max-w-2xl mx-auto pt-8 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8">
+        <div class="card">
+            <div class="max-w-4xl mx-auto pt-3">
                 <div class="px-4 space-y-2 sm:px-0 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 mb-3">
 
                     {{-- <span class="badge-dark ml-2">
@@ -125,7 +125,7 @@
                         @php
                             $wef_id = 'wef-order-'.$order->id.'-order_delivery_deadline';
                         @endphp
-                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="flex items-center font-semibold text-red-600"
+                        <time datetime="{{ $order->created_at->format('Y-m-d') }}" class="cursor-pointer flex items-center font-semibold text-red-600"
                             id="{{ $wef_id }}"
                             @click="$dispatch('display-wef-editor-modal', {
                                 'target': '{{ $wef_id }}',
@@ -133,7 +133,8 @@
                                 'subject_type': '{{ base64_encode($order::class) }}',
                                 'wef_key': 'order_delivery_deadline',
                                 'wef_label': '{{ translate('Order delivery deadline') }}',
-                                'data_type': 'date',
+                                'set_type': 'unix_timestamp',
+                                'get_type': 'date',
                                 'form_type': 'date',
                                 'custom_properties': {'range': false, 'with_time': false},
                             })" >
@@ -175,7 +176,7 @@
                                 class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700"
                                 id="order-documents-tab" data-tabs-target="#order-documents-content" type="button" role="tab"
                                 aria-controls="order-documents-content" aria-selected="false">
-                                {{ translate('Documents') }}
+                                {{ translate('Documents') }} ({{ count($order->documents) }})
                             </button>
                         </li>
 

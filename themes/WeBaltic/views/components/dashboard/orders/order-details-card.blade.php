@@ -102,7 +102,7 @@
 
                     {{-- {!! QrCode::size(100)->generate(URL::current()) !!} --}}
                 </div>
-                <div class="-rotate-90 absolute top-[80px] left-[-80px]" style="margin-left: 15px;">
+                <div class="-rotate-90 absolute top-[80px] left-[-80px] text-center" style="margin-left: 15px;">
                     <div class="underline">
                         www.tero.lt
                     </div>

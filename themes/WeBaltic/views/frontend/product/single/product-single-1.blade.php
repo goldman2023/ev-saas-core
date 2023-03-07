@@ -156,7 +156,9 @@
                                 @svg('heroicon-o-document-text', ['class' => 'h-6 w-6 flex-shrink-0 text-primary-600'])
 
                                 <div class="ml-2 text-sm text-gray-500">
-                                    {{ translate('Download User Guide') }} (.pdf)
+                                    <a target="_blank" href={{ get_setting('documentation_url') }}>
+                                        {{ translate('Download User Guide') }} (.pdf)
+                                    </a>
                                 </div>
                             </a>
 
@@ -199,9 +201,10 @@
 {{-- <x-products.single.technical-specification-section :product="$product">
 </x-products.single.technical-specification-section> --}}
 
-
+<div class="mb-9">
 <x-products.single.related-products :product="$product">
 </x-products.single.related-products>
+</div>
 
 <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
 

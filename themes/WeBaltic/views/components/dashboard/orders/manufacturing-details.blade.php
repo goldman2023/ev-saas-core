@@ -35,7 +35,13 @@
                 </span>
             </dt>
             <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                <x-wef.field :subject="$order" label="Date of Assembly" type="date" form_type="date" key="cycle_step_date_assembly"></x-wef.field>
+                <x-wef.field
+                    :subject="$order" 
+                    label="Date of Assembly" 
+                    type="date" 
+                    form-type="date"
+                    key="cycle_step_date_assembly"
+                    :custom-properties="['range' => false, 'with_time' => true]"></x-wef.field>
             </dd>
         </div>
 

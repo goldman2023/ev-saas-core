@@ -140,6 +140,7 @@ class CustomAttributesRelation extends Relation
      * @return mixed
      */
     public function getResults() {
+        // TODO: Fix custom_attributes to actually returns something when called this way: $model->custom_attributes....it returns empty collection.
         return $this->get();
     }
 
@@ -155,7 +156,7 @@ class CustomAttributesRelation extends Relation
     {
         $data = $this->query->getQuery()->get();
         $attributes = new Collection();
-
+        
         if(!empty($data)) {
 
             foreach($data as $index => $attribute_object) {
@@ -217,6 +218,11 @@ class CustomAttributesRelation extends Relation
                 }
             }
         }
+
+        $this->model->setRelation(
+            'custom_attributes',
+            $attributes
+        );
 
         return $attributes;
     }

@@ -6,11 +6,13 @@ use Illuminate\View\Component;
 
 class Field extends Component
 {
-    public $wef_id;
+    public $wefId;
     public $subject;
     public $key;
-    public $type;
-    public $form_type;
+    public $setType;
+    public $getType;
+    public $formType;
+    public $customProperties;
     public $label;
 
     /**
@@ -18,16 +20,17 @@ class Field extends Component
      *
      * @return void
      */
-    public function __construct($subject, $key, $label,  $type = 'string', $form_type = 'plain_text')
+    public function __construct($subject, $key, $label,  $setType = 'string', $getType = 'string', $formType = 'plain_text', $customProperties = [])
     {
         //
         $this->key = $key;
         $this->label = $label;
         $this->subject = $subject;
-        $this->wef_id = 'wef-'.$this->subject->id.'-'.$this->key;
-        $this->type = $type;
-        $this->form_type = $form_type;
-
+        $this->wefId = 'wef-'.$this->subject->id.'-'.$this->key;
+        $this->setType = $setType;
+        $this->getType = $getType;
+        $this->formType = $formType;
+        $this->customProperties = $customProperties;
     }
 
     /**

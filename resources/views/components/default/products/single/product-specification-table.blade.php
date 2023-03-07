@@ -2,10 +2,6 @@
 
     @foreach ($product_grouped_attributes as $group_name => $group)
         <div class="specification-row">
-            <div class="title">
-                {{-- <h5>{{ $group->name }}</h5> --}}
-            </div>
-
             <ul class="specification-list list-group list-group-flush p-0 grid-cols-2 grid gap-x-6">
                 @foreach($group->custom_attributes as $attribute)
                 @if($attribute->id != 28)

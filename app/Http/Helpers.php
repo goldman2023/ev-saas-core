@@ -85,24 +85,34 @@ if (!function_exists('castValueForSave')) {
     function castValueForSave($key, $setting, $data_types) {
         $data_type = $data_types[$key] ?? null;
 
-        if($data_type === Upload::class || $data_type === Category::class) {
-            $setting = ctype_digit($setting) || is_numeric($setting) ? $setting : null;
-        } else if($data_type === Currency::class) {
-            if(!Currency::where('code', $setting)->exists()) {
-                $setting = 'EUR'; // If currency with $setting code does not exist in database, make EUR default
+        try {
+            if($data_type === Upload::class || $data_type === Category::class) {
+                $setting = ctype_digit($setting) || is_numeric($setting) ? $setting : null;
+            } else if($data_type === Currency::class) {
+                if(!Currency::where('code', $setting)->exists()) {
+                    $setting = 'EUR'; // If currency with $setting code does not exist in database, make EUR default
+                }
+            } else if($data_type === 'int') {
+                $setting = ctype_digit($setting) || is_numeric($setting) ? ((int) $setting) : $setting;
+            } else if($data_type === 'decimal') {
+                $setting = ctype_digit($setting) || is_numeric($setting) ? ((float) $setting) : $setting;
+            } else if($data_type === 'boolean') {
+                $setting = $setting ? 1 : 0;
+            } else if($data_type === 'unix_timestamp') {
+                if(ctype_digit($setting) || is_numeric($setting)) {
+                    $setting = (int) $setting;
+                } else if(is_string($setting)) {
+                    $setting = strtotime($setting);
+                } else {
+                    $setting = null;
+                }
+            } else if($data_type === 'object' || $data_type === 'array' || $data_type === 'uploads' || is_array($data_type) || is_object($data_type)) {
+                $setting = json_encode($setting);
             }
-        } else if($data_type === 'int') {
-            $setting = ctype_digit($setting) || is_numeric($setting) ? ((int) $setting) : $setting;
-        } else if($data_type === 'decimal') {
-            $setting = ctype_digit($setting) || is_numeric($setting) ? ((float) $setting) : $setting;
-        } else if($data_type === 'boolean') {
-            $setting = $setting ? 1 : 0;
-        } else if($data_type === 'unix_timestamp') {
-            $setting = ctype_digit($setting) || is_numeric($setting) ? ((int) $setting) : null;
-        } else if($data_type === 'object' || $data_type === 'array' || $data_type === 'uploads' || is_array($data_type) || is_object($data_type)) {
-            $setting = json_encode($setting);
+        } catch(\Exception $e) {
+            $setting = null;
         }
-
+        
         return $setting;
     }
 }
