@@ -39,9 +39,9 @@
                     :subject="$order" 
                     label="Date of Assembly" 
                     type="date" 
-                    form_type="date"
-                    data_type="date"
-                    key="cycle_step_date_assembly"></x-wef.field>
+                    form-type="date"
+                    key="cycle_step_date_assembly"
+                    :custom-properties="['range' => false, 'with_time' => true]"></x-wef.field>
             </dd>
         </div>
 
