@@ -15,18 +15,18 @@ if($product->getAttrValue('stabdziai') == 'mechanical') {
 }
 
 
-if ($product->getAttr('asiu-kiekis')) {
+if ($product->getAttrValue('asiu-kiekis')) {
 // $att_val = $product->getAttr('asiu-kiekis')->attribute_values->first() (AttributeValue model)
 // $att_val->getWEF('test1')
 
-$axel_count = $product->getAttr('asiu-kiekis')->attribute_values->first()->values;
+$axel_count = $product->getAttrValue('asiu-kiekis');
 } else {
 $axel_count = 0;
 }
 
-$variant = $order->getAttr('variant_custom');
+// $variant = $order->getAttr('variant_custom');
 
-$version = $order->getAttr('version_custom');
+// $version = $order->getAttr('version_custom');
 
 $vehicle_type = "TERO1";
 @endphp
@@ -186,7 +186,7 @@ Version: - <br>
     6. Width: <strong>{{ $product->getAttrValue('kraunamo-pavirsiaus-plotis') }} mm </strong>
 </div>
 <div>
-    7. Height: 540 mm
+    7. Height: {{ $product->getAttrValue('aukstis') }} mm
 </div>
 <div>
     10. Distance between the centre of the coupling device and the rear end of the vehicle : 4300 mm
@@ -211,8 +211,8 @@ Version: - <br>
 <div style="font-weight: 700;">
 
     @php
-    if ($product->getAttr('priekabos-bendroji-mase')) {
-    $lifting_mass = $product->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
+    if ($product->getAttrValue('priekabos-bendroji-mase')) {
+    $lifting_mass = $product->getAttrValue('priekabos-bendroji-mase');
     } else {
     $lifting_mass = 0;
     }
