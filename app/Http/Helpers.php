@@ -188,13 +188,9 @@ if (!function_exists('castValuesForGet')) {
 
                     if(isset($settings[$key]) && !$isEmpty($setting)) {
                         if($data_type === Upload::class) {
-                            $setting = Cache::remember('settings_' . $key, 60, function() use ($setting) {
-                                return Upload::find($setting);
-                            });
+                            $setting = Upload::find($setting); // TODO: Add cache here
                         } else if($data_type === Currency::class) {
-                            $setting = Cache::remember('currency_' . $setting, 60 * 60 * 24, function() use ($setting) {
-                                return Currency::where('code', $setting)?->first() ?? Currency::where('code', 'EUR')?->first();
-                            });
+                            $setting = Currency::where('code', $setting)?->first() ?? Currency::where('code', 'EUR')?->first(); // TODO: Add cache here
                         } else if($data_type === Category::class) {
                             $setting = Category::find($setting);
                         } else if($data_type === 'uploads') {

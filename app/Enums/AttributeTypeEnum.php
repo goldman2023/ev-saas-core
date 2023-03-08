@@ -5,6 +5,7 @@ namespace App\Enums;
 /**
  * @method static self checkbox()
  * @method static self dropdown()
+ * @method static self toggle()
  * @method static self radio()
  * @method static self plain_text()
  * @method static self textarea()

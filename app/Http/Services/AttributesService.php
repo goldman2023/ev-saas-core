@@ -7,11 +7,11 @@ use Cache;
 use Vendor;
 use App\Models\Shop;
 use App\Models\Product;
-use App\Models\Attribute;
 use App\Models\Category;
+use App\Models\Attribute;
 use App\Models\AttributeGroup;
-use Illuminate\Support\Collection;
 use App\Models\CategoryRelationship;
+use App\Support\Eloquent\Collection;
 
 class AttributesService
 {
@@ -131,5 +131,54 @@ class AttributesService
         }
 
         return $selected_attributes;
+    }
+
+    // Getter/Setter functions
+    public static function castGet(&$value, $att_type) {
+        if(self::isValueEmpty($value)) {
+            if($att_type === 'toggle') {
+                $value = false;
+            } if($att_type === 'number') {
+                $value = 0;
+            } else {
+                $value = '';
+            }
+        } else {
+            if($att_type === 'toggle') {
+                $value = (boolean) $value;
+            } else if($att_type === 'number') {
+                $value = ctype_digit($value) || is_numeric($value) ? ((float) $value) : $value;
+            } else if($att_type === 'date') {
+                // If saved as unix_timestamp
+                if(ctype_digit($value) || is_numeric($value) || is_integer($value)) {
+                    $value = \Carbon::createFromTimestamp($value)->format('d M, Y');
+                }
+            } else if($att_type === 'image') {
+                $value = Upload::find($value); // TODO: Add cache for attribute here
+            } 
+            else if($att_type === 'gallery') {
+                $uploads = [];
+                if(is_array($value) && !empty($value)) {
+                    foreach($value as $upload_id) {
+                        $uploads[] = Upload::find($upload_id);
+                    }
+                }
+                $value = (new Collection($uploads))->filter()->values();
+            }
+        }
+
+        return $value;
+    }
+
+    public static function castSet(&$value, $type) {
+
+    }
+
+    public static function isValueEmpty($value) {
+        if($value === '' || $value === "" || $value === null || $value === NULL || $value === false || $value === []) {
+            return true;
+        }
+
+        return false;
     }
 }
