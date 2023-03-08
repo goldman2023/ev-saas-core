@@ -61,8 +61,8 @@ function generate_vin_code($item)
         $vin_code .= 'S';
     }
 
-    if ($order_item->getAttr('priekabos-bendroji-mase')) {
-        $total_weight = $order_item->getAttr('priekabos-bendroji-mase')->attribute_values->first()->values;
+    if ($order_item->getAttr('bendroji-mase')) {
+        $total_weight = $order_item->getAttr('bendroji-mase')->attribute_values->first()->values;
     } else {
         $error = "Missing weight data";
         $total_weight = 0;
@@ -273,6 +273,14 @@ function generate_certificate_number($certificate) {
 
 function generate_axle_permissable_mass() {
 
+}
+
+function get_primary_phone_number() {
+    if(isset(get_setting('company_phones')[0])) {
+        return get_setting('company_phones')[0];
+    } else {
+        return '';
+    }
 }
 
 function get_customer_visible_documents_tags() {

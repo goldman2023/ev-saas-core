@@ -153,8 +153,12 @@
                                 @svg('lineawesome-shopping-cart-solid', ['class' => 'text-slate-600', 'style' => 'width: 72px;'])
                             </figure>
                             <div class="mb-5">
-                                <h3 class="h3">{{ translate('Your cart is currently empty') }}</h3>
-                                <p class="mx-3 mt-3">{{ translate('Before proceed to checkout you must add some products to your shopping cart.') }}</p>
+                                <h3 class="h3 font-bold text-lg">
+                                    {{ translate('Your cart is currently empty') }}
+                                </h3>
+                                <p class="mx-3 mt-3">
+                                    {{ translate('Before proceed to checkout you must add some products to your shopping cart.') }}
+                                </p>
                             </div>
                             <a class="btn btn-pill w-full !text-md !py-3 btn-primary text-white transition-3d-hover px-5 py-2"
                             href="{{ route('products.all') }}">

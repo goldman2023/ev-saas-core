@@ -87,7 +87,7 @@
                 <div class="mb-6 pt-12 sm:pt-0">
                     <div class="flex w-full items-center justify-center">
                     <h1 class="w-full text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-2">
-                        {{ $product->name }}
+                      {{ translate('Priekaba') }} {{ $product->name }}
                     </h1>
                     <div class="text-right">
                     <livewire:actions.social-action-button action="save_detailed" template="wishlist-button-detailed" :object="$product">
@@ -95,9 +95,9 @@
                     </div>
                     </div>
 
-                    <span class="font-medium block text-gray-600 text-[16px] line-clamp-1">
+                    <h2 class="font-medium block text-gray-600 text-[16px] line-clamp-1">
                         {{ $product->excerpt }}
-                    </span>
+                    </h2>
                 </div>
 
 
@@ -118,7 +118,7 @@
 
                 <div class="mt-4"><a href="#" class="group inline-flex text-sm text-gray-500 hover:text-gray-700"><span
                             id="i72hhgh">
-                            {{ translate('Reikia pagalbos?') }} +37065455654
+                            {{ translate('Reikia pagalbos?') }} {{ get_primary_phone_number() }}
                         </span><svg
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                             aria-hidden="true"
