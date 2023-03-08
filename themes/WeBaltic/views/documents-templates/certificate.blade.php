@@ -45,11 +45,12 @@ $vehicle_type = "TERO1";
     The undersigned: <strong>Director {{ get_setting('company_ceo_name') }}</strong> <br>
     hereby certifies that the vehicle:
 </p>
-
+<div style="padding-left: 40px;">
 0.1. Make: <strong>TERO</strong> <br>
 0.2. Type: <strong>{{ $vehicle_type }}</strong> <br>
 Variant: S <br>
 Version: - <br>
+</div>
 <div>
     0.2.1 Commercial name(s): {{ $product->name }}
 </div>
