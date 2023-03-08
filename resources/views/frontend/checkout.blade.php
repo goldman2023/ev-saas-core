@@ -64,7 +64,7 @@
                                             <small class="line-clamp-1">{{ $model->excerpt }}</small>
                                         </div>
                                         <div class="w-full leading-4 pl-4 mt-1">
-                                            <small class="line-clamp-1">{{ translate('Quantity:') }} {{ $model->purchase_quantity }}</small>
+                                            <small class="line-clamp-1">{{ translate('Quantity') }}: {{ $model->purchase_quantity }}</small>
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                                                 <div class="flex items-center ">
                                                     <span class="pr-2">+</span>
                                                     <strong class="text-12 line-clamp-1 pr-2">{{ $addon->name }}</strong>
-                                                    <span class="text-12 line-clamp-1">{{ translate('Quantity:') }} {{ $addon->purchase_quantity }}</span>
+                                                    <span class="text-12 line-clamp-1">{{ translate('Quantity') }}: {{ $addon->purchase_quantity }}</span>
                                                 </div>
 
                                                 <x-system.we-price :model="$addon" :with-qty="true" class="ml-auto"></x-system.we-price>

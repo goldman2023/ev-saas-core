@@ -70,7 +70,7 @@
 
                 <div class="ml-6 flex-1 text-sm">
                   <div class="font-medium text-gray-900 sm:flex sm:justify-between">
-                    <h5 class="flex items-center gap-x-2">{{ $item->name }} <span class="text-12 line-clamp-1 font-normal">({{ translate('Quantity:') }} {{ $item->quantity }})</span></h5>
+                    <h5 class="flex items-center gap-x-2">{{ $item->name }} <span class="text-12 line-clamp-1 font-normal">({{ translate('Quantity') }}: {{ $item->quantity }})</span></h5>
                     <p class="mt-2 sm:mt-0">{{ \FX::formatPrice($item->total_price) }}</p>
                   </div>
                   @if(!empty($item->excerpt))
@@ -86,7 +86,7 @@
                                 <div class="flex items-center ">
                                   <span class="pr-2">+</span>
                                   <strong class="text-12 line-clamp-1 pr-2">{{ $addon_item->name }}</strong>
-                                  <span class="text-12 line-clamp-1">{{ translate('Quantity:') }} {{ $addon_item->quantity }}</span>
+                                  <span class="text-12 line-clamp-1">{{ translate('Quantity') }}: {{ $addon_item->quantity }}</span>
                                 </div>
 
                                 <strong class="text-12 text-gray-900">{{ \FX::formatPrice($addon_item->total_price) }}</strong>

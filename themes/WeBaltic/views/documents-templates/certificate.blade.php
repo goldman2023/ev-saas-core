@@ -133,7 +133,8 @@ Version: - <br>
     0.10.  Vehicle identification number: <strong>{{ generate_vin_code($order) }} </strong>
 </div>
 <div>
-    0.11.  Date of manufacture of the vehicle:
+    0.11.  Date of manufacture of the vehicle: <br>
+    {{-- TODO: add manufacturing date, based on order delivery date. --}}
     conforms in all respects to the type described in approval
     <strong>
         @if($product->getAttrValue('sertifikato-numeris'))
@@ -208,7 +209,7 @@ Version: - <br>
 <div>
     13.1. Distribution of this mass amongst the axles:
 </div>
-<div style="font-weight: 700;">
+<div style="padding-left: 40px; font-weight: 700;">
 
     @php
     if ($product->getAttrValue('priekabos-bendroji-mase')) {
@@ -242,7 +243,10 @@ Version: - <br>
 
 <div>
     16.1. Technically perm. maximum laden mass:
-    {{ $product->getAttrValue('bendra-krova') }} kg
+    {{-- TODO: add all this for other parts, make sure padding is constent --}}
+    <div style="padding-left: 40px;">
+        {{ $product->getAttrValue('bendra-krova') }} kg
+    </div>
 </div>
 
 <div>
@@ -363,6 +367,7 @@ Version: - <br>
     </strong>
 </div>
 <div>
+    {{-- TODO: Select coupling device  --}}
     44. Number of the approval certificate or approval mark of coupling device (if fitted): E4 55R-01 0232
 </div>
 <div>

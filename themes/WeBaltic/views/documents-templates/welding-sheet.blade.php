@@ -67,7 +67,7 @@ if($product->getAttrValue('stabdziai') == 'mechanical') {
             <td colspan="3">{{ $order->getWEF('assembler') }}</td>
         </tr>
         <tr>
-            <td colspan="2">Inspected</td>
+            <td colspan="2">{{ translate('Inspected Date:') }}</td>
 
             <td>Inspector:</td>
             <td colspan="3">{{ $order->getWEF('inspected_by') }}</td>

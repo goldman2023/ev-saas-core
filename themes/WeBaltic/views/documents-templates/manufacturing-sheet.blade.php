@@ -116,7 +116,7 @@ if($product->getAttrValue('stabdziai') == 'mechanical') {
             <td>AL-KO</td>
             <td>O - 750 kg</td>
             <td rowspan="2" colspan="2">Wheels:</td>
-            <td rowspan="2" colspan="2">O - Kargo Trail R13</td>
+            <td rowspan="2" colspan="2">{{ $product->getAttrValue('padangos') }} </td>
         </tr>
         <tr>
             <td>KNOTT</td>

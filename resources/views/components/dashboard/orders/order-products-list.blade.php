@@ -42,9 +42,9 @@
                                         <div class="flex items-center ">
                                           <span class="pr-2">+</span>
                                           <strong class="text-12 line-clamp-1 pr-2">{{ $addon_item->name }}</strong>
-                                          <span class="text-12 line-clamp-1">{{ translate('Quantity:') }} {{ $addon_item->quantity }}</span>
+                                          <span class="text-12 line-clamp-1">{{ translate('Quantity') }}: {{ $addon_item->quantity }}</span>
                                         </div>
-                                        
+
                                         <strong class="text-12 text-gray-900">{{ \FX::formatPrice($addon_item->total_price) }}</strong>
                                     </li>
                                 @endforeach
@@ -83,7 +83,7 @@
                             </div>
                         </dl>
 
-                        
+
                     </div>
                 </div>
             </div>

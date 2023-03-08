@@ -90,9 +90,9 @@
                                       <div class="flex items-center ">
                                         <span class="pr-2">+</span>
                                         <strong class="text-12 line-clamp-1 pr-2">{{ $addon_item->name }}</strong>
-                                        <span class="text-12 line-clamp-1">{{ translate('Quantity:') }} {{ $addon_item->quantity }}</span>
+                                        <span class="text-12 line-clamp-1">{{ translate('Quantity') }}: {{ $addon_item->quantity }}</span>
                                       </div>
-                                      
+
                                       <strong class="text-12 text-gray-900">{{ \FX::formatPrice($addon_item->total_price) }}</strong>
                                   </li>
                               @endforeach
@@ -126,7 +126,7 @@
                                   <dd class="ml-2 text-gray-700">
                                     {{ FX::formatPrice($item->total_price) }} {{ $order->type === 'subscription' ? ' / ' . $order->invoicing_period : '' }}</dd>
                                 @endif
-                                
+
                             </div>
                         </dl>
                     </div>
@@ -141,7 +141,7 @@
         <div class="grid grid-cols-3 gap-x-8">
           @if(!$order->is_temp)
             <div class="col-span-3 md:col-span-1 py-4 md:py-6 space-y-0 space-x-3 md:space-x-0 md:space-y-3 border-b border-gray-200 md:border-none">
-              
+
               <div class="flex flex-col space-y-3">
                 {{-- @if(!empty($order->invoices->first()?->meta['test_stripe_hosted_invoice_url'] ?? null)) --}}
                 @if($order->invoices->first())
