@@ -11,11 +11,11 @@
 
         </div>
     </main>
-    <div class="hidden sm:block mb-6">
+    <div class=" sm:block mb-6">
         {{ Breadcrumbs::render('product', $product) }}
     </div>
 
-    <main class="container sm:px-8">
+    <main class="container card !p-6">
         <!-- Product -->
         <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-12">
             <!-- Image gallery -->
@@ -55,9 +55,9 @@
                             class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
                             aria-controls="tabs-2-panel-1" role="tab" type="button">
                             <span class="sr-only"> Angled view </span>
-                            <span class="absolute inset-0 overflow-hidden rounded-md">
+                            <span class="absolute inset-0 overflow-hidden h-full rounded-md">
                                 <img loading="lazy" :src="window.WE.IMG.url('{{$image->file_name}}')" alt=""
-                                    class="w-full object-contain object-center">
+                                    class="w-full h-full object-cover object-center">
                             </span>
                             <!-- Selected: "ring-indigo-500", Not Selected: "ring-transparent" -->
                             <span
