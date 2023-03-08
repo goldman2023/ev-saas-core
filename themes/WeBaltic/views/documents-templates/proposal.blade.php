@@ -103,7 +103,7 @@ $order_item = $order->get_primary_order_item();
                 <tr>
                     <td class="pr-2 font-bold">{{ get_setting('company_name') }}</td>
                     <td class="pr-2">Įmonės kodas {{ get_setting('company_number') }}</td>
-                    <td class="pr-2">Tel: +370 671 81007</td>
+                    <td class="pr-2">Tel: {{ get_primary_phone_number() }}</td>
                 </tr>
                 <tr>
                     <td class="pr-2">{{ get_setting('company_address') }}, {{ get_setting('company_city') }}, <br> {{

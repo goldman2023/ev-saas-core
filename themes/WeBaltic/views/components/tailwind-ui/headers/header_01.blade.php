@@ -42,12 +42,12 @@ $header_menu_items = $header_menu['menuItems'] ?? null;
                 <div class="lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                     <a href="#" class="flex items-center	 text-sm font-medium text-white hover:text-gray-100">
                         @svg('heroicon-o-phone-arrow-down-left', ['class' => 'h-4 h-4 mr-2'])
-                        Tel.: 8 (671) 81007
+                        Tel.: {{ get_primary_phone_number() }}
                     </a>
                     <span class="h-6 w-px bg-gray-600" aria-hidden="true"></span>
                     <a href="#" class="hidden sm:flex items-center	 text-sm font-medium text-white hover:text-gray-100">
                         @svg('heroicon-o-envelope', ['class' => 'h-4 h-4 mr-2'])
-                        info@baltic-priekabos.lt
+                        {{ get_setting('site_contact_email') }}
                     </a>
                 </div>
             </div>

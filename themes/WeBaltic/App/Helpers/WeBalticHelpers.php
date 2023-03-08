@@ -275,6 +275,14 @@ function generate_axle_permissable_mass() {
 
 }
 
+function get_primary_phone_number() {
+    if(isset(get_setting('company_phones')[0])) {
+        return get_setting('company_phones')[0];
+    } else {
+        return '';
+    }
+}
+
 function get_customer_visible_documents_tags() {
     return ['proposal', 'contract', 'certificate'];
 }
