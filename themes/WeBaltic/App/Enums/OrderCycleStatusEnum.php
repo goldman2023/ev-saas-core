@@ -23,6 +23,7 @@ class OrderCycleStatusEnum extends WeBaseEnum
             9 => 'certificate',
             10 => 'completed',
             11 => 'customer_reviewed',
+            12 => 'final',
         ];
     }
 
@@ -41,13 +42,15 @@ class OrderCycleStatusEnum extends WeBaseEnum
             9 => translate('Certificate approved'),
             10 => translate('Completed'),
             11 => translate('Customer feedback'),
+            12 => translate('Finalized Orders'),
+
         ];
     }
 
     public static function getPublicStatuses() {
         return array_intersect(self::values(), ['request', 'contract', 'approved', 'completed', 'customer_reviewed']);
     }
-    
+
     public static function getPublicStatusesLabels() {
         return array_intersect_key(self::labels(), self::getPublicStatuses());
     }

@@ -1,4 +1,4 @@
-@extends('documents-templates.global-pdf-layout.pdf-layout')
+@extends('documents-templates.global-pdf-layout.pdf-layout-no-logo')
 
 @section('content')
 <div>
