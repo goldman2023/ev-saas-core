@@ -353,6 +353,14 @@ trait IsPaymentMethod
         } elseif ($this->gateway === 'paysera') {
             return [
                 [
+                    'property_name' => 'paysera_verification_meta_id',
+                    'value' => $this->data->paysera_verification_meta_id ?? '',
+                    'rules' => ['required'],
+                    'messages' => [
+                        'required' => translate('Paysera site verification meta id is required'),
+                    ],
+                ],
+                [
                     'property_name' => 'paysera_project_id',
                     'value' => $this->data->paysera_project_id ?? '',
                     'rules' => ['required'],

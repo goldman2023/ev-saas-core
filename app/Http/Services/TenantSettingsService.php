@@ -339,6 +339,11 @@ class TenantSettingsService
                 ],
             ],
 
+            // Dokobit
+            'dokobit_enabled' => 'boolean',
+            'dokobit_api_key' => 'string',
+            'dokobit_sandbox' => 'boolean',
+
             // Advanced
             'user_meta_fields_in_use' => 'array',
             'include_phone_number_in_registration' => 'boolean',

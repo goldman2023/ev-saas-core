@@ -305,6 +305,7 @@ return [
         'UUID' => Webpatser\Uuid\Uuid::class,
         'StripeService' => App\Facades\StripeService::class,
         'MailerService' => App\Facades\MailerService::class,
+        'DocumentSigning' => App\Facades\DocumentSigning::class,
     ],
 
 ];

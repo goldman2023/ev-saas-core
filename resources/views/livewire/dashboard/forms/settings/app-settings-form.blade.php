@@ -2389,7 +2389,7 @@
                                     </x-system.form-modal>
                                     {{-- END Hubspot --}}
 
-                                    {{-- Hubspot --}}
+                                    {{-- Dokobit --}}
                                     <li
                                         class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
                                         <div class="flex-1 flex flex-col p-8">
@@ -2412,7 +2412,7 @@
                                         </div>
                                     </li>
                                     <x-system.form-modal id="app-settings-dokobit" title="Dokobit">
-                                        <!-- Google Analytics Enabled-->
+                                        <!-- Dokobit Enabled-->
                                         <div class="flex flex-col mb-3" x-data="{}">
                                             <label class="block text-sm font-medium text-gray-900 mb-2">
                                                 {{ translate('Enable Dokobit') }}
@@ -2422,23 +2422,36 @@
                                                 <x-dashboard.form.toggle field="settings.dokobit_enabled" />
                                             </div>
                                         </div>
-                                        <!-- END Google Analytics Enabled -->
+                                        <!-- END Dokobit Enabled -->
 
-                                        <!-- Gtag ID-->
-                                        <div class="flex flex-col" x-data="{}">
+                                        <!-- Dokobit Api Key-->
+                                        <div class="flex flex-col mb-3" x-data="{}">
                                             <label class="block text-sm font-medium text-gray-900 mb-2">
-                                                {{ translate('Dokobit ID') }}
+                                                {{ translate('Dokobit Aip Key') }}
                                             </label>
 
                                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                <x-dashboard.form.input field="settings.dokobit_id" />
+                                                <x-dashboard.form.input field="settings.dokobit_api_key" />
                                             </div>
                                         </div>
-                                        <!-- END Gtag ID -->
+                                        <!-- END Dokobit Api Key-->
+
+                                        <!-- Dokobit Sandbox-->
+                                        <div class="flex flex-col mb-3" x-data="{}">
+                                            <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                {{ translate('Dokobit Sandbox') }}
+                                            </label>
+
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                <x-dashboard.form.toggle field="settings.dokobit_sandbox" />
+                                            </div>
+                                        </div>
+                                        <!-- END Dokobit Sandbox -->
 
                                         <div class="w-full flex justify-end mt-4" x-data="{}">
                                             <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
                                             $wire.set('settings.dokobit_enabled', settings.dokobit_enabled, true);
+                                            $wire.set('settings.dokobit_sandbox', settings.dokobit_sandbox, true);
                                         " wire:click="saveIntegrations('integrations.dokobit')">
                                                 {{ translate('Save') }}
                                             </button>
