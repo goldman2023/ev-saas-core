@@ -128,7 +128,8 @@ x-cloak>
                                       :subject="$upload"
                                       wef-key="upload_tag"
                                       wef-label="{{ translate('Tag') }}"
-                                      data-type="string"
+                                      set-type="string"
+                                      get-type="string"
                                       form-type="plain_text"
                                       key="{{ 'wef-tag-'.($upload?->id ?? 0).'-'.now() }}" />
                                   </dd>

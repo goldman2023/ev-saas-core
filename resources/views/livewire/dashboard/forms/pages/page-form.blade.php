@@ -164,25 +164,29 @@
                        [
                            'wef_key' => 'hide_header',
                            'wef_label' => translate('Hide header'),
-                           'data_type' => 'boolean',
+                           'set_type' => 'boolean',
+                           'get_type' => 'boolean',
                            'form_type' => 'toggle',
                         ],
                         [
                            'wef_key' => 'hide_footer',
                            'wef_label' => translate('Hide footer'),
-                           'data_type' => 'boolean',
+                           'set_type' => 'boolean',
+                           'get_type' => 'boolean',
                            'form_type' => 'toggle',
-                ],
-                [
+                        ],
+                        [
                            'wef_key' => 'include_tailwindcdn',
                            'wef_label' => translate('Include Tailwind CDN'),
-                           'data_type' => 'boolean',
+                           'set_type' => 'boolean',
+                           'get_type' => 'boolean',
                            'form_type' => 'toggle',
-                ],
-                [
+                        ],
+                        [
                            'wef_key' => 'include_in_sitemap',
                            'wef_label' => translate('Include in sitemap'),
-                           'data_type' => 'boolean',
+                           'set_type' => 'boolean',
+                           'get_type' => 'boolean',
                            'form_type' => 'toggle',
                        ]
                    ]"></x-dashboard.global.wef-fields>

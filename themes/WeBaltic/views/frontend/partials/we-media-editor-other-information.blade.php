@@ -6,7 +6,8 @@
             :subject="$upload" 
             wef-key="proposal_notes" 
             wef-label="{{ translate('Proposal notes') }}"
-            data-type="array" 
+            set-type="array" 
+            get-type="array" 
             form-type="text_list"
             :custom-properties="['min_rows' => 0]"
             key="{{ \UUID::generate(4)->string }}" />
@@ -18,7 +19,8 @@
             :subject="$upload" 
             wef-key="delivery_to_warehouse_notes" 
             wef-label="{{ translate('Delivery notes') }}"
-            data-type="array" 
+            set-type="array" 
+            get-type="array" 
             form-type="text_list"
             :custom-properties="['min_rows' => 0]"
             key="{{ \UUID::generate(4)->string }}" />
