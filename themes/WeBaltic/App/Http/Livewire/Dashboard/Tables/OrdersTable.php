@@ -124,36 +124,33 @@ class OrdersTable extends DataTableComponent
                 ->sortable()
                 ->excludeFromSelectable()
                 ->addClass('hidden md:table-cell'),
-            // Column::make('Type', 'type')
-            //     ->excludeFromSelectable()
-            //     ->addClass('hidden md:table-cell'),
-            Column::make('Product')
+            Column::make(translate('Product'))
                 ->excludeFromSelectable()
                 ->addClass('text-left max-w-[300px]'),
             Column::make('Customer', 'user_id')
                 ->excludeFromSelectable()
                 ->addClass('text-left max-w-[300px]'),
-            
-            Column::make('Man. order')
+
+            Column::make(translate('Man. order'))
                 ->excludeFromSelectable()
                 ->addClass('text-left whitespace-nowrap'),
 
-            Column::make('Actions')
+            Column::make(translate('Actions'))
                 ->excludeFromSelectable(),
-                Column::make('Printing Status')
+                Column::make(translate('Printing Status'))
                 ->excludeFromSelectable()
                 ->sortable(),
-                Column::make('Payment', 'payment_status')
+                Column::make(translate('Payment'), 'payment_status')
                 ->sortable()
                 ->addClass('hidden md:table-cell'),
-            Column::make('Date', 'created_at')
+            Column::make(translate('Date'), 'updated_at')
                 ->excludeFromSelectable()
                 ->sortable(),
 
             // Column::make('Shipping status', 'shipping_status')
             //     ->sortable()
             //     ->addClass('hidden md:table-cell'),
-            Column::make('Total', 'total')
+            Column::make(translate('Total'), 'total')
                 ->excludeFromSelectable(),
 
         ];

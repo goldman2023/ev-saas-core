@@ -56,7 +56,7 @@
                             aria-controls="tabs-2-panel-1" role="tab" type="button">
                             <span class="sr-only"> Angled view </span>
                             <span class="absolute inset-0 overflow-hidden h-full rounded-md">
-                                <img loading="lazy" :src="window.WE.IMG.url('{{$image->file_name}}')" alt=""
+                                <img loading="lazy" :src="window.WE.IMG.url('{{$image->file_name}}')" alt="{{ $product->name }}"
                                     class="w-full h-full object-cover object-center">
                             </span>
                             <!-- Selected: "ring-indigo-500", Not Selected: "ring-transparent" -->
@@ -74,7 +74,7 @@
                     <!-- Tab panel, show/hide based on tab state. -->
                     <div id="tabs-2-panel-1" aria-labelledby="tabs-2-tab-1" role="tabpanel" tabindex="0">
                         <img src="{{ $product->getThumbnail(['w' => 1200]) }}"
-                            alt="Angled front view with bag zipped and handles upright."
+                            alt="{{ $product->name }}"
                             class="w-full object-contain object-center sm:rounded-lg">
                     </div>
 

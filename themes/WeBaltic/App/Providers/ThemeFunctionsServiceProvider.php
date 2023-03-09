@@ -103,6 +103,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                     'products.index',
                     'tasks.index',
                     'file-manager.index',
+                    'document.templates.index',
                     'orders.index',
                     'invoices.index',
                     'blog.posts.index',

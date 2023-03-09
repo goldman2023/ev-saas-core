@@ -13,7 +13,7 @@
     page: @entangle('page'),
     isMediaSelected(file) {
         if(this.selected.filter((item) => {
-            return !_.get(item, 'id', false) ? false : Number(item['id']) === Number(file.id); 
+            return !_.get(item, 'id', false) ? false : Number(item['id']) === Number(file.id);
         }).length > 0)
             return true;
         else
@@ -51,20 +51,13 @@
         this.new_media = [];
         this.displayModal = false;
     }
-}" 
+}"
 @display-media-library-modal.window="displayModal = true;" x-show="displayModal" x-cloak>
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="{{ $wrapperClass }}" x-show="displayModal" x-transition:enter="ease-out duration-300"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="oapcity-100"
                 x-transition:leave="ease-out duration-300" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"></div>
-
-            <!-- This element is to trick the browser into centering the modal contents. -->
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-                &#8203;
-            </span>
-
-
             <div class="max-w-[90%] lg:max-w-[1150px]  overflow-hidden relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left  shadow-xl transform transition-all sm:my-8 sm:align-middle sm:w-full sm:p-6"
                 wire:loading.class="pointer-events-none opacity-50"
                 x-show="displayModal" x-transition:enter="ease-out duration-300"
@@ -113,12 +106,12 @@
                                                 @svg('heroicon-s-chevron-up-down', ['class' => 'h-5 w-5 text-gray-400'])
                                             </span>
                                         </button>
-    
+
                                         <ul class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
                                             x-show="show_sort_dropdown" x-transition:leave="transition ease-in duration-100"
                                             x-transition:leave-start="opacity-100 " x-transition:leave-end="oapcity-0"
                                             @click.outside="show_sort_dropdown = false">
-    
+
                                             <template x-for="(type, key) in sort_types">
                                                 <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer"
                                                     @click="sort_by = key; show_sort_dropdown= false;">
@@ -127,7 +120,7 @@
                                                         :class="{'font-semibold': key === sort_by, 'font-normal': key !== sort_by }"
                                                         x-text="type">
                                                     </span>
-    
+
                                                     <span
                                                         class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4"
                                                         x-show="key === sort_by">
@@ -153,12 +146,12 @@
                                                 @svg('heroicon-s-chevron-up-down', ['class' => 'h-5 w-5 text-gray-400'])
                                             </span>
                                         </button>
-    
+
                                         <ul class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
                                             x-show="show_type_filter_dropdown" x-transition:leave="transition ease-in duration-100"
                                             x-transition:leave-start="opacity-100 " x-transition:leave-end="oapcity-0"
                                             @click.outside="show_type_filter_dropdown = false">
-    
+
                                             <template x-for="(type, key) in file_types">
                                                 <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer"
                                                     @click="filter_type = key; show_type_filter_dropdown= false;">
@@ -166,7 +159,7 @@
                                                         :class="{'font-semibold': key === filter_type, 'font-normal': key !== filter_type }"
                                                         x-text="type">
                                                     </span>
-    
+
                                                     <span
                                                         class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4"
                                                         x-show="key === filter_type">
@@ -178,7 +171,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
 
                             <div class="" x-data="{}">
                                 <div>
@@ -226,7 +219,7 @@
                                                             @svg('heroicon-s-document', ['class' => 'w-[60px] h-[60px] text-gray-700'])
                                                         </div>
                                                     </template>
-                                                    
+
                                                     <button type="button"
                                                         class="absolute inset-0 focus:outline-none"></button>
                                                 </div>
@@ -239,7 +232,7 @@
 
                                                     @if($display === 'inline')
                                                         <span class="cursor-pointer underline text-12" @click="$wire.emit('showMediaEditor', id, file.id)">
-                                                            {{ translate('Edit file') }}        
+                                                            {{ translate('Edit file') }}
                                                         </span>
                                                     @endif
                                                 </div>

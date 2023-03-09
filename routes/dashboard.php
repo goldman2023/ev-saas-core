@@ -136,6 +136,9 @@ Route::middleware([
 
 
         Route::get('/file-manager', [FileManagerController::class, 'index'])->name('file-manager.index');
+        Route::get('/documents/document-template-preview/{template}', [FileManagerController::class, 'document_template_preview'])->name('document.templates.preview');
+        Route::get('/documents/document-templates', [FileManagerController::class, 'document_templates_index'])->name('document.templates.index');
+
 
         /* Tasks */
         Route::group([], base_path('routes/dashboard/tasks-group.php'));

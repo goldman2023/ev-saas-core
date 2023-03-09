@@ -1,11 +1,5 @@
 @extends('documents-templates.global-pdf-layout.pdf-layout')
 
-@push('styles')
-<style>
-
-</style>
-@endpush
-
 @php
 $order_item = $order->get_primary_order_item();
 @endphp
@@ -71,6 +65,7 @@ $order_item = $order->get_primary_order_item();
         <span class="font-bold">Papildoma įranga / paslaugos:</span>
 
         {{-- Upload `proposal_notes` wef --}}
+        @isset($upload)
         @if(!empty($proposal_notes = $upload->getWEF('proposal_notes', true, 'array')))
         <div class="w-full pb-3">
             <ul class="list-disc pl-5">
@@ -80,6 +75,7 @@ $order_item = $order->get_primary_order_item();
             </ul>
         </div>
         @endif
+        @endisset
 
     </div>
 
