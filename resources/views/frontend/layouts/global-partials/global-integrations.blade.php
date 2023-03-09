@@ -11,6 +11,12 @@
 @endif
 {{-- Google Analytics Integration --}}
 
+{{-- Paysera site verification --}}
+@if(\Payments::paysera()->enabled)
+<meta name="verify-paysera" content="{{ \Payments::paysera()->paysera_verification_meta_id }}">
+@endif
+{{-- END Paysera site verification --}}
+
 {{-- Google Tags Manager Integration --}}
 @if(get_tenant_setting('google_tag_manager_enabled') && !empty($gtm = get_tenant_setting('google_tag_manager_id')))
 <script>

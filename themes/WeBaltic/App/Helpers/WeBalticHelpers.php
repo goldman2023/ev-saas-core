@@ -238,6 +238,9 @@ function define_livewire_dynamic_actions()
         'regenerate_document' => function (&$form) {
             return lda_regenerate_document($form);
         },
+        'sign_document' => function (&$form) {
+            return lda_sign_document($form);
+        },
     ];
 
     return $list;

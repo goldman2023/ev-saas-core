@@ -149,6 +149,11 @@ class AppSettingsForm extends Component
                 'settings.facebook_pixel_enabled' => ['boolean'],
                 'settings.facebook_pixel_id' => ['exclude_if:settings.facebook_pixel_enabled,false', 'required'],
             ],
+            'integrations.dokobit' => [
+                'settings.dokobit_enabled' => ['boolean'],
+                'settings.dokobit_sandbox' => ['boolean'],
+                'settings.dokobit_api_key' => ['required'],
+            ],
             'social' => [
                 'settings.enable_social_logins' => ['boolean'],
                 'settings.google_login' => ['boolean'],

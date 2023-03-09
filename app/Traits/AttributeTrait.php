@@ -190,17 +190,22 @@ trait AttributeTrait
         if(empty($content_type)) $content_type =  $this::class;
 
         if(is_int($slug_or_id) || ctype_digit($slug_or_id)) {
-            return $this->custom_attributes->firstWhere('id', (int) $slug_or_id)->attribute_values->first()->values;
+            $attribute =  $this->custom_attributes->firstWhere('id', (int) $slug_or_id);
+
+            return AttributesService::castGet($attribute->attribute_values->first()->values, $attribute->type);
         } else if(is_string($slug_or_id)) {
             $attribute =  $this->custom_attributes->firstWhere('slug', $slug_or_id);
+            
             if($attribute) {
-                return $attribute->attribute_values->first()->values;
+                return AttributesService::castGet($attribute->attribute_values->first()->values, $attribute->type);
             } else {
                 return null;
             }
-        }
+        } else {
+            $attribute = $this->custom_attributes->firstWhere('identificator', $slug_or_id.'|'.$content_type);
 
-        return $this->custom_attributes->firstWhere('identificator', $slug_or_id.'|'.$content_type)->attribute_values->first()->values;
+            return AttributesService::castGet($attribute->attribute_values->first()->values, $attribute->type);
+        }
     }
 
     /**

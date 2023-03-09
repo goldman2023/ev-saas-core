@@ -50,9 +50,7 @@ class DocumentUploadTagsEnum extends UploadTagsEnum
         }, ARRAY_FILTER_USE_BOTH);
     }
 
-    // public static function getReGeneratableUploadTags() {
-    //     return array_filter(self::values(), function($upload_tag, $key) {
-    //         return in_array($key, ['certificate', 'warrant', 'authenticity_certificate', 'manufacturing_details']);
-    //     }, ARRAY_FILTER_USE_BOTH);
-    // }
+    public static function getSignableDocumentUploadTags() {
+        return ['contract'];
+    }
 }
