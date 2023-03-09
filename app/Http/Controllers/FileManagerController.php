@@ -24,11 +24,11 @@ class FileManagerController extends Controller
             'documents-templates.warrant',
             'documents-templates.certificate',
         ];
+
         return view('frontend.dashboard.file-manager.document_templates', compact('availableTemplates'));
     }
 
     public function document_template_preview($template) {
-        $demoOrder = 1;
         $order = Order::first();
         return view('frontend.dashboard.file-manager.document_template_preview', compact('template', 'order'));
     }
