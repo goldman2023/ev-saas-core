@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Services\AttributesService;
 use App\Http\Services\TenantSettingsService;
+use App\Http\Services\DocumentSigningService;
 
 
 class WeServiceProvider extends ServiceProvider
@@ -119,6 +120,11 @@ class WeServiceProvider extends ServiceProvider
         // WeEngine
         $this->app->singleton('we_engine', function() {
             return new WeEngine(fn () => Container::getInstance());
+        });
+
+        // Document Signing Singleton
+        $this->app->singleton('document_signing', function() {
+            return new DocumentSigningService(fn () => Container::getInstance());
         });
     }
 

@@ -61,12 +61,12 @@ class ProductForm2 extends Component
     {
         $rulesSets = collect([
             'minimum_required' => [
-                'product.name' => 'required|min:6',
+                'product.name' => 'required',
                 'product.unit_price' => 'required|numeric',
                 // 'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
             ],
             'basic' => [
-                'product.name' => 'required|min:6',
+                'product.name' => 'required',
                 'product.description' => 'nullable',
                 'product.excerpt' => 'nullable',
                 // 'product.status' => [Rule::in(StatusEnum::toValues())],
@@ -103,7 +103,7 @@ class ProductForm2 extends Component
                 'product.barcode' => ['nullable'],
                 'product.min_qty' => 'nullable|numeric|min:1',
                 'product.current_stock' => 'required|numeric|min:0',
-                'product.low_stock_qty' => 'required|numeric|min:0',
+                'product.low_stock_qty' => 'nullable|numeric|min:0',
                 'product.use_serial' => 'required|boolean',
                 'product.allow_out_of_stock_purchases' => 'required|boolean',
                 'product.track_inventory' => 'required|boolean',
@@ -143,6 +143,9 @@ class ProductForm2 extends Component
     protected function messages()
     {
         return [
+            'product.name.required' => translate('Product name is required'),
+            'product.unit_price.required' => translate('Product unit price is required'),
+            'product.current_stock.required' => translate('Product current stock is required'),
             'product.thumbnail.if_id_exists' => translate('Please select a valid thumbnail image from the media library'),
             'product.cover.if_id_exists' => translate('Please select a valid cover image from the media library'),
             'product.pdf.if_id_exists' => translate('Please select a valid specification document from the media library'),

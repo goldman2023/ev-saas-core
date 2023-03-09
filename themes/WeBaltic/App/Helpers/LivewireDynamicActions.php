@@ -35,3 +35,26 @@ function lda_regenerate_document(&$form) {
         $form->inform(translate('Delivery to warehouse document successfully regenerated!'), '', 'success');
     }
 }
+
+/**
+ * lda_sign_document
+ *
+ * Sign document with DocumentSigningService
+ * 
+ * @param  mixed $form
+ * @return void
+ */
+function lda_sign_document(&$form) {
+    $upload_tag = $form->upload->getWEF('upload_tag', fresh: true);
+    $order = $form->subject;
+
+    if(empty($order)) {
+        $order = $form->upload->orders->first();
+    }
+
+    $is_form_created = \DocumentSigning::client()->createSigningForm($form->upload, $form->subject->user, auth()->user());
+
+    if($is_form_created) {
+        $form->inform(translate('Document signing form successfully created'), '', 'success');
+    }
+}

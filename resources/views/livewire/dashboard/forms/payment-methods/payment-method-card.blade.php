@@ -584,6 +584,18 @@
                 </div>
                 
                 <div class="w-full mt-6 ">
+                    <!-- Paysera Site Verification ID  -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Paysera Site Verification ID') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.paysera_verification_meta_id" :required="true"/>
+                        </div>
+                    </div>
+                    <!-- END Paysera Site Verification ID  -->
+
                     <!-- Paysera Project ID  -->
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                         <label class="block text-sm font-medium text-gray-900 ">
