@@ -27,6 +27,23 @@
             </dd>
         </div>
 
+        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt class="text-sm font-medium text-gray-500">
+                <span>
+                    {{ translate('Date of Manufacturing (Used For Certificate)') }}
+                </span>
+            </dt>
+            <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                <x-wef.field
+                    :subject="$order"
+                    label="Date of Manufacturing"
+                    type="date"
+                    form-type="date"
+                    key="cycle_step_date_manufacturing"
+                    :custom-properties="['range' => false, 'with_time' => false]"></x-wef.field>
+            </dd>
+        </div>
+
 
         <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
             <dt class="text-sm font-medium text-gray-500">
@@ -36,9 +53,9 @@
             </dt>
             <dd class="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                 <x-wef.field
-                    :subject="$order" 
-                    label="Date of Assembly" 
-                    type="date" 
+                    :subject="$order"
+                    label="Date of Assembly"
+                    type="date"
                     form-type="date"
                     key="cycle_step_date_assembly"
                     :custom-properties="['range' => false, 'with_time' => true]"></x-wef.field>

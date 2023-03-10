@@ -26,7 +26,7 @@ toliau vadinama "Užsakovu" iš kitos pusės, sudarėme šią sutartį:
 </div>
 
 <p>
-    Gamintojas įsipareigoja Užsakovui pagaminti automobilinę priekabą, pagal kom. pasiūlymą B2T-{{ $order->id }} kuris
+    Gamintojas įsipareigoja Užsakovui pagaminti automobilinę priekabą, pagal kom. pasiūlymą <strong>B2T-{{ $order->id }}</strong>
     yra
     neatskiriama šios sutarties dalis
     Užsakovo užsakytų darbų bendra vertė:
@@ -36,15 +36,24 @@ toliau vadinama "Užsakovu" iš kitos pusės, sudarėme šią sutartį:
 <table>
     <tr>
         <td>
-            PVM
+            Viso (be PVM)
         </td>
         <td>
-            Suma
+            222 €
         </td>
     </tr>
 
     <tr>
         <td>
+            PVM (21%)
+        </td>
+        <td>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Viso(su PVM)
         </td>
         <td>
         </td>
