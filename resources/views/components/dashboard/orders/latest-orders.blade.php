@@ -4,7 +4,7 @@
         <h5 class="text-lg font-medium leading-none text-gray-900 dark:text-white">
            {{ translate('Latest Orders') }}
         </h5>
-        <a href="{{ route('crm.all_customers') }}" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+        <a href="{{ route('orders.index') }}" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
             {{ translate('View all') }}
             {{-- TODO: Add a count of unseen orders for this user --}}
         </a>

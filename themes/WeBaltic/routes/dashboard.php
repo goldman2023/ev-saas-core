@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FileManagerController;
 use Illuminate\Support\Facades\Route;
 use WeThemes\WeBaltic\App\Http\Controllers\OrderController;
 

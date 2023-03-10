@@ -12,9 +12,13 @@
 <div>
     Kaunas, du tūkstančiai dvidešimtų antrųjų metų lapkričio mėnesio 3 diena
 </div>
-UAB „Domantas“ (Į/k {{ get_setting('company_code') }}) veikiantis, toliau vadinama "Gamintojas” iš vienos pusės, ir {{
-$order->billing_first_name }} {{ $order->billing_last_name }}
-(38207201189) toliau vadinama "Užsakovu" iš kitos pusės, sudarėme šią sutartį:
+{{ get_setting('company_name') }} (Į/k {{ get_setting('company_code') }}) veikiantis, toliau vadinama "Gamintojas” iš
+vienos pusės, ir
+{{ $order->billing_first_name }} {{ $order->billing_last_name }}
+@isset($order->billing_company_code)
+({{ $order->billing_company_code }})
+@endisset
+toliau vadinama "Užsakovu" iš kitos pusės, sudarėme šią sutartį:
 
 
 <div class="strong">
@@ -22,14 +26,39 @@ $order->billing_first_name }} {{ $order->billing_last_name }}
 </div>
 
 <p>
-    Gamintojas įsipareigoja Užsakovui pagaminti automobilinę priekabą, pagal kom. pasiūlymą B2T-{{ $order->id }} kuris
+    Gamintojas įsipareigoja Užsakovui pagaminti automobilinę priekabą, pagal kom. pasiūlymą <strong>B2T-{{ $order->id }}</strong>
     yra
     neatskiriama šios sutarties dalis
     Užsakovo užsakytų darbų bendra vertė:
 </p>
 
 {{-- TODO: Add pricing breakdown table here --}}
+<table>
+    <tr>
+        <td>
+            Viso (be PVM)
+        </td>
+        <td>
+            222 €
+        </td>
+    </tr>
 
+    <tr>
+        <td>
+            PVM (21%)
+        </td>
+        <td>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Viso(su PVM)
+        </td>
+        <td>
+        </td>
+    </tr>
+</table>
 
 
 <div class="strong">
@@ -160,7 +189,8 @@ $order->billing_first_name }} {{ $order->billing_last_name }}
             <td>
                 {{ get_setting('company_name') }} <br>
                 Įm. k. {{ get_setting('company_code') }}, {{ get_setting('company_vat') }} <br>
-                {{ get_setting('company_address') }}, {{ get_setting('company_city') }},  {{ get_setting('company_postal_code') }}  <br>
+                {{ get_setting('company_address') }}, {{ get_setting('company_city') }}, {{
+                get_setting('company_postal_code') }} <br>
                 <br>
                 SEB bankas <br>
                 El paštas: <br>

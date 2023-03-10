@@ -2,8 +2,6 @@
 <html lang="lt">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    {{-- This is the only tailwind which actually works... --}}
-    {{-- <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> --}}
     <style>
         * {
           font-family: DejaVu Sans !important;
@@ -49,9 +47,9 @@
     @stack('styles')
 </head>
 
-<body style="position: relative;">
+<body style="position: relative; margin-top: -10px;">
     <div class="logo">
-        <img src="{{ get_site_logo() }}" style="width: 100px; " />
+        <img src="{{ get_site_logo() }}" style="width: 80px; " />
     </div>
     @yield('content')
 </body>

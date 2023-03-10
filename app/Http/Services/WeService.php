@@ -377,6 +377,17 @@ class WeService
                         'enabled' => true,
                     ],
                     [
+                        'label' => translate('Document Templates'),
+                        'icon' => 'heroicon-o-paper-clip',
+                        'route' => route('document.templates.index'),
+                        'route_name' => 'document.templates.index',
+
+                        'is_active' => areActiveRoutes(['document.templates.index', 'document.templates.preview']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => [], // TODO: Add App Pages Permissions
+                        'enabled' => true,
+                    ],
+                    [
                         'label' => translate('Sections'),
                         'icon' => 'heroicon-o-rectangle-stack',
                         'route' => route('sections.index'),

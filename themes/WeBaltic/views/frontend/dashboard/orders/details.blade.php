@@ -220,11 +220,6 @@
                     </ul>
                 </div>
                 <div id="order-tabs-content">
-                    {{-- <div class="card mb-3">
-                        <x-dashboard.orders.order-documents-list :order="$order">
-                        </x-dashboard.orders.order-documents-list>
-                    </div> --}}
-
                     <div class="rounded-lg dark:bg-gray-800" id="order-details-content" role="tabpanel" aria-labelledby="order-details-tab">
                         <div class="mb-6">
                             <x-dashboard.orders.order-products-list :order="$order" :orderItems="$order_items">
@@ -250,14 +245,16 @@
                                 </a>
                             </div>
                             </div>
-                            <x-default.products.single.product-specification-table :product="$order->get_primary_order_item()">
-                            </x-default.products.single.product-specification-table>
+                            @if($order->get_primary_order_item())
+                                <x-default.products.single.product-specification-table :product="$order->get_primary_order_item()">
+                                </x-default.products.single.product-specification-table>
+                            @endif
                         </div>
 
                     </div>
 
                     <div class="rounded-lg dark:bg-gray-800" id="order-specification-content" role="tabpanel" aria-labelledby="order-specification-tab">
-                       Specification.
+                        {{ translate('Specification.') }}
                     </div>
 
                     <div class="hidden bg-gray-50 rounded-lg dark:bg-gray-800" id="order-documents-content" role="tabpanel"
@@ -384,6 +381,29 @@
 
                                         @svg('heroicon-o-plus', ['class' => '-ml-1 mr-0.5 h-5 w-5 text-rose-400'])
                                         <span>{{ translate('Add to print list') }}</span>
+                                    </button>
+                                </div>
+                            </li>
+
+                            {{-- TODO: Implement cancel order --}}
+                            <li class="flex items-center space-x-3 py-4">
+                                <div class="flex-shrink-0">
+
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-medium text-gray-900">
+                                        <a href="#">{{ translate('Cancel order') }}</a>
+                                    </p>
+                                    <p class="text-sm text-gray-500">
+                                        {{-- <a href="#">{{ translate('Pending') }}</a> --}}
+                                    </p>
+                                </div>
+
+                                <div class="flex-shrink-0">
+                                    <button type="button"
+                                        class="inline-flex items-center rounded-full bg-rose-50 px-3 py-0.5 text-sm font-medium text-rose-700 hover:bg-rose-100">
+                                        @svg('heroicon-o-x-mark', ['class' => '-ml-1 mr-0.5 h-5 w-5 text-rose-400'])
+                                        <span>{{ translate('Cancel') }}</span>
                                     </button>
                                 </div>
                             </li>

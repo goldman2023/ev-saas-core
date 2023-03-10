@@ -42,8 +42,6 @@ class OrderController extends Controller
 
         DB::beginTransaction();
 
-
-
         try {
             if ($new_status == 1) { // contract
                 $reason = translate('Proposal & Contract Created');
