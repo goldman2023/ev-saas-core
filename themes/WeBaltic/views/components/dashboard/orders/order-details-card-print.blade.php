@@ -38,15 +38,7 @@
                             }
                             @endphp
 
-                            {{ $total_weight }} kg
-                            {{-- Current way of getting an attribute value --}}
-                            {{-- Width: {{
-                            json_encode($order->get_primary_order_item()->subject->get_attribute_value_by_id(6)[0]['values'])
-                            }}
-
-                            Unit: {{ json_encode($order->get_primary_order_item()->subject->get_attribute_value_by_id(6)[0])
-                            }} --}}
-                            {{-- {{ json_encode($order->order_items[0]->get_attribute_value_by_id[9]) }} --}}
+                            {{ $order_item->getAttrValue('max-grazulo-aprkrova-kg') }} kg
                             <br>
 
                             @php

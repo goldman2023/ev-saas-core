@@ -79,7 +79,7 @@ if($product->getAttrValue('stabdziai') == 'mechanical') {
             <td colspan="2">Trailer Category:</td>
             <td colspan="2">{{ $vehicle_category }}</td>
             <td rowspan="2" colspan="2">{{ translate('Number of axles') }}:</td>
-            <td colspan="2">O - {{ $axel_count }} axle</td>
+            <td colspan="2">{{ $axel_count }} axle</td>
         </tr>
         <tr>
             <td colspan="2">{{ translate('Length') }}:</td>
@@ -94,9 +94,9 @@ if($product->getAttrValue('stabdziai') == 'mechanical') {
         </tr>
         <tr>
             <td colspan="2">Model:</td>
-            <td colspan="2"></td>
+            <td colspan="2">{{ $product->name }}</td>
             <td colspan="2">Chasis type:</td>
-            <td colspan="2">O - leaf spring</td>
+            <td colspan="2">{{ $product->getAttrValue('pakaba') }}</td>
         </tr>
         <tr>
             <td colspan="2">Lights:</td>
@@ -106,7 +106,7 @@ if($product->getAttrValue('stabdziai') == 'mechanical') {
         </tr>
         <tr>
             <td colspan="2">Coupling:</td>
-            <td>STC</td>
+            <td>{{ $product->getAttrValue('coupling-device') }}</td>
             <td>O - 750 kg</td>
             <td colspan="2">Axle model:</td>
             <td colspan="2"></td>
@@ -116,14 +116,14 @@ if($product->getAttrValue('stabdziai') == 'mechanical') {
             <td>AL-KO</td>
             <td>O - 750 kg</td>
             <td rowspan="2" colspan="2">Wheels:</td>
-            <td rowspan="2" colspan="2">O - Kargo Trail R13</td>
+            <td rowspan="2" colspan="2">{{ $product->getAttrValue('padangos') }}</td>
         </tr>
         <tr>
             <td>KNOTT</td>
             <td>O - 750 kg</td>
         </tr>
         <tr>
-            <td colspan="8">{{ translate('Comments') }}: <br>
+            <td colspan="8">Comments:<br>
                 {{ $order->getWEF('inspected_by') }}
             </td>
         </tr>
